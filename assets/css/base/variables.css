@@ -1,0 +1,29 @@
+
+
+
+
+
+:root {
+  /* Warna */
+  --hijau-tua: #0A4B3E;
+  --hijau-muda: #2A9D8F;
+  --krem: #F8F4E9;
+  --putih: #FFFFFF;
+  --abu-terang: #F1F1F1;
+  --abu-sedang: #6B7280;
+  --hitam-soft: #263238;
+
+  /* Tipografi */
+  --font-utama: 'Poppins', sans-serif;
+  --judul-besar: clamp(1.8rem, 4vw, 2.8rem);
+  --judul-sedang: clamp(1.4rem, 3vw, 2rem);
+  --teks-standar: clamp(0.95rem, 1.5vw, 1.1rem);
+  --teks-kecil: clamp(0.7rem, 1vw, 0.85rem);
+
+  /* Spacing & Border */
+  --radius: 12px;
+  --radius-besar: 18px;
+  --shadow-lembut: 0 4px 15px rgba(0,0,0,0.05);
+  --shadow-elegan: 0 8px 25px rgba(10,75,62,0.1);
+  --transisi: all 0.3s ease-in-out;
+}

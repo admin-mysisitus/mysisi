@@ -1,0 +1,150 @@
+/* Dashboard Wali Santri */
+.wali-header {
+    background-color: #2f855a;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.wali-tabs {
+    background-color: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 2rem;
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+}
+
+.wali-tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #718096;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.wali-tab-btn.active {
+    color: #2f855a;
+    border-bottom-color: #2f855a;
+}
+
+.wali-tab-btn:hover {
+    color: #2f855a;
+}
+
+.wali-tab-content {
+    display: none;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.wali-tab-content.active {
+    display: block;
+}
+
+.wali-tab-content h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+/* Profil Container */
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.profile-foto {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #2f855a;
+}
+
+.profile-details {
+    flex: 1;
+    min-width: 300px;
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 0.8rem;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #4a5568;
+    min-width: 120px;
+}
+
+.detail-row span:last-child {
+    color: #2d3748;
+}
+
+/* Text Center */
+.text-center {
+    text-align: center;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+/* Tag Status */
+.tag {
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+}
+.tag-hadir { background-color: #2f855a; }
+.tag-sakit { background-color: #f6ad55; }
+.tag-izin { background-color: #3182ce; }
+.tag-alpa { background-color: #e53e3e; }
+.tag-default { background-color: #718096; }
+.tag-lunas { background-color: #2f855a; }
+.tag-belum { background-color: #e53e3e; }
+
+/* Teks Center & Muted */
+.text-center { text-align: center; }
+.text-muted { color: #718096; }
+.py-3 { padding-top: 1rem; padding-bottom: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mt-3 { margin-top: 1rem; }

@@ -1,0 +1,52 @@
+/* ========== KOMPONEN KARTU REUSABLE ========== */
+.kartu {
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+}
+
+/* Varian background & padding */
+.kartu--krem {
+    background-color: var(--warna-krem);
+    padding: 2rem;
+}
+
+.kartu--putih {
+    background-color: var(--warna-putih);
+    padding: 1.5rem;
+}
+
+.kartu--krem-sm {
+    background-color: var(--warna-krem);
+    padding: 1.5rem;
+}
+
+/* Efek hover */
+.kartu--hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.kartu--hover-lift-md:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-elegan);
+}
+
+/* Judul kartu */
+.kartu-judul {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.kartu-judul--md {
+    font-size: 1.5rem;
+}
+
+.kartu-judul--sm {
+    font-size: 1.2rem;
+}
+
+.kartu-judul--xs {
+    font-size: 1rem;
+}

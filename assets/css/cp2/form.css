@@ -1,0 +1,51 @@
+/* ========== KOMPONEN FORM REUSABLE ========== */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--warna-hitam-soft);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--warna-abu-terang);
+    border-radius: var(--radius-standar);
+    font-family: var(--font-utama);
+    font-size: 0.95rem;
+    transition: var(--transisi-standar);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--warna-hijau-muda);
+    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+}
+
+.form-link-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.form-link-group a {
+    color: var(--warna-hijau-muda);
+}
+
+.form-link-group a:hover {
+    color: var(--warna-hijau-tua);
+    text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+    .form-link-group {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}

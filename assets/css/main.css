@@ -1,0 +1,30 @@
+/* ========== IMPORT FILE CSS ========== */
+/* Base */
+@import url('base/variables.css');
+@import url('base/reset.css');
+@import url('base/typography.css');
+
+/* Layout */
+@import url('layout/container.css');
+@import url('layout/header.css');
+@import url('layout/footer2.css');
+@import url('layout/responsive.css');
+
+/* Components */
+@import url('components/button.css');
+@import url('components/support-btn.css');
+@import url('components/preloader.css');
+@import url('components/custom-font.css');
+
+
+/* Pages (sementara css langsung di panggil langsung di html) */
+/* @import url('pages/home.css'); */
+/* @import url('pages/profile.css'); */
+/* @import url('pages/lembaga.css'); */
+/* @import url('pages/yayasan.css'); */
+/* @import url('pages/madin.css'); */
+/* @import url('pages/formal.css'); */
+/* @import url('pages/berita.css'); */
+/* @import url('pages/iksada.css'); */
+/* @import url('pages/pondigi.css'); */
+

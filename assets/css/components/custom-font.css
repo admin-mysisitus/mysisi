@@ -1,0 +1,81 @@
+/* ===============================
+   COMPONENT - DARUL HUDA FONT
+=============================== */
+.ppai-darulhuda-font {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+  position: relative;
+  background: linear-gradient(90deg,
+      var(--hijau-tua) 0%,
+      var(--hijau-tua) 35%,
+      rgba(255, 255, 255, 0.9) 50%,
+      var(--hijau-tua) 65%,
+      var(--hijau-tua) 100%);
+  background-size: 300% 100%;
+  background-position: 0% 0%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow-sweep 14s linear infinite;
+  -webkit-text-stroke: 0.6px rgba(15, 120, 95, 0.6);
+  text-shadow:
+    0 1px 2px rgba(10, 75, 62, 0.15);
+}
+
+@keyframes glow-sweep {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  50% {
+    background-position: 150% 0%;
+  }
+
+  100% {
+    background-position: 300% 0%;
+  }
+}
+
+
+
+/* ===============================
+   WATERMARK / CREDIT LOGO
+   =============================== */
+
+.logo.wm-sc {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  word-spacing: 0;
+  letter-spacing: -0.25px;
+  font-variant-ligatures: none;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #ffffff;
+  background-color: #0f172a;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  opacity: 0.32;
+  transition: opacity 0.3s ease;
+}
+
+.logo.wm-sc::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--favicon-url) no-repeat center / contain;
+  opacity: 0.85;
+}
+
+.logo.wm-sc span {
+  color: #22c55e;
+  transform: none !important;
+}
+
+.logo.wm-sc:hover {
+  opacity: 0.6;
+}

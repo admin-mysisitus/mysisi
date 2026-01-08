@@ -1,0 +1,31 @@
+.tombol {
+  display: inline-block;
+  padding: 0.8rem 1.8rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transisi);
+}
+
+.tombol-primer {
+  background-color: var(--hijau-tua);
+  color: var(--putih);
+}
+
+.tombol-primer:hover {
+  background-color: #083C32;
+  transform: translateY(-2px);
+}
+
+.tombol-sekunder {
+  background-color: transparent;
+  color: var(--hijau-tua);
+  border: 2px solid var(--hijau-tua);
+}
+
+.tombol-sekunder:hover {
+  background-color: var(--hijau-tua);
+  color: var(--putih);
+  transform: translateY(-2px);
+}

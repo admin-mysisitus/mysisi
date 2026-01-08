@@ -1,0 +1,345 @@
+/* ========== BANNER SECTION ========== */
+.banner {
+    position: relative;
+    height: 100vh;
+    min-height: 500px;
+    background: url('../../assets/img/banner/home-banner.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-top: 82px;
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 75, 62, 0.7);
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    color: var(--warna-putih);
+    padding: 0 1rem;
+}
+
+.banner-judul {
+    font-size: var(--ukuran-judul-besar);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.banner-subjudul {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2.5rem auto;
+    opacity: 0.9;
+}
+
+.banner-tombol {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* ========== PROFILE PREVIEW SECTION ========== */
+.profile-preview {
+    background-color: var(--warna-krem);
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.profile-img img {
+    border-radius: var(--radius-besar);
+    box-shadow: var(--shadow-elegan);
+}
+
+.profile-text h3 {
+    font-size: 1.5rem;
+    color: var(--warna-hijau-tua);
+    margin-bottom: 1rem;
+}
+
+.profile-text .visi {
+    margin-bottom: 1rem;
+}
+
+.profile-text ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+/* ========== LEMBAGA PREVIEW SECTION ========== */
+.bg-putih {
+    background-color: var(--warna-putih);
+}
+
+.lembaga-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.lembaga-kartu {
+    background-color: var(--warna-krem);
+    padding: 2rem;
+    border-radius: var(--radius-standar);
+    text-align: center;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+}
+
+.lembaga-kartu:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.kartu-icon {
+    width: 70px;
+    height: 70px;
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+    font-size: 1.8rem;
+}
+
+.lembaga-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.kartu-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--warna-hijau-muda);
+    font-weight: 500;
+}
+
+.kartu-link:hover {
+    color: var(--warna-hijau-tua);
+}
+
+/* ========== BERITA PREVIEW SECTION ========== */
+.berita-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.berita-lihat-semua {
+    color: var(--warna-hijau-muda);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.berita-lihat-semua:hover {
+    color: var(--warna-hijau-tua);
+    text-decoration: underline;
+}
+
+.berita-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.berita-kartu {
+    background-color: var(--warna-putih);
+    border-radius: var(--radius-standar);
+    overflow: hidden;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+}
+
+.berita-kartu:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.berita-img img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.berita-info {
+    padding: 1.5rem;
+}
+
+.berita-kategori {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    font-size: 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+}
+
+.berita-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.berita-tanggal {
+    font-size: 0.85rem;
+    color: var(--warna-abu-sedang);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.berita-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--warna-hijau-muda);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.berita-link:hover {
+    color: var(--warna-hijau-tua);
+    text-decoration: underline;
+}
+
+/* ========== IKSADA PREVIEW SECTION ========== */
+.iksada-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.iksada-img img {
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-elegan);
+}
+
+.iksada-form h3 {
+    color: var(--warna-hijau-tua);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.iksada-form p {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--warna-hitam-soft);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--warna-abu-terang);
+    border-radius: var(--radius-standar);
+    font-family: var(--font-utama);
+    font-size: 0.95rem;
+    transition: var(--transisi-standar);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--warna-hijau-muda);
+    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+}
+
+.form-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.form-link a {
+    color: var(--warna-hijau-muda);
+}
+
+.form-link a:hover {
+    color: var(--warna-hijau-tua);
+    text-decoration: underline;
+}
+
+.w-100 {
+    width: 100%;
+    text-align: center;
+}
+
+/* ========== RESPONSIF BREAKPOINT ========== */
+@media (min-width: 768px) {
+    .banner-tombol {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .profile-content {
+        flex-direction: row;
+        align-items: center;
+        gap: 4rem;
+    }
+
+    .profile-img,
+    .profile-text {
+        flex: 1;
+    }
+
+    .lembaga-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .berita-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .iksada-content {
+        flex-direction: row;
+        align-items: center;
+        gap: 4rem;
+    }
+
+    .iksada-img,
+    .iksada-form {
+        flex: 1;
+    }
+
+    .form-link {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: 992px) {
+    .lembaga-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .berita-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+

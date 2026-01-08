@@ -1,0 +1,195 @@
+/* ========== PAGE HEADER ========== */
+.page-header {
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    padding: 4rem 0 2rem 0;
+    margin-top: 82px;
+}
+
+.page-header h1 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.page-header a {
+    color: var(--warna-hijau-muda);
+}
+
+.page-header a:hover {
+    text-decoration: underline;
+}
+
+/* ========== PROFIL PESANTREN SECTION ========== */
+.profil-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.profil-img img {
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-elegan);
+    width: 100%;
+}
+
+.profil-text p {
+    text-align: justify;
+    line-height: 1.7;
+}
+
+/* ========== PROGRAM PEMBELAJARAN SECTION ========== */
+.program-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.program-kartu {
+    background-color: var(--warna-krem);
+    padding: 2rem;
+    border-radius: var(--radius-standar);
+    text-align: center;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+}
+
+.program-kartu:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.kartu-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+    font-size: 1.5rem;
+}
+
+.program-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* ========== FASILITAS PESANTREN SECTION ========== */
+.fasilitas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.fasilitas-kartu {
+    border-radius: var(--radius-standar);
+    overflow: hidden;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+}
+
+.fasilitas-kartu:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.fasilitas-kartu img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.fasilitas-kartu h3 {
+    padding: 1rem;
+    background-color: var(--warna-putih);
+    color: var(--warna-hijau-tua);
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* ========== PENGURUS & GURU SECTION ========== */
+.pengurus-guru-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.kartu-personil {
+    background-color: var(--warna-krem);
+    padding: 1.5rem;
+    border-radius: var(--radius-standar);
+    text-align: center;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+}
+
+.kartu-personil:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.personil-foto img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1rem auto;
+    border: 3px solid var(--warna-hijau-muda);
+}
+
+.kartu-personil h3 {
+    color: var(--warna-hijau-tua);
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.kartu-personil p {
+    font-size: 0.85rem;
+    color: var(--warna-abu-sedang);
+}
+
+/* ========== RESPONSIF BREAKPOINT ========== */
+@media (min-width: 768px) {
+    .profil-content {
+        flex-direction: row;
+        gap: 4rem;
+    }
+
+    .profil-img,
+    .profil-text {
+        flex: 1;
+    }
+
+    .program-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fasilitas-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    .fasilitas-kartu img {
+        height: 180px;
+    }
+
+    .pengurus-guru-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+
+    .personil-foto img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+

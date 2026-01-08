@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-utama);
+  font-size: var(--teks-standar);
+  color: var(--hitam-soft);
+  background-color: var(--krem);
+  line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
+  padding-top: clamp(70px, 12vw, 88px);
+  transition: padding-top var(--transisi);
+}
+
+body.header-scroll {
+  padding-top: clamp(60px, 10vw, 72px);
+}
+
+a, button {
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  transition: var(--transisi);
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Status aktif navigasi */
+.nav-desktop-link.active,
+.nav-mobile-link.active {
+  font-weight: 600;
+  color: var(--hijau-tua);
+}

@@ -1,0 +1,580 @@
+<!-- ============================= WEBSITE DIDEVELOP BY: @LUKMAN_LOOKER | SISITUS.COM ============================= -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pengurus - SISTEM MANAJEMEN PONDOK PESANTREN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/pengurus.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="pengurus-header">
+        <div class="header-title">
+            <h1><i class="fas fa-building"></i> SISTEM MANAJEMEN PONDOK PESANTREN</h1>
+        </div>
+        <div class="user-info">
+            <span><i class="fas fa-user-circle"></i> <span id="nama-pengurus">-</span> (<span id="bidang-pengurus">-</span>)</span>
+            <button class="btn btn-secondary btn-small" id="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGASI -->
+    <div class="pengurus-tabs">
+        <button class="pengurus-tab-btn active" data-tab="dashboard">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </button>
+        <button class="pengurus-tab-btn" data-tab="santri">
+            <i class="fas fa-users"></i> Data Santri
+        </button>
+        <button class="pengurus-tab-btn" data-tab="keuangan">
+            <i class="fas fa-money-bill-wave"></i> Keuangan
+        </button>
+        <button class="pengurus-tab-btn" data-tab="absensi">
+            <i class="fas fa-calendar-check"></i> Absensi
+        </button>
+        <button class="pengurus-tab-btn" data-tab="pelanggaran">
+            <i class="fas fa-exclamation-triangle"></i> Pelanggaran
+        </button>
+        <button class="pengurus-tab-btn" data-tab="raport">
+            <i class="fas fa-graduation-cap"></i> Raport
+        </button>
+        <button class="pengurus-tab-btn" id="tab-btn-pengurus" style="display: none;" data-tab="pengurus">
+            <i class="fas fa-user-cog"></i> Manajemen Pengurus
+        </button>
+    </div>
+
+    <!-- KONTEN UTAMA -->
+    <div class="container">
+        <!-- TAB DASHBOARD -->
+        <div id="tab-dashboard" class="pengurus-tab-content active">
+            <h2><i class="fas fa-tachometer-alt"></i> Ringkasan Sistem</h2>
+            
+            <div id="loading-dashboard" class="loading">Memuat data... Silakan tunggu.</div>
+            
+            <div id="content-dashboard" style="display: none;">
+                <div class="summary-grid">
+                    <div class="summary-box">
+                        <h4>Total Santri</h4>
+                        <p id="total-santri">0</p>
+                    </div>
+                    <div class="summary-box">
+                        <h4>Santri Lunas Biaya</h4>
+                        <p id="total-lunas">0</p>
+                    </div>
+                    <div class="summary-box">
+                        <h4>Santri Tidak Hadir Hari Ini</h4>
+                        <p id="total-tidak-hadir">0</p>
+                    </div>
+                    <div class="summary-box">
+                        <h4>Jumlah Pelanggaran Bulan Ini</h4>
+                        <p id="total-pelanggaran">0</p>
+                    </div>
+                </div>
+
+                <div class="chart-container" style="height: 350px; margin-top: 2rem;">
+                    <canvas id="chart-santri-per-jenjang"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB DATA SANTRI -->
+        <div id="tab-santri" class="pengurus-tab-content">
+            <h2><i class="fas fa-users"></i> Kelola Data Santri</h2>
+            
+            <!-- FORM INPUT SANTRI -->
+            <div class="form-section">
+                <h3><i class="fas fa-plus"></i> Tambah/Ubah Data Santri</h3>
+                <form id="form-santri">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">ID Santri</label>
+                            <input type="text" id="santri-id" class="form-control" placeholder="Contoh: S001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" id="santri-nama" class="form-control" placeholder="Nama Santri" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Jenjang Pendidikan</label>
+                            <select id="santri-jenjang" class="form-control" required>
+                                <option value="">Pilih Jenjang</option>
+                                <option value="MI">Madrasah Ibtidaiyah</option>
+                                <option value="MTs">Madrasah Tsanawiyah</option>
+                                <option value="MA">Madrasah Aliyah</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Kelas</label>
+                            <input type="text" id="santri-kelas" class="form-control" placeholder="Contoh: 7A, 10 IPS 1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal Lahir</label>
+                            <input type="date" id="santri-tgl-lahir" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Alamat</label>
+                            <textarea id="santri-alamat" class="form-control" rows="2" placeholder="Alamat Lengkap" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Wali</label>
+                            <input type="text" id="santri-nama-wali" class="form-control" placeholder="Nama Wali Santri" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">No HP Wali</label>
+                            <input type="text" id="santri-hp-wali" class="form-control" placeholder="Contoh: 0812xxxxxx" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" id="btn-reset-santri">
+                        <i class="fas fa-refresh"></i> Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL DATA SANTRI -->
+            <div class="search-box">
+                <input type="text" id="search-santri" class="form-control" placeholder="Cari berdasarkan ID/Nama Santri...">
+                <button class="btn btn-primary" id="btn-cari-santri">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+
+            <div id="loading-santri" class="loading">Memuat data santri...</div>
+            
+            <div class="table-responsive" id="table-santri" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Santri</th>
+                            <th>Nama Santri</th>
+                            <th>Jenjang</th>
+                            <th>Kelas</th>
+                            <th>Nama Wali</th>
+                            <th>No HP Wali</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-santri"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB KEUANGAN -->
+        <div id="tab-keuangan" class="pengurus-tab-content">
+            <h2><i class="fas fa-money-bill-wave"></i> Kelola Data Keuangan</h2>
+            
+            <!-- FORM INPUT KEUANGAN -->
+            <div class="form-section">
+                <h3><i class="fas fa-plus"></i> Tambah/Ubah Data Keuangan</h3>
+                <form id="form-keuangan">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">ID Keuangan</label>
+                            <input type="text" id="keuangan-id" class="form-control" placeholder="Contoh: K001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID Santri</label>
+                            <input type="text" id="keuangan-id-santri" class="form-control" placeholder="Contoh: S001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bulan/Tahun</label>
+                            <input type="month" id="keuangan-bulan" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nominal Biaya (Rp)</label>
+                            <input type="number" id="keuangan-nominal" class="form-control" placeholder="Contoh: 500000" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status Pembayaran</label>
+                            <select id="keuangan-status" class="form-control" required>
+                                <option value="Lunas">Lunas</option>
+                                <option value="Belum Dibayar">Belum Dibayar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal Bayar</label>
+                            <input type="date" id="keuangan-tgl-bayar" class="form-control">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" id="btn-reset-keuangan">
+                        <i class="fas fa-refresh"></i> Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL DATA KEUANGAN -->
+            <div class="search-box">
+                <input type="text" id="search-keuangan" class="form-control" placeholder="Cari berdasarkan ID Santri/Nama...">
+                <button class="btn btn-primary" id="btn-cari-keuangan">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+
+            <div id="loading-keuangan" class="loading">Memuat data keuangan...</div>
+            
+            <div class="table-responsive" id="table-keuangan" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Keuangan</th>
+                            <th>ID Santri</th>
+                            <th>Bulan/Tahun</th>
+                            <th>Nominal (Rp)</th>
+                            <th>Status</th>
+                            <th>Tanggal Bayar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-keuangan"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB ABSENSI -->
+        <div id="tab-absensi" class="pengurus-tab-content">
+            <h2><i class="fas fa-calendar-check"></i> Kelola Data Absensi</h2>
+            
+            <!-- FORM INPUT ABSENSI -->
+            <div class="form-section">
+                <h3><i class="fas fa-plus"></i> Tambah/Ubah Data Absensi</h3>
+                <form id="form-absensi">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">ID Absensi</label>
+                            <input type="text" id="absensi-id" class="form-control" placeholder="Contoh: A001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID Santri</label>
+                            <input type="text" id="absensi-id-santri" class="form-control" placeholder="Contoh: S001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal</label>
+                            <input type="date" id="absensi-tanggal" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status Absensi</label>
+                            <select id="absensi-status" class="form-control" required>
+                                <option value="Hadir">Hadir</option>
+                                <option value="Sakit">Sakit</option>
+                                <option value="Izin">Izin</option>
+                                <option value="Alpa">Alpa</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Keterangan</label>
+                            <textarea id="absensi-keterangan" class="form-control" rows="2" placeholder="Tambahkan keterangan jika diperlukan"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" id="btn-reset-absensi">
+                        <i class="fas fa-refresh"></i> Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL DATA ABSENSI -->
+            <div class="search-box">
+                <input type="text" id="search-absensi" class="form-control" placeholder="Cari berdasarkan ID Santri/Nama...">
+                <input type="month" id="filter-absensi-bulan" class="form-control" style="max-width: 200px;">
+                <button class="btn btn-primary" id="btn-cari-absensi">
+                    <i class="fas fa-search"></i> Filter
+                </button>
+            </div>
+
+            <div id="loading-absensi" class="loading">Memuat data absensi...</div>
+            
+            <div class="table-responsive" id="table-absensi" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Absensi</th>
+                            <th>ID Santri</th>
+                            <th>Nama Santri</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-absensi"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB PELANGGARAN -->
+        <div id="tab-pelanggaran" class="pengurus-tab-content">
+            <h2><i class="fas fa-exclamation-triangle"></i> Kelola Data Pelanggaran</h2>
+            
+            <!-- FORM INPUT PELANGGARAN -->
+            <div class="form-section">
+                <h3><i class="fas fa-plus"></i> Tambah/Ubah Data Pelanggaran</h3>
+                <form id="form-pelanggaran">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">ID Pelanggaran</label>
+                            <input type="text" id="pelanggaran-id" class="form-control" placeholder="Contoh: P001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID Santri</label>
+                            <input type="text" id="pelanggaran-id-santri" class="form-control" placeholder="Contoh: S001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal</label>
+                            <input type="date" id="pelanggaran-tanggal" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Jenis Pelanggaran</label>
+                            <input type="text" id="pelanggaran-jenis" class="form-control" placeholder="Contoh: Telat masuk, Tidak membawa buku" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tingkat Pelanggaran</label>
+                            <select id="pelanggaran-tingkat" class="form-control" required>
+                                <option value="Ringan">Ringan</option>
+                                <option value="Sedang">Sedang</option>
+                                <option value="Berat">Berat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sanksi</label>
+                            <input type="text" id="pelanggaran-sanksi" class="form-control" placeholder="Contoh: Membaca doa, Membersihkan kamar" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status Sanksi</label>
+                            <select id="pelanggaran-status" class="form-control" required>
+                                <option value="Belum Dilaksanakan">Belum Dilaksanakan</option>
+                                <option value="Sudah Dilaksanakan">Sudah Dilaksanakan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" id="btn-reset-pelanggaran">
+                        <i class="fas fa-refresh"></i> Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL DATA PELANGGARAN -->
+            <div class="search-box">
+                <input type="text" id="search-pelanggaran" class="form-control" placeholder="Cari berdasarkan ID Santri/Nama...">
+                <button class="btn btn-primary" id="btn-cari-pelanggaran">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+
+            <div id="loading-pelanggaran" class="loading">Memuat data pelanggaran...</div>
+            
+            <div class="table-responsive" id="table-pelanggaran" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Pelanggaran</th>
+                            <th>ID Santri</th>
+                            <th>Nama Santri</th>
+                            <th>Tanggal</th>
+                            <th>Jenis</th>
+                            <th>Tingkat</th>
+                            <th>Sanksi</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pelanggaran"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB RAPORT -->
+        <div id="tab-raport" class="pengurus-tab-content">
+            <h2><i class="fas fa-graduation-cap"></i> Kelola Data Raport</h2>
+            
+            <!-- FORM INPUT RAPORT -->
+            <div class="form-section">
+                <h3><i class="fas fa-plus"></i> Tambah/Ubah Data Raport</h3>
+                <form id="form-raport">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">ID Raport</label>
+                            <input type="text" id="raport-id" class="form-control" placeholder="Contoh: R001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ID Santri</label>
+                            <input type="text" id="raport-id-santri" class="form-control" placeholder="Contoh: S001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Semester/Tahun Ajaran</label>
+                            <input type="text" id="raport-semester" class="form-control" placeholder="Contoh: Semester 1 (2024/2025)" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nilai Matematika</label>
+                            <input type="number" min="0" max="100" id="raport-mtk" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nilai Bahasa Indonesia</label>
+                            <input type="number" min="0" max="100" id="raport-bindo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nilai Aqidah Akhlak</label>
+                            <input type="number" min="0" max="100" id="raport-aqidah" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nilai Bahasa Arab</label>
+                            <input type="number" min="0" max="100" id="raport-barab" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Catatan Guru</label>
+                            <textarea id="raport-catatan" class="form-control" rows="3" placeholder="Catatan untuk wali dan santri"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" id="btn-reset-raport">
+                        <i class="fas fa-refresh"></i> Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL DATA RAPORT -->
+            <div class="search-box">
+                <input type="text" id="search-raport" class="form-control" placeholder="Cari berdasarkan ID Santri/Nama...">
+                <button class="btn btn-primary" id="btn-cari-raport">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+
+            <div id="loading-raport" class="loading">Memuat data raport...</div>
+            
+            <div class="table-responsive" id="table-raport" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Raport</th>
+                            <th>ID Santri</th>
+                            <th>Nama Santri</th>
+                            <th>Semester</th>
+                            <th>Rata-Rata Nilai</th>
+                            <th>Catatan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-raport"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB MANAJEMEN PENGURUS -->
+        <div id="tab-pengurus" class="pengurus-tab-content">
+            <h2><i class="fas fa-user-cog"></i> Kelola Data Pengurus</h2>
+            
+            <!-- FORM INPUT PENGURUS -->
+            <div class="form-section">
+                <h3><i class="fas fa-plus"></i> Tambah/Ubah Data Pengurus</h3>
+                <form id="form-pengurus">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">ID Pengurus</label>
+                            <input type="text" id="pengurus-id" class="form-control" placeholder="Contoh: PG001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" id="pengurus-nama" class="form-control" placeholder="Nama Pengurus" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" id="pengurus-username" class="form-control" placeholder="Username untuk login" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" id="pengurus-password" class="form-control" placeholder="Minimal 6 karakter">
+                                <button type="button" class="toggle-password" data-target="pengurus-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bidang Kerja</label>
+                            <select id="pengurus-bidang" class="form-control" required>
+                                <option value="Admin">Admin</option>
+                                <option value="Keuangan">Keuangan</option>
+                                <option value="Pengasuhan">Pengasuhan</option>
+                                <option value="Akademik">Akademik</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status Aktif</label>
+                            <select id="pengurus-status" class="form-control" required>
+                                <option value="Aktif">Aktif</option>
+                                <option value="Tidak Aktif">Tidak Aktif</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                    <button type="button" class="btn btn-secondary ml-2" id="btn-reset-pengurus">
+                        <i class="fas fa-refresh"></i> Reset Form
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL DATA PENGURUS -->
+            <div class="search-box">
+                <input type="text" id="search-pengurus" class="form-control" placeholder="Cari berdasarkan ID/Nama Pengurus...">
+                <button class="btn btn-primary" id="btn-cari-pengurus">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+
+            <div id="loading-pengurus" class="loading">Memuat data pengurus...</div>
+            
+            <div class="table-responsive" id="table-pengurus" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID Pengurus</th>
+                            <th>Nama Lengkap</th>
+                            <th>Username</th>
+                            <th>Bidang Kerja</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pengurus"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script src="assets/js/pengurus-dashboard.js"></script>
+</body>
+</html>
+<!-- ============================= CATATAN DEVELOPER PERINTIS WEBSITE ============================= 
+- Website ini dibuat oleh Lukman (sidoarjo) - Angkatan 2011 (IG: lukman_looker), seorang alumnus dari pesantren tercinta ini.
+- Tujuan pembuatan: Berkontribusi pada kemajuan PonPes PPAI Darul Huda dengan menyediakan media digital yang dapat diakses oleh santri, wali santri, alumni, dan masyarakat umum.
+- Izin yang diberikan: Setiap developer yang ingin melanjutkan pengembangan website ini DIIZINKAN secara bebas, dengan syarat tetap menjaga semangat kontribusi untuk pesantren dan menghormati nilai-nilai yang dijunjungi.
+- Permintaan khusus: Jika ingin melakukan pembaruan yang signifikan atau perubahan struktur utama, dimohon untuk meminta izin terlebih dahulu dengan DM Instagram: lukman_looker.
+- Harapan: Semoga website ini terus berkembang, memberikan manfaat lebih banyak, dan menjadi bagian dari perjuangan bersama untuk kemaslahatan pesantren dan sekitarnya.
+- Catatan tambahan: Silakan sesuaikan, perbarui, atau tambahkan fitur sesuai kebutuhan masa depan, asalkan tetap berorientasi pada tujuan utama yang telah ditetapkan.
+========================================================================================= -->

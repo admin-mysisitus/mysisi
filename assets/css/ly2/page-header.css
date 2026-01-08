@@ -1,0 +1,31 @@
+/* ========== PAGE HEADER (UNTUK SEMUA HALAMAN) ========== */
+.page-header {
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    padding: 4rem 0 2rem 0;
+    margin-top: 82px;
+}
+
+.page-header h1 {
+    font-size: var(--ukuran-judul-sedang);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.page-header a {
+    color: var(--warna-hijau-muda);
+}
+
+.page-header a:hover {
+    text-decoration: underline;
+}
+
+/* Modifier untuk variasi ukuran judul */
+.page-header--custom h1 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+}

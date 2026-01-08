@@ -1,0 +1,761 @@
+/* ========== VARIABEL (Jika diperlukan, tapi sudah ada di global.css) ========== */
+/* Tidak perlu menambahkan variabel lagi karena sudah didefinisikan di global.css */
+
+
+/* ========== PAGE HEADER ========== */
+.page-header {
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    padding: 3rem 0 1.5rem 0; /* Lebih kecil di mobile */
+    margin-top: 72px; /* Sesuaikan dengan tinggi header mobile */
+}
+
+.page-header .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header h1 {
+    font-size: clamp(1.3rem, 4vw, 2.2rem); /* Lebih responsif */
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.page-header p {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+.page-header a {
+    color: var(--warna-hijau-muda);
+}
+
+.page-header a:hover {
+    text-decoration: underline;
+}
+
+
+/* ========== PROFIL FORMAL SECTION ========== */
+.profil-content {
+    background-color: var(--warna-krem);
+    padding: 1.5rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.profil-content p {
+    text-align: justify;
+    line-height: 1.6;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+
+/* ========== JENJANG PENDIDIKAN SECTION ========== */
+.jenjang-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first: 1 kolom */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.jenjang-kartu {
+    background-color: var(--warna-krem);
+    border-radius: var(--radius-standar);
+    overflow: hidden;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+    width: 100%;
+}
+
+.jenjang-kartu:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elegan);
+}
+
+.kartu-header {
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    padding: 1rem; /* Lebih kecil di mobile */
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.kartu-header i {
+    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kartu-header h3 {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+}
+
+.kartu-body {
+    padding: 1rem; /* Lebih kecil di mobile */
+}
+
+.kartu-body p {
+    margin-bottom: 0.8rem;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.kartu-body ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    line-height: 1.5;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+
+/* ========== KURIKULUM SECTION ========== */
+.kurikulum-content {
+    display: flex;
+    flex-direction: column; /* Mobile first: kolom vertikal */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.kurikulum-img img {
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-elegan);
+    width: 100%;
+    height: auto;
+}
+
+.kurikulum-text h3 {
+    color: var(--warna-hijau-tua);
+    font-size: clamp(1.1rem, 3vw, 1.2rem);
+    margin-bottom: 0.8rem;
+}
+
+.kurikulum-text p {
+    text-align: justify;
+    line-height: 1.6;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.kurikulum-text ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+
+/* ========== PRESTASI SECTION ========== */
+.prestasi-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first: 1 kolom */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.prestasi-kartu {
+    background-color: var(--warna-krem);
+    padding: 1.5rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    width: 100%;
+}
+
+.prestasi-icon {
+    width: 45px;
+    height: 45px;
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.prestasi-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 0.8rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+}
+
+.prestasi-kartu ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+
+/* ========== KONTAK JENJANG SECTION ========== */
+.kontak-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr); /* Mobile first: 1 kolom */
+    gap: 1rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.kontak-kartu {
+    background-color: var(--warna-putih);
+    padding: 1rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    text-align: center;
+    width: 100%;
+}
+
+.kontak-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 0.8rem;
+    font-size: clamp(1rem, 3vw, 1.1rem);
+}
+
+.kontak-kartu p {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    margin-bottom: 0.3rem;
+    line-height: 1.4;
+}
+
+
+/* ========== PENDAFTARAN SPESIFIK CSS ========== */
+.wajib {
+    color: #E63946; /* Tambahkan warna merah karena tidak ada di global.css */
+}
+
+/* INFO PENDAFTARAN */
+.info-content {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first: 1 kolom */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.info-box {
+    background-color: var(--warna-krem);
+    padding: 1.5rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.box-icon {
+    width: 45px;
+    height: 45px;
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+}
+
+.box-text h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 0.8rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+}
+
+.box-text p, 
+.box-text ul {
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.box-text ul {
+    padding-left: 1.2rem;
+    list-style: disc;
+}
+
+/* SYARAT PENDAFTARAN */
+.syarat-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first: 1 kolom */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.syarat-kartu {
+    background-color: var(--warna-krem);
+    padding: 1.5rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    width: 100%;
+}
+
+.syarat-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 0.8rem;
+    font-size: clamp(1rem, 3vw, 1.1rem);
+}
+
+.syarat-kartu ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+/* FORMULIR PENDAFTARAN */
+.form-container {
+    background-color: var(--warna-krem);
+    padding: 1.5rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    box-shadow: var(--shadow-lembut);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.form-note {
+    text-align: justify;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem; /* Lebih kecil di mobile */
+    background-color: rgba(42, 157, 143, 0.1);
+    border-left: 4px solid var(--warna-hijau-tua);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.pendaftaran-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column; /* Mobile first: kolom vertikal */
+    gap: 1.2rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.form-group {
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    color: var(--warna-hitam-soft);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem; /* Lebih kecil di mobile */
+    border: 1px solid var(--warna-abu-terang);
+    border-radius: var(--radius-standar);
+    font-family: var(--font-utama);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    transition: var(--transisi-standar);
+    background-color: var(--warna-putih);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--warna-hijau-muda);
+    box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap; /* Agar tidak terpotong di mobile */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    padding: 0.3rem 0;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.captcha-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem; /* Lebih kecil di mobile */
+    margin-bottom: 0.4rem;
+    width: 100%;
+}
+
+.captcha-box span {
+    background-color: var(--warna-abu-sedang);
+    color: var(--warna-putih);
+    padding: 0.7rem 1rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.refresh-captcha {
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    border: none;
+    padding: 0.7rem 0.9rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    cursor: pointer;
+    transition: var(--transisi-standar);
+    flex-shrink: 0;
+}
+
+.refresh-captcha:hover {
+    background-color: var(--warna-hijau-muda);
+}
+
+/* BEASISWA SECTION */
+.beasiswa-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile first: 1 kolom */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.beasiswa-kartu {
+    background-color: var(--warna-krem);
+    padding: 1.5rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    text-align: center;
+    box-shadow: var(--shadow-lembut);
+    transition: var(--transisi-standar);
+    width: 100%;
+}
+
+.beasiswa-kartu:hover {
+    transform: translateY(-3px); /* Lebih lembut di mobile */
+    box-shadow: var(--shadow-elegan);
+}
+
+.beasiswa-kartu .kartu-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    font-size: 1.2rem;
+}
+
+.beasiswa-kartu h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 0.8rem;
+    font-size: clamp(1rem, 3vw, 1.1rem);
+}
+
+.beasiswa-kartu p {
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.kartu-link {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    color: var(--warna-hijau-tua);
+    font-weight: 500;
+}
+
+.kartu-link:hover {
+    color: var(--warna-hijau-muda);
+}
+
+/* KONTAK PENDAFTARAN */
+.kontak-pendaftaran-content {
+    display: flex;
+    flex-direction: column; /* Mobile first: kolom vertikal */
+    gap: 1.5rem; /* Lebih kecil di mobile */
+    width: 100%;
+}
+
+.kontak-info {
+    width: 100%;
+}
+
+.kontak-info h3 {
+    color: var(--warna-hijau-tua);
+    margin-bottom: 1rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+}
+
+.kontak-info ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* Lebih kecil di mobile */
+    margin-bottom: 1rem;
+}
+
+.kontak-info li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem; /* Lebih kecil di mobile */
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.kontak-info i {
+    color: var(--warna-hijau-tua);
+    width: 18px;
+    text-align: center;
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+}
+
+.sosmed-pendaftaran h4 {
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.sosmed-pendaftaran a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem; /* Lebih kecil di mobile */
+    background-color: var(--warna-hijau-tua);
+    color: var(--warna-putih);
+    padding: 0.4rem 0.8rem; /* Lebih kecil di mobile */
+    border-radius: var(--radius-standar);
+    margin-right: 0.8rem;
+    margin-bottom: 0.8rem;
+    transition: var(--transisi-standar);
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.sosmed-pendaftaran a:hover {
+    background-color: var(--warna-hijau-muda);
+}
+
+.lokasi-peta {
+    width: 100%;
+}
+
+.lokasi-peta iframe {
+    width: 100%;
+    height: 250px; /* Lebih pendek di mobile */
+    border-radius: var(--radius-standar);
+    border: none;
+    box-shadow: var(--shadow-lembut);
+}
+
+
+/* ========== RESPONSIF BREAKPOINT (Mulai dari Tablet ke Atas) ========== */
+@media (min-width: 576px) {
+    /* Kontak Jenjang */
+    .kontak-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+
+    /* Info Pendaftaran */
+    .info-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Page Header */
+    .page-header {
+        padding: 4rem 0 2rem 0;
+        margin-top: 82px; /* Sesuaikan dengan tinggi header desktop */
+    }
+
+    /* Profil Formal */
+    .profil-content {
+        padding: 2rem;
+    }
+
+    /* Jenjang Pendidikan */
+    .jenjang-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .kartu-header {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .kartu-header i {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .kartu-body {
+        padding: 1.5rem;
+    }
+
+    /* Kurikulum */
+    .kurikulum-content {
+        flex-direction: row;
+        gap: 4rem;
+    }
+
+    .kurikulum-img,
+    .kurikulum-text {
+        flex: 1;
+    }
+
+    /* Prestasi */
+    .prestasi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .prestasi-kartu {
+        padding: 2rem;
+    }
+
+    .prestasi-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Kontak Jenjang */
+    .kontak-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+
+    .kontak-kartu {
+        padding: 1.5rem;
+    }
+
+    /* Pendaftaran Spesifik */
+    .info-content {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    .info-box {
+        padding: 2rem;
+        gap: 1.5rem;
+    }
+
+    .box-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .syarat-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .syarat-kartu {
+        padding: 2rem;
+    }
+
+    .form-container {
+        padding: 2.5rem;
+    }
+
+    .form-note {
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .pendaftaran-form {
+        gap: 1.5rem;
+    }
+
+    .form-row {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.8rem 1rem;
+    }
+
+    .radio-group {
+        gap: 2rem;
+    }
+
+    .captcha-box {
+        gap: 1rem;
+    }
+
+    .captcha-box span {
+        padding: 0.8rem 1.2rem;
+    }
+
+    .refresh-captcha {
+        padding: 0.8rem 1rem;
+    }
+
+    /* Beasiswa */
+    .beasiswa-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    .beasiswa-kartu {
+        padding: 2rem;
+    }
+
+    .beasiswa-kartu .kartu-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Kontak Pendaftaran */
+    .kontak-pendaftaran-content {
+        flex-direction: row;
+        gap: 4rem;
+    }
+
+    .kontak-info,
+    .lokasi-peta {
+        flex: 1;
+    }
+
+    .lokasi-peta iframe {
+        height: 100%;
+        min-height: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+    /* Penyesuaian kecil untuk layar besar */
+    .jenjang-grid {
+        gap: 2.5rem;
+    }
+
+    .prestasi-grid {
+        gap: 2.5rem;
+    }
+
+    .beasiswa-grid {
+        gap: 2.5rem;
+    }
+}
