@@ -11,16 +11,18 @@ html {
 body {
   font-family: var(--font-utama);
   font-size: var(--teks-standar);
-  color: var(--hitam-soft);
-  background-color: var(--krem);
-  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-white);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
-  padding-top: clamp(70px, 12vw, 88px);
+  padding-top: clamp(50px, 8vw, 65px);
   transition: padding-top var(--transisi);
 }
 
 body.header-scroll {
-  padding-top: clamp(60px, 10vw, 72px);
+  padding-top: clamp(45px, 7vw, 55px);
 }
 
 a, button {
@@ -45,9 +47,29 @@ img {
   display: block;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+}
+
+p {
+  line-height: var(--line-height-relaxed);
+}
+
 /* Status aktif navigasi */
 .nav-desktop-link.active,
 .nav-mobile-link.active {
   font-weight: 600;
-  color: var(--hijau-tua);
+  color: var(--primary-blue);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
 }

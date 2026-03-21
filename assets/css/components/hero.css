@@ -1,0 +1,936 @@
+/* ========== UNIFIED HERO COMPONENT ========== */
+/* Komponen hero yang digunakan di semua halaman */
+/* Hero langsung setelah header, tidak perlu breadcrumb */
+
+.hero {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--bg-white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background decoration */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero Title */
+.hero h1 {
+  font-size: var(--judul-besar);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+  line-height: var(--line-height-tight);
+}
+
+/* Hero Description/Subtitle */
+.hero p {
+  font-size: var(--teks-standar);
+  opacity: 0.95;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Hero with CTA (optional) */
+.hero .hero-cta {
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero .hero-cta .btn {
+  padding: 0.75rem 1.75rem;
+  font-size: var(--teks-standar);
+}
+
+/* ========== HOME HERO VARIANT ========== */
+/* Hero dengan layout grid (gambar + konten) untuk home page */
+.hero-home {
+  padding: clamp(2rem, 5vw, 3.5rem) 0;
+}
+
+.hero-home::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-home .hero-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+.hero-home .hero-content {
+  max-width: 750px;
+  position: relative;
+  z-index: 1;
+  text-align: left;
+}
+
+.hero-home .hero-content h1 {
+  animation: slideInUp 0.8s ease-out;
+  color: #ffffff;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.hero-home .hero-content p {
+  margin-bottom: clamp(2rem, 4vw, 2.5rem);
+  animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+/* Hero Subtitle Styling - Home Page */
+.hero-home .hero-subtitle {
+  text-align: center;
+  font-size: clamp(1.3rem, 3vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+/* Highlight Text - "Naik Level!" */
+.hero-subtitle .highlight-text {
+  color: rgba(255, 157, 0, 1);
+  font-weight: 700;
+}
+
+.hero-home .cta-buttons {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  animation: slideInUp 0.8s ease-out 0.4s both;
+  justify-content: flex-start;
+}
+
+.hero-home .hero-illustration {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-home .hero-illustration img {
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+}
+
+/* ========== HERO HIGHLIGHTS ========== */
+.hero-home .hero-highlights {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.hero-home .hero-highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: var(--teks-standar);
+  color: var(--bg-white);
+  line-height: var(--line-height-relaxed);
+}
+
+.hero-home .hero-highlights i {
+  color: var(--accent-cyan);
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+/* ========== HERO FEATURES SECTION ========== */
+.hero-home .hero-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-home .hero-feature-item {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-large);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--bg-white);
+  backdrop-filter: blur(10px);
+  transition: var(--transisi);
+}
+
+.hero-home .hero-feature-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-5px);
+}
+
+.hero-home .hero-feature-item i {
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.hero-home .hero-feature-item p {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 600;
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-home .hero-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .hero-home .hero-highlights {
+    text-align: center;
+  }
+
+  .hero-home .hero-highlights li {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-home .hero-wrapper {
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .hero-home .hero-content {
+    text-align: center;
+  }
+
+  .hero-home .cta-buttons {
+    justify-content: center;
+  }
+
+  .hero-home .hero-illustration img {
+    max-width: 350px;
+  }
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .hero p {
+    font-size: clamp(0.95rem, 2vw, 1rem);
+  }
+
+  .hero .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero .hero-cta .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* ========== ARTIKEL HERO VARIANT ========== */
+/* Hero untuk halaman artikel dengan metadata */
+.hero-artikel {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+}
+
+.hero-artikel h1 {
+  font-size: var(--judul-besar);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+  line-height: var(--line-height-tight);
+}
+
+/* Artikel Metadata styling */
+.hero-artikel .artikel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  font-size: var(--teks-standar);
+  color: var(--bg-white);
+  margin-top: 1.5rem;
+}
+
+.hero-artikel .meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.9;
+}
+
+.hero-artikel .meta-item i {
+  font-size: 1rem;
+}
+
+.hero-artikel .meta-item a {
+  color: var(--bg-white);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero-artikel .meta-item a:hover {
+  opacity: 0.7;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .hero p {
+    font-size: clamp(0.95rem, 2vw, 1rem);
+  }
+
+  .hero .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero .hero-cta .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .hero-artikel .artikel-meta {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 2rem 0;
+  }
+
+  .hero h1 {
+    font-size: 1.25rem;
+  }
+
+  .hero p {
+    font-size: 0.9375rem;
+  }
+
+  .hero-artikel .artikel-meta {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* ========== UNIVERSAL CTA SECTIONS BASE STYLES ========== */
+/* Consolidated styling untuk semua CTA sections dengan blue gradient background */
+.detail-cta-section,
+.promo-cta-final-section,
+.layanan-cta-section,
+.tips-cta-section,
+.karir-cta-section,
+.company-cta-section,
+.about-cta-section,
+.kontak-cta-section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background circles - shared across all blue CTA sections */
+.detail-cta-section::before,
+.promo-cta-final-section::before,
+.layanan-cta-section::before,
+.tips-cta-section::before,
+.karir-cta-section::before,
+.kontak-cta-section::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.promo-cta-final-section::before {
+  top: -50%;
+}
+
+.karir-cta-section::before {
+  top: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.kontak-cta-section::before {
+  top: -50%;
+}
+
+/* Bottom decorative circle untuk beberapa sections */
+.detail-cta-section::after,
+.promo-cta-final-section::after,
+.karir-cta-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.karir-cta-section::after {
+  bottom: -50px;
+  right: -50px;
+  left: auto;
+  width: 250px;
+  height: 250px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Headings for all blue CTA sections */
+.detail-cta-section h2,
+.promo-cta-final-section h2,
+.layanan-cta-section h2,
+.tips-cta-section h2,
+.karir-cta-section h2,
+.company-cta-section h2,
+.about-cta-section h2,
+.kontak-cta-section h2 {
+  font-size: var(--judul-sedang);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.company-cta-section h2,
+.about-cta-section h2 {
+  font-size: var(--judul-besar);
+  font-weight: 700;
+}
+
+/* Paragraphs for all blue CTA sections */
+.detail-cta-section p,
+.promo-cta-final-section p,
+.layanan-cta-section p,
+.tips-cta-section p,
+.karir-cta-section p,
+.company-cta-section p,
+.about-cta-section p,
+.kontak-cta-section p {
+  font-size: var(--teks-standar);
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  position: relative;
+  z-index: 1;
+  line-height: var(--line-height-relaxed);
+}
+
+.company-cta-section p,
+.about-cta-section p {
+  line-height: 1.8;
+}
+
+.karir-cta-section p {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.kontak-cta-section p {
+  margin-bottom: 2rem;
+}
+
+/* Shared CTA buttons styling */
+.detail-cta-section .cta-buttons,
+.promo-cta-final-section .cta-buttons,
+.layanan-cta-section .cta-buttons,
+.tips-cta-section .cta-buttons,
+.karir-cta-section .cta-buttons,
+.company-cta-section .cta-buttons,
+.about-cta-section .cta-buttons,
+.kontak-cta-section .cta-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.karir-cta-section .cta-buttons {
+  margin-top: 2rem;
+}
+
+.kontak-cta-section .cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Buttons inside CTA sections */
+.detail-cta-section .cta-buttons .btn,
+.promo-cta-final-section .cta-buttons .btn,
+.layanan-cta-section .cta-buttons .btn,
+.tips-cta-section .cta-buttons .btn,
+.karir-cta-section .cta-buttons .btn,
+.company-cta-section .cta-buttons .btn,
+.about-cta-section .cta-buttons .btn,
+.kontak-cta-section .cta-buttons .btn {
+  padding: 1rem 2rem;
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  transition: var(--transisi);
+}
+
+.karir-cta-section .btn {
+  min-width: 220px;
+  position: relative;
+  will-change: transform;
+}
+
+.kontak-cta-section .cta-buttons .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.kontak-cta-section .cta-buttons .btn:active {
+  transform: translateY(-1px);
+}
+
+/* Contact Info styling */
+.detail-cta-section .contact-info,
+.promo-cta-final-section .contact-info {
+  font-size: var(--teks-kecil);
+  opacity: 0.95;
+  position: relative;
+  z-index: 1;
+  margin-top: 1.5rem;
+  line-height: 1.8;
+}
+
+.detail-cta-section .contact-info a,
+.promo-cta-final-section .contact-info a {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transisi);
+}
+
+.detail-cta-section .contact-info a:hover,
+.promo-cta-final-section .contact-info a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* ========== CTA FINAL SECTION (HOME PAGE) ========== */
+
+.kontak-cta-section h2 {
+  font-size: var(--judul-sedang);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.kontak-cta-section p {
+  font-size: var(--teks-standar);
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.kontak-cta-section .cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.kontak-cta-section .cta-buttons .btn {
+  transition: var(--transisi);
+}
+
+.kontak-cta-section .cta-buttons .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.kontak-cta-section .cta-buttons .btn:active {
+  transform: translateY(-1px);
+}
+
+/* ========== CTA SECTIONS RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .detail-cta-section,
+  .promo-cta-final-section,
+  .layanan-cta-section,
+  .tips-cta-section,
+  .karir-cta-section,
+  .company-cta-section,
+  .about-cta-section,
+  .kontak-cta-section {
+    padding: 3rem 0;
+  }
+
+  .karir-cta-section {
+    padding: clamp(2rem, 5vw, 3rem) 0;
+  }
+
+  .detail-cta-section h2,
+  .promo-cta-final-section h2,
+  .layanan-cta-section h2,
+  .tips-cta-section h2,
+  .karir-cta-section h2,
+  .company-cta-section h2,
+  .about-cta-section h2,
+  .kontak-cta-section h2 {
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    margin-bottom: 1rem;
+  }
+
+  .detail-cta-section p,
+  .promo-cta-final-section p,
+  .layanan-cta-section p,
+  .tips-cta-section p,
+  .karir-cta-section p,
+  .company-cta-section p,
+  .about-cta-section p,
+  .kontak-cta-section p {
+    font-size: clamp(0.95rem, 2vw, 1rem);
+    margin-bottom: 2rem;
+  }
+
+  .detail-cta-section .cta-buttons,
+  .promo-cta-final-section .cta-buttons,
+  .layanan-cta-section .cta-buttons,
+  .tips-cta-section .cta-buttons,
+  .karir-cta-section .cta-buttons,
+  .company-cta-section .cta-buttons,
+  .about-cta-section .cta-buttons,
+  .kontak-cta-section .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detail-cta-section .cta-buttons .btn,
+  .promo-cta-final-section .cta-buttons .btn,
+  .layanan-cta-section .cta-buttons .btn,
+  .tips-cta-section .cta-buttons .btn,
+  .karir-cta-section .cta-buttons .btn,
+  .company-cta-section .cta-buttons .btn,
+  .about-cta-section .cta-buttons .btn,
+  .kontak-cta-section .cta-buttons .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-cta-section,
+  .promo-cta-final-section,
+  .layanan-cta-section,
+  .tips-cta-section,
+  .karir-cta-section,
+  .company-cta-section,
+  .about-cta-section,
+  .kontak-cta-section {
+    padding: 2.5rem 0;
+  }
+
+  .detail-cta-section h2,
+  .promo-cta-final-section h2,
+  .layanan-cta-section h2,
+  .tips-cta-section h2,
+  .karir-cta-section h2,
+  .company-cta-section h2,
+  .about-cta-section h2,
+  .kontak-cta-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .detail-cta-section p,
+  .promo-cta-final-section p,
+  .layanan-cta-section p,
+  .tips-cta-section p,
+  .karir-cta-section p,
+  .company-cta-section p,
+  .about-cta-section p,
+  .kontak-cta-section p {
+    font-size: var(--teks-standar);
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-cta-section .contact-info,
+  .promo-cta-final-section .contact-info {
+    font-size: var(--teks-kecil);
+  }
+}
+
+/* ========== HOME PAGE CTA FINAL SECTION (LIGHT VARIANT) ========== */
+/* CTA final section di home page - light background variant */
+.cta-final-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--white);
+  text-align: center;
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-final-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.cta-final-section p {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  margin-bottom: 2rem;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--line-height-relaxed);
+}
+
+.cta-final-section .cta-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  animation: slideInUp 0.6s ease-out 0.2s backwards;
+}
+
+.cta-final-section .cta-buttons .btn {
+  transition: var(--transisi);
+}
+
+.cta-final-section .cta-buttons .btn:hover {
+  transform: translateY(-6px) scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .cta-final-section {
+    padding: 3rem 0;
+  }
+
+  .cta-final-section .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-final-section .cta-buttons .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-final-section {
+    padding: 2.5rem 0;
+  }
+}
+
+/* ========== CUSTOM CTA SECTIONS (MIGRATED FROM PAGE-SPECIFIC CSS) ========== */
+/* Untuk memastikan semua CTA sections adalah reusable components */
+
+/* ========== COMPARISON CTA (Home Page) ========== */
+/* CTA yang muncul di dalam comparison section */
+.comparison-cta {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.comparison-cta p {
+  font-size: var(--teks-standar);
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--line-height-relaxed);
+}
+
+.comparison-cta .btn {
+  transition: var(--transisi);
+}
+
+@media (max-width: 768px) {
+  .comparison-cta {
+    margin-top: 2rem;
+    padding-top: 2rem;
+  }
+
+  .comparison-cta p {
+    font-size: clamp(0.95rem, 2vw, 1rem);
+  }
+}
+
+/* ========== SERVICES CARD CTA (Home Page) ========== */
+/* CTA yang muncul di footer setiap service card */
+.services-cta-footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  border-top: 2px solid var(--border-light);
+  border-radius: 0 0 var(--radius-large) var(--radius-large);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(0, 216, 255, 0.03) 100%);
+}
+
+.services-cta-footer .link-arrow {
+  font-size: var(--teks-standar);
+  color: var(--primary-blue);
+  font-weight: 600;
+  transition: var(--transisi);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.services-cta-footer .link-arrow::after {
+  content: '→';
+  display: inline-block;
+  transition: var(--transisi);
+}
+
+.services-cta-footer .link-arrow:hover {
+  color: var(--accent-cyan);
+  gap: 0.8rem;
+}
+
+.services-cta-footer .link-arrow:hover::after {
+  transform: translateX(4px);
+}
+
+/* ========== SERVICES SECTION CTA (Home Page) ========== */
+/* CTA minimal untuk services sections */
+.services-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+  .services-cta {
+    margin-top: 2rem;
+  }
+}
+
+/* ========== ARTIKEL SIDEBAR CTA (Article Pages) ========== */
+/* CTA yang muncul di sidebar halaman artikel detail */
+.artikel-cta {
+  background: var(--bg-light);
+  padding: 25px;
+  border-radius: 12px;
+  border-left: 4px solid var(--primary-blue);
+}
+
+.artikel-cta h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.artikel-cta p {
+  font-size: 0.9375rem;
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.artikel-cta .btn {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 0.9375rem;
+  text-align: center;
+  text-decoration: none;
+  background: var(--primary-blue);
+  color: var(--bg-white);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.artikel-cta .btn:hover {
+  background: var(--accent-cyan);
+}
+
+@media (max-width: 768px) {
+  .artikel-cta {
+    padding: 20px;
+  }
+
+  .artikel-cta h3 {
+    font-size: 1rem;
+  }
+
+  .artikel-cta p {
+    font-size: 0.9rem;
+  }
+
+  .artikel-cta .btn {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+  }
+}

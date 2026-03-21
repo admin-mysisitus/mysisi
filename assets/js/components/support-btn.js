@@ -1,49 +1,89 @@
-// Dynamic WhatsApp Link & Script Tombol Support
+// Support Button Builder & Dynamic WhatsApp Links untuk SISITUS.COM
 window.addEventListener("load", () => {
-  const supportBtn = document.querySelector(".support-btn");
-  const whatsappHeader = document.querySelector(".whatsapp-header");
-  const whatsappSublist = document.getElementById("whatsapp-sublist");
-  const kontakLi = document.querySelector(".support-panel .info");
   const supportWrapper = document.querySelector(".support-btn-wrapper");
+
+  // Jika wrapper tidak ada, hentikan
+  if (!supportWrapper) return;
+
+  // Daftar nomor WA placeholder
+  const waContacts = [
+    {
+      label: "Customer Service",
+      number: "6281215289095",
+      schedule: "(Senin-Jumat: 08.00-17.00 WIB)",
+      class: "wa-cs-link"
+    },
+    {
+      label: "Admin Pembuatan Website",
+      number: "6281215289095",
+      class: "wa-admin1-link"
+    }
+  ];
 
   // Mapping path halaman ke pesan WA
   const pathMessageMap = {
-    "/": "Assalamu'alaikum PPAI Darul Huda! Saya ingin mengetahui lebih banyak tentang pesantren Anda.",
-    "/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin mengetahui lebih banyak tentang pesantren Anda.",
-    "/profile/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya baru membaca profil pesantren dan ingin tahu lebih lanjut.",
-    "/lembaga/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin bertanya tentang lembaga yang ada di pesantren.",
-    "/lembaga/pendaftaran.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin bertanya tentang prosedur dan syarat pendaftaran.",
-    "/lembaga/yayasan/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin mengetahui lebih lanjut tentang yayasan pengelola pesantren.",
-    "/lembaga/madin/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin bertanya tentang program pendidikan di MADIN.",
-    "/lembaga/formal/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin bertanya tentang program pendidikan formal di pesantren.",
-    "/berita/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya melihat berita terbaru dan ingin mengetahui detail lebih lanjut.",
-    "/berita/detail.html": "Assalamu'alaikum PPAI Darul Huda! Saya membaca artikel berita ini dan ingin bertanya terkait isinya.",
-    "/iksada/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin mengetahui lebih banyak tentang program IKSADA.",
-    "/iksada/tracking.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin melacak progres pendaftaran atau program IKSADA.",
-    "/iksada/registrasi.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin melakukan registrasi atau bertanya tentang prosedur IKSADA.",
-    "/pondigi/index.html": "Assalamu'alaikum PPAI Darul Huda! Saya ingin bertanya tentang layanan atau program Pondigi."
+    "/": "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang layanan Anda.",
+    "/index.html": "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang layanan Anda.",
+    "/promo/index.html": "Halo SISITUS.COM! Saya tertarik dengan promo yang ditawarkan.",
+    "/blog/index.html": "Halo SISITUS.COM! Saya ingin membaca artikel terbaru di blog Anda.",
+    "/blog/artikel/index.html": "Halo SISITUS.COM! Saya ingin membaca artikel-artikel yang tersedia.",
+    "/blog/artikel/detail.html": "Halo SISITUS.COM! Saya membaca artikel ini dan ingin bertanya lebih lanjut.",
+    "/blog/tips-website/index.html": "Halo SISITUS.COM! Saya ingin mendapatkan tips website terbaru.",
+    "/blog/tips-website/detail.html": "Halo SISITUS.COM! Saya ingin mendiskusikan tips website ini lebih lanjut.",
+    "/layanan/index.html": "Halo SISITUS.COM! Saya ingin mengetahui semua layanan yang tersedia.",
+    "/layanan/pembuatan-website/index.html": "Halo SISITUS.COM! Saya ingin bertanya tentang layanan pembuatan website.",
+    "/layanan/domain-hosting/index.html": "Halo SISITUS.COM! Saya ingin bertanya tentang layanan domain & hosting.",
+    "/layanan/maintenance/index.html": "Halo SISITUS.COM! Saya ingin bertanya tentang layanan maintenance website.",
+    "/perusahaan/index.html": "Halo SISITUS.COM! Saya ingin mengetahui profil perusahaan Anda.",
+    "/perusahaan/tentang/index.html": "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang perusahaan Anda.",
+    "/perusahaan/legal/index.html": "Halo SISITUS.COM! Saya ingin informasi mengenai aspek legal perusahaan."
   };
 
   const currentPath = window.location.pathname;
-  const message = pathMessageMap[currentPath] || "Assalamu'alaikum PPAI Darul Huda!";
+  const defaultMessage = "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang layanan Anda.";
+  const message = pathMessageMap[currentPath] || defaultMessage;
 
-  const mainWaNumber = "62882010067695";
-  const regWaNumber = "62812xxxxxx";
-  const iksadaWaNumber = "62858xxxxxx";
+  // Bangun HTML support button
+  supportWrapper.innerHTML = `
+    <button class="support-btn" aria-expanded="false" aria-controls="support-panel" aria-label="Toggle Support Panel">
+      <i class="fas fa-headset" aria-hidden="true"></i>
+    </button>
+    <nav id="support-panel" class="support-panel" role="region" aria-label="Support Panel" aria-hidden="true" tabindex="-1">
+      <ul>
+        <li class="support-list whatsapp-header" role="button" tabindex="0" aria-expanded="false" aria-controls="whatsapp-sublist" aria-haspopup="true">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp <i class="fas fa-caret-down" aria-hidden="true"></i>
+        </li>
+        <li>
+          <ul id="whatsapp-sublist" class="support-sublist" role="list" hidden aria-hidden="true">
+            ${waContacts
+              .map(contact => `
+              <li>
+                <i class="fas fa-${contact.label.includes("Admin") ? "user-tie" : "building"}" aria-hidden="true"></i>
+                <a href="https://wa.me/${contact.number}?text=${encodeURIComponent(message)}" target="_blank" rel="noopener noreferrer" class="${contact.class}" aria-label="Chat WhatsApp ${contact.label}">
+                  ${contact.label}${contact.schedule ? `<br>${contact.schedule}` : ""}
+                </a>
+              </li>
+            `).join("")}
+          </ul>
+        </li>
+        <li role="link" class="info" tabindex="0" aria-label="Halaman Kontak SISITUS.COM">
+          <i class="fas fa-info-circle" aria-hidden="true"></i> Halaman Kontak
+        </li>
+        <li class="email" role="none" data-no-sc>
+          <i class="fas fa-envelope" aria-hidden="true"></i>
+          <a href="mailto:sisitus.com@gmail.com?subject=Halo SISITUS.COM" aria-label="Kirim email ke sisitus.com@gmail.com">
+            sisitus.com@gmail.com
+          </a>
+        </li>
+      </ul>
+    </nav>
+  `;
 
-  const waKantorLink = document.querySelector(".wa-kantor-link");
-  const waCp1Link = document.querySelector(".wa-cp1-link");
-  const waCp2Link = document.querySelector(".wa-cp2-link");
-
-  if (waKantorLink) {
-    waKantorLink.href = `https://wa.me/${mainWaNumber}?text=${encodeURIComponent(message)}`;
-  }
-  if (waCp1Link) {
-    waCp1Link.href = `https://wa.me/${regWaNumber}?text=${encodeURIComponent("Assalamu'alaikum Admin Pendaftaran! " + message)}`;
-  }
-  if (waCp2Link) {
-    waCp2Link.href = `https://wa.me/${iksadaWaNumber}?text=${encodeURIComponent("Assalamu'alaikum Admin IKSADA! " + message)}`;
-  }
+  // Reuse event listener JS yang sudah ada
+  const supportBtn = supportWrapper.querySelector(".support-btn");
+  const whatsappHeader = supportWrapper.querySelector(".whatsapp-header");
+  const whatsappSublist = supportWrapper.querySelector("#whatsapp-sublist");
+  const kontakLi = supportWrapper.querySelector(".info");
 
   let isAnimatingBack = false;
 
@@ -98,7 +138,7 @@ window.addEventListener("load", () => {
   });
 
   kontakLi.addEventListener("click", () => {
-    window.location.href = "/lembaga/index.html#kontak";
+    window.location.href = "/kontak/index.html";
   });
 
   kontakLi.addEventListener("keydown", (e) => {

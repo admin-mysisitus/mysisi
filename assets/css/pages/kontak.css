@@ -1,0 +1,431 @@
+/* ========== KONTAK PAGE STYLES ========== */
+/* Styling khusus halaman KONTAK dengan fokus pada form interaksi dan contact info */
+
+/* Animations moved to base/shared-animations.css for deduplication */
+
+/* ========== KONTAK HERO SECTION ========== */
+/* Styling handled by components/hero.css - .hero and base classes */
+
+/* ========== KONTAK INFO SECTION ========== */
+.kontak-info-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.kontak-info-section h2 {
+  font-size: var(--judul-sedang);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  text-align: center;
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.section-subtitle {
+  font-size: var(--teks-standar);
+  color: var(--text-secondary);
+  margin-bottom: clamp(2.5rem, 4vw, 3rem);
+  text-align: center;
+  animation: slideUpFadeIn 0.7s ease-out forwards;
+  opacity: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+}
+
+.contact-item {
+  background: var(--bg-white);
+  padding: clamp(2rem, 3vw, 2.5rem);
+  border-radius: var(--radius-large);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  transition: var(--transisi);
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+  border: 1.5px solid var(--border-light);
+}
+
+/* Animation delays handled automatically by shared-sections.css [class*="item"] selector */
+
+.contact-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(6, 182, 212, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 28px;
+  color: var(--accent-cyan);
+  transition: var(--transisi);
+}
+
+.contact-item:hover .contact-icon {
+  background: rgba(6, 182, 212, 0.2);
+  transform: scale(1.1);
+}
+
+.contact-item h3 {
+  font-size: var(--judul-sedang);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.contact-item p {
+  font-size: var(--teks-kecil);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.contact-item a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transisi);
+}
+
+.contact-item a:hover {
+  color: var(--primary-blue);
+  text-decoration: underline;
+}
+
+/* ========== KONTAK FORM SECTION ========== */
+.kontak-form-section {
+  padding: 4rem 0;
+  background-color: var(--white);
+}
+
+.kontak-form-section h2 {
+  font-size: var(--judul-sedang);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  text-align: center;
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.kontak-form-section > .section-subtitle {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 2.5rem auto 0;
+  background: var(--bg-light);
+  padding: 2.5rem;
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  animation: slideUpFadeIn 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.4s; }
+.form-group:nth-child(2) { animation-delay: 0.45s; }
+.form-group:nth-child(3) { animation-delay: 0.5s; }
+.form-group:nth-child(4) { animation-delay: 0.55s; }
+.form-group:nth-child(5) { animation-delay: 0.6s; }
+.form-group:nth-child(6) { animation-delay: 0.65s; }
+
+.form-group label {
+  display: block;
+  font-size: var(--teks-kecil);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  transition: var(--transisi);
+}
+
+.required {
+  color: var(--error-red);
+  margin-left: 2px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  font-size: var(--teks-kecil);
+  font-family: inherit;
+  transition: var(--transisi);
+  background-color: var(--bg-white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  background-color: rgba(6, 182, 212, 0.02);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+.form-group input.input-error,
+.form-group select.input-error,
+.form-group textarea.input-error {
+  border-color: var(--error-red);
+  background-color: rgba(239, 68, 68, 0.05);
+  animation: shake 0.5s ease-in-out;
+}
+
+.form-group input.input-error:focus,
+.form-group select.input-error:focus,
+.form-group textarea.input-error:focus {
+  outline: none;
+  border-color: var(--error-red);
+  background-color: rgba(239, 68, 68, 0.05);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.form-group input[aria-invalid="true"],
+.form-group select[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+  border-color: var(--error-red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-group input[aria-invalid="true"]:focus,
+.form-group select[aria-invalid="true"]:focus,
+.form-group textarea[aria-invalid="true"]:focus {
+  outline: none;
+  border-color: var(--error-red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--gray-medium);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.error-message {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--error-red);
+  margin-top: 0.4rem;
+  font-weight: 500;
+  animation: slideUpFadeIn 0.3s ease-out;
+}
+
+/* ========== KONTAK CTA SECTION ========== */
+/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
+/* Lihat .kontak-cta-section di hero.css untuk styling dan responsive rules */
+
+/* ========== NOTIFICATION STYLES ========== */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-elegan);
+  max-width: 400px;
+  word-wrap: break-word;
+  backdrop-filter: blur(2px);
+  font-size: var(--teks-kecil);
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-success {
+  background: var(--success-green);
+  color: var(--bg-white);
+}
+
+.notification-success i {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.notification-error {
+  background: #ef4444;
+  color: var(--white);
+}
+
+.notification-error i {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ========== BUTTON STYLES ========== */
+/* Generic Button Classes */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transisi);
+  text-decoration: none;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--accent-cyan);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.3);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.2);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Form Button Styles */
+.contact-form button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transisi);
+  background: var(--accent-cyan);
+  color: var(--text-primary);
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.2);
+}
+
+.contact-form button[type="submit"]:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(6, 182, 212, 0.3);
+}
+
+.contact-form button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+.contact-form button[type="submit"]:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .kontak-info-section {
+    padding: 3rem 0;
+  }
+
+  .kontak-form-section {
+    padding: 3rem 0;
+  }
+
+  .contact-form {
+    padding: 1.5rem 1rem;
+  }
+
+  .notification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .kontak-info-section,
+  .kontak-form-section {
+    padding: 2rem 0;
+  }
+
+  .contact-form {
+    padding: 1.5rem 1rem;
+  }
+
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .notification {
+    font-size: 0.75rem;
+  }
+}

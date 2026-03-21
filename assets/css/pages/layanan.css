@@ -1,0 +1,286 @@
+/* ========== LAYANAN PAGE STYLING ========== */
+/* Styling khusus halaman LAYANAN dengan fokus pada layanan cards dan process flow */
+
+/* Hero styling moved to components/hero.css */
+
+/* ========== LAYANAN INTRO SECTION ========== */
+.layanan-intro-section {
+  padding: 2.5rem 0;
+  background-color: var(--bg-light);
+}
+
+.intro-text {
+  text-align: center;
+  font-size: var(--teks-standar);
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========== LAYANAN GRID SECTION ========== */
+.layanan-grid-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.layanan-grid-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.layanan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* ========== LAYANAN CARD ========== */
+.layanan-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  overflow: hidden;
+  transition: var(--transisi);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
+
+.layanan-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-lg);
+}
+
+.layanan-icon {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  color: var(--accent-cyan);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+  background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
+}
+
+.layanan-card h3 {
+  color: var(--text-primary);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  font-weight: 700;
+  padding: 0 clamp(1.5rem, 3vw, 2rem);
+  padding-top: 0.5rem;
+}
+
+.layanan-card > p {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  padding: 0 clamp(1.5rem, 3vw, 2rem);
+  line-height: var(--line-height-relaxed);
+  flex-grow: 1;
+}
+
+.layanan-features {
+  padding: 0 2rem;
+}
+
+.layanan-features h4 {
+  color: var(--text-primary);
+  font-size: var(--teks-kecil);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.layanan-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.layanan-features li {
+  color: var(--text-secondary);
+  font-size: var(--teks-kecil);
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.layanan-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+/* ========== LAYANAN PROCESS SECTION ========== */
+.layanan-process-section {
+  padding: 4rem 0;
+  background-color: var(--gray-light);
+}
+
+.layanan-process-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.process-item {
+  background: var(--white);
+  padding: 2rem 1.5rem;
+  border-radius: var(--radius-besar);
+  text-align: center;
+  box-shadow: var(--shadow-lembut);
+  transition: var(--transisi);
+  position: relative;
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="process"] selector */
+
+.process-item:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-elegan);
+}
+
+.process-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.process-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.process-item p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+}
+
+/* ========== LAYANAN WHY SECTION ========== */
+.layanan-why-section {
+  padding: 4rem 0;
+  background-color: var(--white);
+}
+
+.layanan-why-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.why-item {
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
+  border-radius: var(--radius-large);
+  border-left: 4px solid var(--primary-blue);
+  transition: var(--transisi);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="item"] selector */
+
+.why-item:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-elegan);
+}
+
+.why-item i {
+  font-size: 2rem;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+}
+
+.why-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+.why-item p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+/* ========== LAYANAN CTA SECTION ========== */
+/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
+/* Lihat .layanan-cta-section di hero.css */
+
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .layanan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-layanan-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .layanan-grid-section,
+  .layanan-process-section,
+  .layanan-why-section {
+    padding: 2.5rem 0;
+  }
+
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .layanan-card h3,
+  .layanan-card > p {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .layanan-card .btn {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
+/* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */

@@ -1,0 +1,1251 @@
+/* ========== HOME PAGE STYLING ========== */
+/* Unique home page styles - shared section styles di base/shared-sections.css */
+
+/* Hero styling moved to components/hero.css */
+
+/* ========== PROMO SECTION ========== */
+.promo-section {
+  margin-top: clamp(-3rem, -10vw, -1rem);
+  padding: 0.5rem 0 1.5rem 0;
+  background-color: transparent;
+  position: relative;
+  z-index: 5;
+}
+
+.promo-section .container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.promo-link-card {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.promo-card-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.320, 1), box-shadow 0.3s ease;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.promo-link-card:hover .promo-card-wrapper {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.promo-image-container {
+  position: relative;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.promo-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 100%;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  border-radius: 12px;
+}
+
+.promo-link-card:hover .promo-image {
+  transform: scale(1.03);
+}
+
+.promo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.promo-link-card:hover .promo-overlay {
+  opacity: 1;
+}
+
+.promo-badge {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 18px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.promo-link-card:hover .promo-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.promo-link-card:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .promo-section {
+    margin-top: clamp(-2.5rem, -8vw, -1.5rem);
+    padding: 0.5rem 0 1rem 0;
+  }
+
+  .promo-card-wrapper {
+    border-radius: var(--radius-medium);
+  }
+
+  .promo-image-container {
+    border-radius: var(--radius-medium);
+  }
+
+  .promo-image {
+    border-radius: var(--radius-medium);
+  }
+
+  .promo-overlay {
+    border-radius: var(--radius-medium);
+  }
+
+  .promo-badge {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.65rem;
+    bottom: 0.8rem;
+    right: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .promo-section {
+    margin-top: -1.5rem;
+    padding: 0.5rem 0 1rem 0;
+  }
+
+  .promo-badge {
+    bottom: 0.6rem;
+    right: 0.6rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.6rem;
+  }
+}
+
+/* ========== SERVICES SECTION HEADER ========== */
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  animation: slideInUp 0.6s ease-out;
+}
+
+.section-header h2 {
+  margin-bottom: 0.75rem;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ========== SERVICES OVERVIEW SECTION ========== */
+.services-overview-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.services-overview-section .section-header h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+}
+
+/* ========== SERVICES DESCRIPTION ========== */
+.services-description {
+  background: linear-gradient(135deg, #f0f7ff 0%, #f9f3ff 100%);
+  border: 2px solid var(--primary-blue);
+  border-radius: var(--radius-large);
+  padding: 0;
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+}
+
+.services-description-inner {
+  padding: clamp(2rem, 3vw, 2.5rem);
+  text-align: center;
+}
+
+.services-description h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: var(--line-height-tight);
+}
+
+.highlight-price {
+  color: var(--primary-blue);
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.guarantee-section h4 {
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.guarantee-section h4 i {
+  color: var(--primary-blue);
+}
+
+.guarantee-section ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.guarantee-section li {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-weight: 500;
+}
+
+.guarantee-section li span {
+  font-weight: 500;
+}
+
+.guarantee-section i {
+  color: var(--primary-blue);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* ========== SERVICES GRID CONTAINER ========== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+@media (min-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ========== SERVICE CARD ========== */
+.service-card {
+  background: var(--bg-white);
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-large);
+  padding: clamp(2rem, 4vw, 2.5rem);
+  text-align: center;
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: var(--transisi);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--accent-cyan));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease-out;
+  z-index: 1;
+}
+
+.service-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
+
+.service-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-blue);
+  box-shadow: 0 15px 40px rgba(37, 99, 235, 0.15);
+}
+
+.service-card--featured {
+  border-color: var(--primary-blue);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(34, 197, 94, 0.02) 100%);
+}
+
+.service-card--featured:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+}
+
+/* ========== SERVICE CARD HEADER ========== */
+.card-header {
+  margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+  color: var(--text-primary);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.card-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ========== BADGE FEATURED ========== */
+/* Definisi lengkap badge-featured dipindahkan ke bawah (line 835+) dengan animasi float */
+/* Lihat definisi yang lebih lengkap di bawah section ini */
+
+/* ========== PACKAGE PRICE ========== */
+/* Definisi lengkap package-price dan price-period ada di bawah dengan responsif clamp() */
+
+/* ========== TOGGLE FEATURES BUTTON & PACKAGE FEATURES ========== */
+/* Definisi lengkap ada di bawah (line ~855+) dengan semua state handler */
+/* Lihat section TOGGLE FEATURES BUTTON dan PACKAGE FEATURES untuk style terlengkap */
+
+/* ========== LINK ARROW ========== */
+/* Link Arrow styling moved to components/button.css for global consistency */
+/* Page-specific overrides defined in component/hero.css for .services-cta-footer */
+
+/* ========== SERVICES CTA FOOTER ========== */
+.services-cta-footer {
+  text-align: center;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(2rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--border-light);
+}
+
+.services-cta-footer .link-arrow {
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+}
+
+/* ========== TESTIMONIAL SECTION ========== */
+.testimonial-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-lighter);
+}
+
+.testimonial-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.testimonial-card {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-large);
+  padding: clamp(2rem, 3vw, 2.5rem);
+  box-shadow: var(--shadow-md);
+  transition: var(--transisi);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 120px;
+  color: var(--primary-blue);
+  opacity: 0.1;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
+
+.testimonial-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-lg);
+}
+
+.testimonial-card .rating {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-card .rating i {
+  color: #FBBF24;
+  font-size: 1.15rem;
+}
+
+.testimonial-text {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-author {
+  border-top: 1.5px solid var(--border-light);
+  padding-top: 1.5rem;
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-author h4 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.testimonial-author p {
+  color: var(--text-light);
+  font-size: var(--teks-kecil);
+}
+
+/* ========== WHY US SECTION ========== */
+.why-us-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.why-us-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Title decoration handled by shared-sections.css */
+
+.why-us-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 1024px) {
+  .why-us-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.why-us-item {
+  background: var(--bg-white);
+  padding: clamp(1.8rem, 3vw, 2.2rem);
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  border-left: 4px solid var(--primary-blue);
+  box-shadow: var(--shadow-md);
+  transition: var(--transisi);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+  overflow: hidden;
+}
+
+.why-us-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  opacity: 0.08;
+  border-radius: 0 var(--radius-large) 0 100%;
+  pointer-events: none;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="item"] selector */
+
+.why-us-item:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--accent-cyan);
+}
+
+.why-us-item .number {
+  display: block;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  opacity: 0.15;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.why-us-item h3 {
+  color: var(--text-primary);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  position: relative;
+  z-index: 1;
+}
+
+.why-us-item p {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  line-height: var(--line-height-relaxed);
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== STATS SECTION ========== */
+.stats-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background: linear-gradient(135deg, var(--secondary-slate) 0%, #0F172A 100%);
+  color: var(--bg-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-section::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.stats-section h2 {
+  font-size: var(--judul-sedang);
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+.stat-item {
+  text-align: center;
+  padding: clamp(2rem, 3vw, 2.5rem);
+  border-radius: var(--radius-large);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(37, 99, 235, 0.3);
+  transition: var(--transisi);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="item"] selector */
+
+.stat-item:hover {
+  background: rgba(37, 99, 235, 0.15);
+  transform: translateY(-8px);
+  border-color: var(--accent-cyan);
+}
+
+.stat-item h3 {
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-item p {
+  font-size: var(--teks-standar);
+  opacity: 0.92;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========== CTA FINAL SECTION ========== */
+/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
+/* Lihat .cta-final-section di hero.css */
+
+/* ========== COMPARISON SECTION ========== */
+.comparison-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-lighter);
+}
+
+.comparison-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Title decoration handled by shared-sections.css */
+
+.comparison-card {
+  background: var(--bg-white);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-large);
+  padding: clamp(2rem, 4vw, 3rem);
+  box-shadow: var(--shadow-md);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: 0.1s;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.comparison-card:hover {
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-lg);
+}
+
+.comparison-header {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2.5px solid var(--primary-blue);
+}
+
+.comparison-header-item {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.comparison-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.comparison-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.comparison-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.comparison-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  border-radius: 50%;
+}
+
+.comparison-sisitus .comparison-icon {
+  color: var(--bg-white);
+  background: var(--success-green);
+  font-size: 1.2rem;
+}
+
+.comparison-other .comparison-icon {
+  color: var(--bg-white);
+  background: var(--error-red);
+  font-size: 1.2rem;
+}
+
+.comparison-text {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ========== COMPARISON CTA (moved to components/hero.css) ========== */
+/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
+/* Lihat .comparison-cta di hero.css */
+
+/* ========== ENHANCED COMPARISON CTA STYLES FOR HOME ========== */
+.comparison-cta {
+  text-align: center;
+  margin-top: 2.5rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(0, 216, 255, 0.08) 100%);
+  border-radius: var(--radius-large);
+  border: 2px solid var(--primary-blue);
+}
+
+.comparison-cta h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.comparison-cta p {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--line-height-relaxed);
+}
+
+.comparison-cta .btn {
+  transition: var(--transisi);
+}
+
+/* ========== PACKAGE PRICING STYLES ========== */
+.badge-featured {
+  display: inline-block;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: var(--text-primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-medium);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  animation: float 3s ease-in-out infinite;
+}
+
+/* @keyframes float sudah di-consolidate ke base/shared-sections.css */
+
+.package-price {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 1.5rem 0 1.5rem 0;
+  line-height: 1.2;
+}
+
+.price-period {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* ========== TOGGLE FEATURES BUTTON ========== */
+.toggle-features {
+  background: var(--bg-light);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-medium);
+  padding: 0.85rem 1.25rem;
+  font-size: var(--teks-standar);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.toggle-features:hover {
+  background: var(--primary-blue);
+  color: var(--bg-white);
+  border-color: var(--primary-blue);
+}
+
+.toggle-features i {
+  transition: transform 0.3s ease;
+}
+
+.toggle-features[aria-expanded="true"] i {
+  transform: rotate(180deg);
+}
+
+.package-features {
+  list-style: none;
+  padding: 1.5rem;
+  margin: 1.5rem 0 2rem 0;
+  text-align: left;
+  background: var(--bg-light);
+  border-radius: var(--radius-medium);
+  border-left: 4px solid var(--primary-blue);
+}
+
+.package-features li {
+  padding: 0.7rem 0 0.7rem 0;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.package-features li:last-child {
+  border-bottom: none;
+}
+
+.package-features .feature-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 1.1rem;
+  color: var(--success-green);
+}
+
+.package-features li i {
+  color: var(--success-green);
+  margin-right: 0;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ========== PACKAGE PRICING STYLES FOOTER CTA (moved to components/hero.css) ========== */
+/* Services CTA footer styling sudah di-move ke components/hero.css */
+/* Lihat .services-cta-footer di hero.css */
+
+/* ========== COMPARISON FIT/NOT FIT STYLES ========== */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 2.5rem;
+}
+
+.comparison-fit,
+.comparison-not-fit {
+  background: var(--bg-white);
+  padding: clamp(2rem, 3vw, 2.5rem);
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  transition: var(--transisi);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+  overflow: hidden;
+}
+
+.comparison-fit {
+  animation-delay: 0.1s;
+  border-left: 4px solid var(--success-green);
+}
+
+.comparison-fit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--success-green) 0%, rgba(34, 197, 94, 0.5) 100%);
+  opacity: 0.08;
+  border-radius: 0 var(--radius-large) 0 100%;
+  pointer-events: none;
+}
+
+.comparison-not-fit {
+  animation-delay: 0.2s;
+  border-left: 4px solid var(--error-red);
+}
+
+.comparison-not-fit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--error-red) 0%, rgba(239, 68, 68, 0.5) 100%);
+  opacity: 0.08;
+  border-radius: 0 var(--radius-large) 0 100%;
+  pointer-events: none;
+}
+
+.comparison-fit:hover,
+.comparison-not-fit:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.comparison-fit h3,
+.comparison-not-fit h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  position: relative;
+  z-index: 1;
+}
+
+.comparison-fit h3 {
+  color: var(--success-green);
+}
+
+.comparison-not-fit h3 {
+  color: var(--error-red);
+}
+
+.comparison-fit ul,
+.comparison-not-fit ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.comparison-fit li,
+.comparison-not-fit li {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  line-height: 1.6;
+}
+
+.comparison-fit li:last-child,
+.comparison-not-fit li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* ========== TESTIMONIAL PROJECT INFO ========== */
+.testimonial-project {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.testimonial-disclaimer {
+  color: var(--text-light);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* ========== FAQ STYLES ==========
+ * FAQ styling is now centralized in components/faq.css to ensure consistency
+ * across all pages using the FAQ component. Page-specific overrides can be added here.
+ */
+
+/* Index page specific FAQ adjustments (if needed) */
+@media (max-width: 768px) {
+  .badge-featured {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .package-price {
+    font-size: 1.3rem;
+  }
+
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-final-section .cta-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
+/* @keyframes slideInUp, fadeIn, dan float sudah di-consolidate ke base/shared-sections.css */
+/* Lihat shared-sections.css untuk semua global keyframes */
+
+/* ========== RESPONSIVE ========== */
+/* Hero responsive styling moved to components/hero.css */
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Hero responsive styling moved to components/hero.css */
+
+  .services-overview-section,
+  .why-us-section,
+  .stats-section,
+  .comparison-section,
+  .cta-final-section,
+  .testimonial-section {
+    padding: clamp(3rem, 6vw, 4rem) 0;
+  }
+
+  .service-card {
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .comparison-card {
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .comparison-grid {
+    gap: 1rem;
+  }
+
+  .comparison-column {
+    padding: 0 1rem !important;
+  }
+
+  .comparison-header {
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .comparison-header-item {
+    font-size: 1.05rem;
+  }
+
+  .comparison-row {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .comparison-text {
+    font-size: 0.95rem;
+  }
+
+  .comparison-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-item h3 {
+    font-size: 2.2rem;
+  }
+}
+/* ========== NEW PRICING PACKAGES STYLES ========== */
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.features-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.features-list li:last-child {
+  border-bottom: none;
+}
+
+.price {
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 1rem 0 1.5rem 0;
+}
+
+.service-card.featured {
+  border: 2px solid var(--primary-blue);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(0, 216, 255, 0.05) 100%);
+  transform: scale(1.05);
+  position: relative;
+}
+
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--bg-white);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-medium);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* ========== COMPARISON SECTION UPDATED ========== */
+.comparison-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.comparison-group h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.comparison-group ul {
+  list-style: none;
+  padding: 0;
+}
+
+.comparison-group li {
+  padding: 0.8rem 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+/* ========== FAQ SECTION - REMOVED DUPLICATE (see line 682) ========== */
+/* All FAQ styles consolidated at line 682. This duplicate definition removed. */
+
+/* ========== PROJECT INFO & DISCLAIMER ========== */
+.project-info {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.disclaimer {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+/* ========== SERVICES CTA (moved to components/hero.css) ========== */
+/* Services CTA styling sudah di-move ke components/hero.css */
+/* Lihat .services-cta di hero.css */
+
+/* ========== FONT AWESOME ICONS STYLING ========== */
+
+/* Package features icons */
+.package-features li i {
+  color: var(--success-green);
+  margin-right: 0.8rem;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* Feature badge icons in why-us section */
+.feature-badge i {
+  font-size: 1.8rem;
+  color: var(--success-green);
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+/* Comparison section icons */
+.comparison-fit h3 i {
+  color: var(--success-green);
+  margin-right: 0.7rem;
+  font-size: 1.2rem;
+}
+
+.comparison-not-fit h3 i {
+  color: var(--error-red);
+  margin-right: 0.7rem;
+  font-size: 1.2rem;
+}
+
+/* Stats section icons */
+.stat-item h3 i {
+  color: var(--accent-cyan);
+  margin-right: 0.5rem;
+  font-size: 1.3rem;
+}
+
+/* ========== RESPONSIVE UPDATES ========== */
+@media (max-width: 768px) {
+  .service-card.featured {
+    transform: scale(1);
+  }
+
+  .comparison-content {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-section h2 {
+    margin-bottom: 2rem;
+  }
+}

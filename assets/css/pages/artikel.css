@@ -1,0 +1,224 @@
+/* ========== ARTIKEL PAGE ========== */
+/* Import dari blog.css karena struktur HTML yang mirip */
+@import url('blog.css');
+
+/* ========== ARTIKEL PAGE SPECIFIC STYLING ========== */
+
+/* Hero styling moved to components/hero.css */
+
+/* ========== ARTIKEL LIST SECTION ========== */
+.artikel-list-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.artikel-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.artikel-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+/* ========== ARTIKEL GRID ========== */
+.artikel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+}
+
+/* ========== ARTIKEL CARD ========== */
+.artikel-card {
+  background: var(--bg-white);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  transition: var(--transisi);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
+
+.artikel-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Filter states */
+.artikel-card.hidden {
+  display: none !important;
+}
+
+.artikel-card.filtered {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.artikel-card.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.artikel-header {
+  margin-bottom: 1rem;
+}
+
+.artikel-card h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.artikel-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.artikel-meta time,
+.artikel-meta .reading-time {
+  color: var(--text-secondary);
+  font-size: var(--teks-kecil);
+  font-weight: 500;
+}
+
+.artikel-meta .reading-time {
+  background-color: var(--bg-light);
+  color: var(--primary-blue);
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.artikel-card p {
+  color: var(--text-secondary);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+/* ========== ARTIKEL TAGS ========== */
+.artikel-tags {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.artikel-tags .tag {
+  background-color: #E0F2FE;
+  color: #0369A1;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: var(--transisi);
+  cursor: pointer;
+}
+
+.artikel-tags .tag:hover {
+  background-color: #0369A1;
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* ========== ARTIKEL PAGINATION ========== */
+.artikel-pagination-section {
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination-link {
+  padding: 0.8rem 1.5rem;
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  text-decoration: none;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transisi);
+  font-size: var(--teks-kecil);
+}
+
+.pagination-link:hover:not(.disabled) {
+  background-color: var(--accent-cyan);
+  color: var(--bg-white);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+.pagination-link.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  font-weight: 600;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .artikel-section {
+    padding: 3rem 0;
+  }
+
+  .artikel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .artikel-meta {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .artikel-section {
+    padding: 2.5rem 0;
+  }
+
+  .artikel-card {
+    padding: 1.5rem;
+  }
+
+  .artikel-tags {
+    gap: 0.5rem;
+  }
+
+  .artikel-tags .tag {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .pagination {
+    gap: 0.5rem;
+  }
+
+  .pagination-link {
+    padding: 0.6rem 1rem;
+    font-size: 0.7rem;
+  }
+}

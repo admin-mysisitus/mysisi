@@ -1,0 +1,439 @@
+/* ========== MAINTENANCE PAGE STYLING ========== */
+/* Page-specific styling untuk halaman maintenance layanan */
+
+/* ========== IMPORT BASE STYLES ========== */
+/* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
+@import url('pembuatan-website.css');
+
+/* ========== DETAIL PROBLEMS SECTION ========== */
+.detail-problems-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-light);
+}
+
+.detail-problems-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.problems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.problem-item {
+  background: var(--bg-white);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  text-align: center;
+  transition: var(--transisi);
+  box-shadow: var(--shadow-md);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+}
+
+/* Animation delays handled automatically by shared-sections.css [class*="item"] selector */
+
+.problem-item:hover {
+  transform: translateY(-10px);
+  border-color: var(--error-red);
+  box-shadow: var(--shadow-lg);
+}
+
+.problem-item i {
+  font-size: 2.5rem;
+  color: var(--error-red);
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: var(--transisi);
+}
+
+.problem-item:hover i {
+  transform: scale(1.15) rotate(-10deg);
+}
+
+.problem-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.problem-item p {
+  color: var(--text-secondary);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+}
+
+/* ========== DETAIL SERVICES SECTION ========== */
+.detail-services-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-white);
+}
+
+.detail-services-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.services-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.service-category {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.service-category:nth-child(1) { animation-delay: 0.1s; }
+.service-category:nth-child(2) { animation-delay: 0.2s; }
+.service-category:nth-child(3) { animation-delay: 0.3s; }
+.service-category:nth-child(4) { animation-delay: 0.4s; }
+
+.service-category h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-blue);
+}
+
+.service-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-category li {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  padding-left: 1.8rem;
+  margin-bottom: 0.8rem;
+  position: relative;
+  line-height: 1.6;
+  transition: var(--transisi);
+}
+
+.service-category li:hover {
+  color: var(--text-primary);
+  padding-left: 2.2rem;
+}
+
+.service-category i {
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+/* ========== DETAIL WHAT INCLUDED SECTION ========== */
+.detail-what-included-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-light);
+}
+
+.detail-what-included-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.included-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.included-item {
+  background: var(--bg-white);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  text-align: center;
+  transition: var(--transisi);
+  box-shadow: var(--shadow-md);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.included-item:nth-child(1) { animation-delay: 0.1s; }
+.included-item:nth-child(2) { animation-delay: 0.2s; }
+.included-item:nth-child(3) { animation-delay: 0.3s; }
+.included-item:nth-child(4) { animation-delay: 0.4s; }
+.included-item:nth-child(5) { animation-delay: 0.5s; }
+.included-item:nth-child(6) { animation-delay: 0.6s; }
+
+.included-item:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-lg);
+}
+
+.included-item i {
+  font-size: 2.5rem;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: var(--transisi);
+}
+
+.included-item:hover i {
+  transform: scale(1.2) rotate(15deg);
+}
+
+.included-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.included-item p {
+  color: var(--text-secondary);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+}
+
+/* ========== DETAIL COMPARISON SECTION ========== */
+.detail-comparison-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-white);
+}
+
+.detail-comparison-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.comparison-table {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow-md);
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  width: 100%;
+}
+
+.comparison-table table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  background: var(--bg-white);
+}
+
+.comparison-table th {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--bg-white);
+  padding: 1.5rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: var(--teks-standar);
+  white-space: nowrap;
+}
+
+.comparison-table td {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.comparison-table tbody tr:hover {
+  background-color: rgba(37, 99, 235, 0.02);
+}
+
+.comparison-table tbody tr:nth-child(odd) {
+  background-color: var(--bg-white);
+}
+
+.comparison-table tbody tr:nth-child(even) {
+  background-color: var(--bg-light);
+}
+
+.comparison-table td:first-child {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 150px;
+}
+
+.comparison-table tbody tr:hover td:first-child {
+  color: var(--primary-blue);
+}
+
+/* ========== ANIMATIONS ========== */
+/* slideInUp keyframe sudah di-handle oleh hero.js */
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .detail-problems-section {
+    padding: 3rem 0;
+  }
+
+  .problems-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .services-checklist {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .included-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .comparison-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .comparison-table table {
+    min-width: 500px;
+    font-size: 0.9rem;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 1rem;
+  }
+
+  .comparison-table td:first-child {
+    min-width: 130px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-problems-section,
+  .detail-services-section,
+  .detail-what-included-section,
+  .detail-comparison-section,
+  .faq-section {
+    padding: 2.5rem 0;
+  }
+
+  .problems-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .problem-item {
+    padding: 1.5rem;
+  }
+
+  .problem-item i {
+    font-size: 2rem;
+  }
+
+  .services-checklist {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .service-category h3 {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .service-category li {
+    font-size: var(--teks-kecil);
+    padding-left: 1.5rem;
+  }
+
+  .included-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .included-item {
+    padding: 1.5rem;
+  }
+
+  .included-item i {
+    font-size: 2rem;
+  }
+
+  .comparison-table {
+    display: block;
+    overflow-x: auto;
+    font-size: 0.8rem;
+  }
+
+  .comparison-table table {
+    min-width: 420px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.8rem;
+  }
+
+  .comparison-table th {
+    font-size: 0.9rem;
+  }
+
+  .comparison-table td:first-child {
+    min-width: 110px;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-item summary {
+    padding: 1.2rem;
+    font-size: var(--teks-standar);
+  }
+
+  .faq-item p {
+    padding: 0 1.2rem 1.2rem 1.2rem;
+    font-size: var(--teks-kecil);
+  }
+
+  /* Note: .detail-cta-section responsive styling di hero.css */
+}
+/* ========== PACKAGE CARD BUTTON STYLING ========== */
+.packages-grid .package-card .btn {
+  margin: 0;
+  padding: 0.95rem 2rem;
+  min-height: 44px;
+  font-size: 0.95rem;
+}
+
+.packages-grid .package-card .btn-block {
+  width: calc(100% - 4rem);
+  margin: 0 2rem 2rem;
+}
+
+.packages-grid .package-card.featured .btn {
+  background-color: var(--accent-cyan);
+  color: #000;
+  border: none;
+}
+
+.packages-grid .package-card.featured .btn:hover {
+  background-color: #16a34a;
+  transform: translateY(-2px);
+}

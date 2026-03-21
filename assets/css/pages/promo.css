@@ -1,0 +1,835 @@
+/* ========== PROMO PAGE STYLING ========== */
+/* Promo-specific styling utama untuk override shared styles */
+
+/* ========== PROMO BANNER SECTION ========== */
+.promo-banner-section {
+  padding: 3rem 0;
+  background-color: var(--bg-light);
+}
+
+.promo-banner {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  border-radius: var(--radius-large);
+  padding: 3rem;
+  color: var(--bg-white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.promo-banner::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.promo-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 250px;
+  height: 250px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+}
+
+.badge {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: var(--white);
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  font-size: var(--teks-kecil);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.promo-banner h2 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.promo-banner > .container > p {
+  font-size: var(--teks-standar);
+  opacity: 0.95;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========== PROMO DETAILS SECTION ========== */
+.promo-details-section {
+  padding: 4rem 0;
+  background-color: var(--white);
+}
+
+.promo-details-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Title decorations consolidated */
+
+/* ========== PROMOS GRID ========== */
+.promos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ========== PROMO CARD STYLING ========== */
+.promo-card {
+  background: var(--white);
+  border-radius: var(--radius-besar);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: var(--transisi);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lembut);
+}
+
+.promo-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(37, 99, 235, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+/* Featured Card - Lebih Menonjol */
+.promo-card.featured {
+  grid-column: auto;
+  transform: scale(1);
+  border-color: var(--accent-cyan);
+  background: linear-gradient(135deg, #FAFFFE 0%, var(--white) 100%);
+}
+
+.promo-card.featured:hover {
+  transform: scale(1.02) translateY(-8px);
+  box-shadow: 0 15px 45px rgba(37, 99, 235, 0.2);
+}
+
+/* Responsive: Featured card menjadi grid-column 1/-1 di tablet */
+@media (min-width: 768px) {
+  .promo-card.featured {
+    grid-column: 1 / -1;
+  }
+
+  .promo-card.featured .promo-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .promo-card.featured .promo-content > * {
+    grid-column: 1 / -1;
+  }
+
+  .promo-card.featured .promo-price {
+    grid-column: 1 / -1;
+  }
+
+  .promo-card.featured .promo-includes {
+    grid-column: 1;
+  }
+
+  .promo-card.featured .promo-terms {
+    grid-column: 1;
+  }
+
+  .promo-card.featured .btn {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ========== PROMO BADGE ========== */
+.promo-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--text-primary);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: var(--teks-kecil);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.promo-card.featured .promo-badge {
+  background-color: var(--accent-cyan);
+  top: 1.5rem;
+  right: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: var(--teks-standar);
+}
+
+/* ========== PROMO CONTENT ========== */
+.promo-content {
+  padding: 2rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-content h3 {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+  margin-top: 1.5rem;
+  line-height: 1.4;
+}
+
+.promo-description {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* ========== PROMO PRICE STYLING ========== */
+.promo-price {
+  background-color: var(--gray-light);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.original-price {
+  color: var(--gray-medium);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #EF4444;
+  font-size: var(--teks-kecil);
+  opacity: 0.8;
+}
+
+.discounted-price {
+  color: var(--text-primary);
+  font-size: var(--judul-sedang);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.save {
+  color: #10B981;
+  font-size: var(--teks-kecil);
+  font-weight: 600;
+}
+
+/* ========== PROMO INCLUDES ========== */
+.promo-includes {
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.promo-includes h4 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.promo-includes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.promo-includes li {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  padding-left: 1.5rem;
+  margin-bottom: 0.7rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.promo-includes li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ========== PROMO TERMS ========== */
+.promo-terms {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+/* ========== BUTTON STYLING (BLOCK) ========== */
+.btn-block {
+  width: 100%;
+  text-align: center;
+}
+
+/* ========== PROMO VALUE PROPOSITION SECTION ========== */
+.promo-value-proposition-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #FAFBFF 0%, var(--bg-white) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-value-proposition-section::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -200px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.1), transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.promo-value-proposition-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.promo-value-proposition-section .section-subtitle {
+  text-align: center;
+  color: var(--gray-medium);
+  font-size: var(--teks-standar);
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.value-proposition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.vp-item {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-besar);
+  border: 1.5px solid var(--border-light);
+  transition: var(--transisi);
+  box-shadow: var(--shadow-md);
+  animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.vp-item:nth-child(1) { animation-delay: 0.1s; }
+.vp-item:nth-child(2) { animation-delay: 0.15s; }
+.vp-item:nth-child(3) { animation-delay: 0.2s; }
+.vp-item:nth-child(4) { animation-delay: 0.25s; }
+.vp-item:nth-child(5) { animation-delay: 0.3s; }
+.vp-item:nth-child(6) { animation-delay: 0.35s; }
+
+.vp-item:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+}
+
+.vp-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.vp-item h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.vp-item p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ========== PROMO REQUIREMENTS SECTION ========== */
+.promo-requirements-section {
+  padding: 4rem 0;
+  background-color: var(--gray-light);
+}
+
+.promo-requirements-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Title decorations consolidated */
+
+/* ========== REQUIREMENTS GRID ========== */
+.requirements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+/* ========== REQUIREMENT ITEM ========== */
+.requirement-item {
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-besar);
+  border-left: 4px solid var(--accent-cyan);
+  box-shadow: var(--shadow-lembut);
+  transition: var(--transisi);
+}
+
+.requirement-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elegan);
+}
+
+.requirement-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.requirement-item p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+}
+
+/* ========== PROMO WHY NOW SECTION ========== */
+.promo-why-now-section {
+  padding: 4rem 0;
+  background-color: var(--white);
+}
+
+.promo-why-now-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Title decorations consolidated */
+
+/* ========== WHY GRID ========== */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+/* ========== WHY ITEM ========== */
+.why-item {
+  text-align: center;
+  padding: 2rem;
+  border-radius: var(--radius-besar);
+  background: linear-gradient(135deg, var(--gray-light) 0%, var(--white) 100%);
+  transition: var(--transisi);
+  border: 1px solid var(--border-light);
+}
+
+.why-item:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-elegan);
+  background: linear-gradient(135deg, #F0FDF4 0%, var(--white) 100%);
+}
+
+.why-item i {
+  font-size: 2.5rem;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: var(--transisi);
+}
+
+.why-item:hover i {
+  transform: scale(1.15);
+  animation: spinIcon 0.6s ease-in-out forwards;
+}
+
+.why-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.why-item p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+}
+
+/* ========== PROMO TESTIMONIAL SECTION ========== */
+.promo-testimonial-section {
+  padding: 4rem 0;
+  background-color: var(--gray-light);
+}
+
+.promo-testimonial-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Title decorations consolidated */
+
+/* ========== TESTIMONIAL GRID ========== */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* ========== TESTIMONIAL ITEM ========== */
+.testimonial {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-besar);
+  border-left: 4px solid var(--accent-cyan);
+  box-shadow: var(--shadow-lembut);
+  transition: var(--transisi);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== TESTIMONIAL HEADER ========== */
+.testimonial-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--gray-light);
+}
+
+.testimonial-name {
+  font-size: var(--teks-standar);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+  margin-top: 0;
+}
+
+.testimonial-title {
+  font-size: var(--teks-kecil);
+  color: var(--accent-cyan);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ========== TESTIMONIAL IMAGE PLACEHOLDER ========== */
+.testimonial-image-placeholder {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-sedang);
+  overflow: hidden;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testimonial-image-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ========== TESTIMONIAL QUOTE ========== */
+.testimonial-quote {
+  position: relative;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  font-size: 2rem;
+  color: var(--accent-cyan);
+  opacity: 0.3;
+}
+
+.testimonial-quote p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.7;
+  font-style: italic;
+  flex-grow: 1;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.testimonial:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-elegan);
+}
+
+/* ========== PROMO CTA FINAL SECTION - STYLING MOVED TO components/hero.css ========== */
+/* Promo CTA section sekarang ditangani oleh .promo-cta-final-section di components/hero.css */
+/* Lihat hero.css untuk styling lengkap */
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .promo-banner {
+    padding: 2rem;
+  }
+
+  .promo-banner h2 {
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  }
+
+  .promos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .promo-card.featured {
+    grid-column: auto;
+  }
+
+  .promo-card.featured .promo-content {
+    display: block;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .promo-details-section,
+  .promo-requirements-section,
+  .promo-why-now-section,
+  .promo-testimonial-section {
+    padding: 2.5rem 0;
+  }
+
+  .promo-content {
+    padding: 1.5rem;
+  }
+
+  .promo-badge {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .why-item i {
+    font-size: 2rem;
+  }
+
+  .contact-info {
+    font-size: var(--teks-kecil);
+  }
+
+  /* Note: .promo-cta-final-section responsive styling sudah di hero.css */
+}
+
+/* ========== ANIMATION SCROLL REVEAL ========== */
+/* slideInUp dan fadeIn keyframes di-consolidate ke base/shared-sections.css */
+
+@keyframes spinIcon {
+  from {
+    transform: scale(1.15) rotate(0deg);
+  }
+  to {
+    transform: scale(1.15) rotate(360deg);
+  }
+}
+
+.promo-card {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.promo-card:nth-child(1) { animation-delay: 0.1s; }
+.promo-card:nth-child(2) { animation-delay: 0.2s; }
+.promo-card:nth-child(3) { animation-delay: 0.3s; }
+.promo-card:nth-child(4) { animation-delay: 0.4s; }
+.promo-card:nth-child(5) { animation-delay: 0.5s; }
+.promo-card:nth-child(6) { animation-delay: 0.6s; }
+
+.why-item {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.why-item:nth-child(1) { animation-delay: 0.1s; }
+.why-item:nth-child(2) { animation-delay: 0.2s; }
+.why-item:nth-child(3) { animation-delay: 0.3s; }
+.why-item:nth-child(4) { animation-delay: 0.4s; }
+
+.requirement-item {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.requirement-item:nth-child(1) { animation-delay: 0.1s; }
+.requirement-item:nth-child(2) { animation-delay: 0.2s; }
+.requirement-item:nth-child(3) { animation-delay: 0.3s; }
+.requirement-item:nth-child(4) { animation-delay: 0.4s; }
+.requirement-item:nth-child(5) { animation-delay: 0.5s; }
+.requirement-item:nth-child(6) { animation-delay: 0.6s; }
+
+.testimonial {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.testimonial:nth-child(1) { animation-delay: 0.1s; }
+.testimonial:nth-child(2) { animation-delay: 0.2s; }
+.testimonial:nth-child(3) { animation-delay: 0.3s; }
+
+/* ========== COUNTDOWN TIMER COMPONENT ========== */
+.countdown-timer {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-medium);
+  backdrop-filter: blur(10px);
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.countdown-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bg-white);
+  min-width: 70px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.countdown-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Urgent state: less than 6 hours remaining */
+.countdown-timer.countdown-urgent {
+  background: rgba(220, 53, 69, 0.25);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Responsive countdown timer */
+@media (max-width: 768px) {
+  .countdown-timer {
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .countdown-value {
+    font-size: 2rem;
+    min-width: 60px;
+  }
+
+  .countdown-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-timer {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .countdown-value {
+    font-size: 1.5rem;
+    min-width: 50px;
+  }
+
+  .countdown-label {
+    font-size: 0.7rem;
+  }
+
+  .faq-section {
+    padding: 2.5rem 0;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== FAQ SECTION ==========
+ * FAQ styling is now centralized in components/faq.css to ensure consistency
+ * across all pages.
+ */
+
+@media (max-width: 768px) {
+  .faq-section {
+    padding: 3rem 0;
+  }
+}
+
+

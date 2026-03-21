@@ -1,0 +1,656 @@
+/* ========== KARIR PAGE STYLING ========== */
+/* Styling komprehensif halaman lowongan karir dengan fokus pada job listings, benefits, dan company culture */
+
+/* Hero styling moved to components/hero.css */
+
+/* ========== SECTION HEADER STYLING ========== */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.section-header h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.5px;
+  position: relative;
+}
+
+.section-divider {
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+  border-radius: 2px;
+  animation: slideInHorizontal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========== BENEFITS SECTION ========== */
+.karir-benefits-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-white);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.benefit-item {
+  text-align: center;
+  padding: 2.2rem;
+  border-radius: 12px;
+  background: var(--bg-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.benefit-icon {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: var(--bg-white);
+  border-radius: 50%;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  will-change: transform;
+}
+
+.benefit-item h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.benefit-item p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* ========== JOB OPENINGS SECTION ========== */
+.karir-openings-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-light);
+}
+
+.karir-openings-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  font-size: var(--teks-standar);
+}
+
+.job-listings {
+  display: grid;
+  gap: 2rem;
+}
+
+.job-card {
+  background: var(--bg-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lembut);
+  border: 1px solid rgba(37, 99, 235, 0.05);
+  will-change: transform;
+}
+
+.job-card.hover-active {
+  box-shadow: var(--shadow-elegan);
+  border-color: rgba(37, 99, 235, 0.15);
+}
+
+.job-header {
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: var(--bg-white);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.job-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.job-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.9rem 0;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.5px;
+  line-height: 1.3;
+}
+
+.job-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  opacity: 0.92;
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+.job-body {
+  padding: 2rem;
+  display: block;
+}
+
+.job-body.hidden {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .job-body {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+
+.job-meta {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.job-type,
+.job-level {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.job-type i,
+.job-level i {
+  color: var(--primary-blue);
+}
+
+.job-description,
+.job-requirements {
+  margin-bottom: 1.5rem;
+}
+
+.job-description h4,
+.job-requirements h4 {
+  font-size: var(--judul-kecil);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.job-description ul,
+.job-requirements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.job-description li,
+.job-requirements li {
+  color: var(--text-secondary);
+  margin-bottom: 0.55rem;
+  padding-left: 1.8rem;
+  position: relative;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.job-description li::before,
+.job-requirements li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--primary-blue);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* JOB SALARY STYLING */
+.job-salary {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-left: 4px solid var(--primary-blue);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+}
+
+.job-salary strong {
+  color: var(--text-primary);
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.job-salary small {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* JOB BENEFITS STYLING */
+.job-benefits {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-left: 4px solid #10b981;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 6px;
+}
+
+.job-benefits h4 {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  font-weight: 600;
+}
+
+.job-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.job-benefits li {
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+  padding-left: 1.8rem;
+  position: relative;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.job-benefits li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* JOB CTA BUTTONS */
+.job-cta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.job-cta .btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.8rem 1.4rem;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-sm {
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.3rem;
+  min-height: 42px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.no-jobs-message {
+  background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(37, 99, 235, 0.08);
+  box-shadow: var(--shadow-lembut);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 4rem 2rem;
+  display: none;
+}
+
+.no-jobs-message.show {
+  display: block;
+}
+
+.no-jobs-message i {
+  font-size: 3.5rem;
+  color: var(--primary-blue);
+  margin-bottom: 1.5rem;
+  display: block;
+  opacity: 0.4;
+}
+
+.no-jobs-message p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ========== PROCESS SECTION ========== */
+.karir-process-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background-color: var(--bg-white);
+}
+
+.karir-process-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.process-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.process-step {
+  text-align: center;
+  position: relative;
+  padding-top: 3rem;
+  will-change: transform;
+}
+
+.step-number {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg-white);
+  font-weight: 700;
+  font-size: 1.2rem;
+  z-index: 2;
+  background: var(--primary-blue);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  will-change: transform;
+}
+
+@media (min-width: 768px) {
+  .process-timeline {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .process-step {
+    position: relative;
+  }
+
+  .process-step::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue) 50%, transparent 100%);
+  }
+
+  .process-step:last-child::after {
+    display: none;
+  }
+}
+
+.process-step h3 {
+  font-size: var(--text-standar);
+  color: var(--text-primary);
+  margin: 1rem 0 0.5rem;
+  font-weight: 600;
+}
+
+.process-step p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ========== COMPANY CULTURE SECTION ========== */
+.karir-culture-section {
+  padding: clamp(3rem, 6vw, 4rem) 0;
+  background: linear-gradient(180deg, var(--bg-light) 0%, #FAFBFF 100%);
+}
+
+.karir-culture-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.karir-culture-section .section-subtitle {
+  margin-bottom: 3rem;
+}
+
+.culture-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.culture-item {
+  background: var(--bg-white);
+  padding: 2.2rem;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: var(--shadow-lembut);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  will-change: transform;
+}
+
+.culture-item.hover-active {
+  box-shadow: var(--shadow-elegan);
+  border-color: rgba(37, 99, 235, 0.1);
+}
+
+.culture-icon {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: var(--bg-white);
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  will-change: transform;
+}
+
+.culture-item h3 {
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin: 0 0 0.9rem 0;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.culture-item p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ========== CTA SECTION ========== */
+/* Styling handled by components/hero.css - .karir-cta-section */
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+  }
+
+  .benefit-item {
+    padding: 1.8rem;
+  }
+
+  .job-card {
+    margin-bottom: 0.8rem;
+  }
+
+  .job-header {
+    padding: 1.5rem;
+  }
+
+  .job-title {
+    font-size: 1.1rem;
+  }
+
+  .job-location {
+    font-size: 0.9rem;
+  }
+
+  .job-body {
+    padding: 1.5rem;
+  }
+
+  .job-meta {
+    gap: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .process-timeline {
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+  }
+
+  .process-step::after {
+    display: none !important;
+  }
+
+  .culture-values {
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+  }
+
+  .culture-item {
+    padding: 1.8rem;
+  }
+}
+
+/* Small screens optimization */
+@media (max-width: 640px) {
+  .karir-benefits-section,
+  .karir-openings-section,
+  .karir-process-section,
+  .karir-culture-section,
+  .karir-cta-section {
+    padding: 2.5rem 0;
+  }
+
+  .benefit-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+  }
+
+  .benefit-item h3 {
+    font-size: 1rem;
+  }
+
+  .job-description li,
+  .job-requirements li {
+    font-size: 0.9rem;
+    padding-left: 1.5rem;
+  }
+
+  .culture-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+  }
+
+  .culture-item h3 {
+    font-size: 1rem;
+  }
+
+  .step-number {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
+/* Semua animasi dihandle oleh karir.js untuk menghindari duplikasi dan konflik */
+/* CSS-based animations hanya untuk fallback jika diperlukan */
+
+/* Smooth section divider animation */
+.section-divider {
+  opacity: 0;
+  animation: slideInHorizontal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+}
+
+@keyframes slideInHorizontal {
+  from {
+    opacity: 0;
+    width: 0;
+  }
+  to {
+    opacity: 1;
+    width: 60px;
+  }
+}

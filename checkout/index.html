@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Checkout Domain - Amankan domain impian Anda sekarang juga di SISITUS">
+  <title>Checkout Domain - SISITUS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components/checkout.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <div class="logo">
+          <a href="/">SISITUS</a>
+        </div>
+        <a href="/" class="back-home-btn">
+          <i class="fas fa-arrow-left"></i> Kembali ke Beranda
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="checkout-page">
+    <div class="container">
+      <div class="checkout-wrapper">
+        <!-- Progress Indicator -->
+        <div class="checkout-progress">
+          <div class="progress-step active">
+            <div class="progress-number">1</div>
+            <div class="progress-label">Domain</div>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step">
+            <div class="progress-number">2</div>
+            <div class="progress-label">Paket</div>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step">
+            <div class="progress-number">3</div>
+            <div class="progress-label">Data</div>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step">
+            <div class="progress-number">4</div>
+            <div class="progress-label">Ringkasan</div>
+          </div>
+        </div>
+
+        <!-- Step 1: Domain Summary -->
+        <section class="checkout-section step-domain">
+          <div class="section-header">
+            <h2><i class="fas fa-globe"></i> Ringkasan Domain</h2>
+          </div>
+
+          <div class="domain-summary-card">
+            <div class="domain-name-display" id="domain-display">
+              <div class="skeleton"></div>
+            </div>
+            <div class="domain-price-display" id="price-display">
+              <div class="skeleton"></div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="goBackToCekDomain()">
+              <i class="fas fa-edit"></i> Ubah Domain
+            </button>
+          </div>
+        </section>
+
+        <!-- Step 2: Package Selection -->
+        <section class="checkout-section step-packages">
+          <div class="section-header">
+            <h2><i class="fas fa-cube"></i> Pilih Paket Website Anda</h2>
+            <p>Semua paket sudah termasuk domain dan hosting 1 tahun pertama</p>
+          </div>
+
+          <div class="packages-grid" id="packages-grid">
+            <div class="skeleton package-skeleton"></div>
+            <div class="skeleton package-skeleton"></div>
+            <div class="skeleton package-skeleton"></div>
+          </div>
+
+          <div id="selected-package-display" style="display: none; margin-top: 20px; padding: 15px; background: #e8f4f8; border-radius: 8px; border-left: 4px solid #3498db;">
+            <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+            <span id="selected-package-text"></span>
+          </div>
+        </section>
+
+        <!-- Step 3: Contact Info -->
+        <section class="checkout-section step-contact">
+          <div class="section-header">
+            <h2><i class="fas fa-user-circle"></i> Data Pemilik Domain</h2>
+            <p>Informasi ini diperlukan untuk registrasi domain</p>
+          </div>
+
+          <form id="checkout-form" class="checkout-form">
+            <div class="form-group">
+              <label for="fullname">Nama Lengkap *</label>
+              <input type="text" id="fullname" name="fullname" required placeholder="Contoh: Budi Santoso">
+              <small class="form-help"></small>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required placeholder="nama@example.com">
+                <small class="form-help">Email digunakan untuk verifikasi dan komunikasi</small>
+              </div>
+
+              <div class="form-group">
+                <label for="phone">No. WhatsApp *</label>
+                <input type="tel" id="phone" name="phone" required placeholder="08xxxxxxxxxx">
+                <small class="form-help">Format: 08xxxxxxxxxx</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Alamat *</label>
+              <textarea id="address" name="address" rows="3" required placeholder="Alamat lengkap sesuai KTP/SIM"></textarea>
+              <small class="form-help"></small>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="tos" required>
+                <span>Saya setuju dengan <a href="/perusahaan/legal/" target="_blank">Syarat & Ketentuan</a> dan <a href="/perusahaan/legal/" target="_blank">Kebijakan Privasi</a> SISITUS</span>
+              </label>
+            </div>
+          </form>
+        </section>
+
+        <!-- Step 4: Order Summary -->
+        <section class="checkout-section step-summary">
+          <div class="section-header">
+            <h2><i class="fas fa-receipt"></i> Ringkasan Pesanan</h2>
+          </div>
+
+          <div class="order-summary" id="order-summary">
+            <div class="skeleton summary-skeleton"></div>
+          </div>
+
+          <div class="checkout-total">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span id="subtotal-price">Rp 0</span>
+            </div>
+            <div class="info-box">
+              <i class="fas fa-info-circle"></i>
+              <small>Harga sudah termasuk domain, hosting, SSL, dan maintenance selama periode paket</small>
+            </div>
+            <div class="total-row main">
+              <span>Total Pembayaran:</span>
+              <span id="total-price">Rp 0</span>
+            </div>
+
+            <button id="checkout-btn" class="btn btn-primary btn-lg" onclick="processCheckout()" type="button">
+              <i class="fas fa-credit-card"></i> Lanjutkan ke Pembayaran
+            </button>
+
+            <p class="checkout-note">
+              <i class="fas fa-lock"></i> Koneksi Anda aman. Data dienkripsi dengan standar keamanan internasional.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 SISITUS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/pages/checkout.js"></script>
+</body>
+</html>

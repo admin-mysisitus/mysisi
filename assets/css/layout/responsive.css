@@ -8,27 +8,34 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: clamp(0.8rem, 1.8vw, 1.2rem);
+    gap: clamp(0.9rem, 1.8vw, 1.6rem);
   }
 
   .nav-desktop-item { position: relative; display: flex; align-items: center; }
 
   .nav-desktop-link {
-    font-size: clamp(0.85rem, 1.3vw, 1rem);
-    padding: 1.2rem 0;
-    color: var(--hitam-soft);
+    font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+    padding: 1rem 0;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: var(--transisi-cepat);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 
-  .nav-desktop-link:hover { color: var(--hijau-tua); }
+  .nav-desktop-link:hover { 
+    color: var(--primary-blue);
+  }
 
   .nav-desktop-link::after {
     content: '';
     position: absolute;
-    bottom: 0.8rem;
+    bottom: 1rem;
     left: 0;
     width: 0;
     height: 3px;
-    background-color: var(--hijau-muda);
+    background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
     border-radius: var(--radius);
     transition: width var(--transisi);
   }
@@ -40,21 +47,21 @@
 
   .nav-desktop-dropdown-menu {
     position: absolute;
-    top: calc(100% + 0.5rem);
+    top: calc(100% + 0.8rem);
     left: 0;
     transform: translateY(10px);
-    background-color: var(--putih);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-elegan);
-    padding: 1rem 0;
-    min-width: 220px;
-    max-width: 280px;
+    background-color: var(--bg-white);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-lg);
+    padding: 1.2rem 0;
+    min-width: 240px;
+    max-width: 300px;
     overflow-x: hidden;
     opacity: 0;
     visibility: hidden;
     transition: var(--transisi);
     z-index: 9999;
-    border-top: 3px solid var(--hijau-muda); /* Gunakan gaya umum */
+    border-top: 3px solid var(--primary-blue);
   }
 
   .nav-desktop-dropdown:hover .nav-desktop-dropdown-menu,
@@ -65,25 +72,39 @@
   }
 
   .dropdown-item {
-    display: block;
-    padding: 0.7rem 1.5rem;
-    font-size: clamp(0.85rem, 1.2vw, 1rem);
-    color: var(--hitam-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.8rem;
+    font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+    color: var(--text-primary);
+    transition: var(--transisi-cepat);
   }
 
   .dropdown-item:hover, .dropdown-item:focus {
-    background-color: var(--abu-terang);
-    color: var(--hijau-tua);
-    padding-left: 1.7rem;
+    background-color: var(--bg-light);
+    color: var(--primary-blue);
+    border-radius: var(--radius);
   }
 
-  .nav-desktop-pondigi { margin-left: clamp(0.8rem, 1.5vw, 1.2rem); }
-  .nav-desktop-pondigi .pondigi-link {
-    padding: clamp(0.7rem, 1.5vw, 0.9rem) clamp(1.2rem, 2.5vw, 1.8rem);
-    font-size: clamp(0.85rem, 1.3vw, 1rem);
+  .nav-desktop-promo { margin-left: clamp(0.8rem, 1.5vw, 1.2rem); }
+  .nav-desktop-promo .promo-link {
+    padding: clamp(0.55rem, 1vw, 0.75rem) clamp(0.9rem, 1.8vw, 1.4rem);
+    font-size: clamp(0.85rem, 1.1vw, 0.95rem);
   }
 
-  /* Footer (tidak diubah, tetap utuh) */
+  /* Hapus underline pada button promo */
+  .nav-desktop-link.promo-link::after {
+    display: none;
+  }
+
+  /* Styling state aktif untuk button promo */
+  .nav-desktop-link.promo-link.active {
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Footer */
   .link-services-wrapper { gap: clamp(2rem, 3.5vw, 2.5rem); padding: 0; }
   .link-section, .services-section { min-width: auto; max-width: none; margin: 0; }
 
@@ -124,12 +145,12 @@
   #separator {
     width: 1px;
     height: 20px;
-    background: linear-gradient(to bottom, transparent, var(--hijau-muda), transparent);
+    background: linear-gradient(to bottom, transparent, var(--primary-blue), transparent);
     margin: 0 0 0 1rem;
     opacity: 0.8;
   }
 
-  #hijri {
+  #info {
     width: 60%;
     text-align: center;
     flex-direction: column;
@@ -138,35 +159,6 @@
     font-size: clamp(0.65rem, 1.5vw, 0.75rem);
     line-height: 1.1;
     max-width: unset;
-    margin: 0;
-    padding: 0;
-  }
-  .hijri-text {
-    letter-spacing: 0.05px;
-    display: inline-block;
-    white-space: nowrap;
-    margin: 0;
-    padding: 0;
-  }
-
-  .jawa-calendar {
-    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-    padding-top: 0.05rem;
-    margin-top: 0.05rem;
-    text-align: center;
-    line-height: 1.05;
-    width: 100%;
-    margin: 0;
-  }
-  .jawa-day {
-    font-size: clamp(0.6rem, 1.8vw, 0.7rem);
-    white-space: nowrap;
-    margin: 0;
-    padding: 0;
-  }
-  .jawa-date {
-    font-size: clamp(0.55rem, 1.5vw, 0.65rem);
-    white-space: nowrap;
     margin: 0;
     padding: 0;
   }
@@ -184,14 +176,6 @@
     font-size: clamp(0.9rem, 1.5vw, 1rem);
   }
   .footer-sosmed a { width: 35px; height: 35px; }
-
-  /* Imsak Table */
-  .imsak-table {
-    max-width: 380px;
-    font-size: clamp(0.67rem, 1.3vw, 0.77rem);
-  }
-  .imsak-table th { font-size: clamp(0.72rem, 1.5vw, 0.82rem); }
-  .imsak-table th, .imsak-table td { padding: 0.4rem 0.6rem; }
 }
 
 @media (min-width: 992px) {
@@ -202,13 +186,10 @@
   .footer-grid { gap: 3rem; width: 90%; max-width: 1200px; }
   .footer-datetime { padding: 0.5rem 1.8rem; }
   #datetime { gap: 0.4rem; }
-  #hijri { gap: 0.1rem; }
+  #info { gap: 0.1rem; }
   .footer-map { height: clamp(180px, 20vw, 200px); }
   .link-services-wrapper { gap: 2.5rem; }
   .footer-kontak li { line-height: 1.8; }
-
-  /* Imsak Table */
-  .imsak-table th { font-size: clamp(0.75rem, 1.5vw, 0.85rem); }
 }
 
 @media (min-width: 1200px) {
@@ -222,10 +203,6 @@
   .footer-map { height: 220px; }
   .footer-datetime { padding: 0.6rem 2rem; }
   .link-services-wrapper { gap: 3rem; }
-
-  /* Imsak Table */
-  .imsak-table { max-width: 420px; font-size: clamp(0.72rem, 1.3vw, 0.82rem); }
-  .imsak-table th { font-size: clamp(0.77rem, 1.5vw, 0.87rem); }
 }
 
 /* ============= PENYESUAIAN KHUSUS MOBILE KECIL (<480px) ========== */
@@ -242,10 +219,5 @@
   .footer-map { height: clamp(200px, 42vw, 240px); }
   .footer-datetime { padding: 0.4rem 0.8rem; gap: 0.2rem; }
   #datetime { gap: 0.1rem; line-height: 1.1; }
-  #hijri { gap: 0.05rem; padding: 0; }
-
-  /* Imsak Table */
-  .imsak-table { max-width: 300px; font-size: clamp(0.58rem, 1.2vw, 0.68rem); }
-  .imsak-table th { font-size: clamp(0.63rem, 1.4vw, 0.73rem); }
-  .imsak-table th, .imsak-table td { padding: 0.3rem 0.45rem; }
+  #info { gap: 0.05rem; padding: 0; }
 }

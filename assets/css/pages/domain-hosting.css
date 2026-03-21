@@ -1,0 +1,571 @@
+/* ========== DOMAIN & HOSTING PAGE STYLING ========== */
+/* Page-specific styling untuk halaman domain & hosting layanan */
+
+/* ========== IMPORT BASE STYLES ========== */
+/* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
+@import url('pembuatan-website.css');
+
+/* ========== DETAIL BENEFITS SECTION ========== */
+.detail-benefits-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.detail-benefits-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+}
+
+.benefit-item {
+  background: var(--bg-white);
+  padding: clamp(2rem, 3vw, 2.5rem);
+  border-radius: var(--radius-large);
+  border: 1.5px solid var(--border-light);
+  text-align: center;
+  transition: var(--transisi);
+  box-shadow: var(--shadow-md);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="item"] selector */
+
+.benefit-item:hover {
+  transform: translateY(-10px);
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-lg);
+}
+
+.benefit-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--accent-cyan));
+  border-radius: var(--radius-large) var(--radius-large) 0 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.benefit-item:hover::before {
+  transform: scaleX(1);
+}
+
+.benefit-item i {
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: var(--transisi);
+}
+
+.benefit-item:hover i {
+  transform: scale(1.15) rotate(10deg);
+}
+
+.benefit-item h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.benefit-item p {
+  color: var(--text-secondary);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+}
+
+/* ========== DOMAIN PACKAGES SECTION ========== */
+.detail-domain-packages-section {
+  padding: 4rem 0;
+  background-color: var(--gray-light);
+}
+
+.detail-domain-packages-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.simple-packages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.package-simple {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-besar);
+  border: 2px solid var(--border-light);
+  text-align: center;
+  transition: var(--transisi);
+  box-shadow: var(--shadow-lembut);
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays handled automatically by shared-sections.css [class*="package"] selector */
+
+.package-simple:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.12);
+}
+
+.package-simple h3 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.package-simple .price {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.package-simple .note {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ========== HOSTING PACKAGES SECTION ========== */
+.detail-hosting-packages-section {
+  padding: 4rem 0;
+  background-color: var(--white);
+}
+
+.detail-hosting-packages-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hosting-packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.hosting-packages-grid .package-card {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.hosting-packages-grid .package-card:nth-child(1) { animation-delay: 0.1s; }
+.hosting-packages-grid .package-card:nth-child(2) { animation-delay: 0.2s; }
+.hosting-packages-grid .package-card:nth-child(3) { animation-delay: 0.3s; }
+
+.hosting-packages-grid .package-card.featured {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.1);
+}
+
+.hosting-packages-grid .package-price {
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--gray-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.hosting-packages-grid .package-price strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hosting-packages-grid .period {
+  display: block;
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  font-weight: 500;
+}
+
+/* ========== PACKAGE CARD BUTTON STYLING ========== */
+.hosting-packages-grid .package-card .btn {
+  margin: 0;
+  padding: 0.95rem 2rem;
+  min-height: 44px;
+  font-size: 0.95rem;
+}
+
+.hosting-packages-grid .package-card .btn-block {
+  width: calc(100% - 4rem);
+  margin: 0 2rem 2rem;
+}
+
+.hosting-packages-grid .package-card.featured .btn {
+  background-color: var(--accent-cyan);
+  color: var(--text-primary);
+  border: none;
+}
+
+.hosting-packages-grid .package-card.featured .btn:hover {
+  background-color: #0891b2;
+  transform: translateY(-2px);
+}
+
+/* ========== FEATURES TWO COLUMN SECTION ========== */
+.detail-features-section {
+  padding: 4rem 0;
+  background-color: var(--gray-light);
+}
+
+.detail-features-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.features-two-column {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.feature-column {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.feature-column:nth-child(1) { animation-delay: 0.1s; }
+.feature-column:nth-child(2) { animation-delay: 0.2s; }
+
+.feature-column h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-blue);
+}
+
+.feature-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-column li {
+  color: var(--text-secondary);
+  font-size: var(--teks-standar);
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  position: relative;
+  line-height: 1.6;
+  transition: var(--transisi);
+}
+
+.feature-column li:hover {
+  color: var(--text-primary);
+  padding-left: 2.5rem;
+}
+
+.feature-column i {
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* ========== MIGRATION SECTION ========== */
+.detail-migration-section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--bg-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-migration-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.detail-migration-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.detail-migration-section h2 {
+  font-size: var(--judul-sedang);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.detail-migration-section .section-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--teks-standar);
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.migration-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.migration-info,
+.migration-benefit {
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.migration-info { animation-delay: 0.1s; }
+.migration-benefit { animation-delay: 0.2s; }
+
+.migration-info h3,
+.migration-benefit h3 {
+  font-size: var(--teks-standar);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.migration-info ul,
+.migration-benefit ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.migration-info li,
+.migration-benefit li {
+  font-size: var(--teks-standar);
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.migration-info li::before,
+.migration-benefit li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+/* ========== ANIMATIONS ========== */
+/* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */
+
+@keyframes iconRotate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(15deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ========== HOSTING PLAN SELECTION STATE ========== */
+.hosting-packages-grid .package-card.selected {
+  border: 2px solid var(--accent-cyan);
+  box-shadow: 0 12px 40px rgba(6, 182, 212, 0.2);
+  transform: scale(1.02);
+}
+
+.hosting-packages-grid .package-card.selected .package-header {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));
+  color: var(--bg-white);
+}
+
+.hosting-packages-grid .package-card.selected h3 {
+  color: var(--white);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .detail-benefits-section {
+    padding: 3rem 0;
+  }
+
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .simple-packages {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .hosting-packages-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hosting-packages-grid .package-card .btn-block {
+    width: calc(100% - 3rem);
+    margin: 0 1.5rem 1.5rem;
+  }
+
+  .features-two-column {
+    gap: 2rem;
+  }
+
+  .migration-content {
+    gap: 2rem;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-benefits-section,
+  .detail-domain-packages-section,
+  .detail-hosting-packages-section,
+  .detail-features-section,
+  .detail-migration-section,
+  .faq-section {
+    padding: 2.5rem 0;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .benefit-item {
+    padding: 1.5rem;
+  }
+
+  .benefit-item i {
+    font-size: 2rem;
+  }
+
+  .simple-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .package-simple {
+    padding: 1.5rem;
+  }
+
+  .package-simple h3 {
+    font-size: 1rem;
+  }
+
+  .hosting-packages-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hosting-packages-grid .package-card .btn-block {
+    width: calc(100% - 3rem);
+    margin: 0 1.5rem 1.5rem;
+    padding: 0.875rem 1.5rem;
+  }
+
+  .features-two-column {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .feature-column h3 {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .feature-column li {
+    font-size: var(--teks-kecil);
+    padding-left: 1.5rem;
+  }
+
+  .migration-content {
+    gap: 1.5rem;
+  }
+
+  .migration-info h3,
+  .migration-benefit h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .migration-info li,
+  .migration-benefit li {
+    font-size: var(--teks-kecil);
+    margin-bottom: 0.8rem;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-item summary {
+    padding: 1.2rem;
+    font-size: var(--teks-standar);
+  }
+
+  .faq-item p {
+    padding: 0 1.2rem 1.2rem 1.2rem;
+    font-size: var(--teks-kecil);
+  }
+
+  /* Note: .detail-cta-section responsive styling di hero.css */
+}

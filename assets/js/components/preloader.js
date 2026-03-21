@@ -1,27 +1,18 @@
-// Logika Preloader
+// Logika Preloader yang Tetap Stabil
+const PRELOADER_START = performance.now();
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   const supportWrapper = document.querySelector(".support-btn-wrapper");
-
-  if (preloader) {
-    const MIN_PRELOADER_TIME = 900;     // Durasi minimum tampil
-    const EXIT_ANIMATION_TIME = 600;    // Sama dengan CSS transition
-
-    const startTime = performance.now();
-
-    function hidePreloader() {
-      preloader.classList.add("hidden");
-
-      // Tunggu animasi exit selesai
-      setTimeout(() => {
-        preloader.remove(); // Bersihkan DOM
-        supportWrapper?.classList.add("show");
-      }, EXIT_ANIMATION_TIME);
-    }
-
-    const elapsed = performance.now() - startTime;
-    const remaining = Math.max(0, MIN_PRELOADER_TIME - elapsed);
-
-    setTimeout(hidePreloader, remaining);
-  }
+  if (!preloader) return;
+  const MIN_PRELOADER_TIME = 1800;
+  const EXIT_ANIMATION_TIME = 600;
+  const elapsed = performance.now() - PRELOADER_START;
+  const remaining = Math.max(0, MIN_PRELOADER_TIME - elapsed);
+  setTimeout(() => {
+    preloader.classList.add("hidden");
+    setTimeout(() => {
+      preloader.remove();
+      supportWrapper?.classList.add("show");
+    }, EXIT_ANIMATION_TIME);
+  }, remaining);
 });

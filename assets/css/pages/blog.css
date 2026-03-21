@@ -1,0 +1,471 @@
+/* ========== BLOG PAGE STYLING ========== */
+/* Styling khusus halaman BLOG dengan fokus pada featured posts dan article cards */
+
+/* Hero styling moved to components/hero.css */
+
+/* ========== BLOG CATEGORIES SECTION ========== */
+.blog-categories-section {
+  padding: 2rem 0;
+  background-color: var(--bg-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.blog-categories-section h2 {
+  font-size: var(--teks-standar);
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.categories-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.category-btn {
+  padding: 0.7rem 1.75rem;
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  border: 2px solid var(--primary-blue);
+  border-radius: 50px;
+  font-size: var(--teks-kecil);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transisi);
+  cursor: pointer;
+}
+
+.category-btn:hover,
+.category-btn.active {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: var(--bg-white);
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ========== BLOG FEATURED SECTION ========== */
+.blog-featured-section {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+  background-color: var(--bg-white);
+}
+
+.blog-featured-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(2rem, 3vw, 2.5rem);
+  margin-bottom: 2rem;
+}
+
+/* ========== FEATURED POST ========== */
+.featured-post {
+  background: var(--white);
+  border-radius: var(--radius-besar);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  transition: var(--transisi);
+  box-shadow: var(--shadow-lembut);
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays handled automatically by shared-sections.css [class*="post"] selector */
+
+.featured-post:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(6, 182, 212, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+.featured-image {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+  background-color: var(--gray-light);
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transisi);
+}
+
+.featured-post:hover .featured-image img {
+  transform: scale(1.05);
+}
+
+.post-category {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--accent-cyan);
+  color: var(--bg-white);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.featured-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.featured-content time {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.featured-content h3 {
+  color: var(--text-primary);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.featured-content p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+/* ========== SECTION HEADER ========== */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.section-header h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  margin: 0;
+  font-weight: 700;
+}
+
+.category-secondary-nav {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+}
+
+.link-secondary {
+  color: var(--bg-white);
+  background-color: var(--accent-cyan);
+  text-decoration: none;
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  position: relative;
+  transition: var(--transisi);
+  cursor: pointer;
+  display: inline-block;
+  border: 2px solid var(--accent-cyan);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+}
+
+.link-secondary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: var(--primary-blue);
+  transition: height 0.3s ease;
+  border-radius: 50px;
+  z-index: -1;
+}
+
+.link-secondary:hover {
+  color: var(--bg-white);
+  border-color: var(--primary-blue);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+  transform: translateY(-2px);
+}
+
+.link-secondary:hover::after {
+  height: 100%;
+}
+
+.link-secondary:focus {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+  border-radius: 50px;
+}
+
+/* ========== BLOG GRID SECTION ========== */
+.blog-grid-section {
+  padding: 4rem 0;
+  background-color: var(--gray-light);
+}
+
+.blog-grid-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* ========== ARTICLE CARD ========== */
+.article-card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-besar);
+  border: 1px solid var(--border-light);
+  transition: var(--transisi);
+  box-shadow: var(--shadow-lembut);
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
+
+.article-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-lg);
+}
+
+.article-card h3 {
+  color: var(--text-primary);
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.article-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.article-meta time {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  font-weight: 500;
+}
+
+.article-meta .category {
+  background-color: var(--bg-light);
+  color: var(--primary-blue);
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.article-card p {
+  color: var(--gray-medium);
+  font-size: var(--teks-kecil);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+/* ========== BLOG NEWSLETTER SECTION ========== */
+.blog-newsletter-section {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--bg-white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-newsletter-section::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.blog-newsletter-section h2 {
+  font-size: var(--judul-sedang);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.blog-newsletter-section p {
+  font-size: var(--teks-standar);
+  opacity: 0.95;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: var(--teks-standar);
+  font-family: var(--font-utama);
+  transition: var(--transisi);
+}
+
+.newsletter-form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.newsletter-form input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* ========== FORM ERROR STYLING ========== */
+.form-error-msg {
+  color: #ef4444;
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.newsletter-form input.error {
+  border-color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.05) !important;
+}
+
+/* ========== FILTER STATES ========== */
+.featured-post.hidden,
+.article-card.hidden {
+  display: none !important;
+}
+
+.featured-post.filtered,
+.article-card.filtered {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.featured-post.visible,
+.article-card.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-form input {
+    width: 100%;
+  }
+
+  .category-secondary-nav {
+    gap: 1rem;
+  }
+
+  .link-secondary {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-featured-section,
+  .blog-grid-section,
+  .blog-newsletter-section {
+    padding: 2.5rem 0;
+  }
+
+  .featured-image {
+    height: 150px;
+  }
+
+  .featured-content {
+    padding: 1rem;
+  }
+
+  .article-card {
+    padding: 1.5rem;
+  }
+
+  .categories-nav {
+    gap: 0.5rem;
+  }
+
+  .category-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .section-header {
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .category-secondary-nav {
+    gap: 0.5rem;
+    flex-direction: column;
+  }
+
+  .link-secondary {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
+/* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */

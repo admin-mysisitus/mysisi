@@ -1,0 +1,324 @@
+/* ========== PORTOFOLIO PAGE - STYLING ========== */
+/* Portofolio grid dengan filter, cards, dan interactive elements */
+
+/* ========== FILTER SECTION ========== */
+.portfolio-filter-section {
+  padding: 3rem 0;
+  background-color: var(--bg-white);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.filter-btn {
+  padding: 0.625rem 1.25rem;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background-color: rgba(37, 99, 235, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+.filter-btn.active {
+  background-color: var(--primary-blue);
+  color: var(--bg-white);
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.filter-btn.active:hover {
+  background-color: #1e40af;
+  border-color: #1e40af;
+}
+
+/* ========== PORTFOLIO GRID & CARDS ========== */
+.portfolio-projects-section {
+  padding: 2rem 0;
+  background-color: var(--bg-white);
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-card {
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--bg-white);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-card:hover {
+  border-color: var(--primary-blue);
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
+}
+
+/* Portfolio Card Image Wrapper */
+.portfolio-card-image {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa, #e8ecf1);
+}
+
+.portfolio-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.portfolio-card:hover .portfolio-card-image img {
+  transform: scale(1.06);
+}
+
+/* Portfolio Overlay */
+.portfolio-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(37, 99, 235, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.portfolio-card:hover .portfolio-overlay {
+  opacity: 1;
+}
+
+.btn-view {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--bg-white);
+  color: var(--primary-blue);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-view:hover {
+  background-color: var(--primary-blue);
+  color: var(--bg-white);
+  transform: scale(1.05);
+}
+
+/* Portfolio Card Info */
+.portfolio-card-info {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-card-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.portfolio-type {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--primary-blue);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.portfolio-detail {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.3rem;
+}
+
+.portfolio-detail span {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ========== LOAD MORE SECTION ========== */
+.portfolio-load-more {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+  margin-top: 2rem;
+}
+
+#btn-load-more {
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+#btn-load-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+#btn-load-more.hidden {
+  display: none;
+}
+
+/* ========== CTA SECTION ========== */
+.portfolio-cta-section {
+  padding: 4rem 1rem;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+  border-radius: 12px;
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.portfolio-cta-section h2 {
+  font-size: var(--judul-sedang);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.portfolio-cta-section p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--line-height-relaxed);
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.cta-buttons .btn {
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  min-width: 180px;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .filter-buttons {
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-buttons .btn {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .portfolio-card-image {
+    height: 180px;
+  }
+
+  .portfolio-cta-section {
+    padding: 2.5rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-filter-section {
+    padding: 2rem 0;
+  }
+
+  .filter-buttons {
+    gap: 0.4rem;
+  }
+
+  .filter-btn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .portfolio-card-image {
+    height: 150px;
+  }
+
+  .portfolio-card-info {
+    padding: 1rem;
+  }
+
+  .portfolio-card-info h3 {
+    font-size: 0.95rem;
+  }
+
+  .portfolio-type {
+    font-size: 0.8rem;
+  }
+
+  .portfolio-cta-section h2 {
+    font-size: 1.5rem;
+  }
+}

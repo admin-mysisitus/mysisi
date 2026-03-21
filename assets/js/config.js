@@ -1,39 +1,91 @@
-// Data Navigasi
+// =========================
+// DATA NAVIGASI HEADER
+// =========================
 export const menuData = [
-  { href: "/", text: "Home" },
-  { href: "/profile/", text: "Profile" },
-  { text: "Lembaga", href: "/lembaga/", dropdown: [{ href: "/lembaga/", text: "Kelembagaan", isParent: true }, { href: "/lembaga/yayasan/", text: "Yayasan" }, { href: "/lembaga/madin/", text: "Madrasah Diniyah" }, { href: "/lembaga/formal/", text: "Madrasah Formal" }] },
-  { text: "Layanan", href: "/layanan/", dropdown: [{ href: "/layanan/", text: "Layanan Terpadu", isParent: true }, { href: "/layanan/pendaftaran-santri/", text: "Pendaftaran Santri" }, { href: "/layanan/administrasi/", text: "Administrasi" }, { href: "/layanan/pengaduan/", text: "Pengaduan" }, { href: "/layanan/donasi/", text: "Donasi" }] },
-  { text: "Informasi", href: "/informasi/", dropdown: [{ href: "/informasi/", text: "Pusat Informasi", isParent: true }, { href: "/informasi/berita/", text: "Berita" }, { href: "/informasi/agenda/", text: "Agenda" }, { href: "/informasi/artikel/", text: "Artikel" }] },
-  { text: "IKSADA", href: "/iksada/", dropdown: [{ href: "/iksada/", text: "Tentang IKSADA", isParent: true }, { href: "/iksada/penelusuran.html", text: "Penelusuran Alumni" }, { href: "/iksada/registrasi.html", text: "Registrasi Alumni" }] },
-  { text: "Pondigi", href: "/pondigi/", isPondigi: true }
+  { href: "/", text: "Home", icon: "fas fa-home" },
+
+  {
+    text: "Perusahaan",
+    href: "/perusahaan/",
+    icon: "fas fa-building",
+    dropdown: [
+      { href: "/perusahaan/", text: "Profil Perusahaan", icon: "fas fa-briefcase", isParent: true },
+      { href: "/perusahaan/tentang/", text: "Tentang Kami", icon: "fas fa-users" },
+      { href: "/perusahaan/portofolio/", text: "Portofolio", icon: "fas fa-images" },
+      { href: "/perusahaan/legal/", text: "Legal", icon: "fas fa-file-contract" }
+    ]
+  },
+
+  {
+    text: "Layanan",
+    href: "/layanan/",
+    icon: "fas fa-cogs",
+    dropdown: [
+      { href: "/layanan/", text: "Layanan Kami", icon: "fas fa-th", isParent: true },
+      { href: "/layanan/pembuatan-website/", text: "Pembuatan Website", icon: "fas fa-code" },
+      { href: "/layanan/maintenance/", text: "Maintenance Website", icon: "fas fa-wrench" },
+      { href: "/layanan/domain-hosting/", text: "Domain & Hosting", icon: "fas fa-server" }
+    ]
+  },
+
+  {
+    text: "Blog",
+    href: "/blog/",
+    icon: "fas fa-newspaper",
+    dropdown: [
+      { href: "/blog/", text: "Blog", icon: "fas fa-blog", isParent: true },
+      { href: "/blog/artikel/", text: "Artikel", icon: "fas fa-pen-fancy" },
+      { href: "/blog/tips-website/", text: "Tips Website", icon: "fas fa-lightbulb" }
+    ]
+  },
+
+  { href: "/kontak/", text: "Kontak", icon: "fas fa-envelope" },
+
+  { text: "Promo", href: "/promo/", icon: "fas fa-gift", isPromo: true }
 ];
 
-// Data Layanan Utama Footer
+
+// =========================
+// DATA LAYANAN UTAMA FOOTER
+// =========================
 export const mainServicesData = [
-  { href: "layanan/pendaftaran-santri/index.html", text: "Pendaftaran Santri" },
-  { href: "layanan/administrasi/index.html", text: "Administrasi" },
-  { href: "layanan/donasi/index.html", text: "Donasi" },
-  { href: "iksada/registrasi.html", text: "Registrasi Alumni" },
-  { href: "pondigi/wali-dashboard.html", text: "Login Wali Santri" },
-  { href: "pondigi/pengurus-dashboard.html", text: "Login Pengurus" }
+  { href: "/layanan/pembuatan-website/", text: "Pembuatan Website" },
+  { href: "/layanan/domain-hosting/", text: "Domain & Hosting" },
+  { href: "/layanan/maintenance/", text: "Maintenance Website" },
+  { href: "/promo/", text: "Promo & Penawaran" }
 ];
 
-// Data Footer Sosmed
+
+// =========================
+// DATA SOSIAL MEDIA FOOTER
+// =========================
 export const footerSocialData = [
-  { href: "https://www.facebook.com/share/1GD6k6atzR/", ariaLabel: "Facebook", icon: "fab fa-facebook-f" },
-  { href: "https://www.instagram.com/ppaidarulhuda.id?igsh=cDMza2xzYjZkZGY0", ariaLabel: "Instagram", icon: "fab fa-instagram" },
-  { href: "https://youtube.com/@ppaidarulhuda1300?si=8tV5LH3s-OgVStuz", ariaLabel: "YouTube", icon: "fab fa-youtube" },
-  { href: "https://wa.me/6285385072377", ariaLabel: "WhatsApp", icon: "fab fa-whatsapp" },
-  { href: "https://www.tiktok.com/@ppai_darulhuda?_r=1&_t=ZS-92a4X0Sg4kk", ariaLabel: "TikTok", icon: "fab fa-tiktok" }
+  { href: "https://www.facebook.com/sisitusdotcom", ariaLabel: "Facebook", icon: "fab fa-facebook-f" },
+  { href: "https://www.instagram.com/sisitusdotcom", ariaLabel: "Instagram", icon: "fab fa-instagram" },
+  { href: "https://www.youtube.com/@sisitusdotcom", ariaLabel: "YouTube", icon: "fab fa-youtube" },
+  { href: "https://wa.me/6281215289095", ariaLabel: "WhatsApp", icon: "fab fa-whatsapp" },
+  { href: "https://www.tiktok.com/@sisitusdotcom", ariaLabel: "TikTok", icon: "fab fa-tiktok" }
 ];
 
-// Data Footer Kontak
+
+// =========================
+// DATA KONTAK FOOTER
+// =========================
 export const footerContactData = [
-  { icon: "fas fa-map-marker-alt", text: "Jl. Pesantren, RT.014 RW.004 Ds. Sumbermanjing Wetan, Kec. Sumbermanjing Wetan, Kab. Malang - Jawa Timur" },
-  { icon: "fas fa-phone-alt", text: "<a href=\"tel:+6285233393669\" class=\"footer-kontak-link\">+62 852-3339-3669</a>" },
-  { icon: "fas fa-envelope", text: "<a href=\"mailto:ppaidarulhuda@gmail.com\" class=\"footer-kontak-link\">ppaidarulhuda@gmail.com</a>" },
-  { icon: "fas fa-clock", text: "Senin - Jumat: 06.00 - 18.00 WIB" }
+  {
+    icon: "fas fa-map-marker-alt",
+    text: "Indonesia – Layanan Online sisitus.com"
+  },
+  {
+    icon: "fas fa-phone-alt",
+    text: "<a href=\"tel:+62-812-1528-9095\" class=\"footer-kontak-link\">+62 812-3456-7890</a>"
+  },
+  {
+    icon: "fas fa-envelope",
+    text: "<a href=\"mailto:sisitus@gmail.com\" class=\"footer-kontak-link\">admin@sisitus.com</a>"
+  },
+  {
+    icon: "fas fa-clock",
+    text: "Senin - Sabtu: 08.00 - 20.00 WIB"
+  }
 ];
-
-

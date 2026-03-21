@@ -1,31 +1,713 @@
-.tombol {
-  display: inline-block;
-  padding: 0.8rem 1.8rem;
-  border-radius: var(--radius);
-  font-weight: 500;
+/* ===============================
+   COMPONENT - BUTTON STYLES
+=============================== */
+
+/* Base Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem 2rem;
+  font-size: var(--teks-standar);
+  font-weight: 600;
   border: none;
+  border-radius: var(--radius-medium);
   cursor: pointer;
+  transition: var(--transisi);
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 48px;
+  line-height: 1.4;
+  letter-spacing: 0.3px;
+}
+
+/* Primary Button */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: var(--bg-white);
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, #1E3A8A 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  color: var(--bg-white);
+  border: none;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, #1E3A8A 100%);
+  color: var(--bg-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+/* Outline Button (Alias for Secondary) */
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
+  box-shadow: none;
+}
+
+.btn-outline:hover,
+.btn-outline:focus {
+  background-color: var(--bg-light);
+  color: var(--primary-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-blue-dark);
+}
+
+.btn-outline:active {
+  transform: translateY(0);
+}
+
+/* Accent Button */
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, #0891B2 100%);
+  color: var(--bg-white);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+  background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Success Button */
+.btn-success {
+  background-color: var(--success-green);
+  color: var(--bg-white);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-success:hover,
+.btn-success:focus {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Disabled Button */
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Button Block (Full Width) */
+.btn-block {
+  width: 100%;
+  display: flex;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 0.75rem 1.5rem;
+  font-size: var(--teks-kecil);
+  min-height: 40px;
+}
+
+.btn-lg {
+  padding: 1.25rem 2.5rem;
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  min-height: 52px;
+}
+
+/* Small Button for Learn More Actions */
+.btn-small {
+  padding: 0.75rem 1.75rem;
+  font-size: var(--teks-kecil);
+  min-height: 40px;
+}
+
+/* Tablet/Desktop Specific Button Adjustments */
+@media (min-width: 640px) {
+  .btn {
+    padding: 1.05rem 2.2rem;
+    font-size: 1rem;
+    min-height: 46px;
+  }
+
+  .btn-sm {
+    padding: 0.8rem 1.6rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+
+  .btn-small {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+
+  .btn-lg {
+    padding: 1.3rem 2.7rem;
+    font-size: 1.05rem;
+    min-height: 50px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .btn {
+    padding: 1.1rem 2.4rem;
+    font-size: 1.02rem;
+    min-height: 48px;
+    transition: var(--transisi);
+  }
+
+  .btn-sm {
+    padding: 0.85rem 1.75rem;
+    font-size: 0.93rem;
+    min-height: 40px;
+  }
+
+  .btn-small {
+    padding: 0.85rem 1.95rem;
+    font-size: 0.93rem;
+    min-height: 40px;
+  }
+
+  .btn-lg {
+    padding: 1.4rem 3rem;
+    font-size: 1.08rem;
+    min-height: 52px;
+  }
+
+  /* Desktop Hover Effects */
+  .btn-primary:hover {
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+  }
+
+  .btn-secondary:hover {
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
+  }
+}
+
+/* Desktop Large Screens */
+@media (min-width: 1024px) {
+  .btn {
+    padding: 1.1rem 2.4rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+
+  .btn-sm {
+    padding: 0.8rem 1.6rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+
+  .btn-small {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+
+  .btn-lg {
+    padding: 1.3rem 2.8rem;
+    font-size: 1.05rem;
+    min-height: 52px;
+  }
+}
+
+/* Extra Large Screens */
+@media (min-width: 1280px) {
+  .btn {
+    padding: 1.15rem 2.6rem;
+    font-size: 1.02rem;
+    min-height: 50px;
+  }
+
+  .btn-lg {
+    padding: 1.4rem 3rem;
+    font-size: 1.08rem;
+    min-height: 54px;
+  }
+}
+
+/* Navigation Button Override for Desktop */
+.nav-desktop-pondigi .pondigi-link {
+  padding: clamp(0.7rem, 1.5vw, 0.9rem) clamp(1.2rem, 2.5vw, 1.8rem);
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  background-color: var(--primary-blue);
+  color: var(--bg-white);
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
   transition: var(--transisi);
 }
 
-.tombol-primer {
-  background-color: var(--hijau-tua);
-  color: var(--putih);
-}
-
-.tombol-primer:hover {
-  background-color: #083C32;
+.nav-desktop-pondigi .pondigi-link:hover,
+.nav-desktop-pondigi .pondigi-link:focus {
+  background-color: var(--accent-cyan);
+  color: var(--text-primary);
   transform: translateY(-2px);
 }
 
-.tombol-sekunder {
-  background-color: transparent;
-  color: var(--hijau-tua);
-  border: 2px solid var(--hijau-tua);
+/* ===== BUTTON CONTAINER STYLES ===== */
+
+/* CTA Button Container */
+.cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.tombol-sekunder:hover {
-  background-color: var(--hijau-tua);
-  color: var(--putih);
+.cta-buttons .btn {
+  flex: 1;
+  min-width: clamp(120px, 100%, 100%);
+}
+
+@media (min-width: 640px) {
+  .cta-buttons {
+    gap: 1.1rem;
+  }
+
+  .cta-buttons .btn {
+    flex: 0 1 auto;
+    min-width: auto;
+    padding: 1rem 2.2rem;
+    font-weight: 600;
+  }
+}
+
+@media (min-width: 768px) {
+  .cta-buttons {
+    gap: 1.3rem;
+    justify-content: center;
+  }
+
+  .cta-buttons .btn {
+    flex: 0 1 auto;
+    min-width: auto;
+    padding: 1.05rem 2.3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cta-buttons {
+    gap: 1.4rem;
+  }
+
+  .cta-buttons .btn {
+    padding: 1.1rem 2.5rem;
+  }
+}
+
+/* Hero Section Buttons */
+.hero-content .cta-buttons {
+  gap: 0.8rem;
+}
+
+.hero-content .btn {
+  padding: 1rem 2rem;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .hero-content .btn {
+    padding: 1.05rem 2.2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-content .btn {
+    padding: 1.1rem 2.4rem;
+    font-size: 0.98rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-content .btn {
+    padding: 1.15rem 2.6rem;
+    font-size: 1rem;
+  }
+}
+
+/* Newsletter Form Button */
+.newsletter-form .btn {
+  padding: 0.8rem 1.5rem;
+  transition: var(--transisi);
+}
+
+.newsletter-form .btn:hover {
   transform: translateY(-2px);
+}
+
+@media (min-width: 640px) {
+  .newsletter-form .btn {
+    padding: 0.85rem 1.6rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .newsletter-form .btn {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .newsletter-form .btn {
+    padding: 0.95rem 2rem;
+    font-size: 0.98rem;
+  }
+}
+
+/* Layanan Card Button */
+.layanan-card .btn {
+  margin: 0 2rem 2rem;
+}
+
+@media (max-width: 480px) {
+  .layanan-card .btn {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+}
+
+/* Package Card Button */
+.package-card .btn {
+  margin: 0 2rem 2rem;
+}
+
+/* Service Grid Small Button */
+.services-grid .btn-small {
+  padding: 0.625rem 1.5rem;
+  font-size: var(--teks-kecil);
+  min-height: 40px;
+}
+
+@media (min-width: 640px) {
+  .services-grid .btn-small {
+    padding: 0.7rem 1.6rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .services-grid .btn-small {
+    padding: 0.75rem 1.7rem;
+    font-size: 0.88rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-grid .btn-small {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Contact Form Button */
+.contact-form .btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.contact-form .btn-primary {
+  background: var(--primary-blue);
+  color: var(--bg-white);
+}
+
+.contact-form .btn-primary:hover {
+  background: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+@media (min-width: 640px) {
+  .contact-form .btn {
+    padding: 1.05rem 1.6rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .contact-form .btn {
+    padding: 1.1rem 1.8rem;
+    font-size: 0.98rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-form .btn {
+    padding: 1.15rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Error Actions Button */
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.error-actions .btn {
+  padding: 1rem 2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transisi);
+  display: inline-block;
+  min-height: 44px;
+}
+
+.error-actions .btn-primary {
+  background: var(--bg-white);
+  color: var(--text-primary);
+}
+
+.error-actions .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.error-actions .btn-secondary {
+  background: transparent;
+  color: var(--bg-white);
+  border: 2px solid var(--bg-white);
+}
+
+.error-actions .btn-secondary:hover {
+  background: var(--bg-white);
+  color: var(--text-primary);
+  transform: translateY(-3px);
+}
+
+@media (max-width: 480px) {
+  .error-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (min-width: 640px) {
+  .error-actions .btn {
+    padding: 1.05rem 2.2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .error-actions .btn {
+    padding: 1.1rem 2.4rem;
+    font-size: 0.98rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .error-actions .btn {
+    padding: 1.15rem 2.6rem;
+    font-size: 1rem;
+  }
+}
+
+/* Service Simple Card Button */
+.service-simple .btn {
+  margin-top: auto;
+}
+
+/* Detail Migration Section Button */
+.detail-migration-section .btn {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+}
+
+/* Collaboration Section Button */
+.collaboration-section .btn {
+  display: inline-block;
+}
+
+/* CTA Final Section Button */
+.cta-final-section .btn {
+  padding: 1rem 2.5rem;
+  font-weight: 600;
+  margin: 0 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .cta-final-section .btn {
+    padding: 1.05rem 2.6rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .cta-final-section .btn {
+    padding: 1.1rem 2.8rem;
+    font-size: 0.98rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cta-final-section .btn {
+    padding: 1.15rem 3rem;
+    font-size: 1rem;
+  }
+}
+
+/* Tips CTA Section Button */
+.tips-cta-section .btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* Promo Banner Button */
+.promo-banner .btn {
+  margin-top: 1rem;
+}
+
+/* Expand Highlights Button */
+.btn-expand-highlights {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transisi);
+  font-size: var(--teks-kecil);
+}
+
+.btn-expand-highlights:hover {
+  background-color: var(--accent-cyan);
+  color: var(--bg-white);
+  transform: translateY(-2px);
+}
+
+/* Copy Code Button */
+.btn-copy-code {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background-color: var(--success-green);
+  color: var(--bg-white);
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transisi);
+  z-index: 10;
+}
+
+.btn-copy-code:hover {
+  background-color: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+/* Bookmark Button */
+.btn-bookmark {
+  position: relative;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transisi);
+  font-size: var(--teks-kecil);
+}
+
+.btn-bookmark:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background-color: rgba(6, 182, 212, 0.05);
+}
+
+.btn-bookmark.bookmarked {
+  background-color: var(--accent-cyan);
+  color: var(--bg-white);
+  border-color: var(--accent-cyan);
+}
+
+.btn-bookmark.bookmarked:hover {
+  background-color: #0891b2;
+  border-color: #0891b2;
+}
+
+/* Join Team Section Button Override */
+.join-team-section .btn-secondary {
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  border-color: var(--bg-white);
+}
+
+.join-team-section .btn-secondary:hover {
+  background-color: var(--bg-light);
+  border-color: var(--bg-light);
+}
+
+/* ===== LINK ARROW STYLES ===== */
+/* Centralized link arrow component for consistent styling across pages */
+.link-arrow {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--teks-kecil);
+  transition: var(--transisi);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.link-arrow::after {
+  content: '»';
+  transition: var(--transisi);
+}
+
+.link-arrow:hover {
+  color: var(--primary-blue);
+}
+
+.link-arrow:hover::after {
+  transform: translateX(4px);
+}
+
+/* Focus and Accessibility for Link Arrow */
+.link-arrow:focus,
+.link-arrow:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
 }

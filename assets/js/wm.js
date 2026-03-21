@@ -18,8 +18,8 @@
   // Buat paragraf copyright
   const copyrightPara = document.createElement("p");
   const currentYear = new Date().getFullYear();
-  copyrightPara.innerHTML = `&copy; <span>${currentYear}</span> — PPAI Darul Huda | Hak Cipta Dilindungi<br>
-                             Developed by: <a href="https://www.instagram.com/lukman_looker?igsh=aTZwbmgxdXg0OTJk" class="copyright-link" aria-label="Tim IT PonPes">Tim IT PonPes</a><br>
+  copyrightPara.innerHTML = `&copy; <span>${currentYear}</span> — sisitus.com | Hak Cipta Dilindungi<br>
+                             Developed by: <a href="https://www.instagram.com/lukman_looker?igsh=aTZwbmgxdXg0OTJk" class="copyright-link" aria-label="Designer sisitus">Designer</a><br>
                              Powered by`;
 
   // Buat watermark

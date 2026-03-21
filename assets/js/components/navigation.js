@@ -13,11 +13,24 @@ const generateDesktopMenu = () => {
   list.className = 'nav-desktop-list';
   menuData.forEach(item => {
     const li = document.createElement('li');
-    li.className = `nav-desktop-item ${item.dropdown ? 'nav-desktop-dropdown' : ''} ${item.isPondigi ? 'nav-desktop-pondigi' : ''}`;
+    li.className = `nav-desktop-item ${item.dropdown ? 'nav-desktop-dropdown' : ''} ${item.isPromo ? 'nav-desktop-promo' : ''}`;
     const link = document.createElement('a');
-    link.className = `nav-desktop-link ${item.isPondigi ? 'pondigi-link' : ''}`;
+    link.className = `nav-desktop-link ${item.isPromo ? 'promo-link' : ''}`;
     link.href = item.href;
-    link.textContent = item.text;
+    
+    // Tamahkan icon jika ada
+    if (item.icon) {
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'nav-icon';
+      iconSpan.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i>`;
+      link.appendChild(iconSpan);
+    }
+    
+    const textSpan = document.createElement('span');
+    textSpan.className = 'nav-text';
+    textSpan.textContent = item.text;
+    link.appendChild(textSpan);
+    
     if (item.dropdown) link.setAttribute('aria-haspopup', 'true');
     li.appendChild(link);
     if (item.dropdown) {
@@ -28,7 +41,20 @@ const generateDesktopMenu = () => {
         const subLink = document.createElement('a');
         subLink.className = `dropdown-item ${sub.isParent ? 'dropdown-parent' : ''}`;
         subLink.href = sub.href;
-        subLink.textContent = sub.text;
+        
+        // Tambahkan icon untuk dropdown item jika ada
+        if (sub.icon) {
+          const iconSpan = document.createElement('span');
+          iconSpan.className = 'dropdown-icon';
+          iconSpan.innerHTML = `<i class="${sub.icon}" aria-hidden="true"></i>`;
+          subLink.appendChild(iconSpan);
+        }
+        
+        const textSpan = document.createElement('span');
+        textSpan.className = 'dropdown-text';
+        textSpan.textContent = sub.text;
+        subLink.appendChild(textSpan);
+        
         subLi.appendChild(subLink);
         dropdownMenu.appendChild(subLi);
       });
@@ -45,14 +71,27 @@ const generateMobileMenu = () => {
   list.className = 'nav-mobile-list';
   menuData.forEach(item => {
     const li = document.createElement('li');
-    li.className = `nav-mobile-item ${item.dropdown ? 'nav-mobile-dropdown' : ''} ${item.isPondigi ? 'nav-mobile-pondigi' : ''}`;
+    li.className = `nav-mobile-item ${item.dropdown ? 'nav-mobile-dropdown' : ''} ${item.isPromo ? 'nav-mobile-promo' : ''}`;
     if (item.dropdown) {
       const header = document.createElement('div');
       header.className = 'nav-mobile-dropdown-header';
       const mainLink = document.createElement('a');
       mainLink.className = 'nav-mobile-link';
       mainLink.href = item.dropdown.find(sub => sub.isParent).href;
-      mainLink.textContent = item.dropdown.find(sub => sub.isParent).text;
+      
+      // Tambahkan icon di mobile menu
+      if (item.icon) {
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'nav-icon';
+        iconSpan.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i>`;
+        mainLink.appendChild(iconSpan);
+      }
+      
+      const textSpan = document.createElement('span');
+      textSpan.className = 'nav-text';
+      textSpan.textContent = item.dropdown.find(sub => sub.isParent).text;
+      mainLink.appendChild(textSpan);
+      
       const toggle = document.createElement('button');
       toggle.className = 'nav-mobile-toggle';
       toggle.setAttribute('aria-expanded', 'false');
@@ -68,16 +107,42 @@ const generateMobileMenu = () => {
         const subLink = document.createElement('a');
         subLink.className = 'nav-mobile-dropdown-link';
         subLink.href = sub.href;
-        subLink.textContent = sub.text;
+        
+        // Tambahkan icon untuk mobile dropdown item jika ada
+        if (sub.icon) {
+          const iconSpan = document.createElement('span');
+          iconSpan.className = 'dropdown-icon';
+          iconSpan.innerHTML = `<i class="${sub.icon}" aria-hidden="true"></i>`;
+          subLink.appendChild(iconSpan);
+        }
+        
+        const textSpan = document.createElement('span');
+        textSpan.className = 'dropdown-text';
+        textSpan.textContent = sub.text;
+        subLink.appendChild(textSpan);
+        
         subLi.appendChild(subLink);
         dropdownMenu.appendChild(subLi);
       });
       li.appendChild(dropdownMenu);
     } else {
       const link = document.createElement('a');
-      link.className = `nav-mobile-link ${item.isPondigi ? 'pondigi-link' : ''}`;
+      link.className = `nav-mobile-link ${item.isPromo ? 'promo-link' : ''}`;
       link.href = item.href;
-      link.textContent = item.text;
+      
+      // Tambahkan icon untuk menu tanpa dropdown
+      if (item.icon) {
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'nav-icon';
+        iconSpan.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i>`;
+        link.appendChild(iconSpan);
+      }
+      
+      const textSpan = document.createElement('span');
+      textSpan.className = 'nav-text';
+      textSpan.textContent = item.text;
+      link.appendChild(textSpan);
+      
       li.appendChild(link);
     }
     list.appendChild(li);
@@ -153,7 +218,7 @@ const setActiveLinks = () => {
 const generateFooterLinks = () => {
   const container = document.getElementById('footer-quick-links');
   if (!container) return;
-  menuData.filter(item => !item.isPondigi).forEach(item => {
+  menuData.filter(item => !item.isPromo).forEach(item => {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = item.href;
@@ -202,6 +267,43 @@ const generateFooterContact = () => {
   });
 };
 
+// Auto-hide Header Handler
+let lastScrollTop = 0;
+let isHideActive = false;
+let scrollWithinThreshold = false;
+
+const handleAutoHideHeader = () => {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollThreshold = 100; // Mulai hide setelah scroll 100px
+  const triggerDistance = 50; // Distance untuk trigger show/hide
+
+  // Jika masih dalam threshold awal, tampilkan header
+  if (scrollTop <= scrollThreshold) {
+    navElements.header?.classList.remove('nav-hidden');
+    isHideActive = false;
+    scrollWithinThreshold = true;
+    return;
+  }
+
+  scrollWithinThreshold = false;
+
+  // Menentukan arah scroll
+  const isScrollingDown = scrollTop > lastScrollTop;
+
+  // Hide header ketika scroll down
+  if (isScrollingDown && scrollTop > lastScrollTop + triggerDistance && !isHideActive) {
+    navElements.header?.classList.add('nav-hidden');
+    isHideActive = true;
+  }
+  // Show header ketika scroll up
+  else if (!isScrollingDown && scrollTop < lastScrollTop - triggerDistance && isHideActive) {
+    navElements.header?.classList.remove('nav-hidden');
+    isHideActive = false;
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+};
+
 // Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
   generateDesktopMenu();
@@ -223,6 +325,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const isScrolled = window.scrollY > 50;
     navElements.header?.classList.toggle('scroll', isScrolled);
     document.body.classList.toggle('header-scroll', isScrolled);
+    
+    // Panggil auto-hide header handler
+    handleAutoHideHeader();
   });
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 768 && navElements.menu.classList.contains('active')) toggleMobileMenu();

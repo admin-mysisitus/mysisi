@@ -1,10 +1,16 @@
 /* ===============================
    COMPONENT - PRELOADER
 =============================== */
+:root {
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 #preloader {
   position: fixed;
   inset: 0;
-  background: var(--krem);
+  background: linear-gradient(135deg,
+      var(--secondary-slate) 0%,
+      #0F172A 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,42 +25,162 @@
   pointer-events: none;
 }
 
-/* Logo */
-.loader-logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  z-index: 2;
-
-  animation: logo-breath 3.2s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+.preloader-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: visible;
 }
 
-/* Frame */
-.loader-frame {
+.logo-wrap {
+  transform: translateX(14px);
+  animation: logo-shift-left 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  animation-delay: 0.25s;
+}
+
+/* Lock + Spin dengan easing disesuaikan untuk kelancaran */
+.logo-spin {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  animation:
+    s-lock-compress 0.1s ease-out forwards,
+    logo-spin-once 1s cubic-bezier(0.4, 1.2, 0.6, 1) forwards;
+  animation-delay:
+    0.82s,
+    0.92s;
+}
+
+.loader-top,
+.loader-bottom {
   position: absolute;
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-
-  animation: frame-spin 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-
-  filter: drop-shadow(0 0 10px rgba(10, 75, 62, 0.18));
+  width: 76px;
+  height: auto;
+  filter: none;
 }
 
-/* Animation */
-@keyframes frame-spin {
-  0%   { transform: rotate(0deg); }
-  38%  { transform: rotate(170deg); }
-  52%  { transform: rotate(180deg); }
-  66%  { transform: rotate(190deg); }
-  100% { transform: rotate(360deg); }
+/* Logo 1 masuk dari kiri */
+.loader-top {
+  z-index: 2;
+  animation: s-enter-left 0.9s cubic-bezier(0.25, 0.9, 0.25, 1) forwards;
 }
 
-@keyframes logo-breath {
-  0%, 100% {
-    transform: scale(1);
+/* Logo 2 masuk dari kanan */
+.loader-bottom {
+  z-index: 1;
+  animation: s-enter-right 0.9s cubic-bezier(0.25, 0.9, 0.25, 1) forwards;
+}
+
+.brand-text {
+  font-family: var(--font-utama);
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  display: flex;
+  overflow: hidden;
+}
+
+.brand-name {
+  color: var(--bg-white);
+  opacity: 0;
+  transform: translateX(-12px);
+  animation: brand-in 0.65s cubic-bezier(0.25, 0.9, 0.25, 1) forwards;
+  animation-delay: 0.32s;
+}
+
+.brand-dot {
+  color: var(--primary-blue);
+  opacity: 0;
+  transform: translateX(-8px);
+  margin-left: 0;
+  animation:
+    dot-in 0.4s ease-out forwards,
+    dot-push 0.4s ease-out forwards;
+  animation-delay:
+    0.62s,
+    0.62s;
+}
+
+/* Keyframes Baru untuk Masuk dari Kiri-Kanan */
+@keyframes s-enter-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-64px);
   }
-  50% {
-    transform: scale(1.035);
+
+  65% {
+    opacity: 1;
+    transform: translateX(6px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes s-enter-right {
+  0% {
+    opacity: 0;
+    transform: translateX(64px);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translateX(-6px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Keyframes Lain yang Tetap Berlaku */
+@keyframes logo-shift-left {
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes s-lock-compress {
+  to {
+    transform: scaleY(0.985);
+  }
+}
+
+@keyframes logo-spin-once {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  55% {
+    transform: rotate(390deg);
+  }
+
+  75% {
+    transform: rotate(350deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes brand-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dot-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dot-push {
+  to {
+    margin-left: 2px;
   }
 }

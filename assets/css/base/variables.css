@@ -1,29 +1,53 @@
-
-
-
-
-
 :root {
-  /* Warna */
-  --hijau-tua: #0A4B3E;
-  --hijau-muda: #2A9D8F;
-  --krem: #F8F4E9;
-  --putih: #FFFFFF;
-  --abu-terang: #F1F1F1;
-  --abu-sedang: #6B7280;
-  --hitam-soft: #263238;
-
-  /* Tipografi */
-  --font-utama: 'Poppins', sans-serif;
-  --judul-besar: clamp(1.8rem, 4vw, 2.8rem);
-  --judul-sedang: clamp(1.4rem, 3vw, 2rem);
-  --teks-standar: clamp(0.95rem, 1.5vw, 1.1rem);
-  --teks-kecil: clamp(0.7rem, 1vw, 0.85rem);
+  /* Warna - Modern Professional Palette */
+  --primary-blue: #2563EB;
+  --primary-blue-dark: #1E40AF;
+  --primary-blue-light: #3B82F6;
+  --secondary-slate: #1E293B;
+  --accent-cyan: #06B6D4;
+  --success-green: #10B981;
+  --warning-orange: #F59E0B;
+  --error-red: #EF4444;
+  --bg-white: #FFFFFF;
+  --bg-light: #F8FAFC;
+  --bg-lighter: #F1F5F9;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --text-light: #94A3B8;
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E1;
+  
+  /* Legacy variable maps for compatibility */
+  --dark-navy: #1E293B;
+  --brand-green: #10B981;
+  --bg-darkest: #F8FAFC;
+  --white: #FFFFFF;
+  --gray-light: #F1F5F9;
+  --gray-medium: #94A3B8;
+  --bg-surface: #1E293B;
+  
+  /* Tipografi - Enhanced for Readability */
+  --font-utama: 'Inter', sans-serif;
+  --judul-besar: clamp(2.2rem, 5vw, 3.5rem);
+  --judul-sedang: clamp(1.6rem, 3.5vw, 2.4rem);
+  --judul-kecil: clamp(1.2rem, 2.5vw, 1.6rem);
+  --teks-standar: clamp(1rem, 1.8vw, 1.125rem);
+  --teks-kecil: clamp(0.85rem, 1.2vw, 0.95rem);
+  --teks-terkecil: clamp(0.75rem, 1vw, 0.85rem);
+  --line-height-tight: 1.3;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.8;
 
   /* Spacing & Border */
-  --radius: 12px;
-  --radius-besar: 18px;
-  --shadow-lembut: 0 4px 15px rgba(0,0,0,0.05);
-  --shadow-elegan: 0 8px 25px rgba(10,75,62,0.1);
-  --transisi: all 0.3s ease-in-out;
+  --radius: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --radius-besar: 20px;
+  --shadow-sm: 0 1px 2px rgba(30, 41, 59, 0.05);
+  --shadow-md: 0 4px 12px rgba(30, 41, 59, 0.08);
+  --shadow-lg: 0 10px 25px rgba(30, 41, 59, 0.12);
+  --shadow-lembut: 0 4px 16px rgba(30, 41, 59, 0.1);
+  --shadow-elegan: 0 10px 30px rgba(37, 99, 235, 0.15);
+  --transisi: all 0.25s ease-in-out;
+  --transisi-cepat: all 0.15s ease-in-out;
 }

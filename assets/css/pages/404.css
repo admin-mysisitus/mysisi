@@ -1,0 +1,250 @@
+/* ========== 404 PAGE STYLES ========== */
+
+/* Error Section */
+.error-section {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  color: var(--bg-white);
+  padding: clamp(4rem, 10vw, 6rem) 20px;
+  min-height: calc(100vh - 300px);
+  display: flex;
+  align-items: center;
+}
+
+.error-section .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.error-content {
+  text-align: left;
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 800;
+  line-height: 1;
+  opacity: 0.15;
+  margin-bottom: -20px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.error-section h1 {
+  font-size: var(--judul-besar);
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.error-section p {
+  font-size: var(--teks-standar);
+  margin-bottom: 40px;
+  opacity: 0.95;
+  line-height: var(--line-height-relaxed);
+}
+
+.error-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Error Illustration */
+.error-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.illustration-404 {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustration-404 i {
+  font-size: 200px;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Quick Links Section */
+.quick-links-section {
+  padding: clamp(3.5rem, 7vw, 5rem) 20px;
+  background: var(--bg-light);
+}
+
+.quick-links-section h2 {
+  font-size: var(--judul-sedang);
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.quick-link-item {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quick-link-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.quick-link-item i {
+  font-size: 48px;
+  color: var(--primary-blue);
+  margin-bottom: 15px;
+}
+
+.quick-link-item h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.quick-link-item p {
+  font-size: 0.9375rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .error-section .container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .error-content {
+    text-align: center;
+  }
+
+  .error-actions {
+    justify-content: center;
+  }
+
+  .illustration-404 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .illustration-404 i {
+    font-size: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .error-section {
+    padding: 60px 20px;
+    min-height: auto;
+  }
+
+  .error-code {
+    font-size: 5rem;
+  }
+
+  .error-section h1 {
+    font-size: 2rem;
+  }
+
+  .error-section p {
+    font-size: 1rem;
+  }
+
+  .quick-links-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .quick-links-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .quick-link-item {
+    padding: 20px;
+  }
+
+  .quick-link-item i {
+    font-size: 36px;
+  }
+
+  .quick-link-item h3 {
+    font-size: 1rem;
+  }
+
+  .quick-link-item p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-section {
+    padding: 40px 15px;
+  }
+
+  .error-code {
+    font-size: 3rem;
+  }
+
+  .error-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .error-section p {
+    font-size: 0.9375rem;
+  }
+
+  .error-actions {
+    flex-direction: column;
+  }
+
+  .illustration-404 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .illustration-404 i {
+    font-size: 100px;
+  }
+
+  .quick-links-section {
+    padding: 40px 15px;
+  }
+
+  .quick-links-grid {
+    grid-template-columns: 1fr;
+  }
+}

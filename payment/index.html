@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pembayaran Pesanan - SISITUS">
+  <title>Pembayaran Pesanan - SISITUS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components/payment.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <div class="logo">
+          <a href="/">SISITUS</a>
+        </div>
+        <a href="/checkout/" class="back-home-btn">
+          <i class="fas fa-arrow-left"></i> Kembali ke Checkout
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="payment-page">
+    <div class="container">
+      <div class="payment-wrapper">
+        <!-- Loading State -->
+        <div id="loading-state" class="payment-loading">
+          <div class="spinner-container">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Memuat detail pesanan...</p>
+          </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" style="display: none;" class="payment-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <h2>Pesanan Tidak Ditemukan</h2>
+          <p id="error-message">Pesanan dengan ID ini tidak ditemukan. Silakan cek kembali.</p>
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> Kembali ke Beranda
+          </a>
+        </div>
+
+        <!-- Success State - Order Found -->
+        <div id="order-state" style="display: none;" class="payment-content">
+          <!-- Payment Status Card -->
+          <div class="payment-status-card">
+            <div class="status-header" id="status-header">
+              <i class="fas fa-hourglass-half"></i>
+              <h2>Pesanan Menunggu Pembayaran</h2>
+            </div>
+            <div class="status-body">
+              <p class="order-id" id="order-id-display">Order ID: <strong>ORD-20260322-ABC123</strong></p>
+              <p class="expire-time" id="expire-time-display">Berlaku hingga: -</p>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <section class="payment-section">
+            <div class="section-header">
+              <h3><i class="fas fa-receipt"></i> Ringkasan Pesanan</h3>
+            </div>
+
+            <div class="order-summary" id="order-summary">
+              <div class="summary-row">
+                <div class="summary-label">
+                  <span class="label-text" id="domain-display">example.com</span>
+                  <span class="label-sub" id="paket-display">Paket Grower</span>
+                </div>
+                <span class="summary-price" id="total-display">Rp 0</span>
+              </div>
+            </div>
+
+            <div class="order-details">
+              <div class="detail-row">
+                <span class="detail-label">Domain</span>
+                <span class="detail-value" id="detail-domain">example.com</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Paket Website</span>
+                <span class="detail-value" id="detail-paket">Grower</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Durasi</span>
+                <span class="detail-value">1 Tahun</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Payment Methods -->
+          <section class="payment-section">
+            <div class="section-header">
+              <h3><i class="fas fa-credit-card"></i> Metode Pembayaran</h3>
+            </div>
+
+            <div class="payment-methods" id="payment-methods">
+              <!-- Bank Transfer -->
+              <div class="payment-method" id="method-bank-transfer">
+                <input type="radio" name="payment-method" value="bank-transfer" id="radio-bank">
+                <label for="radio-bank" class="method-label">
+                  <span class="method-icon"><i class="fas fa-university"></i></span>
+                  <span class="method-name">Transfer Bank</span>
+                  <span class="method-desc">BCA, Mandiri, BNI, dsb</span>
+                </label>
+              </div>
+
+              <!-- E-Wallet -->
+              <div class="payment-method" id="method-ewallet">
+                <input type="radio" name="payment-method" value="ewallet" id="radio-ewallet">
+                <label for="radio-ewallet" class="method-label">
+                  <span class="method-icon"><i class="fas fa-wallet"></i></span>
+                  <span class="method-name">E-Wallet</span>
+                  <span class="method-desc">OVO, Dana, LinkAja, GCash</span>
+                </label>
+              </div>
+
+              <!-- WhatsApp -->
+              <div class="payment-method" id="method-whatsapp">
+                <input type="radio" name="payment-method" value="whatsapp" id="radio-whatsapp" checked>
+                <label for="radio-whatsapp" class="method-label">
+                  <span class="method-icon"><i class="fab fa-whatsapp"></i></span>
+                  <span class="method-name">WhatsApp</span>
+                  <span class="method-desc">Chat dengan admin untuk pembayaran</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Bank Details (Hidden by default) -->
+            <div id="bank-details" style="display: none;" class="bank-details">
+              <div class="bank-account">
+                <h4>Detail Rekening</h4>
+                <div class="account-list">
+                  <div class="account-item">
+                    <span class="bank-name">BCA</span>
+                    <span class="account-number">1234567890 (a.n. PT SISITUS)</span>
+                    <button class="btn-copy" onclick="copyToClipboard('1234567890')">
+                      <i class="fas fa-copy"></i> Salin
+                    </button>
+                  </div>
+                  <div class="account-item">
+                    <span class="bank-name">Mandiri</span>
+                    <span class="account-number">1000123456 (a.n. PT SISITUS)</span>
+                    <button class="btn-copy" onclick="copyToClipboard('1000123456')">
+                      <i class="fas fa-copy"></i> Salin
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Customer Info -->
+          <section class="payment-section">
+            <div class="section-header">
+              <h3><i class="fas fa-user"></i> Data Pelanggan</h3>
+            </div>
+
+            <div class="customer-info">
+              <div class="info-row">
+                <span class="info-label">Nama</span>
+                <span class="info-value" id="info-nama">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value" id="info-email">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">WhatsApp</span>
+                <span class="info-value" id="info-phone">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Alamat</span>
+                <span class="info-value" id="info-alamat">-</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Action Buttons -->
+          <div class="payment-actions">
+            <button id="btn-whatsapp" class="btn btn-primary btn-lg" onclick="contactViaWhatsApp()">
+              <i class="fab fa-whatsapp"></i> Chat WhatsApp
+            </button>
+            <a href="/checkout/" class="btn btn-secondary btn-lg">
+              <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+          </div>
+
+          <!-- Payment Instructions -->
+          <div class="payment-instructions">
+            <h4><i class="fas fa-info-circle"></i> Instruksi Pembayaran</h4>
+            <ul>
+              <li>🏦 Jika memilih Transfer Bank → Lakukan transfer ke rekening yang tertera</li>
+              <li>💳 Jika memilih E-Wallet → Hubungi admin untuk mendapatkan link pembayaran</li>
+              <li>💬 Jika memilih WhatsApp → Chat admin untuk panduan pembayaran</li>
+              <li>✉️ Konfirmasi pembayaran akan dikirim lewat email dan WhatsApp</li>
+              <li>⏱️ Pesanan berlaku selama 24 jam. Setelah itu perlu dibuat ulang</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 SISITUS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/pages/payment.js"></script>
+</body>
+</html>
