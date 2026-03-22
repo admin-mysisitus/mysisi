@@ -1,0 +1,468 @@
+/**
+ * Checkout Authentication Component Styles
+ * Handles: Login/Register forms, user profile display, auth UI elements
+ * Version: 1.0
+ */
+
+/* ============================================================================
+   AUTH SECTION - GENERAL
+   ============================================================================ */
+
+.checkout-auth-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+  animation: slideInUp 0.4s ease-out;
+}
+
+.checkout-auth-section h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================================================
+   AUTH TABS
+   ============================================================================ */
+
+.auth-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  color: #7f8c8d;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-bottom: -2px;
+}
+
+.tab-btn:hover {
+  color: #667eea;
+}
+
+.tab-btn.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+/* ============================================================================
+   AUTH FORMS
+   ============================================================================ */
+
+.auth-form {
+  display: none;
+}
+
+.auth-form.active {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.auth-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.auth-form label {
+  display: block;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.auth-form input::placeholder {
+  color: #bdc3c7;
+}
+
+.auth-form button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.auth-form button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.auth-form button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+.form-group small {
+  display: block;
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* ============================================================================
+   AUTH DIVIDER
+   ============================================================================ */
+
+.auth-divider {
+  text-align: center;
+  color: #7f8c8d;
+  margin: 2rem 0;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.auth-divider::before {
+  left: 0;
+}
+
+.auth-divider::after {
+  right: 0;
+}
+
+/* ============================================================================
+   GOOGLE SIGN-IN BUTTON CUSTOMIZATION
+   ============================================================================ */
+
+#google-signin-button {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+#google-signin-button div {
+  margin: 0 auto !important;
+}
+
+/* Fallback Google button styling if needed */
+.google-signin-wrapper {
+  text-align: center;
+}
+
+/* ============================================================================
+   LOGGED IN STATE
+   ============================================================================ */
+
+.logged-in-info {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  object-fit: cover;
+  border: 3px solid #667eea;
+}
+
+.user-info {
+  text-align: left;
+}
+
+.user-info .label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.user-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0.25rem 0 0 0 !important;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin: 0 !important;
+}
+
+.btn-logout {
+  padding: 0.6rem 1.2rem;
+  background: #ecf0f1;
+  color: #2c3e50;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-logout:hover {
+  background: #bdc3c7;
+}
+
+/* ============================================================================
+   WHATSAPP SECTION
+   ============================================================================ */
+
+.whatsapp-section {
+  background: #f0f7ff;
+  border-left: 4px solid #667eea;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+}
+
+.whatsapp-section label {
+  display: block;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.whatsapp-input-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.whatsapp-input-group input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.whatsapp-input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-save {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-save:hover {
+  background: #764ba2;
+  transform: translateY(-2px);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+.whatsapp-section small {
+  display: block;
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+/* ============================================================================
+   VALIDATION MESSAGES
+   ============================================================================ */
+
+.form-error {
+  display: none;
+  background: #fde8e8;
+  border: 1px solid #f5a5a5;
+  color: #c0392b;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  animation: slideInDown 0.3s ease-out;
+}
+
+.form-error.show {
+  display: block;
+}
+
+.form-error strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-error ul {
+  margin: 0.5rem 0 0 1.5rem;
+  padding: 0;
+}
+
+.form-error li {
+  margin-bottom: 0.25rem;
+}
+
+.form-success {
+  display: none;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  color: #27ae60;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  animation: slideInDown 0.3s ease-out;
+}
+
+.form-success.show {
+  display: block;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .checkout-auth-section {
+    padding: 1.5rem;
+  }
+
+  .logged-in-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-profile {
+    width: 100%;
+  }
+
+  .btn-logout {
+    width: 100%;
+    text-align: center;
+  }
+
+  .auth-tabs {
+    flex-direction: column;
+    border-bottom: 1px solid #ecf0f1;
+  }
+
+  .tab-btn {
+    border-bottom: none;
+    padding: 0.75rem 0;
+    border-left: 3px solid transparent;
+    padding-left: 1rem;
+  }
+
+  .tab-btn.active {
+    border-left-color: #667eea;
+    border-bottom-color: transparent;
+  }
+
+  .whatsapp-input-group {
+    flex-direction: column;
+  }
+
+  .btn-save {
+    width: 100%;
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   TEST MODE - Remove before production
+   ============================================================================ */
+
+.auth-test-mode {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.auth-test-mode strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}

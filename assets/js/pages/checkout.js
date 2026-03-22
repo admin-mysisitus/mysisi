@@ -4,60 +4,7 @@
  * Dependencies: DOM manipulation, localStorage API, fetch API
  */
 
-// ============================================================================
-// HARDCODED DOMAIN & PACKAGE DATA
-// ============================================================================
-
-const DOMAIN_PACKAGES = {
-  'starter': {
-    id: 'starter',
-    name: 'Starter',
-    price: 599000,
-    features: [
-      '5 Halaman Website',
-      '5 GB Hosting Storage',
-      'Domain + SSL Gratis',
-      'Email Hosting (5 akun)',
-      'Support Chat 24/7',
-      'Basic SEO Optimization'
-    ],
-    recommended: false
-  },
-  'grower': {
-    id: 'grower',
-    name: 'Grower',
-    price: 1299000,
-    features: [
-      '15 Halaman Website',
-      '50 GB Hosting Storage',
-      'Domain + SSL Gratis',
-      'Email Hosting (25 akun)',
-      'Support Chat 24/7 + Phone Support',
-      'Advanced SEO Optimization',
-      'Analytics Integration',
-      'CDN Global'
-    ],
-    recommended: true
-  },
-  'pioneer': {
-    id: 'pioneer',
-    name: 'Pioneer',
-    price: 2399000,
-    features: [
-      'Unlimited Halaman Website',
-      'Unlimited Hosting Storage',
-      'Domain + SSL Gratis',
-      'Email Hosting (Unlimited)',
-      'Dedicated Support Manager',
-      'Full SEO Optimization',
-      'E-commerce Integration',
-      'CDN Global',
-      'API Access',
-      'Custom Domain Email'
-    ],
-    recommended: false
-  }
-};
+import { GAS_CONFIG, DOMAIN_PACKAGES } from '../config/api.config.js';
 
 // ============================================================================
 // STATE MANAGEMENT
@@ -330,8 +277,10 @@ function renderOrderSummary() {
         <p>Silakan pilih paket terlebih dahulu</p>
       </div>
     `;
-    document.getElementById('subtotal-price').textContent = 'Rp 0';
-    document.getElementById('total-price').textContent = 'Rp 0';
+    const summarySubtotalEl = document.getElementById('summary-subtotal');
+    const totalPriceEl = document.getElementById('total-price');
+    if (summarySubtotalEl) summarySubtotalEl.textContent = 'Rp 0';
+    if (totalPriceEl) totalPriceEl.textContent = 'Rp 0';
     return;
   }
 
@@ -359,8 +308,10 @@ function renderOrderSummary() {
     </div>
   `;
 
-  document.getElementById('subtotal-price').textContent = `Rp ${formatPrice(totalPrice)}`;
-  document.getElementById('total-price').textContent = `Rp ${formatPrice(totalPrice)}`;
+  const summarySubtotalEl = document.getElementById('summary-subtotal');
+  const totalPriceEl = document.getElementById('total-price');
+  if (summarySubtotalEl) summarySubtotalEl.textContent = `Rp ${formatPrice(totalPrice)}`;
+  if (totalPriceEl) totalPriceEl.textContent = `Rp ${formatPrice(totalPrice)}`;
 }
 
 // ============================================================================
@@ -368,6 +319,23 @@ function renderOrderSummary() {
 // ============================================================================
 
 async function processCheckout() {
+  // Validate user authentication
+  const userAuthStr = sessionStorage.getItem('sisitus_user');
+  if (!userAuthStr) {
+    showErrorMessage('Anda harus login terlebih dahulu');
+    scrollToSection('step-auth');
+    return;
+  }
+
+  let userAuth;
+  try {
+    userAuth = JSON.parse(userAuthStr);
+  } catch (e) {
+    showErrorMessage('Session invalid. Silakan login kembali.');
+    sessionStorage.removeItem('sisitus_user');
+    return;
+  }
+
   // Validate form
   if (!validateCheckoutForm()) {
     scrollToSection('step-contact');
@@ -398,34 +366,50 @@ async function processCheckout() {
   checkoutBtn.disabled = true;
 
   try {
-    // Prepare order data
+    // Calculate pricing from pricing state
+    const pkg = DOMAIN_PACKAGES[checkoutState.selectedPackage];
+    const baseDomainPrice = 299000;
+    const subtotal = baseDomainPrice + pkg.price;
+    const ppn = Math.round(subtotal * 0.11);
+    const totalPrice = subtotal + ppn;
+
+    // Prepare order data with user authentication info
     const orderData = {
+      action: 'createOrderWithAuth', // CRITICAL: Use authenticated order creation
+      userId: userAuth.userId,
+      displayName: userAuth.displayName,
+      email: userAuth.email,
+      whatsapp: userAuth.whatsapp,
       domain: checkoutState.domain,
+      domainDuration: 1, // Default 1 year
       packageId: checkoutState.selectedPackage,
-      packageName: DOMAIN_PACKAGES[checkoutState.selectedPackage].name,
-      packagePrice: DOMAIN_PACKAGES[checkoutState.selectedPackage].price,
-      domainPrice: 299000,
-      totalPrice: 299000 + DOMAIN_PACKAGES[checkoutState.selectedPackage].price,
-      customerData: checkoutState.formData,
+      packageName: pkg.name,
+      addons: [], // TODO: Add addon selection logic if available
+      promoCode: '', // TODO: Add promo code if available
+      subtotal: subtotal,
+      ppn: ppn,
+      discount: 0, // TODO: Apply promo discount if available
+      total: totalPrice,
       timestamp: new Date().toISOString()
     };
 
-    // IMPORTANT: Replace GOOGLE_APPS_SCRIPT_URL with your actual Google Apps Script deployment URL
-    // Get it from: Deploy > New deployment > Web app > Copy deployment URL
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2rAgb8plwll-5rDlADw4pitA8kzplN8aA7diUlo70DyeY68pwzl2o8mYp6Y9UJnOS/exec';
-    
-    if (!GOOGLE_APPS_SCRIPT_URL.includes('script.google.com')) {
+    // Validate GAS configuration
+    if (!GAS_CONFIG.URL || !GAS_CONFIG.URL.includes('script.google.com')) {
       showErrorMessage('Google Apps Script URL belum dikonfigurasi. Hubungi admin.');
       checkoutBtn.innerHTML = originalText;
       checkoutBtn.disabled = false;
       return;
     }
 
-    // Send to Google Apps Script
-    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+    // Send to Google Apps Script with timeout (30 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    const response = await fetch(GAS_CONFIG.URL, {
       method: 'POST',
-      body: JSON.stringify(orderData)
-    });
+      body: JSON.stringify(orderData),
+      signal: controller.signal
+    }).finally(() => clearTimeout(timeoutId));
 
     const result = await response.json();
 

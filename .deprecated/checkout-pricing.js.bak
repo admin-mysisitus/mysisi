@@ -1,0 +1,459 @@
+/**
+ * Checkout Pricing UI Module - Phase 2
+ * Handles: Pricing display, calculation updates, promo code validation
+ * Version: 1.0
+ */
+
+import { GAS_CONFIG, DOMAIN_PACKAGES } from '../config/api.config.js';
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  initializePricingUI();
+});
+
+function initializePricingUI() {
+  // Setup domain duration buttons
+  setupDurationButtons();
+
+  // Setup addon checkboxes
+  setupAddonCheckboxes();
+
+  // Setup promo code input
+  setupPromoCode();
+
+  // Initial price calculation
+  updatePricingDisplay();
+}
+
+// ============================================================================
+// DOMAIN DURATION SELECTION
+// ============================================================================
+
+function setupDurationButtons() {
+  const buttons = document.querySelectorAll('.duration-btn');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const years = parseInt(this.dataset.years);
+
+      // Update state
+      pricingState.domainDuration = years;
+
+      // Update UI
+      buttons.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      // Recalculate
+      updatePricingDisplay();
+    });
+  });
+}
+
+// ============================================================================
+// ADDON SELECTION
+// ============================================================================
+
+function setupAddonCheckboxes() {
+  const checkboxes = document.querySelectorAll('input[name="addon"]');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      updateAddons();
+    });
+  });
+}
+
+function updateAddons() {
+  const checkboxes = document.querySelectorAll('input[name="addon"]:checked');
+  pricingState.selectedAddons = Array.from(checkboxes).map(cb => cb.value);
+
+  updatePricingDisplay();
+}
+
+// ============================================================================
+// PROMO CODE
+// ============================================================================
+
+function setupPromoCode() {
+  const promoInput = document.getElementById('promo-code');
+  const promoBtn = document.querySelector('.btn-promo');
+
+  if (promoBtn) {
+    promoBtn.addEventListener('click', applyPromoCode);
+  }
+
+  // Allow Enter key to apply promo
+  if (promoInput) {
+    promoInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        applyPromoCode();
+      }
+    });
+  }
+}
+
+async function applyPromoCode() {
+  const promoInput = document.getElementById('promo-code');
+  const promoCode = promoInput.value.trim().toUpperCase();
+
+  if (!promoCode) {
+    Notifications.showToast('Masukkan kode promo terlebih dahulu', 'error');
+    return;
+  }
+
+  try {
+    // Validate promo code via GAS
+    const params = new URLSearchParams({
+      action: 'validatePromoCode',
+      code: promoCode
+    });
+
+    const result = await fetch(`${GAS_CONFIG.URL}?${params}`).then(r => r.json());
+
+    if (result.success && result.promo) {
+      pricingState.promoCode = promoCode;
+      pricingState.promoDiscount = result.promo.discount;
+      pricingState.discountType = result.promo.type; // 'percentage' or 'fixed'
+
+      Notifications.showToast(`Kode promo "${promoCode}" berhasil diterapkan!`, 'success');
+      updatePricingDisplay();
+    } else {
+      Notifications.showToast(result.message || 'Kode promo tidak valid atau kadaluarsa', 'error');
+      pricingState.promoCode = '';
+      pricingState.promoDiscount = 0;
+      updatePricingDisplay();
+    }
+  } catch (error) {
+    console.error('Promo code error:', error);
+    Notifications.showToast('Gagal memvalidasi kode promo', 'error');
+  }
+}
+
+function removePromoCode() {
+  pricingState.promoCode = '';
+  pricingState.promoDiscount = 0;
+  const promoInput = document.getElementById('promo-code');
+  if (promoInput) promoInput.value = '';
+
+  updatePricingDisplay();
+}
+
+// ============================================================================
+// PRICING DISPLAY UPDATE
+// ============================================================================
+
+function updatePricingDisplay() {
+  // Get selected package
+  const selectedPackageCard = document.querySelector('.package-card.selected');
+  if (!selectedPackageCard) {
+    // No package selected - show empty or disabled
+    disablePricingDisplay();
+    return;
+  }
+
+  const packageId = selectedPackageCard.id.replace('package-', '');
+  const domain = checkoutState?.domain || 'domain.com';
+
+  // Calculate all prices
+  const pricing = calculateAllPrices(
+    domain,
+    pricingState.domainDuration,
+    packageId,
+    pricingState.selectedAddons,
+    pricingState.promoCode,
+    {
+      discount: pricingState.promoDiscount,
+      type: pricingState.discountType
+    }
+  );
+
+  // Store in state
+  pricingState.subtotal = pricing.subtotal;
+  pricingState.ppn = pricing.ppn;
+  pricingState.discount = pricing.discount;
+  pricingState.total = pricing.total;
+
+  // Update header info
+  updateHeaderSummary(domain);
+
+  // Update breakdown display
+  updateBreakdownDisplay(pricing);
+
+  // Update totals
+  updateTotalsDisplay(pricing);
+
+  // Update payment button state
+  updatePaymentButtonState();
+}
+
+function updateHeaderSummary(domain) {
+  const domainDisplay = document.getElementById('summary-domain-name');
+  const durationDisplay = document.getElementById('summary-duration');
+  const priceDisplay = document.getElementById('summary-domain-price');
+
+  if (domainDisplay) domainDisplay.textContent = domain;
+  if (durationDisplay) durationDisplay.textContent = `${pricingState.domainDuration} Tahun`;
+  if (priceDisplay) priceDisplay.textContent = Formatting.formatRupiah(calculateDomainPrice(pricingState.domainDuration));
+}
+
+function updateBreakdownDisplay(pricing) {
+  const container = document.getElementById('order-summary');
+  const addonsContainer = document.getElementById('summary-addons-container');
+
+  if (!container) return;
+
+  // Build summary items
+  let html = '';
+
+  pricing.breakdown.forEach((item, idx) => {
+    if (item.type === 'total') return; // Total shown separately
+
+    const itemClass = `summary-item ${item.type}`;
+
+    if (item.type === 'addon') {
+      // Addons in separate container
+      return;
+    }
+
+    if (item.type === 'subtotal') {
+      html += `
+        <div style="border-top: 1px solid #e0e0e0; padding: 1rem 0; margin: 1rem 0;">
+          <div class="${itemClass}">
+            <span>${item.label}</span>
+            <span>${Formatting.formatRupiah(item.price)}</span>
+          </div>
+      `;
+    } else if (item.type === 'tax') {
+      html += `
+          <div class="${itemClass}">
+            <span>${item.label}</span>
+            <span>+ ${Formatting.formatRupiah(item.price)}</span>
+          </div>
+      `;
+    } else if (item.type === 'discount') {
+      html += `
+          <div class="${itemClass}">
+            <span>${item.label}</span>
+            <span>- ${Formatting.formatRupiah(Math.abs(item.price))}</span>
+          </div>
+        </div>
+      `;
+    } else if (item.type === 'domain' || item.type === 'package') {
+      html += `
+        <div class="${itemClass}">
+          <span>${item.label}</span>
+          <span>${Formatting.formatRupiah(item.price)}</span>
+        </div>
+      `;
+    }
+  });
+
+  container.innerHTML = html;
+
+  // Update addons display
+  if (addonsContainer && pricingState.selectedAddons.length > 0) {
+    addonsContainer.style.display = 'block';
+    let addonsHtml = '';
+
+    pricingState.selectedAddons.forEach(id => {
+      const addon = PRICING_CONFIG.addons[id];
+      if (addon) {
+        addonsHtml += `
+          <div class="summary-item addon">
+            <span>${addon.name}</span>
+            <span>${Formatting.formatRupiah(addon.price)}</span>
+          </div>
+        `;
+      }
+    });
+
+    addonsContainer.innerHTML = addonsHtml;
+  } else {
+    addonsContainer.style.display = 'none';
+  }
+}
+
+function updateTotalsDisplay(pricing) {
+  // Update subtotal
+  const subtotalEl = document.getElementById('summary-subtotal');
+  if (subtotalEl) {
+    subtotalEl.textContent = Formatting.formatRupiah(pricing.subtotal);
+  }
+
+  // Update PPN
+  const ppnEl = document.getElementById('summary-ppn');
+  if (ppnEl) {
+    ppnEl.textContent = `+ ${Formatting.formatRupiah(pricing.ppn)}`;
+  }
+
+  // Update total
+  const totalEl = document.getElementById('total-price');
+  if (totalEl) {
+    totalEl.textContent = Formatting.formatRupiah(pricing.total);
+  }
+
+  // Show promo discount if applied
+  const promoEl = document.getElementById('promo-code');
+  if (pricing.discount > 0 && promoEl) {
+    // Show discount badge
+    const badge = promoEl.parentElement.querySelector('.promo-discount-badge');
+    if (!badge) {
+      const newBadge = document.createElement('div');
+      newBadge.className = 'promo-discount-badge';
+      newBadge.innerHTML = `
+        <span>-${Formatting.formatRupiah(pricing.discount)}</span>
+        <button type="button" onclick="removePromoCode()" class="badge-close">×</button>
+      `;
+      promoEl.parentElement.appendChild(newBadge);
+    }
+  }
+}
+
+function disablePricingDisplay() {
+  const totalEl = document.getElementById('total-price');
+  const subtotalEl = document.getElementById('summary-subtotal');
+  const ppnEl = document.getElementById('summary-ppn');
+
+  if (totalEl) totalEl.textContent = 'Rp 0';
+  if (subtotalEl) subtotalEl.textContent = 'Rp 0';
+  if (ppnEl) ppnEl.textContent = '+ Rp 0';
+}
+
+function updatePaymentButtonState() {
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const paymentRequirement = document.getElementById('payment-requirement-text');
+  const termsCheckbox = document.getElementById('terms-agree');
+
+  if (!checkoutBtn) return;
+
+  // All conditions must be met to enable button
+  const isLoggedIn = userAuth?.isLoggedIn;
+  const hasWhatsApp = userAuth?.whatsapp;
+  const hasPackage = pricingState.subtotal > 0;
+  const agreedToTerms = termsCheckbox?.checked;
+
+  const allConditionsMet = isLoggedIn && hasWhatsApp && hasPackage && agreedToTerms;
+
+  checkoutBtn.disabled = !allConditionsMet;
+
+  if (paymentRequirement) {
+    if (!isLoggedIn) {
+      paymentRequirement.textContent = 'Silakan login terlebih dahulu';
+      paymentRequirement.style.display = 'block';
+    } else if (!hasWhatsApp) {
+      paymentRequirement.textContent = 'Silakan isi nomor WhatsApp di profil Anda';
+      paymentRequirement.style.display = 'block';
+    } else if (!hasPackage) {
+      paymentRequirement.textContent = 'Silakan pilih paket terlebih dahulu';
+      paymentRequirement.style.display = 'block';
+    } else if (!agreedToTerms) {
+      paymentRequirement.textContent = 'Silakan setujui Syarat & Ketentuan';
+      paymentRequirement.style.display = 'block';
+    } else {
+      paymentRequirement.style.display = 'none';
+    }
+  }
+}
+
+// ============================================================================
+// ORDER CREATION WITH PRICING
+// ============================================================================
+
+async function processCheckoutWithPricing() {
+  // Validate all conditions
+  if (!userAuth.isLoggedIn) {
+    showPricingError('Silakan login terlebih dahulu');
+    return;
+  }
+
+  if (!userAuth.whatsapp) {
+    showPricingError('Silakan isi nomor WhatsApp');
+    return;
+  }
+
+  if (pricingState.subtotal === 0) {
+    showPricingError('Silakan pilih paket');
+    return;
+  }
+
+  if (!document.getElementById('terms-agree').checked) {
+    showPricingError('Silakan setujui Syarat & Ketentuan');
+    return;
+  }
+
+  // Prepare order data
+  const orderData = {
+    action: 'createOrderWithAuth',
+    userId: userAuth.userId,
+    displayName: userAuth.displayName,
+    email: userAuth.email,
+    whatsapp: userAuth.whatsapp,
+    domain: checkoutState.domain,
+    domainDuration: pricingState.domainDuration,
+    packageId: pricingState.packageId,
+    packageName: getPackageName(pricingState.packageId),
+    addons: pricingState.selectedAddons,
+    promoCode: pricingState.promoCode,
+    subtotal: pricingState.subtotal,
+    ppn: pricingState.ppn,
+    discount: pricingState.discount,
+    total: pricingState.total,
+    timestamp: new Date().toISOString()
+  };
+
+  // Show loading
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const originalText = checkoutBtn.innerHTML;
+  checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuat pesanan...';
+  checkoutBtn.disabled = true;
+
+  try {
+    const params = new URLSearchParams(orderData);
+
+    const result = await fetch(`${GAS_CONFIG.URL}?${params}`).then(r => r.json());
+
+    if (result.success && result.orderId) {
+      showPricingSuccess('Pesanan berhasil dibuat! Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = `/payment/?orderId=${result.orderId}`;
+      }, 2000);
+    } else {
+      showPricingError(result.message || 'Gagal membuat pesanan');
+      checkoutBtn.innerHTML = originalText;
+      checkoutBtn.disabled = false;
+    }
+  } catch (error) {
+    console.error('Checkout error:', error);
+    showPricingError('Terjadi kesalahan: ' + error.message);
+    checkoutBtn.innerHTML = originalText;
+    checkoutBtn.disabled = false;
+  }
+}
+
+// ============================================================================
+// NOTIFICATION MESSAGES
+// ============================================================================
+
+// showPricingError and showPricingSuccess moved to /assets/js/utils/notifications.js
+// Use Notifications.showToast() and Notifications.showError() instead
+
+// ============================================================================
+// PUBLIC API
+// ============================================================================
+
+window.selectDuration = function(years) {
+  const btn = document.querySelector(`.duration-btn[data-years="${years}"]`);
+  if (btn) btn.click();
+};
+
+window.updateAddons = updateAddons;
+window.applyPromoCode = applyPromoCode;
+window.removePromoCode = removePromoCode;
+window.processCheckout = processCheckoutWithPricing;

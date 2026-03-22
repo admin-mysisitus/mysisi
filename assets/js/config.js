@@ -41,7 +41,9 @@ export const menuData = [
 
   { href: "/kontak/", text: "Kontak", icon: "fas fa-envelope" },
 
-  { text: "Promo", href: "/promo/", icon: "fas fa-gift", isPromo: true }
+  { text: "Promo", href: "/promo/", icon: "fas fa-gift", isPromo: true },
+
+  { text: "Login", href: "/auth/", icon: "fas fa-sign-in-alt", isAuth: true }
 ];
 
 

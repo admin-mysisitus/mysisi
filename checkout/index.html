@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Checkout Domain - Amankan domain impian Anda sekarang juga di SISITUS">
   <title>Checkout Domain - SISITUS</title>
+  <!-- Favicons -->
+  <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+  <!-- CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components/auth.css">
   <link rel="stylesheet" href="/assets/css/components/checkout.css">
+  <!-- Google Sign-In -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -30,17 +38,17 @@
         <div class="checkout-progress">
           <div class="progress-step active">
             <div class="progress-number">1</div>
-            <div class="progress-label">Domain</div>
+            <div class="progress-label">Akun</div>
           </div>
           <div class="progress-line"></div>
           <div class="progress-step">
             <div class="progress-number">2</div>
-            <div class="progress-label">Paket</div>
+            <div class="progress-label">Domain</div>
           </div>
           <div class="progress-line"></div>
           <div class="progress-step">
             <div class="progress-number">3</div>
-            <div class="progress-label">Data</div>
+            <div class="progress-label">Paket</div>
           </div>
           <div class="progress-line"></div>
           <div class="progress-step">
@@ -48,6 +56,103 @@
             <div class="progress-label">Ringkasan</div>
           </div>
         </div>
+
+        <!-- Step 0: Authentication -->
+        <section class="checkout-auth-section" id="auth-section-not-logged-in">
+          <h2><i class="fas fa-user-circle"></i> Masuk atau Buat Akun</h2>
+          
+          <!-- Tabs -->
+          <div class="auth-tabs">
+            <button class="tab-btn active" data-tab="register">Buat Akun Baru</button>
+            <button class="tab-btn" data-tab="login">Sudah Punya Akun?</button>
+          </div>
+
+          <!-- Error/Success Messages -->
+          <div class="form-error" id="auth-error"></div>
+          <div class="form-success" id="auth-success"></div>
+
+          <!-- Register Tab -->
+          <form class="auth-form register-form active" id="register-form">
+            <div class="form-group">
+              <label>Nama Lengkap</label>
+              <input type="text" name="displayName" required placeholder="Contoh: Budi Santoso">
+            </div>
+            
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" required placeholder="nama@example.com">
+              <small>Kami akan mengirim link verifikasi ke email ini</small>
+            </div>
+            
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" name="password" required placeholder="Minimal 6 karakter">
+              <small>Kombinasi huruf, angka, dan simbol lebih aman</small>
+            </div>
+            
+            <div class="form-group">
+              <label>Konfirmasi Password</label>
+              <input type="password" name="passwordConfirm" required placeholder="Ulangi password Anda">
+            </div>
+            
+            <div class="form-group">
+              <label>Nomor WhatsApp</label>
+              <input type="tel" name="whatsapp" required placeholder="08xxxxxxxxxx">
+              <small>Format: 08xxxxxxxxxx (digunakan untuk komunikasi pesanan)</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Daftar</button>
+          </form>
+          
+          <!-- Login Tab -->
+          <form class="auth-form login-form" id="login-form">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" required placeholder="nama@example.com">
+            </div>
+            
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" name="password" required placeholder="Masukkan password Anda">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+          </form>
+          
+          <!-- Divider -->
+          <div class="auth-divider">atau</div>
+          
+          <!-- Google OAuth -->
+          <div id="google-signin-button" style="display: flex; justify-content: center; margin: 1.5rem 0;"></div>
+        </section>
+
+        <!-- Logged In State -->
+        <section class="checkout-auth-section logged-in" id="auth-section-logged-in" style="display: none;">
+          <h2><i class="fas fa-user-check"></i> Akun Anda</h2>
+          
+          <div class="logged-in-info">
+            <div class="user-profile">
+              <img id="user-profile-pic" src="" alt="Profile" class="profile-pic">
+              <div class="user-info">
+                <p class="label">Kamu sudah login sebagai</p>
+                <p class="user-name" id="user-display-name">-</p>
+                <p class="user-email" id="user-email">-</p>
+              </div>
+            </div>
+            
+            <button class="btn-logout" onclick="handleLogout()">Logout</button>
+          </div>
+          
+          <!-- WhatsApp Section -->
+          <div class="whatsapp-section">
+            <label><i class="fab fa-whatsapp"></i> Nomor WhatsApp</label>
+            <div class="whatsapp-input-group">
+              <input type="tel" id="user-whatsapp" placeholder="08xxxxxxxxxx">
+              <button type="button" class="btn-save" onclick="updateUserWhatsApp()">Simpan</button>
+            </div>
+            <small>Digunakan untuk komunikasi pesanan</small>
+          </div>
+        </section>
 
         <!-- Step 1: Domain Summary -->
         <section class="checkout-section step-domain">
@@ -62,7 +167,19 @@
             <div class="domain-price-display" id="price-display">
               <div class="skeleton"></div>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="goBackToCekDomain()">
+            
+            <!-- Domain Duration Selection -->
+            <div style="margin-top: 1.5rem;">
+              <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #2c3e50;">Durasi Domain</label>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.75rem;">
+                <button type="button" class="duration-btn active" data-years="1" onclick="selectDuration(1)">1 Tahun</button>
+                <button type="button" class="duration-btn" data-years="2" onclick="selectDuration(2)">2 Tahun</button>
+                <button type="button" class="duration-btn" data-years="3" onclick="selectDuration(3)">3 Tahun</button>
+                <button type="button" class="duration-btn" data-years="5" onclick="selectDuration(5)">5 Tahun</button>
+              </div>
+            </div>
+            
+            <button class="btn btn-secondary btn-sm" onclick="goBackToCekDomain()" style="margin-top: 1.5rem;">
               <i class="fas fa-edit"></i> Ubah Domain
             </button>
           </div>
@@ -72,7 +189,7 @@
         <section class="checkout-section step-packages">
           <div class="section-header">
             <h2><i class="fas fa-cube"></i> Pilih Paket Website Anda</h2>
-            <p>Semua paket sudah termasuk domain dan hosting 1 tahun pertama</p>
+            <p>Semua paket sudah termasuk hosting, SSL, dan maintenance</p>
           </div>
 
           <div class="packages-grid" id="packages-grid">
@@ -85,78 +202,109 @@
             <i class="fas fa-check-circle" style="color: #27ae60;"></i>
             <span id="selected-package-text"></span>
           </div>
-        </section>
 
-        <!-- Step 3: Contact Info -->
-        <section class="checkout-section step-contact">
-          <div class="section-header">
-            <h2><i class="fas fa-user-circle"></i> Data Pemilik Domain</h2>
-            <p>Informasi ini diperlukan untuk registrasi domain</p>
-          </div>
-
-          <form id="checkout-form" class="checkout-form">
-            <div class="form-group">
-              <label for="fullname">Nama Lengkap *</label>
-              <input type="text" id="fullname" name="fullname" required placeholder="Contoh: Budi Santoso">
-              <small class="form-help"></small>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="email">Email *</label>
-                <input type="email" id="email" name="email" required placeholder="nama@example.com">
-                <small class="form-help">Email digunakan untuk verifikasi dan komunikasi</small>
-              </div>
-
-              <div class="form-group">
-                <label for="phone">No. WhatsApp *</label>
-                <input type="tel" id="phone" name="phone" required placeholder="08xxxxxxxxxx">
-                <small class="form-help">Format: 08xxxxxxxxxx</small>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="address">Alamat *</label>
-              <textarea id="address" name="address" rows="3" required placeholder="Alamat lengkap sesuai KTP/SIM"></textarea>
-              <small class="form-help"></small>
-            </div>
-
-            <div class="form-group">
-              <label>
-                <input type="checkbox" id="tos" required>
-                <span>Saya setuju dengan <a href="/perusahaan/legal/" target="_blank">Syarat & Ketentuan</a> dan <a href="/perusahaan/legal/" target="_blank">Kebijakan Privasi</a> SISITUS</span>
+          <!-- Addons Section NEW -->
+          <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+            <h3 style="margin-bottom: 1rem; color: #2c3e50;">
+              <i class="fas fa-plus-circle"></i> Tambahan (Opsional)
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+              <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border: 1px solid #e0e0e0; border-radius: 6px; transition: all 0.3s ease;">
+                <input type="checkbox" name="addon" value="ssl" data-price="500000" onchange="updateAddons()">
+                <span>
+                  <strong>SSL Extended</strong><br>
+                  <small style="color: #7f8c8d;">+ Rp 500.000</small>
+                </span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border: 1px solid #e0e0e0; border-radius: 6px; transition: all 0.3s ease;">
+                <input type="checkbox" name="addon" value="email" data-price="200000" onchange="updateAddons()">
+                <span>
+                  <strong>Email Hosting Pro</strong><br>
+                  <small style="color: #7f8c8d;">+ Rp 200.000</small>
+                </span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.75rem; border: 1px solid #e0e0e0; border-radius: 6px; transition: all 0.3s ease;">
+                <input type="checkbox" name="addon" value="cdn" data-price="300000" onchange="updateAddons()">
+                <span>
+                  <strong>CDN Global</strong><br>
+                  <small style="color: #7f8c8d;">+ Rp 300.000</small>
+                </span>
               </label>
             </div>
-          </form>
+          </div>
         </section>
 
-        <!-- Step 4: Order Summary -->
+        <!-- Step 3: Order Summary -->
         <section class="checkout-section step-summary">
           <div class="section-header">
             <h2><i class="fas fa-receipt"></i> Ringkasan Pesanan</h2>
           </div>
 
           <div class="order-summary" id="order-summary">
-            <div class="skeleton summary-skeleton"></div>
+            <!-- Pricing breakdown will be inserted here -->
+            <div class="summary-item">
+              <span>Domain <span id="summary-domain-name">-</span></span>
+              <span id="summary-domain-price">Rp 0</span>
+            </div>
+
+            <div class="summary-item">
+              <span>Paket <span id="summary-package-name">-</span></span>
+              <span id="summary-package-price">Rp 0</span>
+            </div>
+
+            <div id="summary-addons-container" style="display: none;">
+              <!-- Addon summaries will be inserted here -->
+            </div>
+
+            <div style="border-top: 1px solid #e0e0e0; padding: 1rem 0; margin: 1rem 0;">
+              <div class="summary-item">
+                <span>Subtotal</span>
+                <span id="summary-subtotal">Rp 0</span>
+              </div>
+
+              <div class="summary-item">
+                <span>PPN 11%</span>
+                <span id="summary-ppn">+ Rp 0</span>
+              </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f0f7ff; border-radius: 6px;">
+              <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #2c3e50;">
+                <i class="fas fa-tag"></i> Kode Promo
+              </label>
+              <div style="display: flex; gap: 0.75rem;">
+                <input type="text" id="promo-code" placeholder="Punya kode promo? Masukkan di sini" style="flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px;">
+                <button type="button" class="btn btn-secondary" onclick="applyPromoCode()">Gunakan</button>
+              </div>
+              <small style="color: #7f8c8d; display: block; margin-top: 0.5rem;">Masukkan kode promo jika Anda memilikinya</small>
+            </div>
           </div>
 
           <div class="checkout-total">
-            <div class="total-row">
-              <span>Subtotal:</span>
-              <span id="subtotal-price">Rp 0</span>
-            </div>
-            <div class="info-box">
-              <i class="fas fa-info-circle"></i>
-              <small>Harga sudah termasuk domain, hosting, SSL, dan maintenance selama periode paket</small>
-            </div>
             <div class="total-row main">
               <span>Total Pembayaran:</span>
               <span id="total-price">Rp 0</span>
             </div>
 
-            <button id="checkout-btn" class="btn btn-primary btn-lg" onclick="processCheckout()" type="button">
+            <!-- Terms Checkbox -->
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: #fff3cd; border-radius: 6px;">
+              <label style="display: flex; gap: 0.75rem; cursor: pointer;">
+                <input type="checkbox" id="terms-agree" required>
+                <span style="font-size: 0.95rem;">
+                  Saya setuju dengan <a href="/perusahaan/legal/" target="_blank">Syarat & Ketentuan</a> dan 
+                  <a href="/perusahaan/legal/" target="_blank">Kebijakan Privasi</a> SISITUS
+                </span>
+              </label>
+            </div>
+
+            <button id="checkout-btn" class="btn btn-primary btn-lg" onclick="processCheckout()" type="button" disabled>
               <i class="fas fa-credit-card"></i> Lanjutkan ke Pembayaran
             </button>
+
+            <div class="payment-requirement-text" id="payment-requirement-text" style="text-align: center; color: #c0392b; margin-top: 0.75rem; font-size: 0.9rem;">
+              Silakan login terlebih dahulu
+            </div>
 
             <p class="checkout-note">
               <i class="fas fa-lock"></i> Koneksi Anda aman. Data dienkripsi dengan standar keamanan internasional.
@@ -173,6 +321,16 @@
     </div>
   </footer>
 
-  <script src="/assets/js/pages/checkout.js"></script>
+  <!-- Centralized Utilities & Configuration -->
+  <script src="/assets/js/config/domain-config.js"></script>
+  <script src="/assets/js/utils/formatting.js"></script>
+  <script src="/assets/js/utils/notifications.js"></script>
+
+  <!-- Checkout Modules -->
+  <script type="module">
+    import '/assets/js/pages/auth.js';
+    import '/assets/js/modules/pricing.js';
+    import '/assets/js/pages/checkout.js';
+  </script>
 </body>
 </html>

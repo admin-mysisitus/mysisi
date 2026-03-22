@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesanan Saya - SISITUS</title>
+  
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/pages/order-history.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a href="/">SISITUS</a>
+        </div>
+        <nav class="nav">
+          <ul>
+            <li><a href="/">Beranda</a></li>
+            <li><a href="/layanan/">Layanan</a></li>
+            <li><a href="/profile/">Profil</a></li>
+            <li><a href="#" onclick="logout()" class="btn-logout">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="orders-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1><i class="fas fa-box"></i> Pesanan Saya</h1>
+          <p>Kelola dan lihat detail pesanan Anda</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">
+              <i class="fas fa-list"></i> Semua
+            </button>
+            <button class="filter-btn" data-filter="pending">
+              <i class="fas fa-hourglass-half"></i> Pending
+            </button>
+            <button class="filter-btn" data-filter="settlement">
+              <i class="fas fa-check-circle"></i> Terbayar
+            </button>
+            <button class="filter-btn" data-filter="expired">
+              <i class="fas fa-times-circle"></i> Kadaluarsa
+            </button>
+          </div>
+        </div>
+
+        <!-- Orders Table Section -->
+        <div class="orders-section">
+          <div class="section-header">
+            <h2>Riwayat Pesanan</h2>
+            <span class="order-count">Loading...</span>
+          </div>
+
+          <!-- Loading State -->
+          <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Memuat pesanan...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">
+              <i class="fas fa-inbox"></i>
+            </div>
+            <h3>Belum Ada Pesanan</h3>
+            <p>Anda belum melakukan pesanan apapun</p>
+            <a href="/" class="btn btn-primary">Mulai Berbelanja</a>
+          </div>
+
+          <!-- Orders Table -->
+          <div id="ordersContainer" class="orders-container" style="display: none;">
+            <div class="table-responsive">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Domain</th>
+                    <th>Paket</th>
+                    <th>Total</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <!-- Will be filled by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Error State -->
+          <div id="errorState" class="error-state" style="display: none;">
+            <div class="error-icon">
+              <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h3>Gagal Memuat Pesanan</h3>
+            <p id="errorMessage">Terjadi kesalahan saat memuat data</p>
+            <button class="btn btn-primary" onclick="location.reload()">
+              <i class="fas fa-redo"></i> Coba Lagi
+            </button>
+          </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Total Pesanan</p>
+              <p class="stat-value" id="statTotalOrders">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Total Terbayar</p>
+              <p class="stat-value" id="statTotalPaid">Rp 0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-spinner"></i>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Pending</p>
+              <p class="stat-value" id="statPendingOrders">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Terakhir Diperbarui</p>
+              <p class="stat-value" id="statLastUpdate">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 SISITUS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Centralized Utilities & Configuration -->
+  <script src="../assets/js/config/domain-config.js"></script>
+  <script src="../assets/js/utils/formatting.js"></script>
+  <script src="../assets/js/utils/notifications.js"></script>
+
+  <!-- Auth Module -->
+  <script type="module">
+    import './../assets/js/pages/auth.js';
+  </script>
+  
+  <!-- Orders History Logic (Module) -->
+  <script type="module">
+    import './../assets/js/pages/orders.js';
+  </script>
+</body>
+</html>

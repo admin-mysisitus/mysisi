@@ -672,3 +672,182 @@
     font-size: 1.1rem;
   }
 }
+
+/* ============================================================================
+   MIDTRANS PAYMENT INTEGRATION
+   ============================================================================ */
+
+.midtrans-payment-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.midtrans-payment-section .btn {
+  background: white;
+  color: #667eea;
+  font-weight: 600;
+  margin: 1rem 0;
+  min-width: 250px;
+  transition: all 0.3s ease;
+}
+
+.midtrans-payment-section .btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.payment-info {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 1rem 0 0 0;
+}
+
+.payment-info i {
+  margin-right: 0.5rem;
+}
+
+/* Payment Methods Grid Info */
+.payment-methods-info {
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.payment-methods-info h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.method-info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+  color: #2c3e50;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.method-info-item:hover {
+  background: #ecf0f1;
+  transform: translateY(-2px);
+}
+
+.method-info-item i {
+  font-size: 1.8rem;
+  color: #667eea;
+  margin-bottom: 0.5rem;
+}
+
+/* Section Divider */
+.payment-section-divider {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  color: #bdc3c7;
+  font-weight: 500;
+}
+
+.payment-section-divider::before,
+.payment-section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.payment-section-divider span {
+  padding: 0 1rem;
+}
+
+/* Manual Payment Section */
+.manual-payment-section {
+  background: #f0f8ff;
+  border: 1px dashed #3498db;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  color: #1a5276;
+}
+
+.manual-payment-section h4 {
+  margin-top: 0;
+  color: #1a5276;
+}
+
+.manual-payment-desc {
+  margin: 0.5rem 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.manual-payment-section .btn {
+  background: #3498db;
+  color: white;
+}
+
+/* Status Alert */
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alert i {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.alert-info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Mobile adjustments for Midtrans */
+@media (max-width: 768px) {
+  .midtrans-payment-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .midtrans-payment-section .btn {
+    min-width: 100%;
+  }
+
+  .methods-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

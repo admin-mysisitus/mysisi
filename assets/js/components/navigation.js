@@ -13,9 +13,9 @@ const generateDesktopMenu = () => {
   list.className = 'nav-desktop-list';
   menuData.forEach(item => {
     const li = document.createElement('li');
-    li.className = `nav-desktop-item ${item.dropdown ? 'nav-desktop-dropdown' : ''} ${item.isPromo ? 'nav-desktop-promo' : ''}`;
+    li.className = `nav-desktop-item ${item.dropdown ? 'nav-desktop-dropdown' : ''} ${item.isPromo ? 'nav-desktop-promo' : ''} ${item.isAuth ? 'nav-desktop-auth' : ''}`;
     const link = document.createElement('a');
-    link.className = `nav-desktop-link ${item.isPromo ? 'promo-link' : ''}`;
+    link.className = `nav-desktop-link ${item.isPromo ? 'promo-link' : ''} ${item.isAuth ? 'auth-link' : ''}`;
     link.href = item.href;
     
     // Tamahkan icon jika ada
@@ -71,7 +71,7 @@ const generateMobileMenu = () => {
   list.className = 'nav-mobile-list';
   menuData.forEach(item => {
     const li = document.createElement('li');
-    li.className = `nav-mobile-item ${item.dropdown ? 'nav-mobile-dropdown' : ''} ${item.isPromo ? 'nav-mobile-promo' : ''}`;
+    li.className = `nav-mobile-item ${item.dropdown ? 'nav-mobile-dropdown' : ''} ${item.isPromo ? 'nav-mobile-promo' : ''} ${item.isAuth ? 'nav-mobile-auth' : ''}`;
     if (item.dropdown) {
       const header = document.createElement('div');
       header.className = 'nav-mobile-dropdown-header';
@@ -127,7 +127,7 @@ const generateMobileMenu = () => {
       li.appendChild(dropdownMenu);
     } else {
       const link = document.createElement('a');
-      link.className = `nav-mobile-link ${item.isPromo ? 'promo-link' : ''}`;
+      link.className = `nav-mobile-link ${item.isPromo ? 'promo-link' : ''} ${item.isAuth ? 'auth-link' : ''}`;
       link.href = item.href;
       
       // Tambahkan icon untuk menu tanpa dropdown

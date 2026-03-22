@@ -8,6 +8,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components/payment.css">
+  <!-- Midtrans Snap Payment Gateway -->
+  <script type="module">
+    import { MIDTRANS_CONFIG } from '/assets/js/config/api.config.js';
+    
+    // Load Midtrans Snap dynamically dengan client key dari config
+    const snapScript = document.createElement('script');
+    snapScript.src = MIDTRANS_CONFIG.SNAP_URL[MIDTRANS_CONFIG.ENVIRONMENT];
+    snapScript.setAttribute('data-client-key', MIDTRANS_CONFIG.CLIENT_KEY);
+    document.head.appendChild(snapScript);
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -90,65 +100,33 @@
             </div>
           </section>
 
-          <!-- Payment Methods -->
+          <!-- Payment Methods - Midtrans Snap -->
           <section class="payment-section">
             <div class="section-header">
               <h3><i class="fas fa-credit-card"></i> Metode Pembayaran</h3>
             </div>
 
-            <div class="payment-methods" id="payment-methods">
-              <!-- Bank Transfer -->
-              <div class="payment-method" id="method-bank-transfer">
-                <input type="radio" name="payment-method" value="bank-transfer" id="radio-bank">
-                <label for="radio-bank" class="method-label">
-                  <span class="method-icon"><i class="fas fa-university"></i></span>
-                  <span class="method-name">Transfer Bank</span>
-                  <span class="method-desc">BCA, Mandiri, BNI, dsb</span>
-                </label>
-              </div>
-
-              <!-- E-Wallet -->
-              <div class="payment-method" id="method-ewallet">
-                <input type="radio" name="payment-method" value="ewallet" id="radio-ewallet">
-                <label for="radio-ewallet" class="method-label">
-                  <span class="method-icon"><i class="fas fa-wallet"></i></span>
-                  <span class="method-name">E-Wallet</span>
-                  <span class="method-desc">OVO, Dana, LinkAja, GCash</span>
-                </label>
-              </div>
-
-              <!-- WhatsApp -->
-              <div class="payment-method" id="method-whatsapp">
-                <input type="radio" name="payment-method" value="whatsapp" id="radio-whatsapp" checked>
-                <label for="radio-whatsapp" class="method-label">
-                  <span class="method-icon"><i class="fab fa-whatsapp"></i></span>
-                  <span class="method-name">WhatsApp</span>
-                  <span class="method-desc">Chat dengan admin untuk pembayaran</span>
-                </label>
-              </div>
+            <!-- Midtrans Payment Button -->
+            <div class="midtrans-payment-section">
+              <button id="pay-button" class="btn btn-primary btn-lg" onclick="openMidtransPayment()">
+                <i class="fas fa-lock"></i> Tulis Pesanan & Pembayaran Sekarang
+              </button>
+              <p class="payment-info">
+                <i class="fas fa-shield-alt"></i> Pilih metode pembayaran: Transfer Bank, E-Wallet, Kartu Kredit, atau BNPL
+              </p>
             </div>
 
-            <!-- Bank Details (Hidden by default) -->
-            <div id="bank-details" style="display: none;" class="bank-details">
-              <div class="bank-account">
-                <h4>Detail Rekening</h4>
-                <div class="account-list">
-                  <div class="account-item">
-                    <span class="bank-name">BCA</span>
-                    <span class="account-number">1234567890 (a.n. PT SISITUS)</span>
-                    <button class="btn-copy" onclick="copyToClipboard('1234567890')">
-                      <i class="fas fa-copy"></i> Salin
-                    </button>
-                  </div>
-                  <div class="account-item">
-                    <span class="bank-name">Mandiri</span>
-                    <span class="account-number">1000123456 (a.n. PT SISITUS)</span>
-                    <button class="btn-copy" onclick="copyToClipboard('1000123456')">
-                      <i class="fas fa-copy"></i> Salin
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <!-- Manual Payment Option (For website design preview) -->
+            <div class="payment-section-divider" style="margin-top: 2rem;">
+              <span>atau</span>
+            </div>
+
+            <div class="manual-payment-section">
+              <h4>Pembayaran Setelah Preview Design (Khusus Pembuatan Website)</h4>
+              <p class="manual-payment-desc">Jika Anda memesan pembuatan website, Anda bisa melihat design preview terlebih dahulu sebelum melakukan pembayaran.</p>
+              <button id="btn-payment-after-preview" class="btn btn-secondary" onclick="requestPaymentAfterPreview()" style="display: none;">
+                <i class="fas fa-eye"></i> Lihat Preview Dulu
+              </button>
             </div>
           </section>
 
@@ -180,9 +158,7 @@
 
           <!-- Action Buttons -->
           <div class="payment-actions">
-            <button id="btn-whatsapp" class="btn btn-primary btn-lg" onclick="contactViaWhatsApp()">
-              <i class="fab fa-whatsapp"></i> Chat WhatsApp
-            </button>
+            <!-- Buttons will be managed by payment.js based on payment status -->
             <a href="/checkout/" class="btn btn-secondary btn-lg">
               <i class="fas fa-arrow-left"></i> Kembali
             </a>
@@ -190,14 +166,16 @@
 
           <!-- Payment Instructions -->
           <div class="payment-instructions">
-            <h4><i class="fas fa-info-circle"></i> Instruksi Pembayaran</h4>
-            <ul>
-              <li>🏦 Jika memilih Transfer Bank → Lakukan transfer ke rekening yang tertera</li>
-              <li>💳 Jika memilih E-Wallet → Hubungi admin untuk mendapatkan link pembayaran</li>
-              <li>💬 Jika memilih WhatsApp → Chat admin untuk panduan pembayaran</li>
-              <li>✉️ Konfirmasi pembayaran akan dikirim lewat email dan WhatsApp</li>
-              <li>⏱️ Pesanan berlaku selama 24 jam. Setelah itu perlu dibuat ulang</li>
-            </ul>
+            <h4><i class="fas fa-info-circle"></i> Cara Pembayaran</h4>
+            <ol>
+              <li>📋 Verifikasi data pesanan Anda di atas</li>
+              <li>💳 Klik tombol "Tulis Pesanan & Pembayaran Sekarang"</li>
+              <li>🔒 Pilih metode pembayaran dari opsi yang tersedia</li>
+              <li>✔️ Selesaikan proses pembayaran</li>
+              <li>📧 Anda akan menerima email konfirmasi pembayaran</li>
+              <li>💬 Tim kami akan menghubungi Anda via WhatsApp</li>
+            </ol>
+          </div>
           </div>
         </div>
       </div>
@@ -210,6 +188,13 @@
     </div>
   </footer>
 
-  <script src="/assets/js/pages/payment.js"></script>
+  <!-- Centralized Utilities & Configuration -->
+  <script src="/assets/js/config/domain-config.js"></script>
+  <script src="/assets/js/utils/formatting.js"></script>
+  <script src="/assets/js/utils/notifications.js"></script>
+
+  <script type="module">
+    import '/assets/js/pages/payment.js';
+  </script>
 </body>
 </html>
