@@ -89,8 +89,8 @@
 
   .nav-desktop-promo { margin-left: clamp(0.8rem, 1.5vw, 1.2rem); }
   .nav-desktop-promo .promo-link {
-    padding: clamp(0.55rem, 1vw, 0.75rem) clamp(0.9rem, 1.8vw, 1.4rem);
-    font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+    padding: clamp(0.475rem, 1.25vw, 0.65rem) clamp(0.875rem, 1.8vw, 1.075rem);
+    font-size: clamp(0.835rem, 1.45vw, 0.94rem);
   }
 
   /* Hapus underline pada button promo */
@@ -102,6 +102,11 @@
   .nav-desktop-link.promo-link.active {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     transform: translateY(-1px);
+  }
+
+  /* Override padding untuk auth-link (tombol login) */
+  .nav-desktop-link.auth-link {
+    padding: clamp(0.475rem, 1.25vw, 0.65rem) clamp(0.875rem, 1.8vw, 1.075rem) !important;
   }
 
   /* Footer */

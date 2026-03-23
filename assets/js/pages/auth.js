@@ -49,7 +49,7 @@ function initializeAuth() {
   if (typeof google !== 'undefined') {
     try {
       google.accounts.id.initialize({
-        client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com', // REPLACE THIS
+        client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
         callback: handleGoogleSignIn,
         auto_select: false
       });
@@ -243,9 +243,10 @@ async function handleLogin(e) {
       // Reset form
       form.reset();
 
-      // Redirect to checkout or profile
+      // Redirect to return URL or home
       setTimeout(() => {
-        const returnTo = sessionStorage.getItem('auth_return_to') || '/checkout';
+        const returnTo = sessionStorage.getItem('auth_return_to') || '/';
+        sessionStorage.removeItem('auth_return_to');
         window.location.href = returnTo;
       }, 1500);
     } else {
@@ -292,9 +293,10 @@ window.handleGoogleSignIn = async function(response) {
 
         showSuccess('Login Berhasil', `Selamat datang, ${userAuth.displayName}!`);
 
-        // Redirect to checkout or previous page
+        // Redirect to return URL or home
         setTimeout(() => {
-          const returnTo = sessionStorage.getItem('auth_return_to') || '/checkout';
+          const returnTo = sessionStorage.getItem('auth_return_to') || '/';
+          sessionStorage.removeItem('auth_return_to');
           window.location.href = returnTo;
         }, 1500);
       } else {
@@ -337,16 +339,8 @@ export function handleLogout() {
 
 function showLoggedInState() {
   const authSection = document.getElementById('auth-section-not-logged-in');
-  const checkoutAuth = document.querySelector('.checkout-auth-section');
 
   if (authSection) authSection.style.display = 'none';
-  if (checkoutAuth) checkoutAuth.style.display = 'none';
-
-  // Show next step based on context
-  const nextStep = document.getElementById('cek-domain-section');
-  if (nextStep) {
-    nextStep.style.display = 'block';
-  }
 }
 
 // ============================================================================

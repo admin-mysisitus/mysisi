@@ -119,15 +119,19 @@ function sanitizeHTML(text) {
   return div.innerHTML;
 }
 
-// Export all functions for use in other modules
+// Export all functions for use in DOM-loaded scripts
+// This allows profile.js and other scripts to use Formatting.formatRupiah() etc.
+window.Formatting = {
+  formatRupiah,
+  formatNumber,
+  formatDate,
+  formatDateWithTime,
+  calculateDiscount,
+  getTimeAgo,
+  sanitizeHTML
+};
+
+// Also support CommonJS if needed in Node environment
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    formatRupiah,
-    formatNumber,
-    formatDate,
-    formatDateWithTime,
-    calculateDiscount,
-    getTimeAgo,
-    sanitizeHTML
-  };
+  module.exports = window.Formatting;
 }

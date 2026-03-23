@@ -6,15 +6,25 @@ import { GAS_CONFIG } from '../config/api.config.js';
 
 let currentUserProfile = null;
 let userStats = null;
+let userAuth = null;
 
 // ============================================================================
 // INITIALIZE
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check authentication
-  if (!userAuth || !userAuth.isLoggedIn) {
-    window.location.href = '/verify-email.html';
+  // Get user from sessionStorage (set by auth.js)
+  const userAuthStr = sessionStorage.getItem('sisitus_user');
+  if (!userAuthStr) {
+    window.location.href = '/auth/';
+    return;
+  }
+
+  try {
+    userAuth = JSON.parse(userAuthStr);
+  } catch (e) {
+    sessionStorage.removeItem('sisitus_user');
+    window.location.href = '/auth/';
     return;
   }
 

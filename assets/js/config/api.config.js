@@ -9,7 +9,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbzDZ8FLbs8VtnH9SCpgZXUfs247NF0T-s58O5uXNRELWyvD-tObAlmtyduG9gtRJPmD/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbyX4pk9V1LdGJp41h0Qgi7yhmACcBO8EBqhc-dFji4WYCxyeUZMt0QajgDLW6y5E7nI/exec',
   
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 30000,
@@ -52,12 +52,12 @@ export const MIDTRANS_CONFIG = {
   ENVIRONMENT: 'sandbox',
   
   // Client Key - untuk frontend Snap integration
-  // Set via VITE_MIDTRANS_CLIENT_KEY in .env file
-  CLIENT_KEY: import.meta.env.VITE_MIDTRANS_CLIENT_KEY || '',
+  // Note: Set directly here since there's no .env in plain HTML/JS environment
+  CLIENT_KEY: '', // Set your Midtrans client key here if needed
   
   // Server Key - untuk backend verification & token generation
-  // Set via VITE_MIDTRANS_SERVER_KEY in .env file
-  SERVER_KEY: import.meta.env.VITE_MIDTRANS_SERVER_KEY || '',
+  // Note: Must be set in Google Apps Script Properties, not here
+  SERVER_KEY: '',
   
   // Snap API URLs
   SNAP_URL: {

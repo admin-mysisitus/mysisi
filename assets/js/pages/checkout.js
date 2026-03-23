@@ -27,6 +27,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeCheckout() {
+  // ===== CHECK LOGIN FIRST =====
+  const userAuthStr = sessionStorage.getItem('sisitus_user');
+  if (!userAuthStr) {
+    // User belum login - redirect ke auth dengan return URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const domain = urlParams.get('domain');
+    const returnUrl = domain ? `/checkout/?domain=${encodeURIComponent(domain)}` : '/checkout/';
+    sessionStorage.setItem('auth_return_to', returnUrl);
+    window.location.href = '/auth/';
+    return;
+  }
+
   // Extract domain from URL parameter
   const urlParams = new URLSearchParams(window.location.search);
   const domain = urlParams.get('domain');
@@ -373,7 +385,7 @@ async function processCheckout() {
     const ppn = Math.round(subtotal * 0.11);
     const totalPrice = subtotal + ppn;
 
-    // Prepare order data with user authentication info
+    // Prepare order data with user authentication info + customer data from form
     const orderData = {
       action: 'createOrderWithAuth', // CRITICAL: Use authenticated order creation
       userId: userAuth.userId,
@@ -390,6 +402,13 @@ async function processCheckout() {
       ppn: ppn,
       discount: 0, // TODO: Apply promo discount if available
       total: totalPrice,
+      // Customer data from checkout form
+      customerData: {
+        fullname: checkoutState.formData.fullname,
+        email: checkoutState.formData.email,
+        phone: checkoutState.formData.phone,
+        address: checkoutState.formData.address
+      },
       timestamp: new Date().toISOString()
     };
 

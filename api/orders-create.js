@@ -64,8 +64,8 @@ const MIDTRANS_MERCHANT_ID = PropertiesService.getScriptProperties().getProperty
 // Midtrans API URL (Sandbox)
 const MIDTRANS_API_URL = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
 
-// Base URL untuk return/notification
-const BASE_URL = 'https://sisitus.com'; // Replace dengan domain Anda
+// Base URL untuk production deployment
+const BASE_URL = 'https://mysisi.pages.dev'; // Ganti dengan URL deployment Anda jika berbeda
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -339,6 +339,12 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
+    if (action === 'verifyGoogleToken') {
+      const result = verifyGoogleToken(postData.token);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // Default: Create new order (checkout submission)
     // Validate order data
     const validationErrors = validateOrderData(postData);
@@ -470,6 +476,12 @@ function doGet(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
+    if (action === 'verifyGoogleToken') {
+      const result = verifyGoogleToken(e.parameter.token);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     if (action === 'verifyEmailToken') {
       const result = verifyEmailToken(e.parameter.token);
       return ContentService.createTextOutput(JSON.stringify(result))
@@ -491,23 +503,18 @@ function doGet(e) {
     // ============================================================================
 
     if (action === 'createOrderWithAuth') {
-      // Parse order data from query parameters (GET request)
-      const orderData = {
-        userId: e.parameter.userId,
-        displayName: e.parameter.displayName,
-        email: e.parameter.email,
-        whatsapp: e.parameter.whatsapp,
-        domain: e.parameter.domain,
-        domainDuration: e.parameter.domainDuration,
-        packageId: e.parameter.packageId,
-        packageName: e.parameter.packageName,
-        addons: e.parameter.addons ? e.parameter.addons.split(',') : [],
-        promoCode: e.parameter.promoCode || '',
-        subtotal: e.parameter.subtotal,
-        ppn: e.parameter.ppn,
-        discount: e.parameter.discount,
-        total: e.parameter.total
-      };
+      // Parse order data from POST body (JSON)
+      const orderData = postData;
+      
+      // Ensure customerData exists
+      if (!orderData.customerData) {
+        orderData.customerData = {
+          fullname: postData.displayName || '',
+          email: postData.email || '',
+          phone: postData.whatsapp || '',
+          address: ''
+        };
+      }
       
       const result = createOrderWithAuth(orderData);
       return ContentService.createTextOutput(JSON.stringify(result))
@@ -883,7 +890,7 @@ function generateVerificationToken() {
  */
 function sendVerificationEmail(email, token, displayName) {
   try {
-    const verifyLink = `https://sisitus.com/verify-email?token=${encodeURIComponent(token)}`;
+    const verifyLink = `${BASE_URL}/verify-email?token=${encodeURIComponent(token)}`;
     const subject = 'Verifikasi Email - SISITUS';
     const body = `
 Halo ${displayName},
@@ -1064,6 +1071,111 @@ function loginUser(email, password) {
     return { 
       success: false, 
       message: 'Error: ' + error.toString() 
+    };
+  }
+}
+
+/**
+ * Verify Google OAuth Token
+ * Validates Google JWT token and creates/updates user
+ */
+function verifyGoogleToken(token) {
+  try {
+    if (!token) {
+      return {
+        success: false,
+        message: 'Token tidak ditemukan'
+      };
+    }
+
+    // Decode JWT token (Google format)
+    // Note: In production, verify token signature with Google's public keys
+    // For now, we parse and extract user info from the token payload
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return {
+        success: false,
+        message: 'Format token tidak valid'
+      };
+    }
+
+    // Decode payload (second part)
+    let payload = parts[1];
+    // Add padding if needed
+    payload += '=='.substring(0, (4 - payload.length % 4) % 4);
+    
+    const decoded = JSON.parse(Utilities.newBlob(Utilities.base64Decode(payload)).getDataAsString());
+    
+    // Verify token is not expired
+    const now = Math.floor(Date.now() / 1000);
+    if (decoded.exp && decoded.exp < now) {
+      return {
+        success: false,
+        message: 'Token sudah expired'
+      };
+    }
+
+    // Check if user exists, if not create new user
+    const email = decoded.email;
+    if (!email) {
+      return {
+        success: false,
+        message: 'Email tidak ditemukan dalam token'
+      };
+    }
+
+    const sheet = ensureUsersSheet();
+    const data = sheet.getDataRange().getValues();
+    
+    let userFound = false;
+    let userId = null;
+
+    // Check if user already exists
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][2] === email) {
+        userFound = true;
+        userId = data[i][0];
+        break;
+      }
+    }
+
+    // If user doesn't exist, create new user
+    if (!userFound) {
+      userId = Utilities.getUuid();
+      const newUser = [
+        userId,                           // A: User ID
+        decoded.name || 'Google User',    // B: Display Name
+        email,                            // C: Email
+        decoded.phone_number || '',       // D: WhatsApp
+        decoded.picture || '',            // E: Photo URL
+        new Date(),                       // F: Created At
+        'Google',                         // G: Registration Source
+        'Yes',                            // H: Email Verified
+        Utilities.getUuid().substring(0, 20), // I: Password (random token)
+        'Google',                         // J: Auth Method
+        'google'                          // K: Auth Type
+      ];
+      sheet.appendRow(newUser);
+    }
+
+    // Return user data
+    return {
+      success: true,
+      data: {
+        userId: userId,
+        displayName: decoded.name || 'Google User',
+        email: email,
+        photoURL: decoded.picture || '',
+        whatsapp: decoded.phone_number || '',
+        authMethod: 'google'
+      },
+      message: 'Token berhasil diverifikasi'
+    };
+  } catch (error) {
+    Logger.log('Error in verifyGoogleToken: ' + error);
+    return {
+      success: false,
+      message: 'Error: ' + error.toString()
     };
   }
 }
@@ -1408,10 +1520,10 @@ function createOrderWithAuth(orderData) {
       orderData.packageName,                // D: Paket (Package Name)
       parseInt(orderData.packageId || 0),   // E: Harga Paket -> Actually Package ID
       parseInt(orderData.total || 0),       // F: Total
-      orderData.displayName,                // G: Nama Customer
-      orderData.email,                      // H: Email
-      orderData.whatsapp,                   // I: Phone/WhatsApp
-      '',                                   // J: Alamat (Address - from contact form if available)
+      orderData.displayName || orderData.customerData?.fullname || '', // G: Nama Customer
+      orderData.email || orderData.customerData?.email || '',          // H: Email
+      orderData.whatsapp || orderData.customerData?.phone || '',       // I: Phone/WhatsApp
+      orderData.customerData?.address || '', // J: Alamat (Address - from contact form)
       'Pending',                            // K: Status (Payment Status)
       new Date().toISOString(),             // L: Created At
       orderData.packageId,                  // M: Package ID (NEW)
@@ -1574,7 +1686,7 @@ function requestPasswordReset(email) {
     ]);
 
     // Send email with reset link
-    const resetLink = `https://sisitus.com/reset-password.html?token=${token}`;
+    const resetLink = `${BASE_URL}/reset-password.html?token=${token}`;
     const subject = 'Reset Password - SISITUS';
     const body = `
 Halo,
