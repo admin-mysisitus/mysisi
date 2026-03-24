@@ -20,6 +20,14 @@
  */
 
 // ============================================================================
+// CONFIGURATION - REPLACE DENGAN DATA KAMU
+// ============================================================================
+
+// Google Sheet ID untuk menyimpan user data
+// Dapatkan dari URL: https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
+const SPREADSHEET_ID = '1qA1LzzVXmVaJ5U36lDuaoW2Eo4wiSkqL_0Y9i-Rav5s';
+
+// ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
 
