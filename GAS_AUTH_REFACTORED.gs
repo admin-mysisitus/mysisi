@@ -728,54 +728,128 @@ function getUserByEmail(email) {
  */
 function doPost(e) {
   try {
-    // Parse request body
+    // Parse POST data - handle both JSON body and URL parameters
     let params = {};
     if (e.postData && e.postData.contents) {
-      params = JSON.parse(e.postData.contents);
+      try {
+        params = JSON.parse(e.postData.contents);
+      } catch (parseError) {
+        // If JSON parsing fails, try URL parameters
+        params = e.parameter || {};
+      }
+    } else {
+      params = e.parameter || {};
     }
 
     const action = params.action || '';
     
-    // Safety check - only allow whitelisted actions
-    const allowedActions = [
-      'registerUser', 'loginUser', 'verifyEmailToken',
-      'getUserProfile', 'updateUserProfile', 'getUserByEmail',
-      'verifyGoogleToken', 'changePassword',
-      'generateMidtransToken', 'logTransaction',
-      'requestPasswordReset', 'resetPassword'
-    ];
-
-    if (!allowedActions.includes(action)) {
-      return buildCORSResponse(false, null, 'Action tidak diizinkan', 'INVALID_ACTION');
+    // Route based on action
+    if (action === 'registerUser') {
+      const result = registerUser(params);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
     }
 
-    // Call the appropriate function
-    const handler = window[action] || eval(action);
-    const result = handler(params, params);
-    
-    // Return with CORS headers
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type')
-      .setHeader('Access-Control-Max-Age', '86400');
+    if (action === 'loginUser') {
+      const result = loginUser(params);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
 
-  } catch (error) {
-    Logger.log('Error in doPost: ' + error.stack);
-    const errorResponse = {
+    if (action === 'verifyEmailToken') {
+      const result = verifyEmailToken(params.token);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'getUserProfile') {
+      const result = getUserProfile(params.userId);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'updateUserProfile') {
+      const result = updateUserProfile(params.userId, params);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'getUserByEmail') {
+      const result = getUserByEmail(params.email);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'verifyGoogleToken') {
+      const result = verifyGoogleToken(params.token);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'changePassword') {
+      const result = changePassword(params.userId, params.oldPassword, params.newPassword);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'generateMidtransToken') {
+      const result = generateMidtransToken(params.orderId, params.amount, params.email);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'logTransaction') {
+      const result = logTransaction(params);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'requestPasswordReset') {
+      const result = requestPasswordReset(params.email);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    if (action === 'resetPassword') {
+      const result = resetPassword(params.token, params.newPassword);
+      return ContentService.createTextOutput(JSON.stringify(result))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*');
+    }
+
+    // If action not found
+    return ContentService.createTextOutput(JSON.stringify({
       success: false,
       data: null,
-      message: 'Error: ' + error.toString(),
-      errorCode: 'EXECUTION_ERROR',
+      message: 'Action tidak ditemukan atau tidak valid',
+      errorCode: 'INVALID_ACTION',
       timestamp: new Date().toISOString()
-    };
-    
-    return ContentService.createTextOutput(JSON.stringify(errorResponse))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    }))
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeader('Access-Control-Allow-Origin', '*');
+
+  } catch (error) {
+    Logger.log('Error in doPost: ' + error.toString());
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      data: null,
+      message: 'Server error: ' + error.toString(),
+      errorCode: 'SERVER_ERROR',
+      timestamp: new Date().toISOString()
+    }))
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeader('Access-Control-Allow-Origin', '*');
   }
 }
 
