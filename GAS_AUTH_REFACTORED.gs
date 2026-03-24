@@ -711,6 +711,105 @@ function getUserByEmail(email) {
 }
 
 // ============================================================================
-// Export this entire file content and replace auth functions in your GAS project
-// Then redeploy the Web App
+// REQUEST HANDLERS - HTTP Entry Points (CORS-Enabled)
+// ============================================================================
+
+/**
+ * Handle POST requests - Main entry point for API calls
+ * This function routes all API requests to the appropriate handler
+ */
+function doPost(e) {
+  try {
+    // Parse request body
+    let params = {};
+    if (e.postData && e.postData.contents) {
+      params = JSON.parse(e.postData.contents);
+    }
+
+    const action = params.action || '';
+    
+    // Safety check - only allow whitelisted actions
+    const allowedActions = [
+      'registerUser', 'loginUser', 'verifyEmailToken',
+      'getUserProfile', 'updateUserProfile', 'getUserByEmail',
+      'verifyGoogleToken', 'changePassword',
+      'generateMidtransToken', 'logTransaction',
+      'requestPasswordReset', 'resetPassword'
+    ];
+
+    if (!allowedActions.includes(action)) {
+      return buildCORSResponse(false, null, 'Action tidak diizinkan', 'INVALID_ACTION');
+    }
+
+    // Call the appropriate function
+    const handler = window[action] || eval(action);
+    const result = handler(params, params);
+    
+    // Return with CORS headers
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type')
+      .setHeader('Access-Control-Max-Age', '86400');
+
+  } catch (error) {
+    Logger.log('Error in doPost: ' + error.stack);
+    const errorResponse = {
+      success: false,
+      data: null,
+      message: 'Error: ' + error.toString(),
+      errorCode: 'EXECUTION_ERROR',
+      timestamp: new Date().toISOString()
+    };
+    
+    return ContentService.createTextOutput(JSON.stringify(errorResponse))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  }
+}
+
+/**
+ * Handle CORS preflight OPTIONS requests
+ * Browser sends this before actual request to check if endpoint is allowed
+ */
+function doOptions(e) {
+  return ContentService.createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader('Access-Control-Allow-Origin', '*')
+    .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD')
+    .setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    .setHeader('Access-Control-Max-Age', '86400');
+}
+
+/**
+ * Helper function to build response with CORS headers
+ */
+function buildCORSResponse(success, data, message, errorCode = null) {
+  return {
+    success: success,
+    data: data || null,
+    message: message,
+    errorCode: errorCode,
+    timestamp: new Date().toISOString()
+  };
+}
+
+// ============================================================================
+// DEPLOYMENT INSTRUCTIONS
+// ============================================================================
+// 1. Copy all content of this file
+// 2. Go to https://script.google.com
+// 3. Open your existing GAS project
+// 4. Replace all content in Code.gs with this file
+// 5. Save the file (Ctrl+S)
+// 6. Click "Deploy" → "New Deployment"
+// 7. Select type: "Web app"
+// 8. Execute as: Your Google Account
+// 9. Who has access: "Anyone"
+// 10. Copy the deployment URL
+// 11. Update GAS_CONFIG.URL in /assets/js/config/api.config.js
+// 12. Test authentication on your website
 // ============================================================================
