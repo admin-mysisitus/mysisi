@@ -27,6 +27,14 @@
 // Dapatkan dari URL: https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
 const SPREADSHEET_ID = '1qA1LzzVXmVaJ5U36lDuaoW2Eo4wiSkqL_0Y9i-Rav5s';
 
+// Base URL untuk verification links di email
+// IMPORTANT: Ganti dengan domain production Anda
+const BASE_URL = 'https://mysisi.pages.dev';
+
+// Admin email untuk notifikasi dan reply-to
+// IMPORTANT: Ganti dengan email Anda
+const ADMIN_EMAIL = 'semutpeyok@gmail.com';
+
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
@@ -715,6 +723,32 @@ function getUserByEmail(email) {
   } catch (error) {
     Logger.log('Error in getUserByEmail: ' + error);
     return buildResponse(false, null, error.toString(), 'QUERY_ERROR');
+  }
+}
+
+/**
+ * PLACEHOLDER: Generate Midtrans Payment Token
+ * TODO: Implement with actual Midtrans API integration
+ */
+function generateMidtransToken(orderId, amount, email) {
+  try {
+    return buildResponse(false, null, 'Midtrans integration not yet configured', 'NOT_IMPLEMENTED');
+  } catch (error) {
+    Logger.log('Error in generateMidtransToken: ' + error);
+    return buildResponse(false, null, error.toString(), 'ERROR');
+  }
+}
+
+/**
+ * PLACEHOLDER: Log Transaction
+ * TODO: Implement with actual transaction logging
+ */
+function logTransaction(params) {
+  try {
+    return buildResponse(true, { logged: true }, 'Transaction logged');
+  } catch (error) {
+    Logger.log('Error in logTransaction: ' + error);
+    return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
 
