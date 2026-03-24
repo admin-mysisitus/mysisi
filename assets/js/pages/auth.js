@@ -1,398 +1,454 @@
 /**
- * Authentication Module
- * Handles: Google OAuth, Email/Password auth, User session management
- * Used by: /auth/index.html, /checkout/index.html (auth section)
- * Version: 2.0 (Consolidated)
+ * REFACTORED PUBLIC AUTHENTICATION PAGE
+ * ===================================
+ * Replace /assets/js/pages/auth.js with this clean, unified version
+ * 
+ * Uses:
+ * - AuthManager: Centralized session state
+ * - APIClient: Unified API calls
+ * - Utils: Notifications & validation
+ * 
+ * Features:
+ * - Email/Password registration & login
+ * - Google OAuth integration
+ * - Email verification with auto-login
+ * - Clean error handling
+ * - Loading states
+ * - Multi-tab auth sync
  */
 
-import { GAS_CONFIG } from '../config/api.config.js';
-import { showSuccess, showError } from '../utils/notifications.js';
-
-// ============================================================================
-// AUTH STATE
-// ============================================================================
-
-let userAuth = {
-  isLoggedIn: false,
-  userId: null,
-  displayName: '',
-  email: '',
-  photoURL: '',
-  whatsapp: '',
-  authMethod: null // 'google' or 'email'
-};
+import { AuthManager } from '../modules/unified-auth.js';
+import APIClient from '../modules/unified-api.js';
+import {
+  showSuccess,
+  showError,
+  showLoading,
+  hideLoading,
+  isValidEmail,
+  isValidPassword,
+  isValidPhoneNumber,
+  setButtonLoading,
+  handleAPIError
+} from '../modules/unified-utils.js';
 
 // ============================================================================
 // INITIALIZATION
 // ============================================================================
 
-document.addEventListener('DOMContentLoaded', function() {
-  initializeAuth();
+document.addEventListener('DOMContentLoaded', initPage);
+
+function initPage() {
+  console.log('[Auth Page] Initializing...');
+
+  // 1. Check for email verification token (highest priority)
+  const urlParams = new URLSearchParams(window.location.search);
+  const verifyToken = urlParams.get('verify');
+
+  if (verifyToken) {
+    console.log('[Auth Page] Verification token detected');
+    handleEmailVerification(verifyToken);
+    return; // Stop further initialization
+  }
+
+  // 2. If already logged in, redirect to dashboard
+  if (AuthManager.isLoggedIn()) {
+    console.log('[Auth Page] User already logged in, redirecting to dashboard');
+    window.location.href = '/dashboard/';
+    return; // Stop further initialization
+  }
+
+  // 3. Initialize auth forms & UI
   setupAuthTabs();
   setupAuthForms();
-});
+  initializeGoogleSignIn();
 
-function initializeAuth() {
-  // Check if user already logged in (from sessionStorage)
-  const savedUser = sessionStorage.getItem('sisitus_user');
-  if (savedUser) {
-    try {
-      userAuth = JSON.parse(savedUser);
-      showLoggedInState();
-    } catch (e) {
-      console.error('Error restoring user session:', e);
-      sessionStorage.removeItem('sisitus_user');
-    }
-  }
-
-  // Initialize Google Sign-In
-  if (typeof google !== 'undefined') {
-    try {
-      google.accounts.id.initialize({
-        client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
-        callback: handleGoogleSignIn,
-        auto_select: false
-      });
-
-      // Render button on dedicated auth page if element exists
-      const googleButton = document.getElementById('g_id_onload');
-      if (googleButton) {
-        google.accounts.id.renderButton(
-          document.querySelector('.g_id_signin'),
-          {
-            theme: 'outline',
-            size: 'large',
-            text: 'signup_with',
-            locale: 'id'
-          }
-        );
-      }
-    } catch (e) {
-      console.warn('Google Sign-In not available:', e);
-    }
-  }
+  console.log('[Auth Page] Ready');
 }
 
-function setupAuthTabs() {
-  const tabButtons = document.querySelectorAll('.tab-btn');
+// ============================================================================
+// EMAIL VERIFICATION (Auto-login after registration)
+// ============================================================================
 
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const tabName = this.dataset.tab;
-      const forms = document.querySelectorAll('.auth-form');
-      const buttons = document.querySelectorAll('.tab-btn');
+/**
+ * Handle email verification token from registration link
+ */
+async function handleEmailVerification(token) {
+  console.log('[Auth] Processing email verification...');
 
-      forms.forEach(form => form.classList.remove('active'));
-      buttons.forEach(b => b.classList.remove('active'));
+  const wrapper = document.querySelector('.auth-wrapper');
 
-      if (tabName === 'register') {
-        document.getElementById('register-form').classList.add('active');
-      } else {
-        document.getElementById('login-form').classList.add('active');
-      }
-      this.classList.add('active');
-    });
-  });
-}
+  try {
+    // Show loading UI
+    if (wrapper) {
+      wrapper.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+          <h2 style="margin-bottom: 20px;">🔐 Verifikasi Email</h2>
+          <p style="font-size: 16px; margin-bottom: 30px; color: #666;">
+            ⏳ Sedang memverifikasi email Anda...
+          </p>
+          <div style="display: inline-block;">
+            <div style="width: 50px; height: 50px; border: 4px solid #e0e0e0; border-top: 4px solid #2563EB; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+          </div>
+          <style>
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          </style>
+        </div>
+      `;
+    }
 
-function setupAuthForms() {
-  // Register form
-  const registerForm = document.getElementById('register-form');
-  if (registerForm) {
-    registerForm.addEventListener('submit', handleRegister);
-  }
+    // Call GAS to verify token
+    console.log('[Auth] Calling API to verify token...');
+    const response = await APIClient.verifyEmailToken(token);
 
-  // Login form
-  const loginForm = document.getElementById('login-form');
-  if (loginForm) {
-    loginForm.addEventListener('submit', handleLogin);
+    console.log('[Auth] API Response:', response);
+
+    if (!response.success) {
+      throw new Error(response.message || 'Verifikasi email gagal');
+    }
+
+    if (!response.data) {
+      throw new Error('Data user tidak ditemukan dalam response');
+    }
+
+    // Save session (auto-login)
+    console.log('[Auth] Saving session & auto-logging in...');
+    AuthManager.saveSession(response.data);
+
+    // Show success message
+    if (wrapper) {
+      wrapper.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+          <div style="font-size: 60px; margin-bottom: 20px;">✓</div>
+          <h2 style="color: #27ae60; margin-bottom: 10px;">Email Terverifikasi!</h2>
+          <p style="font-size: 18px; color: #333; margin-bottom: 5px;">
+            Selamat datang, <strong>${response.data.displayName}</strong>!
+          </p>
+          <p style="color: #666; margin-top: 20px;">
+            Anda akan diarahkan ke dashboard dalam beberapa detik...
+          </p>
+          <div style="margin-top: 30px;">
+            <div style="width: 40px; height: 40px; border: 4px solid #e0e0e0; border-top: 4px solid #27ae60; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    showSuccess('✓ Email Terverifikasi!', `Selamat datang, ${response.data.displayName}!`);
+
+    // Redirect to dashboard after 2 seconds
+    setTimeout(() => {
+      console.log('[Auth] Redirecting to dashboard...');
+      window.location.href = '/dashboard/';
+    }, 2000);
+  } catch (error) {
+    console.error('[Auth Verify Error]:', error);
+
+    // Show error UI
+    if (wrapper) {
+      wrapper.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+          <div style="font-size: 60px; margin-bottom: 20px;">✗</div>
+          <h2 style="color: #e74c3c; margin-bottom: 10px;">Verifikasi Gagal</h2>
+          <p style="font-size: 16px; color: #666; margin-bottom: 20px;">
+            ${error.message || 'Terjadi kesalahan saat memverifikasi email'}
+          </p>
+          <p style="font-size: 14px; color: #999; margin-bottom: 30px;">
+            Link verifikasi mungkin sudah expired atau tidak valid.
+          </p>
+          <a href="/auth/" style="display: inline-block; background-color: #2563EB; color: white; padding: 10px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Kembali ke Login
+          </a>
+        </div>
+      `;
+    }
+
+    handleAPIError(error);
   }
 }
 
 // ============================================================================
-// REGISTER HANDLER
+// REGISTRATION FORM
 // ============================================================================
 
+/**
+ * Handle registration form submission
+ */
 async function handleRegister(e) {
   e.preventDefault();
 
   const form = e.target;
-  const errorEl = document.getElementById('auth-error');
-  const successEl = document.getElementById('auth-success');
-
-  // Clear previous messages
-  errorEl?.classList.remove('show');
-  successEl?.classList.remove('show');
+  const btn = form.querySelector('button[type="submit"]');
 
   try {
+    // Get form values
     const email = form.querySelector('input[name="email"]').value.trim();
     const password = form.querySelector('input[name="password"]').value;
     const passwordConfirm = form.querySelector('input[name="passwordConfirm"]').value;
-    const displayName = form.querySelector('input[name="displayName"]').value.trim();
     const whatsapp = form.querySelector('input[name="whatsapp"]')?.value.trim() || '';
+    const displayName = email.split('@')[0]; // Auto-generate from email
 
-    // Validation
-    if (!email || !password || !displayName) {
-      throw new Error('Silakan isi semua field yang diperlukan');
+    // Validate input
+    if (!isValidEmail(email)) {
+      throw new Error('Email tidak valid');
     }
 
-    if (password.length < 6) {
-      throw new Error('Password minimal 6 karakter');
+    if (!password) {
+      throw new Error('Password diperlukan');
+    }
+
+    const pwdValidation = isValidPassword(password);
+    if (!pwdValidation.valid) {
+      throw new Error(pwdValidation.message);
     }
 
     if (password !== passwordConfirm) {
       throw new Error('Password dan konfirmasi password tidak sesuai');
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      throw new Error('Email tidak valid');
+    if (whatsapp && !isValidPhoneNumber(whatsapp)) {
+      throw new Error('Nomor WhatsApp tidak valid (contoh: 08xxxxxxxxxx)');
     }
 
-    // Call GAS registerUser
-    const response = await callGAS('registerUser', {
-      email,
-      password,
-      displayName,
-      whatsapp
-    });
+    // Show loading state
+    console.log('[Auth Register] Starting registration for:', email);
+    setButtonLoading(btn, true, '⏳ Mendaftar...');
 
-    if (response.success) {
-      // Show success message
-      if (successEl) {
-        successEl.textContent = response.message || 'Akun berhasil dibuat! Silakan verifikasi email Anda.';
-        successEl.classList.add('show');
-      }
+    // Call API
+    const response = await APIClient.registerUser(email, password, displayName, whatsapp);
 
-      showSuccess('Registrasi Berhasil', response.message || 'Email verifikasi sudah dikirim. Cek inbox Anda.');
-
-      // Reset form
-      form.reset();
-
-      // Redirect after delay
-      setTimeout(() => {
-        window.location.href = '/auth/verify-email.html';
-      }, 2000);
-    } else {
-      throw new Error(response.message || 'Terjadi kesalahan saat mendaftar');
+    if (!response.success) {
+      throw new Error(response.message || 'Registrasi gagal, silakan coba lagi');
     }
+
+    // Show success message
+    showSuccess(
+      '✓ Registrasi Berhasil!',
+      `Email verifikasi telah dikirim ke ${email}\n\nSilakan cek folder Inbox atau Spam Anda`
+    );
+
+    // Clear form
+    form.reset();
+
+    // Redirect to login tab after 3 seconds
+    setTimeout(() => {
+      switchTab('login');
+    }, 3000);
+
+    console.log('[Auth Register] Registration successful');
   } catch (error) {
-    console.error('Register error:', error);
-    const message = error.message || 'Terjadi kesalahan saat mendaftar';
-    
-    if (errorEl) {
-      errorEl.textContent = message;
-      errorEl.classList.add('show');
-    }
-    
-    showError('Registrasi Gagal', message);
+    console.error('[Auth Register Error]:', error);
+    handleAPIError(error);
+    setButtonLoading(btn, false);
   }
 }
 
 // ============================================================================
-// LOGIN HANDLER
+// LOGIN FORM
 // ============================================================================
 
+/**
+ * Handle login form submission
+ */
 async function handleLogin(e) {
   e.preventDefault();
 
   const form = e.target;
-  const errorEl = document.getElementById('auth-error');
-  const successEl = document.getElementById('auth-success');
-
-  // Clear previous messages
-  errorEl?.classList.remove('show');
-  successEl?.classList.remove('show');
+  const btn = form.querySelector('button[type="submit"]');
 
   try {
+    // Get form values
     const email = form.querySelector('input[name="email"]').value.trim();
     const password = form.querySelector('input[name="password"]').value;
 
+    // Validate
     if (!email || !password) {
-      throw new Error('Silakan isi email dan password');
+      throw new Error('Email dan password diperlukan');
     }
 
-    // Call GAS loginUser
-    const response = await callGAS('loginUser', {
-      email,
-      password
-    });
-
-    if (response.success && response.data) {
-      // Save user session
-      userAuth = {
-        isLoggedIn: true,
-        userId: response.data.userId,
-        displayName: response.data.displayName,
-        email: response.data.email,
-        photoURL: response.data.photoURL || '',
-        whatsapp: response.data.whatsapp || '',
-        authMethod: 'email'
-      };
-
-      sessionStorage.setItem('sisitus_user', JSON.stringify(userAuth));
-
-      if (successEl) {
-        successEl.textContent = response.message || `Selamat datang, ${userAuth.displayName}!`;
-        successEl.classList.add('show');
-      }
-
-      showSuccess('Login Berhasil', `Selamat datang kembali, ${userAuth.displayName}!`);
-
-      // Reset form
-      form.reset();
-
-      // Redirect to return URL or home
-      setTimeout(() => {
-        const returnTo = sessionStorage.getItem('auth_return_to') || '/';
-        sessionStorage.removeItem('auth_return_to');
-        window.location.href = returnTo;
-      }, 1500);
-    } else {
-      throw new Error(response.message || 'Email atau password salah');
+    if (!isValidEmail(email)) {
+      throw new Error('Email tidak valid');
     }
+
+    // Show loading state
+    console.log('[Auth Login] Starting login for:', email);
+    setButtonLoading(btn, true, '⏳ Login...');
+
+    // Call API
+    const response = await APIClient.loginUser(email, password);
+
+    if (!response.success) {
+      throw new Error(response.message || 'Login gagal');
+    }
+
+    if (!response.data) {
+      throw new Error('Data user tidak ditemukan');
+    }
+
+    // Save session
+    console.log('[Auth Login] Login successful');
+    AuthManager.saveSession(response.data);
+
+    // Show success message
+    showSuccess(
+      '✓ Login Berhasil!',
+      `Selamat datang kembali, ${response.data.displayName}!`
+    );
+
+    // Redirect to dashboard
+    setTimeout(() => {
+      console.log('[Auth Login] Redirecting to dashboard...');
+      window.location.href = '/dashboard/';
+    }, 1500);
   } catch (error) {
-    console.error('Login error:', error);
-    const message = error.message || 'Terjadi kesalahan saat login';
-    
-    if (errorEl) {
-      errorEl.textContent = message;
-      errorEl.classList.add('show');
-    }
-    
-    showError('Login Gagal', message);
+    console.error('[Auth Login Error]:', error);
+    handleAPIError(error);
+    setButtonLoading(btn, false);
   }
 }
 
 // ============================================================================
-// GOOGLE SIGN-IN HANDLER
+// GOOGLE SIGN-IN
 // ============================================================================
 
+/**
+ * Handle Google OAuth response
+ */
 window.handleGoogleSignIn = async function(response) {
-  if (response.clientId && response.credential) {
-    try {
-      // Verify token dengan GAS
-      const result = await callGAS('verifyGoogleToken', {
-        token: response.credential
-      });
+  if (!response.credential) {
+    console.warn('[Auth Google] No credential in response');
+    return;
+  }
 
-      if (result.success && result.data) {
-        // Save user session
-        userAuth = {
-          isLoggedIn: true,
-          userId: result.data.userId,
-          displayName: result.data.displayName,
-          email: result.data.email,
-          photoURL: result.data.photoURL || '',
-          whatsapp: result.data.whatsapp || '',
-          authMethod: 'google'
-        };
+  try {
+    console.log('[Auth Google] Processing Google Sign-In...');
 
-        sessionStorage.setItem('sisitus_user', JSON.stringify(userAuth));
+    showLoading('Google Sign-In', 'Memproses...');
 
-        showSuccess('Login Berhasil', `Selamat datang, ${userAuth.displayName}!`);
+    // Verify token with GAS
+    const result = await APIClient.verifyGoogleToken(response.credential);
 
-        // Redirect to return URL or home
-        setTimeout(() => {
-          const returnTo = sessionStorage.getItem('auth_return_to') || '/';
-          sessionStorage.removeItem('auth_return_to');
-          window.location.href = returnTo;
-        }, 1500);
-      } else {
-        throw new Error(result.message || 'Token tidak valid');
-      }
-    } catch (error) {
-      console.error('Google sign-in error:', error);
-      showError('Google Sign-In Gagal', error.message || 'Terjadi kesalahan saat login dengan Google');
+    console.log('[Auth Google] API Response:', result);
+
+    if (!result.success) {
+      throw new Error(result.message || 'Google Sign-In gagal');
     }
+
+    if (!result.data) {
+      throw new Error('Data user tidak ditemukan');
+    }
+
+    // Save session
+    AuthManager.saveSession(result.data);
+
+    hideLoading();
+    showSuccess(
+      '✓ Google Login Sukses!',
+      `Selamat datang, ${result.data.displayName}!`
+    );
+
+    // Redirect to dashboard
+    setTimeout(() => {
+      console.log('[Auth Google] Redirecting to dashboard...');
+      window.location.href = '/dashboard/';
+    }, 1500);
+  } catch (error) {
+    console.error('[Auth Google Error]:', error);
+    hideLoading();
+    handleAPIError(error);
   }
 };
 
-// ============================================================================
-// LOGOUT HANDLER
-// ============================================================================
-
-export function handleLogout() {
-  userAuth = {
-    isLoggedIn: false,
-    userId: null,
-    displayName: '',
-    email: '',
-    photoURL: '',
-    whatsapp: '',
-    authMethod: null
-  };
-
-  sessionStorage.removeItem('sisitus_user');
-  showSuccess('Logout Sukses', 'Anda telah berhasil logout');
-
-  // Redirect to home
-  setTimeout(() => {
-    window.location.href = '/';
-  }, 1500);
-}
-
-// ============================================================================
-// LOGGED-IN STATE
-// ============================================================================
-
-function showLoggedInState() {
-  const authSection = document.getElementById('auth-section-not-logged-in');
-
-  if (authSection) authSection.style.display = 'none';
-}
-
-// ============================================================================
-// GAS API CALL
-// ============================================================================
-
-async function callGAS(action, params) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
-
+/**
+ * Initialize Google Sign-In button
+ */
+function initializeGoogleSignIn() {
   try {
-    const queryParams = new URLSearchParams({
-      action,
-      ...params
-    });
-
-    const response = await fetch(`${GAS_CONFIG.URL}?${queryParams}`, {
-      signal: controller.signal
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    if (typeof google === 'undefined') {
+      console.warn('[Auth Google] Google SDK not loaded');
+      return;
     }
 
-    const data = await response.json();
-    return data;
+    console.log('[Auth Google] Initializing Google Sign-In...');
+
+    google.accounts.id.initialize({
+      client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
+      callback: window.handleGoogleSignIn,
+      auto_select: false
+    });
+
+    // Find and render Google button
+    const googleBtnContainer = document.querySelector('.google-signin-container');
+    if (googleBtnContainer) {
+      google.accounts.id.renderButton(googleBtnContainer, {
+        theme: 'outline',
+        size: 'large',
+        text: 'signup_with',
+        locale: 'id'
+      });
+    }
   } catch (error) {
-    console.error(`GAS call failed (${action}):`, error);
-
-    if (error.name === 'AbortError') {
-      throw new Error('Server tidak merespons. Silakan coba lagi.');
-    }
-
-    throw error;
-  } finally {
-    clearTimeout(timeoutId);
+    console.warn('[Auth Google] Error initializing:', error);
   }
 }
 
 // ============================================================================
-// UTILITY EXPORTS
+// UI HELPERS
 // ============================================================================
 
-export function isUserLoggedIn() {
-  return userAuth.isLoggedIn;
+/**
+ * Setup auth tab switching
+ */
+function setupAuthTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tabName = btn.dataset.tab;
+      switchTab(tabName);
+    });
+  });
 }
 
-export function getCurrentUser() {
-  return userAuth;
+/**
+ * Switch between tabs
+ */
+function switchTab(tabName) {
+  // Update active tab button
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabName);
+  });
+
+  // Update active form
+  document.querySelectorAll('.auth-form').forEach(form => {
+    form.classList.toggle('active', form.id === `${tabName}-form`);
+  });
 }
 
-export function redirectToLogin(returnTo = window.location.pathname) {
-  sessionStorage.setItem('auth_return_to', returnTo);
-  window.location.href = '/auth/';
+/**
+ * Setup form event listeners
+ */
+function setupAuthForms() {
+  const registerForm = document.getElementById('register-form');
+  if (registerForm) {
+    registerForm.addEventListener('submit', handleRegister);
+    console.log('[Auth Forms] Register form setup');
+  }
+
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+    console.log('[Auth Forms] Login form setup');
+  }
 }
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+export {
+  handleRegister,
+  handleLogin,
+  handleEmailVerification
+};

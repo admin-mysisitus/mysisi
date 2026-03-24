@@ -1,0 +1,188 @@
+/**
+ * Dashboard SPA Main Application
+ * Handles routing, session management, and page rendering
+ */
+
+import { DashboardAuth } from './modules/auth.js';
+import { DashboardNavbar } from './components/navbar.js';
+import { DashboardSidebar } from './components/sidebar.js';
+
+class DashboardApp {
+  constructor() {
+    this.currentUser = DashboardAuth.getCurrentUser();
+    this.currentRoute = null;
+    this.navbar = null;
+    this.sidebar = null;
+
+    // Check auth first
+    if (!this.currentUser) {
+      window.location.href = '/auth/';
+      return;
+    }
+
+    this.init();
+  }
+
+  async init() {
+    // Render navbar and sidebar
+    this.navbar = new DashboardNavbar();
+    this.navbar.render();
+
+    this.sidebar = new DashboardSidebar(this);
+    this.sidebar.render();
+
+    // Setup route handlers
+    this.setupRoutes();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', () => this.handleRouteChange());
+
+    // Handle auth state changes
+    window.addEventListener('authStateChanged', (e) => {
+      if (!e.detail) {
+        // User logged out
+        window.location.href = '/auth/';
+      } else {
+        this.currentUser = e.detail;
+      }
+    });
+
+    // Initial route
+    this.handleRouteChange();
+  }
+
+  setupRoutes() {
+    this.routes = {
+      '/dashboard/': {
+        page: 'dashboard',
+        title: 'Dashboard',
+        loadModule: () => import('./modules/dashboard.js')
+      },
+      '/dashboard/profile': {
+        page: 'profile',
+        title: 'Profil Saya',
+        loadModule: () => import('./modules/profile.js')
+      },
+      '/dashboard/orders': {
+        page: 'orders',
+        title: 'Pesanan Saya',
+        loadModule: () => import('./modules/orders.js')
+      },
+      '/dashboard/checkout': {
+        page: 'checkout',
+        title: 'Beli Domain',
+        loadModule: () => import('./modules/checkout.js')
+      },
+      '/dashboard/payment': {
+        page: 'payment',
+        title: 'Pembayaran',
+        loadModule: () => import('./modules/payment.js')
+      },
+      '/dashboard/invoices': {
+        page: 'invoices',
+        title: 'Invoice',
+        loadModule: () => import('./modules/invoices.js')
+      },
+      '/dashboard/domains': {
+        page: 'domains',
+        title: 'Domain Saya',
+        loadModule: () => import('./modules/domains.js')
+      },
+      '/dashboard/support': {
+        page: 'support',
+        title: 'Support',
+        loadModule: () => import('./modules/support.js')
+      }
+    };
+  }
+
+  handleRouteChange() {
+    const hash = window.location.hash;
+    const route = hash.replace('#!', '') || '/dashboard/';
+    this.navigate(route);
+  }
+
+  async navigate(route) {
+    // Default to home if invalid
+    if (!this.routes[route]) {
+      route = '/dashboard/';
+      window.location.hash = '#!' + route;
+      return;
+    }
+
+    this.currentRoute = route;
+
+    // Update sidebar active state
+    this.sidebar.setActive(route);
+
+    // Update page title
+    const routeConfig = this.routes[route];
+    document.title = `${routeConfig.title} - SISITUS Dashboard`;
+
+    // Load and render page
+    try {
+      this.showLoadingOverlay();
+      
+      // Load module
+      const module = await routeConfig.loadModule();
+      
+      // Load HTML view
+      const response = await fetch(`/dashboard/views/${routeConfig.page}.html`);
+      if (!response.ok) {
+        throw new Error(`Failed to load view for ${routeConfig.page}`);
+      }
+      const html = await response.text();
+
+      // Render content
+      const contentArea = document.getElementById('content');
+      contentArea.innerHTML = html;
+
+      // Initialize page module
+      if (module.render) {
+        await module.render(this.currentUser);
+      }
+
+      // Scroll to top
+      contentArea.scrollTop = 0;
+
+    } catch (error) {
+      console.error('Error loading route:', error);
+      document.getElementById('content').innerHTML = `
+        <div class="error-container">
+          <h2>Error</h2>
+          <p>${error.message}</p>
+          <button onclick="window.location.reload()">Reload</button>
+        </div>
+      `;
+    } finally {
+      this.hideLoadingOverlay();
+    }
+  }
+
+  showLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.style.display = 'flex';
+  }
+
+  hideLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+
+  /**
+   * Show notification
+   */
+  static showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    alert(message);
+  }
+}
+
+// Initialize app when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.dashboardApp = new DashboardApp();
+  });
+} else {
+  window.dashboardApp = new DashboardApp();
+}

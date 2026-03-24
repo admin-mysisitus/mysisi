@@ -9,7 +9,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbyX4pk9V1LdGJp41h0Qgi7yhmACcBO8EBqhc-dFji4WYCxyeUZMt0QajgDLW6y5E7nI/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbwEvRR9mQJk7y9Q34ABM1ef-IrXU1KrUfZgxLwddrZuN6dxcYA3y08F-nzEGV6WEYKJ/exec',
   
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 30000,
@@ -77,7 +77,7 @@ export const MIDTRANS_CONFIG = {
 };
 
 // ========== DOMAIN PACKAGES CONFIGURATION ==========
-// ✅ SYNCHRONIZED dengan package validation di GAS (orders-create.js line 119)
+// ✅ SYNCHRONIZED dengan package validation di GAS (gas.js line 119)
 // PENTING: Update keduanya jika ada perubahan paket
 export const DOMAIN_PACKAGES = {
   // Starter Package
@@ -154,7 +154,7 @@ export const DOMAIN_PACKAGES = {
 // ========== PACKAGE VALIDATION ==========
 /**
  * Validated packages list - MUST MATCH GAS backend validPackages array
- * Location: api/orders-create.js:119
+ * Location: GAS_AUTH_REFACTORED.gs
  * Must be updated if domain_packages change
  */
 export const VALID_PACKAGE_IDS = ['starter', 'professional', 'business', 'enterprise'];

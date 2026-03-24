@@ -1419,17 +1419,6 @@
   color: #2980b9;
 }
 
-/* ============================================
-   ACCESSIBILITY & DARK MODE
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 .cek-domain-form #cek-domain-input:focus,
 .cek-domain-ext-item:focus-visible,
 .cek-domain-action-btn:focus-visible,

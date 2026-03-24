@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return phoneRegex.test(phone.replace(/\s/g, ''));
     };
 
-    // Show error message
-    const showError = (fieldId, message) => {
+    // Show error message on field (form validation)
+    const showFieldError = (fieldId, message) => {
       const field = document.getElementById(fieldId);
       field.setAttribute('aria-invalid', 'true');
       field.classList.add('input-error');
@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
       errorMsg.textContent = message;
     };
 
-    // Clear error message
-    const clearError = (fieldId) => {
+    // Clear error message on field (form validation)
+    const clearFieldError = (fieldId) => {
       const field = document.getElementById(fieldId);
       field.removeAttribute('aria-invalid');
       field.classList.remove('input-error');
@@ -84,27 +84,27 @@ document.addEventListener('DOMContentLoaded', () => {
           const value = field.value.trim();
           
           if (!value) {
-            showError(fieldId, 'Field ini harus diisi');
+            showFieldError(fieldId, 'Field ini harus diisi');
             return;
           }
 
           if (fieldId === 'email' && !validateEmail(value)) {
-            showError(fieldId, 'Email tidak valid');
+            showFieldError(fieldId, 'Email tidak valid');
             return;
           }
 
           if (fieldId === 'phone' && !validatePhone(value)) {
-            showError(fieldId, 'Nomor telepon tidak valid (gunakan format 08xx atau +62xxx)');
+            showFieldError(fieldId, 'Nomor telepon tidak valid (gunakan format 08xx atau +62xxx)');
             return;
           }
 
-          clearError(fieldId);
+          clearFieldError(fieldId);
         });
 
         // Clear error on input
         field.addEventListener('input', () => {
           if (field.classList.contains('input-error')) {
-            clearError(fieldId);
+            clearFieldError(fieldId);
           }
         });
       }
@@ -125,38 +125,38 @@ document.addEventListener('DOMContentLoaded', () => {
       let isValid = true;
 
       if (!fullname) {
-        showError('fullname', 'Nama lengkap harus diisi');
+        showFieldError('fullname', 'Nama lengkap harus diisi');
         isValid = false;
       } else {
-        clearError('fullname');
+        clearFieldError('fullname');
       }
 
       if (!email || !validateEmail(email)) {
-        showError('email', 'Email harus diisi dan valid');
+        showFieldError('email', 'Email harus diisi dan valid');
         isValid = false;
       } else {
-        clearError('email');
+        clearFieldError('email');
       }
 
       if (!phone || !validatePhone(phone)) {
-        showError('phone', 'Nomor telepon harus diisi dan valid');
+        showFieldError('phone', 'Nomor telepon harus diisi dan valid');
         isValid = false;
       } else {
-        clearError('phone');
+        clearFieldError('phone');
       }
 
       if (!subject) {
-        showError('subject', 'Subjek harus dipilih');
+        showFieldError('subject', 'Subjek harus dipilih');
         isValid = false;
       } else {
-        clearError('subject');
+        clearFieldError('subject');
       }
 
       if (!message) {
-        showError('message', 'Pesan harus diisi');
+        showFieldError('message', 'Pesan harus diisi');
         isValid = false;
       } else {
-        clearError('message');
+        clearFieldError('message');
       }
 
       if (!isValid) return;
@@ -190,14 +190,14 @@ document.addEventListener('DOMContentLoaded', () => {
           ? 'Terima kasih! Lamaran Anda akan dikirim via WhatsApp.'
           : 'Terima kasih! Pesan Anda akan dikirim via WhatsApp.';
         
-        showSuccessNotification(successMsg);
+        showSuccess(successMsg);
 
         // Clear URL parameters after submission
         window.history.replaceState({}, document.title, window.location.pathname);
 
       } catch (error) {
         console.error('Error:', error);
-        showErrorNotification('Terjadi kesalahan. Silakan coba lagi.');
+        showError('Terjadi kesalahan. Silakan coba lagi.');
       } finally {
         // Re-enable submit button
         if (submitBtn) {
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!fullname || !email || !phone || !message) {
           // Scroll to form
           contactForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          showInfoNotification('Silakan lengkapi form lamaran Anda');
+          showInfo('Silakan lengkapi form lamaran Anda');
           return;
         }
         
@@ -232,65 +232,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Notification helper functions
-function showSuccessNotification(message) {
-  const notification = document.createElement('div');
-  notification.className = 'notification notification-success';
-  notification.setAttribute('role', 'alert');
-  notification.innerHTML = `
-    <i class="fas fa-check-circle"></i>
-    <span>${message}</span>
-  `;
-  
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
-}
-
-function showErrorNotification(message) {
-  const notification = document.createElement('div');
-  notification.className = 'notification notification-error';
-  notification.setAttribute('role', 'alert');
-  notification.innerHTML = `
-    <i class="fas fa-exclamation-circle"></i>
-    <span>${message}</span>
-  `;
-  
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => notification.remove(), 300);
-  }, 5000);
-}
-function showInfoNotification(message) {
-  const notification = document.createElement('div');
-  notification.className = 'notification notification-info';
-  notification.setAttribute('role', 'alert');
-  notification.innerHTML = `
-    <i class="fas fa-info-circle"></i>
-    <span>${message}</span>
-  `;
-  
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => notification.remove(), 300);
-  }, 4000);
-}
+// Note: Notification functions are imported from /assets/js/utils/notifications.js
+// showSuccess(), showError(), showInfo(), showToast(), showConfirm(), etc. are globally available

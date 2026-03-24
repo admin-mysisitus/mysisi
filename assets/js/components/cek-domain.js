@@ -386,7 +386,7 @@
         <p class="cek-domain-result-price">
           dari <strong>Rp${formatCurrency(extData.newPrice)}</strong> /tahun
         </p>
-        <a href="/checkout/?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn cek-domain-buy-btn">
+        <a href="/dashboard/#!checkout?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn cek-domain-buy-btn">
           <i class="fas fa-lock"></i> Amankan Sekarang
         </a>
       `;
@@ -405,7 +405,7 @@
         <h3><i class="fas fa-question-circle"></i> ${sanitizeHTML(fullDomain)}</h3>
         <p class="cek-domain-result-info">Status ketersediaan tidak jelas</p>
         <p style="font-size: 0.85rem; color: #999;">Silakan hubungi support atau lanjut ke checkout</p>
-        <a href="/checkout/?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn">
+        <a href="/dashboard/#!checkout?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn">
           Lanjut ke Checkout
         </a>
       `;
@@ -441,6 +441,12 @@
       `;
       cekDomainBtn.disabled = false;
       cekDomainBtn.innerHTML = originalBtnHTML;
+      Swal.fire({
+        icon: 'error',
+        title: 'Format Tidak Valid',
+        text: 'Format domain tidak valid. Contoh: namadomain.com',
+        confirmButtonColor: '#e74c3c'
+      });
       return;
     }
 
@@ -544,6 +550,26 @@
         cekDomainPromoSection.classList.add('show');
       }
 
+      // Show success notification
+      const availableCount = validResults.filter(r => r.available === true).length;
+      if (availableCount > 0) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Pengecekan Selesai!',
+          text: `${availableCount} domain tersedia untuk Anda.`,
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      } else {
+        Swal.fire({
+          icon: 'info',
+          title: 'Pengecekan Selesai',
+          text: 'Pengecekan selesai. Silakan coba dengan nama domain lain.',
+          confirmButtonColor: '#2563EB'
+        });
+      }
+
     } catch (err) {
       console.error('Display results error:', err);
       cekDomainResultsList.innerHTML = `
@@ -551,6 +577,12 @@
           <i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan
         </li>
       `;
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Mengecek Domain',
+        text: 'Gagal mengecek domain. Silakan coba lagi.',
+        confirmButtonColor: '#e74c3c'
+      });
     } finally {
       cekDomainBtn.disabled = false;
       cekDomainBtn.innerHTML = originalBtnHTML;

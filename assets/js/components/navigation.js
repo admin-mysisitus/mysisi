@@ -7,11 +7,64 @@ const navElements = {
   desktopNav: document.querySelector('.nav-desktop')
 };
 
+// Helper: Get logged-in user from sessionStorage
+function getLoggedInUser() {
+  try {
+    const userStr = sessionStorage.getItem('sisitus_user');
+    console.log('[Navigation] sessionStorage.sisitus_user:', userStr);
+    return userStr ? JSON.parse(userStr) : null;
+  } catch (e) {
+    console.error('Error parsing user session:', e);
+    return null;
+  }
+}
+
+// Helper: Create profile menu item
+function createProfileMenuItem(user) {
+  const li = document.createElement('li');
+  li.className = 'nav-desktop-item nav-desktop-profile';
+  
+  const link = document.createElement('a');
+  link.className = 'nav-desktop-link profile-link';
+  link.href = '/dashboard/';
+  
+  // Profile photo
+  const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
+  const photoImg = document.createElement('img');
+  photoImg.className = 'nav-profile-photo';
+  photoImg.src = user?.photoURL || defaultAvatarSVG;
+  photoImg.alt = user?.displayName || 'Profile';
+  photoImg.onerror = function() {
+    this.src = defaultAvatarSVG;
+  };
+  link.appendChild(photoImg);
+  
+  // Profile name
+  const span = document.createElement('span');
+  span.className = 'nav-profile-name';
+  span.textContent = user?.displayName || 'User';
+  link.appendChild(span);
+  
+  li.appendChild(link);
+  return li;
+}
+
 // Generate Menu Desktop
 const generateDesktopMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-desktop-list';
+  const loggedInUser = getLoggedInUser();
+  
+  // DEBUG: Log user status
+  console.log('[Navigation] Desktop Menu - Logged in user:', loggedInUser);
+  
   menuData.forEach(item => {
+    // Skip login item if user is logged in
+    if (item.isAuth && loggedInUser) {
+      console.log('[Navigation] Skipping Login item - User is logged in');
+      return;
+    }
+    
     const li = document.createElement('li');
     li.className = `nav-desktop-item ${item.dropdown ? 'nav-desktop-dropdown' : ''} ${item.isPromo ? 'nav-desktop-promo' : ''} ${item.isAuth ? 'nav-desktop-auth' : ''}`;
     const link = document.createElement('a');
@@ -62,14 +115,33 @@ const generateDesktopMenu = () => {
     }
     list.appendChild(li);
   });
-  navElements.desktopNav.appendChild(list);
+  
+  // Add profile item if user is logged in
+  if (loggedInUser) {
+    const profileLi = createProfileMenuItem(loggedInUser);
+    list.appendChild(profileLi);
+  }
+  
+  // Only append to desktop nav if element exists (not on auth page)
+  if (navElements.desktopNav) {
+    navElements.desktopNav.appendChild(list);
+  } else {
+    console.warn('[Navigation] .nav-desktop element not found - skipping desktop menu');
+  }
 };
 
 // Generate Menu Mobile
 const generateMobileMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-mobile-list';
+  const loggedInUser = getLoggedInUser();
+  
   menuData.forEach(item => {
+    // Skip login item if user is logged in
+    if (item.isAuth && loggedInUser) {
+      return;
+    }
+    
     const li = document.createElement('li');
     li.className = `nav-mobile-item ${item.dropdown ? 'nav-mobile-dropdown' : ''} ${item.isPromo ? 'nav-mobile-promo' : ''} ${item.isAuth ? 'nav-mobile-auth' : ''}`;
     if (item.dropdown) {
@@ -147,7 +219,42 @@ const generateMobileMenu = () => {
     }
     list.appendChild(li);
   });
-  navElements.menu.appendChild(list);
+  
+  // Add profile item if user is logged in (mobile version)
+  if (loggedInUser) {
+    const profileLi = document.createElement('li');
+    profileLi.className = 'nav-mobile-item nav-mobile-profile';
+    const link = document.createElement('a');
+    link.className = 'nav-mobile-link profile-link';
+    link.href = '/dashboard/';
+    
+    // Profile photo
+    const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
+    const photoImg = document.createElement('img');
+    photoImg.className = 'nav-profile-photo';
+    photoImg.src = loggedInUser?.photoURL || defaultAvatarSVG;
+    photoImg.alt = loggedInUser?.displayName || 'Profile';
+    photoImg.onerror = function() {
+      this.src = defaultAvatarSVG;
+    };
+    link.appendChild(photoImg);
+    
+    // Profile name
+    const span = document.createElement('span');
+    span.className = 'nav-profile-name';
+    span.textContent = loggedInUser?.displayName || 'User';
+    link.appendChild(span);
+    
+    profileLi.appendChild(link);
+    list.appendChild(profileLi);
+  }
+  
+  // Only append to mobile nav if element exists (not on auth page)
+  if (navElements.menu) {
+    navElements.menu.appendChild(list);
+  } else {
+    console.warn('[Navigation] #nav-mobile element not found - skipping mobile menu');
+  }
 };
 
 // Setup Dropdown Mobile
@@ -304,6 +411,38 @@ const handleAutoHideHeader = () => {
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 };
 
+// Refresh Navigation - Call this after user login/logout to update navbar
+export function refreshNavigation() {
+  try {
+    // Clear existing desktop menu
+    const desktopNav = navElements.desktopNav;
+    if (desktopNav) {
+      const existingList = desktopNav.querySelector('.nav-desktop-list');
+      if (existingList) existingList.remove();
+    }
+    
+    // Clear existing mobile menu
+    const menu = navElements.menu;
+    if (menu) {
+      const existingList = menu.querySelector('.nav-mobile-list');
+      if (existingList) existingList.remove();
+    }
+    
+    // Re-generate menus with updated user session
+    generateDesktopMenu();
+    generateMobileMenu();
+    
+    // Re-setup interactions
+    setActiveLinks();
+    setupMobileDropdowns();
+  } catch (error) {
+    console.error('Error refreshing navigation:', error);
+  }
+}
+
+// Expose refreshNavigation to window for easy access from other scripts
+window.refreshNavigation = refreshNavigation;
+
 // Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
   generateDesktopMenu();
@@ -316,10 +455,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMobileDropdowns();
   navElements.btn?.addEventListener('click', toggleMobileMenu);
   window.addEventListener('click', e => {
-    if (navElements.menu.classList.contains('active') && !e.target.closest('.nav-mobile') && !e.target.closest('.nav-mobile-btn')) toggleMobileMenu();
+    if (navElements.menu && navElements.menu.classList.contains('active') && !e.target.closest('.nav-mobile') && !e.target.closest('.nav-mobile-btn')) toggleMobileMenu();
   });
   window.addEventListener('keydown', e => {
-    if (navElements.menu.classList.contains('active') && e.key === 'Escape') toggleMobileMenu();
+    if (navElements.menu && navElements.menu.classList.contains('active') && e.key === 'Escape') toggleMobileMenu();
   });
   window.addEventListener('scroll', () => {
     const isScrolled = window.scrollY > 50;
@@ -330,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleAutoHideHeader();
   });
   window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768 && navElements.menu.classList.contains('active')) toggleMobileMenu();
+    if (navElements.menu && window.innerWidth >= 768 && navElements.menu.classList.contains('active')) toggleMobileMenu();
   });
   generateFooterLinks();
   generateFooterServices();

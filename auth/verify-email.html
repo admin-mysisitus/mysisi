@@ -132,6 +132,9 @@
       color: #667eea;
     }
   </style>
+  <!-- SweetAlert2 for Elegant Notifications -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -151,10 +154,46 @@
     const TIMEOUT = 30000; // 30 second timeout
 
     if (!token) {
-      showError('Token Tidak Ditemukan', 'Silakan gunakan link verifikasi email yang lengkap dari email Anda.');
+      // Check if this is first visit (no token)
+      const referrer = document.referrer;
+      const fromRegistration = referrer.includes('/auth') || referrer.includes('register');
+      
+      if (fromRegistration) {
+        showInfo(
+          '📧 Cek Email Anda!',
+          'Link verifikasi telah dikirim ke email Anda. Silakan buka email dan klik link verifikasi untuk mengaktifkan akun Anda.'
+        );
+      } else {
+        showError(
+          'Token Tidak Ditemukan',
+          'Silakan gunakan link verifikasi email yang lengkap dari email Anda. Link harus berformat: https://mysisi.pages.dev/auth/verify-email.html?token=xxxxx'
+        );
+      }
     } else {
       showLoading('Memverifikasi Email...', 'Mohon tunggu sebentar');
       verifyEmailToken(token);
+    }
+
+    function showInfo(title, message) {
+      statusContent.innerHTML = `
+        <div class="status-icon" style="color: #3498db; font-size: 3rem;">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h2 style="color: #3498db;">${title}</h2>
+        <p>${message}</p>
+        <div class="info-box">
+          <strong><i class="fas fa-lightbulb"></i> Tips:</strong><br>
+          Jika email tidak terlihat, cek folder:
+          <ul style="margin-top: 10px; text-align: left; list-style: inside;">
+            <li><strong>Spam/Junk</strong> - Pindahkan ke Inbox</li>
+            <li><strong>Promotions/Tab lain</strong> - Cek semua tab di email</li>
+          </ul>
+        </div>
+        <div class="button-group">
+          <a href="/auth/" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Kembali ke Login</a>
+          <a href="/" class="btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+        </div>
+      `;
     }
 
     function showLoading(title, message) {
@@ -177,7 +216,7 @@
           Anda sekarang dapat login dengan email dan password Anda atau gunakan Google Sign-In untuk mulai membeli domain.
         </div>
         <div class="button-group">
-          <a href="/checkout" class="btn-primary"><i class="fas fa-shopping-cart"></i> Ke Halaman Checkout</a>
+          <a href="/dashboard/#!checkout" class="btn-primary"><i class="fas fa-user-plus"></i> Daftar Ulang</a>
           <a href="/" class="btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
         </div>
       `;
@@ -209,42 +248,58 @@
           token: token
         });
 
-        const response = await fetch(`${GAS_CONFIG.URL}?${params}`, {
+        const apiUrl = `${GAS_CONFIG.URL}?${params}`;
+        console.log('🔍 Debug Info:');
+        console.log('- API URL:', GAS_CONFIG.URL);
+        console.log('- Token (first 20 chars):', token.substring(0, 20) + '...');
+        console.log('- Full Request URL:', apiUrl);
+
+        const response = await fetch(apiUrl, {
           signal: controller.signal
         });
+
+        console.log('- Response Status:', response.status);
 
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
         }
 
         const data = await response.json();
+        console.log('- Response Data:', data);
 
         if (data.success) {
+          console.log('✅ Verifikasi berhasil!');
           showSuccess(
             '<i class="fas fa-check"></i> Email Berhasil Diverifikasi!',
             'Akun Anda sudah aktif dan siap digunakan.'
           );
           // Auto-redirect after 3 seconds
           setTimeout(() => {
-            window.location.href = '/checkout';
+            window.location.href = '/dashboard/#!checkout';
           }, 3000);
         } else {
+          console.log('❌ Verifikasi gagal:', data.message);
           showError(
             '<i class="fas fa-exclamation-triangle"></i> Verifikasi Gagal',
             data.message || 'Token verifikasi tidak valid atau sudah kadaluarsa. Link verifikasi berlaku 24 jam.'
           );
         }
       } catch (error) {
-        console.error('Verification error:', error);
+        console.error('❌ Verification error:', error);
+        console.error('Error type:', error.name);
+        console.error('Error message:', error.message);
         
         let errorTitle = '<i class="fas fa-exclamation-circle"></i> Terjadi Kesalahan';
         let errorMsg = 'Tidak dapat terhubung ke server. Silakan coba lagi nanti.';
         
         if (error.name === 'AbortError') {
-          errorMsg = 'Permintaan timeout. Server tidak merespons dalam waktu yang ditentukan. Silakan refresh halaman.';
+          errorMsg = 'Permintaan timeout (lebih dari 30 detik). Server tidak merespons. Silakan: <br>1. Refresh halaman<br>2. Atau coba lagi dalam beberapa menit';
         } else if (error instanceof TypeError) {
-          errorMsg = 'Kesalahan jaringan. Periksa koneksi internet Anda dan coba lagi.';
+          errorMsg = 'Kesalahan jaringan. Periksa koneksi internet Anda dan coba lagi. Jika masalah berlanjut, hubungi support.';
         }
+        
+        console.log('📊 GAS_CONFIG:', GAS_CONFIG);
+        console.log('API endpoint valid?', GAS_CONFIG && GAS_CONFIG.URL);
         
         showError(errorTitle, errorMsg);
       } finally {

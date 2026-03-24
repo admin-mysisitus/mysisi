@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SISITUS</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/dashboard/styles/dashboard.css">
+</head>
+<body>
+    <div id="dashboard">
+        <!-- Top Navigation Bar -->
+        <nav id="navbar" class="dashboard-navbar"></nav>
+        
+        <!-- Main Container: Sidebar + Content -->
+        <div class="dashboard-container">
+            <!-- Sidebar Navigation -->
+            <aside id="sidebar" class="dashboard-sidebar"></aside>
+            
+            <!-- Main Content Area -->
+            <main id="content" class="dashboard-content">
+                <div class="content-loading">
+                    <div class="spinner"></div>
+                    <p>Memuat...</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- SweetAlert2 for Elegant Notifications -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <!-- SweetAlert2 provides elegant, non-intrusive toast notifications with auto-dismiss -->
+
+    <!-- Midtrans Snap SDK for Payment Processing -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="CLIENT-KEY"></script>
+    <!-- Note: Midtrans Snap SDK is loaded for payment processing via snap.pay() -->
+    <!-- The actual token is generated server-side by GAS and passed to snap.pay() -->
+
+    <!-- Main App Script -->
+    <script type="module" src="/dashboard/js/dashboard-app.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 /**
  * Domain Configuration - Centralized domain extensions and pricing
- * Consolidated from: cek-domain.js, checkout-pricing.js, orders-create.js
+ * Consolidated from: cek-domain.js, checkout-pricing.js, gas.js
  */
 
 // All supported domain extensions with pricing and info
