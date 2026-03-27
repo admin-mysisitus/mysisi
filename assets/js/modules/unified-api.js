@@ -19,112 +19,143 @@ import { GAS_CONFIG } from '../config/api.config.js';
 
 export class APIClient {
   static DEFAULT_TIMEOUT = 30000; // 30 seconds
-  static MAX_RETRIES = 2;
-  static RETRY_DELAY = 1000; // 1 second
 
   /**
    * Make API call to GAS backend
-   * Handles errors, retries, timeouts
+   * Simple, direct pattern matching sampel-mekanisme-GAS
    */
   static async call(action, data = {}, options = {}) {
-    const {
-      timeout = this.DEFAULT_TIMEOUT,
-      retries = this.MAX_RETRIES,
-      method = 'GET'
-    } = options;
+    const { method = 'GET' } = options;
 
-    let lastError;
+    try {
+      const response = await this.makeRequest(action, data, method, this.DEFAULT_TIMEOUT);
 
-    for (let attempt = 1; attempt <= retries + 1; attempt++) {
-      try {
-        const response = await this.makeRequest(action, data, method, timeout);
+      // Response bisa dalam berbagai format, fallback jika tidak sesuai expected
+      let result = response;
 
-        // Validate response format
-        if (!response.success === false && typeof response.success !== 'boolean') {
-          console.warn('[API] Response missing success field, assuming false');
-          response.success = false;
+      // Jika response adalah object dengan success field
+      if (typeof response === 'object' && response !== null) {
+        // Jika ada success field, gunakan sebagai response valid
+        if ('success' in response) {
+          if (typeof response.success !== 'boolean') {
+            console.warn('[API] Warning: success field bukan boolean, treating as:', !!response.success);
+            response.success = !!response.success; // Convert to boolean
+          }
+          result = response;
+        } else if ('data' in response) {
+          // Fallback: jika ada data field tapi tidak ada success, anggap success = true
+          console.warn('[API] No success field, default to true (data present)');
+          result = {
+            success: true,
+            data: response.data,
+            message: response.message || 'Operation successful',
+            timestamp: response.timestamp || Date.now()
+          };
+        } else {
+          // Response adalah object tapi tidak ada expected field
+          console.warn('[API] Unexpected response format, trying to detect success state:', response);
+          result = {
+            success: true, // Assume success jika response sudah dikirim
+            data: response,
+            message: response.message || 'Operation completed',
+            timestamp: Date.now()
+          };
         }
-
-        // Handle auth errors
-        if (response.success === false && response.message?.includes('Auth')) {
-          console.error('[API] Auth error detected, clearing session');
-          AuthManager.clearSession();
-          throw new Error('Session expired. Please login again.');
-        }
-
-        return response;
-      } catch (error) {
-        lastError = error;
-        console.warn(`[API] Attempt ${attempt} failed:`, error.message);
-
-        // Don't retry on auth errors
-        if (error.message?.includes('Auth')) {
-          throw error;
-        }
-
-        // Don't retry on validation errors
-        if (error.message?.includes('Validation')) {
-          throw error;
-        }
-
-        // Retry on network/timeout errors
-        if (attempt < retries + 1) {
-          await this.delay(this.RETRY_DELAY);
-        }
+      } else {
+        // Response bukan object (string, boolean, etc) - unexpected
+        console.error('[API] Response bukan object:', typeof response);
+        throw new Error('Server response format tidak valid');
       }
-    }
 
-    console.error('[API] All retry attempts failed:', lastError);
-    throw new Error(lastError?.message || 'API call failed');
+      // Final validation
+      if (result.success === false && result.message?.includes('Auth')) {
+        console.error('[API] Auth error - clearing session');
+        AuthManager.clearSession();
+        throw new Error('Session expired. Please login again.');
+      }
+
+      return result;
+    } catch (error) {
+      console.error(`[API] ${action} failed:`, error.message);
+      throw error; // Let caller handle error
+    }
   }
 
   /**
    * Make actual HTTP request
-   * CORS-optimized: Avoids preflight by using form-urlencoded and no custom headers
+   * Using URLSearchParams for ALL requests - avoids CORS preflight
+   * Per sampel-mekanisme-GAS: application/x-www-form-urlencoded works with GAS
+   * ⚠️ Do NOT set Content-Type header - let browser handle it
    */
   static async makeRequest(action, data, method, timeout) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
+      const params = new URLSearchParams({ action, ...data });
       let url = `${GAS_CONFIG.URL}`;
       let options = {
         method: method,
         signal: controller.signal
       };
 
-      // For GET requests: Add all data to URL query string
       if (method === 'GET') {
-        const params = new URLSearchParams({ action, ...data });
         url = `${GAS_CONFIG.URL}?${params}`;
-        // GET with no custom headers - no preflight
-      } 
-      // For POST requests: Send URLSearchParams object directly (not string)
-      // Browser automatically sets Content-Type: application/x-www-form-urlencoded
-      // This is a "simple request" with no preflight
-      else if (method === 'POST') {
-        options.body = new URLSearchParams({ action, ...data });
-        // Do NOT convert to string - send URLSearchParams object directly
-        // Browser handles Content-Type automatically
+      } else if (method === 'POST') {
+        // URLSearchParams = application/x-www-form-urlencoded
+        // NO custom headers to avoid CORS preflight
+        options.body = params;
       }
 
       const response = await fetch(url, options);
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        // Try to get error message from response body
+        let errorBody = '';
+        try {
+          const contentType = response.headers.get('content-type');
+          if (contentType?.includes('application/json')) {
+            const errorJson = await response.json();
+            errorBody = errorJson.message || JSON.stringify(errorJson);
+          } else {
+            errorBody = await response.text();
+          }
+        } catch (e) {
+          errorBody = response.statusText;
+        }
+        throw new Error(`HTTP ${response.status}: ${errorBody || response.statusText}`);
       }
 
-      return await response.json();
+      // Try parse as JSON
+      try {
+        const responseText = await response.text();
+        
+        // Try parse JSON
+        try {
+          return JSON.parse(responseText);
+        } catch (parseError) {
+          // Jika bukan valid JSON, return sebagai response object dengan raw text
+          console.warn('[API] Response bukan JSON, return as-is:', responseText.substring(0, 100));
+          return {
+            success: true, // Assume success jika GAS respond
+            data: responseText,
+            message: 'Response received from server',
+            timestamp: Date.now(),
+            _raw: responseText // Keep raw response
+          };
+        }
+      } catch (error) {
+        throw new Error('Gagal membaca response dari server: ' + error.message);
+      }
+    } catch (error) {
+      // Network error, timeout, atau parse error
+      if (error.name === 'AbortError') {
+        throw new Error('Request timeout setelah ' + timeout + 'ms');
+      }
+      throw error; // Re-throw all other errors
     } finally {
       clearTimeout(timeoutId);
     }
-  }
-
-  /**
-   * Helper: delay function for retries
-   */
-  static delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   // ========== AUTH ENDPOINTS ==========
@@ -214,16 +245,6 @@ export class APIClient {
     }, { method: 'POST' });
   }
 
-  /**
-   * Delete account
-   */
-  static deleteAccount(userId, password) {
-    return this.call('deleteAccount', {
-      userId,
-      password
-    }, { method: 'POST' });
-  }
-
   // ========== ORDER ENDPOINTS ==========
 
   /**
@@ -276,19 +297,9 @@ export class APIClient {
       phone,
       name,
       domain,
-      packages: packageId,
+      packageId,
       total
     }, { method: 'POST' });
-  }
-
-  /**
-   * Verify payment status
-   */
-  static verifyPaymentStatus(transactionId, orderId) {
-    return this.call('verifyPaymentStatus', {
-      transactionId,
-      orderId
-    });
   }
 
   // ========== DOMAIN ENDPOINTS ==========
@@ -314,21 +325,6 @@ export class APIClient {
    */
   static validatePromoCode(code) {
     return this.call('validatePromoCode', { code });
-  }
-
-  // ========== UTILITY ENDPOINTS ==========
-
-  /**
-   * Health check
-   */
-  static async healthCheck() {
-    try {
-      const response = await this.call('healthCheck', {});
-      return response.success;
-    } catch (error) {
-      console.error('[API] Health check failed:', error);
-      return false;
-    }
   }
 }
 
