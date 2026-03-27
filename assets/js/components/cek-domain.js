@@ -392,7 +392,7 @@
           dari <strong>Rp${formatCurrency(extData.newPrice)}</strong> /tahun
         </p>
         <div class="cek-domain-actions" style="display: flex; gap: 10px; margin-top: 15px;">
-          <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${ext.replace('.', '')}" data-price="${extData.newPrice}">
+          <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}">
             <i class="fas fa-lock"></i> Amankan Sekarang
           </button>
           <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist" style="flex: 0 0 50px; cursor: pointer; border: 1px solid #ddd; background: #f8f9fa; border-radius: 5px; font-size: 18px; color: #999; transition: all 0.3s;">
