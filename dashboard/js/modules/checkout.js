@@ -155,8 +155,10 @@ function selectPackage(packageId) {
   renderOrderSummary();
 
   // Show notification
-  const pkg = DOMAIN_PACKAGES.find(p => p.id === packageId);
-  showSuccessMessage(`Paket ${pkg.name} dipilih`);
+  const pkg = DOMAIN_PACKAGES[packageId];  // DOMAIN_PACKAGES is object, not array
+  if (pkg) {
+    showSuccessMessage(`Paket ${pkg.name} dipilih`);
+  }
 }
 
 function setupFormValidation(currentUser) {
@@ -251,7 +253,8 @@ async function validateAndApplyPromoCode(code) {
       
       // Calculate discount based on type
       const baseDomainPrice = 299000;
-      const pkg = DOMAIN_PACKAGES.find(p => p.id === checkoutState.selectedPackage);
+      const pkg = DOMAIN_PACKAGES[checkoutState.selectedPackage];  // DOMAIN_PACKAGES is object
+      if (!pkg) return;  // Package not found
       const subtotal = baseDomainPrice + pkg.price;
       
       if (result.data.discountType === 'percentage') {
@@ -336,7 +339,8 @@ function renderOrderSummary() {
   }
 
   const baseDomainPrice = 299000;
-  const pkg = DOMAIN_PACKAGES.find(p => p.id === checkoutState.selectedPackage);
+  const pkg = DOMAIN_PACKAGES[checkoutState.selectedPackage];  // DOMAIN_PACKAGES is object
+  if (!pkg) return;  // Package not found
   const subtotal = baseDomainPrice + pkg.price;
   const ppn = Math.round(subtotal * 0.11);
   const discount = checkoutState.discount || 0;
@@ -404,7 +408,11 @@ async function processCheckout(currentUser) {
 
     // Calculate prices
     const baseDomainPrice = 299000;
-    const pkg = DOMAIN_PACKAGES.find(p => p.id === checkoutState.selectedPackage);
+    const pkg = DOMAIN_PACKAGES[checkoutState.selectedPackage];  // DOMAIN_PACKAGES is object
+    if (!pkg) {
+      showErrorMessage('Paket tidak valid');
+      return;
+    }
     const subtotal = baseDomainPrice + pkg.price;
     const ppn = Math.round(subtotal * 0.11);
     const discount = checkoutState.discount || 0;
