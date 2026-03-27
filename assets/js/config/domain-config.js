@@ -252,19 +252,4 @@ function calculateDomainPrice(ext, years = 1) {
   return Math.round(extData.newPrice * multiplier);
 }
 
-// Export all for use in modules
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    DOMAIN_EXTENSIONS,
-    MULTI_PART_EXTENSIONS,
-    DOMAIN_MULTIPLIERS,
-    BASE_DOMAIN_PRICE,
-    getDomainExtensions,
-    getExtensionData,
-    getDomainMultiplier,
-    getMultiPartExtensions,
-    parseDomain,
-    validateDomain,
-    calculateDomainPrice
-  };
-}
+// ES6 Module - no CommonJS export needed

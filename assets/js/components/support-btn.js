@@ -138,7 +138,7 @@ window.addEventListener("load", () => {
   });
 
   kontakLi.addEventListener("click", () => {
-    window.location.href = "/kontak/index.html";
+    window.location.href = "/kontak/";
   });
 
   kontakLi.addEventListener("keydown", (e) => {

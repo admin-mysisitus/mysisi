@@ -85,7 +85,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Export untuk penggunaan manual jika diperlukan
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = FAQComponent;
-}
+// ES6 Module - no CommonJS export needed

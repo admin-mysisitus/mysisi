@@ -124,7 +124,7 @@ class DashboardCart {
           <!-- Register Link -->
           <p style="text-align: center; color: #666; font-size: 14px; margin: 0;">
             Belum punya akun? 
-            <a href="/auth#register" style="color: #2563EB; text-decoration: none; font-weight: bold;">Daftar di sini</a>
+            <a href="/auth/" style="color: #2563EB; text-decoration: none; font-weight: bold;">Daftar di sini</a>
           </p>
         </div>
       </div>

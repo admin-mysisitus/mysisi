@@ -270,7 +270,4 @@ if (document.readyState === 'loading') {
   HeroComponent.initAll();
 }
 
-// Export untuk digunakan di module
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = HeroComponent;
-}
+// ES6 Module - no CommonJS export needed
