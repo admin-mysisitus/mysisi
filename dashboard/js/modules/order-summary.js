@@ -18,7 +18,6 @@
 import { CartManager } from '/assets/js/modules/unified-cart.js';
 import { showSuccess, showError, showInfo } from '/assets/js/modules/unified-utils.js';
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
 import { ADDON_PACKAGES } from '/assets/js/config/api.config.js';
 
 // State management (currentUser can be null for guests)
@@ -34,8 +33,9 @@ let orderState = {
 };
 
 /**
- * Main render function - can be called with or without currentUser
- * @param {object|null} currentUser - Current authenticated user or null
+ * Main render function
+ * Order summary is GUEST ACCESSIBLE - NO login friction
+ * Login only happens in cart page
  */
 export async function render(currentUser) {
   try {
@@ -44,15 +44,6 @@ export async function render(currentUser) {
     
     if (!domain) {
       throw new Error('Domain tidak ditemukan. Kembali ke pencarian domain.');
-    }
-
-    // Check if user is authenticated
-    const user = currentUser || AuthManager.getCurrentUser();
-    
-    // If not authenticated, show login form
-    if (!user) {
-      renderLoginForm();
-      return;
     }
 
     // Parse domain and TLD
@@ -94,89 +85,6 @@ export async function render(currentUser) {
         </a>
       `;
     }
-  }
-}
-
-/**
- * Render inline login form for order page
- */
-function renderLoginForm() {
-  // Hide loading
-  const loadingState = document.getElementById('loading-state');
-  if (loadingState) loadingState.style.display = 'none';
-
-  // Show login form
-  const loginState = document.getElementById('login-state');
-  if (loginState) loginState.style.display = 'block';
-
-  // Attach event listener
-  const form = document.getElementById('order-inline-login-form');
-  if (form) {
-    form.addEventListener('submit', (e) => handleOrderLoginSubmit(e));
-  }
-}
-
-/**
- * Handle order page inline login submission
- */
-async function handleOrderLoginSubmit(e) {
-  e.preventDefault();
-
-  const emailInput = document.getElementById('order-login-email');
-  const passwordInput = document.getElementById('order-login-password');
-  const loadingDiv = document.getElementById('order-login-loading');
-  const errorDiv = document.getElementById('order-login-error');
-
-  if (!emailInput || !passwordInput) return;
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  if (!email || !password) {
-    if (errorDiv) {
-      errorDiv.style.display = 'block';
-      errorDiv.textContent = 'Email dan kata sandi harus diisi';
-    }
-    return;
-  }
-
-  try {
-    // Show loading state
-    if (loadingDiv) loadingDiv.style.display = 'block';
-    if (errorDiv) errorDiv.style.display = 'none';
-
-    // Call login API
-    const result = await APIClient.login(email, password);
-
-    if (!result.success) {
-      throw new Error(result.message || 'Login gagal');
-    }
-
-    // Save token
-    const token = result.data?.token || result.data?.accessToken;
-    if (token) {
-      sessionStorage.setItem('auth_token', token);
-      sessionStorage.setItem('user_data', JSON.stringify(result.data));
-    }
-
-    // Update AuthManager
-    AuthManager.setCurrentUser(result.data);
-
-    showSuccess('✓ Berhasil', 'Login berhasil');
-
-    // Refresh page to load order summary
-    setTimeout(() => {
-      location.reload();
-    }, 500);
-
-  } catch (error) {
-    console.error('Login error:', error);
-    if (errorDiv) {
-      errorDiv.style.display = 'block';
-      errorDiv.textContent = error.message || 'Terjadi kesalahan saat login';
-    }
-  } finally {
-    if (loadingDiv) loadingDiv.style.display = 'none';
   }
 }
 
