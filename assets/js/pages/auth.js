@@ -32,6 +32,55 @@ import {
 } from '../modules/unified-utils.js';
 
 // ============================================================================
+// GLOBAL STATE - Define early
+// ============================================================================
+
+let googleSignInInitialized = false; // Guard against multiple initialization
+
+/**
+ * Handle Google OAuth response - Define EARLY before Google SDK loads
+ * This must be on window object and defined before Google SDK tries to use it
+ */
+window.handleGoogleSignIn = async function(response) {
+  if (!response.credential) {
+    console.warn('[Auth Google] No credential in response');
+    return;
+  }
+
+  try {
+    showLoading('Google Sign-In', 'Memproses...');
+
+    // Verify token with GAS
+    const result = await APIClient.verifyGoogleToken(response.credential);
+
+    if (!result.success) {
+      throw new Error(result.message || 'Google Sign-In gagal');
+    }
+
+    if (!result.data) {
+      throw new Error('Data user tidak ditemukan');
+    }
+
+    // Save session
+    AuthManager.saveSession(result.data);
+
+    hideLoading();
+    showSuccess(
+      '✓ Google Login Sukses!',
+      `Selamat datang, ${result.data.displayName}!`
+    );
+
+    // Redirect to dashboard
+    setTimeout(() => {
+      window.location.href = '/dashboard/';
+    }, 1500);
+  } catch (error) {
+    hideLoading();
+    handleAPIError(error);
+  }
+};
+
+// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
@@ -298,77 +347,55 @@ async function handleLogin(e) {
 // GOOGLE SIGN-IN
 // ============================================================================
 
-/**
- * Handle Google OAuth response
- */
-window.handleGoogleSignIn = async function(response) {
-  if (!response.credential) {
-    console.warn('[Auth Google] No credential in response');
+// window.handleGoogleSignIn is defined at the top of the file as a global
+// to ensure it's available when Google SDK loads
+
+
+function initializeGoogleSignIn() {
+  // Guard: prevent multiple initialization
+  if (googleSignInInitialized) {
+    console.debug('[Auth Google] Already initialized, skipping');
     return;
   }
 
-  try {
+  // Mark as initializing to prevent race conditions
+  googleSignInInitialized = true;
 
-    showLoading('Google Sign-In', 'Memproses...');
+  const maxAttempts = 100; // 100 * 100ms = 10 seconds max
+  let attempts = 0;
 
-    // Verify token with GAS
-    const result = await APIClient.verifyGoogleToken(response.credential);
+  const initGoogleSDK = () => {
+    attempts++;
 
-    if (!result.success) {
-      throw new Error(result.message || 'Google Sign-In gagal');
-    }
-
-    if (!result.data) {
-      throw new Error('Data user tidak ditemukan');
-    }
-
-    // Save session
-    AuthManager.saveSession(result.data);
-
-    hideLoading();
-    showSuccess(
-      '✓ Google Login Sukses!',
-      `Selamat datang, ${result.data.displayName}!`
-    );
-
-    // Redirect to dashboard
-    setTimeout(() => {
-      window.location.href = '/dashboard/';
-    }, 1500);
-  } catch (error) {
-    hideLoading();
-    handleAPIError(error);
-  }
-};
-
-/**
- * Initialize Google Sign-In button
- * Waits for Google SDK to load before initializing
- */
-function initializeGoogleSignIn() {
-  // Wait for Google SDK to load
-  const waitForGoogle = setInterval(() => {
-    try {
-      if (typeof google === 'undefined') {
-        console.debug('[Auth Google] Waiting for Google SDK to load...');
+    // Check if Google SDK is loaded
+    if (typeof google === 'undefined' || !google.accounts?.id) {
+      if (attempts > maxAttempts) {
+        console.error('[Auth Google] Google SDK failed to load after 10 seconds');
+        googleSignInInitialized = false; // Reset flag on failure
         return;
       }
+      setTimeout(initGoogleSDK, 100);
+      return;
+    }
 
-      // Clear the interval
-      clearInterval(waitForGoogle);
-
+    try {
       console.info('[Auth Google] SDK loaded, initializing...');
 
+      // Initialize Google Sign-In
       google.accounts.id.initialize({
         client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
-        callback: window.handleGoogleSignIn,
-        auto_select: false
+        callback: window.handleGoogleSignIn, // Uses global callback defined earlier
+        auto_select: false,
+        itp_support: false // Avoid third-party cookie conflicts
       });
 
-      // Find and render Google button from g_id_onload
-      const googleOnLoad = document.getElementById('g_id_onload');
-      if (googleOnLoad) {
-        google.accounts.id.renderButton(googleOnLoad, {
+      // Find and render Google button
+      const googleButtonContainer = document.getElementById('g_id_onload');
+      if (googleButtonContainer) {
+        // Clear previous renders if any
+        googleButtonContainer.innerHTML = '';
+        
+        google.accounts.id.renderButton(googleButtonContainer, {
           type: 'standard',
           size: 'large',
           theme: 'outline',
@@ -376,21 +403,21 @@ function initializeGoogleSignIn() {
           shape: 'rectangular',
           logo_alignment: 'left'
         });
+
+        console.info('[Auth Google] Google Sign-In button rendered');
+      } else {
+        console.warn('[Auth Google] Google button container (#g_id_onload) not found');
       }
 
       console.info('[Auth Google] Google Sign-In ready');
     } catch (error) {
-      console.warn('[Auth Google] Error initializing:', error);
+      console.error('[Auth Google] Error initializing:', error.message);
+      googleSignInInitialized = false; // Reset flag on error
     }
-  }, 100);
+  };
 
-  // Timeout after 10 seconds if SDK doesn't load
-  setTimeout(() => {
-    clearInterval(waitForGoogle);
-    if (typeof google === 'undefined') {
-      console.warn('[Auth Google] Google SDK failed to load after 10 seconds');
-    }
-  }, 10000);
+  // Start initialization
+  initGoogleSDK();
 }
 
 // ============================================================================
