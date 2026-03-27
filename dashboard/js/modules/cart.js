@@ -4,31 +4,199 @@
  * Professional cart management for dashboard
  * - Display cart items with prices
  * - Add/remove/modify items
+ * - Inline login if not authenticated
+ * - Display addons and promo
  * - Proceed to checkout
- * - Save to order
  */
 
 import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
-import { showSuccess, showError } from '/assets/js/modules/unified-utils.js';
+import { showSuccess, showError, showInfo } from '/assets/js/modules/unified-utils.js';
+import APIClient from '/assets/js/modules/unified-api.js';
+import { AuthManager } from '/assets/js/modules/unified-auth.js';
+import { ADDON_PACKAGES } from '/assets/js/config/api.config.js';
 
 class DashboardCart {
   constructor() {
     this.cart = CartManager.getCart();
     this.container = null;
+    this.currentUser = null;
+    this.isSubmittingLogin = false;
   }
 
   /**
    * Render cart view
    */
-  render(containerElement) {
+  render(containerElement, currentUser = null) {
     this.container = containerElement;
+    this.currentUser = currentUser || AuthManager.getCurrentUser();
 
+    // If not authenticated, show login form first
+    if (!this.currentUser) {
+      this.renderLoginPrompt();
+      return;
+    }
+
+    // If cart is empty, show empty state
     if (CartManager.isEmpty()) {
       this.renderEmptyCart();
       return;
     }
 
+    // Show full cart with items, addons, promo
     this.renderCartContent();
+  }
+
+  /**
+   * Render login prompt (inline login in cart)
+   */
+  renderLoginPrompt() {
+    this.container.innerHTML = `
+      <div style="max-width: 600px; margin: 60px auto; padding: 20px;">
+        <!-- Cart Preview (without checkout) -->
+        <div style="background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+          <h3 style="margin: 0 0 15px 0; font-size: 18px; font-weight: bold;">
+            <i class="fas fa-shopping-cart"></i> Preview Keranjang
+          </h3>
+          <div style="max-height: 200px; overflow-y: auto;">
+            ${CartManager.getCart().items.map(item => `
+              <div style="padding: 10px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between;">
+                <span>${item.domain}</span>
+                <strong>Rp${this.formatCurrency(item.price)}</strong>
+              </div>
+            `).join('')}
+          </div>
+          <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #2563EB;">
+            <span>Total:</span>
+            <span>Rp${this.formatCurrency(CartManager.getSummary().total)}</span>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 30px;">
+          <h2 style="margin: 0 0 10px 0; font-size: 24px; font-weight: bold; text-align: center;">
+            Masuk ke Akun Anda
+          </h2>
+          <p style="text-align: center; color: #666; margin-bottom: 25px;">
+            Silakan login untuk melanjutkan checkout domain Anda
+          </p>
+
+          <form id="inline-login-form" style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- Email Field -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px;">
+                Email
+              </label>
+              <input type="email" id="login-email" name="email" placeholder="nama@email.com" required
+                style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; box-sizing: border-box;">
+            </div>
+
+            <!-- Password Field -->
+            <div>
+              <label style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px;">
+                Kata Sandi
+              </label>
+              <input type="password" id="login-password" name="password" placeholder="••••••••" required
+                style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; box-sizing: border-box;">
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="btn-login" 
+              style="width: 100%; padding: 14px 20px; background-color: #2563EB; color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background-color 0.3s;">
+              <i class="fas fa-sign-in-alt"></i> Masuk
+            </button>
+
+            <!-- Loading State -->
+            <div id="login-loading" style="display: none; text-align: center; color: #2563EB; font-size: 14px;">
+              <i class="fas fa-spinner fa-spin"></i> Memproses...
+            </div>
+
+            <!-- Error Message -->
+            <div id="login-error" style="display: none; background: #fee; border: 1px solid #fcc; color: #c33; padding: 12px; border-radius: 5px; font-size: 14px;"></div>
+          </form>
+
+          <!-- Divider -->
+          <div style="margin: 20px 0; text-align: center; color: #999; font-size: 14px;">atau</div>
+
+          <!-- Register Link -->
+          <p style="text-align: center; color: #666; font-size: 14px; margin: 0;">
+            Belum punya akun? 
+            <a href="/auth#register" style="color: #2563EB; text-decoration: none; font-weight: bold;">Daftar di sini</a>
+          </p>
+        </div>
+      </div>
+
+      <style>
+        .btn-login:hover {
+          background-color: #1d4ed8 !important;
+        }
+
+        .btn-login:disabled {
+          background-color: #999 !important;
+          cursor: not-allowed !important;
+        }
+      </style>
+    `;
+
+    // Attach event listeners
+    const form = this.container.querySelector('#inline-login-form');
+    if (form) {
+      form.addEventListener('submit', (e) => this.handleLoginSubmit(e));
+    }
+  }
+
+  /**
+   * Handle inline login form submission
+   */
+  async handleLoginSubmit(e) {
+    e.preventDefault();
+
+    const email = this.container.querySelector('#login-email').value.trim();
+    const password = this.container.querySelector('#login-password').value;
+    const errorDiv = this.container.querySelector('#login-error');
+    const loadingDiv = this.container.querySelector('#login-loading');
+    const submitBtn = this.container.querySelector('.btn-login');
+
+    // Validate
+    if (!email || !password) {
+      if (errorDiv) errorDiv.textContent = 'Email dan kata sandi tidak boleh kosong';
+      if (errorDiv) errorDiv.style.display = 'block';
+      return;
+    }
+
+    try {
+      // Show loading state
+      if (loadingDiv) loadingDiv.style.display = 'block';
+      if (errorDiv) errorDiv.style.display = 'none';
+      if (submitBtn) submitBtn.disabled = true;
+
+      // Call login API
+      const result = await APIClient.loginUser(email, password);
+
+      if (!result.success || !result.data) {
+        throw new Error(result.message || 'Login gagal. Silakan cek email dan kata sandi Anda.');
+      }
+
+      // Save session
+      AuthManager.saveSession(result.data);
+
+      // Show success message
+      showSuccess('✓ Login Berhasil', 'Anda sudah login. Halaman sedang diperbarui...');
+
+      // Reload cart with user data
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+    } catch (error) {
+      console.error('Login error:', error);
+      if (errorDiv) {
+        errorDiv.textContent = error.message || 'Terjadi kesalahan saat login';
+        errorDiv.style.display = 'block';
+      }
+    } finally {
+      if (loadingDiv) loadingDiv.style.display = 'none';
+      if (submitBtn) submitBtn.disabled = false;
+    }
   }
 
   /**
@@ -57,8 +225,11 @@ class DashboardCart {
    */
   renderCartContent() {
     const { items, subtotal, discount, total } = CartManager.getSummary();
+    const addons = CartManager.getCart().addons || [];
+    const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
 
     let itemsHTML = items.map(item => this.renderCartItem(item)).join('');
+    let addonsHTML = this.renderAddonsSection(addons);
 
     this.container.innerHTML = `
       <div class="cart-content">
@@ -70,6 +241,9 @@ class DashboardCart {
           <div class="cart-items-list">
             ${itemsHTML}
           </div>
+
+          <!-- Addons Section -->
+          ${addonsHTML}
         </div>
 
         <!-- Cart Summary & Checkout -->
@@ -78,9 +252,16 @@ class DashboardCart {
             <h3 style="margin-bottom: 20px; font-size: 18px; font-weight: bold;">Ringkasan Pesanan</h3>
             
             <div class="summary-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd;">
-              <span>Subtotal (${items.length} item):</span>
+              <span>Domain (${items.length}):</span>
               <strong>Rp${this.formatCurrency(subtotal)}</strong>
             </div>
+
+            ${addonsTotal > 0 ? `
+              <div class="summary-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd;">
+                <span>Addon (${addons.length}):</span>
+                <strong>Rp${this.formatCurrency(addonsTotal)}</strong>
+              </div>
+            ` : ''}
 
             ${discount > 0 ? `
               <div class="summary-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; color: #27ae60;">
@@ -91,7 +272,7 @@ class DashboardCart {
 
             <div class="summary-row" style="display: flex; justify-content: space-between; padding: 15px 0; font-size: 18px; font-weight: bold; color: #2563EB;">
               <span>Total:</span>
-              <strong>Rp${this.formatCurrency(total)}</strong>
+              <strong>Rp${this.formatCurrency(total + addonsTotal)}</strong>
             </div>
 
             <!-- Promo Code Input -->
@@ -107,6 +288,7 @@ class DashboardCart {
                   Gunakan
                 </button>
               </div>
+              <div id="promo-message" style="display: none; margin-top: 8px; font-size: 13px;"></div>
             </div>
 
             <!-- Action Buttons -->
@@ -165,6 +347,7 @@ class DashboardCart {
     window.proceedToCheckout = () => this.proceedToCheckout();
     window.applyPromoCode = () => this.applyPromoCode();
     window.removeCartItem = (domain) => this.removeItem(domain);
+    window.removeAddon = (addonId) => this.removeAddon(addonId);
     window.updateCartItemDuration = (domain, duration) => this.updateItemDuration(domain, duration);
   }
 
@@ -201,6 +384,47 @@ class DashboardCart {
             <i class="fas fa-trash"></i> Hapus
           </button>
         </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render addons section (show addons added from order-summary)
+   */
+  renderAddonsSection(addons) {
+    if (!addons || addons.length === 0) {
+      return '';
+    }
+
+    const addonsHTML = addons.map(addon => `
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong style="display: block; margin-bottom: 4px;">${addon.name}</strong>
+          <small style="color: #999;">${addon.duration} tahun</small>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-weight: bold; color: #2563EB; margin-bottom: 6px;">
+            Rp${this.formatCurrency(addon.price)}
+          </div>
+          <button onclick="window.removeAddon && window.removeAddon('${addon.id}')" 
+            style="background: #fee; color: #e74c3c; border: 1px solid #fcc; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 11px;">
+            Hapus
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div style="margin-top: 30px;">
+        <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: bold;">
+          <i class="fas fa-gift"></i> Addon Layanan (${addons.length})
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          ${addonsHTML}
+        </div>
+        <a href="/dashboard/#!order-summary" style="display: inline-block; margin-top: 15px; color: #2563EB; text-decoration: none; font-size: 14px; font-weight: bold;">
+          <i class="fas fa-plus"></i> Tambah Addon
+        </a>
       </div>
     `;
   }
@@ -271,22 +495,66 @@ class DashboardCart {
   }
 
   /**
+   * Remove addon from cart
+   */
+  removeAddon(addonId) {
+    CartManager.removeAddon(addonId);
+    showSuccess('✓ Addon Dihapus', 'Addon dihapus dari keranjang');
+    this.render(this.container, this.currentUser);
+  }
+
+  /**
    * Apply promo code
    */
-  applyPromoCode() {
+  async applyPromoCode() {
     const input = document.getElementById('promo-code-input');
-    if (!input) return;
+    const msgDiv = document.getElementById('promo-message');
+    if (!input || !msgDiv) return;
 
     const code = input.value.trim().toUpperCase();
     if (!code) {
-      showError('⚠️ Kode Kosong', 'Masukkan kode promo terlebih dahulu');
+      msgDiv.textContent = 'Masukkan kode promo terlebih dahulu';
+      msgDiv.style.color = '#e74c3c';
+      msgDiv.style.display = 'block';
       return;
     }
 
-    // TODO: Validate coupon with GAS backend
-    CartManager.applyCoupon(code);
-    showSuccess('✓ Kode Diterapkan', `Kode promo ${code} sudah diterapkan`);
-    this.render(this.container);
+    try {
+      // Show loading state
+      const btn = input.nextElementSibling;
+      if (btn) btn.disabled = true;
+
+      // Validate promo with backend
+      const result = await APIClient.call('validatePromo', { code }, { method: 'POST' });
+
+      if (!result.success) {
+        throw new Error(result.message || 'Kode promo tidak valid');
+      }
+
+      // Apply promo to cart
+      CartManager.applyCoupon(code, result.data?.discount || 0);
+
+      // Show success message
+      msgDiv.textContent = `✓ ${result.data?.message || 'Kode promo berhasil diterapkan'}`;
+      msgDiv.style.color = '#27ae60';
+      msgDiv.style.display = 'block';
+
+      showSuccess('✓ Promo Diterapkan', `Diskon Rp${this.formatCurrency(result.data?.discount || 0)} diterapkan!`);
+
+      // Re-render cart with updated prices
+      setTimeout(() => {
+        this.render(this.container, this.currentUser);
+      }, 500);
+
+    } catch (error) {
+      console.error('Promo validation error:', error);
+      msgDiv.textContent = error.message || 'Gagal memvalidasi kode promo';
+      msgDiv.style.color = '#e74c3c';
+      msgDiv.style.display = 'block';
+    } finally {
+      const btn = input.nextElementSibling;
+      if (btn) btn.disabled = false;
+    }
   }
 
   /**
@@ -329,7 +597,7 @@ export async function render(currentUser) {
 
   try {
     const cart = new DashboardCart();
-    cart.render(container);
+    cart.render(container, currentUser);
   } catch (error) {
     console.error('Error rendering cart:', error);
     container.innerHTML = `
