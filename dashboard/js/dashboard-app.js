@@ -62,12 +62,6 @@ class DashboardApp {
         requiresAuth: true,
         loadModule: () => import('./modules/dashboard.js')
       },
-      '/dashboard/order-summary': {
-        page: 'order-summary',
-        title: 'Ringkasan Pesanan',
-        requiresAuth: false,
-        loadModule: () => import('./modules/order-summary.js')
-      },
       '/dashboard/profile': {
         page: 'profile',
         title: 'Profil Saya',
@@ -103,12 +97,6 @@ class DashboardApp {
         title: 'Domain Saya',
         requiresAuth: true,
         loadModule: () => import('./modules/domains.js')
-      },
-      '/dashboard/cart': {
-        page: 'cart',
-        title: 'Keranjang Saya',
-        requiresAuth: false,
-        loadModule: () => import('./modules/cart.js')
       },
       '/dashboard/wishlist': {
         page: 'wishlist',

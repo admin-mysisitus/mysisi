@@ -414,9 +414,9 @@ function addToCart() {
 
     showSuccess('✓ Ditambahkan', 'Domain sudah di keranjang');
 
-    // Redirect to cart
+    // Redirect to standalone cart page
     setTimeout(() => {
-      window.location.href = '/dashboard/#!cart';
+      window.location.href = '/cart/';
     }, 1000);
 
   } catch (error) {
