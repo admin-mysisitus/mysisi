@@ -238,27 +238,37 @@ function updatePriceSummary() {
   const discount = orderState.promoDiscount || 0;
   const total = subtotal + ppn - discount;
 
-  // Update DOM
-  document.getElementById('domain-price').textContent = `Rp ${formatNumber(domainPrice)}`;
+  // Update DOM - with defensive checks
+  const domainPriceEl = document.getElementById('domain-price');
+  if (domainPriceEl) domainPriceEl.textContent = `Rp ${formatNumber(domainPrice)}`;
   
   if (addonTotal > 0) {
-    document.getElementById('addons-subtotal').style.display = 'flex';
-    document.getElementById('addons-total').textContent = `Rp ${formatNumber(addonTotal)}`;
+    const addonSubEl = document.getElementById('addons-subtotal');
+    if (addonSubEl) addonSubEl.style.display = 'flex';
+    const addontotalEl = document.getElementById('addons-total');
+    if (addontotalEl) addontotalEl.textContent = `Rp ${formatNumber(addonTotal)}`;
   } else {
-    document.getElementById('addons-subtotal').style.display = 'none';
+    const addonSubEl = document.getElementById('addons-subtotal');
+    if (addonSubEl) addonSubEl.style.display = 'none';
   }
 
-  document.getElementById('subtotal').textContent = `Rp ${formatNumber(subtotal)}`;
-  document.getElementById('ppn').textContent = `Rp ${formatNumber(ppn)}`;
-  document.getElementById('total').textContent = `Rp ${formatNumber(total)}`;
+  const subtotalEl = document.getElementById('subtotal');
+  if (subtotalEl) subtotalEl.textContent = `Rp ${formatNumber(subtotal)}`;
+  const ppnEl = document.getElementById('ppn');
+  if (ppnEl) ppnEl.textContent = `Rp ${formatNumber(ppn)}`;
+  const totalEl = document.getElementById('total');
+  if (totalEl) totalEl.textContent = `Rp ${formatNumber(total)}`;
 
   // Show/hide promo discount row
   const promoRow = document.getElementById('promo-discount-row');
-  if (discount > 0) {
-    promoRow.style.display = 'block';
-    document.getElementById('promo-discount-amount').textContent = `-Rp ${formatNumber(discount)}`;
-  } else {
-    promoRow.style.display = 'none';
+  if (promoRow) {
+    if (discount > 0) {
+      promoRow.style.display = 'block';
+      const discountAmtEl = document.getElementById('promo-discount-amount');
+      if (discountAmtEl) discountAmtEl.textContent = `-Rp ${formatNumber(discount)}`;
+    } else {
+      promoRow.style.display = 'none';
+    }
   }
 }
 
