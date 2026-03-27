@@ -83,16 +83,31 @@ export class APIClient {
 
   /**
    * Make actual HTTP request
-   * Using URLSearchParams for ALL requests - avoids CORS preflight
-   * Per sampel-mekanisme-GAS: application/x-www-form-urlencoded works with GAS
-   * ⚠️ Do NOT set Content-Type header - let browser handle it
+   * Using FormData for ALL requests - matches sampel-mekanisme-GAS pattern
+   * FormData automatically becomes multipart/form-data - NO CORS preflight needed
+   * Per sampel-mekanisme-GAS: this is the ONLY way to reliably work with GAS
+   * 
+   * DO NOT use:
+   * - Content-Type: application/json (triggers preflight - GAS doesn't like it)
+   * - URLSearchParams (less reliable than FormData)
+   * - Custom headers (can trigger preflight)
    */
   static async makeRequest(action, data, method, timeout) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      const params = new URLSearchParams({ action, ...data });
+      // Build FormData (automatically becomes multipart/form-data)
+      const formData = new FormData();
+      formData.append('action', action);
+      
+      // Add all data fields
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
+      });
+
       let url = `${GAS_CONFIG.URL}`;
       let options = {
         method: method,
@@ -100,11 +115,14 @@ export class APIClient {
       };
 
       if (method === 'GET') {
+        // For GET, append as query string
+        const params = new URLSearchParams({ action, ...data });
         url = `${GAS_CONFIG.URL}?${params}`;
       } else if (method === 'POST') {
-        // URLSearchParams = application/x-www-form-urlencoded
-        // NO custom headers to avoid CORS preflight
-        options.body = params;
+        // For POST, use FormData (multipart/form-data)
+        // DO NOT set Content-Type header - let browser handle it
+        // DO NOT set other headers that trigger preflight
+        options.body = formData;
       }
 
       const response = await fetch(url, options);
