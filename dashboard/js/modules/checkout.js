@@ -22,8 +22,22 @@ let checkoutState = {
 export async function render(currentUser) {
   try {
     // Extract domain from URL parameter
-    const params = new URLSearchParams(window.location.search);
-    const domain = params.get('domain');
+    // Support both: /page?domain=x (regular) and /#!page?domain=x (hash routing)
+    let domain = null;
+    
+    // Try regular search params first
+    const searchParams = new URLSearchParams(window.location.search);
+    domain = searchParams.get('domain');
+    
+    // If not found, try extracting from hash
+    if (!domain) {
+      const hash = window.location.hash;
+      if (hash && hash.includes('?')) {
+        const queryPart = hash.split('?')[1];
+        const hashParams = new URLSearchParams(queryPart);
+        domain = hashParams.get('domain');
+      }
+    }
 
     if (domain) {
       parseAndStoreDomain(domain);

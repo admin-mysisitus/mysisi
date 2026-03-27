@@ -115,8 +115,12 @@ class DashboardApp {
 
   handleRouteChange() {
     const hash = window.location.hash;
-    const route = hash.replace('#!', '') || '/dashboard/';
-    this.navigate(route);
+    // Extract route without query parameters
+    // From: #!checkout?domain=example.com
+    // To: /dashboard/checkout
+    const routePart = hash.replace('#!', '').split('?')[0] || '/dashboard/';
+    const baseRoute = routePart.startsWith('/dashboard/') ? routePart : `/dashboard/${routePart}`;
+    this.navigate(baseRoute);
   }
 
   async navigate(route) {
