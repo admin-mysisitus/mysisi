@@ -267,8 +267,8 @@
           );
           // Auto-redirect after 3 seconds to CART (if items exist) or dashboard
           setTimeout(() => {
-            const cartSummary = JSON.parse(localStorage.getItem('sisitus_cart') || '{"items":[]}');
-            if (cartSummary.items && cartSummary.items.length > 0) {
+            const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
+            if (cartSummary.domains && cartSummary.domains.length > 0) {
               window.location.href = '/dashboard/#!cart';
             } else {
               window.location.href = '/dashboard/';

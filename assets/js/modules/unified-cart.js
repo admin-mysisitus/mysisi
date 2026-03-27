@@ -37,7 +37,7 @@ export class CartManager {
     const existingIndex = cart.domains.findIndex(d => d.domain.toLowerCase() === domain.toLowerCase());
     
     if (existingIndex >= 0) {
-      cartArray.domains[existingIndex] = {
+      cart.domains[existingIndex] = {
         ...cart.domains[existingIndex],
         ...options,
         lastUpdated: Date.now()
