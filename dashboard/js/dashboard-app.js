@@ -21,12 +21,8 @@ class DashboardApp {
     this.navbar = null;
     this.sidebar = null;
 
-    // Check auth first
-    if (!this.currentUser) {
-      window.location.href = '/auth/';
-      return;
-    }
-
+    // Note: Auth check moved to individual pages that require it
+    // Cart page allows inline login for guests
     this.init();
   }
 
@@ -63,56 +59,67 @@ class DashboardApp {
       '/dashboard/': {
         page: 'dashboard',
         title: 'Dashboard',
+        requiresAuth: true,
         loadModule: () => import('./modules/dashboard.js')
       },
       '/dashboard/order-summary': {
         page: 'order-summary',
         title: 'Ringkasan Pesanan',
+        requiresAuth: false,
         loadModule: () => import('./modules/order-summary.js')
       },
       '/dashboard/profile': {
         page: 'profile',
         title: 'Profil Saya',
+        requiresAuth: true,
         loadModule: () => import('./modules/profile.js')
       },
       '/dashboard/orders': {
         page: 'orders',
         title: 'Pesanan Saya',
+        requiresAuth: true,
         loadModule: () => import('./modules/orders.js')
       },
       '/dashboard/checkout': {
         page: 'checkout',
         title: 'Beli Domain',
+        requiresAuth: true,
         loadModule: () => import('./modules/checkout.js')
       },
       '/dashboard/payment': {
         page: 'payment',
         title: 'Pembayaran',
+        requiresAuth: true,
         loadModule: () => import('./modules/payment.js')
       },
       '/dashboard/invoices': {
         page: 'invoices',
         title: 'Invoice',
+        requiresAuth: true,
         loadModule: () => import('./modules/invoices.js')
       },
       '/dashboard/domains': {
         page: 'domains',
         title: 'Domain Saya',
+        requiresAuth: true,
         loadModule: () => import('./modules/domains.js')
       },
       '/dashboard/cart': {
         page: 'cart',
         title: 'Keranjang Saya',
+        requiresAuth: false,
         loadModule: () => import('./modules/cart.js')
       },
       '/dashboard/wishlist': {
         page: 'wishlist',
         title: 'Wishlist Saya',
+        requiresAuth: true,
         loadModule: () => import('./modules/wishlist.js')
       },
       '/dashboard/support': {
         page: 'support',
         title: 'Support',
+        requiresAuth: true,
         loadModule: () => import('./modules/support.js')
       }
     };
@@ -136,13 +143,20 @@ class DashboardApp {
       return;
     }
 
+    // Check if route requires authentication
+    const routeConfig = this.routes[route];
+    if (routeConfig.requiresAuth && !this.currentUser) {
+      // Redirect to auth page
+      window.location.href = '/auth/';
+      return;
+    }
+
     this.currentRoute = route;
 
     // Update sidebar active state
     this.sidebar.setActive(route);
 
     // Update page title
-    const routeConfig = this.routes[route];
     document.title = `${routeConfig.title} - SISITUS Dashboard`;
 
     // Load and render page
