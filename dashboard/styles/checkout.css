@@ -56,6 +56,21 @@
   background: #f8f9fa;
 }
 
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-primary, #3498db);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #2c3e50;
+}
+
 .checkout-wrapper {
   max-width: 900px;
   margin: 0 auto;
@@ -133,6 +148,23 @@
 /* ============================================================================
    CHECKOUT SECTIONS
    ============================================================================ */
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-primary, #3498db);
+  font-size: 1.3rem;
+  color: #2c3e50;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
 .checkout-section {
   background: white;
@@ -482,6 +514,28 @@
   flex-shrink: 0;
 }
 
+/* PROMO CODE INPUT */
+.form-group input[name="promoCode"] {
+  background: #fafafa;
+  border: 1px solid #ddd;
+}
+
+.form-group input[name="promoCode"]:focus {
+  background: white;
+  border-color: #f39c12;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+}
+
+.form-group input[name="promoCode"].valid {
+  border-color: #27ae60;
+  background: #f0fdf4;
+}
+
+.form-group input[name="promoCode"].invalid {
+  border-color: #c0392b;
+  background: #fef2f2;
+}
+
 /* ============================================================================
    ORDER SUMMARY
    ============================================================================ */
@@ -528,6 +582,29 @@
   color: #e67e22;
   font-size: 1.1rem;
   text-align: right;
+}
+
+.summary-item.discount {
+  color: #27ae60;
+  font-weight: 600;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-item.discount .price {
+  color: #27ae60;
+  font-weight: 700;
+}
+
+.summary-item.total .price {
+  font-size: 1.3rem;
+  color: #e67e22;
+}
+
+.summary-divider {
+  border-top: 1px solid var(--color-border, #e0e0e0);
+  margin: 1rem 0;
 }
 
 .empty-state {
@@ -664,14 +741,100 @@
   width: 100%;
 }
 
-.btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.btn-checkout {
+  background: linear-gradient(135deg, #27ae60, #229954);
+  color: white;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.btn-checkout:hover {
+  background: linear-gradient(135deg, #229954, #1e8449);
+  box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-checkout:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* ============================================================================
    NOTIFICATION TOASTS
    ============================================================================ */
+
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-error {
+  background: #fadbd8;
+  border-left: 4px solid #c0392b;
+  color: #c0392b;
+}
+
+.alert-success {
+  background: #d5f4e6;
+  border-left: 4px solid #27ae60;
+  color: #27ae60;
+}
+
+.alert-info {
+  background: #d6eaf8;
+  border-left: 4px solid #3498db;
+  color: #1a5276;
+}
+
+.alert-dismissible {
+  position: relative;
+  padding-right: 35px;
+}
+
+.btn-close {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
 
 .toast {
   position: fixed;

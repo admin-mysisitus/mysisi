@@ -38,21 +38,21 @@ import {
 document.addEventListener('DOMContentLoaded', initPage);
 
 function initPage() {
-  console.log('[Auth Page] Initializing...');
+
 
   // 1. Check for email verification token (highest priority)
   const urlParams = new URLSearchParams(window.location.search);
   const verifyToken = urlParams.get('verify');
 
   if (verifyToken) {
-    console.log('[Auth Page] Verification token detected');
+
     handleEmailVerification(verifyToken);
     return; // Stop further initialization
   }
 
   // 2. If already logged in, redirect to dashboard
   if (AuthManager.isLoggedIn()) {
-    console.log('[Auth Page] User already logged in, redirecting to dashboard');
+
     window.location.href = '/dashboard/';
     return; // Stop further initialization
   }
@@ -62,7 +62,7 @@ function initPage() {
   setupAuthForms();
   initializeGoogleSignIn();
 
-  console.log('[Auth Page] Ready');
+
 }
 
 // ============================================================================
@@ -73,8 +73,6 @@ function initPage() {
  * Handle email verification token from registration link
  */
 async function handleEmailVerification(token) {
-  console.log('[Auth] Processing email verification...');
-
   const wrapper = document.querySelector('.auth-wrapper');
 
   try {
@@ -100,10 +98,7 @@ async function handleEmailVerification(token) {
     }
 
     // Call GAS to verify token
-    console.log('[Auth] Calling API to verify token...');
     const response = await APIClient.verifyEmailToken(token);
-
-    console.log('[Auth] API Response:', response);
 
     if (!response.success) {
       throw new Error(response.message || 'Verifikasi email gagal');
@@ -114,7 +109,6 @@ async function handleEmailVerification(token) {
     }
 
     // Save session (auto-login)
-    console.log('[Auth] Saving session & auto-logging in...');
     AuthManager.saveSession(response.data);
 
     // Show success message
@@ -140,11 +134,9 @@ async function handleEmailVerification(token) {
 
     // Redirect to dashboard after 2 seconds
     setTimeout(() => {
-      console.log('[Auth] Redirecting to dashboard...');
       window.location.href = '/dashboard/';
     }, 2000);
   } catch (error) {
-    console.error('[Auth Verify Error]:', error);
 
     // Show error UI
     if (wrapper) {
@@ -209,11 +201,10 @@ async function handleRegister(e) {
     }
 
     if (whatsapp && !isValidPhoneNumber(whatsapp)) {
-      throw new Error('Nomor WhatsApp tidak valid (contoh: 08xxxxxxxxxx)');
+      throw new Error('Nomor WhatsApp tidak valid (format: 08xxxxxxxxxx, +62xxxxxxxxxx, atau 62xxxxxxxxxx)');
     }
 
     // Show loading state
-    console.log('[Auth Register] Starting registration for:', email);
     setButtonLoading(btn, true, '⏳ Mendaftar...');
 
     // Call API
@@ -237,9 +228,7 @@ async function handleRegister(e) {
       switchTab('login');
     }, 3000);
 
-    console.log('[Auth Register] Registration successful');
   } catch (error) {
-    console.error('[Auth Register Error]:', error);
     handleAPIError(error);
     setButtonLoading(btn, false);
   }
@@ -273,7 +262,6 @@ async function handleLogin(e) {
     }
 
     // Show loading state
-    console.log('[Auth Login] Starting login for:', email);
     setButtonLoading(btn, true, '⏳ Login...');
 
     // Call API
@@ -288,7 +276,6 @@ async function handleLogin(e) {
     }
 
     // Save session
-    console.log('[Auth Login] Login successful');
     AuthManager.saveSession(response.data);
 
     // Show success message
@@ -299,11 +286,9 @@ async function handleLogin(e) {
 
     // Redirect to dashboard
     setTimeout(() => {
-      console.log('[Auth Login] Redirecting to dashboard...');
       window.location.href = '/dashboard/';
     }, 1500);
   } catch (error) {
-    console.error('[Auth Login Error]:', error);
     handleAPIError(error);
     setButtonLoading(btn, false);
   }
@@ -323,14 +308,11 @@ window.handleGoogleSignIn = async function(response) {
   }
 
   try {
-    console.log('[Auth Google] Processing Google Sign-In...');
 
     showLoading('Google Sign-In', 'Memproses...');
 
     // Verify token with GAS
     const result = await APIClient.verifyGoogleToken(response.credential);
-
-    console.log('[Auth Google] API Response:', result);
 
     if (!result.success) {
       throw new Error(result.message || 'Google Sign-In gagal');
@@ -351,11 +333,9 @@ window.handleGoogleSignIn = async function(response) {
 
     // Redirect to dashboard
     setTimeout(() => {
-      console.log('[Auth Google] Redirecting to dashboard...');
       window.location.href = '/dashboard/';
     }, 1500);
   } catch (error) {
-    console.error('[Auth Google Error]:', error);
     hideLoading();
     handleAPIError(error);
   }
@@ -371,7 +351,7 @@ function initializeGoogleSignIn() {
       return;
     }
 
-    console.log('[Auth Google] Initializing Google Sign-In...');
+
 
     google.accounts.id.initialize({
       client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
@@ -433,13 +413,13 @@ function setupAuthForms() {
   const registerForm = document.getElementById('register-form');
   if (registerForm) {
     registerForm.addEventListener('submit', handleRegister);
-    console.log('[Auth Forms] Register form setup');
+
   }
 
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', handleLogin);
-    console.log('[Auth Forms] Login form setup');
+
   }
 }
 

@@ -5,14 +5,16 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showSuccess, showError, showLoading, hideLoading } from '/assets/js/modules/unified-utils.js';
-import { DOMAIN_PACKAGES, validateEmail, validatePhone } from '../utils/validators.js';
+import { showSuccess, showError, showLoading, hideLoading, formatCurrency, isValidEmail, isValidPhoneNumber } from '/assets/js/modules/unified-utils.js';
+import { DOMAIN_PACKAGES } from '/assets/js/config/api.config.js';
 
 let checkoutState = {
   domain: null,
   domainWithoutExt: null,
   extension: null,
   selectedPackage: null,
+  promoCode: '',
+  discount: 0,
   formData: {}
 };
 
@@ -160,6 +162,14 @@ function setupFormValidation(currentUser) {
     field.addEventListener('blur', () => validateField(field));
     field.addEventListener('input', () => validateField(field));
   });
+
+  // Handle promo code input
+  const promoInput = form.querySelector('[name="promoCode"]');
+  if (promoInput) {
+    promoInput.addEventListener('blur', async () => {
+      await validateAndApplyPromoCode(promoInput.value.trim());
+    });
+  }
 }
 
 function validateField(field) {
@@ -175,14 +185,14 @@ function validateField(field) {
       break;
 
     case 'email':
-      if (!validateEmail(value)) {
+      if (!isValidEmail(value)) {
         error = 'Email tidak valid';
       }
       break;
 
     case 'phone':
-      if (!validatePhone(value)) {
-        error = 'Format: 08xxxxxxxxxx (8-11 digit)';
+      if (!isValidPhoneNumber(value)) {
+        error = 'Format: 08xxxxxxxxxx, +62xxxxxxxxxx, atau 62xxxxxxxxxx';
       }
       break;
 
@@ -207,6 +217,52 @@ function validateField(field) {
   }
 }
 
+async function validateAndApplyPromoCode(code) {
+  try {
+    if (!code) {
+      // Clear promo if empty
+      checkoutState.promoCode = '';
+      checkoutState.discount = 0;
+      renderOrderSummary();
+      return;
+    }
+
+    // Validate promo code via API
+    const result = await APIClient.validatePromoCode(code);
+    
+    if (result.success && result.data) {
+      // Promo is valid
+      checkoutState.promoCode = result.data.code;
+      
+      // Calculate discount based on type
+      const baseDomainPrice = 299000;
+      const pkg = DOMAIN_PACKAGES.find(p => p.id === checkoutState.selectedPackage);
+      const subtotal = baseDomainPrice + pkg.price;
+      
+      if (result.data.discountType === 'percentage') {
+        checkoutState.discount = Math.round(subtotal * (result.data.discount / 100));
+      } else {
+        checkoutState.discount = result.data.discount;
+      }
+      
+      renderOrderSummary();
+      showSuccessMessage(`✅ ${result.message}`);
+    } else {
+      // Promo is invalid
+      checkoutState.promoCode = '';
+      checkoutState.discount = 0;
+      renderOrderSummary();
+      showErrorMessage(result.message || 'Kode promo tidak valid');
+    }
+  } catch (error) {
+    console.error('Promo validation error:', error);
+    checkoutState.promoCode = '';
+    checkoutState.discount = 0;
+    renderOrderSummary();
+    showErrorMessage('Gagal validasi kode promo');
+  }
+}
+
 function validateCheckoutForm() {
   const form = document.getElementById('checkout-form');
   if (!form) return false;
@@ -223,13 +279,13 @@ function validateCheckoutForm() {
     return false;
   }
 
-  if (!validateEmail(email)) {
+  if (!isValidEmail(email)) {
     showErrorMessage('Email tidak valid');
     return false;
   }
 
-  if (!validatePhone(phone)) {
-    showErrorMessage('Format phone: 08xxxxxxxxxx (8-11 digit)');
+  if (!isValidPhoneNumber(phone)) {
+    showErrorMessage('Format nomor: 08xxxxxxxxxx, +62xxxxxxxxxx, atau 62xxxxxxxxxx');
     return false;
   }
 
@@ -268,7 +324,18 @@ function renderOrderSummary() {
   const pkg = DOMAIN_PACKAGES.find(p => p.id === checkoutState.selectedPackage);
   const subtotal = baseDomainPrice + pkg.price;
   const ppn = Math.round(subtotal * 0.11);
-  const total = subtotal + ppn;
+  const discount = checkoutState.discount || 0;
+  const total = subtotal + ppn - discount;
+
+  let discountHtml = '';
+  if (discount > 0) {
+    discountHtml = `
+      <div class="summary-item discount">
+        <span>Diskon (${checkoutState.promoCode})</span>
+        <span class="price">-Rp ${formatPrice(discount)}</span>
+      </div>
+    `;
+  }
 
   container.innerHTML = `
     <div class="order-summary-card">
@@ -295,6 +362,8 @@ function renderOrderSummary() {
         <span>PPN (11%)</span>
         <span class="price">Rp ${formatPrice(ppn)}</span>
       </div>
+
+      ${discountHtml}
 
       <div class="summary-divider"></div>
 
@@ -323,7 +392,8 @@ async function processCheckout(currentUser) {
     const pkg = DOMAIN_PACKAGES.find(p => p.id === checkoutState.selectedPackage);
     const subtotal = baseDomainPrice + pkg.price;
     const ppn = Math.round(subtotal * 0.11);
-    const total = subtotal + ppn;
+    const discount = checkoutState.discount || 0;
+    const total = subtotal + ppn - discount;
 
     // Show loading
     const btn = document.getElementById('btn-checkout');
@@ -337,10 +407,10 @@ async function processCheckout(currentUser) {
       packageId: checkoutState.selectedPackage,
       packageName: pkg.name,
       addons: '',
-      promoCode: '',
+      promoCode: checkoutState.promoCode,
       subtotal,
       ppn,
-      discount: 0,
+      discount,
       total,
       customerData: {
         name: fullname,

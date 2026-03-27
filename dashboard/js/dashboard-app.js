@@ -6,6 +6,13 @@
 import { DashboardAuth } from './modules/auth.js';
 import { DashboardNavbar } from './components/navbar.js';
 import { DashboardSidebar } from './components/sidebar.js';
+import { showSuccess, showError, showWarning, showInfo } from '/assets/js/modules/unified-utils.js';
+
+// Expose utility functions globally for inline onclick handlers
+window.showSuccess = showSuccess;
+window.showError = showError;
+window.showWarning = showWarning;
+window.showInfo = showInfo;
 
 class DashboardApp {
   constructor() {
@@ -171,9 +178,9 @@ class DashboardApp {
 
   /**
    * Show notification
+   * Note: Uses alert as fallback. Primary notifications use SweetAlert2 (unified-utils.js)
    */
   static showNotification(message, type = 'info') {
-    // TODO: Implement notification system
     alert(message);
   }
 }

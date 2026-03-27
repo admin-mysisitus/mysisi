@@ -23,7 +23,7 @@ class PopupPromo {
   init() {
     // Check if popup already shown (dan belum lebih dari 3 jam)
     if (this.isAlreadyShown()) {
-      console.log('[PopupPromo] Popup sudah ditampilkan, akan ditampilkan kembali dalam 3 jam');
+
       return;
     }
 
@@ -264,10 +264,8 @@ window.addEventListener('load', () => {
       actionUrl: '/promo/',
       actionTarget: '_self',
       onShow: () => {
-        console.log('[PopupPromo] Popup ditampilkan - akan kembali dalam 3 jam');
       },
       onClose: () => {
-        console.log('[PopupPromo] Popup ditutup - ditampilkan ulang dalam 3 jam');
       }
     });
 

@@ -130,11 +130,20 @@ export function showToast(message = '', type = 'success') {
 // ========== FORM VALIDATION ==========
 
 /**
- * Validate email format
+ * Validate email format (RFC 5322 simplified)
  */
 export function isValidEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
+}
+
+/**
+ * Enhanced email validation with stricter rules
+ */
+export function isValidEmailStrict(email) {
+  // More comprehensive regex
+  const regex = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
+  return regex.test(email) && email.length <= 254;
 }
 
 /**
@@ -179,18 +188,24 @@ export function isValidPassword(password) {
 }
 
 /**
- * Validate phone number (Indonesia)
+ * Validate phone number (Indonesia) - Basic
  */
 export function isValidPhoneNumber(phone) {
-  const regex = /^(\+62|62|0)8\d{8,11}$/;
-  return regex.test(phone.replace(/\D/g, ''));
+  // Accept formats: +628xxx, 628xxx, 08xxx
+  // Synchronized with backend validation (gas.gs validatePhoneNumber function)
+  const regex = /^(\+62|62|0)8\d{8,12}$/;
+  return regex.test(phone.replace(/[\s\-]/g, ''));
 }
 
 /**
- * Validate domain format
+ * Validate domain format - Synchronized with backend validateDomainFormat
+ * Frontend companion validation for consistency
  */
 export function isValidDomain(domain) {
-  const regex = /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\.[a-z]{2,}$/i;
+  // Remove protocol if present - match backend cleanup
+  domain = domain.replace(/^https?:\/\//i, '').toLowerCase().trim();
+  // Pattern matches backend validation: example.com, site.co.id, subdomain.site.co.id
+  const regex = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
   return regex.test(domain);
 }
 
@@ -479,3 +494,8 @@ export const Utilities = {
   showLoadingOverlay,
   hideLoadingOverlay
 };
+
+// ========== DOMAIN PACKAGES EXPORT ==========
+// Re-export from api.config for consolidation
+import { DOMAIN_PACKAGES } from '../config/api.config.js';
+export { DOMAIN_PACKAGES };

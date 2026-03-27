@@ -5,14 +5,18 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showError, showSuccess, showInfo, showWarning } from '/assets/js/modules/unified-utils.js';
+import { showError, showSuccess, showWarning, showInfo } from '/assets/js/modules/unified-utils.js';
 
 const ADMIN_WHATSAPP = '6281215289095';
+let currentUser = null;
 let currentOrder = null;
 let currentTransaction = null;
 
-export async function render(currentUser) {
+export async function render(user) {
   try {
+    // Store current user for use in other functions
+    currentUser = user;
+    
     // Get order ID from URL
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get('orderId');
@@ -77,15 +81,28 @@ async function loadOrderData(orderId, currentUser) {
 
 async function generateMidtransToken(orderData) {
   try {
-    // Call GAS to generate Midtrans token
-    const result = await APIClient.generateMidtransToken(orderData.orderId);
+    if (!currentUser) {
+      throw new Error('Data pengguna tidak ditemukan');
+    }
 
-    if (!result.success || !result.snapToken) {
-      throw new Error('Gagal generate token pembayaran');
+    // Call GAS to generate Midtrans token with all required parameters
+    const result = await APIClient.generateMidtransToken(
+      orderData.orderId,
+      currentUser.email,
+      currentUser.phone || '',
+      currentUser.displayName || currentUser.name || 'Customer',
+      orderData.domain,
+      orderData.packageId || orderData.packageName,
+      orderData.total
+    );
+
+    if (!result.success || !result.data || !result.data.snapToken) {
+      throw new Error(result.message || 'Gagal membuat token pembayaran');
     }
 
     currentTransaction = {
-      token: result.snapToken,
+      token: result.data.snapToken,
+      redirectUrl: result.data.snapRedirectUrl,
       orderId: orderData.orderId,
       amount: orderData.total
     };

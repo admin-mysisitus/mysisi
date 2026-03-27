@@ -11,7 +11,6 @@ const navElements = {
 function getLoggedInUser() {
   try {
     const userStr = sessionStorage.getItem('sisitus_user');
-    console.log('[Navigation] sessionStorage.sisitus_user:', userStr);
     return userStr ? JSON.parse(userStr) : null;
   } catch (e) {
     console.error('Error parsing user session:', e);
@@ -55,13 +54,9 @@ const generateDesktopMenu = () => {
   list.className = 'nav-desktop-list';
   const loggedInUser = getLoggedInUser();
   
-  // DEBUG: Log user status
-  console.log('[Navigation] Desktop Menu - Logged in user:', loggedInUser);
-  
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
-      console.log('[Navigation] Skipping Login item - User is logged in');
       return;
     }
     

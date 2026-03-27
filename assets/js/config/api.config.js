@@ -9,7 +9,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbzijy9JbeFL-kPUdZQNcYL2T5p7gl7CE98FfgeqpXC-vGHaDCjsLh1zkXqxpK1jI4lS/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbzFY5UYHubs24PpdoVbWlH-VAmjMJsUR8BRz_kx0rrC5uW5Y3nq8zo8_vuecX_x3CKf/exec',
   
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 30000,
@@ -34,6 +34,7 @@ export const GAS_CONFIG = {
     GET_ORDERS: 'getUserOrders',
     GET_ORDER_DETAIL: 'getOrderDetail',
     UPDATE_ORDER_STATUS: 'updateOrderStatus',
+    GET_USER_ORDER_STATS: 'getUserOrderStats',
     
     // Payment related
     GET_SNAP_TOKEN: 'getSnapToken',
@@ -52,8 +53,7 @@ export const MIDTRANS_CONFIG = {
   ENVIRONMENT: 'sandbox',
   
   // Client Key - untuk frontend Snap integration
-  // Note: Set directly here since there's no .env in plain HTML/JS environment
-  CLIENT_KEY: '', // Set your Midtrans client key here if needed
+  CLIENT_KEY: 'Mid-client-5Pt2HLTUbjJd24VZ',
   
   // Server Key - untuk backend verification & token generation
   // Note: Must be set in Google Apps Script Properties, not here
@@ -154,7 +154,7 @@ export const DOMAIN_PACKAGES = {
 // ========== PACKAGE VALIDATION ==========
 /**
  * Validated packages list - MUST MATCH GAS backend validPackages array
- * Location: GAS_AUTH_REFACTORED.gs
+ * Location: gas.gs
  * Must be updated if domain_packages change
  */
 export const VALID_PACKAGE_IDS = ['starter', 'professional', 'business', 'enterprise'];
@@ -167,50 +167,6 @@ export function isValidPackage(packageId) {
 }
 
 // ========== HELPER FUNCTIONS ==========
-
-/**
- * Get Midtrans Snap URL based on environment
- */
-export function getMidtransSnapUrl() {
-  const env = MIDTRANS_CONFIG.ENVIRONMENT;
-  return MIDTRANS_CONFIG.SNAP_URL[env];
-}
-
-/**
- * Build GAS URL dengan parameters
- * @param {string} action - Action name dari ACTIONS
- * @param {object} params - Query parameters
- * @returns {string} Full URL dengan query string
- */
-export function buildGASUrl(action, params = {}) {
-  const url = new URL(GAS_CONFIG.URL);
-  url.searchParams.append('action', action);
-  
-  // Add additional parameters
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      url.searchParams.append(key, value);
-    }
-  });
-  
-  return url.toString();
-}
-
-/**
- * Build POST request untuk GAS dengan proper headers
- * @param {object} data - Request body data
- * @returns {object} Fetch options
- */
-export function buildGASRequest(data) {
-  return {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-    signal: AbortSignal.timeout(GAS_CONFIG.TIMEOUT)
-  };
-}
 
 /**
  * Get package details by ID

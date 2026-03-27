@@ -3,6 +3,9 @@
 .env.local
 .env.*.local
 
+# Google Apps Script - contains sensitive configuration
+gas.gs
+
 # Dependencies
 node_modules/
 package-lock.json

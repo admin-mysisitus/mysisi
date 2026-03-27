@@ -1,8 +1,8 @@
 /**
  * Invoices Page Module
  * Display invoices and payment history
- * MVP: Shows invoices table with search/filter
- * TODO: Add invoice download (PDF generation)
+ * MVP Status: ✅ COMPLETE - Shows invoices table with search/filter
+ * Future Enhancement: Add invoice download (PDF generation)
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';

@@ -33,12 +33,6 @@ export class APIClient {
       method = 'GET'
     } = options;
 
-    console.log(`[API] Calling action: ${action}`, {
-      data,
-      method,
-      timeout
-    });
-
     let lastError;
 
     for (let attempt = 1; attempt <= retries + 1; attempt++) {
@@ -50,12 +44,6 @@ export class APIClient {
           console.warn('[API] Response missing success field, assuming false');
           response.success = false;
         }
-
-        console.log(`[API] Response (attempt ${attempt}):`, {
-          success: response.success,
-          message: response.message,
-          hasData: !!response.data
-        });
 
         // Handle auth errors
         if (response.success === false && response.message?.includes('Auth')) {
@@ -81,7 +69,6 @@ export class APIClient {
 
         // Retry on network/timeout errors
         if (attempt < retries + 1) {
-          console.log(`[API] Retrying in ${this.RETRY_DELAY}ms...`);
           await this.delay(this.RETRY_DELAY);
         }
       }
@@ -259,6 +246,13 @@ export class APIClient {
       orderId,
       status
     }, { method: 'POST' });
+  }
+
+  /**
+   * Get user order statistics
+   */
+  static getUserOrderStats(userId) {
+    return this.call('getUserOrderStats', { userId });
   }
 
   // ========== PAYMENT ENDPOINTS ==========

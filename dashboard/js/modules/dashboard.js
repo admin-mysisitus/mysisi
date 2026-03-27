@@ -6,13 +6,17 @@ import APIClient from '/assets/js/modules/unified-api.js';
 
 export async function render(currentUser) {
   try {
-    // Get analytics data if available
+    // Get order statistics from userOrderStats endpoint
     let stats = null;
     try {
-      const result = await APIClient.getAnalytics(currentUser.userId);
-      stats = result.data || {};
+      const result = await APIClient.getUserOrderStats(currentUser.userId);
+      if (result.success) {
+        stats = result.data || {};
+        // Update dashboard with statistics
+        updateStatisticsDisplay(stats);
+      }
     } catch (error) {
-      console.warn('Analytics not available yet:', error);
+      console.warn('Statistics not available:', error);
     }
 
     // Setup event listeners
@@ -26,6 +30,28 @@ export async function render(currentUser) {
       </div>
     `;
   }
+}
+
+function updateStatisticsDisplay(stats) {
+  // Update dashboard statistics widgets
+  const widgets = {
+    'stat-total-orders': stats.totalOrders || 0,
+    'stat-total-spent': stats.totalSpent ? formatCurrency(stats.totalSpent) : 'Rp 0',
+    'stat-average-order': stats.averageOrderValue ? formatCurrency(stats.averageOrderValue) : 'Rp 0',
+    'stat-active-orders': stats.ordersByStatus?.processing || 0,
+    'stat-completed': stats.ordersByStatus?.completed || 0
+  };
+  
+  Object.entries(widgets).forEach(([elementId, value]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = value;
+    }
+  });
+}
+
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
 }
 
 function setupEventListeners(currentUser) {

@@ -1,0 +1,42 @@
+SHEET: USERS
+═══════════════════════════════════════════════════════════════════════════════
+User ID	Display Name	Email	WhatsApp	Photo URL	Created At	Updated At	Email Verified	Verification Token	Password Hash	Status	Auth Method
+USER-1711359600000	John Doe	john@example.com	+62812345678	https://profile.com/photo.jpg	2026-03-27T10:00:00.000Z	2026-03-27T10:00:00.000Z	Yes	abc123def456ghi789	$2a$10$abc...	active	email
+
+
+SHEET: ORDERS
+═══════════════════════════════════════════════════════════════════════════════
+Order ID	User ID	Email	Phone Number	Display Name	Domain Name	Package	Total Amount	Order Status	Payment Status	Snap Token	Transaction ID	Created At	Updated At	Payment Method
+ORDER-1711359600000	USER-1711359600000	john@example.com	+62812345678	John Doe	example.com	professional	349000	completed	paid	snap_abc123	MID-1711359600000	2026-03-27T10:00:00.000Z	2026-03-27T10:05:00.000Z	credit_card
+
+
+SHEET: PAYMENT_LOGS
+═══════════════════════════════════════════════════════════════════════════════
+Log ID	Order ID	User ID	Email	Transaction ID	Event Type	Old Status	New Status	Amount	Payment Method	Midtrans Status	Response Data	Timestamp	Notes
+LOG-1711359600000	ORDER-1711359600000	USER-1711359600000	john@example.com	MID-1711359600000	payment_update	pending	paid	349000	credit_card	settlement	{"status_code":"200","transaction_status":"settlement"}	2026-03-27T10:05:00.000Z	Order completed
+
+
+SHEET: API_LOGS
+═══════════════════════════════════════════════════════════════════════════════
+Log ID	Timestamp	Action	User ID	Email	Method	Status	Response Code	Execution Time (ms)	Error	Request Data	Notes
+API-1711359600000	2026-03-27T10:00:00.000Z	registerUser	USER-1711359600000	john@example.com	POST	success	200	125		{"email":"john@example.com"}	User registered successfully
+
+
+SHEET: DOMAIN_PACKAGES
+═══════════════════════════════════════════════════════════════════════════════
+Package ID	Package Name	Price (Rp)	Period (Years)	Description	Storage (GB)	Email Accounts	SSL Certificate	Backups	Support Level	Status	Created At	Updated At
+starter	Starter	199000	1	Basic domain only	N/A	Limited	Free	Manual	Standard	active	2026-03-27T10:00:00.000Z	2026-03-27T10:00:00.000Z
+
+
+SHEET: EMAIL_TEMPLATES
+═══════════════════════════════════════════════════════════════════════════════
+Template ID	Template Name	Subject	Type	Use Case	Variables	Status	Created At	Updated At
+EMAIL-001	Email Verification	🔐 Verifikasi Email SISITUS - Aktivasi Akun Anda	html	Sent after user registration	{displayName}, {verificationUrl}	active	2026-03-27T10:00:00.000Z	2026-03-27T10:00:00.000Z
+
+
+SHEET: PROMO_CODES
+═══════════════════════════════════════════════════════════════════════════════
+Code	Discount Type	Discount Value	Max Usage	Current Usage	Valid From	Valid Until	Active	Description
+WELCOME10	percentage	10	-1	0	2026-03-01T00:00:00.000Z	2026-12-31T23:59:59.000Z	Yes	Diskon 10% untuk pelanggan baru
+SAVE20K	fixed	20000	-1	0	2026-03-01T00:00:00.000Z	2026-12-31T23:59:59.000Z	Yes	Hemat Rp 20.000 untuk pembelian sekarang
+HALFPRICE	percentage	50	100	0	2026-03-27T00:00:00.000Z	2026-03-31T23:59:59.000Z	Yes	Promo terbatas - diskon 50% untuk 100 pembeli pertama

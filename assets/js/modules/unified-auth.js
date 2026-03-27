@@ -44,8 +44,6 @@ export class AuthManager {
    * - Setup storage listener
    */
   static init() {
-    console.log('[AuthManager] Initializing...');
-
     // Load saved session
     this.loadSession();
 
@@ -57,8 +55,6 @@ export class AuthManager {
 
     // Setup activity tracker
     this.setupActivityTracker();
-
-    console.log('[AuthManager] Initialized. User logged in:', this.isLoggedIn());
   }
 
   /**
@@ -168,7 +164,6 @@ export class AuthManager {
         expiresAt
       };
 
-      console.log('[AuthManager] Session saved for user:', validatedUser.email);
       this.emit('authChanged', validatedUser);
     } catch (error) {
       console.error('[AuthManager] Error saving session:', error);
@@ -187,7 +182,6 @@ export class AuthManager {
       lastActivity: null,
       expiresAt: null
     };
-    console.log('[AuthManager] Session cleared');
     this.emit('authChanged', null);
   }
 
@@ -236,7 +230,6 @@ export class AuthManager {
     setInterval(() => {
       if (this.isLoggedIn() && this.state.expiresAt) {
         if (Date.now() > this.state.expiresAt) {
-          console.log('[AuthManager] Session timeout');
           this.clearSession();
           this.emit('sessionExpired');
         }
@@ -267,7 +260,6 @@ export class AuthManager {
   static setupStorageListener() {
     window.addEventListener('storage', (event) => {
       if (event.key === this.SESSION_KEY) {
-        console.log('[AuthManager] Storage changed from another tab, reloading session');
         this.loadSession();
       }
     });

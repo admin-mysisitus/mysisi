@@ -193,7 +193,6 @@ class HeroComponent {
     const ctaContainers = document.querySelectorAll(selector);
     
     if (ctaContainers.length === 0) {
-      console.log('HeroComponent: No CTA buttons found with selector', selector);
       return;
     }
 
@@ -243,8 +242,6 @@ class HeroComponent {
         }
       });
     });
-
-    console.log('HeroComponent: Initialized', ctaContainers.length, 'CTA button containers');
   }
 
   /**
