@@ -101,7 +101,7 @@ function renderPackages() {
   const container = document.getElementById('packages-grid');
   if (!container) return;
 
-  container.innerHTML = DOMAIN_PACKAGES.map(pkg => createPackageCard(pkg)).join('');
+  container.innerHTML = Object.values(DOMAIN_PACKAGES).map(pkg => createPackageCard(pkg)).join('');
 
   // Add click handlers
   container.querySelectorAll('.package-card').forEach(card => {

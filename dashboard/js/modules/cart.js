@@ -11,7 +11,7 @@
 import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
 import { showSuccess, showError } from '/assets/js/modules/unified-utils.js';
 
-export class DashboardCart {
+class DashboardCart {
   constructor() {
     this.cart = CartManager.getCart();
     this.container = null;
@@ -319,4 +319,24 @@ export class DashboardCart {
   }
 }
 
-export default DashboardCart;
+// Export render function for dashboard-app compatibility
+export async function render(currentUser) {
+  const container = document.getElementById('cart-container');
+  if (!container) {
+    console.error('Cart container not found');
+    return;
+  }
+
+  try {
+    const cart = new DashboardCart();
+    cart.render(container);
+  } catch (error) {
+    console.error('Error rendering cart:', error);
+    container.innerHTML = `
+      <div class="alert alert-error">
+        <p>${error.message}</p>
+        <button onclick="window.location.reload()">Coba Lagi</button>
+      </div>
+    `;
+  }
+}
