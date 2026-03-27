@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ringkasan Pesanan Domain - SISITUS</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        .navbar-simple {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar-simple-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-link {
+            text-decoration: none;
+            color: #2563EB;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        .navbar-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-nav {
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+        }
+        .btn-nav-secondary {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+        .btn-nav-secondary:hover {
+            background: #e5e7eb;
+        }
+        .btn-nav-primary {
+            background: #2563EB;
+            color: white;
+        }
+        .btn-nav-primary:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Simple Navigation -->
+    <nav class="navbar-simple">
+        <div class="navbar-simple-content">
+            <a href="/" class="logo-link">🌐 SISITUS</a>
+            <div class="navbar-buttons">
+                <a href="/" class="btn-nav btn-nav-secondary">← Kembali</a>
+                <a href="/auth/" class="btn-nav btn-nav-primary">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div id="order-summary-app"></div>
+    </main>
+
+    <!-- Module Loader -->
+    <script type="module">
+        import render from '/dashboard/js/modules/order-summary.js';
+
+        // Initialize order summary
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('order-summary-app');
+            
+            // Create wrapper
+            const wrapper = document.createElement('div');
+            wrapper.style.marginTop = '20px';
+            wrapper.style.marginBottom = '40px';
+            container.appendChild(wrapper);
+
+            // Render module without auth requirement
+            try {
+                // Call render with null (no authenticated user - guest mode)
+                await render(null);
+                
+                // Move content from #content equivalent to our wrapper
+                // The module renders into document.getElementById('summary-content') etc
+                const content = document.querySelectorAll('.order-summary-container, #loading-state, #error-state, #summary-content');
+                content.forEach(el => {
+                    if (el.parentElement?.id !== 'order-summary-app') {
+                        wrapper.appendChild(el);
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading order summary:', error);
+                wrapper.innerHTML = `
+                    <div style="max-width: 1000px; margin: 60px auto; padding: 40px; text-align: center;">
+                        <h2>Kesalahan</h2>
+                        <p>${error.message}</p>
+                        <a href="/" style="display: inline-block; padding: 10px 20px; background: #2563EB; color: white; text-decoration: none; border-radius: 6px; margin-top: 20px;">
+                            Kembali ke Beranda
+                        </a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

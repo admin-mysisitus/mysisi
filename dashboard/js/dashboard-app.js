@@ -65,6 +65,11 @@ class DashboardApp {
         title: 'Dashboard',
         loadModule: () => import('./modules/dashboard.js')
       },
+      '/dashboard/order-summary': {
+        page: 'order-summary',
+        title: 'Ringkasan Pesanan',
+        loadModule: () => import('./modules/order-summary.js')
+      },
       '/dashboard/profile': {
         page: 'profile',
         title: 'Profil Saya',

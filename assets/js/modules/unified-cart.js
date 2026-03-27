@@ -179,6 +179,71 @@ export class CartManager {
   }
 
   /**
+   * Add addons to cart
+   * @param {array} addons - Array of addon objects [{id, name, price, duration, quantity}]
+   */
+  static addAddons(addons) {
+    if (!Array.isArray(addons)) {
+      throw new Error('Addon harus berupa array');
+    }
+
+    const cart = this.getCart();
+    
+    // Initialize addons array if doesn't exist
+    if (!cart.addons) {
+      cart.addons = [];
+    }
+
+    // Add each addon
+    addons.forEach(addon => {
+      const existingIndex = cart.addons.findIndex(a => a.id.toLowerCase() === addon.id.toLowerCase());
+      
+      if (existingIndex >= 0) {
+        // Update existing addon
+        cart.addons[existingIndex] = {
+          ...cart.addons[existingIndex],
+          ...addon,
+          quantity: addon.quantity || 1
+        };
+      } else {
+        // Add new addon
+        cart.addons.push({
+          id: addon.id,
+          name: addon.name,
+          price: addon.price || 0,
+          duration: addon.duration || 1,
+          quantity: addon.quantity || 1
+        });
+      }
+    });
+
+    this.saveCart(cart);
+    return cart;
+  }
+
+  /**
+   * Remove addon from cart
+   */
+  static removeAddon(addonId) {
+    const cart = this.getCart();
+    if (cart.addons) {
+      cart.addons = cart.addons.filter(a => a.id.toLowerCase() !== addonId.toLowerCase());
+    }
+    this.saveCart(cart);
+    return cart;
+  }
+
+  /**
+   * Clear all addons from cart
+   */
+  static clearAddons() {
+    const cart = this.getCart();
+    cart.addons = [];
+    this.saveCart(cart);
+    return cart;
+  }
+
+  /**
    * Calculate prices (subtotal, discount, total)
    * @private
    */

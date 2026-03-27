@@ -184,3 +184,64 @@ export function getPackageById(packageId) {
 export function getAllPackages() {
   return Object.values(DOMAIN_PACKAGES);
 }
+
+// ========== ADDON PACKAGES ==========
+/**
+ * Available addons for domains and services
+ * Each addon can be added to cart independently
+ */
+export const ADDON_PACKAGES = {
+  dns_management: {
+    id: 'dns_management',
+    name: 'DNS Management',
+    description: 'Pengelolaan DNS record dan nameserver',
+    price: 0,  // Free with domain
+    duration: 1,
+    recommended: true
+  },
+  
+  privacy_protection: {
+    id: 'privacy_protection',
+    name: 'Privacy Protection',
+    description: 'Sembunyikan informasi pribadi Anda dari WHOIS',
+    price: 6625,
+    duration: 1,
+    recommended: false
+  },
+  
+  email_2gb: {
+    id: 'email_2gb',
+    name: 'Email 2GB',
+    description: 'Akun email dengan kapasitas 2 GB per tahun',
+    price: 5000,
+    duration: 1,
+    recommended: false
+  },
+  
+  email_10gb: {
+    id: 'email_10gb',
+    name: 'Email 10GB',
+    description: 'Akun email dengan kapasitas 10 GB per tahun',
+    price: 15000,
+    duration: 1,
+    recommended: false
+  },
+
+  ssl_certificate: {
+    id: 'ssl_certificate',
+    name: 'SSL Certificate',
+    description: 'Sertifikat SSL untuk keamanan website',
+    price: 99000,
+    duration: 1,
+    recommended: false
+  },
+
+  domain_forwarding: {
+    id: 'domain_forwarding',
+    name: 'Domain Forwarding',
+    description: 'Arahkan domain ke URL lain',
+    price: 0,
+    duration: 1,
+    recommended: false
+  }
+};
