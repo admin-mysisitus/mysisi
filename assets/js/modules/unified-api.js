@@ -80,6 +80,10 @@ export class APIClient {
 
   /**
    * Make actual HTTP request
+   * CORS-optimized: Avoids preflight by:
+   * - Using GET requests for read operations
+   * - Using application/x-www-form-urlencoded for POST (not JSON)
+   * - Not sending custom headers
    */
   static async makeRequest(action, data, method, timeout) {
     const controller = new AbortController();
@@ -88,19 +92,21 @@ export class APIClient {
     try {
       let url = `${GAS_CONFIG.URL}?action=${action}`;
       let options = {
-        method,
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        method: method,
+        signal: controller.signal
       };
 
-      // Add data to request
-      if (method === 'POST') {
-        options.body = JSON.stringify(data);
-      } else if (method === 'GET' && Object.keys(data).length > 0) {
+      // For GET requests: Add all data to URL query string
+      if (method === 'GET') {
         const params = new URLSearchParams({ action, ...data });
         url = `${GAS_CONFIG.URL}?${params}`;
+        // GET with no custom headers - no preflight
+      } 
+      // For POST requests: Use form-urlencoded format to avoid preflight
+      else if (method === 'POST') {
+        const params = new URLSearchParams({ action, ...data });
+        options.body = params.toString();
+        // application/x-www-form-urlencoded is a simple request, no preflight
       }
 
       const response = await fetch(url, options);
@@ -148,23 +154,26 @@ export class APIClient {
 
   /**
    * Verify email token (auto-login after registration)
+   * Using GET request to avoid CORS preflight issues
    */
   static verifyEmailToken(token) {
-    return this.call('verifyEmailToken', { token });
+    return this.call('verifyEmailToken', { token }, { method: 'GET' });
   }
 
   /**
    * Verify Google OAuth token
+   * Using GET request to avoid CORS preflight issues
    */
   static verifyGoogleToken(token) {
-    return this.call('verifyGoogleToken', { token }, { method: 'POST' });
+    return this.call('verifyGoogleToken', { token }, { method: 'GET' });
   }
 
   /**
    * Request password reset
+   * Using GET request to avoid CORS preflight issues
    */
   static requestPasswordReset(email) {
-    return this.call('requestPasswordReset', { email }, { method: 'POST' });
+    return this.call('requestPasswordReset', { email }, { method: 'GET' });
   }
 
   /**
@@ -178,9 +187,10 @@ export class APIClient {
 
   /**
    * Get user profile
+   * Using GET request to avoid CORS preflight issues
    */
   static getUserProfile(userId) {
-    return this.call('getUserProfile', { userId });
+    return this.call('getUserProfile', { userId }, { method: 'GET' });
   }
 
   /**

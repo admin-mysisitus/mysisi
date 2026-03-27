@@ -440,6 +440,12 @@ window.refreshNavigation = refreshNavigation;
 
 // Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
+  // Skip navigation setup if on auth page (no nav-desktop or nav-mobile elements)
+  if (!navElements.desktopNav && !navElements.menu) {
+    console.info('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
+    return;
+  }
+  
   generateDesktopMenu();
   generateMobileMenu();
   navElements.menu?.classList.remove('active');

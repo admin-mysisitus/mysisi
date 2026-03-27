@@ -343,35 +343,54 @@ window.handleGoogleSignIn = async function(response) {
 
 /**
  * Initialize Google Sign-In button
+ * Waits for Google SDK to load before initializing
  */
 function initializeGoogleSignIn() {
-  try {
-    if (typeof google === 'undefined') {
-      console.warn('[Auth Google] Google SDK not loaded');
-      return;
-    }
+  // Wait for Google SDK to load
+  const waitForGoogle = setInterval(() => {
+    try {
+      if (typeof google === 'undefined') {
+        console.debug('[Auth Google] Waiting for Google SDK to load...');
+        return;
+      }
 
+      // Clear the interval
+      clearInterval(waitForGoogle);
 
+      console.info('[Auth Google] SDK loaded, initializing...');
 
-    google.accounts.id.initialize({
-      client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
-      callback: window.handleGoogleSignIn,
-      auto_select: false
-    });
-
-    // Find and render Google button
-    const googleBtnContainer = document.querySelector('.google-signin-container');
-    if (googleBtnContainer) {
-      google.accounts.id.renderButton(googleBtnContainer, {
-        theme: 'outline',
-        size: 'large',
-        text: 'signup_with',
-        locale: 'id'
+      google.accounts.id.initialize({
+        client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
+        callback: window.handleGoogleSignIn,
+        auto_select: false
       });
+
+      // Find and render Google button from g_id_onload
+      const googleOnLoad = document.getElementById('g_id_onload');
+      if (googleOnLoad) {
+        google.accounts.id.renderButton(googleOnLoad, {
+          type: 'standard',
+          size: 'large',
+          theme: 'outline',
+          text: 'signin_with',
+          shape: 'rectangular',
+          logo_alignment: 'left'
+        });
+      }
+
+      console.info('[Auth Google] Google Sign-In ready');
+    } catch (error) {
+      console.warn('[Auth Google] Error initializing:', error);
     }
-  } catch (error) {
-    console.warn('[Auth Google] Error initializing:', error);
-  }
+  }, 100);
+
+  // Timeout after 10 seconds if SDK doesn't load
+  setTimeout(() => {
+    clearInterval(waitForGoogle);
+    if (typeof google === 'undefined') {
+      console.warn('[Auth Google] Google SDK failed to load after 10 seconds');
+    }
+  }, 10000);
 }
 
 // ============================================================================
