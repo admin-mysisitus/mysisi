@@ -591,10 +591,11 @@ class DashboardCart {
   }
 
   /**
-   * Format currency
+   * Format currency - imported from unified-utils
    */
   formatCurrency(value) {
-    return value.toLocaleString('id-ID');
+    const { formatCurrency } = require('/assets/js/modules/unified-utils.js');
+    return formatCurrency(value);
   }
 }
 
