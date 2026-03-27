@@ -50,6 +50,10 @@ class DashboardCart {
    * Render login prompt (inline login in cart)
    */
   renderLoginPrompt() {
+    const cartData = CartManager.getCart();
+    const items = (cartData && cartData.items) || [];
+    const summary = CartManager.getSummary();
+    
     this.container.innerHTML = `
       <div style="max-width: 600px; margin: 60px auto; padding: 20px;">
         <!-- Cart Preview (without checkout) -->
@@ -58,16 +62,16 @@ class DashboardCart {
             <i class="fas fa-shopping-cart"></i> Preview Keranjang
           </h3>
           <div style="max-height: 200px; overflow-y: auto;">
-            ${CartManager.getCart().items.map(item => `
+            ${items.length > 0 ? items.map(item => `
               <div style="padding: 10px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between;">
                 <span>${item.domain}</span>
                 <strong>Rp${this.formatCurrency(item.price)}</strong>
               </div>
-            `).join('')}
+            `).join('') : '<div style="padding: 20px; text-align: center; color: #999;">Keranjang kosong</div>'}
           </div>
           <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #2563EB;">
             <span>Total:</span>
-            <span>Rp${this.formatCurrency(CartManager.getSummary().total)}</span>
+            <span>Rp${this.formatCurrency(summary.total)}</span>
           </div>
         </div>
 
@@ -225,7 +229,8 @@ class DashboardCart {
    */
   renderCartContent() {
     const { items, subtotal, discount, total } = CartManager.getSummary();
-    const addons = CartManager.getCart().addons || [];
+    const cartData = CartManager.getCart();
+    const addons = (cartData && cartData.addons) || [];
     const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
 
     let itemsHTML = items.map(item => this.renderCartItem(item)).join('');
@@ -433,41 +438,47 @@ class DashboardCart {
    * Render wishlist sidebar
    */
   renderWishlistSidebar() {
-    const wishlistSummary = WishlistManager.getSummary();
+    try {
+      const wishlistSummary = WishlistManager.getSummary();
+      
+      if (!wishlistSummary || wishlistSummary.itemCount === 0) {
+        return '';
+      }
 
-    if (wishlistSummary.itemCount === 0) {
+      const items = wishlistSummary.items || [];
+      const wishlistItems = items
+        .slice(0, 5) // Show top 5
+        .map(item => `
+          <div style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+            <div style="flex: 1;">
+              <div style="font-size: 13px; font-weight: bold;">${item.domain}</div>
+              <div style="font-size: 11px; color: #999;">
+                ${item.priority === 'high' ? '⭐ Urgent' : ''}
+              </div>
+            </div>
+            <button onclick="window.moveWishlistToCart && window.moveWishlistToCart('${item.domain}')"
+              style="background: #e8f5e9; color: #27ae60; border: none; padding: 4px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;">
+              Beli
+            </button>
+          </div>
+        `)
+        .join('');
+
+      return `
+        <div class="wishlist-card" style="background: #f0f8ff; border-radius: 10px; padding: 15px; border: 1px solid #bfe7ff;">
+          <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold;">
+            <i class="fas fa-heart" style="color: #e74c3c;"></i> Wishlist (${wishlistSummary.itemCount})
+          </h4>
+          <div style="font-size: 12px;">
+            ${wishlistItems}
+            ${wishlistSummary.itemCount > 5 ? `<div style="padding: 10px 0; text-align: center;"><a href="/dashboard/#!wishlist" style="color: #2563EB; text-decoration: none; font-weight: bold;">Lihat Semua</a></div>` : ''}
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      console.warn('Error rendering wishlist sidebar:', error);
       return '';
     }
-
-    const wishlistItems = wishlistSummary.items
-      .slice(0, 5) // Show top 5
-      .map(item => `
-        <div style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-          <div style="flex: 1;">
-            <div style="font-size: 13px; font-weight: bold;">${item.domain}</div>
-            <div style="font-size: 11px; color: #999;">
-              ${item.priority === 'high' ? '⭐ Urgent' : ''}
-            </div>
-          </div>
-          <button onclick="window.moveWishlistToCart && window.moveWishlistToCart('${item.domain}')"
-            style="background: #e8f5e9; color: #27ae60; border: none; padding: 4px 8px; border-radius: 3px; font-size: 11px; cursor: pointer;">
-            Beli
-          </button>
-        </div>
-      `)
-      .join('');
-
-    return `
-      <div class="wishlist-card" style="background: #f0f8ff; border-radius: 10px; padding: 15px; border: 1px solid #bfe7ff;">
-        <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold;">
-          <i class="fas fa-heart" style="color: #e74c3c;"></i> Wishlist (${wishlistSummary.itemCount})
-        </h4>
-        <div style="font-size: 12px;">
-          ${wishlistItems}
-          ${wishlistSummary.itemCount > 5 ? `<div style="padding: 10px 0; text-align: center;"><a href="/dashboard/#!wishlist" style="color: #2563EB; text-decoration: none; font-weight: bold;">Lihat Semua</a></div>` : ''}
-        </div>
-      </div>
-    `;
   }
 
   /**
