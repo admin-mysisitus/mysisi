@@ -202,7 +202,16 @@ function requestPaymentAfterPreview() {
   try {
     if (!currentOrder) return;
 
-    const message = `Halo, saya ingin meminta preview desain untuk order berikut:\n\nOrder ID: ${currentOrder.orderId}\nDomain: ${currentOrder.domain}\nPaket: ${currentOrder.packageName}\nTotal: Rp ${formatPrice(currentOrder.total)}\n\nTerima kasih`;
+    // Build addon info if present
+    let addonInfo = '';
+    if (currentOrder.addons && Array.isArray(currentOrder.addons) && currentOrder.addons.length > 0) {
+      addonInfo = `\nAddon (${currentOrder.addons.length}):\n`;
+      currentOrder.addons.forEach(addon => {
+        addonInfo += `- ${addon.name}: Rp ${formatPrice(addon.price)}\n`;
+      });
+    }
+
+    const message = `Halo, saya ingin meminta preview desain untuk order berikut:\n\nOrder ID: ${currentOrder.orderId}\nDomain: ${currentOrder.domain}\nPaket: ${currentOrder.packageName}${addonInfo}\nTotal: Rp ${formatPrice(currentOrder.total)}\n\nTerima kasih`;
 
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -219,6 +228,48 @@ function displayOrderData(orderData) {
   const expirationDate = new Date(new Date(orderData.createdAt).getTime() + 24 * 60 * 60 * 1000);
   const isExpired = new Date() > expirationDate;
   const statusInfo = getStatusInfo(orderData.paymentStatus);
+
+  // Build addons section if present
+  let addonsSection = '';
+  if (orderData.addons && Array.isArray(orderData.addons) && orderData.addons.length > 0) {
+    const addonsHTML = orderData.addons.map(addon => `
+      <div class="summary-row">
+        <span>${addon.name} (${addon.duration} tahun)</span>
+        <strong>Rp ${formatPrice(addon.price)}</strong>
+      </div>
+    `).join('');
+    
+    addonsSection = `
+      <div class="summary-row">
+        <span><strong>Addon (${orderData.addons.length})</strong></span>
+        <strong>${orderData.addons.length} item</strong>
+      </div>
+      ${addonsHTML}
+      <div class="summary-divider"></div>
+    `;
+  }
+
+  // Build pricing breakdown if available
+  let pricingBreakdown = '';
+  if (orderData.subtotal !== undefined && orderData.ppn !== undefined) {
+    pricingBreakdown = `
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <strong>Rp ${formatPrice(orderData.subtotal)}</strong>
+      </div>
+      <div class="summary-row">
+        <span>PPN (11%):</span>
+        <strong>Rp ${formatPrice(orderData.ppn)}</strong>
+      </div>
+      ${orderData.discount > 0 ? `
+        <div class="summary-row" style="color: #27ae60;">
+          <span>Diskon (${orderData.promoCode || 'Promo'}):</span>
+          <strong>-Rp ${formatPrice(orderData.discount)}</strong>
+        </div>
+      ` : ''}
+      <div class="summary-divider"></div>
+    `;
+  }
 
   content.innerHTML = `
     <div class="card">
@@ -252,7 +303,8 @@ function displayOrderData(orderData) {
               <span>Durasi:</span>
               <strong>${orderData.domainDuration} tahun</strong>
             </div>
-            <div class="summary-divider"></div>
+            ${addonsSection}
+            ${pricingBreakdown}
             <div class="summary-row total">
               <span>Total Pembayaran:</span>
               <strong class="total-price">Rp ${formatPrice(orderData.total)}</strong>

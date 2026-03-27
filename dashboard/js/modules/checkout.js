@@ -7,7 +7,7 @@
 import APIClient from '/assets/js/modules/unified-api.js';
 import { CartManager } from '/assets/js/modules/unified-cart.js';
 import { showSuccess, showError, showLoading, hideLoading, formatCurrency, isValidEmail, isValidPhoneNumber } from '/assets/js/modules/unified-utils.js';
-import { DOMAIN_PACKAGES } from '/assets/js/config/api.config.js';
+import { DOMAIN_PACKAGES, ADDON_PACKAGES } from '/assets/js/config/api.config.js';
 
 let checkoutState = {
   domain: null,
@@ -16,7 +16,10 @@ let checkoutState = {
   selectedPackage: null,
   promoCode: '',
   discount: 0,
-  formData: {}
+  formData: {},
+  addons: [],
+  isRecheckingDomain: false,
+  domainStatus: null  // 'available' or 'taken'
 };
 
 export async function render(currentUser) {
@@ -43,12 +46,22 @@ export async function render(currentUser) {
       parseAndStoreDomain(domain);
     }
 
+    // Load addons from CartManager
+    const cart = CartManager.getCart();
+    checkoutState.addons = cart.addons || [];
+
+    // Perform initial domain recheck
+    if (checkoutState.domain) {
+      await recheckDomainAvailability();
+    }
+
     // Setup form event listeners
     setupFormValidation(currentUser);
 
     // Render UI
     renderDomainSummary();
     renderPackages();
+    renderAddonsSection();
     renderOrderSummary();
 
     // Setup checkout button
@@ -89,6 +102,37 @@ function parseAndStoreDomain(domain) {
   checkoutState.extension = extension;
 }
 
+/**
+ * Recheck domain availability before checkout
+ * This ensures the domain is still available and not taken
+ */
+async function recheckDomainAvailability() {
+  if (!checkoutState.domain) return;
+
+  try {
+    checkoutState.isRecheckingDomain = true;
+    
+    // Call API to check domain availability
+    const result = await APIClient.call('cekDomain', { 
+      domain: checkoutState.domain 
+    }, { method: 'GET' });
+
+    if (result.available) {
+      checkoutState.domainStatus = 'available';
+    } else {
+      checkoutState.domainStatus = 'taken';
+      showErrorMessage(`Domain ${checkoutState.domain} sudah tidak tersedia`);
+    }
+
+  } catch (error) {
+    console.error('Domain recheck error:', error);
+    // If API fails, assume available and continue
+    checkoutState.domainStatus = 'available';
+  } finally {
+    checkoutState.isRecheckingDomain = false;
+  }
+}
+
 function renderDomainSummary() {
   const container = document.getElementById('domain-summary');
   if (!container) return;
@@ -103,11 +147,53 @@ function renderDomainSummary() {
   }
 
   const basePrice = 299000;
+  const statusBadge = checkoutState.domainStatus === 'taken' 
+    ? '<span style="color: #e74c3c; font-weight: bold;">❌ Tidak Tersedia</span>'
+    : '<span style="color: #27ae60; font-weight: bold;">✓ Tersedia</span>';
 
   container.innerHTML = `
     <div class="domain-card">
       <div class="domain-name">${checkoutState.domain}</div>
+      <div style="font-size: 14px; margin-bottom: 10px;">
+        ${statusBadge}
+      </div>
       <div class="domain-price">Rp ${formatPrice(basePrice)} / tahun</div>
+    </div>
+  `;
+}
+
+/**
+ * Render addons section showing selected addons from order-summary
+ */
+function renderAddonsSection() {
+  const container = document.getElementById('addons-summary');
+  if (!container) return;
+
+  if (!checkoutState.addons || checkoutState.addons.length === 0) {
+    container.innerHTML = `
+      <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; font-size: 14px; color: #666;">
+        Tidak ada addon yang dipilih
+      </div>
+    `;
+    return;
+  }
+
+  const addonsHTML = checkoutState.addons.map(addon => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e0e0e0;">
+      <div>
+        <strong>${addon.name}</strong>
+        <div style="font-size: 12px; color: #999;">Durasi: ${addon.duration} tahun</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-weight: bold; color: #2563EB;">Rp${formatPrice(addon.price)}</div>
+      </div>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+      <h4 style="margin: 0 0 15px 0; font-weight: bold;">Addon Layanan (${checkoutState.addons.length})</h4>
+      ${addonsHTML}
     </div>
   `;
 }
@@ -341,7 +427,12 @@ function renderOrderSummary() {
   const baseDomainPrice = 299000;
   const pkg = DOMAIN_PACKAGES[checkoutState.selectedPackage];  // DOMAIN_PACKAGES is object
   if (!pkg) return;  // Package not found
-  const subtotal = baseDomainPrice + pkg.price;
+  
+  // Calculate addon total
+  const addonsTotal = checkoutState.addons.reduce((sum, addon) => sum + addon.price, 0);
+  
+  // Calculate subtotal (domain + package + addons)
+  const subtotal = baseDomainPrice + pkg.price + addonsTotal;
   const ppn = Math.round(subtotal * 0.11);
   const discount = checkoutState.discount || 0;
   const total = subtotal + ppn - discount;
@@ -352,6 +443,16 @@ function renderOrderSummary() {
       <div class="summary-item discount">
         <span>Diskon (${checkoutState.promoCode})</span>
         <span class="price">-Rp ${formatPrice(discount)}</span>
+      </div>
+    `;
+  }
+
+  let addonsHtml = '';
+  if (addonsTotal > 0) {
+    addonsHtml = `
+      <div class="summary-item">
+        <span>Addon (${checkoutState.addons.length})</span>
+        <span class="price">Rp ${formatPrice(addonsTotal)}</span>
       </div>
     `;
   }
@@ -369,6 +470,8 @@ function renderOrderSummary() {
         <span>Paket: ${pkg.name}</span>
         <span class="price">Rp ${formatPrice(pkg.price)}</span>
       </div>
+
+      ${addonsHtml}
 
       <div class="summary-divider"></div>
 
@@ -396,6 +499,12 @@ function renderOrderSummary() {
 
 async function processCheckout(currentUser) {
   try {
+    // Check if domain is still available
+    if (checkoutState.domainStatus === 'taken') {
+      showErrorMessage(`Domain ${checkoutState.domain} tidak tersedia. Silakan pilih domain lain.`);
+      return;
+    }
+
     if (!validateCheckoutForm()) {
       return;
     }
@@ -413,7 +522,12 @@ async function processCheckout(currentUser) {
       showErrorMessage('Paket tidak valid');
       return;
     }
-    const subtotal = baseDomainPrice + pkg.price;
+    
+    // Calculate addon total
+    const addonsTotal = checkoutState.addons.reduce((sum, addon) => sum + addon.price, 0);
+    
+    // Calculate subtotal and total
+    const subtotal = baseDomainPrice + pkg.price + addonsTotal;
     const ppn = Math.round(subtotal * 0.11);
     const discount = checkoutState.discount || 0;
     const total = subtotal + ppn - discount;
@@ -423,6 +537,14 @@ async function processCheckout(currentUser) {
     btn.disabled = true;
     btn.textContent = 'Memproses...';
 
+    // Prepare addons data
+    const addonsData = checkoutState.addons.map(addon => ({
+      id: addon.id,
+      name: addon.name,
+      price: addon.price,
+      duration: addon.duration
+    }));
+
     // Create order via API
     const result = await APIClient.createOrder({
       userId: currentUser.userId,
@@ -430,7 +552,7 @@ async function processCheckout(currentUser) {
       domainDuration: 1,
       packageId: checkoutState.selectedPackage,
       packageName: pkg.name,
-      addons: '',
+      addons: addonsData,  // Now properly populated
       promoCode: checkoutState.promoCode,
       subtotal,
       ppn,
@@ -450,7 +572,7 @@ async function processCheckout(currentUser) {
       } catch (e) {
         console.warn('Could not clear cart:', e);
       }
-      // Redirect to payment page
+      // Redirect to payment page with order data
       setTimeout(() => {
         window.location.hash = `#!payment?orderId=${result.data.orderId}`;
       }, 1500);
