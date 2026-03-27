@@ -410,9 +410,9 @@
       card.innerHTML = `
         <h3><i class="fas fa-question-circle"></i> ${sanitizeHTML(fullDomain)}</h3>
         <p class="cek-domain-result-info">Status ketersediaan tidak jelas</p>
-        <p style="font-size: 0.85rem; color: #999;">Silakan hubungi support atau lanjut ke checkout</p>
-        <a href="/dashboard/#!checkout?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn">
-          Lanjut ke Checkout
+        <p style="font-size: 0.85rem; color: #999;">Silakan hubungi support atau lihat detail</p>
+        <a href="/order-summary/?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn">
+          Lihat Detail & Promo
         </a>
       `;
     }
