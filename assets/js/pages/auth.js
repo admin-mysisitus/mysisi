@@ -359,9 +359,9 @@ async function handleLogin(e) {
     let redirectUrl = '/dashboard/';
     
     if (cartSummary.itemCount > 0) {
-      // Redirect to checkout with first domain
-      const firstDomain = cartSummary.items[0].domain;
-      redirectUrl = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
+      // After login with cart items, redirect to CART to view domains + addons
+      // NOT directly to checkout (user should see cart summary first)
+      redirectUrl = `/dashboard/#!cart`;
       // Don't clear cart yet - user might see other items in cart
     }
 
