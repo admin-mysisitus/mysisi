@@ -51,7 +51,7 @@ class DashboardCart {
    */
   renderLoginPrompt() {
     const cartData = CartManager.getCart();
-    const items = (cartData && cartData.items) || [];
+    const items = (cartData && cartData.domains) || [];
     const summary = CartManager.getSummary();
     
     this.container.innerHTML = `
@@ -65,13 +65,13 @@ class DashboardCart {
             ${items.length > 0 ? items.map(item => `
               <div style="padding: 10px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between;">
                 <span>${item.domain}</span>
-                <strong>Rp${this.formatCurrency(item.price)}</strong>
+                <strong>${this.formatCurrency(item.price)}</strong>
               </div>
             `).join('') : '<div style="padding: 20px; text-align: center; color: #999;">Keranjang kosong</div>'}
           </div>
           <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #2563EB;">
             <span>Total:</span>
-            <span>Rp${this.formatCurrency(summary.total)}</span>
+            <span>${this.formatCurrency(summary.total)}</span>
           </div>
         </div>
 
