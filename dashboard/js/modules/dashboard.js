@@ -3,6 +3,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
+import { formatCurrency } from '/assets/js/modules/unified-utils.js';
 
 export async function render(currentUser) {
   try {
@@ -48,10 +49,6 @@ function updateStatisticsDisplay(stats) {
       element.textContent = value;
     }
   });
-}
-
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
 }
 
 function setupEventListeners(currentUser) {

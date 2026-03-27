@@ -5,7 +5,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showError } from '/assets/js/modules/unified-utils.js';
+import { showError, formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
 
 let currentUser = null;
 
@@ -202,27 +202,10 @@ function getStatusText(status) {
   return statusMap[status] || status;
 }
 
-function formatPrice(amount) {
-  if (!amount) return '0,00';
-  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
-
 function formatPhoneNumber(phone) {
   if (!phone) return '-';
   // Format: 0812-3456-7890 or similar
   return phone.replace(/(\d{4})(\d{4})(\d)/, '$1-$2-$3');
-}
-
-function formatDateTime(dateString) {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
 }
 
 function sanitizeHTML(text) {

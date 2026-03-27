@@ -5,7 +5,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showError, showSuccess, showWarning, showInfo } from '/assets/js/modules/unified-utils.js';
+import { showError, showSuccess, showWarning, showInfo, formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
 
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
@@ -427,10 +427,6 @@ function getStatusInfo(status) {
   return statusMap[status] || statusMap['pending'];
 }
 
-function formatPrice(price) {
-  return new Intl.NumberFormat('id-ID').format(price);
-}
-
 function formatPhoneNumber(phone) {
   if (!phone) return '';
   // Convert 08x to +628x
@@ -441,22 +437,6 @@ function formatPhoneNumber(phone) {
     return '+62' + phone;
   }
   return phone;
-}
-
-function formatDateTime(dateString) {
-  if (!dateString) return '';
-  try {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('id-ID', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  } catch (error) {
-    return dateString;
-  }
 }
 
 function sanitizeHTML(text) {

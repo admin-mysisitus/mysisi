@@ -4,7 +4,7 @@
   // Import cart managers
   const { CartManager, WishlistManager } = await import('../modules/unified-cart.js');
   const { AuthManager } = await import('../modules/unified-auth.js');
-  const { showSuccess, showError } = await import('../modules/unified-utils.js');
+  const { showSuccess, showError, formatCurrency } = await import('../modules/unified-utils.js');
 
   // Get the section container
   const section = document.querySelector('.cek-domain-section');
@@ -37,10 +37,6 @@
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
-  }
-
-  function formatCurrency(value) {
-    return value.toLocaleString('id-ID');
   }
 
   function calculateSavings(oldP, newP) {

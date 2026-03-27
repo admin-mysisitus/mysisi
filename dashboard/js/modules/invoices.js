@@ -6,6 +6,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
+import { formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
 
 export async function render(currentUser) {
   try {
@@ -67,17 +68,4 @@ export async function render(currentUser) {
   }
 }
 
-function formatPrice(amount) {
-  if (!amount) return '0,00';
-  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
 
-function formatDateTime(dateString) {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}

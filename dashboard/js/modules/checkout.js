@@ -6,7 +6,7 @@
 
 import APIClient from '/assets/js/modules/unified-api.js';
 import { CartManager } from '/assets/js/modules/unified-cart.js';
-import { showSuccess, showError, showLoading, hideLoading, formatCurrency, isValidEmail, isValidPhoneNumber } from '/assets/js/modules/unified-utils.js';
+import { showSuccess, showError, showLoading, hideLoading, formatCurrency, formatPrice, formatDateTime, isValidEmail, isValidPhoneNumber } from '/assets/js/modules/unified-utils.js';
 import { DOMAIN_PACKAGES, ADDON_PACKAGES } from '/assets/js/config/api.config.js';
 
 let checkoutState = {
@@ -587,10 +587,6 @@ async function processCheckout(currentUser) {
     btn.disabled = false;
     btn.textContent = 'Buat Pesanan';
   }
-}
-
-function formatPrice(price) {
-  return new Intl.NumberFormat('id-ID').format(price);
 }
 
 function showErrorMessage(message) {

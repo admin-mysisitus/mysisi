@@ -268,6 +268,27 @@ export function formatTimeAgo(date) {
 }
 
 /**
+ * Format price with IDR currency symbol
+ */
+export function formatPrice(value) {
+  return `Rp ${formatCurrency(value).replace('IDR', '').trim()}`;
+}
+
+/**
+ * Format date and time
+ */
+export function formatDateTime(date) {
+  if (!date) return '-';
+  return new Date(date).toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+/**
  * Capitalize first letter
  */
 export function capitalize(str) {
