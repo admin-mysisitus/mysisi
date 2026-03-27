@@ -26,6 +26,19 @@ export class DashboardSidebar {
         route: '/dashboard/profile'
       },
       {
+        id: 'cart',
+        icon: 'icon-shopping-cart',
+        label: 'Keranjang',
+        route: '/dashboard/cart',
+        badge: 'cart-badge'
+      },
+      {
+        id: 'wishlist',
+        icon: 'icon-heart',
+        label: 'Wishlist',
+        route: '/dashboard/wishlist'
+      },
+      {
         id: 'orders',
         icon: 'icon-shopping',
         label: 'Pesanan',
@@ -64,18 +77,27 @@ export class DashboardSidebar {
       </div>
       
       <nav class="sidebar-menu">
-        ${menuItems.map(item => `
-          <a 
-            href="#!${item.route}" 
-            class="menu-item ${this.currentRoute === item.route ? 'active' : ''}"
-            data-route="${item.route}"
-            title="${item.label}"
-          >
-            <span class="menu-icon ${item.icon}"></span>
-            <span class="menu-label">${item.label}</span>
-            ${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}
-          </a>
-        `).join('')}
+        ${menuItems.map(item => {
+          let badge = '';
+          if (item.badge === 'cart-badge') {
+            // Will be updated dynamically
+            badge = '<span class="menu-badge cart-badge-count" style="display: none;">0</span>';
+          } else if (item.badge) {
+            badge = `<span class="menu-badge">${item.badge}</span>`;
+          }
+          return `
+            <a 
+              href="#!${item.route}" 
+              class="menu-item ${this.currentRoute === item.route ? 'active' : ''}"
+              data-route="${item.route}"
+              title="${item.label}"
+            >
+              <span class="menu-icon ${item.icon}"></span>
+              <span class="menu-label">${item.label}</span>
+              ${badge}
+            </a>
+          `;
+        }).join('')}
       </nav>
 
       <div class="sidebar-footer">
@@ -94,6 +116,32 @@ export class DashboardSidebar {
         this.router.navigate(route);
       });
     });
+
+    // Update cart badge on cart changes
+    this.updateCartBadge();
+    window.addEventListener('cart:updated', () => this.updateCartBadge());
+  }
+
+  /**
+   * Update cart item count badge
+   */
+  async updateCartBadge() {
+    try {
+      const { CartManager } = await import('../../../assets/js/modules/unified-cart.js');
+      const cartSummary = CartManager.getSummary();
+      const badge = document.querySelector('.cart-badge-count');
+      
+      if (badge) {
+        if (cartSummary.itemCount > 0) {
+          badge.textContent = cartSummary.itemCount;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    } catch (err) {
+      // CartManager not available, skip silently
+    }
   }
 
   /**

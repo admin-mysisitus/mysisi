@@ -95,6 +95,16 @@ class DashboardApp {
         title: 'Domain Saya',
         loadModule: () => import('./modules/domains.js')
       },
+      '/dashboard/cart': {
+        page: 'cart',
+        title: 'Keranjang Saya',
+        loadModule: () => import('./modules/cart.js')
+      },
+      '/dashboard/wishlist': {
+        page: 'wishlist',
+        title: 'Wishlist Saya',
+        loadModule: () => import('./modules/wishlist.js')
+      },
       '/dashboard/support': {
         page: 'support',
         title: 'Support',

@@ -18,6 +18,7 @@
  */
 
 import { AuthManager } from '../modules/unified-auth.js';
+import { CartManager } from '../modules/unified-cart.js';
 import APIClient from '../modules/unified-api.js';
 import {
   showSuccess,
@@ -70,9 +71,20 @@ window.handleGoogleSignIn = async function(response) {
       `Selamat datang, ${result.data.displayName}!`
     );
 
-    // Redirect to dashboard
+    // Check if there's pending checkout in cart
+    const cartSummary = CartManager.getSummary();
+    let redirectUrl = '/dashboard/';
+    
+    if (cartSummary.itemCount > 0) {
+      // Redirect to checkout with first domain
+      const firstDomain = cartSummary.items[0].domain;
+      redirectUrl = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
+      // Don't clear cart yet - user might see other items in cart
+    }
+
+    // Redirect to appropriate page
     setTimeout(() => {
-      window.location.href = '/dashboard/';
+      window.location.href = redirectUrl;
     }, 1500);
   } catch (error) {
     hideLoading();
@@ -181,9 +193,19 @@ async function handleEmailVerification(token) {
 
     showSuccess('✓ Email Terverifikasi!', `Selamat datang, ${response.data.displayName}!`);
 
-    // Redirect to dashboard after 2 seconds
+    // Check if there's pending checkout in cart
+    const cartSummary = CartManager.getSummary();
+    let redirectUrl = '/dashboard/';
+    
+    if (cartSummary.itemCount > 0) {
+      // Redirect to checkout with first domain
+      const firstDomain = cartSummary.items[0].domain;
+      redirectUrl = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
+    }
+
+    // Redirect to appropriate page after 2 seconds
     setTimeout(() => {
-      window.location.href = '/dashboard/';
+      window.location.href = redirectUrl;
     }, 2000);
   } catch (error) {
 
@@ -333,9 +355,20 @@ async function handleLogin(e) {
       `Selamat datang kembali, ${response.data.displayName}!`
     );
 
-    // Redirect to dashboard
+    // Check if there's pending checkout in cart
+    const cartSummary = CartManager.getSummary();
+    let redirectUrl = '/dashboard/';
+    
+    if (cartSummary.itemCount > 0) {
+      // Redirect to checkout with first domain
+      const firstDomain = cartSummary.items[0].domain;
+      redirectUrl = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
+      // Don't clear cart yet - user might see other items in cart
+    }
+
+    // Redirect to appropriate page
     setTimeout(() => {
-      window.location.href = '/dashboard/';
+      window.location.href = redirectUrl;
     }, 1500);
   } catch (error) {
     handleAPIError(error);

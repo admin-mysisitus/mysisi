@@ -1,5 +1,10 @@
-(function () {
+(async function () {
   'use strict';
+
+  // Import cart managers
+  const { CartManager, WishlistManager } = await import('../modules/unified-cart.js');
+  const { AuthManager } = await import('../modules/unified-auth.js');
+  const { showSuccess, showError } = await import('../modules/unified-utils.js');
 
   // Get the section container
   const section = document.querySelector('.cek-domain-section');
@@ -386,9 +391,14 @@
         <p class="cek-domain-result-price">
           dari <strong>Rp${formatCurrency(extData.newPrice)}</strong> /tahun
         </p>
-        <a href="/dashboard/#!checkout?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn cek-domain-buy-btn">
-          <i class="fas fa-lock"></i> Amankan Sekarang
-        </a>
+        <div class="cek-domain-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+          <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${ext.replace('.', '')}" data-price="${extData.newPrice}">
+            <i class="fas fa-lock"></i> Amankan Sekarang
+          </button>
+          <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist" style="flex: 0 0 50px; cursor: pointer; border: 1px solid #ddd; background: #f8f9fa; border-radius: 5px; font-size: 18px; color: #999; transition: all 0.3s;">
+            <i class="far fa-heart"></i>
+          </button>
+        </div>
       `;
     } else if (result.available === false) {
       // STATE 2: UNAVAILABLE
@@ -640,10 +650,97 @@
     }
   });
 
-  section.addEventListener('click', (e) => {
+  // ============================================
+  // DOMAIN PURCHASE & WISHLIST HANDLERS
+  // ============================================
+
+  section.addEventListener('click', async (e) => {
+    // Handle "Amankan Sekarang" button
+    if (e.target.closest('.cek-domain-buy-btn')) {
+      e.preventDefault();
+      const btn = e.target.closest('.cek-domain-buy-btn');
+      const domain = decodeURIComponent(btn.dataset.domain);
+      const tld = btn.dataset.tld;
+      const price = parseInt(btn.dataset.price) || 0;
+
+      if (AuthManager.isLoggedIn()) {
+        // Already logged in → Go to checkout directly
+        CartManager.add(domain, tld, {
+          package: 'starter',
+          duration: 1,
+          price: price,
+          renewalPrice: price
+        });
+        window.location.href = `/dashboard/#!checkout?domain=${encodeURIComponent(domain)}`;
+      } else {
+        // Not logged in → Add to cart + redirect to auth
+        try {
+          CartManager.add(domain, tld, {
+            package: 'starter',
+            duration: 1,
+            price: price,
+            renewalPrice: price
+          });
+          window.location.href = '/auth/?from=checkout';
+        } catch (error) {
+          showError('❌ Gagal', error.message);
+        }
+      }
+    }
+
+    // Handle Wishlist heart button
+    if (e.target.closest('.cek-domain-wishlist-btn')) {
+      e.preventDefault();
+      const btn = e.target.closest('.cek-domain-wishlist-btn');
+      const domain = btn.dataset.domain;
+      const heartIcon = btn.querySelector('i');
+
+      try {
+        if (WishlistManager.isInWishlist(domain)) {
+          // Remove from wishlist
+          WishlistManager.remove(domain);
+          heartIcon.className = 'far fa-heart';
+          btn.style.color = '#999';
+          showSuccess('❤️ Dihapus', `${domain} dihapus dari wishlist`);
+        } else {
+          // Add to wishlist
+          WishlistManager.add(domain, 'Domain impian', 'medium');
+          heartIcon.className = 'fas fa-heart';
+          btn.style.color = '#e74c3c';
+        }
+      } catch (error) {
+        showError('❌ Error', error.message);
+      }
+    }
+
+    // Close autocomplete if clicking elsewhere
     if (!cekDomainForm.contains(e.target) && !cekDomainSuggestions.contains(e.target)) {
       cekDomainSuggestions.innerHTML = '';
     }
   });
+
+  // Update wishlist heart icons on page load
+  document.addEventListener('cart:updated', () => {
+    updateWishlistIcons();
+  });
+
+  document.addEventListener('wishlist:updated', () => {
+    updateWishlistIcons();
+  });
+
+  function updateWishlistIcons() {
+    const wishlistBtns = section.querySelectorAll('.cek-domain-wishlist-btn');
+    wishlistBtns.forEach(btn => {
+      const domain = btn.dataset.domain;
+      const heartIcon = btn.querySelector('i');
+      if (WishlistManager.isInWishlist(domain)) {
+        heartIcon.className = 'fas fa-heart';
+        btn.style.color = '#e74c3c';
+      } else {
+        heartIcon.className = 'far fa-heart';
+        btn.style.color = '#999';
+      }
+    });
+  }
 
 })();
