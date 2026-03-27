@@ -525,7 +525,7 @@ class DashboardCart {
       if (btn) btn.disabled = true;
 
       // Validate promo with backend
-      const result = await APIClient.call('validatePromo', { code }, { method: 'POST' });
+      const result = await APIClient.validatePromoCode(code);
 
       if (!result.success) {
         throw new Error(result.message || 'Kode promo tidak valid');

@@ -113,9 +113,7 @@ async function recheckDomainAvailability() {
     checkoutState.isRecheckingDomain = true;
     
     // Call API to check domain availability
-    const result = await APIClient.call('cekDomain', { 
-      domain: checkoutState.domain 
-    }, { method: 'GET' });
+    const result = await APIClient.checkDomain(checkoutState.domain);
 
     if (result.available) {
       checkoutState.domainStatus = 'available';
