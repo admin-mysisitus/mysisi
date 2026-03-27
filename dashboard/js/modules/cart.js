@@ -10,7 +10,7 @@
  */
 
 import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
-import { showSuccess, showError, showInfo } from '/assets/js/modules/unified-utils.js';
+import { showSuccess, showError, showInfo, formatCurrency } from '/assets/js/modules/unified-utils.js';
 import APIClient from '/assets/js/modules/unified-api.js';
 import { AuthManager } from '/assets/js/modules/unified-auth.js';
 import { ADDON_PACKAGES } from '/assets/js/config/api.config.js';
@@ -594,7 +594,6 @@ class DashboardCart {
    * Format currency - imported from unified-utils
    */
   formatCurrency(value) {
-    const { formatCurrency } = require('/assets/js/modules/unified-utils.js');
     return formatCurrency(value);
   }
 }
