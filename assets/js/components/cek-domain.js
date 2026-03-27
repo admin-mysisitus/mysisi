@@ -663,28 +663,22 @@
       const tld = btn.dataset.tld;
       const price = parseInt(btn.dataset.price) || 0;
 
-      if (AuthManager.isLoggedIn()) {
-        // Already logged in → Go to checkout directly
+      try {
+        // Add domain to cart for both guest and authenticated users
         CartManager.add(domain, tld, {
           package: 'starter',
           duration: 1,
           price: price,
           renewalPrice: price
         });
-        window.location.href = `/dashboard/#!checkout?domain=${encodeURIComponent(domain)}`;
-      } else {
-        // Not logged in → Add to cart + redirect to auth
-        try {
-          CartManager.add(domain, tld, {
-            package: 'starter',
-            duration: 1,
-            price: price,
-            renewalPrice: price
-          });
-          window.location.href = '/auth/?from=checkout';
-        } catch (error) {
-          showError('❌ Gagal', error.message);
-        }
+
+        // ALL users (guest or authenticated) → Order Summary page
+        // This enables:
+        // - Guest: view addons + promo → add to cart → inline login in cart
+        // - Authenticated: view addons + promo → add to cart → checkout
+        window.location.href = `/order-summary.html?domain=${encodeURIComponent(domain)}`;
+      } catch (error) {
+        showError('❌ Gagal', error.message);
       }
     }
 

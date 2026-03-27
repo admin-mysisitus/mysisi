@@ -76,10 +76,9 @@ window.handleGoogleSignIn = async function(response) {
     let redirectUrl = '/dashboard/';
     
     if (cartSummary.itemCount > 0) {
-      // Redirect to checkout with first domain
-      const firstDomain = cartSummary.items[0].domain;
-      redirectUrl = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
-      // Don't clear cart yet - user might see other items in cart
+      // After login, redirect to CART to view domains + addons
+      // NOT directly to checkout (user should see cart summary first)
+      redirectUrl = `/dashboard/#!cart`;
     }
 
     // Redirect to appropriate page
@@ -198,9 +197,9 @@ async function handleEmailVerification(token) {
     let redirectUrl = '/dashboard/';
     
     if (cartSummary.itemCount > 0) {
-      // Redirect to checkout with first domain
-      const firstDomain = cartSummary.items[0].domain;
-      redirectUrl = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
+      // After email verification, redirect to CART to view domains + addons
+      // NOT directly to checkout (user should see cart summary first)
+      redirectUrl = `/dashboard/#!cart`;
     }
 
     // Redirect to appropriate page after 2 seconds
