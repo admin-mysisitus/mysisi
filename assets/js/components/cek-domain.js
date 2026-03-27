@@ -676,7 +676,7 @@
         // This enables:
         // - Guest: view addons + promo → add to cart → inline login in cart
         // - Authenticated: view addons + promo → add to cart → checkout
-        window.location.href = `/order-summary.html?domain=${encodeURIComponent(domain)}`;
+        window.location.href = `/order-summary/?domain=${encodeURIComponent(domain)}`;
       } catch (error) {
         showError('❌ Gagal', error.message);
       }

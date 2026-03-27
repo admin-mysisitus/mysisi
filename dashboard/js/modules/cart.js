@@ -427,7 +427,7 @@ class DashboardCart {
         <div style="display: flex; flex-direction: column; gap: 10px;">
           ${addonsHTML}
         </div>
-        <a href="/dashboard/#!order-summary" style="display: inline-block; margin-top: 15px; color: #2563EB; text-decoration: none; font-size: 14px; font-weight: bold;">
+        <a href="/order-summary/" style="display: inline-block; margin-top: 15px; color: #2563EB; text-decoration: none; font-size: 14px; font-weight: bold;">
           <i class="fas fa-plus"></i> Tambah Addon
         </a>
       </div>
@@ -579,7 +579,7 @@ class DashboardCart {
     }
 
     const firstDomain = summary.items[0].domain;
-    window.location.href = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}&from=cart`;
+      window.location.href = `/dashboard/#!checkout?domain=${encodeURIComponent(firstDomain)}`;
   }
 
   /**

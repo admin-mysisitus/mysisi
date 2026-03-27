@@ -269,7 +269,7 @@
           setTimeout(() => {
             const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
             if (cartSummary.domains && cartSummary.domains.length > 0) {
-              window.location.href = '/dashboard/#!cart';
+              window.location.href = '/cart/';
             } else {
               window.location.href = '/dashboard/';
             }

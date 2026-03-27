@@ -26,13 +26,6 @@ export class DashboardSidebar {
         route: '/dashboard/profile'
       },
       {
-        id: 'cart',
-        icon: 'icon-shopping-cart',
-        label: 'Keranjang',
-        route: '/dashboard/cart',
-        badge: 'cart-badge'
-      },
-      {
         id: 'wishlist',
         icon: 'icon-heart',
         label: 'Wishlist',

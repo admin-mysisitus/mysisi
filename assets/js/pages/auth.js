@@ -78,7 +78,7 @@ window.handleGoogleSignIn = async function(response) {
     if (cartSummary.itemCount > 0) {
       // After login, redirect to CART to view domains + addons
       // NOT directly to checkout (user should see cart summary first)
-      redirectUrl = `/dashboard/#!cart`;
+      redirectUrl = `/cart/`;
     }
 
     // Redirect to appropriate page
@@ -199,7 +199,7 @@ async function handleEmailVerification(token) {
     if (cartSummary.itemCount > 0) {
       // After email verification, redirect to CART to view domains + addons
       // NOT directly to checkout (user should see cart summary first)
-      redirectUrl = `/dashboard/#!cart`;
+      redirectUrl = `/cart/`;
     }
 
     // Redirect to appropriate page after 2 seconds
@@ -361,7 +361,7 @@ async function handleLogin(e) {
     if (cartSummary.itemCount > 0) {
       // After login with cart items, redirect to CART to view domains + addons
       // NOT directly to checkout (user should see cart summary first)
-      redirectUrl = `/dashboard/#!cart`;
+      redirectUrl = `/cart/`;
       // Don't clear cart yet - user might see other items in cart
     }
 
