@@ -5,6 +5,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
+import { CartManager } from '/assets/js/modules/unified-cart.js';
 import { showSuccess, showError, showLoading, hideLoading, formatCurrency, isValidEmail, isValidPhoneNumber } from '/assets/js/modules/unified-utils.js';
 import { DOMAIN_PACKAGES } from '/assets/js/config/api.config.js';
 
@@ -401,7 +402,8 @@ async function processCheckout(currentUser) {
     btn.textContent = 'Memproses...';
 
     // Create order via API
-    const result = await APIClient.createOrderWithAuth(currentUser.userId, {
+    const result = await APIClient.createOrder({
+      userId: currentUser.userId,
       domain: checkoutState.domain,
       domainDuration: 1,
       packageId: checkoutState.selectedPackage,
@@ -412,19 +414,23 @@ async function processCheckout(currentUser) {
       ppn,
       discount,
       total,
-      customerData: {
-        name: fullname,
-        email,
-        phone,
-        address
-      }
+      name: fullname,
+      email,
+      phone,
+      address
     });
 
-    if (result.success && result.orderId) {
+    if (result.success && result.data && result.data.orderId) {
       showSuccessMessage('Pesanan berhasil dibuat! Redirecting...');
+      // Clear cart after successful order
+      try {
+        CartManager.clear();
+      } catch (e) {
+        console.warn('Could not clear cart:', e);
+      }
       // Redirect to payment page
       setTimeout(() => {
-        window.location.hash = `#!payment?orderId=${result.orderId}`;
+        window.location.hash = `#!payment?orderId=${result.data.orderId}`;
       }, 1500);
     } else {
       showErrorMessage(result.message || 'Gagal membuat pesanan');

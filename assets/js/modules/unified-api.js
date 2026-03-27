@@ -267,9 +267,28 @@ export class APIClient {
 
   /**
    * Create order (authenticated)
+   * Accepts userId as part of orderData or will pass-through
    */
   static createOrder(orderData) {
     return this.call('createOrderWithAuth', orderData, { method: 'POST' });
+  }
+
+  /**
+   * Create order with separate userId (alternative signature for convenience)
+   */
+  static createOrderWithAuth(userIdOrOrderData, orderDataIfUserIdProvided) {
+    // Support both signatures:
+    // createOrderWithAuth({userId, domain, ...}) 
+    // createOrderWithAuth(userId, {domain, ...})
+    let data;
+    if (typeof userIdOrOrderData === 'string') {
+      // Second param provided - merge userId
+      data = { userId: userIdOrOrderData, ...orderDataIfUserIdProvided };
+    } else {
+      // First param is the full object
+      data = userIdOrOrderData;
+    }
+    return this.call('createOrderWithAuth', data, { method: 'POST' });
   }
 
   /**
