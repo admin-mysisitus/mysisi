@@ -80,17 +80,14 @@ export class APIClient {
 
   /**
    * Make actual HTTP request
-   * CORS-optimized: Avoids preflight by:
-   * - Using GET requests for read operations
-   * - Using application/x-www-form-urlencoded for POST (not JSON)
-   * - Not sending custom headers
+   * CORS-optimized: Avoids preflight by using form-urlencoded and no custom headers
    */
   static async makeRequest(action, data, method, timeout) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      let url = `${GAS_CONFIG.URL}?action=${action}`;
+      let url = `${GAS_CONFIG.URL}`;
       let options = {
         method: method,
         signal: controller.signal
@@ -102,11 +99,13 @@ export class APIClient {
         url = `${GAS_CONFIG.URL}?${params}`;
         // GET with no custom headers - no preflight
       } 
-      // For POST requests: Use form-urlencoded format to avoid preflight
+      // For POST requests: Send URLSearchParams object directly (not string)
+      // Browser automatically sets Content-Type: application/x-www-form-urlencoded
+      // This is a "simple request" with no preflight
       else if (method === 'POST') {
-        const params = new URLSearchParams({ action, ...data });
-        options.body = params.toString();
-        // application/x-www-form-urlencoded is a simple request, no preflight
+        options.body = new URLSearchParams({ action, ...data });
+        // Do NOT convert to string - send URLSearchParams object directly
+        // Browser handles Content-Type automatically
       }
 
       const response = await fetch(url, options);
