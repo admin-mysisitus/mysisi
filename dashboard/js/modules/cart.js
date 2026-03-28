@@ -58,6 +58,11 @@ export async function render(currentUser) {
       return;
     }
 
+    // CRITICAL: Refresh user data from storage in case they just verified email
+    if (!currentUser) {
+      AuthManager.refreshUserData();  // NEW: Load latest user session
+    }
+
     cartState.currentUser = currentUser || AuthManager.getCurrentUser();
     
     // Initialize auth if not already done

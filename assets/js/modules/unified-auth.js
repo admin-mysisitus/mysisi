@@ -194,6 +194,21 @@ export class AuthManager {
   }
 
   /**
+   * CRITICAL: Refresh user data from storage (NEW)
+   * Call this when returning from email verification or other auth operations
+   * to ensure you have the latest user data
+   */
+  static refreshUserData() {
+    console.log('[AuthManager] Refreshing user data from storage...');
+    this.loadSession();
+    if (this.state.user && this.state.user.emailVerified) {
+      console.log('✅ User verification status updated:', this.state.user);
+      this.emit('authChanged', { user: this.state.user, isLoggedIn: true });
+    }
+    return this.state.user;
+  }
+
+  /**
    * Check if user is logged in
    */
   static isLoggedIn() {

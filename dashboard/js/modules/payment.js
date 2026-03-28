@@ -5,6 +5,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
+import { AuthManager } from '/assets/js/modules/unified-auth.js';  // NEW
 import { showError, showSuccess, showWarning, showInfo, formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
 
 const ADMIN_WHATSAPP = '6281215289095';
@@ -14,8 +15,13 @@ let currentTransaction = null;
 
 export async function render(user) {
   try {
+    // CRITICAL: Refresh user data from storage
+    if (!user) {
+      AuthManager.refreshUserData();  // NEW: Load latest user session
+    }
+    
     // Store current user for use in other functions
-    currentUser = user;
+    currentUser = user || AuthManager.getCurrentUser();  // NEW: Use refreshed data
     
     // Email verification check - REQUIRED before payment
     if (!currentUser?.emailVerified) {

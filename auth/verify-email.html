@@ -203,6 +203,9 @@
         <div style="margin: 2rem 0;">
           <div class="spinner"></div>
         </div>
+        <p style="color: #999; font-size: 12px; margin-top: 20px;">
+          <i class="fas fa-info-circle"></i> Sistem sedang memverifikasi email Anda. Mohon tunggu...
+        </p>
       `;
     }
 
@@ -212,13 +215,16 @@
         <h2 class="success-message">${title}</h2>
         <p>${message}</p>
         <div class="info-box">
-          <strong><i class="fas fa-info-circle"></i> Langkah Berikutnya:</strong><br>
-          Anda sekarang dapat login dengan email dan password Anda atau gunakan Google Sign-In untuk mulai membeli domain.
+          <strong><i class="fas fa-info-circle"></i> Anda sekarang dapat:</strong><br>
+          ✅ Lanjut checkout di keranjang belanja<br>
+          ✅ Memilih paket dan aksesori (addon)<br>
+          ✅ Melakukan pembayaran<br>
         </div>
         <div class="button-group">
-          <a href="/cart/" class="btn-primary"><i class="fas fa-user-plus"></i> Daftar Ulang</a>
+          <a href="/cart/" class="btn-primary"><i class="fas fa-shopping-cart"></i> Kembali ke Keranjang</a>
           <a href="/" class="btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
         </div>
+        <p style="color: #999; font-size: 12px; margin-top: 20px;">Halaman akan otomatis diarahkan ke keranjang dalam 2 detik...</p>
       `;
     }
 
@@ -261,19 +267,35 @@
         const data = await response.json();
 
         if (data.success) {
+          // CRITICAL: Save updated user data using AuthManager key
+          if (data.data && data.data.userId) {
+            // Save to both localStorage (for cross-tab) and sessionStorage (for current tab)
+            const userData = JSON.stringify({
+              version: 2,
+              user: data.data,
+              isLoggedIn: true,
+              lastActivity: Date.now(),
+              expiresAt: Date.now() + (30 * 60 * 1000) // 30 min expiry
+            });
+            sessionStorage.setItem('sisitus_user', userData);
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
+            console.log('✅ User session updated with emailVerified:', data.data);
+          }
+
           showSuccess(
             '<i class="fas fa-check"></i> Email Berhasil Diverifikasi!',
-            'Akun Anda sudah aktif dan siap digunakan.'
+            'Akun Anda sudah aktif. Anda akan diarahkan kembali ke keranjang belanja...'
           );
-          // Auto-redirect after 3 seconds to CART (if items exist) or dashboard
+          
+          // Auto-redirect after 2 seconds to CART (if items exist) or checkout
           setTimeout(() => {
             const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
             if (cartSummary.domains && cartSummary.domains.length > 0) {
               window.location.href = '/cart/';
             } else {
-              window.location.href = '/dashboard/';
+              window.location.href = '/?section=cek-domain';
             }
-          }, 3000);
+          }, 2000);
         } else {
           showError(
             '<i class="fas fa-exclamation-triangle"></i> Verifikasi Gagal',
