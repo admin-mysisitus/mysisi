@@ -1,8 +1,21 @@
-<div class="card">
-  <div class="card-header">
-    <h1 class="card-title">Invoice</h1>
-  </div>
-  <div class="card-body">
-    <p>Halaman invoice sedang dalam pengembangan...</p>
-  </div>
-</div>
+<!-- Invoices Container - Content rendered by invoices.js module -->
+<div id="content"></div>
+
+<script type="module">
+  import { render } from '/dashboard/js/modules/invoices.js';
+  import { AuthManager } from '/assets/js/modules/unified-auth.js';
+
+  // Get current user and render invoices
+  const user = AuthManager.getCurrentUser();
+  if (user && user.emailVerified) {
+    render(user);
+  } else {
+    document.getElementById('content').innerHTML = `
+      <div class="card">
+        <div class="card-body" style="text-align: center; padding: 40px;">
+          <p style="color: var(--color-text-light);">Silakan login dan verifikasi email untuk melihat invoice Anda.</p>
+        </div>
+      </div>
+    `;
+  }
+</script>

@@ -1,8 +1,11 @@
-<div class="card">
-  <div class="card-header">
-    <h1 class="card-title">Support</h1>
-  </div>
-  <div class="card-body">
-    <p>Halaman support sedang dalam pengembangan...</p>
-  </div>
-</div>
+<!-- Support Container - Content rendered by support.js module -->
+<div id="content"></div>
+
+<script type="module">
+  import { render } from '/dashboard/js/modules/support.js';
+  import { AuthManager } from '/assets/js/modules/unified-auth.js';
+
+  // Get current user and render support page
+  const user = AuthManager.getCurrentUser();
+  render(user);
+</script>
