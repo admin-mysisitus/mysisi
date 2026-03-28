@@ -223,48 +223,78 @@ function updatePriceSummary() {
   // Calculate addon total
   const addonTotal = orderState.selectedAddons.reduce((sum, addonId) => {
     const addon = ADDON_PACKAGES[addonId];
-    return sum + (addon ? addon.price : 0);
+    const price = addon ? addon.price : 0;
+    console.log(`[PRICE DEBUG] Addon ${addonId}:`, addon?.name, `price: ${price}`);
+    return sum + price;
   }, 0);
 
   const subtotal = domainPrice + addonTotal;
   const ppn = Math.round(subtotal * 0.11); // 11% tax
   const total = subtotal + ppn;
 
+  console.log(`[PRICE DEBUG] Domain: ${domainPrice}, Addons: ${addonTotal}, Subtotal: ${subtotal}, PPN: ${ppn}, Total: ${total}`);
+
   // Update DOM - with defensive checks
   const domainPriceEl = document.getElementById('domain-price');
-  if (domainPriceEl) domainPriceEl.textContent = `Rp ${formatNumber(domainPrice)}`;
+  if (domainPriceEl) {
+    domainPriceEl.textContent = `Rp ${formatNumber(domainPrice)}`;
+    console.log(`[PRICE DEBUG] Updated domain-price to: Rp ${formatNumber(domainPrice)}`);
+  }
   
   if (addonTotal > 0) {
     const addonSubEl = document.getElementById('addons-subtotal');
-    if (addonSubEl) addonSubEl.style.display = 'flex';
+    if (addonSubEl) {
+      addonSubEl.style.display = 'flex';
+      console.log(`[PRICE DEBUG] Showing addons-subtotal`);
+    }
     const addontotalEl = document.getElementById('addons-total');
-    if (addontotalEl) addontotalEl.textContent = `Rp ${formatNumber(addonTotal)}`;
+    if (addontotalEl) {
+      addontotalEl.textContent = `Rp ${formatNumber(addonTotal)}`;
+      console.log(`[PRICE DEBUG] Updated addons-total to: Rp ${formatNumber(addonTotal)}`);
+    }
   } else {
     const addonSubEl = document.getElementById('addons-subtotal');
-    if (addonSubEl) addonSubEl.style.display = 'none';
+    if (addonSubEl) {
+      addonSubEl.style.display = 'none';
+      console.log(`[PRICE DEBUG] Hiding addons-subtotal (no addons selected)`);
+    }
   }
 
   const subtotalEl = document.getElementById('subtotal');
-  if (subtotalEl) subtotalEl.textContent = `Rp ${formatNumber(subtotal)}`;
+  if (subtotalEl) {
+    subtotalEl.textContent = `Rp ${formatNumber(subtotal)}`;
+    console.log(`[PRICE DEBUG] Updated subtotal to: Rp ${formatNumber(subtotal)}`);
+  }
   const ppnEl = document.getElementById('ppn');
-  if (ppnEl) ppnEl.textContent = `Rp ${formatNumber(ppn)}`;
+  if (ppnEl) {
+    ppnEl.textContent = `Rp ${formatNumber(ppn)}`;
+    console.log(`[PRICE DEBUG] Updated ppn to: Rp ${formatNumber(ppn)}`);
+  }
   const totalEl = document.getElementById('total');
-  if (totalEl) totalEl.textContent = `Rp ${formatNumber(total)}`;
+  if (totalEl) {
+    totalEl.textContent = `Rp ${formatNumber(total)}`;
+    console.log(`[PRICE DEBUG] Updated total to: Rp ${formatNumber(total)}`);
+  }
 }
 
 /**
  * Toggle addon selection
  */
 function toggleAddon(addonId, isChecked) {
+  console.log(`[ADDON DEBUG] Toggling addon: ${addonId}, checked: ${isChecked}`);
+  
   if (isChecked) {
     if (!orderState.selectedAddons.includes(addonId)) {
       orderState.selectedAddons.push(addonId);
+      console.log(`[ADDON DEBUG] Added addon. Selected addons:`, orderState.selectedAddons);
     }
   } else {
     orderState.selectedAddons = orderState.selectedAddons.filter(id => id !== addonId);
+    console.log(`[ADDON DEBUG] Removed addon. Selected addons:`, orderState.selectedAddons);
   }
 
   // Update UI
+  console.log(`[ADDON DEBUG] Calling updatePriceSummary...`);
   updatePriceSummary();
   
   // Update label styling
@@ -279,6 +309,7 @@ function toggleAddon(addonId, isChecked) {
   });
 
   saveOrderState();
+  console.log(`[ADDON DEBUG] State saved to localStorage`);
 }
 
 
