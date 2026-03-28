@@ -113,32 +113,32 @@ function renderGuestCheckout() {
   const summary = CartManager.getSummary();
 
   cartState.container.innerHTML = `
-    <div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div class="page-container">
+      <div class="cart-page guest-checkout-grid">
         
         <!-- Cart Preview -->
-        <div>
-          <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: bold;">
+        <div class="cart-preview">
+          <h3 class="preview-title">
             <i class="fas fa-shopping-cart"></i> Preview Keranjang
           </h3>
-          <div style="background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+          <div class="preview-body">
             ${items.length > 0 ? `
-              <div style="max-height: 300px; overflow-y: auto;">
+              <div class="preview-items">
                 ${items.map(item => `
-                  <div style="padding: 12px 0; border-bottom: 1px solid #ddd;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                      <strong>${item.domain}</strong>
-                      <strong style="color: #2563EB;">Rp ${formatCurrency(item.price * (item.duration || 1))}</strong>
+                  <div class="preview-item">
+                    <div>
+                      <div class="preview-item-name">${item.domain}</div>
+                      <div class="preview-item-meta">${item.duration || 1} tahun</div>
                     </div>
-                    <small style="color: #999;">${item.duration || 1} tahun</small>
+                    <div class="preview-item-price">Rp ${formatCurrency(item.price * (item.duration || 1))}</div>
                   </div>
                 `).join('')}
               </div>
-              <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #ddd; display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; color: #2563EB;">
+              <div class="preview-total">
                 <span>Total:</span>
                 <span>Rp ${formatCurrency(summary.total)}</span>
               </div>
-            ` : '<div style="padding: 40px; text-align: center; color: #999;">Keranjang kosong</div>'}
+            ` : '<div class="preview-empty">Keranjang kosong</div>'}
           </div>
         </div>
 
@@ -240,33 +240,35 @@ async function handleGoogleSignIn(response) {
 
 function renderEmailVerificationPrompt() {
   cartState.container.innerHTML = `
-    <div style="max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;">
-      <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
-        <h2 style="margin: 0 0 10px 0; color: #92400e;">
-          <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
-        </h2>
-        <p style="margin: 0 0 10px 0; color: #78350f;">
-          Email Anda belum terverifikasi. Silakan cek email untuk link verifikasi.
-        </p>
-        <p style="margin: 0; color: #99410e; font-size: 14px;">
-          Email dikirim ke: <strong>${cartState.currentUser?.email}</strong>
-        </p>
-      </div>
+    <div class="page-container">
+      <div class="verification-prompt">
+        <div class="verification-alert">
+          <h2>
+            <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
+          </h2>
+          <p>
+            Email Anda belum terverifikasi. Silakan cek email untuk link verifikasi.
+          </p>
+          <p>
+            Email dikirim ke: <strong>${cartState.currentUser?.email}</strong>
+          </p>
+        </div>
 
-      <div style="margin-bottom: 20px;">
-        <p style="color: #666;">Setelah memverifikasi email, refresh halaman ini atau klik tombol di bawah.</p>
-        <button onclick="location.reload()" class="btn" style="padding: 12px 24px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-          <i class="fas fa-redo"></i> Refresh Halaman
-        </button>
-      </div>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <p style="color: var(--text-secondary); margin-bottom: 1rem;">Setelah memverifikasi email, refresh halaman ini atau klik tombol di bawah.</p>
+          <button onclick="location.reload()" class="btn btn-primary">
+            <i class="fas fa-redo"></i> Refresh Halaman
+          </button>
+        </div>
 
-      <hr style="margin: 30px 0; border: none; border-top: 1px solid #e0e0e0;">
+        <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-light);">
 
-      <div style="color: #999; font-size: 14px;">
-        <p>Link verifikasi tidak muncul?</p>
-        <a href="/auth/verify-email.html" style="color: #2563EB; text-decoration: none; font-weight: bold;">
-          Buka halaman verifikasi email
-        </a>
+        <div style="color: var(--text-light); text-align: center; font-size: var(--teks-kecil);">
+          <p>Link verifikasi tidak muncul?</p>
+          <a href="/auth/verify-email.html" style="color: var(--primary-blue); text-decoration: none; font-weight: bold;">
+            Buka halaman verifikasi email
+          </a>
+        </div>
       </div>
     </div>
   `;
@@ -278,17 +280,19 @@ function renderEmailVerificationPrompt() {
 
 function renderEmptyCart() {
   cartState.container.innerHTML = `
-    <div style="text-align: center; padding: 60px 20px;">
-      <div style="font-size: 80px; margin-bottom: 20px; opacity: 0.5;">
-        <i class="fas fa-shopping-cart"></i>
+    <div class="page-container">
+      <div class="cart-empty">
+        <div class="empty-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h2 class="empty-title">Keranjang Kosong</h2>
+        <p class="empty-text">
+          Belum ada domain di keranjang Anda. Mulai cari domain impian Anda!
+        </p>
+        <a href="/?section=cek-domain" class="btn btn-primary">
+          <i class="fas fa-search"></i> Cari Domain
+        </a>
       </div>
-      <h2 style="color: #333; margin-bottom: 10px;">Keranjang Kosong</h2>
-      <p style="color: #666; margin-bottom: 30px; font-size: 16px;">
-        Belum ada domain di keranjang Anda. Mulai cari domain impian Anda!
-      </p>
-      <a href="/?section=cek-domain" class="btn" style="display: inline-block; padding: 12px 30px; background-color: #2563EB; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
-        <i class="fas fa-search"></i> Cari Domain
-      </a>
     </div>
   `;
 }
@@ -303,111 +307,114 @@ function renderAuthenticatedCart() {
   const addons = (cartData && cartData.addons) || [];
   const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
   const promoTotal = cartState.promoDiscount || 0;
+  const ppn = Math.round((subtotal + addonsTotal) * 0.11);
+  const finalTotal = subtotal + addonsTotal + ppn - promoTotal;
 
   let itemsHTML = items.map(item => renderCartItem(item)).join('');
 
   cartState.container.innerHTML = `
-    <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
-      <h2 style="margin: 0 0 30px 0; font-size: 28px; font-weight: bold;">
-        <i class="fas fa-shopping-cart"></i> Keranjang Saya
-      </h2>
+    <div class="page-container">
+      <div class="cart-page">
+        <h2 class="cart-page-title">
+          <i class="fas fa-shopping-cart"></i> Keranjang Saya
+        </h2>
 
-      <div style="display: grid; grid-template-columns: 1fr 380px; gap: 30px;">
-        
-        <!-- Cart Items -->
-        <div>
-          <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-            <h3 style="margin: 0 0 20px 0; font-weight: bold;">Domain yang Dipesan</h3>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-              ${itemsHTML}
+        <div class="cart-grid">
+          
+          <!-- Cart Items -->
+          <div>
+            <div class="cart-items-section">
+              <h3 class="cart-items-title">Domain yang Dipesan</h3>
+              <div class="cart-items-list">
+                ${itemsHTML}
+              </div>
             </div>
-          </div>
 
-          ${addons.length > 0 ? `
-            <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
-              <h3 style="margin: 0 0 15px 0; font-weight: bold;">📦 Layanan Tambahan</h3>
-              <div style="display: flex; flex-direction: column; gap: 12px;">
-                ${addons.map(addon => `
-                  <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
-                    <div>
-                      <strong>${addon.name}</strong><br>
-                      <small style="color: #999;">${addon.duration} tahun</small>
+            ${addons.length > 0 ? `
+              <div class="addons-section">
+                <h3 class="addons-title"><i class="fas fa-cube"></i> Layanan Tambahan</h3>
+                <div class="addons-list">
+                  ${addons.map(addon => `
+                    <div class="addon-item">
+                      <div class="addon-info">
+                        <div class="addon-name">${addon.name}</div>
+                        <div class="addon-desc">${addon.duration} tahun</div>
+                      </div>
+                      <div class="addon-price">Rp ${formatCurrency(addon.price)}</div>
                     </div>
-                    <strong style="color: #2563EB;">Rp ${formatCurrency(addon.price)}</strong>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
-        </div>
-
-        <!-- Cart Summary & Checkout -->
-        <div>
-          <div style="background: #f8f9fa; border-radius: 10px; padding: 25px; border: 1px solid #e0e0e0; position: sticky; top: 20px;">
-            <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: bold;">Ringkasan Pesanan</h3>
-            
-            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; font-size: 14px;">
-              <span>Domain (${items.length}):</span>
-              <strong>Rp ${formatCurrency(subtotal)}</strong>
-            </div>
-
-            ${addonsTotal > 0 ? `
-              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; font-size: 14px;">
-                <span>Addon (${addons.length}):</span>
-                <strong>Rp ${formatCurrency(addonsTotal)}</strong>
+                  `).join('')}
+                </div>
               </div>
             ` : ''}
-
-            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; font-size: 14px;">
-              <span>Subtotal:</span>
-              <strong>Rp ${formatCurrency(subtotal + addonsTotal)}</strong>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; font-size: 14px;">
-              <span>PPN (11%):</span>
-              <strong>Rp ${formatCurrency(Math.round((subtotal + addonsTotal) * 0.11))}</strong>
-            </div>
-
-            ${promoTotal > 0 ? `
-              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; font-size: 14px; color: #27ae60;">
-                <span><i class="fas fa-tag"></i> Diskon Promo:</span>
-                <strong>-Rp ${formatCurrency(promoTotal)}</strong>
-              </div>
-            ` : ''}
-
-            <div style="display: flex; justify-content: space-between; padding: 15px 0; font-size: 18px; font-weight: bold; color: #2563EB;">
-              <span>Total:</span>
-              <strong>Rp ${formatCurrency(total - promoTotal + Math.round((subtotal + addonsTotal) * 0.11))}</strong>
-            </div>
-
-            <!-- Promo Code Section -->
-            <div style="margin: 20px 0; border-top: 1px solid #ddd; padding-top: 20px;">
-              <label style="display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px;">
-                🎉 Punya Kode Promo?
-              </label>
-              <div style="display: flex; gap: 8px;">
-                <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" 
-                  style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; box-sizing: border-box;">
-                <button onclick="window.applyPromoCode()" class="btn" 
-                  style="padding: 10px 16px; background-color: #f0f0f0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-weight: bold; white-space: nowrap;">
-                  Gunakan
-                </button>
-              </div>
-              <div id="promo-message" style="display: none; margin-top: 8px; font-size: 13px;"></div>
-            </div>
-
-            <!-- Checkout Button -->
-            <button onclick="window.proceedToCheckout()" class="btn" 
-              style="width: 100%; padding: 15px 20px; background-color: #2563EB; color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 20px;">
-              <i class="fas fa-lock"></i> Lanjut ke Pembayaran
-            </button>
-
-            <a href="/?section=cek-domain" style="display: block; text-align: center; padding: 12px 20px; background-color: #f0f0f0; color: #333; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px;">
-              <i class="fas fa-search"></i> Cari Domain Lain
-            </a>
           </div>
-        </div>
 
+          <!-- Cart Summary & Checkout -->
+          <div>
+            <div class="cart-summary">
+              <h3 class="summary-title">Ringkasan Pesanan</h3>
+              
+              <div class="price-row">
+                <span class="price-row-label">Domain (${items.length}):</span>
+                <span class="price-value">Rp ${formatCurrency(subtotal)}</span>
+              </div>
+
+              ${addonsTotal > 0 ? `
+                <div class="price-row">
+                  <span class="price-row-label">Addon (${addons.length}):</span>
+                  <span class="price-value">Rp ${formatCurrency(addonsTotal)}</span>
+                </div>
+              ` : ''}
+
+              <div class="price-row subtotal">
+                <span class="price-row-label">Subtotal:</span>
+                <span class="price-value">Rp ${formatCurrency(subtotal + addonsTotal)}</span>
+              </div>
+
+              <div class="price-row ppn">
+                <span class="price-row-label">PPN (11%):</span>
+                <span class="price-value">Rp ${formatCurrency(ppn)}</span>
+              </div>
+
+              ${promoTotal > 0 ? `
+                <div class="price-row discount">
+                  <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                  <span class="price-value">-Rp ${formatCurrency(promoTotal)}</span>
+                </div>
+              ` : ''}
+
+              <div class="price-row total">
+                <span>Total:</span>
+                <span class="price-value">Rp ${formatCurrency(finalTotal)}</span>
+              </div>
+
+              <!-- Promo Code Section -->
+              <div class="promo-section">
+                <label class="promo-label">
+                  <i class="fas fa-tag"></i> Punya Kode Promo?
+                </label>
+                <div class="promo-input-group">
+                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
+                  <button onclick="window.applyPromoCode()" class="btn-apply-promo">
+                    Gunakan
+                  </button>
+                </div>
+                <div id="promo-message" class="promo-message"></div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="action-section">
+                <button onclick="window.proceedToCheckout()" class="btn btn-primary">
+                  <i class="fas fa-lock"></i> Lanjut ke Pembayaran
+                </button>
+
+                <a href="/?section=cek-domain" class="btn btn-secondary">
+                  <i class="fas fa-search"></i> Cari Domain Lain
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   `;
@@ -425,29 +432,22 @@ function renderAuthenticatedCart() {
 
 function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price
-    ? `<small style="color: #999;">Pembaruan: Rp ${formatCurrency(item.renewalPrice)}/tahun</small>`
+    ? `<div class="cart-item-renewal"><i class="fas fa-sync"></i> Pembaruan: Rp ${formatCurrency(item.renewalPrice)}/tahun</div>`
     : '';
 
   return `
-    <div style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: flex-start;">
-      <div style="flex: 1;">
-        <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">
-          ${item.domain}
-        </h4>
-        <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">
-          <span style="display: inline-block; background: #e3f2fd; color: #2563EB; padding: 4px 8px; border-radius: 3px; font-size: 12px; margin-right: 10px;">
-            ${item.package ? item.package.toUpperCase() : 'STARTER'}
-          </span>
-          <span style="color: #999;">${item.duration || 1} tahun</span>
-        </p>
+    <div class="cart-item">
+      <div class="cart-item-info">
+        <h4 class="cart-item-domain">${item.domain}</h4>
+        <div class="cart-item-details">
+          <span class="cart-item-badge">${item.package ? item.package.toUpperCase() : 'STARTER'}</span>
+          <span class="cart-item-duration"><i class="fas fa-calendar"></i> ${item.duration || 1} tahun</span>
+        </div>
         ${renewalInfo}
       </div>
-      <div style="text-align: right; margin-left: 20px; white-space: nowrap;">
-        <div style="font-size: 18px; font-weight: bold; color: #2563EB; margin-bottom: 8px;">
-          Rp ${formatCurrency(item.price * (item.duration || 1))}
-        </div>
-        <button onclick="window.removeCartItem('${item.domain}')" 
-          style="background: #fee; color: #e74c3c; border: 1px solid #fcc; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+      <div class="cart-item-actions">
+        <div class="cart-item-price">Rp ${formatCurrency(item.price * (item.duration || 1))}</div>
+        <button onclick="window.removeCartItem('${item.domain}')" class="btn-remove">
           <i class="fas fa-trash"></i> Hapus
         </button>
       </div>
