@@ -17,6 +17,43 @@ export async function render(user) {
     // Store current user for use in other functions
     currentUser = user;
     
+    // Email verification check - REQUIRED before payment
+    if (!currentUser?.emailVerified) {
+      const content = document.getElementById('content');
+      content.innerHTML = `
+        <div style="max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;">
+          <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
+            <h2 style="margin: 0 0 10px 0; color: #92400e;">
+              <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
+            </h2>
+            <p style="margin: 0 0 10px 0; color: #78350f;">
+              Email Anda belum terverifikasi. Verifikasi email diperlukan untuk melanjutkan pembayaran.
+            </p>
+            <p style="margin: 0; color: #99410e; font-size: 14px;">
+              Email dikirim ke: <strong>${currentUser?.email}</strong>
+            </p>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <p style="color: #666;">Setelah memverifikasi email, refresh halaman ini untuk melanjutkan.</p>
+            <button onclick="location.reload()" class="btn" style="padding: 12px 24px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+              <i class="fas fa-redo"></i> Refresh Halaman
+            </button>
+          </div>
+
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+          <div style="color: #999; font-size: 14px;">
+            <p>Link verifikasi tidak muncul?</p>
+            <a href="/auth/verify-email.html" style="color: #2563EB; text-decoration: none; font-weight: bold;">
+              Buka halaman verifikasi email
+            </a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+    
     // Get order ID from URL
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get('orderId');
@@ -167,9 +204,11 @@ function openMidtransPayment() {
 
 function handlePaymentSuccess(result) {
   updateOrderStatus(currentOrder.orderId, 'settlement', result.transaction_id);
-    showSuccess('Pembayaran berhasil! Terima kasih atas pemesanan Anda.');
+  showSuccess('✓ Pembayaran Berhasil!', 'Terima kasih atas pemesanan Anda. Mengarahkan ke invoice...');
+  
+  // Redirect to invoice page after 2 seconds
   setTimeout(() => {
-    window.location.hash = '#!orders';
+    window.location.href = `/invoice/?orderId=${encodeURIComponent(currentOrder.orderId)}`;
   }, 2000);
 }
 
