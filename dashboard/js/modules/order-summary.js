@@ -37,6 +37,9 @@ let orderState = {
  */
 export async function render(currentUser) {
   try {
+    // Load saved order state from localStorage
+    loadOrderState();
+
     // Extract domain from URL (hash-based routing support)
     const domain = extractDomainFromUrl();
     
@@ -337,6 +340,29 @@ function saveOrderState() {
     localStorage.setItem('current_order_state', JSON.stringify(orderState));
   } catch (e) {
     console.warn('Could not save order state:', e);
+  }
+}
+
+/**
+ * Load order state from localStorage
+ */
+function loadOrderState() {
+  try {
+    const saved = localStorage.getItem('current_order_state');
+    if (saved) {
+      const restored = JSON.parse(saved);
+      // Restore selected addons - ensure it's an array
+      if (restored.selectedAddons && Array.isArray(restored.selectedAddons)) {
+        orderState.selectedAddons = restored.selectedAddons;
+      }
+      // Restore other fields if domain/tld match current URL
+      if (restored.domain) orderState.domain = restored.domain;
+      if (restored.tld) orderState.tld = restored.tld;
+      if (restored.price) orderState.price = restored.price;
+      if (restored.duration) orderState.duration = restored.duration;
+    }
+  } catch (e) {
+    console.warn('Could not load order state:', e);
   }
 }
 
