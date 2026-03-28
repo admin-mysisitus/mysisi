@@ -10,7 +10,7 @@
 .payment-page {
   min-height: calc(100vh - 200px);
   padding: 2rem 0;
-  background: #f8f9fa;
+  background: var(--color-bg-light);
 }
 
 .payment-wrapper {
@@ -31,7 +31,7 @@
 
 .spinner-container {
   text-align: center;
-  color: #3498db;
+  color: var(--color-primary);
 }
 
 .spinner-container i {
@@ -42,7 +42,7 @@
 
 .spinner-container p {
   font-size: 1.1rem;
-  color: #7f8c8d;
+  color: var(--color-text-light);
 }
 
 /* ============================================================================
@@ -50,7 +50,7 @@
    ============================================================================ */
 
 .payment-error {
-  background: white;
+  background: var(--color-bg-white);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
@@ -59,18 +59,18 @@
 
 .payment-error i {
   font-size: 3rem;
-  color: #e74c3c;
+  color: var(--color-danger);
   margin-bottom: 1rem;
   display: block;
 }
 
 .payment-error h2 {
-  color: #2c3e50;
+  color: var(--color-text-dark);
   margin: 0 0 0.5rem 0;
 }
 
 .payment-error p {
-  color: #7f8c8d;
+  color: var(--color-text-light);
   margin: 0 0 1.5rem 0;
 }
 
@@ -79,21 +79,21 @@
    ============================================================================ */
 
 .payment-status-card {
-  background: white;
+  background: var(--color-bg-white);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid var(--color-primary);
 }
 
 .status-header {
   padding: 1.5rem;
-  background: linear-gradient(135deg, #ecf0f1 0%, #f8f9fa 100%);
+  background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-light) 100%);
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .status-header i {

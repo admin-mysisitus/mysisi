@@ -12,7 +12,7 @@
 .auth-page {
   min-height: 100vh;
   padding: 3rem 1rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, var(--bg-light) 0%, #e0f2fe 100%);
   margin-top: var(--header-height, 80px);
 }
 
@@ -23,6 +23,12 @@
   max-width: 1000px;
   margin: 0 auto;
   align-items: start;
+}
+
+@media (max-width: 768px) {
+  .auth-wrapper {
+    grid-template-columns: 1fr;
+  }
 }
 
 .auth-container {
@@ -37,17 +43,17 @@
    ============================================================================ */
 
 .checkout-auth-section {
-  background: white;
+  background: var(--bg-white);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-light);
   animation: slideInUp 0.4s ease-out;
 }
 
 .checkout-auth-section h2,
 .auth-container h3 {
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -60,7 +66,7 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 2px solid var(--border-light);
 }
 
 .tab-btn {
@@ -69,7 +75,7 @@
   border: none;
   border-bottom: 3px solid transparent;
   cursor: pointer;
-  color: #7f8c8d;
+  color: var(--text-light);
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -78,12 +84,12 @@
 }
 
 .tab-btn:hover {
-  color: #667eea;
+  color: var(--primary-blue);
 }
 
 .tab-btn.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: var(--primary-blue);
+  border-bottom-color: var(--primary-blue);
 }
 
 /* ============================================================================
@@ -105,14 +111,14 @@
 
 .auth-form label {
   display: block;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 0.5rem;
   font-size: 0.95rem;
 }
 
 .auth-form label .optional {
-  color: #7f8c8d;
+  color: var(--text-light);
   font-weight: 400;
   font-size: 0.85em;
 }
@@ -120,7 +126,7 @@
 .auth-form input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-light);
   border-radius: 6px;
   font-size: 1rem;
   font-family: inherit;
@@ -129,19 +135,19 @@
 
 .auth-form input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .auth-form input::placeholder {
-  color: #bdc3c7;
+  color: var(--border-light);
 }
 
 .auth-form button[type="submit"],
 .btn-primary {
   width: 100%;
   padding: 0.9rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #1e40af 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -162,7 +168,7 @@
 .auth-form button[type="submit"]:hover,
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 .auth-form button[type="submit"]:active,
@@ -172,7 +178,7 @@
 
 .form-group small {
   display: block;
-  color: #7f8c8d;
+  color: var(--text-light);
   font-size: 0.85rem;
   margin-top: 0.25rem;
 }
@@ -185,7 +191,7 @@
 }
 
 .forgot-password-link {
-  color: #667eea;
+  color: var(--primary-blue);
   text-decoration: none;
   font-size: 0.9rem;
   transition: all 0.3s ease;
