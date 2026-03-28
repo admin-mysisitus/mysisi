@@ -650,25 +650,3 @@ function removeAddon(addonId) {
 }
 
 export default render;
-
-// Export render function for dashboard-app compatibility
-export async function render(currentUser) {
-  const container = document.getElementById('cart-container');
-  if (!container) {
-    console.error('Cart container not found');
-    return;
-  }
-
-  try {
-    const cart = new DashboardCart();
-    cart.render(container, currentUser);
-  } catch (error) {
-    console.error('Error rendering cart:', error);
-    container.innerHTML = `
-      <div class="alert alert-error">
-        <p>${error.message}</p>
-        <button onclick="window.location.reload()">Coba Lagi</button>
-      </div>
-    `;
-  }
-}
