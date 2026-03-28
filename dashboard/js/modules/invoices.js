@@ -14,8 +14,8 @@ export async function render(currentUser) {
     const result = await APIClient.getUserOrders(currentUser.userId);
     const orders = result.orders || [];
 
-    // Filter orders with payment status = settlement
-    const invoices = orders.filter(o => o.paymentStatus === 'settlement');
+    // Filter orders with payment status = paid
+    const invoices = orders.filter(o => o.paymentStatus === 'paid');
 
     const content = document.getElementById('content');
     content.innerHTML = `

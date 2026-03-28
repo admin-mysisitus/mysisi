@@ -150,7 +150,7 @@ async function showOrderDetail(orderId) {
         </div>
 
         <div class="modal-footer">
-          ${order.paymentStatus !== 'settlement' ? `
+          ${order.paymentStatus !== 'paid' ? `
             <button class="btn btn-primary" onclick="window.location.hash='#!payment?orderId=${order.orderId}'">
               💳 Lanjut Pembayaran
             </button>
@@ -180,7 +180,7 @@ async function showOrderDetail(orderId) {
 
 function getStatusClass(status) {
   const statusMap = {
-    'settlement': 'success',
+    'paid': 'success',
     'pending': 'warning',
     'expired': 'danger',
     'cancel': 'danger',
@@ -192,7 +192,7 @@ function getStatusClass(status) {
 
 function getStatusText(status) {
   const statusMap = {
-    'settlement': 'Selesai',
+    'paid': 'Selesai',
     'pending': 'Tertunda',
     'expired': 'Expired',
     'cancel': 'Dibatalkan',

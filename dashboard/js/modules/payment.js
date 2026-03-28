@@ -106,7 +106,7 @@ async function loadOrderData(orderId, currentUser) {
     displayOrderData(currentOrder);
 
     // Generate payment token if not yet paid
-    if (currentOrder.paymentStatus !== 'settlement') {
+    if (currentOrder.paymentStatus !== 'paid') {
       await generateMidtransToken(currentOrder);
     }
 
@@ -203,7 +203,7 @@ function openMidtransPayment() {
 }
 
 function handlePaymentSuccess(result) {
-  updateOrderStatus(currentOrder.orderId, 'settlement', result.transaction_id);
+  updateOrderStatus(currentOrder.orderId, 'paid', result.transaction_id);
   showSuccess('✓ Pembayaran Berhasil!', 'Terima kasih atas pemesanan Anda. Mengarahkan ke invoice...');
   
   // Redirect to invoice page after 2 seconds
@@ -378,18 +378,18 @@ function displayOrderData(orderData) {
         <div class="section">
           <h3>Status Pembayaran</h3>
           <div class="payment-status">
-            <div class="status-item ${orderData.paymentStatus === 'settlement' ? 'completed' : ''}">
-              <span class="status-check">${orderData.paymentStatus === 'settlement' ? '✓' : ''}</span>
+            <div class="status-item ${orderData.paymentStatus === 'paid' ? 'completed' : ''}">
+              <span class="status-check">${orderData.paymentStatus === 'paid' ? '✓' : ''}</span>
               <div class="status-text">
                 <strong>Pembayaran</strong>
-                <small>${orderData.paymentStatus === 'settlement' ? 'Selesai' : 'Menunggu'}</small>
+                <small>${orderData.paymentStatus === 'paid' ? 'Selesai' : 'Menunggu'}</small>
               </div>
             </div>
-            <div class="status-item ${orderData.paymentStatus === 'settlement' ? 'completed' : ''}">
-              <span class="status-check">${orderData.paymentStatus === 'settlement' ? '✓' : ''}</span>
+            <div class="status-item ${orderData.paymentStatus === 'paid' ? 'completed' : ''}">
+              <span class="status-check">${orderData.paymentStatus === 'paid' ? '✓' : ''}</span>
               <div class="status-text">
                 <strong>Proses</strong>
-                <small>${orderData.paymentStatus === 'settlement' ? 'Sedang Diproses' : 'Menunggu Pembayaran'}</small>
+                <small>${orderData.paymentStatus === 'paid' ? 'Sedang Diproses' : 'Menunggu Pembayaran'}</small>
               </div>
             </div>
             <div class="status-item">
@@ -401,11 +401,11 @@ function displayOrderData(orderData) {
             </div>
           </div>
 
-          ${isExpired && orderData.paymentStatus !== 'settlement' ? `
+          ${isExpired && orderData.paymentStatus !== 'paid' ? `
             <div class="alert alert-danger" style="margin-top: 15px;">
               ⚠️ Pembayaran telah expired. Silakan buat pesanan baru.
             </div>
-          ` : orderData.paymentStatus !== 'settlement' ? `
+          ` : orderData.paymentStatus !== 'paid' ? `
             <div class="alert alert-warning" style="margin-top: 15px;">
               ⏳ Pembayaran harus selesai sebelum: <strong>${formatDateTime(expirationDate)}</strong>
             </div>
@@ -416,7 +416,7 @@ function displayOrderData(orderData) {
         <div id="payment-actions" class="section">
           <h3>Opsi Pembayaran</h3>
           <div class="button-group">
-            ${orderData.paymentStatus !== 'settlement' && !isExpired ? `
+            ${orderData.paymentStatus !== 'paid' && !isExpired ? `
               <button id="btn-payment" class="btn btn-primary btn-lg">
                 💳 Lanjut Pembayaran
               </button>
@@ -436,7 +436,7 @@ function displayOrderData(orderData) {
 
 function getStatusInfo(status) {
   const statusMap = {
-    'settlement': {
+    'paid': {
       text: 'Pembayaran Selesai',
       icon: '✓',
       class: 'success'
