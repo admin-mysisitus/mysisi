@@ -15,7 +15,7 @@ export async function render(currentUser) {
 
     // Filter completed orders to show as registered domains
     const domains = orders
-      .filter(o => o.paymentStatus === 'settlement')
+      .filter(o => o.paymentStatus === 'paid')
       .map(o => ({
         name: o.domain,
         registeredDate: o.createdAt,
