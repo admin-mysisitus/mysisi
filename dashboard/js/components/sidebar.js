@@ -37,12 +37,7 @@ export class DashboardSidebar {
         label: 'Pesanan',
         route: '/dashboard/orders'
       },
-      {
-        id: 'checkout',
-        icon: 'icon-plus-circle',
-        label: 'Beli Domain',
-        route: '/dashboard/checkout'
-      },
+
       {
         id: 'invoices',
         icon: 'icon-file-text',

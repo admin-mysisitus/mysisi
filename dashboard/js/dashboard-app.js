@@ -74,12 +74,7 @@ class DashboardApp {
         requiresAuth: true,
         loadModule: () => import('./modules/orders.js')
       },
-      '/dashboard/checkout': {
-        page: 'checkout',
-        title: 'Beli Domain',
-        requiresAuth: true,
-        loadModule: () => import('./modules/checkout.js')
-      },
+
       '/dashboard/payment': {
         page: 'payment',
         title: 'Pembayaran',

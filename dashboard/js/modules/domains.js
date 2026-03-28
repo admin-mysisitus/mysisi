@@ -35,7 +35,7 @@ export async function render(currentUser) {
           ${domains.length === 0 ? `
             <div style="text-align: center; padding: 40px;">
               <p style="color: var(--color-text-light); margin-bottom: 20px;">Belum ada domain terdaftar.</p>
-              <a href="/dashboard/#!checkout" class="btn btn-primary">Daftar Domain Baru</a>
+              <a href="/" class="btn btn-primary">Daftar Domain Baru</a>
             </div>
           ` : `
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
