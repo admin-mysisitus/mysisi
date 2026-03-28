@@ -221,8 +221,7 @@ function updatePriceSummary() {
 
   const subtotal = domainPrice + addonTotal;
   const ppn = Math.round(subtotal * 0.11); // 11% tax
-  const discount = orderState.promoDiscount || 0;
-  const total = subtotal + ppn - discount;
+  const total = subtotal + ppn;
 
   // Update DOM - with defensive checks
   const domainPriceEl = document.getElementById('domain-price');
