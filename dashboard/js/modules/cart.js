@@ -587,6 +587,13 @@ async function proceedToCheckout() {
     const parts = firstDomain.split('.');
     const tld = parts[parts.length - 1];
 
+    // VALIDASI: Recheck domain availability (per spec)
+    console.log('[Cart] Checking domain availability:', firstDomain);
+    const availabilityCheck = await APIClient.checkDomainAvailability(firstDomain, tld);
+    if (!availabilityCheck.success || !availabilityCheck.data?.available) {
+      throw new Error(`Domain ${firstDomain} tidak tersedia. Silakan pilih domain lain.`);
+    }
+
     // Calculate final total with promo + ppn
     const subtotal = summary.subtotal + (CartManager.getCart().addons || []).reduce((sum, a) => sum + a.price, 0);
     const ppn = Math.round(subtotal * 0.11);
