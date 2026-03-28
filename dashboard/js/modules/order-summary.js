@@ -4,15 +4,16 @@
  * Display order details before checkout
  * - Guest accessible (public page)
  * - Shows domain + available addons
- * - Allows promo code entry
+ * - Displays pricing with PPN tax
  * - Redirects to cart on add-to-cart
  * 
  * Features:
  * - No login required
  * - Domain availability recheck
  * - Addon selection UI
- * - Promo code validation
  * - LocalStorage persistence
+ * 
+ * NOTE: Promo code logic moved to /cart/ (inline checkout)
  */
 
 import { CartManager } from '/assets/js/modules/unified-cart.js';
@@ -243,15 +244,6 @@ function updatePriceSummary() {
   if (ppnEl) ppnEl.textContent = `Rp ${formatNumber(ppn)}`;
   const totalEl = document.getElementById('total');
   if (totalEl) totalEl.textContent = `Rp ${formatNumber(total)}`;
-}
-
-/**
- * Setup event handlers
- */
-function setupEventHandlers() {
-  // Expose functions to window for inline handlers
-  window.toggleAddon = toggleAddon;
-  window.addToCart = addToCart;
 }
 
 /**
