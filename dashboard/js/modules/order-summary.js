@@ -55,11 +55,11 @@ export async function render(currentUser) {
     // Validate domain availability
     await validateDomainAvailability();
 
+    // Setup event handlers BEFORE rendering (before addon checkboxes are created)
+    setupEventHandlers();
+
     // Render UI
     renderOrderSummary();
-
-    // Setup event handlers
-    setupEventHandlers();
 
     // Save state to localStorage for persistence
     saveOrderState();
@@ -144,11 +144,10 @@ async function validateDomainAvailability() {
 }
 
 /**
- * Setup event handlers
+ * Setup event handlers for buttons
  */
 function setupEventHandlers() {
-  // Expose functions to window for inline handlers
-  window.toggleAddon = toggleAddon;
+  // Expose only addToCart to window for button click handler
   window.addToCart = addToCart;
 }
 function renderOrderSummary() {
@@ -194,8 +193,7 @@ function renderAddons() {
     addonEl.style.cursor = 'pointer';
     
     addonEl.innerHTML = `
-      <input type="checkbox" data-addon-id="${addon.id}" ${isSelected ? 'checked' : ''}
-        onchange="window.toggleAddon && window.toggleAddon('${addon.id}', this.checked)">
+      <input type="checkbox" data-addon-id="${addon.id}" ${isSelected ? 'checked' : ''}>
       <div style="flex: 1;">
         <strong style="display: block; margin-bottom: 2px;">${addon.name}</strong>
         <small style="color: #666;">${addon.description || 'Layanan tambahan untuk domain'}</small>
@@ -205,6 +203,12 @@ function renderAddons() {
         <small style="color: #666;">/${addon.duration} tahun</small>
       </div>
     `;
+    
+    // Attach event listener to checkbox (proper event binding)
+    const checkbox = addonEl.querySelector('input[type="checkbox"]');
+    checkbox.addEventListener('change', (e) => {
+      toggleAddon(addon.id, e.target.checked);
+    });
     
     addonsList.appendChild(addonEl);
   });
