@@ -37,6 +37,12 @@ let orderState = {
  */
 export async function render(currentUser) {
   try {
+    console.log(`[ORDER-SUMMARY] Render started`);
+    console.log(`[ORDER-SUMMARY] ADDON_PACKAGES available:`, Object.keys(ADDON_PACKAGES).length, 'addons');
+    Object.entries(ADDON_PACKAGES).forEach(([key, addon]) => {
+      console.log(`  - ${key}: ${addon.name} (Rp ${addon.price})`);
+    });
+
     // Load saved order state from localStorage
     loadOrderState();
 
@@ -51,15 +57,18 @@ export async function render(currentUser) {
     const { domainName, tld } = parseDomain(domain);
     orderState.domain = domainName;
     orderState.tld = tld;
+    console.log(`[ORDER-SUMMARY] Domain parsed: ${domainName}.${tld}`);
 
     // Validate domain availability
     await validateDomainAvailability();
 
     // Setup event handlers BEFORE rendering (before addon checkboxes are created)
     setupEventHandlers();
+    console.log(`[ORDER-SUMMARY] Event handlers setup complete`);
 
     // Render UI
     renderOrderSummary();
+    console.log(`[ORDER-SUMMARY] Render complete`);
 
     // Save state to localStorage for persistence
     saveOrderState();
@@ -164,14 +173,14 @@ function renderOrderSummary() {
     domainNameEl.textContent = `${orderState.domain}.${orderState.tld}`;
   }
 
-  // Set prices
-  updatePriceSummary();
-
-  // Render addons
+  // Render addons FIRST (before updating prices)
   renderAddons();
 
   // Restore selected addons if any
   restoreSelectedAddons();
+
+  // Update prices LAST (after addons are restored)
+  updatePriceSummary();
 }
 
 /**
