@@ -123,6 +123,7 @@ async function generateMidtransToken(orderData) {
     }
 
     // Call GAS to generate Midtrans token with all required parameters
+    // NEW: Pass addons as the 8th parameter
     const result = await APIClient.generateMidtransToken(
       orderData.orderId,
       currentUser.email,
@@ -130,7 +131,8 @@ async function generateMidtransToken(orderData) {
       currentUser.displayName || currentUser.name || 'Customer',
       orderData.domain,
       orderData.packageId || orderData.packageName,
-      orderData.total
+      orderData.total,
+      orderData.addons || []  // NEW: Pass addons array
     );
 
     if (!result.success || !result.data || !result.data.snapToken) {

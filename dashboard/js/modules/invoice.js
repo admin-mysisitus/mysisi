@@ -219,8 +219,9 @@ function renderInvoice() {
                 <small style="color: #999;">1 tahun registrasi</small>
               </td>
               <td style="padding: 15px; text-align: center;">1</td>
-              <td style="padding: 15px; text-align: right; font-weight: bold;">Rp ${formatCurrency(invoiceData.total || 0)}</td>
+              <td style="padding: 15px; text-align: right; font-weight: bold;">Rp ${formatCurrency(299000)}</td>
             </tr>
+            ${renderInvoiceAddons()}
           </tbody>
         </table>
       </div>
@@ -360,6 +361,33 @@ function setupEventListeners() {
       window.print();
     }
   });
+}
+
+/**
+ * Render addons in invoice items table
+ * Returns HTML rows for each addon
+ */
+function renderInvoiceAddons() {
+  if (!invoiceData || !invoiceData.addons || !Array.isArray(invoiceData.addons)) {
+    return '';
+  }
+
+  let html = '';
+  for (const addon of invoiceData.addons) {
+    if (addon && addon.price && addon.price > 0) {
+      html += `
+        <tr style="border-bottom: 1px solid #e0e0e0;">
+          <td style="padding: 15px; color: #333;">
+            <strong>${addon.name || 'Addon'}</strong><br>
+            <small style="color: #999;">${addon.duration || 1} tahun</small>
+          </td>
+          <td style="padding: 15px; text-align: center;">1</td>
+          <td style="padding: 15px; text-align: right; font-weight: bold;">Rp ${formatCurrency(addon.price)}</td>
+        </tr>
+      `;
+    }
+  }
+  return html;
 }
 
 export default render;

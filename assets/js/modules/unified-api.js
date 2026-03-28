@@ -327,7 +327,7 @@ export class APIClient {
   /**
    * Generate Midtrans payment token
    */
-  static generateMidtransToken(orderId, email, phone, name, domain, packageId, total) {
+  static generateMidtransToken(orderId, email, phone, name, domain, packageId, total, addons = []) {
     return this.call('generateMidtransToken', {
       orderId,
       email,
@@ -335,7 +335,8 @@ export class APIClient {
       name,
       domain,
       packageId,
-      total
+      total,
+      addons  // NEW: Pass addons array
     }, { method: 'POST' });
   }
 
