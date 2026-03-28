@@ -621,9 +621,9 @@ async function proceedToCheckout() {
     console.log('[Cart] Order created:', orderId);
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
 
-    // Redirect to payment page
+    // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
-      window.location.href = `/dashboard/payment/?orderId=${encodeURIComponent(orderId)}`;
+      window.location.hash = `#!payment?orderId=${encodeURIComponent(orderId)}`;
     }, 1500);
 
   } catch (error) {
