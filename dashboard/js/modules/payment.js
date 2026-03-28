@@ -233,7 +233,7 @@ function handlePaymentClose() {
 
 async function updateOrderStatus(orderId, status, transactionId) {
   try {
-    await APIClient.updateOrderStatus(orderId, status);
+    await APIClient.updateOrderStatus(orderId, status, transactionId);  // NEW: Pass transactionId
   } catch (error) {
     console.error('Error updating order status:', error);
   }

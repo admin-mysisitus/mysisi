@@ -308,10 +308,11 @@ export class APIClient {
   /**
    * Update order status
    */
-  static updateOrderStatus(orderId, status) {
+  static updateOrderStatus(orderId, status, transactionId = null) {
     return this.call('updateOrderStatus', {
       orderId,
-      status
+      status,
+      transactionId  // NEW: Pass transaction ID from Midtrans
     }, { method: 'POST' });
   }
 
