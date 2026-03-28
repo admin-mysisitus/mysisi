@@ -40,3 +40,9 @@ Code	Discount Type	Discount Value	Max Usage	Current Usage	Valid From	Valid Until
 WELCOME10	percentage	10	-1	0	2026-03-01T00:00:00.000Z	2026-12-31T23:59:59.000Z	Yes	Diskon 10% untuk pelanggan baru
 SAVE20K	fixed	20000	-1	0	2026-03-01T00:00:00.000Z	2026-12-31T23:59:59.000Z	Yes	Hemat Rp 20.000 untuk pembelian sekarang
 HALFPRICE	percentage	50	100	0	2026-03-27T00:00:00.000Z	2026-03-31T23:59:59.000Z	Yes	Promo terbatas - diskon 50% untuk 100 pembeli pertama
+
+
+SHEET: INVOICES
+═══════════════════════════════════════════════════════════════════════════════
+Invoice ID	Order ID	User ID	Email	Customer Name	Domain	Package	Total Amount	Transaction ID	Payment Method	Paid At	Generated At	Status
+INV-2026-03-27-00001	ORDER-1711359600000	USER-1711359600000	john@example.com	John Doe	example.com	professional	349000	MID-1711359600000	credit_card	2026-03-27T10:05:00.000Z	2026-03-27T10:05:30.000Z	paid
