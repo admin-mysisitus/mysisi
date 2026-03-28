@@ -11,124 +11,103 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/order-summary/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-        
-        .page-container {
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #summary-content {
-            display: grid;
-        }
-    </style>
 </head>
 <body>
     <div id="order-summary-container" class="page-container">
         <!-- Loading State -->
-        <div id="loading-state" style="text-align: center; padding: 60px 20px;">
-            <div class="spinner" style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #2563EB; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="margin-top: 20px; color: #666;">Memproses ringkasan pesanan...</p>
+        <div id="loading-state">
+            <div class="spinner"></div>
+            <p>Memproses ringkasan pesanan...</p>
         </div>
         
         <!-- Error State -->
-        <div id="error-state" style="display: none;">
-            <div style="max-width: 900px; margin: 0 auto;">
-                <div style="background: white; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <div style="background-color: #fee2e2; border-left: 4px solid #ef4444; padding: 20px; border-radius: 4px;">
-                        <h3 style="margin: 0 0 10px 0; color: #991b1b; display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 20px;">⚠️</span>
-                            <span>Pesanan Tidak Lengkap</span>
-                        </h3>
-                        <p id="error-message" style="margin: 10px 0; color: #7f1d1d; font-size: 14px;">
-                            Periksa kembali informasi berikut:
-                        </p>
-                        <ul id="error-list" style="margin: 10px 0; padding-left: 20px; color: #7f1d1d; font-size: 14px;"></ul>
-                        <p style="margin: 15px 0 0 0; color: #7f1d1d; font-size: 13px;">
-                            Jika masalah berlanjut, silakan <a href="https://wa.me/6281215289095" target="_blank" style="color: #dc2626; text-decoration: underline;">hubungi support kami</a>
-                        </p>
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <button type="button" onclick="history.back()" 
-                            style="padding: 12px 20px; background: #f0f0f0; color: #333; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px;">
-                            ← Kembali
-                        </button>
-                    </div>
+        <div id="error-state">
+            <div class="error-card">
+                <div class="error-alert">
+                    <h3>
+                        <i class="fas fa-exclamation-circle"></i>
+                        Pesanan Tidak Lengkap
+                    </h3>
+                    <p id="error-message">
+                        Periksa kembali informasi berikut:
+                    </p>
+                    <ul id="error-list"></ul>
+                    <p style="margin-top: 15px; font-size: small;">
+                        Jika masalah berlanjut, silakan <a href="https://wa.me/6281215289095" target="_blank">hubungi support kami</a>
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    <button type="button" onclick="history.back()" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </button>
                 </div>
             </div>
         </div>
         
         <!-- Summary Content -->
-        <div id="summary-content" style="display: none; max-width: 900px; margin: 0 auto;">
-            <div style="background: white; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <div id="summary-content">
+            <div class="summary-card">
                 <!-- Domain Information -->
-                <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e0e0e0;">
-                    <h2 style="margin: 0 0 10px 0; font-size: 24px; font-weight: bold;">🌐 <span id="domain-name"></span></h2>
-                    <p style="margin: 0; color: #666; font-size: 14px;">Domain yang akan Anda daftarkan</p>
+                <div class="domain-section">
+                    <h2>
+                        <i class="fas fa-globe"></i>
+                        <span class="domain-name" id="domain-name"></span>
+                    </h2>
+                    <p>Domain yang akan Anda daftarkan</p>
                 </div>
 
                 <!-- Addons Section -->
-                <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e0e0e0;">
-                    <h3 style="margin: 0 0 15px 0; font-weight: bold;">📦 Layanan Tambahan (Opsional)</h3>
-                    <div id="addons-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                <div class="addons-section">
+                    <h3>
+                        <i class="fas fa-cube"></i> Layanan Tambahan
+                    </h3>
+                    <div id="addons-list"></div>
                 </div>
 
                 <!-- Price Summary -->
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                    <h3 style="margin: 0 0 15px 0; font-weight: bold;">💰 Ringkasan Harga</h3>
+                <div class="price-section">
+                    <h3>
+                        <i class="fas fa-money-bill-wave"></i> Ringkasan Harga
+                    </h3>
                     
-                    <!-- Domain Price -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
-                        <span>Domain (1 tahun)</span>
-                        <strong id="domain-price">Rp 0</strong>
+                    <div class="price-row">
+                        <label>Domain (1 tahun)</label>
+                        <span class="price-value" id="domain-price">Rp 0</span>
                     </div>
 
-                    <!-- Addons Subtotal -->
-                    <div id="addons-subtotal" style="display: none; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
-                        <span>Layanan Tambahan</span>
-                        <strong id="addons-total">Rp 0</strong>
+                    <div id="addons-subtotal" class="price-row">
+                        <label>Layanan Tambahan</label>
+                        <span class="price-value" id="addons-total">Rp 0</span>
                     </div>
 
-                    <!-- Subtotal -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
-                        <span>Subtotal</span>
-                        <strong id="subtotal">Rp 0</strong>
+                    <div class="price-divider"></div>
+
+                    <div class="price-row subtotal">
+                        <label>Subtotal</label>
+                        <span class="price-value" id="subtotal">Rp 0</span>
                     </div>
 
-                    <!-- PPNPadding -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
-                        <span>PPN (11%)</span>
-                        <strong id="ppn">Rp 0</strong>
+                    <div class="price-row ppn">
+                        <label>PPN (11%)</label>
+                        <span class="price-value" id="ppn">Rp 0</span>
                     </div>
 
-                    <!-- Total -->
-                    <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #2563EB;">
-                        <span>Total</span>
-                        <span id="total">Rp 0</span>
+                    <div class="price-row total">
+                        <label>Total Pembayaran</label>
+                        <span class="price-value" id="total">Rp 0</span>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <button type="button" onclick="history.back()" 
-                        style="padding: 14px 20px; background: #f0f0f0; color: #333; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px;">
-                        ← Kembali
+                <div class="action-section">
+                    <button type="button" onclick="history.back()" class="btn btn-back">
+                        <i class="fas fa-arrow-left"></i> Kembali Edit
                     </button>
-                    <button type="button" onclick="window.addToCart && window.addToCart()" 
-                        style="padding: 14px 20px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px;">
-                        🛒 Tambahkan ke Keranjang
+                    <button type="button" onclick="window.addToCart && window.addToCart()" class="btn btn-cart">
+                        <i class="fas fa-shopping-cart"></i> Tambahkan ke Keranjang
                     </button>
                 </div>
             </div>

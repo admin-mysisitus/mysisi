@@ -78,19 +78,31 @@ export async function render(currentUser) {
     showError('Kesalahan', error.message);
     
     const errorState = document.getElementById('error-state');
+    const loadingState = document.getElementById('loading-state');
+    const summaryContent = document.getElementById('summary-content');
+    
+    if (loadingState) loadingState.style.display = 'none';
+    if (summaryContent) summaryContent.classList.remove('visible');
+    
     if (errorState) {
-      errorState.style.display = 'block';
-      errorState.style.textAlign = 'center';
-      errorState.style.padding = '60px 20px';
-      errorState.innerHTML = `
-        <div style="color: #dc2626; margin-bottom: 20px;">
-          <h2>❌ Kesalahan</h2>
-          <p>${error.message}</p>
-        </div>
-        <a href="/" style="padding: 10px 20px; background: #2563EB; color: white; text-decoration: none; border-radius: 6px; display: inline-block;">
-          Kembali ke Beranda
-        </a>
-      `;
+      errorState.classList.add('visible');
+      const errorCard = errorState.querySelector('.error-card');
+      if (errorCard) {
+        errorCard.innerHTML = `
+          <div class="error-alert">
+            <h3>
+              <i class="fas fa-exclamation-circle"></i>
+              Kesalahan Memproses Pesanan
+            </h3>
+            <p>${error.message}</p>
+          </div>
+          <div class="action-buttons">
+            <a href="/" class="btn btn-primary" style="text-decoration: none;">
+              <i class="fas fa-arrow-left"></i> Kembali ke Beranda
+            </a>
+          </div>
+        `;
+      }
     }
   }
 }
@@ -163,9 +175,11 @@ function renderOrderSummary() {
   // Hide loading, show content
   const loadingState = document.getElementById('loading-state');
   const summaryContent = document.getElementById('summary-content');
+  const errorState = document.getElementById('error-state');
   
   if (loadingState) loadingState.style.display = 'none';
-  if (summaryContent) summaryContent.style.display = 'grid';
+  if (errorState) errorState.classList.remove('visible');
+  if (summaryContent) summaryContent.classList.add('visible');
 
   // Set domain info
   const domainNameEl = document.getElementById('domain-name');
@@ -193,23 +207,31 @@ function renderAddons() {
   // Clear existing
   addonsList.innerHTML = '';
 
+  // Get all addons
+  const addonsArray = Object.values(ADDON_PACKAGES);
+  
+  if (addonsArray.length === 0) {
+    addonsList.innerHTML = '<div class="addon-empty">Tidak ada layanan tambahan yang tersedia saat ini</div>';
+    return;
+  }
+
   // Render each addon
-  Object.values(ADDON_PACKAGES).forEach(addon => {
+  addonsArray.forEach(addon => {
     const isSelected = orderState.selectedAddons.includes(addon.id);
     
     const addonEl = document.createElement('label');
-    addonEl.className = 'addon-checkbox' + (isSelected ? ' selected' : '');
+    addonEl.className = 'addon-item';
     addonEl.style.cursor = 'pointer';
     
     addonEl.innerHTML = `
-      <input type="checkbox" data-addon-id="${addon.id}" ${isSelected ? 'checked' : ''}>
-      <div style="flex: 1;">
-        <strong style="display: block; margin-bottom: 2px;">${addon.name}</strong>
-        <small style="color: #666;">${addon.description || 'Layanan tambahan untuk domain'}</small>
+      <input type="checkbox" data-addon-id="${addon.id}" ${isSelected ? 'checked' : ''} style="display: none;">
+      <div class="addon-info">
+        <span class="addon-name">${addon.name}</span>
+        <span class="addon-desc">${addon.description || 'Layanan tambahan untuk domain'}</span>
       </div>
-      <div style="text-align: right; white-space: nowrap;">
-        <strong style="display: block; color: #2563EB;">${addon.price === 0 ? 'GRATIS' : `Rp ${formatNumber(addon.price)}`}</strong>
-        <small style="color: #666;">/${addon.duration} tahun</small>
+      <div class="addon-price">
+        <div>${addon.price === 0 ? 'GRATIS' : `Rp ${formatNumber(addon.price)}`}</div>
+        <small>/${addon.duration} tahun</small>
       </div>
     `;
     
@@ -253,7 +275,7 @@ function updatePriceSummary() {
   if (addonTotal > 0) {
     const addonSubEl = document.getElementById('addons-subtotal');
     if (addonSubEl) {
-      addonSubEl.style.display = 'flex';
+      addonSubEl.classList.add('visible');
       console.log(`[PRICE DEBUG] Showing addons-subtotal`);
     }
     const addontotalEl = document.getElementById('addons-total');
@@ -264,7 +286,7 @@ function updatePriceSummary() {
   } else {
     const addonSubEl = document.getElementById('addons-subtotal');
     if (addonSubEl) {
-      addonSubEl.style.display = 'none';
+      addonSubEl.classList.remove('visible');
       console.log(`[PRICE DEBUG] Hiding addons-subtotal (no addons selected)`);
     }
   }
@@ -307,13 +329,15 @@ function toggleAddon(addonId, isChecked) {
   updatePriceSummary();
   
   // Update label styling
-  const labels = document.querySelectorAll('.addon-checkbox');
+  const labels = document.querySelectorAll('.addon-item');
   labels.forEach(label => {
     const checkbox = label.querySelector('input[type="checkbox"]');
-    if (checkbox.checked) {
-      label.classList.add('selected');
+    if (checkbox && checkbox.checked) {
+      label.style.borderColor = 'var(--primary-blue)';
+      label.style.backgroundColor = 'rgba(37, 99, 235, 0.05)';
     } else {
-      label.classList.remove('selected');
+      label.style.borderColor = 'var(--border-color)';
+      label.style.backgroundColor = 'var(--bg-light)';
     }
   });
 

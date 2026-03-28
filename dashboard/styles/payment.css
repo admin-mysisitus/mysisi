@@ -89,11 +89,11 @@
 
 .status-header {
   padding: 1.5rem;
-  background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-light) 100%);
+  background: #f8fafc;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
 }
 
 .status-header i {
@@ -205,9 +205,10 @@
 
 .order-summary {
   padding: 1rem;
-  background: linear-gradient(135deg, #ecf0f1 0%, #f8f9fa 100%);
+  background: #f8fafc;
   border-radius: 8px;
   margin-bottom: 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .summary-row {
@@ -451,15 +452,15 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
   flex-grow: 1;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #2980b9, #1f618d);
-  box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
   transform: translateY(-2px);
 }
 
@@ -484,9 +485,9 @@
    ============================================================================ */
 
 .payment-instructions {
-  background: #d6eaf8;
-  border: 1px solid #aed6f1;
-  border-left: 4px solid #3498db;
+  background: #cffafe;
+  border: 1px solid #a5f3fc;
+  border-left: 4px solid #0284c7;
   border-radius: 8px;
   padding: 1.5rem;
   margin: 2rem 0;
@@ -494,7 +495,7 @@
 
 .payment-instructions h4 {
   margin: 0 0 1rem 0;
-  color: #1a5276;
+  color: #0c4a6e;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -508,7 +509,7 @@
 }
 
 .payment-instructions li {
-  color: #1a5276;
+  color: #0c4a6e;
   padding: 0.5rem 0;
   line-height: 1.5;
 }
