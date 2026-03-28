@@ -20,7 +20,7 @@ export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;
   static SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-  static STORAGE_TYPE = 'sessionStorage'; // Use sessionStorage for same-tab only
+  static STORAGE_TYPE = 'localStorage'; // Use localStorage for cross-tab persistence
 
   // State
   static state = {
