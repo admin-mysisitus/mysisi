@@ -587,9 +587,9 @@ async function proceedToCheckout() {
     const parts = firstDomain.split('.');
     const tld = parts[parts.length - 1];
 
-    // VALIDASI: Recheck domain availability (per spec)
+    // VALIDASI: Re-check domain availability (per spec)
     console.log('[Cart] Checking domain availability:', firstDomain);
-    const availabilityCheck = await APIClient.checkDomainAvailability(firstDomain, tld);
+    const availabilityCheck = await APIClient.checkDomain(firstDomain);
     if (!availabilityCheck.success || !availabilityCheck.data?.available) {
       throw new Error(`Domain ${firstDomain} tidak tersedia. Silakan pilih domain lain.`);
     }
@@ -604,7 +604,6 @@ async function proceedToCheckout() {
       userId: cartState.userId,
       email: cartState.userEmail,
       domain: firstDomain,
-      tld: tld,
       packageId: 'starter',
       addons: CartManager.getCart().addons || [],
       promoCode: cartState.promoCode || null,

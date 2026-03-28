@@ -124,6 +124,7 @@ export class AuthManager {
       userId: user.userId,
       email: user.email,
       displayName: user.displayName,
+      emailVerified: user.emailVerified || false,
       photoURL: user.photoURL || this.getDefaultAvatar(),
       whatsapp: user.whatsapp || '',
       authMethod: user.authMethod || 'email',
