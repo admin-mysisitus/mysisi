@@ -61,20 +61,6 @@
                     <div id="addons-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
                 </div>
 
-                <!-- Promo Code Section -->
-                <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e0e0e0;">
-                    <h3 style="margin: 0 0 15px 0; font-weight: bold;">🎉 Kode Promo (Opsional)</h3>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" 
-                            style="flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
-                        <button type="button" onclick="window.applyPromoCode && window.applyPromoCode()" 
-                            style="padding: 10px 20px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-                            Gunakan
-                        </button>
-                    </div>
-                    <div id="promo-message" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-                </div>
-
                 <!-- Price Summary -->
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="margin: 0 0 15px 0; font-weight: bold;">💰 Ringkasan Harga</h3>
@@ -97,16 +83,10 @@
                         <strong id="subtotal">Rp 0</strong>
                     </div>
 
-                    <!-- PPN -->
+                    <!-- PPNPadding -->
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
                         <span>PPN (11%)</span>
                         <strong id="ppn">Rp 0</strong>
-                    </div>
-
-                    <!-- Promo Discount -->
-                    <div id="promo-discount-row" style="display: none; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd; color: #27ae60;">
-                        <span>Diskon Promo</span>
-                        <strong id="promo-discount-amount">-Rp 0</strong>
                     </div>
 
                     <!-- Total -->

@@ -26,10 +26,7 @@ let orderState = {
   tld: null,
   price: 299000,
   duration: 1,
-  selectedAddons: [],
-  promoCode: null,
-  promoDiscount: 0,
-  isValidating: false
+  selectedAddons: []
 };
 
 /**
@@ -53,9 +50,6 @@ export async function render(currentUser) {
 
     // Validate domain availability
     await validateDomainAvailability();
-
-    // Load any saved promo code
-    loadSavedPromo();
 
     // Render UI
     renderOrderSummary();
@@ -146,23 +140,13 @@ async function validateDomainAvailability() {
 }
 
 /**
- * Load saved promo code from localStorage if exists
+ * Setup event handlers
  */
-function loadSavedPromo() {
-  try {
-    const saved = localStorage.getItem('saved_promo_code');
-    if (saved) {
-      orderState.promoCode = saved;
-      // Will be validated during render
-    }
-  } catch (e) {
-    console.warn('Could not load saved promo:', e);
-  }
+function setupEventHandlers() {
+  // Expose functions to window for inline handlers
+  window.toggleAddon = toggleAddon;
+  window.addToCart = addToCart;
 }
-
-/**
- * Render order summary UI
- */
 function renderOrderSummary() {
   // Hide loading, show content
   const loadingState = document.getElementById('loading-state');
@@ -259,18 +243,6 @@ function updatePriceSummary() {
   if (ppnEl) ppnEl.textContent = `Rp ${formatNumber(ppn)}`;
   const totalEl = document.getElementById('total');
   if (totalEl) totalEl.textContent = `Rp ${formatNumber(total)}`;
-
-  // Show/hide promo discount row
-  const promoRow = document.getElementById('promo-discount-row');
-  if (promoRow) {
-    if (discount > 0) {
-      promoRow.style.display = 'block';
-      const discountAmtEl = document.getElementById('promo-discount-amount');
-      if (discountAmtEl) discountAmtEl.textContent = `-Rp ${formatNumber(discount)}`;
-    } else {
-      promoRow.style.display = 'none';
-    }
-  }
 }
 
 /**
@@ -279,7 +251,6 @@ function updatePriceSummary() {
 function setupEventHandlers() {
   // Expose functions to window for inline handlers
   window.toggleAddon = toggleAddon;
-  window.applyPromoCode = applyPromoCode;
   window.addToCart = addToCart;
 }
 
@@ -312,71 +283,6 @@ function toggleAddon(addonId, isChecked) {
   saveOrderState();
 }
 
-/**
- * Apply promo code
- */
-async function applyPromoCode() {
-  const input = document.getElementById('promo-code-input');
-  if (!input) return;
-
-  const code = input.value.trim().toUpperCase();
-  if (!code) {
-    showError('Kode Kosong', 'Masukkan kode promo terlebih dahulu');
-    return;
-  }
-
-  if (orderState.isValidating) {
-    return; // Already validating
-  }
-
-  orderState.isValidating = true;
-  const promoMsg = document.getElementById('promo-message');
-  promoMsg.textContent = 'Memvalidasi...';
-
-  try {
-    const result = await APIClient.validatePromoCode(code);
-
-    if (result.success && result.data) {
-      // Valid promo
-      const subtotal = orderState.price + orderState.selectedAddons.reduce((sum, addonId) => {
-        const addon = ADDON_PACKAGES[addonId];
-        return sum + (addon ? addon.price : 0);
-      }, 0);
-
-      let discount = 0;
-      if (result.data.discountType === 'percentage') {
-        discount = Math.round(subtotal * (result.data.discount / 100));
-      } else {
-        discount = result.data.discount;
-      }
-
-      orderState.promoCode = code;
-      orderState.promoDiscount = discount;
-
-      promoMsg.textContent = `✓ ${result.message || 'Kode promo berhasil diterapkan'}`;
-      promoMsg.style.color = '#27ae60';
-      
-      updatePriceSummary();
-      saveOrderState();
-      showSuccess('✓ Berhasil', 'Kode promo diterapkan');
-    } else {
-      // Invalid promo
-      orderState.promoCode = null;
-      orderState.promoDiscount = 0;
-      promoMsg.textContent = result.message || 'Kode promo tidak valid';
-      promoMsg.style.color = '#dc2626';
-      updatePriceSummary();
-    }
-  } catch (error) {
-    console.error('Promo validation error:', error);
-    promoMsg.textContent = 'Gagal memvalidasi kode promo';
-    promoMsg.style.color = '#dc2626';
-    orderState.promoCode = null;
-    orderState.promoDiscount = 0;
-  } finally {
-    orderState.isValidating = false;
-  }
-}
 
 /**
  * Add to cart and redirect
@@ -405,11 +311,6 @@ function addToCart() {
         };
       });
       CartManager.addAddons(addons);
-    }
-
-    // Save promo if applied
-    if (orderState.promoCode) {
-      localStorage.setItem('saved_promo_code', orderState.promoCode);
     }
 
     showSuccess('✓ Ditambahkan', 'Domain sudah di keranjang');
