@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (platform === 'whatsapp') {
         url = 'https://wa.me/6281215289095';
       } else if (platform === 'email') {
-        url = 'mailto:sisitus.com@gmail.com';
+        url = 'mailto:hello@sisitus.com';
       }
       
       if (url) {

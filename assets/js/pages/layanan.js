@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.open('https://wa.me/6281215289095?text=Halo, saya tertarik dengan layanan SISITUS', '_blank');
       } else if (text.includes('email')) {
         e.preventDefault();
-        window.location.href = 'mailto:sisitus.com@gmail.com?subject=Inquiry%20Layanan%20SISITUS';
+        window.location.href = 'mailto:hello@sisitus.com?subject=Inquiry%20Layanan%20SISITUS';
       }
     });
   });

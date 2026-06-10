@@ -71,8 +71,8 @@ window.addEventListener("load", () => {
         </li>
         <li class="email" role="none" data-no-sc>
           <i class="fas fa-envelope" aria-hidden="true"></i>
-          <a href="mailto:sisitus.com@gmail.com?subject=Halo SISITUS.COM" aria-label="Kirim email ke sisitus.com@gmail.com">
-            sisitus.com@gmail.com
+          <a href="mailto:hello@sisitus.com?subject=Halo SISITUS.COM" aria-label="Kirim email ke hello@sisitus.com">
+            hello@sisitus.com
           </a>
         </li>
       </ul>

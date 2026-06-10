@@ -144,8 +144,8 @@ function renderInvoice() {
           <div>
             <h1 style="margin: 0 0 10px 0; color: #2563EB;">SISITUS</h1>
             <p style="margin: 0; color: #666; font-size: 13px;">
-              PT SISITUS Digital<br>
-              Email: sisitus.com@gmail.com<br>
+              PT SINTARA DIGITAL NUSANTARA<br>
+              Email: hello@sisitus.com<br>
               Phone: +62-812-1528-9095
             </p>
           </div>

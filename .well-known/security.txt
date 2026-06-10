@@ -1,4 +1,4 @@
-Contact: sisitus.com@gmail.com
+Contact: hello@sisitus.com
 Expires: 2027-02-03T00:00:00Z
 Preferred-Languages: id, en
 Canonical: https://sisitus.com/.well-known/security.txt
