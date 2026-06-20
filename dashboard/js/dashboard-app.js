@@ -79,7 +79,7 @@ class DashboardApp {
         page: 'payment',
         title: 'Pembayaran',
         requiresAuth: true,
-        loadModule: () => import('./modules/payment.js')
+        loadModule: () => import('./modules/payment.js?v=2')
       },
       '/dashboard/invoices': {
         page: 'invoices',

@@ -4,7 +4,7 @@
  * Migrated and fixed from assets/js/pages/payment.js
  */
 
-import APIClient from '/assets/js/modules/unified-api.js';
+import APIClient from '/assets/js/modules/unified-api.js?v=2';
 import { AuthManager } from '/assets/js/modules/unified-auth.js';  // NEW
 import { showError, showSuccess, showWarning, showInfo, formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
 
