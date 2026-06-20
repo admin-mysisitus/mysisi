@@ -225,7 +225,7 @@ export class APIClient {
    * Using GET request to avoid CORS preflight issues
    */
   static requestPasswordReset(email) {
-    return this.call('requestPasswordReset', { email }, { method: 'GET' });
+    return this.call('requestPasswordReset', { email }, { method: 'POST' });
   }
 
   /**
@@ -299,14 +299,14 @@ export class APIClient {
    * Get user's orders
    */
   static getUserOrders(userId) {
-    return this.call('getUserOrders', { userId });
+    return this.call('getUserOrders', { userId }, { method: 'POST' });
   }
 
   /**
    * Get order detail
    */
   static getOrderDetail(orderId, userId) {
-    return this.call('getOrderDetail', { orderId, userId });
+    return this.call('getOrderDetail', { orderId, userId }, { method: 'POST' });
   }
 
   /**
@@ -324,7 +324,7 @@ export class APIClient {
    * Get user order statistics
    */
   static getUserOrderStats(userId) {
-    return this.call('getUserOrderStats', { userId });
+    return this.call('getUserOrderStats', { userId }, { method: 'POST' });
   }
 
   // ========== PAYMENT ENDPOINTS ==========
@@ -358,7 +358,7 @@ export class APIClient {
    * Get domain pricing
    */
   static getDomainPricing(tld) {
-    return this.call('getDomainPricing', { tld });
+    return this.call('getDomainPricing', { tld }, { method: 'POST' });
   }
 
   // ========== PROMO ENDPOINTS ==========
@@ -367,7 +367,7 @@ export class APIClient {
    * Validate promo code
    */
   static validatePromoCode(code) {
-    return this.call('validatePromoCode', { code });
+    return this.call('validatePromoCode', { code }, { method: 'POST' });
   }
 }
 
