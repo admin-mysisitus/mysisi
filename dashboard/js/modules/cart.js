@@ -64,6 +64,15 @@ export async function render(currentUser) {
     }
 
     cartState.currentUser = currentUser || AuthManager.getCurrentUser();
+    if (cartState.currentUser) {
+      cartState.userId = cartState.currentUser.userId;
+      cartState.userEmail = cartState.currentUser.email;
+      cartState.emailVerified = cartState.currentUser.emailVerified || false;
+    } else {
+      cartState.userId = null;
+      cartState.userEmail = null;
+      cartState.emailVerified = false;
+    }
     
     // Register background verification check listeners once
     if (!window.cartListenersRegistered) {
@@ -683,8 +692,8 @@ async function proceedToCheckout() {
 
     // Prepare order data
     const orderData = {
-      userId: cartState.userId,
-      email: cartState.userEmail,
+      userId: cartState.userId || cartState.currentUser?.userId,
+      email: cartState.userEmail || cartState.currentUser?.email,
       domain: firstDomain,
       packageId: summary.items[0]?.package || 'starter',
       addons: CartManager.getCart().addons || [],
