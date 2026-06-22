@@ -670,6 +670,47 @@ function resetPassword(token, newPassword) {
 }
 
 /**
+ * VALIDATE RESET TOKEN
+ * GET: /validateResetToken
+ * Query: { token }
+ */
+function validateResetToken(token) {
+  try {
+    if (!token) {
+      return buildResponse(false, null, 'Token diperlukan', 'MISSING_TOKEN');
+    }
+
+    const sheet = ensureUsersSheet();
+    const data = sheet.getDataRange().getValues();
+
+    // Find user with matching token
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][8] === token) {
+        // Token format matches: uuid-timestamp
+        const parts = token.split('-');
+        const timestampStr = parts[parts.length - 1];
+        if (timestampStr) {
+          const timestamp = parseInt(timestampStr, 10);
+          if (!isNaN(timestamp)) {
+            const oneHour = 60 * 60 * 1000;
+            if (Date.now() - timestamp > oneHour) {
+              return buildResponse(false, null, 'Token sudah kadaluarsa', 'TOKEN_EXPIRED');
+            }
+          }
+        }
+        
+        return buildResponse(true, { email: data[i][2] }, 'Token valid');
+      }
+    }
+
+    return buildResponse(false, null, 'Token tidak valid atau sudah kadaluarsa', 'INVALID_TOKEN');
+  } catch (error) {
+    Logger.log('Error in validateResetToken: ' + error);
+    return buildResponse(false, null, error.toString(), 'VALIDATE_ERROR');
+  }
+}
+
+/**
  * CHANGE PASSWORD (logged-in user)
  * POST: /changePassword
  * Body: { userId, oldPassword, newPassword }
@@ -2030,7 +2071,7 @@ function doPost(e) {
       case 'registeruser':
         return respondJson(registerUser(params));
       case 'loginuser':
-        return respondJson(loginUser(params));
+        return respondJson(loginUser(params.email, params.password));
       case 'verifyemailtoken':
         return respondJson(verifyEmailToken(params.token));
       case 'verifygoogletoken':
@@ -2046,6 +2087,8 @@ function doPost(e) {
         return respondJson(changePassword(params.userId, params.oldPassword, params.newPassword));
       case 'requestpasswordreset':
         return respondJson(requestPasswordReset(params.email));
+      case 'validateresettoken':
+        return respondJson(validateResetToken(params.token));
       case 'resetpassword':
         return respondJson(resetPassword(params.token, params.password));
       case 'checkdomain':
