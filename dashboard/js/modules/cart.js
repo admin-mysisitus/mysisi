@@ -716,6 +716,10 @@ async function proceedToCheckout() {
     }
 
     console.log('[Cart] Order created:', orderId);
+    
+    // Clear cart so previous checkout items are not carried over to the next order
+    CartManager.clear();
+    
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
 
     // Redirect to payment page (use hash route for SPA)
