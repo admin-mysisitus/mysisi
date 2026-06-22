@@ -2158,6 +2158,8 @@ function doGet(e) {
         return respondJson(checkDomain(params.domain));
       case 'getuserprofile':
         return respondJson(getUserProfile(params.userId));
+      case 'validateresettoken':
+        return respondJson(validateResetToken(params.token));
       default:
         return respondJson(buildResponse(false, null, 'Aksi tidak valid atau tidak ditemukan', 'INVALID_ACTION'));
     }
