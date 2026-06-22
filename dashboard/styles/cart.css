@@ -336,6 +336,7 @@
 
 .promo-input {
   flex: 1;
+  min-width: 0;
   padding: clamp(0.6rem, 1.2vw, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
   border: 1px solid var(--border-light);
   border-radius: var(--radius);

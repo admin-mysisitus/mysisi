@@ -1,4 +1,5 @@
 /* ========== PROMO PAGE INTERACTIONS ========== */
+import APIClient from '/assets/js/modules/unified-api.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   // ========== SMOOTH SCROLL KE PROMO DETAILS ==========
@@ -181,4 +182,88 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // ========== DYNAMIC ACTIVE COUPONS LOADER ==========
+  const couponsList = document.getElementById('active-coupons-list');
+  if (couponsList) {
+    fetchActiveCoupons();
+  }
+
+  async function fetchActiveCoupons() {
+    try {
+      const response = await APIClient.getActivePromoCodes();
+      if (response.success && Array.isArray(response.data) && response.data.length > 0) {
+        couponsList.innerHTML = '';
+        response.data.forEach(promo => {
+          const card = document.createElement('div');
+          card.className = 'coupon-card';
+          
+          let discountDisplay = '';
+          let typeBadge = '';
+          if (promo.discountType === 'percentage') {
+            discountDisplay = `${promo.discountValue}%`;
+            typeBadge = 'DISKON %';
+          } else {
+            discountDisplay = `Rp ${new Intl.NumberFormat('id-ID').format(promo.discountValue)}`;
+            typeBadge = 'DISKON RP';
+          }
+
+          const expiryDate = new Date(promo.validUntil);
+          const expiryFormatted = expiryDate.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          });
+
+          card.innerHTML = `
+            <div>
+              <div class="coupon-header">
+                <span class="coupon-discount">${discountDisplay} OFF</span>
+                <span class="coupon-type-badge">${typeBadge}</span>
+              </div>
+              <p class="coupon-desc">${promo.description || 'Diskon spesial untuk pembelian Anda.'}</p>
+            </div>
+            <div>
+              <div class="coupon-code-wrapper">
+                <input type="text" class="coupon-code-value" value="${promo.code}" readonly>
+                <button class="btn-copy-coupon" onclick="copyCouponCode(this, '${promo.code}')">Salin</button>
+              </div>
+              <div class="coupon-expiry">Berlaku s/d ${expiryFormatted}</div>
+            </div>
+          `;
+          couponsList.appendChild(card);
+        });
+      } else {
+        couponsList.innerHTML = `
+          <div style="text-align: center; color: var(--gray-medium); padding: 2rem; grid-column: 1 / -1; width: 100%;">
+            <i class="fas fa-info-circle" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: var(--primary-blue);"></i>
+            Belum ada kode promo aktif saat ini. Silakan hubungi kami untuk penawaran khusus!
+          </div>
+        `;
+      }
+    } catch (e) {
+      console.error('Error fetching active coupons:', e);
+      couponsList.innerHTML = `
+        <div style="text-align: center; color: #ef4444; padding: 2rem; grid-column: 1 / -1; width: 100%;">
+          <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+          Gagal memuat daftar kode promo. Silakan muat ulang halaman.
+        </div>
+      `;
+    }
+  }
+
+  // Global clipboard copy helper
+  window.copyCouponCode = (btn, code) => {
+    navigator.clipboard.writeText(code).then(() => {
+      const originalText = btn.textContent;
+      btn.textContent = 'Tersalin!';
+      btn.style.backgroundColor = '#10b981';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.backgroundColor = 'var(--primary-blue)';
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy text:', err);
+    });
+  };
 });

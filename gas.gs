@@ -1916,6 +1916,54 @@ function validatePromoCode(code) {
 }
 
 /**
+ * GET ACTIVE PROMO CODES LIST
+ */
+function getActivePromoCodes() {
+  try {
+    const sheet = ensurePromoCodesSheet();
+    const data = sheet.getDataRange().getValues();
+    const activePromos = [];
+    const now = new Date();
+
+    for (let i = 1; i < data.length; i++) {
+      const code = data[i][0];
+      const discountType = data[i][1];
+      const discountValue = data[i][2];
+      const maxUsage = parseInt(data[i][3]) || -1;
+      const currentUsage = parseInt(data[i][4]) || 0;
+      const validFrom = new Date(data[i][5]);
+      const validUntil = new Date(data[i][6]);
+      const active = data[i][7];
+      const description = data[i][8];
+
+      if (code && active === 'Yes') {
+        // Check date range
+        if (now >= validFrom && now <= validUntil) {
+          // Check max usage
+          if (maxUsage < 0 || currentUsage < maxUsage) {
+            activePromos.push({
+              code: code,
+              discountType: discountType,
+              discountValue: discountValue,
+              maxUsage: maxUsage,
+              currentUsage: currentUsage,
+              validFrom: data[i][5],
+              validUntil: data[i][6],
+              description: description
+            });
+          }
+        }
+      }
+    }
+
+    return buildResponse(true, activePromos, 'Daftar promo aktif berhasil diambil');
+  } catch (error) {
+    Logger.log('Error in getActivePromoCodes: ' + error);
+    return buildResponse(false, null, error.toString(), 'ERROR');
+  }
+}
+
+/**
  * Increment promo code usage
  * Called when order is created with valid promo code
  */
@@ -2111,6 +2159,8 @@ function doPost(e) {
         return respondJson(getOrder(params.orderId));
       case 'validatepromocode':
         return respondJson(validatePromoCode(params.code));
+      case 'getactivepromocodes':
+        return respondJson(getActivePromoCodes());
       case 'generatemidtranstoken':
         return respondJson(generateMidtransToken(params.orderId, params.email, params.phone, params.name, params.domain, params.packageId, params.total));
       case 'handlemidtranswebhook':
@@ -2162,6 +2212,8 @@ function doGet(e) {
         return respondJson(validateResetToken(params.token));
       case 'resetpassword':
         return respondJson(resetPassword(params.token, params.password));
+      case 'getactivepromocodes':
+        return respondJson(getActivePromoCodes());
       default:
         return respondJson(buildResponse(false, null, 'Aksi tidak valid atau tidak ditemukan', 'INVALID_ACTION'));
     }

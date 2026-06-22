@@ -369,6 +369,13 @@ export class APIClient {
   static validatePromoCode(code) {
     return this.call('validatePromoCode', { code }, { method: 'POST' });
   }
+
+  /**
+   * Get active promo codes list
+   */
+  static getActivePromoCodes() {
+    return this.call('getActivePromoCodes', {}, { method: 'GET' });
+  }
 }
 
 // Export for use
