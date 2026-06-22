@@ -642,7 +642,8 @@
 
   cekDomainInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      cekDomainForm.dispatchEvent(new Event('submit'));
+      e.preventDefault();
+      cekDomainBtn.click();
     }
   });
 
