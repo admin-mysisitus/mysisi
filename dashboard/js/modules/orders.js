@@ -92,7 +92,7 @@ async function showOrderDetail(orderId) {
               </div>
               <div class="summary-row">
                 <span>Paket:</span>
-                <strong>${order.packageName}</strong>
+                <strong>${order.packageName || order.packageId || 'Starter'}</strong>
               </div>
               <div class="summary-row">
                 <span>Durasi:</span>
@@ -101,7 +101,7 @@ async function showOrderDetail(orderId) {
               <div class="summary-divider"></div>
               <div class="summary-row total">
                 <span>Total:</span>
-                <strong>Rp ${formatPrice(order.total)}</strong>
+                <strong>${formatPrice(order.total)}</strong>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ async function showOrderDetail(orderId) {
             <div class="details-grid">
               <div class="detail-item">
                 <label>Nama:</label>
-                <div>${order.customerName}</div>
+                <div>${order.customerName || order.name || 'Customer'}</div>
               </div>
               <div class="detail-item">
                 <label>Email:</label>
@@ -124,7 +124,7 @@ async function showOrderDetail(orderId) {
               </div>
               <div class="detail-item">
                 <label>Alamat:</label>
-                <div>${sanitizeHTML(order.address)}</div>
+                <div>${sanitizeHTML(order.address || '-')}</div>
               </div>
             </div>
           </div>

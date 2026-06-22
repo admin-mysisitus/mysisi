@@ -845,6 +845,9 @@ function getUserByEmail(email) {
 function generateMidtransToken(orderId, email, phone, name, domain, packageId, total) {
   const startTime = Date.now();
   try {
+    // Convert total to number explicitly to satisfy Midtrans API
+    total = Number(total) || 0;
+
     // Log start
     logApiCall('generateMidtransToken', '', email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({ orderId, total }), 'Payment token generation started');
 
@@ -864,26 +867,13 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
       first_name: name || 'Customer'
     };
 
-    // Build item details - breakdown domain + package
-    const itemDetails = [];
-    const domainPrice = 299000;
-    const packagePrice = Math.max(0, total - domainPrice);
-    
-    itemDetails.push({
-      id: domain,
-      price: domainPrice,
+    // Build item details - single item representing the total order value to guarantee gross_amount match
+    const itemDetails = [{
+      id: orderId,
+      price: total,
       quantity: 1,
-      name: `${domain} (Domain Registration - 1 tahun)`
-    });
-    
-    if (packagePrice > 0) {
-      itemDetails.push({
-        id: packageId || 'package',
-        price: packagePrice,
-        quantity: 1,
-        name: `Paket ${packageId || 'Standard'} - Domain Hosting`
-      });
-    }
+      name: `Layanan Mysisi: ${domain} (${packageId || 'Starter'})`
+    }];
 
     // Build transaction data for Midtrans Snap API
     const transactionData = {
@@ -928,14 +918,18 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
       let errorMessage = 'Gagal membuat token pembayaran';
       try {
         const errorResponse = JSON.parse(responseText);
-        if (errorResponse.errors) {
+        if (errorResponse.error_messages && Array.isArray(errorResponse.error_messages)) {
+          errorMessage = errorResponse.error_messages.join(', ');
+        } else if (errorResponse.errors) {
           errorMessage = errorResponse.errors[0].message || errorMessage;
+        } else if (errorResponse.message) {
+          errorMessage = errorResponse.message;
         }
       } catch (e) {
         // Use default error message if can't parse response
       }
       logApiCall('generateMidtransToken', '', email, 'POST', 'failed', responseCode, Date.now() - startTime, errorMessage, JSON.stringify({ orderId }), 'Midtrans API error');
-      return buildResponse(false, null, errorMessage, 'MIDTRANS_API_ERROR');
+      return buildResponse(false, null, errorMessage + ' (HTTP ' + responseCode + ')', 'MIDTRANS_API_ERROR');
     }
 
     // Parse successful response

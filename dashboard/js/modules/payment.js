@@ -260,11 +260,11 @@ function requestPaymentAfterPreview() {
     if (currentOrder.addons && Array.isArray(currentOrder.addons) && currentOrder.addons.length > 0) {
       addonInfo = `\nAddon (${currentOrder.addons.length}):\n`;
       currentOrder.addons.forEach(addon => {
-        addonInfo += `- ${addon.name}: Rp ${formatPrice(addon.price)}\n`;
+        addonInfo += `- ${addon.name}: ${formatPrice(addon.price)}\n`;
       });
     }
 
-    const message = `Halo, saya ingin meminta preview desain untuk order berikut:\n\nOrder ID: ${currentOrder.orderId}\nDomain: ${currentOrder.domain}\nPaket: ${currentOrder.packageName}${addonInfo}\nTotal: Rp ${formatPrice(currentOrder.total)}\n\nTerima kasih`;
+    const message = `Halo, saya ingin meminta preview desain untuk order berikut:\n\nOrder ID: ${currentOrder.orderId}\nDomain: ${currentOrder.domain}\nPaket: ${currentOrder.packageName || currentOrder.packageId || 'Starter'}${addonInfo}\nTotal: ${formatPrice(currentOrder.total)}\n\nTerima kasih`;
 
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -288,7 +288,7 @@ function displayOrderData(orderData) {
     const addonsHTML = orderData.addons.map(addon => `
       <div class="summary-row">
         <span>${addon.name} (${addon.duration} tahun)</span>
-        <strong>Rp ${formatPrice(addon.price)}</strong>
+        <strong>${formatPrice(addon.price)}</strong>
       </div>
     `).join('');
     
@@ -308,16 +308,16 @@ function displayOrderData(orderData) {
     pricingBreakdown = `
       <div class="summary-row">
         <span>Subtotal:</span>
-        <strong>Rp ${formatPrice(orderData.subtotal)}</strong>
+        <strong>${formatPrice(orderData.subtotal)}</strong>
       </div>
       <div class="summary-row">
         <span>PPN (11%):</span>
-        <strong>Rp ${formatPrice(orderData.ppn)}</strong>
+        <strong>${formatPrice(orderData.ppn)}</strong>
       </div>
       ${orderData.discount > 0 ? `
         <div class="summary-row" style="color: #27ae60;">
           <span>Diskon (${orderData.promoCode || 'Promo'}):</span>
-          <strong>-Rp ${formatPrice(orderData.discount)}</strong>
+          <strong>-${formatPrice(orderData.discount)}</strong>
         </div>
       ` : ''}
       <div class="summary-divider"></div>
@@ -350,17 +350,17 @@ function displayOrderData(orderData) {
             </div>
             <div class="summary-row">
               <span>Paket:</span>
-              <strong>${orderData.packageName}</strong>
+              <strong>${orderData.packageName || orderData.packageId || 'Starter'}</strong>
             </div>
             <div class="summary-row">
               <span>Durasi:</span>
-              <strong>${orderData.domainDuration} tahun</strong>
+              <strong>${orderData.domainDuration || 1} tahun</strong>
             </div>
             ${addonsSection}
             ${pricingBreakdown}
             <div class="summary-row total">
               <span>Total Pembayaran:</span>
-              <strong class="total-price">Rp ${formatPrice(orderData.total)}</strong>
+              <strong class="total-price">${formatPrice(orderData.total)}</strong>
             </div>
           </div>
         </div>
@@ -371,7 +371,7 @@ function displayOrderData(orderData) {
           <div class="details-grid">
             <div class="detail-item">
               <label>Nama:</label>
-              <div>${orderData.customerName}</div>
+              <div>${orderData.customerName || orderData.name || 'Customer'}</div>
             </div>
             <div class="detail-item">
               <label>Email:</label>
@@ -383,7 +383,7 @@ function displayOrderData(orderData) {
             </div>
             <div class="detail-item">
               <label>Alamat:</label>
-              <div>${sanitizeHTML(orderData.address)}</div>
+              <div>${sanitizeHTML(orderData.address || '-')}</div>
             </div>
           </div>
         </div>

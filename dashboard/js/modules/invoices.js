@@ -12,7 +12,7 @@ export async function render(currentUser) {
   try {
     // Load user orders (use as invoices for now)
     const result = await APIClient.getUserOrders(currentUser.userId);
-    const orders = result.orders || [];
+    const orders = result.data?.orders || result.orders || [];
 
     // Filter orders with payment status = paid
     const invoices = orders.filter(o => o.paymentStatus === 'paid');
@@ -45,7 +45,7 @@ export async function render(currentUser) {
                     <td>${formatDateTime(inv.createdAt)}</td>
                     <td><strong>${inv.orderId}</strong></td>
                     <td>${inv.domain}</td>
-                    <td>Rp ${formatPrice(inv.total)}</td>
+                    <td>${formatPrice(inv.total)}</td>
                     <td>
                       <button class="btn btn-sm btn-outline" onclick="showInfo('Fitur download PDF sedang dikembangkan')">
                         📥 Download

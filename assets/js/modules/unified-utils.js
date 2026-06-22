@@ -271,7 +271,9 @@ export function formatTimeAgo(date) {
  * Format price with IDR currency symbol
  */
 export function formatPrice(value) {
-  return `Rp ${formatCurrency(value).replace('IDR', '').trim()}`;
+  let formatted = formatCurrency(value);
+  formatted = formatted.replace(/IDR|Rp/g, '').trim();
+  return `Rp ${formatted}`;
 }
 
 /**
