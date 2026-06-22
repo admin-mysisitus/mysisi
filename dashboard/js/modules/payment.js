@@ -23,7 +23,8 @@ export async function render(user) {
     // Store current user for use in other functions
     currentUser = user || AuthManager.getCurrentUser();  // NEW: Use refreshed data
     
-    // Email verification check - REQUIRED before payment
+    // Email verification check - Bypassed to allow payment
+    /*
     if (!currentUser?.emailVerified) {
       const content = document.getElementById('content');
       content.innerHTML = `
@@ -59,6 +60,7 @@ export async function render(user) {
       `;
       return;
     }
+    */
     
     // Get order ID from URL (support both search params and hash params)
     let orderId = new URLSearchParams(window.location.search).get('orderId');

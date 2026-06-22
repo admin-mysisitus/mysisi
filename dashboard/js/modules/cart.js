@@ -114,9 +114,6 @@ export async function render(currentUser) {
         cartState.verificationPollInterval = null;
       }
       renderGuestCheckout();
-    } else if (!cartState.currentUser.emailVerified) {
-      // Logged in but not verified: show verification message
-      renderEmailVerificationPrompt();
     } else if (CartManager.isEmpty()) {
       // Empty cart
       if (cartState.verificationPollInterval) {
@@ -830,11 +827,11 @@ async function proceedToCheckout() {
       return;
     }
 
-    // Check email verification
-    if (!cartState.currentUser?.emailVerified) {
-      showError('⚠️ Email Tidak Terverifikasi', 'Silakan verifikasi email Anda terlebih dahulu');
-      return;
-    }
+    // Check email verification - Bypassed to allow checkout
+    // if (!cartState.currentUser?.emailVerified) {
+    //   showError('⚠️ Email Tidak Terverifikasi', 'Silakan verifikasi email Anda terlebih dahulu');
+    //   return;
+    // }
 
     cartState.isProcessingCheckout = true;
 
