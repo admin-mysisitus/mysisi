@@ -15,7 +15,7 @@ export async function render(user) {
 
     // Load orders
     const result = await APIClient.getUserOrders(user.userId);
-    const orders = result.orders || [];
+    const orders = result.data?.orders || result.orders || [];
 
     // Render orders table
     const tableBody = document.querySelector('#orders-table tbody');
@@ -70,7 +70,7 @@ async function showOrderDetail(orderId) {
       return;
     }
 
-    const order = result.order;
+    const order = result.data || result.order;
     const modal = document.getElementById('order-detail-modal');
     
     // Render modal content

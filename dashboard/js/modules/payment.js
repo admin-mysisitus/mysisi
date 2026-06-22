@@ -112,7 +112,7 @@ async function loadOrderData(orderId, currentUser) {
       throw new Error(result.message || 'Gagal memuat pesanan');
     }
 
-    currentOrder = result.order;
+    currentOrder = result.data || result.order;
 
     // Display order
     displayOrderData(currentOrder);
