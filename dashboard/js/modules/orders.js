@@ -33,7 +33,7 @@ export async function render(user) {
           <tr class="order-row" data-order-id="${order.orderId}" style="cursor: pointer;">
             <td><strong>${order.orderId}</strong></td>
             <td>${order.domain}</td>
-            <td>${order.packageName}</td>
+            <td>${order.packageId ? (order.packageId.charAt(0).toUpperCase() + order.packageId.slice(1)) : 'Starter'}</td>
             <td>${formatPrice(order.total)}</td>
             <td><span class="badge badge-${getStatusClass(order.paymentStatus)}">${getStatusText(order.paymentStatus)}</span></td>
             <td>${formatDateTime(order.createdAt)}</td>

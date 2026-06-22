@@ -392,13 +392,11 @@ function loginUser(email, password) {
 
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === email) {
-        // Check if email is verified - Bypassed to allow direct login
-        /*
+        // Check if email is verified
         if (data[i][7] !== 'Yes') {
           logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 403, Date.now() - startTime, 'Email not verified', JSON.stringify({ email }), 'Email verification required');
           return buildResponse(false, null, 'Email belum diverifikasi', 'EMAIL_NOT_VERIFIED');
         }
-        */
 
         // Check if account is active
         if (data[i][10] !== 'active') {

@@ -6,7 +6,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
-import { formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
+import { formatPrice, formatDateTime, showInfo } from '/assets/js/modules/unified-utils.js';
 
 export async function render(currentUser) {
   try {
@@ -17,57 +17,64 @@ export async function render(currentUser) {
     // Filter orders with payment status = paid
     const invoices = orders.filter(o => o.paymentStatus === 'paid');
 
-    const content = document.getElementById('content');
-    content.innerHTML = `
-      <div class="card">
-        <div class="card-header">
-          <h1 class="card-title">Invoice</h1>
+    const container = document.getElementById('invoices-list-container');
+    if (!container) return;
+
+    if (invoices.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px;">
+          <p style="color: var(--color-text-light);">Belum ada invoice. Selesaikan pembayaran pesanan terlebih dahulu.</p>
         </div>
-        <div class="card-body">
-          ${invoices.length === 0 ? `
-            <div style="text-align: center; padding: 40px;">
-              <p style="color: var(--color-text-light);">Belum ada invoice. Selesaikan pembayaran pesanan terlebih dahulu.</p>
-            </div>
-          ` : `
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Tanggal</th>
-                  <th>Order ID</th>
-                  <th>Domain</th>
-                  <th>Jumlah</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${invoices.map(inv => `
-                  <tr>
-                    <td>${formatDateTime(inv.createdAt)}</td>
-                    <td><strong>${inv.orderId}</strong></td>
-                    <td>${inv.domain}</td>
-                    <td>${formatPrice(inv.total)}</td>
-                    <td style="display: flex; gap: 8px;">
-                      <a href="/invoice/?orderId=${inv.orderId}" class="btn btn-sm btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                        👁️ Lihat
-                      </a>
-                      <button class="btn btn-sm btn-outline" onclick="showInfo('Fitur download PDF sedang dikembangkan')">
-                        📥 PDF
-                      </button>
-                    </td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `}
-        </div>
-      </div>
-    `;
+      `;
+    } else {
+      container.innerHTML = `
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Order ID</th>
+              <th>Domain</th>
+              <th>Jumlah</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${invoices.map(inv => `
+              <tr>
+                <td>${formatDateTime(inv.createdAt)}</td>
+                <td><strong>${inv.orderId}</strong></td>
+                <td>${inv.domain}</td>
+                <td>${formatPrice(inv.total)}</td>
+                <td style="display: flex; gap: 8px;">
+                  <a href="/invoice/?orderId=${inv.orderId}" class="btn btn-sm btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                    👁️ Lihat
+                  </a>
+                  <button class="btn btn-sm btn-outline btn-pdf" data-order-id="${inv.orderId}">
+                    📥 PDF
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+
+      // Attach event listeners for PDF buttons
+      container.querySelectorAll('.btn-pdf').forEach(btn => {
+        btn.addEventListener('click', () => {
+          showInfo(`Fitur download PDF untuk invoice ${btn.dataset.orderId} sedang dikembangkan.`);
+        });
+      });
+    }
 
   } catch (error) {
     console.error('Error rendering invoices:', error);
-    document.getElementById('content').innerHTML = `
-      <div class="alert alert-error">${error.message}</div>
-    `;
+    const container = document.getElementById('invoices-list-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="alert alert-error">${error.message}</div>
+      `;
+    }
   }
 }
 

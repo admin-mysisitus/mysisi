@@ -41,14 +41,14 @@ export class DashboardSidebar {
       },
       {
         id: 'orders',
-        icon: 'icon-shopping',
+        icon: 'icon-bag',
         label: 'Pesanan',
         route: '/dashboard/orders'
       },
 
       {
         id: 'invoices',
-        icon: 'icon-file-text',
+        icon: 'icon-doc',
         label: 'Invoice',
         route: '/dashboard/invoices',
         badge: ''
