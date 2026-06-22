@@ -117,7 +117,7 @@
   // ============================================
   function selectDomainItem(value) {
     cekDomainInput.value = value;
-    cekDomainForm.dispatchEvent(new Event('submit'));
+    cekDomainBtn.click();
   }
 
   function renderPricingPreview() {
@@ -421,6 +421,14 @@
   }
 
   async function displayResults(inputVal) {
+    // Hide suggestions dropdown and blur input to prevent UI occlusion
+    if (cekDomainSuggestions) {
+      cekDomainSuggestions.style.display = 'none';
+    }
+    if (cekDomainInput) {
+      cekDomainInput.blur();
+    }
+
     // Cancel previous request
     if (activeAbortController) {
       activeAbortController.abort();
