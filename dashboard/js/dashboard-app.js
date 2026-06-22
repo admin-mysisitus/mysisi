@@ -194,10 +194,20 @@ class DashboardApp {
 
   /**
    * Show notification
-   * Note: Uses alert as fallback. Primary notifications use SweetAlert2 (unified-utils.js)
+   * Note: Uses SweetAlert2 for consistent and professional notifications.
    */
   static showNotification(message, type = 'info') {
-    alert(message);
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        icon: type === 'error' ? 'error' : (type === 'success' ? 'success' : 'info'),
+        title: type === 'error' ? 'Kesalahan' : (type === 'success' ? 'Sukses' : 'Informasi'),
+        text: message,
+        confirmButtonText: 'OK',
+        confirmButtonColor: type === 'error' ? '#ef4444' : '#2563eb'
+      });
+    } else {
+      alert(message);
+    }
   }
 }
 

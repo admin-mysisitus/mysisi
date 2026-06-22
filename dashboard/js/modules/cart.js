@@ -303,8 +303,34 @@ function renderGuestCheckout() {
 
   // Expose guest cart item remover that updates DOM dynamically without losing form inputs
   window.removeGuestCartItem = (domain) => {
-    CartManager.remove(domain);
-    updateCartPreview();
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: 'Hapus Domain?',
+        text: `Apakah Anda yakin ingin menghapus ${domain} dari keranjang?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          CartManager.remove(domain);
+          updateCartPreview();
+          Swal.fire({
+            title: 'Dihapus!',
+            text: `${domain} telah dihapus dari keranjang.`,
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        }
+      });
+    } else {
+      CartManager.remove(domain);
+      updateCartPreview();
+    }
   };
 
   // Expose toggle preview details handler
@@ -880,9 +906,35 @@ async function proceedToCheckout() {
 }
 
 function removeCartItem(domain) {
-  if (confirm(`Hapus ${domain} dari keranjang?`)) {
-    CartManager.remove(domain);
-    render(cartState.currentUser);
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Hapus Domain?',
+      text: `Apakah Anda yakin ingin menghapus ${domain} dari keranjang?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Ya, Hapus',
+      cancelButtonText: 'Batal',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        CartManager.remove(domain);
+        render(cartState.currentUser);
+        Swal.fire({
+          title: 'Dihapus!',
+          text: `${domain} telah dihapus dari keranjang.`,
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    });
+  } else {
+    if (confirm(`Hapus ${domain} dari keranjang?`)) {
+      CartManager.remove(domain);
+      render(cartState.currentUser);
+    }
   }
 }
 
