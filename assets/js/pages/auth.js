@@ -421,26 +421,6 @@ function initializeGoogleSignIn() {
         itp_support: false // Avoid third-party cookie conflicts
       });
 
-      // Find and render Google button
-      const googleButtonContainer = document.getElementById('g_id_onload');
-      if (googleButtonContainer) {
-        // Clear previous renders if any
-        googleButtonContainer.innerHTML = '';
-        
-        google.accounts.id.renderButton(googleButtonContainer, {
-          type: 'standard',
-          size: 'large',
-          theme: 'outline',
-          text: 'signin_with',
-          shape: 'rectangular',
-          logo_alignment: 'left'
-        });
-
-        console.info('[Auth Google] Google Sign-In button rendered');
-      } else {
-        console.warn('[Auth Google] Google button container (#g_id_onload) not found');
-      }
-
       console.info('[Auth Google] Google Sign-In ready');
     } catch (error) {
       console.error('[Auth Google] Error initializing:', error.message);

@@ -68,7 +68,7 @@ export class APIClient {
       }
 
       // Final validation
-      if (result.success === false && result.message?.includes('Auth')) {
+      if (result.success === false && (result.errorCode === 'UNAUTHORIZED' || result.errorCode === 'SESSION_EXPIRED')) {
         console.error('[API] Auth error - clearing session');
         AuthManager.clearSession();
         throw new Error('Session expired. Please login again.');

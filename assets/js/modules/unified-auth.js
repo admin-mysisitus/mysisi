@@ -172,11 +172,22 @@ export class AuthManager {
     }
   }
 
-  /**
-   * Clear session
-   */
   static clearSession() {
+    // Clear localStorage session key
     window[this.STORAGE_TYPE].removeItem(this.SESSION_KEY);
+    
+    // Clear all sessionStorage keys
+    try {
+      sessionStorage.clear();
+    } catch (e) {}
+
+    // Clear all cookies for the current domain
+    try {
+      document.cookie.split(";").forEach(function(c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
+      });
+    } catch (e) {}
+
     this.state = {
       user: null,
       isLoggedIn: false,
@@ -268,11 +279,29 @@ export class AuthManager {
    * Setup activity tracker to extend session
    */
   static setupActivityTracker() {
+    let lastSavedTime = Date.now();
+
     const updateActivity = () => {
       if (this.isLoggedIn()) {
-        this.state.lastActivity = Date.now();
-        // Extend expiration
-        this.state.expiresAt = Date.now() + this.SESSION_TIMEOUT;
+        const now = Date.now();
+        this.state.lastActivity = now;
+        this.state.expiresAt = now + this.SESSION_TIMEOUT;
+
+        // Throttle writing to localStorage to once every 1 minute
+        if (now - lastSavedTime > 60 * 1000) {
+          lastSavedTime = now;
+          try {
+            const stored = window[this.STORAGE_TYPE].getItem(this.SESSION_KEY);
+            if (stored) {
+              const data = JSON.parse(stored);
+              data.lastActivity = now;
+              data.expiresAt = this.state.expiresAt;
+              window[this.STORAGE_TYPE].setItem(this.SESSION_KEY, JSON.stringify(data));
+            }
+          } catch (e) {
+            console.error('[AuthManager] Error persisting extended activity:', e);
+          }
+        }
       }
     };
 
@@ -327,6 +356,11 @@ export class AuthManager {
     // Also dispatch custom event for global handling
     const event = new CustomEvent(`auth:${eventName}`, { detail: data });
     document.dispatchEvent(event);
+
+    // Dispatch legacy authStateChanged event on window for compatibility with dashboard-app and components
+    if (eventName === 'authChanged') {
+      window.dispatchEvent(new CustomEvent('authStateChanged', { detail: data }));
+    }
   }
 
   /**
