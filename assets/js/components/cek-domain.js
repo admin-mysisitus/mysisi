@@ -608,11 +608,9 @@
   // ============================================
   const debouncedSuggestions = debounce(() => renderInstantSuggestions(), 300);
 
-  // Initialize when page loads
-  window.addEventListener('load', () => {
-    renderPricingPreview();
-    initiatePlaceholderAnimation();
-  }, { once: true });
+  // Initialize immediately
+  renderPricingPreview();
+  initiatePlaceholderAnimation();
 
   cekDomainInput.addEventListener('input', (e) => {
     let value = e.target.value;
