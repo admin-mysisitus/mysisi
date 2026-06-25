@@ -327,12 +327,21 @@ function displayOrderData(orderData) {
   }
 
   content.innerHTML = `
-    <div class="card">
+    <div class="dashboard-page-header" style="background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);">
+      <div class="dashboard-page-header-content">
+        <h1 class="dashboard-page-header-title">Invoice #${orderData.orderId}</h1>
+        <p class="dashboard-page-header-desc">Dibuat pada: ${formatDateTime(orderData.createdAt)}. Silakan lakukan pembayaran tagihan pesanan Anda.</p>
+      </div>
+      <div class="dashboard-page-header-visual">
+        <i class="fas fa-credit-card"></i>
+      </div>
+    </div>
+
+    <div class="card" style="border-top: none;">
       <div class="card-header">
-        <div class="order-header">
+        <div class="order-header" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
           <div>
-            <h1 class="card-title">${orderData.orderId}</h1>
-            <small class="text-muted">Dibuat: ${formatDateTime(orderData.createdAt)}</small>
+            <h4 style="margin: 0; color: var(--color-text-dark);">Detail Transaksi</h4>
           </div>
           <div class="status-badge ${statusInfo.class}">
             <span class="status-icon">${statusInfo.icon}</span>
@@ -434,14 +443,14 @@ function displayOrderData(orderData) {
           <div class="button-group">
             ${orderData.paymentStatus !== 'paid' && !isExpired ? `
               <button id="btn-payment" class="btn btn-primary btn-lg">
-                💳 Lanjut Pembayaran
+                <i class="fas fa-credit-card"></i> Lanjut Pembayaran
               </button>
               <button id="btn-payment-preview" class="btn btn-secondary btn-lg">
-                👁️ Minta Preview Dulu
+                <i class="fas fa-eye"></i> Minta Preview Dulu
               </button>
             ` : ''}
             <button onclick="window.location.hash='#!orders'" class="btn btn-outline">
-              Kembali ke Pesanan
+              <i class="fas fa-arrow-left"></i> Kembali ke Pesanan
             </button>
           </div>
         </div>

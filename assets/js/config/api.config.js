@@ -84,69 +84,75 @@ export const DOMAIN_PACKAGES = {
   starter: {
     id: 'starter',
     name: 'Starter',
-    price: 199000,
-    period: '1 Tahun',
+    price: 599000,
+    period: 'Sekali Bayar',
     periodValue: 1,
-    description: 'Paket dasar untuk domain baru',
+    description: 'Sempurna untuk Bisnis Kecil & UMKM',
     features: [
-      'Domain .com, .id, .net',
-      'Gratis email forwarding',
-      'Domain management panel',
-      'Auto renewal'
+      '5–7 Hari Pengerjaan',
+      'Hingga 5 Halaman Custom Design',
+      'Optimasi Core Web Vitals',
+      'Domain & Hosting 1 Tahun',
+      'WhatsApp Integrasi Otomatis'
     ]
   },
 
-  // Professional Package
+  // Professional Package (Grower)
   professional: {
     id: 'professional',
-    name: 'Professional',
-    price: 349000,
-    period: '1 Tahun',
+    name: 'Grower',
+    price: 1299000,
+    period: 'Sekali Bayar',
     periodValue: 1,
-    description: 'Paket lengkap dengan hosting basic',
+    description: 'Untuk Bisnis Menengah & Perusahaan Profesional',
     features: [
-      'Domain registration',
-      'Hosting 10GB SSD',
-      'Email unlimited',
-      'SSL certificate gratis',
-      'Daily backups'
+      '7–10 Hari Pengerjaan',
+      'Hingga 8 Halaman Custom Design',
+      'SEO On-Page Lengkap + SEO Lokal',
+      'Optimasi Core Web Vitals Advanced',
+      'Domain & Hosting 2 Tahun (Promo: 3 Tahun)',
+      'SSL, Backup Bulanan & Anti-Malware',
+      '3x Revisi Desain',
+      '1 Bulan Maintenance Gratis'
     ]
   },
 
-  // Business Package
+  // Business Package (Pioneer)
   business: {
     id: 'business',
-    name: 'Business',
-    price: 599000,
-    period: '1 Tahun',
+    name: 'Pioneer',
+    price: 2399000,
+    period: 'Sekali Bayar',
     periodValue: 1,
-    description: 'Paket premium dengan performa tinggi',
+    description: 'Untuk Bisnis E-Commerce & Penjual Produk',
     features: [
-      'Domain registration',
-      'Hosting 50GB SSD',
-      'Email unlimited',
-      'SSL certificate gratis',
-      'Hourly backups',
-      'Priority support'
+      '14–21 Hari Pengerjaan',
+      '12 Halaman + Toko Online Lengkap',
+      'Manajemen Produk (Unlimited)',
+      'Integrasi Ongkir & Payment Gateway',
+      'Domain & Hosting Cloud Bisnis 1-2 Tahun',
+      'Dashboard Admin Lengkap',
+      'Maintenance Ringan Gratis'
     ]
   },
 
-  // Enterprise Package
+  // Enterprise Package (Custom/Enterprise)
   enterprise: {
     id: 'enterprise',
     name: 'Enterprise',
-    price: 1299000,
-    period: '1 Tahun',
+    price: 4999000,
+    period: 'Sekali Bayar',
     periodValue: 1,
-    description: 'Paket ultimate untuk bisnis besar',
+    description: 'Solusi Kustom & Skala Besar',
     features: [
-      'Domain registration',
-      'Hosting unlimited SSD',
-      'Email unlimited',
-      'SSL certificate premium',
-      'Real-time backups',
-      '24/7 Premium support',
-      'Dedicated account manager'
+      'Pengerjaan Custom & Kompleks',
+      'Halaman Unlimited',
+      'Sistem Custom Sesuai Kebutuhan',
+      'Integrasi API Kustom & Database',
+      'Hosting Dedicated / Cloud VMS Premium',
+      'Keamanan Tingkat Tinggi & Backup Harian',
+      'Revisi Unlimited',
+      'Dukungan Teknis Prioritas 24/7'
     ]
   }
 };

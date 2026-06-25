@@ -40,6 +40,7 @@ export class CartManager {
       cart.domains[existingIndex] = {
         ...cart.domains[existingIndex],
         ...options,
+        basePrice: options.basePrice || cart.domains[existingIndex].basePrice || options.price || cart.domains[existingIndex].price || 0,
         lastUpdated: Date.now()
       };
       showSuccess('🔄 Item Diperbarui', `${domain} sudah di cart, detail diupdate`);
@@ -51,6 +52,7 @@ export class CartManager {
         package: options.package || 'starter',
         duration: options.duration || 1,
         price: options.price || 0,
+        basePrice: options.basePrice || options.price || 0,
         renewalPrice: options.renewalPrice || 0,
         registrar: options.registrar || 'auto',
         status: 'pending',

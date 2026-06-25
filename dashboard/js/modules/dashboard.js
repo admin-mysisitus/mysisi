@@ -58,7 +58,7 @@ export async function render(currentUser) {
                 </p>
               </div>
               <div>
-                <a href="/cart/" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-weight: bold; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border: none;">
+                <a href="#!/dashboard/keranjang" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-weight: bold; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border: none;">
                   Selesaikan Pembayaran <i class="fas fa-arrow-right"></i>
                 </a>
               </div>

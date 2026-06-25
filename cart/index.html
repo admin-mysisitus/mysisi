@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+        window.location.replace("/dashboard/#!/dashboard/keranjang");
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keranjang Saya - SISITUS</title>
@@ -18,15 +21,22 @@
 </head>
 <body class="checkout-page-body">
     <!-- Header Navigation -->
-    <header class="checkout-header">
-        <div class="checkout-header-container">
-            <a href="/" class="checkout-brand">
-                <img src="/assets/img/logo/logo.svg" alt="SISITUS Logo" class="checkout-logo-img">
-                <span class="checkout-logo-text">SISITUS</span>
+    <header aria-label="Navigasi Utama">
+        <div class="container nav-container">
+            <a href="/" class="logo" aria-label="Kembali ke Beranda sisitus.com">
+                <div class="logo-img">
+                    <img src="/assets/img/logo/logo512x512.webp" alt="Logo sisitus.com" width="512" height="512">
+                </div>
+                <div class="logo-text">
+                    <span>sisitus.com</span>
+                    <p>Solusi Digital Web Profesional</p>
+                </div>
             </a>
-            <a href="/" class="btn-back-home">
-                <i class="fas fa-arrow-left"></i> Kembali ke Beranda
-            </a>
+            <nav class="nav-desktop" aria-label="Navigasi Desktop"></nav>
+            <button class="nav-mobile-btn" id="nav-mobile-btn" aria-label="Buka/Tutup Menu Mobile" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <nav class="nav-mobile" id="nav-mobile" aria-label="Navigasi Mobile" aria-hidden="true"></nav>
         </div>
     </header>
 
@@ -34,6 +44,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/assets/js/components/navigation.js"></script>
     <script type="module">
         import { AuthManager } from '/assets/js/modules/unified-auth.js';
         import { render } from '/dashboard/js/modules/cart.js';

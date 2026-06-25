@@ -435,11 +435,129 @@ export function refreshNavigation() {
   }
 }
 
+// Helper: Get cart item count from localStorage
+function getCartItemCount() {
+  try {
+    const stored = localStorage.getItem('cart');
+    if (!stored) return 0;
+    const cart = JSON.parse(stored);
+    return (cart && cart.domains) ? cart.domains.length : 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
+// Update floating cart display based on cart items count
+function updateFloatingCart() {
+  // Don't show floating cart button on the cart page itself
+  const isCartPage = window.location.pathname.includes('/cart/') || window.location.pathname.endsWith('/cart');
+  if (isCartPage) {
+    const existing = document.getElementById('floating-cart-btn');
+    if (existing) existing.remove();
+    return;
+  }
+
+  const count = getCartItemCount();
+  let el = document.getElementById('floating-cart-btn');
+
+  if (count > 0) {
+    if (!el) {
+      el = document.createElement('a');
+      el.id = 'floating-cart-btn';
+      el.className = 'floating-cart-btn';
+      el.href = '/dashboard/#!/dashboard/keranjang';
+      el.innerHTML = `
+        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+        <span class="floating-cart-badge">${count}</span>
+      `;
+      document.body.appendChild(el);
+      
+      // Inject floating cart styles if not already present
+      if (!document.getElementById('floating-cart-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'floating-cart-styles';
+        styles.textContent = `
+          .floating-cart-btn {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            background: #2563eb;
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            z-index: 9999;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid white;
+          }
+          .floating-cart-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+            background: #1d4ed8;
+          }
+          .floating-cart-btn i {
+            font-size: 20px;
+          }
+          .floating-cart-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 4px;
+            border: 2px solid white;
+            animation: floating-cart-pulse 2s infinite;
+          }
+          @keyframes floating-cart-pulse {
+            0% {
+              box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            70% {
+              box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+            }
+            100% {
+              box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+          }
+        `;
+        document.head.appendChild(styles);
+      }
+    } else {
+      const badge = el.querySelector('.floating-cart-badge');
+      if (badge) badge.textContent = count;
+    }
+  } else {
+    if (el) el.remove();
+  }
+}
+
 // Expose refreshNavigation to window for easy access from other scripts
 window.refreshNavigation = refreshNavigation;
 
 // Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
+  // Always initialize floating cart
+  updateFloatingCart();
+
+  // Listen to cart updates
+  window.addEventListener('cart:updated', updateFloatingCart);
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cart') updateFloatingCart();
+  });
+
   // Skip navigation setup if on auth page (no nav-desktop or nav-mobile elements)
   if (!navElements.desktopNav && !navElements.menu) {
     console.info('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');

@@ -101,11 +101,17 @@ class DashboardWishlist {
     }
 
     this.container.innerHTML = `
-      <div class="wishlist-content">
-        <h2 style="margin-bottom: 20px; font-size: 24px; font-weight: bold;">
-          <i class="fas fa-heart" style="color: #e74c3c;"></i> Wishlist Saya
-        </h2>
-        
+      <div class="dashboard-page-header" style="background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);">
+        <div class="dashboard-page-header-content">
+          <h1 class="dashboard-page-header-title">Wishlist Saya</h1>
+          <p class="dashboard-page-header-desc">Simpan nama domain potensial untuk proyek masa depan Anda dan pantau ketersediaan serta harga mereka.</p>
+        </div>
+        <div class="dashboard-page-header-visual">
+          <i class="fas fa-heart"></i>
+        </div>
+      </div>
+
+      <div class="wishlist-content" style="padding-top: 15px;">
         <div class="wishlist-items-list">
           ${itemsHTML}
         </div>

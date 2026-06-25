@@ -5,6 +5,7 @@
   const { CartManager, WishlistManager } = await import('../modules/unified-cart.js');
   const { AuthManager } = await import('../modules/unified-auth.js');
   const { showSuccess, showError, formatCurrency } = await import('../modules/unified-utils.js');
+  const APIClient = (await import('../modules/unified-api.js')).default;
 
   // Get the section container
   const section = document.querySelector('.cek-domain-section');
@@ -311,6 +312,20 @@
    */
   async function checkDomainAvailability(domain, abortSignal) {
     try {
+      // 1. Check internal backend database first to see if someone else ordered it
+      let backendSaysTaken = false;
+      try {
+        const backendCheck = await APIClient.checkDomain(domain);
+        if (backendCheck && backendCheck.success === false) {
+          backendSaysTaken = true;
+        } else if (backendCheck && backendCheck.success && backendCheck.data?.available === false) {
+          backendSaysTaken = true;
+        }
+      } catch (backendError) {
+        console.warn('[Domain Check] Backend API check failed:', backendError);
+      }
+
+      // 2. Check Cloudflare DNS for global availability
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
         headers: { 'accept': 'application/dns-json' },
         signal: abortSignal,
@@ -322,14 +337,36 @@
       }
 
       const data = await response.json();
+      const dnsAvailable = !data.Answer || data.Answer.length === 0;
 
-      // Return explicit result object (bukan hanya boolean)
-      return {
-        available: !data.Answer || data.Answer.length === 0,
-        error: false,
-        method: 'dns-check',
-        message: null
-      };
+      // 3. Determine final state
+      if (!dnsAvailable) {
+        // Globally registered
+        return {
+          available: false,
+          error: false,
+          method: 'dns-check',
+          message: 'Domain sudah terdaftar secara global'
+        };
+      } else if (backendSaysTaken) {
+        // Available globally, but ordered in our DB
+        return {
+          available: true,
+          isOrdered: true,
+          error: false,
+          method: 'hybrid-check',
+          message: 'Domain sedang dipesan orang lain. Siapa cepat dia dapat!'
+        };
+      } else {
+        // Completely available
+        return {
+          available: true,
+          isOrdered: false,
+          error: false,
+          method: 'hybrid-check',
+          message: null
+        };
+      }
     } catch (error) {
       // Return error state (jangan silent fail)
       const message = error.name === 'AbortError' 
@@ -365,30 +402,41 @@
         </button>
       `;
     } else if (result.available === true) {
-      // STATE 1: AVAILABLE
-      card.className = `cek-domain-result-card available ${isRecommended ? 'super-highlight' : ''}`;
+      // STATE 1: AVAILABLE OR ORDERED
+      card.className = `cek-domain-result-card available ${isRecommended ? 'super-highlight' : ''} ${result.isOrdered ? 'warning' : ''}`;
 
       const badges = [];
-      if (extData.label) {
-        badges.push(`<span class="cek-domain-ext-label">${extData.label}</span>`);
+      if (result.isOrdered) {
+        badges.push(`<span class="cek-domain-ext-label" style="background:#f39c12; color:white;"><i class="fas fa-fire"></i> Rebutan</span>`);
+      } else {
+        if (extData.label) {
+          badges.push(`<span class="cek-domain-ext-label">${extData.label}</span>`);
+        }
+        if (discount > 0) {
+          badges.push(`<span class="cek-domain-ext-discount">-${discount}%</span>`);
+        }
+        if (isRecommended) {
+          badges.push(`<span class="cek-domain-recommended-badge"><i class="fas fa-star"></i> Rekomendasi</span>`);
+        }
       }
-      if (discount > 0) {
-        badges.push(`<span class="cek-domain-ext-discount">-${discount}%</span>`);
-      }
-      if (isRecommended) {
-        badges.push(`<span class="cek-domain-recommended-badge"><i class="fas fa-star"></i> Rekomendasi</span>`);
+
+      let infoHtml = sanitizeHTML(extData.info);
+      if (result.isOrdered) {
+        infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Siapa cepat bayar, dia dapat.</span>`;
       }
 
       card.innerHTML = `
         <div class="cek-domain-result-badges">${badges.join('')}</div>
-        <h3><i class="fas fa-check-circle"></i> ${sanitizeHTML(fullDomain)}</h3>
-        <p class="cek-domain-result-info">${sanitizeHTML(extData.info)}</p>
+        <h3 ${result.isOrdered ? 'style="color:#d35400;"' : ''}>
+          <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}"></i> ${sanitizeHTML(fullDomain)}
+        </h3>
+        <p class="cek-domain-result-info">${infoHtml}</p>
         ${extData.oldPrice ? `<span class="cek-domain-result-old">Rp${formatCurrency(extData.oldPrice)}</span>` : ''}
         <p class="cek-domain-result-price">
           dari <strong>Rp${formatCurrency(extData.newPrice)}</strong> /tahun
         </p>
         <div class="cek-domain-actions" style="display: flex; gap: 10px; margin-top: 15px;">
-          <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}">
+          <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
             <i class="fas fa-lock"></i> Amankan Sekarang
           </button>
           <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist" style="flex: 0 0 50px; cursor: pointer; border: 1px solid #ddd; background: #f8f9fa; border-radius: 5px; font-size: 18px; color: #999; transition: all 0.3s;">
@@ -411,8 +459,8 @@
         <h3><i class="fas fa-question-circle"></i> ${sanitizeHTML(fullDomain)}</h3>
         <p class="cek-domain-result-info">Status ketersediaan tidak jelas</p>
         <p style="font-size: 0.85rem; color: #999;">Silakan hubungi support atau lihat detail</p>
-        <a href="/order-summary/?domain=${encodeURIComponent(fullDomain)}" class="cek-domain-action-btn">
-          Lihat Detail & Promo
+        <a href="/dashboard/#!/dashboard/keranjang" class="cek-domain-action-btn">
+          Lihat Keranjang
         </a>
       `;
     }
@@ -667,19 +715,18 @@
       const price = parseInt(btn.dataset.price) || 0;
 
       try {
+        const { DOMAIN_PACKAGES } = await import('../config/api.config.js');
         // Add domain to cart for both guest and authenticated users
         CartManager.add(domain, tld, {
           package: 'starter',
           duration: 1,
-          price: price,
-          renewalPrice: price
+          price: DOMAIN_PACKAGES.starter.price,
+          renewalPrice: DOMAIN_PACKAGES.starter.price,
+          basePrice: DOMAIN_PACKAGES.starter.price
         });
 
-        // ALL users (guest or authenticated) → Order Summary page
-        // This enables:
-        // - Guest: view addons + promo → add to cart → inline login in cart
-        // - Authenticated: view addons + promo → add to cart → checkout
-        window.location.href = `/order-summary/?domain=${encodeURIComponent(domain)}`;
+        // ALL users (guest or authenticated) → Cart page directly
+        window.location.href = '/dashboard/#!/dashboard/keranjang';
       } catch (error) {
         showError('❌ Gagal', error.message);
       }

@@ -23,7 +23,7 @@ import { showSuccess, showError, showInfo, formatPrice, isValidEmail } from '/as
 import APIClient from '/assets/js/modules/unified-api.js';
 import { AuthManager } from '/assets/js/modules/unified-auth.js';
 import SharedAuthForm from '/assets/js/modules/shared-auth-form.js';
-import { ADDON_PACKAGES } from '/assets/js/config/api.config.js';
+import { DOMAIN_PACKAGES, ADDON_PACKAGES } from '/assets/js/config/api.config.js';
 
 // ============================================================================
 // CART STATE MANAGEMENT
@@ -45,6 +45,63 @@ let cartState = {
   
   // UI state
   isProcessingCheckout: false
+};
+
+// Expose package & addon update handlers globally
+window.changeItemPackage = (domain, packageId) => {
+  try {
+    const cart = CartManager.getCart();
+    const item = cart.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
+    if (!item) return;
+
+    const pkg = DOMAIN_PACKAGES[packageId];
+    if (!pkg) return;
+
+    const newPrice = pkg.price;
+
+    CartManager.update(domain, {
+      package: packageId,
+      price: newPrice,
+      renewalPrice: newPrice
+    });
+
+    if (cartState.currentUser) {
+      render(cartState.currentUser);
+    } else if (window.updateCartPreview) {
+      window.updateCartPreview();
+    }
+    showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
+  } catch (error) {
+    console.error('Error changing package:', error);
+    showError('Gagal', error.message);
+  }
+};
+
+window.toggleCartAddon = (addonId, isChecked) => {
+  try {
+    const addon = ADDON_PACKAGES[addonId];
+    if (!addon) return;
+
+    if (isChecked) {
+      CartManager.addAddons([{
+        id: addonId,
+        name: addon.name,
+        price: addon.price,
+        duration: addon.duration
+      }]);
+    } else {
+      CartManager.removeAddon(addonId);
+    }
+
+    if (cartState.currentUser) {
+      render(cartState.currentUser);
+    } else if (window.updateCartPreview) {
+      window.updateCartPreview();
+    }
+  } catch (error) {
+    console.error('Error toggling addon:', error);
+    showError('Gagal', error.message);
+  }
 };
 
 /**
@@ -193,16 +250,12 @@ function renderGuestCheckout() {
           ${items.length > 0 ? `
             <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 1rem; padding-bottom: 0.5rem;">
               ${items.map(item => {
-                const safeId = item.domain.replace(/\./g, '-');
                 return `
-                  <div class="preview-item-container" style="border-bottom: 1px dashed var(--border-light); padding: 0.75rem 0;">
-                    <div class="preview-item" style="align-items: center; display: flex; justify-content: space-between; gap: 1rem;">
-                      <div onclick="window.togglePreviewDetails('${item.domain}')" style="cursor: pointer; flex: 1; user-select: none;">
-                        <div class="preview-item-name" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                  <div class="preview-item-container" style="border-bottom: 1px dashed var(--border-light); padding: 1rem 0;">
+                    <div class="preview-item" style="align-items: center; display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 0.75rem;">
+                      <div style="flex: 1; user-select: none;">
+                        <div class="preview-item-name" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); font-size: 14px;">
                           ${item.domain}
-                          <span class="btn-cart-detail" style="font-family: var(--font-primary), sans-serif; font-size: 11px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 4px; padding: 2px 8px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; margin-left: 6px;">
-                            Detail <i class="fas fa-chevron-down" id="chevron-${safeId}" style="font-size: 8px; transition: transform 0.2s;"></i>
-                          </span>
                         </div>
                         <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
                           <span style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.package ? item.package.toUpperCase() : 'STARTER'}</span>
@@ -217,29 +270,9 @@ function renderGuestCheckout() {
                       </div>
                     </div>
 
-                    <!-- Collapsible Details -->
-                    <div id="details-${safeId}" style="display: none; padding: 0.75rem 0.75rem; margin-top: 0.5rem; background: var(--bg-light); border-radius: var(--radius); border-left: 3px solid var(--primary-blue);">
-                      <div style="font-size: 12px; color: var(--text-primary);">
-                        <strong>Paket:</strong> <span style="text-transform: uppercase; font-weight: 600; color: var(--primary-blue);">${item.package ? item.package : 'Starter'}</span> (Rp ${formatPrice(item.price)} / tahun)
-                      </div>
-                      <div style="margin-top: 0.5rem;">
-                        <strong style="font-size: 12px; color: var(--text-secondary);">Layanan Tambahan:</strong>
-                        ${addons.length > 0 ? `
-                          <div style="margin-top: 4px;">
-                            ${addons.map(addon => `
-                              <div style="font-size: 11px; margin-top: 2px; color: var(--text-primary); display: flex; justify-content: space-between;">
-                                <span>• ${addon.name}</span>
-                                <span style="font-family: 'Courier New', monospace;">${formatPrice(addon.price)}</span>
-                              </div>
-                            `).join('')}
-                          </div>
-                        ` : '<div style="font-size: 11px; color: var(--text-light); font-style: italic; margin-top: 2px;">Tidak ada layanan tambahan</div>'}
-                      </div>
-                      <div style="margin-top: 0.75rem; text-align: left;">
-                        <a href="/order-summary/?domain=${item.domain}" style="display: inline-flex; align-items: center; gap: 4px; background: #e3f2fd; color: var(--primary-blue); border: 1px solid #bbdefb; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-decoration: none; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-                          <i class="fas fa-edit"></i> Edit Paket & Layanan
-                        </a>
-                      </div>
+                    <!-- Config Section (Packages & Addons) -->
+                    <div class="cart-item-config">
+                      ${renderCartItemSelectors(item)}
                     </div>
                   </div>
                 `;
@@ -287,6 +320,9 @@ function renderGuestCheckout() {
     `;
   };
 
+  // Register updateCartPreview globally
+  window.updateCartPreview = updateCartPreview;
+
   // Initial render of preview
   updateCartPreview();
 
@@ -333,20 +369,6 @@ function renderGuestCheckout() {
     } else {
       CartManager.remove(domain);
       updateCartPreview();
-    }
-  };
-
-  // Expose toggle preview details handler
-  window.togglePreviewDetails = (domain) => {
-    const safeId = domain.replace(/\./g, '-');
-    const detailsEl = document.getElementById(`details-${safeId}`);
-    const chevronEl = document.getElementById(`chevron-${safeId}`);
-    if (detailsEl) {
-      const isHidden = detailsEl.style.display === 'none';
-      detailsEl.style.display = isHidden ? 'block' : 'none';
-      if (chevronEl) {
-        chevronEl.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-      }
     }
   };
 }
@@ -638,19 +660,70 @@ function renderAuthenticatedCart() {
   window.removeCartItem = removeCartItem;
   window.removeAddon = removeAddon;
 
-  // Expose toggle details handler for authenticated cart items
-  window.toggleCartItemDetails = (domain) => {
-    const safeId = domain.replace(/\./g, '-');
-    const detailsEl = document.getElementById(`auth-details-${safeId}`);
-    const chevronEl = document.getElementById(`auth-chevron-${safeId}`);
-    if (detailsEl) {
-      const isHidden = detailsEl.style.display === 'none';
-      detailsEl.style.display = isHidden ? 'block' : 'none';
-      if (chevronEl) {
-        chevronEl.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-      }
-    }
-  };
+}
+
+function renderCartItemSelectors(item) {
+  const currentPackage = item.package || 'starter';
+  const cartData = CartManager.getCart();
+  const selectedAddonIds = (cartData && cartData.addons || []).map(a => a.id.toLowerCase());
+
+  // Generate Packages Selection HTML
+  const packagesHTML = Object.values(DOMAIN_PACKAGES).map(pkg => {
+    const isSelected = currentPackage === pkg.id;
+    const priceDisplay = pkg.price;
+
+    return `
+      <div class="cart-item-package-card ${isSelected ? 'selected' : ''}" 
+           onclick="window.changeItemPackage('${item.domain}', '${pkg.id}')">
+        <div>
+          <div class="cart-item-package-name">
+            ${isSelected ? '✓ ' : ''}${pkg.name}
+          </div>
+          <div class="cart-item-package-price">
+            Rp ${formatPrice(priceDisplay)}
+          </div>
+        </div>
+        <div class="cart-item-package-desc">${pkg.description}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Generate Addons Checklist HTML
+  const addonsHTML = Object.values(ADDON_PACKAGES).map(addon => {
+    const isSelected = selectedAddonIds.includes(addon.id.toLowerCase());
+    return `
+      <label class="cart-item-addon-option ${isSelected ? 'selected' : ''}">
+        <input type="checkbox" 
+               class="cart-item-addon-checkbox" 
+               ${isSelected ? 'checked' : ''} 
+               onchange="window.toggleCartAddon('${addon.id}', this.checked)">
+        <div class="cart-item-addon-info">
+          <span class="cart-item-addon-name">${addon.name}</span>
+          <span class="cart-item-addon-price">${addon.price === 0 ? 'Gratis' : `+Rp ${formatPrice(addon.price)}`}</span>
+        </div>
+      </label>
+    `;
+  }).join('');
+
+  return `
+    <div class="cart-item-packages">
+      <div class="cart-item-packages-title">
+        <i class="fas fa-cubes"></i> Pilih Paket Pembuatan Website
+      </div>
+      <div class="cart-item-packages-grid">
+        ${packagesHTML}
+      </div>
+    </div>
+
+    <div class="cart-item-addons">
+      <div class="cart-item-addons-title">
+        <i class="fas fa-puzzle-piece"></i> Layanan Tambahan (Add-ons)
+      </div>
+      <div class="cart-item-addons-grid">
+        ${addonsHTML}
+      </div>
+    </div>
+  `;
 }
 
 // ============================================================================
@@ -661,21 +734,13 @@ function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price
     ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="fas fa-sync"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>`
     : '';
-  const safeId = item.domain.replace(/\./g, '-');
   
-  // Get addons
-  const cartData = CartManager.getCart();
-  const addons = (cartData && cartData.addons) || [];
-
   return `
-    <div class="cart-item" style="display: block; margin-bottom: 1rem;">
-      <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: center; gap: clamp(1rem, 2vw, 1.5rem);">
-        <div onclick="window.toggleCartItemDetails('${item.domain}')" style="cursor: pointer; flex: 1; user-select: none;">
-          <h4 class="cart-item-domain" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); margin: 0; font-size: 16px; display: flex; align-items: center; gap: 6px;">
+    <div class="cart-item" style="display: block; margin-bottom: 1.5rem;">
+      <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: center; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: 0.75rem;">
+        <div style="flex: 1; user-select: none;">
+          <h4 class="cart-item-domain" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); margin: 0; font-size: 16px;">
             ${item.domain}
-            <span class="btn-cart-detail" style="font-family: var(--font-primary), sans-serif; font-size: 11px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 4px; padding: 2.5px 8px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; margin-left: 6px;">
-              Detail <i class="fas fa-chevron-down" id="auth-chevron-${safeId}" style="font-size: 8px; transition: transform 0.2s;"></i>
-            </span>
           </h4>
           <div class="cart-item-details" style="display: flex; gap: 8px; align-items: center; margin-top: 6px; border: none; padding: 0;">
             <span class="cart-item-badge" style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.package ? item.package.toUpperCase() : 'STARTER'}</span>
@@ -691,29 +756,9 @@ function renderCartItem(item) {
         </div>
       </div>
 
-      <!-- Collapsible Details -->
-      <div id="auth-details-${safeId}" style="display: none; padding: 0.75rem 0.75rem; margin-top: 0.75rem; background: var(--bg-light); border-radius: var(--radius); border-left: 3px solid var(--primary-blue);">
-        <div style="font-size: 13px; color: var(--text-primary);">
-          <strong>Paket:</strong> <span style="text-transform: uppercase; font-weight: 600; color: var(--primary-blue);">${item.package ? item.package : 'Starter'}</span> (Rp ${formatPrice(item.price)} / tahun)
-        </div>
-        <div style="margin-top: 0.5rem;">
-          <strong style="font-size: 13px; color: var(--text-secondary);">Layanan Tambahan:</strong>
-          ${addons.length > 0 ? `
-            <div style="margin-top: 4px;">
-              ${addons.map(addon => `
-                <div style="font-size: 12px; margin-top: 2px; color: var(--text-primary); display: flex; justify-content: space-between;">
-                  <span>• ${addon.name}</span>
-                  <span style="font-family: 'Courier New', monospace;">${formatPrice(addon.price)}</span>
-                </div>
-              `).join('')}
-            </div>
-          ` : '<div style="font-size: 12px; color: var(--text-light); font-style: italic; margin-top: 2px;">Tidak ada layanan tambahan</div>'}
-        </div>
-        <div style="margin-top: 0.8rem; text-align: left;">
-          <a href="/order-summary/?domain=${item.domain}" style="display: inline-flex; align-items: center; gap: 4px; background: #e3f2fd; color: var(--primary-blue); border: 1px solid #bbdefb; padding: 4px 8px; border-radius: 4px; font-size: 12px; text-decoration: none; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-            <i class="fas fa-edit"></i> Edit Paket & Layanan
-          </a>
-        </div>
+      <!-- Config Section (Packages & Addons) -->
+      <div class="cart-item-config">
+        ${renderCartItemSelectors(item)}
       </div>
     </div>
   `;
@@ -878,11 +923,31 @@ async function proceedToCheckout() {
     const parts = firstDomain.split('.');
     const tld = parts[parts.length - 1];
 
-    // VALIDASI: Re-check domain availability (per spec)
-    console.log('[Cart] Checking domain availability:', firstDomain);
-    const availabilityCheck = await APIClient.checkDomain(firstDomain);
-    if (!availabilityCheck.success || !availabilityCheck.data?.available) {
-      throw new Error(`Domain ${firstDomain} tidak tersedia. Silakan pilih domain lain.`);
+    // VALIDASI: Re-check domain availability via DNS (Siapa Cepat Dia Dapat)
+    console.log('[Cart] Checking global DNS availability for:', firstDomain);
+    try {
+      const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(firstDomain)}&type=A`, {
+        headers: { 'accept': 'application/dns-json' },
+        timeout: 8000
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const isDnsAvailable = !data.Answer || data.Answer.length === 0;
+        if (!isDnsAvailable) {
+          throw new Error(`Domain ${firstDomain} sudah didaftarkan secara global. Silakan pilih domain lain.`);
+        }
+      } else {
+        // Fallback to backend check if DNS check fails
+        const availabilityCheck = await APIClient.checkDomain(firstDomain);
+        if (!availabilityCheck.success || !availabilityCheck.data?.available) {
+          throw new Error(`Domain ${firstDomain} tidak tersedia di sistem.`);
+        }
+      }
+    } catch(e) {
+      if(e.message.includes('didaftarkan secara global') || e.message.includes('tidak tersedia')) {
+        throw e;
+      }
+      console.warn("[Cart] DNS check error, proceeding anyway:", e);
     }
 
     // Calculate final total with promo + ppn

@@ -23,7 +23,7 @@ export class DashboardNavbar {
 
         <div class="navbar-brand">
           <a href="/" class="navbar-logo">
-            <img src="/assets/img/logo/logo.svg" alt="SISITUS" class="logo-img">
+            <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS" class="logo-img">
             <span class="logo-text">Client Area</span>
           </a>
         </div>
@@ -31,7 +31,7 @@ export class DashboardNavbar {
         <div class="navbar-content">
           <!-- Breadcrumb or Title -->
           <div class="navbar-breadcrumbs">
-            <span class="breadcrumb-item">Dashboard</span>
+            <a href="#!/dashboard/" class="breadcrumb-link"><i class="fas fa-home"></i> Dashboard</a>
             <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
             <span class="breadcrumb-item active" id="navbar-active-page">Overview</span>
           </div>
@@ -40,7 +40,7 @@ export class DashboardNavbar {
         <div class="navbar-actions">
           <!-- Buy Now green button -->
           <a href="/?section=cek-domain" class="btn btn-success btn-buy-now">
-            <i class="fas fa-shopping-cart"></i> Beli Layanan
+            <i class="fas fa-shopping-cart"></i> <span>Beli Layanan</span>
           </a>
 
           <!-- User Profile Dropdown -->
@@ -134,20 +134,25 @@ export class DashboardNavbar {
     const hash = window.location.hash;
     const pageId = hash.replace('#!', '').split('?')[0].split('/').filter(Boolean).pop() || 'dashboard';
     
-    const pageNames = {
-      'dashboard': 'Overview',
-      'profile': 'Profil Saya',
-      'orders': 'Pesanan Saya',
-      'payment': 'Pembayaran',
-      'invoices': 'Invoice',
-      'domains': 'Domain Saya',
-      'wishlist': 'Wishlist Saya',
-      'support': 'Support & Bantuan'
+    const pageData = {
+      'dashboard': { label: 'Overview', icon: 'fas fa-th-large' },
+      'profile': { label: 'Profil Saya', icon: 'fas fa-user-cog' },
+      'orders': { label: 'Pesanan Saya', icon: 'fas fa-shopping-bag' },
+      'payment': { label: 'Pembayaran', icon: 'fas fa-credit-card' },
+      'invoices': { label: 'Invoice', icon: 'fas fa-file-invoice-dollar' },
+      'domains': { label: 'Domain Saya', icon: 'fas fa-globe' },
+      'wishlist': { label: 'Wishlist Saya', icon: 'fas fa-heart' },
+      'support': { label: 'Support & Bantuan', icon: 'fas fa-headset' },
+      'checkout': { label: 'Pesan Domain Baru', icon: 'fas fa-shopping-cart' },
+      'cart': { label: 'Keranjang Belanja', icon: 'fas fa-shopping-cart' },
+      'keranjang': { label: 'Keranjang Saya', icon: 'fas fa-shopping-cart' },
+      'keranjang-saya': { label: 'Keranjang Saya', icon: 'fas fa-shopping-cart' }
     };
 
     const activeBreadcrumb = document.getElementById('navbar-active-page');
     if (activeBreadcrumb) {
-      activeBreadcrumb.textContent = pageNames[pageId] || 'Overview';
+      const data = pageData[pageId] || pageData['dashboard'];
+      activeBreadcrumb.innerHTML = `<i class="${data.icon}" style="margin-right: 6px; color: var(--primary-blue);"></i>${data.label}`;
     }
   }
 }

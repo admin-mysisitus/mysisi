@@ -28,9 +28,9 @@ export class DashboardSidebar {
       {
         id: 'cart',
         icon: 'fas fa-shopping-cart',
-        label: 'Keranjang',
-        route: '/cart/',
-        isExternal: true,
+        label: 'Keranjang Saya',
+        route: '/dashboard/keranjang',
+        isExternal: false,
         badge: 'cart-badge'
       },
       {
@@ -69,7 +69,7 @@ export class DashboardSidebar {
     container.innerHTML = `
       <div class="sidebar-brand-container">
         <a href="/" class="sidebar-logo">
-          <img src="/assets/img/logo/logo.svg" alt="SISITUS" class="sidebar-logo-img">
+          <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS" class="sidebar-logo-img">
           <span class="sidebar-logo-text">SISITUS</span>
         </a>
       </div>
@@ -117,7 +117,7 @@ export class DashboardSidebar {
         }
         e.preventDefault();
         const route = item.dataset.route;
-        this.router.navigate(route);
+        window.location.hash = '#!' + route;
       });
     });
 
