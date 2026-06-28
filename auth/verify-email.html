@@ -125,8 +125,9 @@
 
     if (!token) {
       // Check if this is first visit (no token)
+      const isSent = urlParams.get('sent') === 'true';
       const referrer = document.referrer;
-      const fromRegistration = referrer.includes('/auth') || referrer.includes('register');
+      const fromRegistration = isSent || referrer.includes('/auth') || referrer.includes('register') || referrer.includes('/cart') || referrer.includes('/checkout');
       
       if (fromRegistration) {
         showInfo(
@@ -136,7 +137,7 @@
       } else {
         showError(
           'Token Tidak Ditemukan',
-          'Silakan gunakan link verifikasi email yang lengkap dari email Anda. Link harus berformat: https://mysisi.pages.dev/auth/verify-email.html?token=xxxxx'
+          'Silakan gunakan link verifikasi email yang lengkap dari email Anda. Link harus berformat: https://sisitus.com/auth/verify-email.html?token=xxxxx'
         );
       }
     } else {
@@ -219,7 +220,7 @@
           Cek email Anda kembali dan gunakan link verifikasi terbaru. Jika sudah tidak dapat ditemukan, silakan daftar ulang.
         </div>
         <div class="button-group">
-          <a href="/checkout" class="btn btn-primary"><i class="fas fa-user-plus"></i> Daftar Ulang</a>
+          <a href="/auth/" class="btn btn-primary"><i class="fas fa-user-plus"></i> Daftar Ulang</a>
           <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
         </div>
       `;

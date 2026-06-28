@@ -674,4 +674,11 @@ body.checkout-page-body {
   background-color: #f8fafc !important;
 }
 
+/* ========== PASSWORD STRENGTH METER ========== */
+.strength-weak { background: #ef4444 !important; }
+.strength-fair { background: #f59e0b !important; }
+.strength-good { background: #3b82f6 !important; }
+.strength-strong { background: #10b981 !important; }
+
+
 

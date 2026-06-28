@@ -30,10 +30,10 @@ function initializeMidtransConfig() {
  */
 function ensureUsersSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Users');
+  let sheet = ss.getSheetByName('USERS');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Users');
+    sheet = ss.insertSheet('USERS');
     // Add headers
     sheet.appendRow([
       'User ID',           // A
@@ -125,7 +125,7 @@ function validatePasswordStrength(password) {
 function validatePhoneNumber(phone) {
   if (!phone || typeof phone !== 'string') return false;
   phone = phone.replace(/[\s\-]/g, '');
-  return /^(\+62|62|08)\d{9,12}$/.test(phone);
+  return /^(\+62|62|0)?8\d{8,12}$/.test(phone);
 }
 
 /**
@@ -133,11 +133,14 @@ function validatePhoneNumber(phone) {
  */
 function formatPhoneNumber(phone) {
   if (!phone) return '';
-  phone = phone.replace(/[\s\-]/g, '');
-  if (phone.startsWith('+62')) return phone;
-  if (phone.startsWith('62')) return '+' + phone;
-  if (phone.startsWith('0')) return '+62' + phone.substring(1);
-  return phone;
+  phone = phone.replace(/[\s\-+]/g, '');
+  let standardPhone = phone;
+  if (phone.startsWith('62')) {
+    standardPhone = '0' + phone.substring(2);
+  } else if (phone.startsWith('8')) {
+    standardPhone = '0' + phone;
+  }
+  return "'" + standardPhone;
 }
 
 /**
@@ -815,7 +818,14 @@ function updateUserProfile(userId, data) {
           sheet.getRange(i + 1, 2).setValue(data.displayName);
         }
         if (data.whatsapp !== undefined) {
-          sheet.getRange(i + 1, 4).setValue(data.whatsapp);
+          let formattedPhone = data.whatsapp ? data.whatsapp.replace(/[\s\-]/g, '') : '';
+          if (formattedPhone) {
+            if (!validatePhoneNumber(formattedPhone)) {
+              return buildResponse(false, null, 'Nomor WhatsApp tidak valid (format: 08xx atau +6281xx)', 'INVALID_PHONE');
+            }
+            formattedPhone = formatPhoneNumber(formattedPhone);
+          }
+          sheet.getRange(i + 1, 4).setValue(formattedPhone);
         }
 
         // Update timestamp
@@ -1008,10 +1018,10 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
  */
 function ensureOrdersSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Orders');
+  let sheet = ss.getSheetByName('ORDERS');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Orders');
+    sheet = ss.insertSheet('ORDERS');
     // Add headers
     sheet.appendRow([
       'Order ID',                // A
@@ -1691,10 +1701,10 @@ function handleMidtransWebhook(webhookData) {
  */
 function ensurePaymentLogsSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Payment_Logs');
+  let sheet = ss.getSheetByName('PAYMENT_LOGS');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Payment_Logs');
+    sheet = ss.insertSheet('PAYMENT_LOGS');
     sheet.appendRow([
       'Log ID',                   // A
       'Order ID',                 // B
@@ -1721,10 +1731,10 @@ function ensurePaymentLogsSheet() {
  */
 function ensureApiLogsSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('API_Logs');
+  let sheet = ss.getSheetByName('API_LOGS');
   
   if (!sheet) {
-    sheet = ss.insertSheet('API_Logs');
+    sheet = ss.insertSheet('API_LOGS');
     sheet.appendRow([
       'Log ID',                   // A
       'Timestamp',                // B
@@ -1749,10 +1759,10 @@ function ensureApiLogsSheet() {
  */
 function ensureDomainPackagesSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Domain_Packages');
+  let sheet = ss.getSheetByName('DOMAIN_PACKAGES');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Domain_Packages');
+    sheet = ss.insertSheet('DOMAIN_PACKAGES');
     sheet.appendRow([
       'Package ID',               // A
       'Package Name',             // B
@@ -1784,10 +1794,10 @@ function ensureDomainPackagesSheet() {
  */
 function ensureEmailTemplatesSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Email_Templates');
+  let sheet = ss.getSheetByName('EMAIL_TEMPLATES');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Email_Templates');
+    sheet = ss.insertSheet('EMAIL_TEMPLATES');
     sheet.appendRow([
       'Template ID',              // A
       'Template Name',            // B
@@ -1847,10 +1857,10 @@ function ensureEmailTemplatesSheet() {
  */
 function ensureInvoicesSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Invoices');
+  let sheet = ss.getSheetByName('INVOICES');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Invoices');
+    sheet = ss.insertSheet('INVOICES');
     sheet.appendRow([
       'Invoice ID',               // A - INV-2026-03-28-00001
       'Order ID',                 // B - ORDER-xxxxx
@@ -1932,10 +1942,10 @@ function generateInvoiceId() {
  */
 function ensurePromoCodesSheet() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('Promo_Codes');
+  let sheet = ss.getSheetByName('PROMO_CODES');
   
   if (!sheet) {
-    sheet = ss.insertSheet('Promo_Codes');
+    sheet = ss.insertSheet('PROMO_CODES');
     sheet.appendRow([
       'Code',                 // A
       'Discount Type',        // B
@@ -2240,7 +2250,40 @@ function doPost(e) {
   e = e || { parameter: {}, postData: { contents: '', type: '' } };
   
   try {
-    const params = e.parameter || {};
+    // 1. Start with query string parameters
+    let params = {};
+    if (e.parameter) {
+      Object.keys(e.parameter).forEach(key => {
+        params[key] = e.parameter[key];
+      });
+    }
+    
+    // 2. Parse JSON body if present (e.g. from Midtrans webhook)
+    if (e.postData && e.postData.contents) {
+      const contentType = (e.postData.type || '').toLowerCase();
+      if (contentType.indexOf('application/json') > -1) {
+        try {
+          const bodyData = JSON.parse(e.postData.contents);
+          if (bodyData && typeof bodyData === 'object') {
+            Object.keys(bodyData).forEach(key => {
+              params[key] = bodyData[key];
+            });
+          }
+        } catch (jsonErr) {
+          Logger.log('Warning: Failed to parse JSON POST body: ' + jsonErr);
+        }
+      }
+    }
+    
+    // 3. Fallback to e.parameters array format (used by Apps Script for FormData/multipart)
+    if (e.parameters) {
+      Object.keys(e.parameters).forEach(key => {
+        if (!params[key] && e.parameters[key] && e.parameters[key].length > 0) {
+          params[key] = e.parameters[key][0];
+        }
+      });
+    }
+
     const action = (params.action || '').toLowerCase();
     
     switch(action) {

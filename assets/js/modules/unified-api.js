@@ -97,17 +97,18 @@ export class APIClient {
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      // Build FormData (automatically becomes multipart/form-data)
-      const formData = new FormData();
-      formData.append('action', action);
+      // Build URLSearchParams for application/x-www-form-urlencoded format
+      // as required by Google Apps Script rules to avoid CORS preflight errors.
+      const postParams = new URLSearchParams();
+      postParams.append('action', action);
       
       // Add all data fields
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           if (typeof value === 'object') {
-            formData.append(key, JSON.stringify(value));
+            postParams.append(key, JSON.stringify(value));
           } else {
-            formData.append(key, String(value));
+            postParams.append(key, String(value));
           }
         }
       });
@@ -123,10 +124,8 @@ export class APIClient {
         const params = new URLSearchParams({ action, ...data });
         url = `${GAS_CONFIG.URL}?${params}`;
       } else if (method === 'POST') {
-        // For POST, use FormData (multipart/form-data)
-        // DO NOT set Content-Type header - let browser handle it
-        // DO NOT set other headers that trigger preflight
-        options.body = formData;
+        // For POST, use application/x-www-form-urlencoded to prevent CORS preflight issues
+        options.body = postParams;
       }
 
       const response = await fetch(url, options);

@@ -15,7 +15,7 @@
 
 import { AuthManager } from '/assets/js/modules/unified-auth.js';
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showSuccess, showError, showLoading, hideLoading, isValidEmail, isValidPhoneNumber, initPasswordToggle } from '/assets/js/modules/unified-utils.js';
+import { showSuccess, showError, showLoading, hideLoading, isValidEmail, isValidPassword, isValidPhoneNumber, initPasswordToggle } from '/assets/js/modules/unified-utils.js';
 
 export class SharedAuthForm {
   constructor(options = {}) {
@@ -49,6 +49,32 @@ export class SharedAuthForm {
 
     this.renderFormHTML();
     this.setupEventListeners();
+    this.initGoogleSignIn();
+  }
+
+  /**
+   * Explicitly initialize Google Sign-In for dynamic rendering
+   */
+  initGoogleSignIn() {
+    if (!this.options.showGoogleSignIn) return;
+
+    if (window.google && window.google.accounts && window.google.accounts.id) {
+      const gBtnContainer = this.container.querySelector('.g_id_signin');
+      if (gBtnContainer) {
+        window.google.accounts.id.initialize({
+          client_id: "1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com",
+          callback: window.handleGoogleSignIn
+        });
+        
+        window.google.accounts.id.renderButton(
+          gBtnContainer,
+          { theme: "outline", size: "large", type: "standard", shape: "rectangular", logo_alignment: "left", width: 400 }
+        );
+      }
+    } else {
+      // Retry in case the Google script hasn't fully loaded yet
+      setTimeout(() => this.initGoogleSignIn(), 500);
+    }
   }
 
   /**
@@ -77,6 +103,19 @@ export class SharedAuthForm {
         <div class="form-error" id="auth-error" style="display: none;"></div>
         <div class="form-success" id="auth-success" style="display: none;"></div>
 
+        <!-- Google Sign-In Button -->
+        ${this.options.showGoogleSignIn ? `
+          <div style="margin-top: 20px; display: flex; justify-content: center; width: 100%;">
+            <div id="g_id_onload"
+              data-client_id="1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com"
+              data-callback="handleGoogleSignIn">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
+          </div>
+          <!-- Divider -->
+          <div class="auth-divider" style="text-align: center; margin: 20px 0; color: #999; font-size: 14px;">atau dengan email</div>
+        ` : ''}
+
         <!-- Register Form -->
         <form class="auth-form register-form ${!this.options.inlineMode ? 'active' : ''}" id="register-form">
           <div class="form-group">
@@ -87,7 +126,13 @@ export class SharedAuthForm {
           
           <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" required placeholder="Minimal 6 karakter">
+            <input type="password" name="password" id="register-password-shared" required placeholder="Minimal 8 karakter">
+            <div class="password-strength" id="register-password-strength-shared" style="display: none; margin-top: 8px;">
+              <div class="strength-meter" style="width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-bottom: 5px; overflow: hidden;">
+                <div class="strength-bar" id="register-strength-bar-shared" style="height: 100%; width: 0%; transition: all 0.3s; border-radius: 2px;"></div>
+              </div>
+              <div class="strength-text" id="register-strength-text-shared" style="font-size: 11px; color: #94a3b8;"></div>
+            </div>
             <small>Kombinasi huruf, angka, dan simbol lebih aman</small>
           </div>
 
@@ -103,7 +148,13 @@ export class SharedAuthForm {
 
           <div class="form-group">
             <label>Nomor WhatsApp <span class="optional">(opsional)</span></label>
-            <input type="tel" name="whatsapp" placeholder="Contoh: 081234567890">
+            <input type="tel" name="whatsapp" id="register-whatsapp-shared" placeholder="Contoh: 081234567890">
+            <div class="phone-validation" id="register-phone-validation-shared" style="display: none; margin-top: 8px;">
+              <div class="strength-meter" style="width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-bottom: 5px; overflow: hidden;">
+                <div class="strength-bar" id="register-phone-bar-shared" style="height: 100%; width: 0%; transition: all 0.3s; border-radius: 2px;"></div>
+              </div>
+              <div class="strength-text" id="register-phone-text-shared" style="font-size: 11px; color: #94a3b8;"></div>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 14px; margin-bottom: 15px;">
@@ -124,7 +175,13 @@ export class SharedAuthForm {
           
           <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" required placeholder="Masukkan password Anda">
+            <input type="password" name="password" id="login-password-shared" required placeholder="Masukkan password Anda">
+            <div class="password-strength" id="login-password-strength-shared" style="display: none; margin-top: 8px;">
+              <div class="strength-meter" style="width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-bottom: 5px; overflow: hidden;">
+                <div class="strength-bar" id="login-strength-bar-shared" style="height: 100%; width: 0%; transition: all 0.3s; border-radius: 2px;"></div>
+              </div>
+              <div class="strength-text" id="login-strength-text-shared" style="font-size: 11px; color: #94a3b8;"></div>
+            </div>
           </div>
 
           <div class="form-actions">
@@ -164,17 +221,7 @@ export class SharedAuthForm {
           </div>
         </form>
 
-        <!-- Divider -->
-        <div class="auth-divider" style="text-align: center; margin: 20px 0; color: #999; font-size: 14px;">atau</div>
 
-        <!-- Google Sign-In Button -->
-        ${this.options.showGoogleSignIn ? `
-          <div id="g_id_onload"
-            data-client_id="1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com"
-            data-callback="handleGoogleSignIn">
-          </div>
-          <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
-        ` : ''}
 
         <!-- Privacy Notice -->
         ${this.options.showPrivacyNotice ? `
@@ -432,6 +479,12 @@ export class SharedAuthForm {
 
     // Initialize password toggles
     initPasswordToggle(this.container);
+
+    // Initialize password strength indicators
+    this.initPasswordStrengthIndicators();
+
+    // Initialize WhatsApp validation
+    this.initWhatsAppValidation();
   }
 
   /**
@@ -521,8 +574,9 @@ export class SharedAuthForm {
       return;
     }
 
-    if (password.length < 6) {
-      this.showError('Password minimal 6 karakter');
+    const pwdValidation = isValidPassword(password);
+    if (!pwdValidation.valid) {
+      this.showError(pwdValidation.message);
       return;
     }
 
@@ -575,7 +629,7 @@ export class SharedAuthForm {
             this.options.onRegisterSuccess(userData);
           } else {
             // Default: redirect to verify email page
-            window.location.href = '/auth/verify-email.html';
+            window.location.href = '/auth/verify-email.html?sent=true';
           }
         }
       }, 1500);
@@ -716,6 +770,139 @@ export class SharedAuthForm {
     } else {
       submitBtn.disabled = false;
       submitBtn.textContent = submitBtn.dataset.originalText || 'Submit';
+    }
+  }
+
+  /**
+   * Initialize password strength indicators
+   */
+  initPasswordStrengthIndicators() {
+    const registerPassword = this.container.querySelector('#register-password-shared');
+    if (registerPassword) {
+      registerPassword.addEventListener('input', () => {
+        this.updatePasswordStrength(
+          registerPassword.value,
+          'register-password-strength-shared',
+          'register-strength-bar-shared',
+          'register-strength-text-shared'
+        );
+      });
+    }
+
+    const loginPassword = this.container.querySelector('#login-password-shared');
+    if (loginPassword) {
+      loginPassword.addEventListener('input', () => {
+        this.updatePasswordStrength(
+          loginPassword.value,
+          'login-password-strength-shared',
+          'login-strength-bar-shared',
+          'login-strength-text-shared'
+        );
+      });
+    }
+  }
+
+  /**
+   * Calculate and display password strength
+   */
+  updatePasswordStrength(password, strengthDivId, strengthBarId, strengthTextId) {
+    const strengthDiv = this.container.querySelector(`#${strengthDivId}`);
+    const strengthBar = this.container.querySelector(`#${strengthBarId}`);
+    const strengthText = this.container.querySelector(`#${strengthTextId}`);
+
+    if (!strengthDiv || !strengthBar || !strengthText) return;
+
+    if (password.length === 0) {
+      strengthDiv.style.display = 'none';
+      return;
+    }
+
+    strengthDiv.style.display = 'block';
+
+    let strength = 0;
+    const checks = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      numbers: /[0-9]/.test(password),
+      special: /[!@#$%^&*]/.test(password)
+    };
+
+    strength = Object.values(checks).filter(Boolean).length;
+
+    let className = '';
+    let text = '';
+
+    if (strength <= 1) {
+      className = 'strength-weak';
+      text = 'Password lemah';
+    } else if (strength <= 2) {
+      className = 'strength-fair';
+      text = 'Password cukup';
+    } else if (strength <= 3) {
+      className = 'strength-good';
+      text = 'Password kuat';
+    } else {
+      className = 'strength-strong';
+      text = 'Password sangat kuat';
+    }
+
+    strengthBar.className = `strength-bar ${className}`;
+    strengthBar.style.width = (strength * 20) + '%';
+    strengthText.textContent = text;
+  }
+
+  /**
+   * Initialize WhatsApp number validation
+   */
+  initWhatsAppValidation() {
+    const whatsappInput = this.container.querySelector('#register-whatsapp-shared');
+    if (whatsappInput) {
+      whatsappInput.addEventListener('input', () => {
+        this.updateWhatsAppValidation(
+          whatsappInput.value,
+          'register-phone-validation-shared',
+          'register-phone-bar-shared',
+          'register-phone-text-shared'
+        );
+      });
+    }
+  }
+
+  /**
+   * Update WhatsApp validation display
+   */
+  updateWhatsAppValidation(value, validationDivId, barId, textId) {
+    const div = this.container.querySelector(`#${validationDivId}`);
+    const barEl = this.container.querySelector(`#${barId}`);
+    const textEl = this.container.querySelector(`#${textId}`);
+    
+    if (!div || !barEl || !textEl) return;
+
+    if (value.length === 0) {
+      div.style.display = 'none';
+      return;
+    }
+
+    div.style.display = 'block';
+
+    const cleanValue = value.replace(/[\s\-+]/g, '');
+
+    if (isValidPhoneNumber(value)) {
+      barEl.className = 'strength-bar strength-strong';
+      barEl.style.width = '100%';
+      textEl.style.color = '#10b981'; // Green
+      textEl.innerHTML = '<i class="fas fa-check-circle"></i> Format WhatsApp valid';
+    } else if (cleanValue.length >= 5) {
+      barEl.className = 'strength-bar strength-fair';
+      barEl.style.width = '50%';
+      textEl.style.color = '#f59e0b'; // Orange
+      textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Format tidak valid. Gunakan format Indonesia (contoh: 0812xxxxxx)';
+    } else {
+      barEl.className = 'strength-bar strength-weak';
+      barEl.style.width = '25%';
+      textEl.style.color = '#ef4444'; // Red
+      textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nomor terlalu pendek';
     }
   }
 }

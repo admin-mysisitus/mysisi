@@ -125,6 +125,12 @@ function initPage() {
 
   // Initialize password toggles
   initPasswordToggle(document);
+
+  // Initialize password strength indicators
+  initPasswordStrengthIndicators();
+
+  // Initialize WhatsApp number validation
+  initWhatsAppValidation();
 }
 
 // ============================================================================
@@ -480,6 +486,139 @@ function setupAuthForms() {
   if (loginForm) {
     loginForm.addEventListener('submit', handleLogin);
 
+  }
+}
+
+/**
+ * Initialize password strength indicators
+ */
+function initPasswordStrengthIndicators() {
+  const registerPassword = document.getElementById('register-password');
+  if (registerPassword) {
+    registerPassword.addEventListener('input', () => {
+      updatePasswordStrength(
+        registerPassword.value,
+        'register-password-strength',
+        'register-strength-bar',
+        'register-strength-text'
+      );
+    });
+  }
+
+  const loginPassword = document.getElementById('login-password');
+  if (loginPassword) {
+    loginPassword.addEventListener('input', () => {
+      updatePasswordStrength(
+        loginPassword.value,
+        'login-password-strength',
+        'login-strength-bar',
+        'login-strength-text'
+      );
+    });
+  }
+}
+
+/**
+ * Calculate and display password strength
+ */
+function updatePasswordStrength(password, strengthDivId, strengthBarId, strengthTextId) {
+  const strengthDiv = document.getElementById(strengthDivId);
+  const strengthBar = document.getElementById(strengthBarId);
+  const strengthText = document.getElementById(strengthTextId);
+
+  if (!strengthDiv || !strengthBar || !strengthText) return;
+
+  if (password.length === 0) {
+    strengthDiv.style.display = 'none';
+    return;
+  }
+
+  strengthDiv.style.display = 'block';
+
+  let strength = 0;
+  const checks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    numbers: /[0-9]/.test(password),
+    special: /[!@#$%^&*]/.test(password)
+  };
+
+  strength = Object.values(checks).filter(Boolean).length;
+
+  let className = '';
+  let text = '';
+
+  if (strength <= 1) {
+    className = 'strength-weak';
+    text = 'Password lemah';
+  } else if (strength <= 2) {
+    className = 'strength-fair';
+    text = 'Password cukup';
+  } else if (strength <= 3) {
+    className = 'strength-good';
+    text = 'Password kuat';
+  } else {
+    className = 'strength-strong';
+    text = 'Password sangat kuat';
+  }
+
+  strengthBar.className = `strength-bar ${className}`;
+  strengthBar.style.width = (strength * 20) + '%';
+  strengthText.textContent = text;
+}
+
+/**
+ * Initialize WhatsApp number validation
+ */
+function initWhatsAppValidation() {
+  const whatsappInput = document.getElementById('register-whatsapp');
+  if (whatsappInput) {
+    whatsappInput.addEventListener('input', () => {
+      updateWhatsAppValidation(
+        whatsappInput.value,
+        'register-phone-validation',
+        'register-phone-bar',
+        'register-phone-text'
+      );
+    });
+  }
+}
+
+/**
+ * Update WhatsApp validation display
+ */
+function updateWhatsAppValidation(value, validationDivId, barId, textId) {
+  const div = document.getElementById(validationDivId);
+  const barEl = document.getElementById(barId);
+  const textEl = document.getElementById(textId);
+  
+  if (!div || !barEl || !textEl) return;
+
+  if (value.length === 0) {
+    div.style.display = 'none';
+    return;
+  }
+
+  div.style.display = 'block';
+
+  const cleanValue = value.replace(/[\s\-+]/g, '');
+
+  if (isValidPhoneNumber(value)) {
+    barEl.className = 'strength-bar strength-strong';
+    barEl.style.width = '100%';
+    textEl.style.color = '#10b981'; // Green
+    textEl.innerHTML = '<i class="fas fa-check-circle"></i> Format WhatsApp valid';
+  } else if (cleanValue.length >= 5) {
+    barEl.className = 'strength-bar strength-fair';
+    barEl.style.width = '50%';
+    textEl.style.color = '#f59e0b'; // Orange
+    textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Format tidak valid. Gunakan format Indonesia (contoh: 0812xxxxxx)';
+  } else {
+    barEl.className = 'strength-bar strength-weak';
+    barEl.style.width = '25%';
+    textEl.style.color = '#ef4444'; // Red
+    textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nomor terlalu pendek';
   }
 }
 

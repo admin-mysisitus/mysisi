@@ -191,9 +191,9 @@ export function isValidPassword(password) {
  * Validate phone number (Indonesia) - Basic
  */
 export function isValidPhoneNumber(phone) {
-  // Accept formats: +628xxx, 628xxx, 08xxx
+  // Accept formats: +628xxx, 628xxx, 08xxx, 8xxx
   // Synchronized with backend validation (gas.gs validatePhoneNumber function)
-  const regex = /^(\+62|62|0)8\d{8,12}$/;
+  const regex = /^(\+62|62|0)?8\d{8,12}$/;
   return regex.test(phone.replace(/[\s\-]/g, ''));
 }
 
