@@ -1277,37 +1277,82 @@
 /* Package features icons */
 .package-features li i {
   color: var(--success-green);
+  background-color: rgba(16, 185, 129, 0.12); /* Hijau transparan */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 0.8rem;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
 }
 
-/* Feature badge icons in why-us section */
-.feature-badge i {
-  font-size: 1.8rem;
-  color: var(--success-green);
-  margin-bottom: 1rem;
-  display: inline-block;
+/* Custom Icon Styling for why-us section */
+.feature-icon-custom {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px; /* Squircle look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  color: #ffffff;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sedikit bayangan agar terlihat modern */
 }
+
+/* Background Colors */
+.feature-icon-custom.bg-orange { background-color: #f59e0b; }
+.feature-icon-custom.bg-red { background-color: #ef4444; }
+.feature-icon-custom.bg-purple { background-color: #a855f7; }
+.feature-icon-custom.bg-green { background-color: #22c55e; }
+.feature-icon-custom.bg-blue { background-color: #3b82f6; }
+.feature-icon-custom.bg-cyan { background-color: #06b6d4; }
 
 /* Comparison section icons */
 .comparison-fit h3 i {
-  color: var(--success-green);
+  color: #ffffff;
+  background-color: var(--success-green);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px; /* Squircle */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 0.7rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
 }
 
 .comparison-not-fit h3 i {
-  color: var(--error-red);
+  color: #ffffff;
+  background-color: var(--error-red);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px; /* Squircle */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 0.7rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
 }
 
 /* Stats section icons */
 .stat-item h3 i {
-  color: var(--accent-cyan);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand-base) 100%);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 0.5rem;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 /* ========== RESPONSIVE UPDATES ========== */

@@ -1,0 +1,225 @@
+/* ==========================================================================
+   GLOBAL CUSTOM ICON SYSTEM
+   Sistem reusable untuk membuat icon berbentuk modern (Squircle / Circle)
+   ========================================================================== */
+
+/* --- Base Shapes --- */
+
+/* Squircle (Large) - cocok untuk fitur hero/bento box */
+.icon-squircle-lg {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+/* Squircle (Medium) - cocok untuk highlight / stats / komparasi */
+.icon-squircle-md {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+/* Squircle (Small) */
+.icon-squircle-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+/* Circle Soft (Small) - cocok untuk checkmarks list */
+.icon-circle-soft {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* --- Color Modifiers (Backgrounds) --- */
+
+/* Vibrant Solids */
+.bg-orange { background-color: #f59e0b; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
+.bg-red { background-color: #ef4444; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
+.bg-purple { background-color: #a855f7; box-shadow: 0 4px 10px rgba(168, 85, 247, 0.2); }
+.bg-green { background-color: #22c55e; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2); }
+.bg-blue { background-color: #3b82f6; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); }
+.bg-cyan { background-color: #06b6d4; box-shadow: 0 4px 10px rgba(6, 182, 212, 0.2); }
+
+/* Gradients */
+.bg-brand-gradient { 
+  background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand-base) 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  color: #ffffff;
+}
+
+/* Soft Colors (for text & subtle background) */
+.text-bg-success {
+  color: var(--success-green);
+  background-color: rgba(16, 185, 129, 0.12);
+}
+.text-bg-brand {
+  color: var(--brand-base);
+  background-color: rgba(37, 99, 235, 0.12);
+}
+.text-bg-warning {
+  color: var(--accent-orange);
+  background-color: rgba(245, 158, 11, 0.12);
+}
+.text-bg-danger {
+  color: var(--error-red);
+  background-color: rgba(239, 68, 68, 0.12);
+}
+
+/* Generic margins to fix tight spacing if used inline */
+.icon-mr { margin-right: 0.75rem; }
+
+/* ==========================================================================
+   AUTO-STYLING UNTUK COMPONENT ITEMS DI SELURUH HALAMAN
+   Menerapkan gaya squircle / bulatan berwarna-warni tanpa perlu edit HTML
+   ========================================================================== */
+
+/* 1. Komponen Kotak Layanan / Fitur / Benefit / Value & Card Icons (Hanya Icon Utama) */
+.feature-item > i,
+.highlight-card > i,
+.layanan-icon > i,
+.benefit-icon > i,
+.value-icon > i,
+.culture-icon > i,
+.service-icon-wrapper > i,
+.contact-icon > i {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px; /* Squircle */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.feature-item:hover > i,
+.highlight-card:hover > i,
+.layanan-card:hover .layanan-icon > i,
+.benefit-item:hover .benefit-icon > i,
+.value-item:hover .value-icon > i,
+.culture-item:hover .culture-icon > i,
+.service-card:hover .service-icon-wrapper > i {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Auto-coloring squircle based on position (nth-child) for Cards & Features ONLY */
+/* Kita harus menargetkan parent-nya (nth-child) lalu men-style child-nya (i) */
+.feature-item:nth-child(6n+1) > i, .highlight-card:nth-child(6n+1) > i, .layanan-card:nth-child(6n+1) .layanan-icon > i, .benefit-item:nth-child(6n+1) .benefit-icon > i, .value-item:nth-child(6n+1) .value-icon > i, .culture-item:nth-child(6n+1) .culture-icon > i, .service-card:nth-child(6n+1) .service-icon-wrapper > i { background-color: #f59e0b; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+.feature-item:nth-child(6n+2) > i, .highlight-card:nth-child(6n+2) > i, .layanan-card:nth-child(6n+2) .layanan-icon > i, .benefit-item:nth-child(6n+2) .benefit-icon > i, .value-item:nth-child(6n+2) .value-icon > i, .culture-item:nth-child(6n+2) .culture-icon > i, .service-card:nth-child(6n+2) .service-icon-wrapper > i { background-color: #ef4444; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+.feature-item:nth-child(6n+3) > i, .highlight-card:nth-child(6n+3) > i, .layanan-card:nth-child(6n+3) .layanan-icon > i, .benefit-item:nth-child(6n+3) .benefit-icon > i, .value-item:nth-child(6n+3) .value-icon > i, .culture-item:nth-child(6n+3) .culture-icon > i, .service-card:nth-child(6n+3) .service-icon-wrapper > i { background-color: #a855f7; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); }
+.feature-item:nth-child(6n+4) > i, .highlight-card:nth-child(6n+4) > i, .layanan-card:nth-child(6n+4) .layanan-icon > i, .benefit-item:nth-child(6n+4) .benefit-icon > i, .value-item:nth-child(6n+4) .value-icon > i, .culture-item:nth-child(6n+4) .culture-icon > i, .service-card:nth-child(6n+4) .service-icon-wrapper > i { background-color: #22c55e; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); }
+.feature-item:nth-child(6n+5) > i, .highlight-card:nth-child(6n+5) > i, .layanan-card:nth-child(6n+5) .layanan-icon > i, .benefit-item:nth-child(6n+5) .benefit-icon > i, .value-item:nth-child(6n+5) .value-icon > i, .culture-item:nth-child(6n+5) .culture-icon > i, .service-card:nth-child(6n+5) .service-icon-wrapper > i { background-color: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+.feature-item:nth-child(6n+6) > i, .highlight-card:nth-child(6n+6) > i, .layanan-card:nth-child(6n+6) .layanan-icon > i, .benefit-item:nth-child(6n+6) .benefit-icon > i, .value-item:nth-child(6n+6) .value-icon > i, .culture-item:nth-child(6n+6) .culture-icon > i, .service-card:nth-child(6n+6) .service-icon-wrapper > i { background-color: #06b6d4; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3); }
+
+
+/* 2. Daftar List (ul > li > i) seperti di fitur paket / info job */
+ul.checklist-modern li i,
+.package-features li i,
+.job-meta span i,
+.job-location i,
+.job-type i,
+.job-level i {
+  color: var(--success-green);
+  background-color: rgba(16, 185, 129, 0.12);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.8rem;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* 3. Komparasi (Fit / Not Fit) */
+.comparison-fit h3 i, .comparison-yes h3 i {
+  color: #ffffff;
+  background-color: var(--success-green);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.7rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.comparison-not-fit h3 i, .comparison-no h3 i {
+  color: #ffffff;
+  background-color: var(--error-red);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.7rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+}
+
+/* 4. Stats & Highlights */
+.stat-item h3 i,
+.highlight-icon i {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand-base) 100%);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* 5. FAQ Chevron Icons */
+.faq-icon i, .detail-summary .toggle-icon {
+  color: var(--brand-base);
+  background-color: rgba(37, 99, 235, 0.08);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
