@@ -3,7 +3,7 @@
 
 /* ========== ABOUT: WHY SISITUS ========== */
 .about-why-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(2rem, 4vw, 3rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -11,7 +11,7 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .why-content {
@@ -23,7 +23,7 @@
   color: var(--text-secondary);
   font-size: var(--teks-standar);
   line-height: var(--line-height-relaxed);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -34,7 +34,7 @@
 
 /* ========== METRICS SECTION ========== */
 .about-metrics-section {
-  padding: 5rem 1rem;
+  padding: 2.5rem 1rem;
   background: linear-gradient(180deg, var(--bg-light) 0%, #FAFBFF 100%);
   position: relative;
   overflow: hidden;
@@ -56,7 +56,7 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   position: relative;
   z-index: 1;
 }
@@ -64,7 +64,7 @@
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1rem;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -74,7 +74,7 @@
 .metric-item {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
-  padding: 2rem;
+  padding: 1.25rem;
   border-radius: 12px;
   border: 1px solid rgba(37, 99, 235, 0.1);
   text-align: center;
@@ -111,7 +111,7 @@
 
 /* ========== TECHNICAL SECTION ========== */
 .about-technical-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(2rem, 4vw, 3rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -119,19 +119,19 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .technical-approaches {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2.5rem;
+  gap: 1.25rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .approach-item {
-  padding: 2rem;
+  padding: 1.25rem;
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent);
   border-left: 4px solid var(--primary-blue);
   border-radius: 8px;
@@ -159,7 +159,7 @@
 
 /* ========== TIMELINE SECTION (LEGACY - KEEP FOR BACKWARDS COMPAT) ========== */
 .about-timeline-section {
-  padding: 5rem 1rem;
+  padding: 2.5rem 1rem;
   background: linear-gradient(180deg, var(--bg-light) 0%, #FAFBFF 100%);
   position: relative;
   overflow: hidden;
@@ -193,7 +193,7 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 4.5rem;
+  margin-bottom: 2rem;
   position: relative;
   z-index: 1;
 }
@@ -202,7 +202,7 @@
   position: relative;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 1rem 0;
   z-index: 1;
 }
 
@@ -220,7 +220,7 @@
 }
 
 .timeline-item {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   position: relative;
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   opacity: 0;
@@ -303,7 +303,7 @@
 
 .timeline-content {
   background: var(--white);
-  padding: 2.2rem 2.5rem;
+  padding: 1.5rem;
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
   border-left: 6px solid var(--accent-cyan);
@@ -358,7 +358,7 @@
 
 /* ========== VALUES SECTION ========== */
 .about-values-section {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background-color: var(--white);
 }
 
@@ -366,17 +366,17 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .values-expanded-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .value-expanded {
-  padding: 2.5rem;
+  padding: 1.5rem;
   background: linear-gradient(135deg, var(--gray-light) 0%, var(--white) 100%);
   border-radius: var(--radius-besar);
   border-left: 4px solid var(--accent-cyan);
@@ -417,7 +417,7 @@
 
 /* ========== COLLABORATION SECTION ========== */
 .collaboration-section {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background-color: var(--white);
   text-align: center;
 }
@@ -432,13 +432,13 @@
   color: var(--gray-medium);
   font-size: var(--teks-standar);
   max-width: 600px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1rem;
   line-height: 1.8;
 }
 
 /* ========== TEAM INTRO SECTION ========== */
 .team-intro-section {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background: linear-gradient(135deg, var(--gray-light) 0%, var(--white) 100%);
   border-top: 3px solid var(--accent-cyan);
   text-align: center;
@@ -478,7 +478,7 @@
 
 /* ========== TEAM MEMBERS SECTION ========== */
 .team-members-section {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background-color: var(--gray-light);
 }
 
@@ -486,13 +486,13 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .team-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1rem;
 }
 
 /* ========== TEAM CARD ========== */
@@ -540,7 +540,7 @@
 }
 
 .team-info {
-  padding: 2rem;
+  padding: 1.25rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -564,7 +564,7 @@
   color: var(--gray-medium);
   font-size: var(--teks-kecil);
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .team-skills {
@@ -592,7 +592,7 @@
 
 /* ========== PARTNERS SECTION ========== */
 .partners-section {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background-color: var(--gray-light);
 }
 
@@ -606,7 +606,7 @@
 .section-subtitle {
   text-align: center;
   color: var(--gray-medium);
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   font-size: var(--teks-standar);
   max-width: 600px;
   margin-left: auto;
@@ -616,7 +616,7 @@
 .partners-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .partner-item {
@@ -663,7 +663,7 @@
   opacity: 0;
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(4px);
-  padding: 2rem;
+  padding: 1.25rem;
   text-align: center;
 }
 
@@ -694,26 +694,7 @@
   box-shadow: 0 12px 35px rgba(37, 99, 235, 0.25);
 }
 
-/* ========== COLLABORATION SECTION ========== */
-.collaboration-section {
-  padding: 4rem 0;
-  background-color: var(--white);
-  text-align: center;
-}
 
-.collaboration-section h2 {
-  font-size: var(--judul-sedang);
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-}
-
-.collaboration-section p {
-  color: var(--gray-medium);
-  font-size: var(--teks-standar);
-  max-width: 600px;
-  margin: 0 auto 2rem;
-  line-height: 1.8;
-}
 
 /* ========== CALL-TO-ACTION SECTION ========== */
 /* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
@@ -752,7 +733,7 @@
 
 @media (max-width: 768px) {
   .about-timeline-section {
-    padding: 4rem 1rem;
+    padding: 2.5rem 1rem;
   }
 
   .about-timeline-section::before {
@@ -810,7 +791,7 @@
   }
 
   .timeline-content {
-    padding: 2rem 2rem;
+    padding: 1.25rem;
     border-left: 6px solid var(--accent-cyan) !important;
     border-right: none !important;
     border-radius: 10px;
@@ -872,7 +853,7 @@
   .team-members-section,
   .partners-section,
   .collaboration-section {
-    padding: 2.5rem 0;
+    padding: 2rem 0;
   }
 }
 

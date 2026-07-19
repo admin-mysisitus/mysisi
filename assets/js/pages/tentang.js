@@ -108,6 +108,58 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  // ========== METRICS COUNT UP ANIMATION ==========
+  const metricNumbers = document.querySelectorAll('.metric-number');
+  
+  const animateCountUp = (element) => {
+    const originalText = element.textContent;
+    // Extract numbers, decimal point, and surrounding text
+    const match = originalText.match(/^(.*?)([0-9.]+)(.*?)$/);
+    if (!match) return;
+
+    const prefix = match[1];
+    const numberText = match[2];
+    const suffix = match[3];
+
+    const isFloat = numberText.includes('.');
+    const endValue = parseFloat(numberText);
+    const duration = 2000;
+    let startTime = null;
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      const easeProgress = progress * (2 - progress);
+      const currentValue = easeProgress * endValue;
+      
+      const displayValue = isFloat ? currentValue.toFixed(1) : Math.floor(currentValue);
+      element.textContent = `${prefix}${displayValue}${suffix}`;
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        element.textContent = originalText;
+      }
+    };
+    
+    element.setAttribute('data-animated', 'true');
+    window.requestAnimationFrame(step);
+  };
+
+  const countUpObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+        animateCountUp(entry.target);
+        observer.unobserve(entry.target); // Optional: if you only want it to animate once
+      }
+    });
+  }, { threshold: 0.1 });
+
+  metricNumbers.forEach(metric => {
+    countUpObserver.observe(metric);
+  });
+
   // ========== UTILITY FUNCTIONS ==========
   function isTouch() {
     return (('ontouchstart' in window) ||

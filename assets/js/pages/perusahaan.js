@@ -109,26 +109,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // ========== VALUE ITEMS ICON ANIMATION ==========
-  const valueItems = document.querySelectorAll('.value-item');
-  
-  valueItems.forEach(item => {
-    const valueIcon = item.querySelector('.value-icon');
-    
-    if (valueIcon) {
-      item.addEventListener('mouseenter', function () {
-        valueIcon.style.animation = 'bounce 0.6s ease-in-out';
-      });
-
-      item.addEventListener('mouseleave', function () {
-        valueIcon.style.animation = 'none';
-      });
-    }
-  });
 
   // ========== CTA BUTTONS INTERACTION ==========
   // Auto-initialized by HeroComponent.initAll() - no manual setup needed
   // CTA buttons akan mendapatkan hover effects, animations, dan ripple effect secara otomatis
+
+  // ========== ABOUT TABS INTERACTION ==========
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  if (tabButtons.length > 0 && tabPanes.length > 0) {
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        // Remove active class from all
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabPanes.forEach(p => p.classList.remove('active'));
+
+        // Add active class to clicked button
+        this.classList.add('active');
+
+        // Show corresponding pane
+        const targetId = this.getAttribute('data-tab');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) {
+          targetPane.classList.add('active');
+        }
+      });
+    });
+  }
 
 });
 

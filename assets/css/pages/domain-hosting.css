@@ -62,17 +62,7 @@
   transform: scaleX(1);
 }
 
-.benefit-item i {
-  font-size: clamp(2.2rem, 4vw, 2.8rem);
-  color: var(--accent-cyan);
-  margin-bottom: 1rem;
-  display: inline-block;
-  transition: var(--transisi);
-}
-
-.benefit-item:hover i {
-  transform: scale(1.15) rotate(10deg);
-}
+/* Icon styling now handled by custom-icons.css */
 
 .benefit-item h3 {
   color: var(--text-primary);
@@ -548,9 +538,7 @@
     padding: 1.5rem;
   }
 
-  .benefit-item i {
-    font-size: 2rem;
-  }
+  /* Responsive icon scaling handled by custom-icons.css */
 
   .simple-packages {
     grid-template-columns: 1fr;

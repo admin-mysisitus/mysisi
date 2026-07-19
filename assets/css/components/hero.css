@@ -392,7 +392,7 @@
 .company-cta-section,
 .about-cta-section,
 .kontak-cta-section {
-  padding: 4rem 0;
+  padding: clamp(2rem, 4vw, 3rem) 0;
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
   color: var(--white);
   text-align: center;
@@ -477,7 +477,7 @@
 
 .company-cta-section h2,
 .about-cta-section h2 {
-  font-size: var(--judul-besar);
+  font-size: var(--judul-sedang);
   font-weight: 700;
   color: white;
 }
@@ -494,7 +494,7 @@
   font-size: var(--teks-standar);
   opacity: 0.95;
   max-width: 600px;
-  margin: 0 auto 2.5rem;
+  margin: 0 auto 1.5rem;
   position: relative;
   z-index: 1;
   line-height: var(--line-height-relaxed);
@@ -990,7 +990,7 @@
   background-position: center;
 }
 .hero-domain-hosting {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-domain-hosting.webp');
+  background-image: url('/assets/img/banner/banner-dekstop/banner-domain-hosting.webp?v=3');
   background-size: cover;
   background-position: center;
 }
@@ -1046,7 +1046,7 @@
     background-image: url('/assets/img/banner/banner-mobile/banner-blog.webp');
   }
   .hero-domain-hosting {
-    background-image: url('/assets/img/banner/banner-mobile/banner-domain-hosting.webp');
+    background-image: url('/assets/img/banner/banner-mobile/banner-domain-hosting.webp?v=3');
   }
   .hero-kontak {
     background-image: url('/assets/img/banner/banner-mobile/banner-kontak.webp');
