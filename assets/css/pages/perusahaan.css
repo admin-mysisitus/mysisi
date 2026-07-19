@@ -53,10 +53,8 @@
 }
 
 .highlight-card i {
-  font-size: 2.5rem;
-  color: var(--accent-cyan);
+  color: #ffffff;
   margin-bottom: 1rem;
-  display: inline-block;
   transition: var(--transisi);
 }
 
@@ -192,7 +190,6 @@
 }
 
 .value-icon {
-  font-size: 2.5rem;
   color: var(--accent-cyan);
   margin-bottom: 1rem;
   display: inline-flex;
@@ -283,22 +280,18 @@
 .diff-item:nth-child(6) { animation-delay: 0.35s; }
 
 .diff-item:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-elegan);
-  border-left-color: var(--primary-blue);
-}
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-elegan);
+    border-left-color: var(--primary-blue);
+  }
 
 .diff-item i {
-  font-size: 2rem;
-  color: var(--accent-cyan);
   margin-bottom: 1rem;
-  display: inline-block;
   transition: var(--transisi);
 }
 
 .diff-item:hover i {
   transform: scale(1.2) rotate(5deg);
-  color: var(--primary-blue);
 }
 
 .diff-item h3 {
@@ -395,16 +388,13 @@
 .service-simple:nth-child(4) { animation-delay: 0.4s; }
 
 .service-simple:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-elegan);
-  border-color: var(--accent-cyan);
-}
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-elegan);
+    border-color: var(--accent-cyan);
+  }
 
 .service-simple i {
-  font-size: 2.5rem;
-  color: var(--accent-cyan);
   margin-bottom: 1rem;
-  display: inline-block;
   transition: var(--transisi);
 }
 
@@ -467,6 +457,7 @@
   margin-bottom: 0.5rem;
   font-family: 'Inter', sans-serif;
   letter-spacing: -1px;
+  color: white;
 }
 
 .stat-box p {
@@ -520,15 +511,12 @@
 }
 
 .navigate-card i {
-  font-size: 2.5rem;
-  color: var(--accent-cyan);
   margin-bottom: 1rem;
   transition: var(--transisi);
 }
 
 .navigate-card:hover i {
   transform: scale(1.2) rotate(5deg);
-  color: var(--text-primary);
 }
 
 .navigate-card h3 {
@@ -754,21 +742,30 @@
 
 .team-cta {
   text-align: center;
-  padding: clamp(2rem, 4vw, 3rem);
-  background: linear-gradient(135deg, var(--primary-blue) 0%, #2563eb 100%);
+  padding: clamp(3rem, 6vw, 4rem) 2rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
   border-radius: var(--radius-large);
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .team-cta h3 {
-  font-size: var(--heading-sm);
-  margin-bottom: 12px;
+  font-size: var(--judul-besar);
+  font-weight: 700;
+  margin-bottom: 1rem;
   color: white;
 }
 
 .team-cta p {
-  margin-bottom: clamp(1.5rem, 3vw, 2rem);
-  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--teks-standar);
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.8;
+  color: white;
 }
 
 .team-cta .btn {

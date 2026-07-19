@@ -44,17 +44,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-.problem-item i {
-  font-size: 2.5rem;
-  color: var(--error-red);
-  margin-bottom: 1rem;
-  display: inline-block;
-  transition: var(--transisi);
-}
-
-.problem-item:hover i {
-  transform: scale(1.15) rotate(-10deg);
-}
+/* Styles for problem-item icons are handled by custom-icons.css squircle styling */
 
 .problem-item h3 {
   color: var(--text-primary);
@@ -179,17 +169,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-.included-item i {
-  font-size: 2.5rem;
-  color: var(--accent-cyan);
-  margin-bottom: 1rem;
-  display: inline-block;
-  transition: var(--transisi);
-}
-
-.included-item:hover i {
-  transform: scale(1.2) rotate(15deg);
-}
+/* Icon styles handled by custom-icons.css squircle styling */
 
 .included-item h3 {
   color: var(--text-primary);
@@ -371,9 +351,7 @@
     padding: 1.5rem;
   }
 
-  .included-item i {
-    font-size: 2rem;
-  }
+  /* Icon styles handled by custom-icons.css */
 
   .comparison-table {
     display: block;

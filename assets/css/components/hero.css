@@ -479,6 +479,7 @@
 .about-cta-section h2 {
   font-size: var(--judul-besar);
   font-weight: 700;
+  color: white;
 }
 
 /* Paragraphs for all blue CTA sections */
@@ -999,7 +1000,7 @@
   background-position: center;
 }
 .hero-layanan {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-layanan.webp');
+  background-image: url('/assets/img/banner/banner-dekstop/banner-layanan.webp?v=1.1');
   background-size: cover;
   background-position: center;
 }
@@ -1009,12 +1010,12 @@
   background-position: center;
 }
 .hero-maintenance {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-maintenance.webp');
+  background-image: url('/assets/img/banner/banner-dekstop/banner-maintenance.webp?v=1.1');
   background-size: cover;
   background-position: center;
 }
 .hero-pembuatan-web {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-pembuatan-web.webp');
+  background-image: url('/assets/img/banner/banner-dekstop/banner-pembuatan-web.webp?v=1.1');
   background-size: cover;
   background-position: center;
 }
@@ -1051,16 +1052,16 @@
     background-image: url('/assets/img/banner/banner-mobile/banner-kontak.webp');
   }
   .hero-layanan {
-    background-image: url('/assets/img/banner/banner-mobile/banner-layanan.webp');
+    background-image: url('/assets/img/banner/banner-mobile/banner-layanan.webp?v=1.1');
   }
   .hero-legal {
     background-image: url('/assets/img/banner/banner-mobile/banner-legal.webp');
   }
   .hero-maintenance {
-    background-image: url('/assets/img/banner/banner-mobile/banner-maintenance.webp');
+    background-image: url('/assets/img/banner/banner-mobile/banner-maintenance.webp?v=1.1');
   }
   .hero-pembuatan-web {
-    background-image: url('/assets/img/banner/banner-mobile/banner-pembuatan-web.webp');
+    background-image: url('/assets/img/banner/banner-mobile/banner-pembuatan-web.webp?v=1.1');
   }
   .hero-perusahaan {
     background-image: url('/assets/img/banner/banner-mobile/banner-perusahaan.webp');

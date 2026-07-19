@@ -1,6 +1,11 @@
 /* ========== PORTOFOLIO PAGE - STYLING ========== */
 /* Portofolio grid dengan filter, cards, dan interactive elements */
 
+/* ========== HERO SECTION ========== */
+.hero.hero-portofolio {
+  background: url('/assets/img/banner/banner-portofolio.webp') center/cover no-repeat !important;
+}
+
 /* ========== FILTER SECTION ========== */
 .portfolio-filter-section {
   padding: 3rem 0;
