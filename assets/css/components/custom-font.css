@@ -39,7 +39,6 @@
 }
 
 
-
 /* ===============================
    WATERMARK / CREDIT LOGO
    =============================== */
@@ -57,10 +56,8 @@
   font-weight: 600;
   line-height: 1;
   color: #ffffff;
-  background-color: #0f172a;
-  background-color: #0f172a;
-  padding: 0.2rem 0.4rem 0.2rem 0; /* Kurangi padding kiri untuk mengimbangi ::before 10px */
-  padding-right: calc(0.4rem + 10px); /* Tambah ruang kanan agar teks benar-benar di tengah */
+  background-color: #162033;
+  padding: 0.2rem 0.4rem;
   border-radius: 3px;
   opacity: 0.32;
   transition: opacity 0.3s ease;
@@ -75,7 +72,7 @@
 }
 
 .logo.wm-sc span {
-  color: var(--success-green);
+  color: #2563EB;
   transform: none !important;
 }
 

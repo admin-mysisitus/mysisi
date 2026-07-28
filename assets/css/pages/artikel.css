@@ -27,7 +27,7 @@
 /* ========== ARTIKEL GRID ========== */
 .artikel-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: clamp(2rem, 3vw, 2.5rem);
 }
 
@@ -220,5 +220,144 @@
   .pagination-link {
     padding: 0.6rem 1rem;
     font-size: 0.7rem;
+  }
+}
+
+/* ========== ARTIKEL CTA ACCENT (UNIQUE STYLE) ========== */
+.artikel-cta-accent {
+  padding: 1.5rem 0 2rem 0;
+}
+
+.artikel-cta-card {
+  text-align: center;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
+  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #4f46e5 100%);
+  border-radius: 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.artikel-cta-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.artikel-cta-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  right: -15%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.artikel-cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.artikel-cta-badge i {
+  font-size: 0.9rem;
+}
+
+.artikel-cta-card h2 {
+  font-size: var(--judul-kecil);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.artikel-cta-card p {
+  font-size: var(--teks-kecil);
+  opacity: 0.9;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+.artikel-cta-categories {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: var(--transisi);
+}
+
+.cat-pill:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  color: white;
+}
+
+.cat-pill i {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.artikel-cta-card .cta-buttons {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .artikel-cta-card {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  .artikel-cta-categories {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cat-pill {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.65rem;
   }
 }

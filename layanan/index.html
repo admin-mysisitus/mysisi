@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Layanan sisitus.com</title>
   <!-- App & Theme Settings -->
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="sisitus.com" />
@@ -185,109 +186,143 @@
   </header>
   <!-- BATAS CONTENT -->
   <main>
-    <section class="hero hero-layanan">
+    <section class="hero hero-home" style="background: url('/assets/img/banner-layanan.webp') center/cover no-repeat !important; color: white;">
       <div class="container">
-        <h1>Layanan Kami</h1>
-        <p>Solusi digital lengkap untuk mengembangkan bisnis Anda di era modern</p>
+        <div class="hero-wrapper">
+          <div class="hero-content">
+            <p class="hero-subtitle">Solusi Digital <span class="highlight-text">Lengkap</span></p>
+            <h1>Layanan Terbaik untuk Mengembangkan Bisnis Anda di Era Modern</h1>
+            <p>Kami menyediakan tiga layanan utama yang dirancang khusus untuk memenuhi kebutuhan bisnis Anda. Setiap layanan dikerjakan dengan pendekatan profesional dan proses kerja yang terstruktur.</p>
+            <div class="cta-buttons">
+              <a href="#services-grid" class="btn btn-primary" aria-label="Lihat Layanan Kami">Lihat Layanan</a>
+              <a href="/kontak/" class="btn btn-secondary">Konsultasi Gratis</a>
+            </div>
+          </div>
+          <div class="hero-illustration">
+            <img src="/assets/img/banner-layanan.webp" alt="Layanan SISITUS.com" width="500" height="500" loading="lazy">
+          </div>
+        </div>
       </div>
     </section>
-    <section class="layanan-intro-section">
-      <div class="container">
-        <p class="intro-text">Kami menyediakan tiga layanan utama yang dirancang khusus untuk memenuhi kebutuhan bisnis Anda. Setiap layanan dikerjakan dengan pendekatan profesional dan proses kerja yang terstruktur.</p>
-      </div>
-    </section>
+
     <section class="layanan-grid-section">
       <div class="container">
         <h2>Tiga Layanan Unggulan Kami</h2>
-        <div class="layanan-grid">
-          <article class="layanan-card">
-            <div class="layanan-icon">
-              <i class="fas fa-globe"></i>
+        <div class="layanan-tabs-container">
+          <div class="layanan-tabs-nav">
+            <button class="layanan-tab-btn active" data-target="tab-website">Pembuatan Website</button>
+            <button class="layanan-tab-btn" data-target="tab-domain">Domain & Hosting</button>
+            <button class="layanan-tab-btn" data-target="tab-maintenance">Maintenance</button>
+          </div>
+          <div class="layanan-tabs-content">
+            <!-- Website Tab -->
+            <div class="layanan-tab-pane active" id="tab-website">
+              <div class="layanan-card-horizontal">
+                <div class="layanan-icon-area">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <div class="layanan-content-area">
+                  <h3>Pembuatan Website</h3>
+                  <p>Website RINGAN, AMAN, dan SCALABLE dibangun dengan clean code architecture. Bukan template, bukan monthly fees—Anda punya ownership 100%.</p>
+                  <div class="layanan-features">
+                    <ul>
+                      <li>Architecture clean & scalable</li>
+                      <li>Core Web Vitals &lt;2s loading</li>
+                      <li>Security-first tanpa plugin rentan</li>
+                      <li>100% code ownership</li>
+                      <li>Sekali bayar, forever yours</li>
+                    </ul>
+                  </div>
+                  <a href="/layanan/pembuatan-website/" class="btn btn-secondary">Pelajari Detail</a>
+                </div>
+              </div>
             </div>
-            <h3>Pembuatan Website</h3>
-            <p>Website RINGAN, AMAN, dan SCALABLE dibangun dengan clean code architecture. Bukan template, bukan monthly fees—Anda punya ownership 100%.</p>
-            <div class="layanan-features">
-              <ul>
-                <li>Architecture clean & scalable</li>
-                <li>Core Web Vitals &lt;2s loading</li>
-                <li>Security-first tanpa plugin rentan</li>
-                <li>100% code ownership</li>
-                <li>Sekali bayar, forever yours</li>
-              </ul>
+            <!-- Domain Tab -->
+            <div class="layanan-tab-pane" id="tab-domain">
+              <div class="layanan-card-horizontal">
+                <div class="layanan-icon-area">
+                  <i class="fas fa-server"></i>
+                </div>
+                <div class="layanan-content-area">
+                  <h3>Domain & Hosting</h3>
+                  <p>Layanan pendaftaran domain dan pengelolaan hosting melalui mitra terpercaya dengan dukungan teknis responsif.</p>
+                  <div class="layanan-features">
+                    <ul>
+                      <li>Beragam pilihan domain</li>
+                      <li>Hosting melalui mitra terpercaya</li>
+                      <li>Email hosting sesuai paket</li>
+                      <li>Free SSL certificate</li>
+                      <li>Dukungan teknis responsif</li>
+                    </ul>
+                  </div>
+                  <a href="/layanan/domain-hosting/" class="btn btn-secondary">Pelajari Detail</a>
+                </div>
+              </div>
             </div>
-            <a href="/layanan/pembuatan-website/" class="btn btn-secondary">Pelajari Detail</a>
-          </article>
-          <article class="layanan-card">
-            <div class="layanan-icon">
-              <i class="fas fa-server"></i>
+            <!-- Maintenance Tab -->
+            <div class="layanan-tab-pane" id="tab-maintenance">
+              <div class="layanan-card-horizontal">
+                <div class="layanan-icon-area">
+                  <i class="fas fa-tools"></i>
+                </div>
+                <div class="layanan-content-area">
+                  <h3>Maintenance Website</h3>
+                  <p>Perawatan website berbasis filosofi SISITUS—karena architecture ringan & clean code berarti maintenance lebih sederhana dan affordable.</p>
+                  <div class="layanan-features">
+                    <ul>
+                      <li>Regular backup & security audit</li>
+                      <li>Performa monitoring & optimization</li>
+                      <li>Pembaruan berkala & testing</li>
+                      <li>Dukungan teknis responsif 24/7</li>
+                      <li>Dokumentasi lengkap untuk sustainability</li>
+                    </ul>
+                  </div>
+                  <a href="/layanan/maintenance/" class="btn btn-secondary">Pelajari Detail</a>
+                </div>
+              </div>
             </div>
-            <h3>Domain & Hosting</h3>
-            <p>Layanan pendaftaran domain dan pengelolaan hosting melalui mitra terpercaya dengan dukungan teknis responsif.</p>
-            <div class="layanan-features">
-              <ul>
-                <li>Beragam pilihan domain</li>
-                <li>Hosting melalui mitra terpercaya</li>
-                <li>Email hosting sesuai paket</li>
-                <li>Free SSL certificate</li>
-                <li>Dukungan teknis responsif</li>
-              </ul>
-            </div>
-            <a href="/layanan/domain-hosting/" class="btn btn-secondary">Pelajari Detail</a>
-          </article>
-          <article class="layanan-card">
-            <div class="layanan-icon">
-              <i class="fas fa-tools"></i>
-            </div>
-            <h3>Maintenance Website</h3>
-            <p>Perawatan website berbasis filosofi SISITUS—karena architecture ringan & clean code berarti maintenance lebih sederhana dan affordable.</p>
-            <div class="layanan-features">
-              <ul>
-                <li>Regular backup & security audit</li>
-                <li>Performa monitoring & optimization</li>
-                <li>Pembaruan berkala & testing</li>
-                <li>Dukungan teknis responsif 24/7</li>
-                <li>Dokumentasi lengkap untuk sustainability</li>
-              </ul>
-            </div>
-            <a href="/layanan/maintenance/" class="btn btn-secondary">Pelajari Detail</a>
-          </article>
+          </div>
         </div>
       </div>
     </section>
     <section class="layanan-process-section">
       <div class="container">
         <h2>Metode Kerja Kami: RINGAN, AMAN, SCALABLE di Setiap Langkah</h2>
-        <p style="text-align: center; margin-bottom: 40px; font-size: 16px; color: #666;">Setiap service—dari pembuatan website hingga domain & maintenance—mengikuti filosofi yang sama: prioritaskan performance, keamanan, dan ownership jangka panjang.</p>
-        <div class="process-grid">
-          <div class="process-item">
-            <div class="process-number">01</div>
-            <h3>Konsultasi Mendalam</h3>
-            <p>Pahami kebutuhan bisnis, tujuan, dan ekspektasi maintenance jangka panjang. Ini fondasi untuk architecture yang tepat.</p>
+        <p style="text-align: center; margin-bottom: 40px; font-size: 16px; color: #666; max-width: 800px; margin-inline: auto;">Setiap service—dari pembuatan website hingga domain & maintenance—mengikuti filosofi yang sama: prioritaskan performance, keamanan, dan ownership jangka panjang.</p>
+        <div class="stepper-container">
+          <div class="stepper-nav">
+            <button class="step-btn active" data-step="1"><span class="step-num">01</span><span class="step-title">Konsultasi</span></button>
+            <button class="step-btn" data-step="2"><span class="step-num">02</span><span class="step-title">Planning</span></button>
+            <button class="step-btn" data-step="3"><span class="step-num">03</span><span class="step-title">Development</span></button>
+            <button class="step-btn" data-step="4"><span class="step-num">04</span><span class="step-title">Testing</span></button>
+            <button class="step-btn" data-step="5"><span class="step-num">05</span><span class="step-title">Handover</span></button>
+            <button class="step-btn" data-step="6"><span class="step-num">06</span><span class="step-title">Support</span></button>
           </div>
-          <div class="process-item">
-            <div class="process-number">02</div>
-            <h3>Planning & Strategy</h3>
-            <p>Design architecture yang RINGAN & SCALABLE dengan clean code principles. Prioritas: performance, security, ownership clarity.</p>
-          </div>
-          <div class="process-item">
-            <div class="process-number">03</div>
-            <h3>Development Best Practices</h3>
-            <p>Build dengan zero shortcuts. Semantic HTML, modular CSS, efficient JS. Dokumentasi lengkap untuk future safety.</p>
-          </div>
-          <div class="process-item">
-            <div class="process-number">04</div>
-            <h3>Testing & QA Rigorous</h3>
-            <p>Validasi Core Web Vitals, security audit, cross-device testing. Scope-dependent timeline—bukan marketing rush.</p>
-          </div>
-          <div class="process-item">
-            <div class="process-number">05</div>
-            <h3>Handover & Training</h3>
-            <p>Lengkap transfer codebase, domain access, hosting control. Anda punya 100% ownership, dokumentasi, dan training.</p>
-          </div>
-          <div class="process-item">
-            <div class="process-number">06</div>
-            <h3>Optional Ongoing Support</h3>
-            <p>Maintenance plans tersedia—tapi architecture ringan berarti biaya maintenance lebih affordable &amp; sustainable.</p>
+          <div class="stepper-content">
+            <div class="step-pane active" id="step-1">
+              <h3><span class="highlight-text">01.</span> Konsultasi Mendalam</h3>
+              <p>Pahami kebutuhan bisnis, tujuan, dan ekspektasi maintenance jangka panjang. Ini fondasi untuk architecture yang tepat.</p>
+            </div>
+            <div class="step-pane" id="step-2">
+              <h3><span class="highlight-text">02.</span> Planning & Strategy</h3>
+              <p>Design architecture yang RINGAN & SCALABLE dengan clean code principles. Prioritas: performance, security, ownership clarity.</p>
+            </div>
+            <div class="step-pane" id="step-3">
+              <h3><span class="highlight-text">03.</span> Development Best Practices</h3>
+              <p>Build dengan zero shortcuts. Semantic HTML, modular CSS, efficient JS. Dokumentasi lengkap untuk future safety.</p>
+            </div>
+            <div class="step-pane" id="step-4">
+              <h3><span class="highlight-text">04.</span> Testing & QA Rigorous</h3>
+              <p>Validasi Core Web Vitals, security audit, cross-device testing. Scope-dependent timeline—bukan marketing rush.</p>
+            </div>
+            <div class="step-pane" id="step-5">
+              <h3><span class="highlight-text">05.</span> Handover & Training</h3>
+              <p>Lengkap transfer codebase, domain access, hosting control. Anda punya 100% ownership, dokumentasi, dan training.</p>
+            </div>
+            <div class="step-pane" id="step-6">
+              <h3><span class="highlight-text">06.</span> Optional Ongoing Support</h3>
+              <p>Maintenance plans tersedia—tapi architecture ringan berarti biaya maintenance lebih affordable & sustainable.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -295,47 +330,57 @@
     <section class="layanan-why-section">
       <div class="container">
         <h2>Mengapa Memilih SISITUS?</h2>
-        <div class="why-grid">
-          <div class="why-item">
-            <i class="fas fa-check-circle"></i>
-            <h3>Harga Value-Driven</h3>
-            <p>Mulai dari Rp 599.000 dengan harga transparan, tanpa biaya tersembunyi, dan fleksibel sesuai kebutuhan Anda.</p>
+        <div class="why-accordion">
+          <div class="accordion-item active">
+            <button class="accordion-header"><i class="fas fa-wallet"></i> Harga Value-Driven<span class="icon-toggle">-</span></button>
+            <div class="accordion-body" style="display: block;">
+              <p>Mulai dari Rp 599.000 dengan harga transparan, tanpa biaya tersembunyi, dan fleksibel sesuai kebutuhan Anda.</p>
+            </div>
           </div>
-          <div class="why-item">
-            <i class="fas fa-check-circle"></i>
-            <h3>Struktur Website SEO-Friendly dari Awal</h3>
-            <p>Setiap layanan dibangun dengan struktur SEO-friendly untuk memastikan kehadiran bisnis Anda mudah ditemukan di search engine.</p>
+          <div class="accordion-item">
+            <button class="accordion-header"><i class="fas fa-search"></i> Struktur Website SEO-Friendly dari Awal<span class="icon-toggle">+</span></button>
+            <div class="accordion-body">
+              <p>Setiap layanan dibangun dengan struktur SEO-friendly untuk memastikan kehadiran bisnis Anda mudah ditemukan di search engine.</p>
+            </div>
           </div>
-          <div class="why-item">
-            <i class="fas fa-check-circle"></i>
-            <h3>Domain & Hosting Included</h3>
-            <p>Paket kami sudah mencakup domain dan hosting berkualitas selama 1 tahun, jadi Anda langsung siap online.</p>
+          <div class="accordion-item">
+            <button class="accordion-header"><i class="fas fa-server"></i> Domain & Hosting Included<span class="icon-toggle">+</span></button>
+            <div class="accordion-body">
+              <p>Paket kami sudah mencakup domain dan hosting berkualitas selama 1 tahun, jadi Anda langsung siap online.</p>
+            </div>
           </div>
-          <div class="why-item">
-            <i class="fas fa-check-circle"></i>
-            <h3>SSL Certificate Gratis</h3>
-            <p>Keamanan website Anda terjamin dengan SSL certificate gratis yang melindungi data pelanggan Anda.</p>
+          <div class="accordion-item">
+            <button class="accordion-header"><i class="fas fa-shield-alt"></i> SSL Certificate Gratis<span class="icon-toggle">+</span></button>
+            <div class="accordion-body">
+              <p>Keamanan website Anda terjamin dengan SSL certificate gratis yang melindungi data pelanggan Anda.</p>
+            </div>
           </div>
-          <div class="why-item">
-            <i class="fas fa-check-circle"></i>
-            <h3>Dukungan Purna Jual Responsif</h3>
-            <p>Dukungan tersedia melalui WhatsApp, Email, dan Live Chat untuk membantu kebutuhan Anda pasca pembelian.</p>
+          <div class="accordion-item">
+            <button class="accordion-header"><i class="fas fa-headset"></i> Dukungan Purna Jual Responsif<span class="icon-toggle">+</span></button>
+            <div class="accordion-body">
+              <p>Dukungan tersedia melalui WhatsApp, Email, dan Live Chat untuk membantu kebutuhan Anda pasca pembelian.</p>
+            </div>
           </div>
-          <div class="why-item">
-            <i class="fas fa-check-circle"></i>
-            <h3>Custom Design (Bukan Template)</h3>
-            <p>Setiap project dirancang khusus untuk identitas unik bisnis Anda, memastikan Anda menonjol dari kompetisi.</p>
+          <div class="accordion-item">
+            <button class="accordion-header"><i class="fas fa-palette"></i> Custom Design (Bukan Template)<span class="icon-toggle">+</span></button>
+            <div class="accordion-body">
+              <p>Setiap project dirancang khusus untuk identitas unik bisnis Anda, memastikan Anda menonjol dari kompetisi.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="layanan-cta-section">
+    <section class="bottom-cta-section">
       <div class="container">
-        <h2>Siap Memulai Project Anda?</h2>
-        <p>Hubungi kami sekarang untuk mendapatkan konsultasi gratis dan penawaran terbaik untuk bisnis Anda.</p>
-        <div class="cta-buttons">
-          <a href="/kontak/" class="btn btn-primary">Hubungi Kami via WhatsApp</a>
-          <a href="/kontak/" class="btn btn-secondary">Email Kami</a>
+        <div class="team-cta">
+          <div class="team-cta-content">
+            <h2>Jangan Tunggu Kompetitor Anda Lebih Dulu! Bangun Sistem & Website Bisnis Anda Sekarang.</h2>
+            <p>Dapatkan website cepat, aman dari serangan, dan bergaransi resmi dari SISITUS. Konsultasi gratis hari ini untuk mengamankan harga promo sebelum antrean proyek bulan ini penuh!</p>
+          </div>
+          <div class="cta-buttons" style="display: flex; flex-direction: column; gap: 0.75rem; flex-shrink: 0; width: 100%; min-width: 280px; max-width: 360px;">
+            <a href="/kontak/" class="btn btn-primary" style="margin: 0; white-space: normal; text-align: center; line-height: 1.35; width: 100%; padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: center;">Amankan Promo & Konsultasi Gratis via WA</a>
+            <a href="/layanan/pembuatan-website/" class="btn btn-secondary" style="margin: 0; white-space: normal; text-align: center; line-height: 1.35; width: 100%; padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">Lihat Paket & Daftar Harga Layanan</a>
+          </div>
         </div>
       </div>
     </section>

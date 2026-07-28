@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   // ========== KONFIGURASI TAMPILAN ==========
-  const INITIAL_ITEMS = 6; // Jumlah item yang ditampilkan awalnya
+  const INITIAL_ITEMS = 3; // Jumlah item yang ditampilkan awalnya
   let currentFilter = 'all';
   let displayedItems = INITIAL_ITEMS;
   const portfolioGrid = document.getElementById('portfolio-grid');
@@ -153,19 +153,19 @@ document.addEventListener('DOMContentLoaded', function () {
     card.className = 'portfolio-card';
     card.dataset.category = item.category;
     card.dataset.id = item.id;
+    card.style.animation = 'fadeInUp 0.6s ease-out forwards';
 
     card.innerHTML = `
       <div class="portfolio-card-image" onclick="window.open('${item.url}', '_blank')" style="cursor: pointer;">
         <img src="${item.image}" alt="${item.imageAlt}" loading="lazy">
-        <div class="portfolio-overlay">
-          <a href="${item.url}" target="_blank" class="btn btn-view">Lihat Website</a>
-        </div>
+        <div class="portfolio-overlay"></div>
       </div>
       <div class="portfolio-card-info">
         <h3>${item.name}</h3>
         <span class="portfolio-type">${item.type}</span>
         <div class="portfolio-detail"><span>Selesai:</span> ${item.completed}</div>
         <div class="portfolio-detail"><span>Fitur:</span> ${item.features}</div>
+        <a href="${item.url}" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
       </div>
     `;
 
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========== FUNGSI RENDER ITEMS ==========
-  function renderItems(filter = 'all', limit = null) {
+  function renderItems(filter = 'all', limit = null, shouldScroll = false) {
     // Kosongkan grid terlebih dahulu
     portfolioGrid.innerHTML = '';
     
@@ -185,9 +185,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // Tentukan jumlah item yang akan ditampilkan
     const itemsToShow = limit ? Math.min(limit, filteredItems.length) : filteredItems.length;
     
-    // Tambahkan card ke grid
-    for (let i = 0; i < itemsToShow; i++) {
-      portfolioGrid.appendChild(createPortfolioCard(filteredItems[i]));
+    // Tambahkan card ke grid dengan mengelompokkan per 3 item (1 baris)
+    for (let i = 0; i < itemsToShow; i += 3) {
+      const row = document.createElement('div');
+      row.className = 'portfolio-row';
+      
+      for (let j = i; j < i + 3 && j < itemsToShow; j++) {
+        row.appendChild(createPortfolioCard(filteredItems[j]));
+      }
+      
+      portfolioGrid.appendChild(row);
+      
+      // Terapkan animasi scroll horizontal hanya pada tampilan mobile
+      if (window.innerWidth <= 768) {
+        initAutoSnapSlider(row);
+      }
     }
 
     // Sembunyikan tombol jika semua item sudah ditampilkan
@@ -201,8 +213,8 @@ document.addEventListener('DOMContentLoaded', function () {
     currentFilter = filter;
     displayedItems = itemsToShow;
 
-    // Scroll to grid dengan smooth
-    if (portfolioGrid) {
+    // Scroll to grid dengan smooth jika dipicu oleh filter
+    if (shouldScroll && portfolioGrid) {
       portfolioGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -211,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function filterItems(filterValue) {
     // Reset jumlah item yang ditampilkan
     displayedItems = INITIAL_ITEMS;
-    renderItems(filterValue, INITIAL_ITEMS);
+    renderItems(filterValue, INITIAL_ITEMS, true);
     
     // Update status tombol filter
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -309,4 +321,69 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
+  // ========== AUTO SCROLL SLIDERS ==========
+  function initAutoSnapSlider(sliderElement) {
+    if (!sliderElement) return;
+    
+    let autoScrollInterval;
+    let resumeTimeout;
+    const slideInterval = 2500;
+    const resumeDelay = 3000;
+    let isAutoScrolling = false;
+    let scrollFlagTimeout;
+
+    const scrollToNext = () => {
+      if (!sliderElement.children || sliderElement.children.length === 0) return;
+      const scrollLeft = sliderElement.scrollLeft;
+      const clientWidth = sliderElement.clientWidth;
+      const scrollWidth = sliderElement.scrollWidth;
+      
+      // Jangan scroll otomatis di Desktop (saat konten tidak overflow)
+      if (clientWidth >= scrollWidth - 5) return;
+      
+      isAutoScrolling = true;
+      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
+      
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const itemWidth = sliderElement.children[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(sliderElement).gap) || 8; 
+        sliderElement.scrollBy({ left: itemWidth + gap, behavior: 'smooth' });
+      }
+      
+      scrollFlagTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+      }, 800);
+    };
+
+    const startAutoScroll = () => {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(scrollToNext, slideInterval);
+    };
+
+    const stopAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+
+    const handleInteraction = (e) => {
+      if (e && e.type === 'scroll' && isAutoScrolling) return;
+      
+      stopAutoScroll();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
+    };
+
+    sliderElement.addEventListener('scroll', handleInteraction, {passive: true});
+    sliderElement.addEventListener('wheel', handleInteraction, {passive: true});
+    sliderElement.addEventListener('touchstart', handleInteraction, {passive: true});
+    sliderElement.addEventListener('mousedown', handleInteraction);
+    
+    startAutoScroll();
+  }
+
+  const filterBtnsContainer = document.querySelector('.filter-buttons');
+  initAutoSnapSlider(filterBtnsContainer);
+
 });

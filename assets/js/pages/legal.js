@@ -14,105 +14,49 @@
   }
 
   onReady(function () {
-    // ========== LEGAL NAVIGATION SMOOTH SCROLL & ACTIVE STATE ==========
-    const navLinks = document.querySelectorAll('.legal-nav .nav-link');
+    // ========== SIDEBAR TABS LOGIC ==========
+    const tabButtons = document.querySelectorAll('.legal-menu-btn');
     const articles = document.querySelectorAll('.legal-article');
 
-    // Smooth scroll on nav link click
-    navLinks.forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href')?.substring(1);
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-          // Update active state
-          navLinks.forEach(l => l.classList.remove('active'));
+    if (tabButtons.length > 0 && articles.length > 0) {
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          
+          // Remove active class from all buttons and articles
+          tabButtons.forEach(b => b.classList.remove('active'));
+          articles.forEach(a => a.classList.remove('active'));
+          
+          // Add active class to clicked button and target article
           this.classList.add('active');
-
-          // Smooth scroll
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-          // Highlight effect
-          targetElement.style.backgroundColor = '#F0F9F7';
-          setTimeout(() => {
-            targetElement.style.backgroundColor = 'transparent';
-          }, 2000);
-        }
-      });
-    });
-
-    // Update active nav link on scroll
-    window.addEventListener('scroll', debounce(function () {
-      let current = '';
-      articles.forEach(article => {
-        const rect = article.getBoundingClientRect();
-        if (rect.top <= 150) {
-          current = article.id;
-        }
-      });
-
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('active');
-        }
-      });
-    }, 100));
-
-    // ========== ACCORDION FUNCTIONALITY (H3 SECTIONS) ==========
-    const sectionHeaders = document.querySelectorAll('.legal-article h3');
-
-    sectionHeaders.forEach((header, index) => {
-      header.setAttribute('data-expanded', 'false');
-      header.setAttribute('role', 'button');
-      header.setAttribute('tabindex', '0');
-      header.setAttribute('aria-expanded', 'false');
-
-      // Get all content until next h3 or end of article
-      const contents = getContentUntilNextH3(header);
-
-      header.addEventListener('click', toggleAccordion);
-      header.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          toggleAccordion.call(this);
-        }
-      });
-
-      function toggleAccordion() {
-        const isExpanded = header.getAttribute('data-expanded') === 'true';
-        const article = header.closest('.legal-article');
-
-        // Close other sections in same article
-        article.querySelectorAll('h3[data-expanded="true"]').forEach(h => {
-          if (h !== header) {
-            h.setAttribute('data-expanded', 'false');
-            h.setAttribute('aria-expanded', 'false');
+          const targetArticle = document.getElementById(targetId);
+          if (targetArticle) {
+            targetArticle.classList.add('active');
+            
+            // Scroll to top of content area
+            const contentArea = document.querySelector('.legal-content-area');
+            if (contentArea) {
+              const headerOffset = 80;
+              const elementPosition = contentArea.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+              
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
           }
         });
-
-        // Toggle current section
-        if (isExpanded) {
-          header.setAttribute('data-expanded', 'false');
-          header.setAttribute('aria-expanded', 'false');
-        } else {
-          header.setAttribute('data-expanded', 'true');
-          header.setAttribute('aria-expanded', 'true');
+      });
+      
+      // Handle URL hash on load
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        const targetBtn = document.querySelector(`.legal-menu-btn[data-target="${hash}"]`);
+        if (targetBtn) {
+          targetBtn.click();
         }
       }
-    });
-
-    function getContentUntilNextH3(h3Element) {
-      const contents = [];
-      let sibling = h3Element.nextElementSibling;
-
-      while (sibling && sibling.tagName !== 'H3') {
-        contents.push(sibling);
-        sibling = sibling.nextElementSibling;
-      }
-
-      return contents;
     }
 
     // ========== DOCUMENT SEARCH FUNCTIONALITY ==========
@@ -235,6 +179,27 @@
 
       elem.addEventListener('blur', function () {
         this.style.outline = 'none';
+      });
+    });
+
+    // ========== FAQ AUTO SCROLL ==========
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', function() {
+        const item = this.closest('.faq-item');
+        // Give time for the default toggle and any CSS transitions
+        setTimeout(() => {
+          if (item && item.hasAttribute('open')) {
+            const headerOffset = 90; // Offset for sticky header
+            const elementPosition = item.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }, 150);
       });
     });
 

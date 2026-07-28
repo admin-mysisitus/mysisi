@@ -31,84 +31,108 @@
   margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
 }
 
-.layanan-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-/* ========== LAYANAN CARD ========== */
-.layanan-card {
-  background: var(--bg-white);
-  border-radius: var(--radius-large);
-  border: 1.5px solid var(--border-light);
-  overflow: hidden;
-  transition: var(--transisi);
-  box-shadow: var(--shadow-md);
+/* ========== TABS SECTION ========== */
+.layanan-tabs-container {
   display: flex;
   flex-direction: column;
-  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  background: var(--bg-white);
+  border-radius: var(--radius-large);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 
-/* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
-
-.layanan-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--primary-blue);
-  box-shadow: var(--shadow-lg);
+.layanan-tabs-nav {
+  display: flex;
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
-.layanan-icon {
-  font-size: clamp(2.2rem, 4vw, 3rem);
-  color: var(--accent-cyan);
-  padding: clamp(1.5rem, 3vw, 2rem);
-  text-align: center;
+.layanan-tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 1.25rem 1rem;
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  color: var(--gray-medium);
+  cursor: pointer;
+  transition: var(--transisi);
+  border-bottom: 3px solid transparent;
+}
+
+.layanan-tab-btn:hover {
+  color: var(--primary-blue);
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.layanan-tab-btn.active {
+  color: var(--primary-blue);
+  border-bottom-color: var(--primary-blue);
+  background: var(--bg-white);
+}
+
+.layanan-tab-pane {
+  display: none;
+  animation: fadeIn 0.4s ease-in-out forwards;
+}
+
+.layanan-tab-pane.active {
+  display: block;
+}
+
+.layanan-card-horizontal {
+  display: flex;
+  flex-direction: row;
+  padding: 2.5rem;
+  gap: 2.5rem;
+}
+
+.layanan-icon-area {
+  flex: 0 0 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 130px;
   background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
+  border-radius: var(--radius-large);
+  font-size: 4rem;
+  color: var(--accent-cyan);
+  aspect-ratio: 1;
 }
 
-.layanan-card h3 {
+.layanan-content-area {
+  flex: 1;
+}
+
+.layanan-content-area h3 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   color: var(--text-primary);
-  font-size: clamp(1.05rem, 2vw, 1.2rem);
-  font-weight: 700;
-  padding: 0 clamp(1.5rem, 3vw, 2rem);
-  padding-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.layanan-card > p {
+.layanan-content-area > p {
   color: var(--text-secondary);
-  font-size: var(--teks-standar);
-  padding: 0 clamp(1.5rem, 3vw, 2rem);
-  line-height: var(--line-height-relaxed);
-  flex-grow: 1;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
 .layanan-features {
-  padding: 0 2rem;
-}
-
-.layanan-features h4 {
-  color: var(--text-primary);
-  font-size: var(--teks-kecil);
-  font-weight: 600;
-  margin-bottom: 1rem;
-  display: none;
+  margin-bottom: 1.5rem;
 }
 
 .layanan-features ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 1.5rem;
 }
 
 .layanan-features li {
   color: var(--text-secondary);
   font-size: var(--teks-kecil);
   padding-left: 1.5rem;
-  margin-bottom: 0.5rem;
   position: relative;
   line-height: 1.5;
 }
@@ -121,7 +145,7 @@
   font-weight: 700;
 }
 
-/* ========== LAYANAN PROCESS SECTION ========== */
+/* ========== STEPPER SECTION ========== */
 .layanan-process-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -131,54 +155,136 @@
   font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
-.process-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.stepper-container {
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.process-item {
-  background: var(--white);
-  padding: 2rem 1.5rem;
-  border-radius: var(--radius-besar);
-  text-align: center;
-  box-shadow: var(--shadow-lembut);
+.stepper-nav {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.stepper-nav::-webkit-scrollbar {
+  height: 6px;
+}
+
+.stepper-nav::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+.step-btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  flex: 1;
+  min-width: 100px;
+  color: var(--gray-medium);
   transition: var(--transisi);
   position: relative;
-  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* Animation delays di-handle otomatis oleh shared-sections.css [class*="process"] selector */
-
-.process-item:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-elegan);
+.step-btn::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border-light);
+  z-index: 1;
 }
 
-.process-number {
-  font-size: 2.5rem;
+.step-btn:last-child::after {
+  display: none;
+}
+
+.step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-white);
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
-  color: var(--accent-cyan);
+  z-index: 2;
+  transition: var(--transisi);
+}
+
+.step-title {
+  font-weight: 600;
+  font-size: var(--teks-kecil);
+  text-align: center;
+}
+
+.step-btn.active .step-num,
+.step-btn:hover .step-num {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
+.step-btn.active .step-num {
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.step-btn.active .step-title,
+.step-btn:hover .step-title {
+  color: var(--primary-blue);
+}
+
+.stepper-content {
+  background: var(--bg-white);
+  border-radius: var(--radius-large);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lembut);
+  border: 1px solid var(--border-light);
+  min-height: auto;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.step-pane {
+  display: none;
+  animation: fadeIn 0.4s ease-in-out forwards;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.step-pane.active {
+  display: block;
+}
+
+.step-pane h3 {
+  font-size: var(--judul-kecil);
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
-.process-item h3 {
-  color: var(--text-primary);
-  font-size: var(--teks-standar);
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-}
-
-.process-item p {
-  color: var(--gray-medium);
-  font-size: var(--teks-kecil);
+.step-pane p {
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
-/* ========== LAYANAN WHY SECTION ========== */
+/* ========== ACCORDION SECTION ========== */
 .layanan-why-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -191,94 +297,368 @@
   margin-bottom: 3rem;
 }
 
-.why-grid {
+.why-accordion {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  align-items: start;
+}
+
+.accordion-item {
+  background: var(--bg-white);
+  border-radius: var(--radius-medium);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: var(--transisi);
+  box-shadow: var(--shadow-lembut);
+}
+
+.accordion-item.active {
+  border-color: var(--primary-blue);
+  box-shadow: var(--shadow-md);
+}
+
+.accordion-header {
+  width: 100%;
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  background: none;
+  border: none;
+  font-size: var(--teks-standar);
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.accordion-header i {
+  color: var(--accent-cyan);
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.icon-toggle {
+  margin-left: auto;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--gray-medium);
+}
+
+.accordion-item.active .icon-toggle {
+  color: var(--primary-blue);
+}
+
+.accordion-body {
+  display: none;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
+.bottom-cta-section {
+  padding: 1rem 0 1.5rem 0;
+}
+
+.team-cta {
+  text-align: left;
+  padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  border-radius: 16px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   gap: 2rem;
 }
 
-.why-item {
-  padding: 2rem;
-  background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
-  border-radius: var(--radius-large);
-  border-left: 4px solid var(--primary-blue);
-  transition: var(--transisi);
-  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.team-cta-content {
+  flex: 1;
 }
 
-/* Animation delays di-handle otomatis oleh shared-sections.css [class*="item"] selector */
-
-.why-item:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-elegan);
+.team-cta h3,
+.team-cta h2 {
+  font-size: var(--judul-kecil);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: white;
 }
 
-.why-item i {
-  font-size: 2rem;
-  color: var(--accent-cyan);
-  margin-bottom: 1rem;
-}
-
-.why-item h3 {
-  color: var(--text-primary);
-  font-size: var(--teks-standar);
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-  text-align: center;
-}
-
-.why-item p {
-  color: var(--gray-medium);
+.team-cta p {
   font-size: var(--teks-kecil);
-  line-height: 1.6;
+  opacity: 0.95;
   margin: 0;
-  text-align: center;
+  line-height: 1.5;
+  color: white;
 }
 
-/* ========== LAYANAN CTA SECTION ========== */
-/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
-/* Lihat .layanan-cta-section di hero.css */
+.team-cta .cta-buttons {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  flex-shrink: 0;
+  width: 100%;
+  min-width: 280px;
+  max-width: 360px;
+}
+
+.team-cta .btn,
+.team-cta .cta-buttons .btn {
+  margin: 0 !important;
+  white-space: normal !important;
+  text-align: center !important;
+  line-height: 1.35 !important;
+  width: 100% !important;
+  padding: 0.85rem 1.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+}
 
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
-  .layanan-grid {
-    grid-template-columns: 1fr;
+  /* 0. Hero Section (Responsiveness Fix) */
+  .hero.hero-home {
+    padding: 2.25rem 0 !important;
+  }
+  .hero-content h1 {
+    font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 0.75rem !important;
+    letter-spacing: -0.02em !important;
+  }
+  .hero-content p {
+    font-size: 0.938rem !important; /* 15px */
+    line-height: 1.45 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .hero-content .cta-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+  }
+  .hero-content .btn {
+    width: 100% !important;
   }
 
-  .process-grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* 1. Layanan Grid Section (Compact Tabs & Stacked Cards) */
+  .layanan-grid-section {
+    padding: 2.25rem 0 !important;
+  }
+  .layanan-grid-section h2 {
+    font-size: 1.35rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .layanan-tabs-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.25rem !important;
+    padding: 0.35rem !important;
+    border-bottom: none !important;
+    background: var(--bg-light) !important;
+  }
+  .layanan-tab-btn {
+    padding: 0.5rem 0.25rem !important;
+    font-size: 0.65rem !important; /* Diperkecil agar muat di layar 320px */
+    line-height: 1.25 !important;
+    text-align: center !important;
+    white-space: normal !important; /* Izinkan teks wrap */
+    word-break: break-word !important; /* Paksa break jika kepanjangan */
+    border: 1px solid transparent !important;
+    border-radius: var(--radius-medium) !important;
+    border-bottom: none !important;
+  }
+  .layanan-tab-btn.active {
+    background: var(--bg-white) !important;
+    color: var(--primary-blue) !important;
+    border-color: var(--border-light) !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
+  }
+  .layanan-card-horizontal {
+    flex-direction: column !important;
+    padding: 1.25rem !important;
+    gap: 1.25rem !important;
+  }
+  .layanan-icon-area {
+    flex: 0 0 64px !important;
+    width: 64px !important;
+    height: 64px !important;
+    font-size: 2rem !important;
+    margin: 0 auto !important;
+  }
+  .layanan-content-area {
+    text-align: center !important;
+  }
+  .layanan-content-area h3 {
+    font-size: 1.15rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .layanan-content-area > p {
+    font-size: 0.813rem !important; /* 13px */
+    line-height: 1.45 !important;
+    margin-bottom: 1rem !important;
+  }
+  .layanan-features {
+    margin-bottom: 1.25rem !important;
+    text-align: left !important;
+  }
+  .layanan-features ul {
+    grid-template-columns: 1fr !important;
+    gap: 0.4rem !important;
+  }
+  .layanan-features li {
+    font-size: 0.813rem !important; /* 13px */
+    line-height: 1.4 !important;
+    padding-left: 1.35rem !important;
+  }
+  .layanan-content-area .btn {
+    width: 100% !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
   }
 
-  .why-layanan-grid {
-    grid-template-columns: 1fr;
+  /* 2. Process Section (2x3 Compact Stepper Grid & Dense Typography) */
+  .layanan-process-section {
+    padding: 2.25rem 0 !important;
   }
-}
+  .layanan-process-section h2 {
+    font-size: 1.35rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .layanan-process-section > .container > p {
+    font-size: 0.813rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .stepper-container {
+    gap: 1.25rem !important;
+  }
+  .stepper-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.75rem 0.5rem !important;
+    padding-bottom: 0 !important;
+    overflow-x: visible !important;
+  }
+  .step-btn {
+    min-width: 0 !important;
+    gap: 0.35rem !important;
+  }
+  .step-btn::after {
+    display: none !important; /* Hilangkan garis penghubung horisontal di mobile grid */
+  }
+  .step-num {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0.875rem !important;
+  }
+  .step-title {
+    font-size: 0.7rem !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+  .stepper-content {
+    padding: 1.25rem !important;
+    min-height: auto !important;
+  }
+  .step-pane h3 {
+    font-size: 1.05rem !important;
+    margin-bottom: 0.5rem !important;
+    text-align: center !important;
+  }
+  .step-pane p {
+    font-size: 0.813rem !important; /* 13px */
+    line-height: 1.45 !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
 
-@media (max-width: 480px) {
-  .layanan-grid-section,
-  .layanan-process-section,
+  /* 3. Why Section (Compact Mobile Accordion) */
   .layanan-why-section {
-    padding: 2.5rem 0;
+    padding: 2.25rem 0 !important;
+  }
+  .layanan-why-section h2 {
+    font-size: 1.35rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .why-accordion {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .accordion-header {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.813rem !important; /* 13px */
+    line-height: 1.35 !important;
+    gap: 0.65rem !important;
+  }
+  .accordion-header i {
+    font-size: 1rem !important;
+    width: 20px !important;
+  }
+  .accordion-body {
+    padding: 0 0.75rem 0.75rem 0.75rem !important;
+  }
+  .accordion-body p {
+    font-size: 0.78rem !important; /* ~12.5px */
+    line-height: 1.4 !important;
+    margin: 0 !important;
   }
 
-  .process-grid {
-    grid-template-columns: 1fr;
+  /* 4. Bottom CTA Section */
+  .bottom-cta-section {
+    padding: 1rem 0 2rem 0 !important;
   }
-
-  .layanan-card h3,
-  .layanan-card > p {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+  .team-cta {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 1.5rem 1.25rem !important;
+    gap: 1.25rem !important;
   }
-
-  .layanan-card .btn {
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+  .team-cta h2 {
+    font-size: 1.25rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .team-cta p {
+    font-size: 0.813rem !important;
+    line-height: 1.45 !important;
+  }
+  .team-cta .cta-buttons {
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    display: flex !important;
+  }
+  .team-cta .btn,
+  .team-cta .cta-buttons .btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.938rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    display: inline-flex !important;
   }
 }
 

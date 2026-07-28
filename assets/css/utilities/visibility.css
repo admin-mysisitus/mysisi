@@ -1,0 +1,39 @@
+/* ========== VISIBILITY UTILITIES ========== */
+
+/* Hidden universally */
+.hidden {
+  display: none !important;
+}
+
+/* Mobile visibility controls */
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+  .visible-mobile {
+    display: block !important;
+  }
+  .visible-mobile-flex {
+    display: flex !important;
+  }
+}
+
+/* Tablet visibility controls */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hidden-tablet {
+    display: none !important;
+  }
+}
+
+/* Desktop visibility controls */
+@media (min-width: 1024px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+  .visible-desktop {
+    display: block !important;
+  }
+  .visible-desktop-flex {
+    display: flex !important;
+  }
+}

@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', function () {
     
     if (breakdownElement) {
       const featureMap = {
-        'Basic': ['Daily backup', 'Weekly updates', 'Email support'],
-        'Professional': ['Daily backup', 'Daily updates', '24/7 support', 'Performance monitoring', 'Security scanning'],
-        'Premium': ['Hourly backup', 'Real-time updates', 'Priority support', '24/7 monitoring', 'Advanced security', 'Dedicated account manager']
+        'Maintenance Ringan': ['Pergantian gambar banner & produk', 'Revisi teks & kalimat', 'Koreksi typo & font', 'Waktu pengerjaan cepat'],
+        'Maintenance Sedang': ['Update konten sedang (hingga 5 item)', 'Penambahan section/bagian baru sederhana', 'Optimasi tata letak UI/UX minor', 'Pembenahan link rusak & error ringan'],
+        'Maintenance Besar': ['Refactor kode & peningkatan performa', 'Penambahan fitur custom (Form, API)', 'Perombakan UI/UX ekstensif', 'Perbaikan bug & error sistem kompleks']
       };
 
       const features = featureMap[level] || [];
@@ -207,6 +207,77 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
+  // ========== AUTO SCROLL SLIDERS (SERUPA HALAMAN PERUSAHAAN) ==========
+  function initAutoSnapSlider(sliderElement) {
+    if (!sliderElement) return;
+
+    let autoScrollInterval;
+    let resumeTimeout;
+    let isAutoScrolling = false;
+    let scrollFlagTimeout;
+    const slideInterval = 2500;
+    const resumeDelay = 3000;
+
+    let track = sliderElement.firstElementChild;
+    if (track && (track.classList.contains('problem-item') || track.classList.contains('package-card'))) {
+      track = sliderElement;
+    }
+
+    if (!track || track.children.length === 0) return;
+
+    const scrollToNext = () => {
+      const scrollLeft = sliderElement.scrollLeft;
+      const clientWidth = sliderElement.clientWidth;
+      const scrollWidth = sliderElement.scrollWidth;
+
+      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
+      if (clientWidth >= scrollWidth - 5) return;
+
+      isAutoScrolling = true;
+      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
+
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const cardWidth = track.children[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 16;
+        sliderElement.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      }
+
+      scrollFlagTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+      }, 800);
+    };
+
+    const startAutoScroll = () => {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(scrollToNext, slideInterval);
+    };
+
+    const stopAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+
+    const handleInteraction = (e) => {
+      if (e && e.type === 'scroll' && isAutoScrolling) return;
+
+      stopAutoScroll();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
+    };
+
+    sliderElement.addEventListener('scroll', handleInteraction, { passive: true });
+    sliderElement.addEventListener('wheel', handleInteraction, { passive: true });
+    sliderElement.addEventListener('touchstart', handleInteraction, { passive: true });
+    sliderElement.addEventListener('mousedown', handleInteraction);
+
+    startAutoScroll();
+  }
+
+  // Inisialisasi slider untuk mobile
+  initAutoSnapSlider(document.querySelector('.problems-grid'));
+  initAutoSnapSlider(document.querySelector('.packages-grid'));
 
   function isTouch() {
     return (('ontouchstart' in window) ||

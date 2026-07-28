@@ -1,131 +1,140 @@
-/* ========== PEMBUATAN WEBSITE PAGE INTERACTIONS ========== */
-/* Detail halaman layanan dengan package comparison dan spec details */
-
-// Toggle function untuk detail packages
-function toggleDetails(packageId) {
-  const detailBlock = document.getElementById(packageId);
-  const allBlocks = document.querySelectorAll('.package-detail-block');
-  const allButtons = document.querySelectorAll('.btn-expand');
-  
-  if (detailBlock) {
-    // Tutup semua detail blocks yang lain
-    allBlocks.forEach(block => {
-      if (block.id !== packageId) {
-        block.removeAttribute('open');
-      }
-    });
-    
-    // Update semua button states
-    allButtons.forEach(btn => {
-      btn.setAttribute('aria-expanded', 'false');
-    });
-    
-    // Toggle yang sekarang
-    if (detailBlock.hasAttribute('open')) {
-      detailBlock.removeAttribute('open');
-      document.querySelector(`[onclick="toggleDetails('${packageId}')"]`).setAttribute('aria-expanded', 'false');
-    } else {
-      detailBlock.setAttribute('open', '');
-      document.querySelector(`[onclick="toggleDetails('${packageId}')"]`).setAttribute('aria-expanded', 'true');
-      
-      // Smooth scroll ke detail block yang dipilih
-      setTimeout(() => {
-        if (detailBlock) {
-          const headerOffset = 120; // Offset untuk fixed header
-          const elementPosition = detailBlock.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.scrollY - headerOffset;
-          
-          window.scrollTo({
-            top: Math.max(0, offsetPosition),
-            behavior: 'smooth'
-          });
-        }
-      }, 100);
-    }
-  }
-}
+/* ========== PEMBUATAN WEBSITE PREMIUM INTERACTIONS ========== */
 
 document.addEventListener('DOMContentLoaded', function () {
-  // ========== FEATURE TOGGLE ==========
-  const featureItems = document.querySelectorAll('.feature-item');
   
-  featureItems.forEach(item => {
-    const icon = item.querySelector('i');
-    
-    if (icon && !isTouch()) {
-      item.addEventListener('mouseenter', function () {
-        icon.style.animation = 'none';
-        setTimeout(() => {
-          icon.style.animation = 'iconRotate 0.6s ease-in-out';
-        }, 10);
-      });
-    }
-  });
-
-  // ========== PACKAGE DETAIL BLOCKS SYNC ==========
-  const detailBlocks = document.querySelectorAll('.package-detail-block');
-  const expandButtons = document.querySelectorAll('.btn-expand');
+  // ========== 1. FEATURES VERTICAL TABS ==========
+  const featBtns = document.querySelectorAll('.feat-btn');
+  const featPanes = document.querySelectorAll('.feat-pane');
   
-  // Listen for accordion state changes
-  detailBlocks.forEach(block => {
-    // Update button state when accordion opens
-    block.addEventListener('toggle', function () {
-      const packageId = this.id;
-      const button = document.querySelector(`[onclick="toggleDetails('${packageId}')"]`);
+  featBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active from all
+      featBtns.forEach(b => b.classList.remove('active'));
+      featPanes.forEach(p => p.classList.remove('active'));
       
-      if (button) {
-        button.setAttribute('aria-expanded', this.hasAttribute('open') ? 'true' : 'false');
+      // Add active to clicked
+      this.classList.add('active');
+      
+      // Scroll nav to bring button into view on mobile
+      const featuresNav = document.querySelector('.features-nav-vertical');
+      if (featuresNav && window.innerWidth <= 768) {
+        const scrollLeft = this.offsetLeft - (featuresNav.clientWidth / 2) + (this.clientWidth / 2);
+        featuresNav.scrollTo({ left: scrollLeft, behavior: 'smooth' });
       }
       
-      // Close other blocks when one opens
-      if (this.hasAttribute('open')) {
-        detailBlocks.forEach(otherBlock => {
-          if (otherBlock.id !== packageId) {
-            otherBlock.removeAttribute('open');
-            const otherButton = document.querySelector(`[onclick="toggleDetails('${otherBlock.id}')"]`);
-            if (otherButton) {
-              otherButton.setAttribute('aria-expanded', 'false');
-            }
-          }
-        });
+      // Show pane
+      const targetId = this.getAttribute('data-target');
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) {
+        targetPane.classList.add('active');
       }
     });
   });
 
-  // ========== SPEC COMPARISON TABLE ==========
-  // Comparison table animations handled by CSS for better performance
-
-  // ========== COLLAPSE/EXPAND FEATURES ==========
-  // Feature groups not used in current page structure
-
-  // ========== FAQ ACCORDION INTERACTIONS ==========
-  // FAQ functionality is now handled by faq.js component
-
-  // ========== PORTFOLIO ITEM INTERACTIONS ==========
-  // Hover effects handled by CSS, no inline JS styles needed for better UI consistency
-
-  // ========== PROCESS TIMELINE NUMBER ANIMATION ==========
-  const timelineNumbers = document.querySelectorAll('.process-timeline .timeline-number');
+  // ========== 2. PRICING TOGGLE ==========
+  const priceBtns = document.querySelectorAll('.price-btn');
+  const pricePanes = document.querySelectorAll('.price-pane');
   
-  timelineNumbers.forEach((number, index) => {
-    if (!isTouch()) {
-      number.addEventListener('mouseenter', function () {
-        this.style.transform = 'scale(1.1) rotate(5deg)';
-      });
+  priceBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active from all
+      priceBtns.forEach(b => b.classList.remove('active'));
+      pricePanes.forEach(p => p.classList.remove('active'));
       
-      number.addEventListener('mouseleave', function () {
-        this.style.transform = 'scale(1) rotate(0deg)';
-      });
-    }
+      // Add active to clicked
+      this.classList.add('active');
+      
+      // Scroll nav on mobile
+      const pricingNav = document.querySelector('.pricing-toggle-nav');
+      if (pricingNav && window.innerWidth <= 768) {
+        const scrollLeft = this.offsetLeft - (pricingNav.clientWidth / 2) + (this.clientWidth / 2);
+        pricingNav.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      }
+      
+      // Show pane
+      const targetId = this.getAttribute('data-target');
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+    });
   });
 
-  // ========== CTA BUTTONS INTERACTIONS ==========
-  // Button hover and interaction effects handled by CSS for optimal performance
+  // ========== 3. AUTO SNAP SLIDER (RESPONSIVE HORIZONTAL CAROUSEL ON MOBILE) ==========
+  function initAutoSnapSlider(sliderElement) {
+    if (!sliderElement) return;
+    
+    let autoScrollInterval;
+    let resumeTimeout;
+    let isAutoScrolling = false;
+    let scrollFlagTimeout;
+    const slideInterval = 2500;
+    const resumeDelay = 3000;
+    
+    let track = sliderElement.firstElementChild;
+    if (track && (track.classList.contains('feat-card') || track.classList.contains('package-overview') || track.classList.contains('process-row') || track.classList.contains('bento-card') || track.classList.contains('portfolio-row') || track.classList.contains('portfolio-card'))) {
+      track = sliderElement;
+    }
 
-  function isTouch() {
-    return (('ontouchstart' in window) ||
-      (navigator.maxTouchPoints > 0) ||
-      (navigator.msMaxTouchPoints > 0));
+    if (!track || track.children.length === 0) return;
+    
+    const scrollToNext = () => {
+      const scrollLeft = sliderElement.scrollLeft;
+      const clientWidth = sliderElement.clientWidth;
+      const scrollWidth = sliderElement.scrollWidth;
+      
+      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
+      if (clientWidth >= scrollWidth - 5) return;
+      
+      isAutoScrolling = true;
+      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
+      
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        let firstCard = track.children[0];
+        if (firstCard && firstCard.classList.contains('portfolio-row')) {
+          firstCard = firstCard.children[0] || firstCard;
+        }
+        const cardWidth = firstCard ? firstCard.offsetWidth : 280;
+        const gap = parseFloat(window.getComputedStyle(sliderElement).gap) || parseFloat(window.getComputedStyle(track).gap) || 20; 
+        sliderElement.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      }
+      
+      scrollFlagTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+      }, 800);
+    };
+
+    const startAutoScroll = () => {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(scrollToNext, slideInterval);
+    };
+
+    const stopAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+
+    const handleInteraction = (e) => {
+      if (e && e.type === 'scroll' && isAutoScrolling) return;
+      stopAutoScroll();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
+    };
+
+    sliderElement.addEventListener('scroll', handleInteraction, {passive: true});
+    sliderElement.addEventListener('wheel', handleInteraction, {passive: true});
+    sliderElement.addEventListener('touchstart', handleInteraction, {passive: true});
+    sliderElement.addEventListener('mousedown', handleInteraction);
+    
+    startAutoScroll();
   }
 
+  initAutoSnapSlider(document.querySelector('.features-grid-3col'));
+  initAutoSnapSlider(document.querySelector('.packages-carousel'));
+  initAutoSnapSlider(document.querySelector('.premium-process-list'));
+  initAutoSnapSlider(document.querySelector('#portfolio-grid'));
+  initAutoSnapSlider(document.querySelector('.premium-bento-grid'));
+
 });
+

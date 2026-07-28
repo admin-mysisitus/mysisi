@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Website Saya</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="description" content="Portofolio website profesional menampilkan demo tampilan desktop dan mobile dari lima proyek nyata.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: #f0f4f8; padding: 30px 15px; max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; color: #2d3748; margin-bottom: 40px; font-size: 2rem; }
+        .grid-portofolio { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; }
+        .kartu-website { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; transition: all 0.3s ease; }
+        .kartu-website:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .wadah-tampilan { display: flex; gap: 15px; padding: 25px 20px; background: #f7fafc; justify-content: center; align-items: flex-end; }
+
+        /* ===== TAMPILAN DESKTOP - MIRIP MONITOR PC ===== */
+        .tampilan-desktop {
+            position: relative;
+            width: 326px;
+            background: #fff;
+            border: 8px solid #374151;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        /* Bagian kaki monitor */
+        .tampilan-desktop::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35%;
+            height: 20px;
+            background: #374151;
+            border-radius: 0 0 4px 4px;
+        }
+        .layar-desktop {
+            width: 100%;
+            aspect-ratio: 1440 / 900;
+            overflow: hidden;
+            border-radius: 2px;
+            position: relative;
+        }
+        .layar-wrapper {
+             position: relative;
+             width: 100%;
+             padding-top: 62.5%; /* 16:10 ratio */
+         }
+         .layar-wrapper iframe {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             border: 0;
+         }
+
+        /* ===== TAMPILAN MOBILE - MIRIP SMARTPHONE ===== */
+        .tampilan-mobile {
+            position: relative;
+            width: 139px;
+            background: #fff;
+            border: 8px solid #1f2937;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        /* Potongan atas layar HP */
+        .tampilan-mobile::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25%;
+            height: 4px;
+            background: #6b7280;
+            border-radius: 4px;
+            z-index: 2;
+        }
+        .layar-mobile {
+            width: 100%;
+            aspect-ratio: 390 / 844;
+            overflow: hidden;
+            border-radius: 12px;
+            position: relative;
+        }
+        .layar-wrapper {
+             position: relative;
+             width: 100%;
+             padding-top: 216%; /* approximate mobile ratio */
+         }
+         .layar-wrapper iframe {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             border: 0;
+         }
+
+        .isi-kartu { padding: 22px 18px 18px; }
+        .nama-web { font-size: 1.25rem; font-weight: 600; color: #1a73e8; margin-bottom: 8px; display: block; text-decoration: none; }
+        .nama-web:hover { text-decoration: underline; }
+        .deskripsi-web { font-size: 0.95rem; color: #4a5568; line-height: 1.5; }
+        .keterangan-responsif { font-size: 0.85rem; color: #48bb78; margin-top: 8px; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+
+        @media (max-width: 640px) {
+            .grid-portofolio { grid-template-columns: 1fr; }
+            .wadah-tampilan { flex-direction: column; align-items: center; gap: 40px; padding: 30px 15px; }
+            .tampilan-desktop { width: 346px; }
+            .layar-desktop iframe { transform: scale(0.22917); } /* (346-16)/1440 */
+            .tampilan-mobile { width: 170px; }
+            .layar-mobile iframe { transform: scale(0.39487); } /* (170-16)/390 */
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 1.6rem; }
+            .tampilan-desktop { width: 300px; }
+            .layar-desktop iframe { transform: scale(0.19722); } /* (300-16)/1440 */
+            .tampilan-mobile { width: 150px; }
+            .layar-mobile iframe { transform: scale(0.34359); } /* (150-16)/390 */
+            .tampilan-mobile::before { top: -5px; height: 3px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>📂 Portofolio Website Saya</h1>
+    <div class="card-grid">
+
+        <!-- 1. mtsalittihadmlg.sch.id -->
+        <div class="kartu-website">
+            <div class="wadah-tampilan">
+                <div class="tampilan-desktop">
+                    <div class="layar-wrapper">
+                     <iframe src="https://mtsalittihadmlg.sch.id" loading="lazy" title="Tampilan Desktop"></iframe>
+                 </div>
+                </div>
+                <div class="tampilan-mobile">
+                    <div class="layar-wrapper">
+                     <iframe src="https://mtsalittihadmlg.sch.id" loading="lazy" title="Tampilan Mobile"></iframe>
+                 </div>
+                </div>
+            </div>
+            <div class="isi-kartu">
+                <a href="https://mtsalittihadmlg.sch.id" target="_blank" rel="noopener noreferrer" class="nama-web">mtsalittihadmlg.sch.id</a>
+                <div class="deskripsi-web">Website resmi Madrasah Tsanawiyah Al Ittihad Poncokusumo, Malang.</div>
+                <div class="keterangan-responsif">✅ Tampilan Responsif Asli</div>
+            </div>
+        </div>
+
+        <!-- 2. jakalelana.id -->
+        <div class="kartu-website">
+            <div class="wadah-tampilan">
+                <div class="tampilan-desktop">
+                    <div class="layar-wrapper">
+                     <iframe src="https://jakalelana.id" loading="lazy" title="Tampilan Desktop"></iframe>
+                 </div>
+                </div>
+                <div class="tampilan-mobile">
+                    <div class="layar-wrapper">
+                     <iframe src="https://jakalelana.id" loading="lazy" title="Tampilan Mobile"></iframe>
+                 </div>
+                </div>
+            </div>
+            <div class="isi-kartu">
+                <a href="https://jakalelana.id" target="_blank" rel="noopener noreferrer" class="nama-web">jakalelana.id</a>
+                <div class="deskripsi-web">Biro perjalanan wisata dan sewa kendaraan profesional.</div>
+                <div class="keterangan-responsif">✅ Tampilan Responsif Asli</div>
+            </div>
+        </div>
+
+        <!-- 3. sisitus.com -->
+        <div class="kartu-website">
+            <div class="wadah-tampilan">
+                <div class="tampilan-desktop">
+                    <div class="layar-wrapper">
+                     <iframe src="https://sisitus.com" loading="lazy" title="Tampilan Desktop"></iframe>
+                 </div>
+                </div>
+                <div class="tampilan-mobile">
+                    <div class="layar-wrapper">
+                     <iframe src="https://sisitus.com" loading="lazy" title="Tampilan Mobile"></iframe>
+                 </div>
+                </div>
+            </div>
+            <div class="isi-kartu">
+                <a href="https://sisitus.com" target="_blank" rel="noopener noreferrer" class="nama-web">sisitus.com</a>
+                <div class="deskripsi-web">Jasa pembuatan website profesional untuk bisnis & UMKM.</div>
+                <div class="keterangan-responsif">✅ Tampilan Responsif Asli</div>
+            </div>
+        </div>
+
+        <!-- 4. dawinsight.my.id -->
+        <div class="kartu-website">
+            <div class="wadah-tampilan">
+                <div class="tampilan-desktop">
+                    <div class="layar-wrapper">
+                     <iframe src="https://dawinsight.my.id" loading="lazy" title="Tampilan Desktop"></iframe>
+                 </div>
+                </div>
+                <div class="tampilan-mobile">
+                    <div class="layar-wrapper">
+                     <iframe src="https://dawinsight.my.id" loading="lazy" title="Tampilan Mobile"></iframe>
+                 </div>
+                </div>
+            </div>
+            <div class="isi-kartu">
+                <a href="https://dawinsight.my.id" target="_blank" rel="noopener noreferrer" class="nama-web">dawinsight.my.id</a>
+                <div class="deskripsi-web">Platform tulisan dan pemikiran mendalam tentang isu terkini.</div>
+                <div class="keterangan-responsif">✅ Tampilan Responsif Asli</div>
+            </div>
+        </div>
+
+        <!-- 5. dawinsight.web.id -->
+        <div class="kartu-website">
+            <div class="wadah-tampilan">
+                <div class="tampilan-desktop">
+                    <div class="layar-wrapper">
+                     <iframe src="https://dawinsight.web.id" loading="lazy" title="Tampilan Desktop"></iframe>
+                 </div>
+                </div>
+                <div class="tampilan-mobile">
+                    <div class="layar-wrapper">
+                     <iframe src="https://dawinsight.web.id" loading="lazy" title="Tampilan Mobile"></iframe>
+                 </div>
+                </div>
+            </div>
+            <div class="isi-kartu">
+                <a href="https://dawinsight.web.id" target="_blank" rel="noopener noreferrer" class="nama-web">dawinsight.web.id</a>
+                <div class="deskripsi-web">Layanan pemesanan seragam dinas kualitas terbaik.</div>
+                <div class="keterangan-responsif">✅ Tampilan Responsif Asli</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

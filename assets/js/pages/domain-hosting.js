@@ -78,96 +78,82 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // ========== FEATURE COLUMN INTERACTION ==========
-  const featureColumns = document.querySelectorAll('.feature-column');
-  const featureItems = document.querySelectorAll('.feature-column li');
+  // ========== FEATURE CARD INTERACTION ==========
+  const featureCards = document.querySelectorAll('.feature-card-item');
   
-  featureColumns.forEach(col => {
-    col.style.animation = `slideInUp 0.6s ease-out forwards`;
+  featureCards.forEach((card, index) => {
+    card.style.animation = `slideInUp 0.6s ease-out ${index * 0.08}s both`;
   });
 
-  if (!isTouch()) {
-    featureItems.forEach((item, index) => {
-      item.addEventListener('mouseenter', function () {
-        this.style.transform = 'translateX(8px)';
-        this.style.color = 'var(--dark-navy)';
-      });
-      
-      item.addEventListener('mouseleave', function () {
-        this.style.transform = 'translateX(0)';
-        this.style.color = 'var(--gray-medium)';
-      });
-    });
+  // ========== AUTO SCROLL SLIDERS (SERUPA HALAMAN PERUSAHAAN) ==========
+  function initAutoSnapSlider(sliderElement) {
+    if (!sliderElement) return;
+
+    let autoScrollInterval;
+    let resumeTimeout;
+    let isAutoScrolling = false;
+    let scrollFlagTimeout;
+    const slideInterval = 2500;
+    const resumeDelay = 3000;
+
+    let track = sliderElement;
+    if (!track || track.children.length === 0) return;
+
+    const scrollToNext = () => {
+      const scrollLeft = sliderElement.scrollLeft;
+      const clientWidth = sliderElement.clientWidth;
+      const scrollWidth = sliderElement.scrollWidth;
+
+      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
+      if (clientWidth >= scrollWidth - 5) return;
+
+      isAutoScrolling = true;
+      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
+
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const cardWidth = track.children[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 16;
+        sliderElement.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      }
+
+      scrollFlagTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+      }, 800);
+    };
+
+    const startAutoScroll = () => {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(scrollToNext, slideInterval);
+    };
+
+    const stopAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+
+    const handleInteraction = (e) => {
+      if (e && e.type === 'scroll' && isAutoScrolling) return;
+
+      stopAutoScroll();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
+    };
+
+    sliderElement.addEventListener('scroll', handleInteraction, { passive: true });
+    sliderElement.addEventListener('wheel', handleInteraction, { passive: true });
+    sliderElement.addEventListener('touchstart', handleInteraction, { passive: true });
+    sliderElement.addEventListener('mousedown', handleInteraction);
+
+    startAutoScroll();
   }
 
-  // ========== MIGRATION SECTION BUTTON ==========
-  const migrationButton = document.querySelector('.detail-migration-section .btn');
-  
-  if (migrationButton) {
-    migrationButton.addEventListener('click', function (e) {
-      e.preventDefault();
-      
-      // Smooth scroll ke contact section atau form jika ada
-      const contactSection = document.querySelector('.contact-section, [data-contact], form');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
-
-  // ========== FAQ ACCORDION INTERACTIONS ==========
-  // FAQ functionality is now handled by faq.js component
-
-  // ========== CTA BUTTONS INTERACTIONS ==========
-  const ctaButtons = document.querySelectorAll('.detail-cta-section .btn');
-  
-  ctaButtons.forEach(btn => {
-    btn.addEventListener('click', function (e) {
-      // Add ripple effect hanya untuk non-touch devices
-      if (!isTouch()) {
-        const ripple = document.createElement('span');
-        ripple.style.position = 'absolute';
-        ripple.style.borderRadius = '50%';
-        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
-        ripple.style.transform = 'scale(0)';
-        ripple.style.animation = 'ripple 0.6s ease-out';
-        ripple.style.pointerEvents = 'none';
-        
-        if (!this.style.position) {
-          this.style.position = 'relative';
-        }
-        if (!this.style.overflow) {
-          this.style.overflow = 'hidden';
-        }
-        
-        this.appendChild(ripple);
-        
-        setTimeout(() => ripple.remove(), 600);
-      }
-    });
-  });
-
-  // ========== SUPPORT CHANNELS ==========
-  const supportChannels = document.querySelectorAll('[data-support-channel]');
-  
-  supportChannels.forEach(channel => {
-    channel.addEventListener('click', function (e) {
-      e.preventDefault();
-      
-      const platform = this.getAttribute('data-support-channel')?.toLowerCase();
-      
-      let url = '';
-      if (platform === 'whatsapp') {
-        url = 'https://wa.me/6281215289095';
-      } else if (platform === 'email') {
-        url = 'mailto:hello@sisitus.com';
-      }
-      
-      if (url) {
-        window.open(url, '_blank');
-      }
-    });
-  });
+  // Inisialisasi slider untuk mobile
+  initAutoSnapSlider(document.querySelector('.benefits-grid'));
+  initAutoSnapSlider(document.querySelector('.simple-packages'));
+  initAutoSnapSlider(document.querySelector('.hosting-packages-grid'));
+  initAutoSnapSlider(document.querySelector('.features-grid'));
+  initAutoSnapSlider(document.querySelector('.migration-steps-grid'));
 
   function isTouch() {
     return (('ontouchstart' in window) ||

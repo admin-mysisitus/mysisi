@@ -1,45 +1,84 @@
 /* ========== LAYANAN PAGE INTERACTIONS ========== */
 
 document.addEventListener('DOMContentLoaded', function () {
-  // ========== SERVICE CARD INTERACTIONS ==========
-  const serviceCards = document.querySelectorAll('.layanan-card');
+  // ========== TABS LOGIC ==========
+  const tabBtns = document.querySelectorAll('.layanan-tab-btn');
+  const tabPanes = document.querySelectorAll('.layanan-tab-pane');
   
-  serviceCards.forEach((card, index) => {
-    // Add hover effect with smooth transition
-    card.addEventListener('mouseenter', function () {
-      this.style.transform = 'translateY(-8px)';
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active class from all
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanes.forEach(p => p.classList.remove('active'));
+      
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      // Show target pane
+      const targetId = this.getAttribute('data-target');
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
     });
-    
-    card.addEventListener('mouseleave', function () {
-      this.style.transform = 'translateY(0)';
-    });
-
-    // Intersection observer untuk reveal animation
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.animation = 'slideInUp 0.6s ease-out forwards';
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    
-    observer.observe(card);
   });
 
-  // ========== PROCESS FLOW INTERACTION ==========
-  const processItems = document.querySelectorAll('.process-item');
+  // ========== STEPPER LOGIC ==========
+  const stepBtns = document.querySelectorAll('.step-btn');
+  const stepPanes = document.querySelectorAll('.step-pane');
+  const stepperNav = document.querySelector('.stepper-nav');
   
-  processItems.forEach((item, index) => {
-    item.addEventListener('mouseenter', function () {
-      this.style.borderTop = '3px solid var(--hijau-muda)';
-      this.style.boxShadow = 'var(--shadow-elegan)';
+  stepBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active class from all
+      stepBtns.forEach(b => b.classList.remove('active'));
+      stepPanes.forEach(p => p.classList.remove('active'));
+      
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      // Scroll nav to bring button into view if on mobile
+      if (stepperNav && window.innerWidth < 768) {
+        const scrollLeft = this.offsetLeft - (stepperNav.clientWidth / 2) + (this.clientWidth / 2);
+        stepperNav.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      }
+      
+      // Show target pane
+      const targetStep = this.getAttribute('data-step');
+      const targetPane = document.getElementById('step-' + targetStep);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
     });
-    
-    item.addEventListener('mouseleave', function () {
-      this.style.borderTop = 'none';
-      this.style.boxShadow = 'var(--shadow-lembut)';
+  });
+
+  // ========== ACCORDION LOGIC ==========
+  const accordionHeaders = document.querySelectorAll('.accordion-header');
+  
+  accordionHeaders.forEach(header => {
+    header.addEventListener('click', function() {
+      const item = this.parentElement;
+      const body = item.querySelector('.accordion-body');
+      const icon = this.querySelector('.icon-toggle');
+      
+      // Check if already active
+      const isActive = item.classList.contains('active');
+      
+      // Close all accordions
+      document.querySelectorAll('.accordion-item').forEach(accItem => {
+        accItem.classList.remove('active');
+        const accBody = accItem.querySelector('.accordion-body');
+        const accIcon = accItem.querySelector('.icon-toggle');
+        if (accBody) accBody.style.display = 'none';
+        if (accIcon) accIcon.textContent = '+';
+      });
+      
+      // Toggle current accordion
+      if (!isActive) {
+        item.classList.add('active');
+        if (body) body.style.display = 'block';
+        if (icon) icon.textContent = '-';
+      }
     });
   });
 
@@ -64,48 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Navigation handled by browser default behavior
   // Animation handled by CSS Intersection Observer utility (if needed)
 
-  // ========== FEATURE LIST EXPAND (Optional) ==========
-  const featureLists = document.querySelectorAll('.layanan-features ul');
-  
-  featureLists.forEach(list => {
-    const items = list.querySelectorAll('li');
-    if (items.length > 4) {
-      // Limit visible items
-      items.forEach((item, index) => {
-        if (index > 3) {
-          item.style.display = 'none';
-        }
-      });
-      
-      // Add expand button
-      const expandBtn = document.createElement('button');
-      expandBtn.className = 'btn-expand-features';
-      expandBtn.textContent = 'Lihat Lebih Banyak ▼';
-      expandBtn.style.marginTop = '0.5rem';
-      expandBtn.style.padding = '0.4rem 0.8rem';
-      expandBtn.style.background = 'transparent';
-      expandBtn.style.border = 'none';
-      expandBtn.style.color = 'var(--hijau-muda)';
-      expandBtn.style.cursor = 'pointer';
-      expandBtn.style.fontWeight = '600';
-      expandBtn.style.fontSize = 'var(--teks-kecil)';
-      expandBtn.style.transition = 'var(--transisi)';
-      
-      expandBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        const isExpanded = this.textContent.includes('Lebih Sedikit');
-        
-        items.forEach((item, index) => {
-          if (index > 3) {
-            item.style.display = isExpanded ? 'none' : 'block';
-          }
-        });
-        
-        this.textContent = isExpanded ? 'Lihat Lebih Banyak ▼' : 'Lihat Lebih Sedikit ▲';
-      });
-      
-      list.parentNode.appendChild(expandBtn);
-    }
-  });
+
 
 });

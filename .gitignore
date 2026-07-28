@@ -10,6 +10,7 @@ yarn.lock
 
 # IDE & Editor
 .vscode/
+.agents/
 .idea/
 *.swp
 *.swo
@@ -19,6 +20,10 @@ yarn.lock
 # OS files
 Thumbs.db
 desktop.ini
+
+# Google App Script
+gas.gs
+spreadsheet.tsv
 
 # Build outputs
 dist/
@@ -33,3 +38,4 @@ yarn-debug.log*
 # Temporary files
 .tmp/
 temp/
+

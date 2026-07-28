@@ -1,0 +1,87 @@
+/* ========== TABLE ========== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-medium);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-white);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: var(--bg-light);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 16px;
+  font-size: 0.875rem;
+  border-bottom: 2px solid var(--border-medium);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.data-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 0.938rem;
+  vertical-align: top;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Zebra stripe subtle */
+.data-table tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Mobile card-list view for tables is recommended, can be extended via JS or classes */
+@media (max-width: 767px) {
+  .table-responsive-card {
+    display: block;
+  }
+  .table-responsive-card thead {
+    display: none;
+  }
+  .table-responsive-card tbody tr {
+    display: block;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    background: var(--bg-white) !important;
+    padding: 16px;
+  }
+  .table-responsive-card td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+    text-align: right;
+  }
+  .table-responsive-card td:last-child {
+    border-bottom: none;
+  }
+  .table-responsive-card td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: left;
+  }
+}

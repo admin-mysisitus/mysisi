@@ -100,7 +100,8 @@
   background: transparent;
   border: 1px solid var(--border-light);
   padding: 0.75rem 1.5rem;
-  border-radius: 50px; /* Fully rounded/pill shape */
+  border-radius: 50px;
+  /* Fully rounded/pill shape */
   font-size: var(--teks-standar);
   font-weight: 600;
   color: var(--text-secondary);
@@ -170,8 +171,15 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========== COMPANY VALUES SECTION ========== */
@@ -271,12 +279,29 @@
   z-index: 20;
 }
 
-.diff-item-icon:nth-child(1) { animation-delay: 0.1s; }
-.diff-item-icon:nth-child(2) { animation-delay: 0.15s; }
-.diff-item-icon:nth-child(3) { animation-delay: 0.2s; }
-.diff-item-icon:nth-child(4) { animation-delay: 0.25s; }
-.diff-item-icon:nth-child(5) { animation-delay: 0.3s; }
-.diff-item-icon:nth-child(6) { animation-delay: 0.35s; }
+.diff-item-icon:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.diff-item-icon:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.diff-item-icon:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.diff-item-icon:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.diff-item-icon:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.diff-item-icon:nth-child(6) {
+  animation-delay: 0.35s;
+}
 
 .diff-icon-wrapper {
   width: 100px;
@@ -312,12 +337,14 @@
 /* Tooltip implementation */
 .diff-tooltip {
   position: absolute;
-  top: calc(100% + 15px); /* Position below the title/icon */
+  top: calc(100% + 15px);
+  /* Position below the title/icon */
   left: 50%;
   transform: translateX(-50%) translateY(-10px);
   background: var(--white);
   padding: 1.25rem;
-  border-radius: var(--radius-besar); /* Increased from standar to besar */
+  border-radius: var(--radius-besar);
+  /* Increased from standar to besar */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   width: 250px;
   opacity: 0;
@@ -400,77 +427,92 @@
   gap: 1.5rem;
   background: linear-gradient(135deg, var(--gray-light) 0%, var(--white) 100%);
   padding: 1.25rem 2rem;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: var(--white);
+  padding: 2rem;
   border-radius: var(--radius-besar);
-  border: 1px solid var(--border-light);
-  transition: var(--transisi);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  height: 100%;
 }
 
-.service-simple:nth-child(1) { animation-delay: 0.1s; }
-.service-simple:nth-child(2) { animation-delay: 0.2s; }
-.service-simple:nth-child(3) { animation-delay: 0.3s; }
+.service-simple:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.service-simple:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.service-simple:nth-child(3) {
+  animation-delay: 0.3s;
+}
 
 .service-simple:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-elegan);
-  border-color: var(--accent-cyan);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
 }
 
 .service-simple i {
-  transition: var(--transisi);
+  font-size: 2rem;
+  color: var(--primary-blue);
+  background: rgba(37, 99, 235, 0.08);
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  transition: all 0.3s ease;
 }
 
 .service-simple:hover i {
-  transform: scale(1.15);
+  transform: scale(1.1) rotate(5deg);
+  background: var(--primary-blue);
+  color: var(--white);
 }
 
 .service-simple-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .service-simple h3 {
   color: var(--text-primary);
-  font-size: var(--teks-standar);
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
 }
 
 .service-simple p {
-  color: var(--gray-medium);
-  font-size: var(--teks-kecil);
-  line-height: 1.5;
-  margin-bottom: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
 }
 
 .service-simple .btn {
-  flex-shrink: 0;
-  white-space: nowrap;
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
 }
 
-
 @media (max-width: 768px) {
+  .services-simple-grid {
+    grid-template-columns: 1fr;
+  }
+
   .service-simple {
-    padding: 1rem;
-    gap: 0.75rem;
-  }
-  
-  .service-simple i {
-    transform: scale(0.7); /* Scale icon down */
-  }
-  
-  .service-simple h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.2rem;
-  }
-  
-  .service-simple p {
-    font-size: 0.8rem;
-    line-height: 1.3;
-  }
-  
-  .service-simple .btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
+    padding: 1.5rem;
   }
 }
 
@@ -497,10 +539,21 @@
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-.stat-box:nth-child(1) { animation-delay: 0.1s; }
-.stat-box:nth-child(2) { animation-delay: 0.2s; }
-.stat-box:nth-child(3) { animation-delay: 0.3s; }
-.stat-box:nth-child(4) { animation-delay: 0.4s; }
+.stat-box:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stat-box:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stat-box:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stat-box:nth-child(4) {
+  animation-delay: 0.4s;
+}
 
 .stat-box:hover {
   background: transparent;
@@ -525,21 +578,91 @@
 
 /* ========== COMPANY NAVIGATE SECTION ========== */
 .company-navigate-section {
-  padding: 1rem 0;
-  background-color: var(--gray-light);
+  padding: 3rem 0;
+  background-color: var(--bg-light);
 }
 
 .company-navigate-section h2 {
-  font-size: var(--judul-kecil);
+  font-size: var(--judul-sedang);
   color: var(--text-primary);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .navigate-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.navigate-card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius-besar);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  text-decoration: none;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.navigate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.navigate-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.navigate-card:hover .navigate-icon {
+  transform: scale(1.1);
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
+.navigate-info {
+  flex: 1;
+}
+
+.navigate-info h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.navigate-info p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.navigate-arrow {
+  color: #d1d5db;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navigate-card:hover .navigate-arrow {
+  color: var(--primary-blue);
+  transform: translateX(4px);
 }
 
 
@@ -589,6 +712,7 @@
 }
 
 @media (max-width: 480px) {
+
   .company-highlight-section,
   .company-vision-mission-section,
   .company-values-section,
@@ -649,35 +773,33 @@
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  align-items: start;
 }
 
 .team-card {
-  position: relative;
-  background: var(--bg-white);
-  border-radius: var(--radius-large);
+  background: var(--white);
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
-  aspect-ratio: 3 / 4; /* Tinggi lebih besar dari lebar, proporsi pas foto */
+  display: flex;
+  flex-direction: column;
 }
 
 .team-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .team-image {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  z-index: 1;
+  background: var(--gray-light);
 }
 
 .team-image img {
@@ -688,7 +810,7 @@
 }
 
 .team-card:hover .team-image img {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .team-social {
@@ -698,7 +820,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 3;
   opacity: 0;
   transform: translateX(20px);
   transition: all 0.4s ease;
@@ -711,7 +832,7 @@
 
 .team-social a {
   color: var(--white);
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -729,22 +850,11 @@
 }
 
 .team-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
   padding: 1.5rem;
-  z-index: 2;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: var(--white);
   display: flex;
   flex-direction: column;
-}
-
-.team-card:hover .team-content {
-  transform: translateY(0);
+  flex: 1;
 }
 
 .team-content h3 {
@@ -754,12 +864,10 @@
   color: var(--text-primary);
 }
 
-
-
 .team-role {
-  color: var(--color-primary);
+  color: var(--primary-blue);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 12px;
   display: block;
 }
@@ -769,6 +877,7 @@
   color: var(--text-secondary);
   line-height: var(--line-height-relaxed);
   margin-bottom: 16px;
+  flex: 1;
 }
 
 .team-skills {
@@ -778,13 +887,21 @@
 }
 
 .skill-tag {
-  display: inline-block;
-  background: #e0e7ff;
-  color: var(--color-primary);
-  font-size: 12px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-light);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background: var(--primary-blue);
+  color: var(--white);
 }
 
 .team-cta {
@@ -831,5 +948,725 @@
     text-align: center;
     padding: 1rem;
     gap: 1rem;
+  }
+}
+
+/* ========== NEW ASYMMETRICAL LAYOUTS ========== */
+
+/* Metric Bento Grid */
+.metric-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.metric-bento-card {
+  background: var(--white);
+  text-align: center;
+}
+
+/* Team section styling consolidated at lines 774-952 */
+
+/* ========== SPACE EFFICIENT LAYOUTS ========== */
+
+/* 1. Compact Metrics List (Highlight) */
+.compact-metrics-list {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Hide scrollbar Firefox */
+  gap: 1.5rem;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding-bottom: 0.5rem;
+}
+
+.compact-metrics-list::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar Chrome/Safari */
+}
+
+.metric-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+  .compact-metrics-list {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .metric-list-item {
+    flex: 1 1 calc(50% - 1.5rem);
+  }
+}
+
+.metric-list-item .metric-number {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 70px;
+}
+
+.metric-list-item .metric-text h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.metric-list-item .metric-text p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 2. Vision Mission Tabs */
+.vm-tabs-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.vm-tabs-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  justify-content: center;
+}
+
+.vm-tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.vm-tab-btn:hover {
+  color: var(--primary-blue);
+}
+
+.vm-tab-btn.active {
+  color: var(--primary-blue);
+}
+
+.vm-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--primary-blue);
+  border-radius: 3px 3px 0 0;
+}
+
+.vm-tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.vm-tab-content.active {
+  display: block;
+}
+
+.vision-block h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.mission-cards-grid {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Hide scrollbar Firefox */
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.mission-cards-grid::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar Chrome/Safari */
+}
+
+@media (min-width: 600px) {
+  .mission-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+}
+
+.mission-card {
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+  background: var(--bg-white);
+  padding: 1.25rem;
+  border-radius: var(--radius-sedang);
+  border-left: 3px solid var(--primary-blue);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 600px) {
+  .mission-card {
+    flex: none;
+  }
+}
+
+.mission-card h4 {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.mission-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 3 & 6. Accordions (Values & Services) */
+.values-accordion,
+.services-accordion {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.value-details,
+.service-details {
+  background: var(--white);
+  border-radius: var(--radius-sedang);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.value-details[open],
+.service-details[open] {
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.value-summary,
+.service-summary {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.value-summary::-webkit-details-marker,
+.service-summary::-webkit-details-marker {
+  display: none;
+}
+
+.value-summary {
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.service-summary-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.service-summary-title i {
+  color: var(--primary-blue);
+  font-size: 1.25rem;
+}
+
+.service-summary-title h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.value-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+}
+
+.value-summary h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+.accordion-icon {
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+}
+
+details[open] .accordion-icon {
+  transform: rotate(180deg);
+}
+
+.value-content,
+.service-content {
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.service-content {
+  padding-left: 3.75rem;
+}
+
+.service-content .btn,
+.service-content .btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.4rem;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary-blue);
+  border: 1.5px solid rgba(37, 99, 235, 0.25);
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.service-content .btn:hover,
+.service-content .btn-small:hover {
+  background: var(--primary-blue);
+  color: var(--white);
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+/* 4 & 5. Scroll Snap Sliders (Diff & Team) */
+.diff-slider-container,
+.team-slider-container {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-bottom: 1rem;
+}
+
+.diff-slider-container::-webkit-scrollbar,
+.team-slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+.diff-slider-track,
+.team-slider-track {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.diff-slider-track .feature-card {
+  flex: 0 0 calc(85% - 1rem);
+  scroll-snap-align: center;
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius-besar);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.diff-slider-track .feature-card .feature-number {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(37, 99, 235, 0.4);
+  margin-bottom: 0.5rem;
+}
+
+.diff-slider-track .feature-card .feature-details h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.diff-slider-track .feature-card .feature-details p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.team-slider-track .team-card {
+  flex: 0 0 calc(85% - 1rem);
+  scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+
+  .diff-slider-track .feature-card,
+  .team-slider-track .team-card {
+    flex: 0 0 calc(45% - 1rem);
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .diff-slider-track .feature-card,
+  .team-slider-track .team-card {
+    flex: 0 0 calc(30% - 1rem);
+  }
+}
+
+/* 7. Stats Inline Row */
+.stats-inline-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 2rem;
+  padding: 1rem;
+  justify-content: flex-start;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.stats-inline-row::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .stats-inline-row {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.stats-inline-row .stat-box {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.stats-inline-row .stat-box h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stats-inline-row .stat-box p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* 8. Navigate Pill Menu */
+.navigate-pill-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.navigate-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--white);
+  border-radius: 50px;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.navigate-pill i {
+  color: var(--primary-blue);
+}
+
+.navigate-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+/* ==========================================================================
+   MOBILE TYPOGRAPHY & SPACE-EFFICIENT OPTIMIZATIONS (IMPECCABLE)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* --- 1. Hero Section (Compact & Punchy) --- */
+  .hero-home {
+    padding: 2.25rem 0 !important;
+  }
+  
+  .hero-home .hero-subtitle {
+    font-size: 0.938rem !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  .hero-home .hero-content h1 {
+    font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .hero-home .hero-content p {
+    font-size: 0.938rem !important; /* 15px */
+    line-height: 1.45 !important;
+    margin-bottom: 1.25rem !important;
+  }
+  
+  .hero-home .hero-illustration img {
+    max-width: 280px !important;
+  }
+  
+  .hero-home .cta-buttons {
+    gap: 0.75rem !important;
+  }
+  
+  .hero-home .cta-buttons .btn {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 0.938rem !important;
+  }
+
+  /* --- 2. Sorotan Angka / Metrics (Compact Horizontal Card) --- */
+  .compact-metrics-list {
+    gap: 0.75rem !important;
+  }
+  
+  .metric-list-item {
+    flex: 0 0 75% !important; /* Kartu berikutnya mengintip 25% sebagai petunjuk scroll */
+    gap: 0.75rem !important;
+    align-items: flex-start;
+  }
+  
+  .metric-list-item .metric-number {
+    font-size: 1.75rem !important; /* 28px - lebih hemat ruang namun tetap menonjol */
+    width: auto !important;
+    min-width: 55px;
+  }
+  
+  .metric-list-item .metric-text h3 {
+    font-size: 0.938rem !important; /* 15px */
+    margin-bottom: 0.2rem !important;
+    font-weight: 700;
+  }
+  
+  .metric-list-item .metric-text p {
+    font-size: 0.844rem !important; /* 13.5px */
+    line-height: 1.4 !important;
+    margin: 0 !important;
+  }
+
+  /* --- 3. Visi Misi & Kenapa Memilih SISITUS (Compact Card Slider) --- */
+  .company-differentiation-section .section-subtitle {
+    margin-bottom: 1.25rem !important; /* Mengurangi whitespace 40px menjadi 20px */
+  }
+  
+  .vision-block h2 {
+    font-size: 1.375rem !important; /* 22px (~1.4rem) */
+    line-height: 1.25 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .tab-pane-content p {
+    font-size: 0.9rem !important;
+    line-height: 1.45 !important;
+  }
+  
+  .mission-card {
+    flex: 0 0 78% !important;
+    padding: 0.875rem !important; /* 14px */
+  }
+  
+  .mission-card h4 {
+    font-size: 0.938rem !important; /* 15px */
+    margin-bottom: 0.35rem !important;
+  }
+  
+  .mission-card p {
+    font-size: 0.844rem !important; /* 13.5px */
+    line-height: 1.4 !important;
+  }
+  
+  .diff-slider-track .feature-card {
+    flex: 0 0 78% !important;
+    padding: 0.875rem !important; /* 14px */
+  }
+  
+  .diff-slider-track .feature-card .feature-number {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+  
+  .diff-slider-track .feature-card .feature-details h3 {
+    font-size: 0.938rem !important; /* 15px */
+    margin-bottom: 0.35rem !important;
+    font-weight: 700;
+  }
+  
+  .diff-slider-track .feature-card .feature-details p {
+    font-size: 0.844rem !important; /* 13.5px */
+    line-height: 1.4 !important;
+  }
+
+  /* --- 4. Accordion Nilai-Nilai Kami & Layanan Kami (Full-Width Content) --- */
+  .value-summary,
+  .service-summary {
+    padding: 0.75rem 0.875rem !important; /* 12px 14px */
+  }
+  
+  .value-num {
+    font-size: 1.1rem !important;
+  }
+  
+  .value-summary h3,
+  .service-summary-title h3 {
+    font-size: 0.938rem !important; /* 15px */
+    font-weight: 600 !important;
+  }
+  
+  .service-summary-title {
+    gap: 0.75rem !important;
+  }
+  
+  .service-summary-title i {
+    font-size: 1.1rem !important;
+    width: 28px;
+  }
+  
+  .value-content {
+    padding: 0 0.875rem 0.875rem 0.875rem !important;
+    font-size: 0.844rem !important;
+    line-height: 1.45 !important;
+  }
+  
+  /* Hapus padding kiri 60px pada Layanan di mobile agar teks memanfaatkan lebar penuh HP */
+  .service-content {
+    padding: 0 0.875rem 0.875rem 0.875rem !important;
+    font-size: 0.844rem !important;
+    line-height: 1.45 !important;
+  }
+  
+  .service-content .btn,
+  .service-content .btn-small {
+    display: inline-flex !important;
+    padding: 0.55rem 1.15rem !important;
+    font-size: 0.813rem !important;
+    margin-top: 0.6rem !important;
+  }
+
+  /* --- 5. Kartu Tim Kami (Clean Compact Team Card & Line-Clamp) --- */
+  .team-slider-track .team-card {
+    flex: 0 0 78% !important;
+  }
+  
+  .team-content {
+    padding: 0.875rem !important; /* 14px */
+  }
+  
+  .team-content h3 {
+    font-size: 0.938rem !important; /* 15px */
+    margin-bottom: 2px !important;
+  }
+  
+  .team-role {
+    font-size: 0.813rem !important; /* 13px */
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .team-bio {
+    font-size: 0.813rem !important; /* 13px */
+    line-height: 1.4 !important;
+    margin-bottom: 0.75rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  
+  .skill-tag {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
+  
+  .team-cta {
+    padding: 1.25rem 1rem !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+  
+  .team-cta .cta-buttons {
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  .team-cta h3 {
+    font-size: 1.1rem !important;
+  }
+  
+  .team-cta p {
+    font-size: 0.844rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .team-cta .btn,
+  .team-cta .cta-buttons .btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.938rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+
+  /* --- 6. Bottom Navigation Pill Menu --- */
+  .navigate-pill-menu {
+    gap: 0.6rem !important;
+    margin-top: 1.25rem !important;
+  }
+  
+  .navigate-pill {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.844rem !important;
   }
 }

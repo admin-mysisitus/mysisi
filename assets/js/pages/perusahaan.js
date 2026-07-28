@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
   'use strict';
   
   // ========== STAT COUNTER ANIMATION ==========
-  const statsSection = document.querySelector('.company-stats-section');
-  const statBoxes = document.querySelectorAll('.stat-box');
+  const statsSection = document.querySelector('.company-highlight-section');
+  const statBoxes = document.querySelectorAll('.metric-list-item');
   let hasAnimated = false;
 
   const animateStats = () => {
@@ -17,20 +17,22 @@ document.addEventListener('DOMContentLoaded', function () {
         if (entry.isIntersecting && !hasAnimated) {
           hasAnimated = true;
           statBoxes.forEach(box => {
-            const h3 = box.querySelector('h3');
-            if (!h3) return;
+            const span = box.querySelector('.metric-number');
+            if (!span) return;
 
-            const text = h3.textContent.trim();
+            const text = span.textContent.trim();
             const numMatch = text.match(/(\d+)/);
             
             if (!numMatch) return;
 
             const finalValue = numMatch[1];
             const isPercentage = text.includes('%');
+            const isPlus = text.includes('+');
             const finalNum = parseInt(finalValue);
             let currentNum = 0;
-            const increment = Math.ceil(finalNum / 30);
-            const duration = 1000;
+            // If the number is small (e.g. 7), increment by 1. Otherwise split it up.
+            const increment = Math.max(1, Math.ceil(finalNum / 30));
+            const duration = 1500; // 1.5 seconds for animation
             const stepTime = duration / (finalNum / increment);
 
             const counter = setInterval(() => {
@@ -41,8 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
               }
               const display = isPercentage 
                 ? currentNum + '%' 
-                : (text.includes('+') ? currentNum + '+' : currentNum);
-              h3.textContent = display;
+                : (isPlus ? currentNum + '+' : currentNum);
+              span.textContent = display;
             }, stepTime);
           });
           observer.disconnect();
@@ -108,35 +110,173 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   });
+  // ========== ICON CARD POPUP AUTO-SCROLL ==========
+  const iconCards = document.querySelectorAll('.icon-card');
+  
+  iconCards.forEach(card => {
+    const handleScroll = () => {
+      const popup = card.querySelector('.icon-card-popup');
+      if (!popup) return;
+
+      // Small delay to allow the CSS transition to reveal the popup
+      setTimeout(() => {
+        const popupRect = popup.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        // If the bottom of the popup is cut off by the bottom of the viewport
+        if (popupRect.bottom > windowHeight) {
+          // Calculate exact scroll needed to show the bottom with 24px margin
+          const scrollAmount = popupRect.bottom - windowHeight + 24; 
+          
+          window.scrollBy({
+            top: scrollAmount,
+            behavior: 'smooth'
+          });
+        }
+      }, 300); // Matches the 0.3s CSS transition duration
+    };
+
+    card.addEventListener('mouseenter', handleScroll);
+    card.addEventListener('focusin', handleScroll);
+  });
 
 
   // ========== CTA BUTTONS INTERACTION ==========
   // Auto-initialized by HeroComponent.initAll() - no manual setup needed
   // CTA buttons akan mendapatkan hover effects, animations, dan ripple effect secara otomatis
 
-  // ========== ABOUT TABS INTERACTION ==========
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const tabPanes = document.querySelectorAll('.tab-pane');
-
-  if (tabButtons.length > 0 && tabPanes.length > 0) {
-    tabButtons.forEach(btn => {
-      btn.addEventListener('click', function () {
-        // Remove active class from all
-        tabButtons.forEach(b => b.classList.remove('active'));
-        tabPanes.forEach(p => p.classList.remove('active'));
-
-        // Add active class to clicked button
-        this.classList.add('active');
-
-        // Show corresponding pane
-        const targetId = this.getAttribute('data-tab');
-        const targetPane = document.getElementById(targetId);
-        if (targetPane) {
-          targetPane.classList.add('active');
+  // ========== REVEAL ON SCROLL ANIMATION ==========
+  const revealElements = document.querySelectorAll('.reveal-up');
+  
+  if (revealElements.length > 0) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      let delay = 0;
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('is-visible');
+          }, delay);
+          delay += 100; // 100ms stagger
+          observer.unobserve(entry.target);
         }
+      });
+    }, {
+      root: null,
+      rootMargin: '0px 0px -50px 0px',
+      threshold: 0.1
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  }
+
+  // ========== VISION MISSION TABS ==========
+  const tabBtns = document.querySelectorAll('.vm-tab-btn');
+  const tabContents = document.querySelectorAll('.vm-tab-content');
+
+  if (tabBtns.length > 0) {
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        
+        btn.classList.add('active');
+        const targetId = `tab-${btn.getAttribute('data-tab')}`;
+        const targetContent = document.getElementById(targetId);
+        if(targetContent) targetContent.classList.add('active');
       });
     });
   }
+  // ========== AUTO SCROLL SLIDERS ==========
+  function initAutoSnapSlider(sliderElement) {
+    if (!sliderElement) return;
+    
+    let autoScrollInterval;
+    let resumeTimeout;
+    let isAutoScrolling = false;
+    let scrollFlagTimeout;
+    const slideInterval = 2500;
+    const resumeDelay = 3000;
+    
+    let track = sliderElement.firstElementChild;
+    // Adaptasi jika sliderElement tidak memiliki wrapper melainkan langsung berisi item
+    if (track && (track.classList.contains('metric-list-item') || track.classList.contains('mission-card'))) {
+      track = sliderElement;
+    }
+
+    if(!track || track.children.length === 0) return;
+    
+    const scrollToNext = () => {
+      const scrollLeft = sliderElement.scrollLeft;
+      const clientWidth = sliderElement.clientWidth;
+      const scrollWidth = sliderElement.scrollWidth;
+      
+      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
+      if (clientWidth >= scrollWidth - 5) return;
+      
+      isAutoScrolling = true;
+      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
+      
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const cardWidth = track.children[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 24; 
+        sliderElement.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      }
+      
+      // Reset flag after smooth scroll is expected to complete
+      scrollFlagTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+      }, 800);
+    };
+
+    const startAutoScroll = () => {
+      stopAutoScroll();
+      autoScrollInterval = setInterval(scrollToNext, slideInterval);
+    };
+
+    const stopAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+
+    const handleInteraction = (e) => {
+      // Ignore scroll events triggered by our own script's scrollToNext
+      if (e && e.type === 'scroll' && isAutoScrolling) return;
+      
+      stopAutoScroll();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
+    };
+
+    // Listen to manual interaction events
+    sliderElement.addEventListener('scroll', handleInteraction, {passive: true});
+    sliderElement.addEventListener('wheel', handleInteraction, {passive: true});
+    sliderElement.addEventListener('touchstart', handleInteraction, {passive: true});
+    sliderElement.addEventListener('mousedown', handleInteraction);
+    
+    startAutoScroll();
+  }
+
+  initAutoSnapSlider(document.querySelector('.diff-slider-container'));
+  initAutoSnapSlider(document.querySelector('.team-slider-container'));
+  initAutoSnapSlider(document.querySelector('.compact-metrics-list'));
+  initAutoSnapSlider(document.querySelector('.mission-cards-grid'));
+  // ========== EXCLUSIVE ACCORDION (AUTO-CLOSE OTHERS) ==========
+  const detailElements = document.querySelectorAll('details');
+  detailElements.forEach(detail => {
+    detail.addEventListener('toggle', () => {
+      if (detail.open) {
+        const parent = detail.parentElement;
+        if (parent) {
+          parent.querySelectorAll('details').forEach(otherDetail => {
+            if (otherDetail !== detail && otherDetail.hasAttribute('open')) {
+              otherDetail.removeAttribute('open');
+            }
+          });
+        }
+      }
+    });
+  });
 
 });
 

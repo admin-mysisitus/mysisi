@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Portofolio SISITUS - Kumpulan Proyek Website Profesional</title>
   <!-- App & Theme Settings -->
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="sisitus.com" />
@@ -189,11 +190,22 @@
   </header>
   <!-- BATAS CONTENT -->
   <main>
-    <section class="hero hero-portofolio">
+    <section class="hero hero-home" style="background: url('/assets/img/banner-portofolio.webp') center/cover no-repeat !important;">
       <div class="container">
-        <h1>Portofolio Hasil Kerja SISITUS.COM</h1>
-        <p>Contoh website profesional yang kami bangun untuk klien dari berbagai bidang di seluruh Indonesia. Setiap
-          website dirancang responsif, berkualitas premium, dan fokus pada user experience serta performa maksimal.</p>
+        <div class="hero-wrapper">
+          <div class="hero-content">
+            <p class="hero-subtitle">Karya & <span class="highlight-text">Studi Kasus</span></p>
+            <h1>Portofolio Hasil Kerja SISITUS.COM</h1>
+            <p>Contoh website profesional yang kami bangun untuk klien dari berbagai bidang di seluruh Indonesia. Setiap website dirancang responsif, berkualitas premium, dan fokus pada user experience serta performa maksimal.</p>
+            <div class="cta-buttons">
+              <a href="#portfolio-grid" class="btn btn-primary">Lihat Karya Kami</a>
+              <a href="/kontak/" class="btn btn-secondary">Mulai Proyek Baru</a>
+            </div>
+          </div>
+          <div class="hero-illustration">
+            <img src="/assets/img/banner-portofolio.webp" alt="Portofolio Proyek SISITUS.com" width="500" height="500" loading="lazy">
+          </div>
+        </div>
       </div>
     </section>
     <section class="portfolio-filter-section">
@@ -217,13 +229,17 @@
         </div>
       </div>
     </section>
-    <section class="company-cta-section">
+    <section class="bottom-cta-section" style="padding: 1rem 0 1.5rem 0;">
       <div class="container">
-        <h2>Suka Hasil Kerja Kami?</h2>
-        <p>Buat website yang sama profesionalnya untuk bisnis Anda. Dapatkan penawaran gratis dalam 1x24 jam!</p>
-        <div class="cta-buttons">
-          <a href="/kontak/" class="btn btn-primary">Minta Penawaran Gratis</a>
-          <a href="/layanan/pembuatan-website/" class="btn btn-secondary">Lihat Paket Website</a>
+        <div class="team-cta reveal-up">
+          <div class="team-cta-content">
+            <h2 style="font-size: var(--judul-kecil); font-weight: 700; margin-bottom: 0.25rem; color: white;">Jangan Biarkan Kompetitor Mendahului Anda!</h2>
+            <p style="font-size: var(--teks-kecil); opacity: 0.95; margin: 0; line-height: 1.5; color: white; max-width: 100%;">Setiap detik berlalu, Anda kehilangan potensi pelanggan karena website yang tidak profesional. Tingkatkan konversi penjualan Anda hari ini juga. <strong>Slot pembuatan website premium bulan ini hanya tersisa 2 klien!</strong></p>
+          </div>
+          <div class="cta-buttons" style="display: flex; gap: 1rem; flex-shrink: 0;">
+            <a href="/kontak/" class="btn btn-primary" style="margin: 0; white-space: nowrap;">Amankan Slot Anda</a>
+            <a href="/layanan/pembuatan-website/" class="btn btn-secondary" style="margin: 0; white-space: nowrap; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">Lihat Opsi Harga</a>
+          </div>
         </div>
       </div>
     </section>

@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Pembuatan Website sisitus.com</title>
   <!-- App & Theme Settings -->
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="sisitus.com" />
@@ -42,6 +43,7 @@
   <link rel="preload" href="/assets/css/main.css?v=1.1" as="style" />
   <link rel="stylesheet" href="/assets/css/main.css?v=1.1" />
   <link rel="stylesheet" href="/assets/css/pages/pembuatan-website.css?v=1.1" />
+  <link rel="stylesheet" href="/assets/css/pages/portofolio.css?v=1.1" />
   <!-- Speed Optimization -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -185,54 +187,59 @@
   </header>
   <!-- BATAS CONTENT -->
   <main>
-    <section class="hero hero-pembuatan-web">
+    <section class="hero hero-home" style="background: url('/assets/img/banner-pembuatan-web.webp') center/cover no-repeat !important; color: white;">
       <div class="container">
-        <h1>Pembuatan Website Profesional</h1>
-        <p>Website custom yang dirancang khusus untuk brand Anda dengan performa maksimal dan SEO-friendly</p>
-      </div>
-    </section>
-    <section class="detail-intro-section">
-      <div class="container">
-        <div class="intro-content">
-          <p>Di era digital, website bukan hanya sekedar kehadiran online. Website adalah aset berharga yang dapat meningkatkan penjualan, membangun kredibilitas, dan menjangkau lebih banyak pelanggan potensial.</p>
-          <p>Kami membuat website yang tidak hanya indah secara visual, tetapi juga dioptimalkan untuk performa, keamanan, dan hasil bisnis.</p>
+        <div class="hero-wrapper">
+          <div class="hero-content">
+            <p class="hero-subtitle">Layanan Unggulan <span class="highlight-text">SISITUS</span></p>
+            <h1>Pembuatan Website Profesional</h1>
+            <p>Di era digital, website bukan hanya sekedar kehadiran online. Website adalah aset berharga yang dapat meningkatkan penjualan, membangun kredibilitas, dan menjangkau lebih banyak pelanggan potensial. Kami membuat website yang tidak hanya indah secara visual, tetapi juga dioptimalkan untuk performa, keamanan, dan hasil bisnis.</p>
+            <div class="cta-buttons">
+              <a href="#starter" class="btn btn-primary" aria-label="Lihat Paket Harga">Lihat Paket Harga</a>
+              <a href="/kontak/" class="btn btn-secondary">Konsultasi Gratis</a>
+            </div>
+          </div>
+          <div class="hero-illustration">
+            <img src="/assets/img/banner-pembuatan-web.webp" alt="Pembuatan Website SISITUS.com" width="500" height="500" loading="lazy">
+          </div>
         </div>
       </div>
     </section>
+
     <section class="detail-features-section">
       <div class="container">
         <h2>Fitur-Fitur Unggulan</h2>
-        <div class="features-grid">
-          <article class="feature-item">
-            <i class="fas fa-paint-brush"></i>
+        <div class="features-grid-3col">
+          <div class="feat-card">
+            <div class="feat-icon-lux"><i class="fas fa-paint-brush"></i></div>
             <h3>Custom Design</h3>
-            <p>Design original yang mencerminkan identitas unik brand Anda, bukan template yang membosankan.</p>
-          </article>
-          <article class="feature-item">
-            <i class="fas fa-mobile-alt"></i>
-            <h3>Responsive Design</h3>
-            <p>Website yang sempurna di semua ukuran layar: desktop, tablet, dan mobile phone.</p>
-          </article>
-          <article class="feature-item">
-            <i class="fas fa-rocket"></i>
-            <h3>Fast Loading Speed</h3>
-            <p>Optimasi maksimal untuk kecepatan loading yang super cepat (2 detik atau lebih cepat).</p>
-          </article>
-          <article class="feature-item">
-            <i class="fas fa-search"></i>
-            <h3>SEO Optimization</h3>
-            <p>Semua website kami dioptimalkan untuk mesin pencari agar mudah ditemukan di Google.</p>
-          </article>
-          <article class="feature-item">
-            <i class="fas fa-lock"></i>
-            <h3>Security & SSL</h3>
-            <p>Sertifikat SSL gratis dan security measures untuk melindungi website dan data pelanggan.</p>
-          </article>
-          <article class="feature-item">
-            <i class="fas fa-cog"></i>
-            <h3>Easy Management</h3>
-            <p>Content management system yang mudah digunakan tanpa perlu skill coding.</p>
-          </article>
+            <p>Desain eksklusif yang dirancang dari nol, mencerminkan nilai premium brand Anda tanpa batasan template konvensional.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-lux"><i class="fas fa-mobile-alt"></i></div>
+            <h3>Responsive UI</h3>
+            <p>Tampilan yang beradaptasi sempurna di setiap perangkat, memastikan pengalaman pengguna yang mulus di smartphone, tablet, maupun desktop.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-lux"><i class="fas fa-rocket"></i></div>
+            <h3>Ultra Fast Performance</h3>
+            <p>Dioptimalkan menggunakan teknologi terkini untuk kecepatan muat di bawah 2 detik, menjaga retensi pengunjung Anda.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-lux"><i class="fas fa-search"></i></div>
+            <h3>SEO Ready Architecture</h3>
+            <p>Struktur kode dan semantik HTML yang disesuaikan secara presisi agar mudah dirayapi dan didominasi oleh mesin pencari Google.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-lux"><i class="fas fa-lock"></i></div>
+            <h3>High Grade Security</h3>
+            <p>Proteksi berlapis termasuk SSL gratis, perlindungan DDoS, dan firewall cerdas untuk menjaga data bisnis Anda tetap aman.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-lux"><i class="fas fa-cog"></i></div>
+            <h3>Effortless Management</h3>
+            <p>Sistem manajemen konten yang sangat intuitif. Perbarui teks dan gambar semudah menggunakan media sosial.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -241,371 +248,162 @@
         <h2>Paket Harga Jasa Pembuatan Website</h2>
         <p class="section-intro">Pilih paket yang paling cocok untuk bisnis Anda dengan harga transparan dan fitur premium!</p>
         
-        <!-- PACKAGES OVERVIEW GRID -->
-        <div class="packages-overview-grid">
+        <!-- PACKAGES OVERVIEW CAROUSEL TO SIDE-BY-SIDE SAAS PRICING GRID -->
+        <div class="packages-carousel">
+          <!-- STARTER -->
           <article class="package-overview">
-            <h3>Paket Starter</h3>
-            <p class="overview-subtitle">Untuk Bisnis Baru & UMKM</p>
-            <div class="overview-price">
-              <strong>Rp 599.000</strong>
-              <span>(Sekali Bayar - Standard)</span>
+            <div>
+              <h3>Paket Starter</h3>
+              <p class="overview-subtitle">Untuk Bisnis Baru & UMKM</p>
+              <div class="overview-price">
+                <strong>Rp 599.000</strong>
+                <span>(Sekali Bayar - Standard)</span>
+              </div>
+              <p class="overview-highlight"><i class="fas fa-clock"></i> Siap dalam 5-7 hari kerja</p>
+              <p class="overview-description">Perfect untuk kampanye promosi, pre-order, atau testing pasar digital dengan biaya efisien.</p>
+              
+              <ul class="package-feature-list">
+                <li><i class="fas fa-check-circle"></i> <span>1 Halaman Landing Page Custom</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Gratis Domain .id/.co.id & Hosting 1 Tahun</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>2x Revisi Desain Presisi</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Mobile-Friendly & SEO Lokal Dasar</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Form Kontak & Integrasi WhatsApp Chat</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Gratis SSL & Google Analytics Setup</span></li>
+              </ul>
             </div>
-            <p class="overview-highlight">Siap dalam 5-7 hari kerja</p>
-            <p class="overview-description">Perfect untuk kampanye promosi, pre-order, atau testing pasar digital</p>
             <div class="overview-actions">
-              <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20paket%20Starter" class="btn btn-secondary">Hubungi Kami</a>
-              <button class="btn-expand" onclick="toggleDetails('starter')" aria-expanded="false">
-                <span class="text">Lihat Fitur Paket</span>
-                <span class="icon">▼</span>
-              </button>
+              <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20paket%20Starter" class="btn btn-secondary">Pesan Paket Ini</a>
             </div>
           </article>
 
+          <!-- GROWER (POPULAR) -->
           <article class="package-overview featured">
             <span class="badge">PALING POPULER</span>
-            <h3>Paket Grower</h3>
-            <p class="overview-subtitle">Untuk Bisnis Menengah</p>
-            <div class="overview-price">
-              <strong>Rp 1.299.000</strong>
-              <span>(Sekali Bayar)</span>
+            <div>
+              <h3>Paket Grower</h3>
+              <p class="overview-subtitle">Untuk Bisnis Menengah</p>
+              <div class="overview-price">
+                <strong>Rp 1.299.000</strong>
+                <span>(Sekali Bayar - Standard)</span>
+              </div>
+              <p class="overview-highlight"><i class="fas fa-clock"></i> Siap dalam 7-10 hari kerja</p>
+              <p class="overview-description">Ideal untuk perusahaan profesional yang serius membangun kehadiran & reputasi online.</p>
+              
+              <ul class="package-feature-list">
+                <li><i class="fas fa-check-circle"></i> <span>Up to 5 Halaman Custom Design</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Gratis Domain .id/.co.id & Hosting 2 Tahun</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>3x Revisi Desain & Tata Letak</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>SEO Lokal & Google My Business Setup</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Formulir Lanjutan & Tombol WhatsApp</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Perlindungan SSL & Email Bisnis Resmi</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Panduan Pengelolaan Lengkap</span></li>
+              </ul>
             </div>
-            <p class="overview-highlight">Siap dalam 7-10 hari kerja</p>
-            <p class="overview-description">Ideal untuk perusahaan profesional yang serius berkembang online</p>
             <div class="overview-actions">
-              <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20paket%20Grower" class="btn btn-primary">Hubungi Kami</a>
-              <button class="btn-expand" onclick="toggleDetails('grower')" aria-expanded="false">
-                <span class="text">Lihat Fitur Paket</span>
-                <span class="icon">▼</span>
-              </button>
+              <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20paket%20Grower" class="btn btn-primary">Pesan Paket Ini</a>
             </div>
           </article>
 
+          <!-- PIONEER -->
           <article class="package-overview">
-            <h3>Paket Pioneer</h3>
-            <p class="overview-subtitle">Untuk E-Commerce & Penjual</p>
-            <div class="overview-price">
-              <strong>Rp 2.399.000</strong>
-              <span>(Sekali Bayar)</span>
+            <div>
+              <h3>Paket Pioneer</h3>
+              <p class="overview-subtitle">Untuk E-Commerce & Penjual</p>
+              <div class="overview-price">
+                <strong>Rp 2.399.000</strong>
+                <span>(Sekali Bayar - Standard)</span>
+              </div>
+              <p class="overview-highlight"><i class="fas fa-clock"></i> Siap dalam 14-21 hari kerja</p>
+              <p class="overview-description">Toko online lengkap dengan sistem keranjang belanja, manajemen inventori, dan kasir.</p>
+              
+              <ul class="package-feature-list">
+                <li><i class="fas fa-check-circle"></i> <span>Up to 8 Halaman & Katalog Produk</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Gratis Domain & Hosting Premium 2 Tahun</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>3x Revisi Desain Komprehensif</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Integrasi Payment Gateway & Ongkir Otomatis</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>SEO On-Page Lengkap + Heatmap Tracking</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Backup Bulanan & Perlindungan Anti-Malware</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>1 Bulan Maintenance & Training Gratis</span></li>
+              </ul>
             </div>
-            <p class="overview-highlight">Siap dalam 14-21 hari kerja</p>
-            <p class="overview-description">Toko online lengkap dengan integrasi pembayaran dan inventory management</p>
             <div class="overview-actions">
-              <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20paket%20Pioneer" class="btn btn-secondary">Hubungi Kami</a>
-              <button class="btn-expand" onclick="toggleDetails('pioneer')" aria-expanded="false">
-                <span class="text">Lihat Fitur Paket</span>
-                <span class="icon">▼</span>
-              </button>
+              <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20paket%20Pioneer" class="btn btn-secondary">Pesan Paket Ini</a>
             </div>
           </article>
 
+          <!-- MONSTER -->
           <article class="package-overview">
-            <h3>Paket Monster</h3>
-            <p class="overview-subtitle">Custom Website</p>
-            <div class="overview-price">
-              <strong>Custom</strong>
-              <span>Konsultasi Gratis</span>
+            <div>
+              <h3>Paket Monster</h3>
+              <p class="overview-subtitle">Custom & Enterprise Website</p>
+              <div class="overview-price">
+                <strong>Custom</strong>
+                <span>Konsultasi Gratis</span>
+              </div>
+              <p class="overview-highlight"><i class="fas fa-clock"></i> Timeline Sesuai Kebutuhan</p>
+              <p class="overview-description">Solusi web khusus dengan arsitektur sistem rumit, integrasi API, dan fitur skala besar.</p>
+              
+              <ul class="package-feature-list">
+                <li><i class="fas fa-check-circle"></i> <span>Halaman & Struktur Tidak Terbatas (Unlimited)</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Desain Eksklusif Sesuai Brand Guidelines</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Pengembangan Fitur Khusus & Custom API</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Dashboard Admin & Integrasi ERP/CRM</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Keamanan Tingkat Tinggi Standar Industri</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>Dedicated Cloud Server & SSL Premium</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>3 Bulan Garansi Bug Fix & Support Prioritas</span></li>
+              </ul>
             </div>
-            <p class="overview-highlight">Timeline sesuai kebutuhan</p>
-            <p class="overview-description">Solusi website khusus untuk kebutuhan bisnis yang kompleks dan unik</p>
             <div class="overview-actions">
-              <a href="https://wa.me/6281215289095?text=Saya%20ingin%20diskusi%20paket%20Monster" class="btn btn-secondary">Hubungi Kami</a>
-              <button class="btn-expand" onclick="toggleDetails('monster')" aria-expanded="false">
-                <span class="text">Lihat Fitur Paket</span>
-                <span class="icon">▼</span>
-              </button>
+              <a href="https://wa.me/6281215289095?text=Saya%20ingin%20diskusi%20paket%20Monster" class="btn btn-secondary">Konsultasi Project</a>
             </div>
           </article>
-        </div>
-
-        <!-- PACKAGES DETAILS SECTION -->
-        <div class="packages-details-wrapper">
-          <!-- STARTER DETAILS -->
-          <details class="package-detail-block" id="starter">
-            <summary class="detail-summary">
-              <h4>Paket Starter — Landing Page</h4>
-              <span class="toggle-icon">+</span>
-            </summary>
-            <div class="detail-content">
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Pilihan Pembayaran (Sekali Bayar)</h5>
-                  <ul>
-                    <li><strong>Rp 599.000</strong> (Domain & Hosting 1 tahun - Standard)</li>
-                    <li><strong>Rp 749.000</strong> (Domain & Hosting 2 tahun) <span class="discount">hemat 15%</span></li>
-                    <li><strong>Rp 899.000</strong> (Domain & Hosting 3 tahun) <span class="discount">hemat 30%</span></li>
-                    <li style="font-style: italic; color: #666; margin-top: 8px;">Setelah periode berakhir, domain & hosting dapat diperpanjang dengan biaya terpisah</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Mengapa Pilih Paket Ini?</h5>
-                  <ul>
-                    <li>Fokus pada tujuan spesifik (kampanye, launching, calon pelanggan)</li>
-                    <li>Optimalisasi konversi berbasis data lokal Indonesia</li>
-                    <li>Proses cepat: siap dalam 7-10 hari kerja</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Apa yang Anda Dapatkan</h5>
-                  <ul>
-                    <li>1 halaman landing page dengan desain unik</li>
-                    <li>2x revisi desain (tambah Rp 150.000/revisi)</li>
-                    <li>Gratis domain Indonesia (.id/.co.id) & hosting 1 tahun</li>
-                    <li>Mobile-Friendly & SEO lokal dasar</li>
-                    <li>Formulir kontak + WhatsApp Chat</li>
-                    <li>Google Analytics, Facebook Pixel, GTM</li>
-                    <li>Sertifikat SSL gratis</li>
-                    <li>Panduan lengkap Bahasa Indonesia</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Cocok Untuk</h5>
-                  <ul>
-                    <li>Promosi produk baru</li>
-                    <li>Pre-order atau flash sale</li>
-                    <li>Pendaftaran event/webinar</li>
-                    <li>Bisnis baru testing pasar</li>
-                    <li>UMKM dengan budget terbatas</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </details>
-
-          <!-- GROWER DETAILS -->
-          <details class="package-detail-block featured" id="grower">
-            <summary class="detail-summary">
-              <h4>Paket Grower — Bisnis Profesional ⭐ <span class="badge-small">PALING POPULER</span></h4>
-              <span class="toggle-icon">+</span>
-            </summary>
-            <div class="detail-content">
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Pilihan Pembayaran (Sekali Bayar)</h5>
-                  <ul>
-                    <li><strong>Rp 1.299.000</strong> (Domain & Hosting 2 tahun - Standard)
-                    <li style="font-style: italic; color: #666; margin-top: 8px;">Setelah periode berakhir, domain & hosting dapat diperpanjang dengan biaya terpisah. Promo: Untuk periode terbatas, dapatkan 3 tahun gratis dengan harga yang sama!</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Mengapa Pilih Paket Ini?</h5>
-                  <ul>
-                    <li>Desain professional yang meningkatkan kepercayaan klien</li>
-                    <li>Struktur halaman terorganisir dan user-friendly</li>
-                    <li>Optimalisasi SEO lokal untuk bersaing di mesin pencari</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Apa yang Anda Dapatkan</h5>
-                  <ul>
-                    <li>8 halaman custom design (Home, Tentang, Layanan, Portofolio, Galeri, Kontak, dll.)</li>
-                    <li>3x revisi desain (tambah Rp 200.000/revisi)</li>
-                    <li>Gratis domain Indonesia (.id/.co.id) & hosting premium 2 tahun</li>
-                    <li>SEO On-Page Lengkap + SEO Lokal + Structured Data</li>
-                    <li>Google My Business Setup, WhatsApp Chat, Telegram integration</li>
-                    <li>Google Analytics, Facebook Pixel, Heatmap Tracking</li>
-                    <li>SSL Certificate, Backup Bulanan, Perlindungan Anti-Malware</li>
-                    <li>1 Bulan Maintenance Gratis + Pelatihan Singkat</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Cocok Untuk</h5>
-                  <ul>
-                    <li>Perusahaan konsultasi & profesional</li>
-                    <li>Sekolah & instansi akademik</li>
-                    <li>Restoran, kafe, kuliner</li>
-                    <li>Klinik, apotek, layanan kesehatan</li>
-                    <li>Event organizer, travel agent</li>
-                    <li>Startup yang ingin kredibilitas</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="detail-addons">
-                <h5>Opsi Tambahan</h5>
-                <div class="addons-list">
-                  <span>Halaman tambahan: Rp 250.000</span> • 
-                  <span>Blog + CMS: Rp 450.000</span> • 
-                  <span>Live Chat: Rp 200.000</span> • 
-                  <span>Form/Survei: Rp 150.000</span> • 
-                  <span>Payment Gateway: Rp 250.000</span>
-                </div>
-              </div>
-            </div>
-          </details>
-
-          <!-- PIONEER DETAILS -->
-          <details class="package-detail-block" id="pioneer">
-            <summary class="detail-summary">
-              <h4>Paket Pioneer — Toko Online</h4>
-              <span class="toggle-icon">+</span>
-            </summary>
-            <div class="detail-content">
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Pilihan Pembayaran (Sekali Bayar)</h5>
-                  <ul>
-                    <li><strong>Rp 2.399.000</strong> (Domain & Hosting 1 tahun - Standard)</li>
-                    <li><strong>Rp 4.299.000</strong> (Domain & Hosting 2 tahun) <span class="discount">hemat 20%</span></li>
-                    <li><strong>Rp 5.999.000</strong> (Domain & Hosting 3 tahun) <span class="discount">hemat 28%</span></li>
-                    <li style="font-style: italic; color: #666; margin-top: 8px;"><strong>PROMO:</strong> Harga Rp 2.199.000 berlaku terbatas sampai 31 Maret 2026 untuk 5 project pertama. Harga standard: Rp 2.399.000</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Mengapa Pilih Paket Ini?</h5>
-                  <ul>
-                    <li>Sistem toko online stabil dan mudah dioperasikan</li>
-                    <li>Integrasi semua metode pembayaran populer Indonesia</li>
-                    <li>Fitur marketing untuk meningkatkan penjualan</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Apa yang Anda Dapatkan</h5>
-                  <ul>
-                    <li>12 halaman + sistem toko online lengkap</li>
-                    <li>Manajemen produk & kategori (unlimited)</li>
-                    <li>Keranjang belanja & checkout otomatis</li>
-                    <li>Integrasi ongkir (JNE, J&T, SiCepat, POS)</li>
-                    <li>Payment Gateway (QRIS, OVO, GoPay, ShopeePay, Bank, Kartu)</li>
-                    <li>Manajemen pelanggan & program loyalitas</li>
-                    <li>SEO produk + optimasi kecepatan</li>
-                    <li>Hosting cloud bisnis 1 tahun</li>
-                    <li>SSL + keamanan anti-penipuan</li>
-                    <li>Pelatihan 1x tatap muka/online</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Cocok Untuk</h5>
-                  <ul>
-                    <li>Fashion, aksesoris, kecantikan</li>
-                    <li>Bisnis makanan & minuman</li>
-                    <li>Elektronik, gadget, kantor</li>
-                    <li>Produk rumah tangga & anak-anak</li>
-                    <li>Produk digital & jasa</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="detail-addons">
-                <h5>Opsi Tambahan</h5>
-                <div class="addons-list">
-                  <span>WhatsApp per produk: Rp 200.000</span> • 
-                  <span>Diskon/Voucher: Rp 300.000</span> • 
-                  <span>Multi-vendor: Rp 850.000</span> • 
-                  <span>Manajemen gudang: Rp 400.000</span> • 
-                  <span>Pre-order & langganan: Rp 250.000</span> • 
-                  <span>Integrasi Tokopedia/Shopee: Rp 350.000</span>
-                </div>
-              </div>
-            </div>
-          </details>
-
-          <!-- MONSTER DETAILS -->
-          <details class="package-detail-block" id="monster">
-            <summary class="detail-summary">
-              <h4>Paket Monster — Custom Website</h4>
-              <span class="toggle-icon">+</span>
-            </summary>
-            <div class="detail-content">
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Penawaran Harga</h5>
-                  <p><strong>Custom — Konsultasi gratis untuk penawaran</strong></p>
-                  <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">Harga ditentukan setelah diskusi mendalam mengenai scope, kompleksitas, timeline, dan teknologi yang diperlukan. Biasanya antara Rp 5.000.000 - Rp 50.000.000+ tergantung kelengkapan fitur.</p>
-                </div>
-                <div class="detail-col">
-                  <h5>Mengapa Pilih Paket Ini?</h5>
-                  <ul>
-                    <li>Solusi sepenuhnya custom sesuai kebutuhan bisnis</li>
-                    <li>Integrasi dengan sistem existing (ERP, CRM, dll)</li>
-                    <li>Teknologi scalable untuk pertumbuhan bisnis</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="detail-row">
-                <div class="detail-col">
-                  <h5>Proses Kerja Paket Custom</h5>
-                  <p style="font-size: 0.9rem;">Diskusi Kebutuhan → Analisis & Penawaran → Kontrak & Timeline → Development Iteratif → Testing Komprehensif → Launching & Training</p>
-                  <p style="font-size: 0.85rem; color: #666; margin-top: 8px;"><em>Durasi project: 2-6 bulan tergantung kompleksitas</em></p>
-                </div>
-                <div class="detail-col">
-                  <h5>Apa yang Anda Dapatkan</h5>
-                  <ul>
-                    <li>Konsultasi strategis 2x untuk konsep</li>
-                    <li>Desain unik & pengembangan custom</li>
-                    <li>Fitur kompleks sesuai permintaan</li>
-                    <li>Dashboard admin khusus & API integration</li>
-                    <li>Keamanan tingkat tinggi standar industri</li>
-                    <li>Hosting cloud khusus + domain pilihan</li>
-                    <li>SSL premium</li>
-                    <li>Testing & bug fix 3 bulan gratis</li>
-                    <li>Pelatihan & dokumentasi teknis lengkap</li>
-                    <li>Support prioritas selama kontrak</li>
-                  </ul>
-                </div>
-                <div class="detail-col">
-                  <h5>Cocok Untuk</h5>
-                  <ul>
-                    <li>Sistem booking/reservasi</li>
-                    <li>Marketplace multi-vendor</li>
-                    <li>E-learning & keanggotaan</li>
-                    <li>Website dengan AI/chatbot</li>
-                    <li>Perusahaan skala enterprise</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </details>
         </div>
       </div>
     </section>
     <section class="detail-process-section">
       <div class="container">
         <h2>Proses Pembuatan Website</h2>
-        <div class="process-timeline">
-          <div class="timeline-item">
-            <div class="timeline-number">1</div>
-            <div class="timeline-content">
+        <div class="premium-process-list">
+          <div class="process-row">
+            <div class="proc-num">01</div>
+            <div class="proc-body">
               <h3>Discovery & Consultation</h3>
-              <p>Kami menggali detail tentang bisnis Anda, target audience, kompetitor, dan goals website. (1-2 minggu)</p>
+              <p>Kami menganalisis secara mendalam model bisnis, target audiens, lanskap kompetitor, dan sasaran konversi Anda untuk menciptakan pondasi strategi yang kokoh.</p>
             </div>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-number">2</div>
-            <div class="timeline-content">
-              <h3>Planning & Strategy</h3>
-              <p>Membuat roadmap, wireframe, dan strategy yang jelas untuk project. (1 minggu)</p>
+          <div class="process-row">
+            <div class="proc-num">02</div>
+            <div class="proc-body">
+              <h3>Planning & Architecture</h3>
+              <p>Menyusun peta situs (sitemap), merancang *wireframe* presisi, dan menentukan tumpukan teknologi (tech stack) paling optimal.</p>
             </div>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-number">3</div>
-            <div class="timeline-content">
-              <h3>Design & Mockup</h3>
-              <p>Membuat design visual yang stunning dan user-friendly. (2-3 minggu)</p>
+          <div class="process-row">
+            <div class="proc-num">03</div>
+            <div class="proc-body">
+              <h3>Visual Design</h3>
+              <p>Desainer UI/UX kami membuat antarmuka memukau yang tidak hanya estetis, namun dirancang khusus untuk mengarahkan pengguna melakukan aksi (konversi).</p>
             </div>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-number">4</div>
-            <div class="timeline-content">
-              <h3>Development</h3>
-              <p>Mengembangkan website dengan code berkualitas tinggi dan best practices. (3-6 minggu)</p>
+          <div class="process-row">
+            <div class="proc-num">04</div>
+            <div class="proc-body">
+              <h3>Agile Development</h3>
+              <p>Proses *coding* dengan standar clean code dan arsitektur modern. Memastikan keamanan berlapis dan waktu muat secepat kilat.</p>
             </div>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-number">5</div>
-            <div class="timeline-content">
-              <h3>Testing & QA</h3>
-              <p>Testing menyeluruh di berbagai browser dan device untuk memastikan semua sempurna. (1-2 minggu)</p>
+          <div class="process-row">
+            <div class="proc-num">05</div>
+            <div class="proc-body">
+              <h3>Rigorous Testing</h3>
+              <p>Pengujian komprehensif di lebih dari 20 perangkat dan browser berbeda. Mencari celah sekecil apapun sebelum platform Anda diluncurkan.</p>
             </div>
           </div>
-          <div class="timeline-item">
-            <div class="timeline-number">6</div>
-            <div class="timeline-content">
-              <h3>Launch & Monitoring</h3>
-              <p>Meluncurkan website dan monitoring performa untuk memastikan semuanya berjalan optimal. (Ongoing)</p>
+          <div class="process-row">
+            <div class="proc-num">06</div>
+            <div class="proc-body">
+              <h3>Deployment & Scaling</h3>
+              <p>Peluncuran ke peladen produksi. Kami memantau metrik performa secara real-time dan memastikan website Anda siap menerima lonjakan pengunjung.</p>
             </div>
           </div>
         </div>
@@ -615,37 +413,103 @@
       <div class="container">
         <h2>Portfolio Kami</h2>
         <p class="section-subtitle">Lihat beberapa project website yang telah kami kerjakan</p>
-        <div class="portfolio-grid">
-          <article class="portfolio-item">
-            <div class="portfolio-image">
-              <img src="/assets/img/portfolio/website-1.webp" alt="Portfolio 1" loading="lazy">
-            </div>
-            <div class="portfolio-info">
-              <h3>Toko Online Fashion</h3>
-              <p>E-commerce website dengan integrasi payment gateway dan inventory management.</p>
-              <a href="#" class="link-arrow">Lihat Lebih Lanjut</a>
-            </div>
-          </article>
-          <article class="portfolio-item">
-            <div class="portfolio-image">
-              <img src="/assets/img/portfolio/website-2.webp" alt="Portfolio 2" loading="lazy">
-            </div>
-            <div class="portfolio-info">
-              <h3>Corporate Website</h3>
-              <p>Website profesional untuk perusahaan dengan design modern dan SEO optimization.</p>
-              <a href="#" class="link-arrow">Lihat Lebih Lanjut</a>
-            </div>
-          </article>
-          <article class="portfolio-item">
-            <div class="portfolio-image">
-              <img src="/assets/img/portfolio/website-3.webp" alt="Portfolio 3" loading="lazy">
-            </div>
-            <div class="portfolio-info">
-              <h3>Blog & Membership</h3>
-              <p>Website dengan sistem membership dan blog yang terintegrasi dengan analytics.</p>
-              <a href="#" class="link-arrow">Lihat Lebih Lanjut</a>
-            </div>
-          </article>
+        <div class="portfolio-grid" id="portfolio-grid">
+          <div class="portfolio-row">
+            <!-- Card 1 -->
+            <article class="portfolio-card" style="opacity: 1; transform: translateY(0);">
+              <div class="portfolio-card-image" onclick="window.open('https://jakalelana.id', '_blank')" style="cursor: pointer;">
+                <img src="/assets/img/portfolio/web-1.jpg" alt="Jakalelana Tour & Travel Website" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-card-info">
+                <h3>Jakalelana Tour & Travel</h3>
+                <span class="portfolio-type">Website Perusahaan | Travel</span>
+                <div class="portfolio-detail"><span>Selesai:</span> November 2025</div>
+                <div class="portfolio-detail"><span>Fitur:</span> Paket Wisata, Sewa Kendaraan, Layanan Driver</div>
+                <a href="https://jakalelana.id" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="portfolio-card" style="opacity: 1; transform: translateY(0);">
+              <div class="portfolio-card-image" onclick="window.open('https://mynasgor.pages.dev', '_blank')" style="cursor: pointer;">
+                <img src="/assets/img/portfolio/web-2.jpg" alt="Nasi Goreng Rasa Merakyat Website" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-card-info">
+                <h3>Nasi Goreng Rasa Merakyat</h3>
+                <span class="portfolio-type">Toko Online | Makanan</span>
+                <div class="portfolio-detail"><span>Selesai:</span> Oktober 2025</div>
+                <div class="portfolio-detail"><span>Fitur:</span> Form Pesanan, Pilihan Pembayaran, Tracking</div>
+                <a href="https://mynasgor.pages.dev" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="portfolio-card" style="opacity: 1; transform: translateY(0);">
+              <div class="portfolio-card-image" onclick="window.open('https://smkn1sidoarjo.sch.id', '_blank')" style="cursor: pointer;">
+                <img src="/assets/img/portfolio/web-3.jpg" alt="SMK Negeri 1 Sidoarjo Website" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-card-info">
+                <h3>SMK Negeri 1 Sidoarjo</h3>
+                <span class="portfolio-type">Web Instansi | Sekolah</span>
+                <div class="portfolio-detail"><span>Selesai:</span> September 2025</div>
+                <div class="portfolio-detail"><span>Fitur:</span> Kurikulum Merdeka, Ektrakurikuler, Bengkel Industri</div>
+                <a href="https://smkn1sidoarjo.sch.id" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+              </div>
+            </article>
+          </div>
+
+          <div class="portfolio-row">
+            <!-- Card 4 -->
+            <article class="portfolio-card" style="opacity: 1; transform: translateY(0);">
+              <div class="portfolio-card-image" onclick="window.open('https://myppai.pages.dev', '_blank')" style="cursor: pointer;">
+                <img src="/assets/img/portfolio/web-4.jpg" alt="PPAI Darul Huda Website" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-card-info">
+                <h3>PPAI Darul Huda</h3>
+                <span class="portfolio-type">Web Instansi | Pesantren</span>
+                <div class="portfolio-detail"><span>Selesai:</span> November 2025</div>
+                <div class="portfolio-detail"><span>Fitur:</span> Pendaftaran Santri, Donasi, Layanan Terpadu</div>
+                <a href="https://myppai.pages.dev" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+              </div>
+            </article>
+
+            <!-- Card 5 -->
+            <article class="portfolio-card" style="opacity: 1; transform: translateY(0);">
+              <div class="portfolio-card-image" onclick="window.open('https://produk.handokotantra.com', '_blank')" style="cursor: pointer;">
+                <img src="/assets/img/portfolio/web-5.jpg" alt="Handoko Tantra Website" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-card-info">
+                <h3>Handoko Tantra</h3>
+                <span class="portfolio-type">Personal Brand | Internet Marketing</span>
+                <div class="portfolio-detail"><span>Selesai:</span> Oktober 2025</div>
+                <div class="portfolio-detail"><span>Fitur:</span> Produk Digital, Konsultasi, Artikel Edukasi</div>
+                <a href="https://produk.handokotantra.com" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+              </div>
+            </article>
+
+            <!-- Card 6 -->
+            <article class="portfolio-card" style="opacity: 1; transform: translateY(0);">
+              <div class="portfolio-card-image" onclick="window.open('https://fajarkristiono.com', '_blank')" style="cursor: pointer;">
+                <img src="/assets/img/portfolio/web-6.jpg" alt="Fajar Kristiono Website" loading="lazy">
+                <div class="portfolio-overlay"></div>
+              </div>
+              <div class="portfolio-card-info">
+                <h3>Fajar Kristiono</h3>
+                <span class="portfolio-type">Personal Brand | Fotografi</span>
+                <div class="portfolio-detail"><span>Selesai:</span> September 2025</div>
+                <div class="portfolio-detail"><span>Fitur:</span> Galeri Foto, Buku Digital, Kalkulator Harga</div>
+                <a href="https://fajarkristiono.com" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="portfolio-load-more" style="text-align: center; margin-top: 2rem;">
+          <a href="/perusahaan/portofolio/" class="btn btn-secondary" style="display: inline-block;">Lihat Seluruh Portofolio Kami</a>
         </div>
       </div>
     </section>
@@ -653,64 +517,42 @@
       <div class="container">
         <h2>Layanan Tambahan untuk Optimasi Website</h2>
         <p class="section-intro">Dirancang untuk memaksimalkan potensi website dan mendukung pertumbuhan bisnis berkelanjutan</p>
-        <div class="additional-services-grid">
-          <article class="service-item">
-            <div class="service-icon-wrapper">
-              <i class="fas fa-tools"></i>
+        <div class="premium-bento-grid">
+          <!-- Item 1: Wide -->
+          <div class="bento-card bento-wide">
+            <div class="bento-icon"><i class="fas fa-search"></i></div>
+            <div class="bento-content">
+              <h3>SEO Dominance</h3>
+              <p>Optimasi mesin pencari agresif. Dominasi halaman pertama Google dan tarik trafik organik tanpa henti. Rp 500k - 1Jt.</p>
             </div>
-            <h3>Maintenance Website - Paket Ringan</h3>
-            <p class="service-description">Update konten, perbaikan kecil, dan maintenance umum untuk website Anda</p>
-            <p class="service-price"><strong>GRATIS</strong> <span>(Untuk klien sisitus)</span></p>
-            <p style="font-size: 0.85rem; color: #666; margin-top: -8px; margin-bottom: 12px;"><em>Termasuk: update teks, upload foto, perubahan kategori, dll</em></p>
-            <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20layanan%20Maintenance%20Website" class="btn btn-secondary">Hubungi Kami</a>
-          </article>
-          <article class="service-item">
-            <div class="service-icon-wrapper">
-              <i class="fas fa-wrench"></i>
+          </div>
+          
+          <!-- Item 2: Box -->
+          <div class="bento-card bento-box">
+            <div class="bento-icon"><i class="fas fa-share-alt"></i></div>
+            <div class="bento-content">
+              <h3>Social Media<br>Management</h3>
+              <p>Kampanye kreatif terstruktur. Rp 600k+.</p>
             </div>
-            <h3>Maintenance Website - Paket Sedang</h3>
-            <p class="service-description">Perbaikan, refactoring code, optimasi performa, revisi desain modul tertentu</p>
-            <p class="service-price">Rp <strong>50.000 - 150.000</strong> <span>(Sekali Bayar)</span></p>
-            <p style="font-size: 0.85rem; color: #666; margin-top: -8px; margin-bottom: 12px;"><em>Termasuk: custom feature, integrasi API, perubahan desain section</em></p>
-            <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20layanan%20Maintenance%20Sedang" class="btn btn-secondary">Hubungi Kami</a>
-          </article>
-          <article class="service-item">
-            <div class="service-icon-wrapper">
-              <i class="fas fa-sliders-h"></i>
+          </div>
+
+          <!-- Item 3: Box -->
+          <div class="bento-card bento-box">
+            <div class="bento-icon"><i class="fas fa-tools"></i></div>
+            <div class="bento-content">
+              <h3>Pro Maintenance</h3>
+              <p>Perawatan server, pembaruan kode keamanan, dan optimasi database bulanan. Mulai dari Gratis (Klien Sisitus) hingga Rp 500k.</p>
             </div>
-            <h3>Maintenance Website - Paket Besar</h3>
-            <p class="service-description">Refactoring besar, redesign komprehensif, migrasi server, atau custom development kompleks</p>
-            <p class="service-price">Rp <strong>200.000 - 500.000</strong> <span>(Sekali Bayar)</span></p>
-            <p style="font-size: 0.85rem; color: #666; margin-top: -8px; margin-bottom: 12px;"><em>Termasuk: redesign halaman besar, migrasi platform, optimization mendalam</em></p>
-            <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20layanan%20Maintenance%20Besar" class="btn btn-secondary">Hubungi Kami</a>
-          </article>
-          <article class="service-item">
-            <div class="service-icon-wrapper">
-              <i class="fas fa-search"></i>
+          </div>
+
+          <!-- Item 4: Wide -->
+          <div class="bento-card bento-wide">
+            <div class="bento-icon"><i class="fas fa-bullhorn"></i></div>
+            <div class="bento-content">
+              <h3>Ads Management</h3>
+              <p>Google & Meta Ads berkinerja tinggi. Optimalisasi konversi langsung dengan biaya manajemen terjangkau (15% dari budget).</p>
             </div>
-            <h3>Paket SEO Lengkap</h3>
-            <p class="service-description">Strategi SEO komprehensif untuk meningkatkan ranking dan traffic website Anda</p>
-            <p class="service-price">Rp <strong>500.000 - 1.000.000</strong> <span>(Sekali Bayar)</span></p>
-            <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20layanan%20SEO%20Lengkap" class="btn btn-secondary">Hubungi Kami</a>
-          </article>
-          <article class="service-item">
-            <div class="service-icon-wrapper">
-              <i class="fas fa-share-alt"></i>
-            </div>
-            <h3>Manajemen Media Sosial</h3>
-            <p class="service-description">Kelola dan optimalkan media sosial bisnis Anda untuk engagement dan konversi lebih baik</p>
-            <p class="service-price">Rp 600.000 - 2.000.000 <span>(Per Campaign/Project)</span></p>
-            <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20layanan%20Manajemen%20Media%20Sosial" class="btn btn-secondary">Hubungi Kami</a>
-          </article>
-          <article class="service-item">
-            <div class="service-icon-wrapper">
-              <i class="fas fa-bullhorn"></i>
-            </div>
-            <h3>Manajemen Iklan Digital Terarah</h3>
-            <p class="service-description">Maksimalkan ROI iklan Anda dengan strategi digital advertising yang data-driven dan terukur</p>
-            <p class="service-price"><strong>15%</strong><span>dari budget iklan</span></p>
-            <a href="https://wa.me/6281215289095?text=Saya%20tertarik%20layanan%20Manajemen%20Iklan%20Digital" class="btn btn-secondary">Hubungi Kami</a>
-          </article>
+          </div>
         </div>
       </div>
     </section>
@@ -826,13 +668,17 @@
         </div>
       </div>
     </section>
-    <section class="detail-cta-section">
+    <section class="bottom-cta-section" style="padding: 1.5rem 0 2rem 0;">
       <div class="container">
-        <h2>Siap Membuat Website Profesional?</h2>
-        <p>Hubungi kami sekarang untuk konsultasi gratis dan mendapatkan proposal harga khusus untuk project Anda.</p>
-        <div class="cta-buttons">
-          <a href="/kontak/" class="btn btn-primary">Chat via WhatsApp</a>
-          <a href="/kontak/" class="btn btn-secondary">Email Kami</a>
+        <div class="team-cta">
+          <div class="team-cta-content">
+            <h2 style="font-size: var(--judul-kecil); font-weight: 800; margin-bottom: 0.5rem; color: white; line-height: 1.3;">Amankan Promo & Konsultasi Gratis Hari Ini!</h2>
+            <p style="font-size: var(--teks-standar); opacity: 0.95; margin: 0; line-height: 1.6; color: white; max-width: 100%;">Jangan tunda kesuksesan digital Anda. Pesan website premium sekarang juga dan nikmati penawaran khusus sebelum kuota klien bulan ini penuh!</p>
+          </div>
+          <div class="cta-buttons" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: flex-start; flex-shrink: 0;">
+            <a href="https://wa.me/6281215289095" class="btn btn-primary" style="margin: 0; font-weight: 700; white-space: normal; text-align: center;">Klaim Promo via WhatsApp</a>
+            <a href="/kontak/" class="btn btn-secondary" style="margin: 0; font-weight: 600; white-space: normal; text-align: center; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: white; backdrop-filter: blur(10px);">Lihat Portofolio</a>
+          </div>
         </div>
       </div>
     </section>

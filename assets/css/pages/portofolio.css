@@ -25,13 +25,14 @@
 }
 
 .filter-btn {
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem 1.5rem;
   border: 1px solid rgba(37, 99, 235, 0.2);
   background-color: var(--bg-white);
   color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 50px;
+  /* Pill-shaped */
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -64,11 +65,38 @@
 }
 
 .portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   animation: fadeInUp 0.6s ease-out;
+}
+
+.portfolio-row {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.portfolio-row::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .portfolio-row {
+    display: contents;
+  }
 }
 
 @keyframes fadeInUp {
@@ -76,6 +104,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -83,113 +112,123 @@
 }
 
 .portfolio-card {
-  border: 1px solid rgba(37, 99, 235, 0.1);
+  flex: 0 0 85%;
+  /* 85% width for nice swiping on mobile */
+  scroll-snap-align: center;
+  position: relative;
   border-radius: 12px;
   overflow: hidden;
-  background-color: var(--bg-white);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  background-color: #0f172a;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: 280px;
+  display: block;
+  opacity: 0;
+  /* For fadeInUp animation */
 }
 
 .portfolio-card:hover {
-  border-color: var(--primary-blue);
-  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.25);
 }
 
 /* Portfolio Card Image Wrapper */
 .portfolio-card-image {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 200px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #f5f7fa, #e8ecf1);
+  height: 100%;
+  z-index: 1;
 }
 
 .portfolio-card-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.6s ease;
 }
 
 .portfolio-card:hover .portfolio-card-image img {
-  transform: scale(1.06);
+  transform: scale(1.1);
 }
 
-/* Portfolio Overlay */
+/* Portfolio Overlay (Gradient) */
 .portfolio-overlay {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(37, 99, 235, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.portfolio-card:hover .portfolio-overlay {
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 60%, transparent 100%);
+  z-index: 2;
   opacity: 1;
+  /* Always visible */
 }
 
 .btn-view {
-  padding: 0.75rem 1.5rem;
-  background-color: var(--bg-white);
-  color: var(--primary-blue);
+  padding: 0.6rem 1.2rem;
+  background-color: var(--primary-blue);
+  color: white;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   display: inline-block;
+  margin-top: 1rem;
 }
 
 .btn-view:hover {
-  background-color: var(--primary-blue);
-  color: var(--bg-white);
+  background-color: var(--accent-cyan);
+  color: #0f172a;
   transform: scale(1.05);
 }
 
-/* Portfolio Card Info */
+/* Portfolio Content */
 .portfolio-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   padding: 1.5rem;
-  flex: 1;
+  z-index: 3;
+  opacity: 1;
+  /* Always visible */
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
 }
 
 .portfolio-card-info h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  line-height: 1.3;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .portfolio-type {
-  display: block;
-  font-size: 0.9rem;
-  color: var(--primary-blue);
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
   font-weight: 500;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .portfolio-detail {
   font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
   margin-bottom: 0.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .portfolio-detail span {
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ========== LOAD MORE SECTION ========== */
@@ -240,90 +279,229 @@
   line-height: var(--line-height-relaxed);
 }
 
-.cta-buttons {
+
+/* ========== TEAM CTA SECTION (BASE/DESKTOP STYLES) ========== */
+.bottom-cta-section {
+  padding: 1rem 0 1.5rem 0;
+}
+
+.team-cta {
+  text-align: left;
+  padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  border-radius: 16px;
+  color: white;
   display: flex;
-  justify-content: center;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-  margin-top: 2rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
 }
 
-.cta-buttons .btn {
-  padding: 0.75rem 2rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  display: inline-block;
-  min-width: 180px;
+.team-cta-content {
+  flex: 1;
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
+.team-cta h3,
+.team-cta h2 {
+  font-size: var(--judul-kecil);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: white !important;
+}
+
+.team-cta p {
+  font-size: var(--teks-kecil);
+  opacity: 0.95;
+  margin: 0;
+  line-height: 1.5;
+  color: white !important;
+}
+
+.team-cta .btn {
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+
+/* ==========================================================================
+   MOBILE TYPOGRAPHY & SPACING OPTIMIZATION (OPTION A - RECOMMENDED)
+   ========================================================================== */
 @media (max-width: 768px) {
-  .portfolio-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  /* 1. Hero Section (Compact & Punchy) */
+  .hero.hero-home,
+  .hero.hero-portofolio {
+    padding: 2.25rem 0 !important;
+  }
+  .hero-content h1 {
+    font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
+    line-height: 1.15 !important;
+    margin-bottom: 0.75rem !important;
+    letter-spacing: -0.02em !important;
+  }
+  .hero-content p {
+    font-size: 0.938rem !important; /* 15px */
+    line-height: 1.45 !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .hero-subtitle {
+    font-size: 0.938rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .hero-home .cta-buttons {
+    gap: 0.75rem !important;
+  }
+  .hero-home .cta-buttons .btn {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 0.938rem !important;
   }
 
-  .filter-buttons {
-    gap: 0.5rem;
-  }
-
-  .filter-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-  }
-
-  .cta-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .cta-buttons .btn {
-    min-width: unset;
-    width: 100%;
-  }
-
-  .portfolio-card-image {
-    height: 180px;
-  }
-
-  .portfolio-cta-section {
-    padding: 2.5rem 1rem;
-  }
-}
-
-@media (max-width: 480px) {
+  /* 2. Portfolio Filter Section (Sleek & Hemat Ruang) */
   .portfolio-filter-section {
-    padding: 2rem 0;
+    padding: 1rem 0 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
   }
-
   .filter-buttons {
-    gap: 0.4rem;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    padding: 0.25rem 1rem 0.5rem 1rem !important;
+    gap: 0.375rem !important; /* 6px */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-
+  .filter-buttons::-webkit-scrollbar {
+    display: none;
+  }
   .filter-btn {
-    padding: 0.45rem 0.85rem;
-    font-size: 0.8rem;
+    padding: 0.375rem 0.875rem !important; /* 6px 14px */
+    font-size: 0.844rem !important; /* 13.5px */
+    font-weight: 600 !important;
   }
 
+  /* 3. Portfolio Projects Grid & Cards (Compact Card & High Readability) */
+  .portfolio-projects-section {
+    padding: 1rem 0 !important;
+  }
+  .portfolio-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important; /* 20px */
+    margin-bottom: 1.5rem !important;
+  }
+  .portfolio-card {
+    height: 240px !important;
+  }
   .portfolio-card-image {
-    height: 150px;
+    height: 100% !important;
   }
-
   .portfolio-card-info {
-    padding: 1rem;
+    padding: 1rem !important;
   }
-
   .portfolio-card-info h3 {
-    font-size: 0.95rem;
+    font-size: 0.938rem !important; /* 15px */
+    font-weight: 700 !important;
+    margin-bottom: 2px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
   }
-
   .portfolio-type {
-    font-size: 0.8rem;
+    font-size: 0.78rem !important; /* 12.5px */
+    font-weight: 600 !important;
+    margin-bottom: 0.35rem !important;
+  }
+  .portfolio-detail {
+    font-size: 0.813rem !important; /* 13px */
+    line-height: 1.35 !important;
+    margin-bottom: 0 !important;
+  }
+  .btn-view {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.844rem !important;
+    margin-top: 0.5rem !important;
   }
 
+  /* 4. Load More Section (Tight & Seamless) */
+  .portfolio-load-more {
+    padding: 1rem 0 !important;
+    margin-top: 1rem !important;
+  }
+  #btn-load-more {
+    padding: 0.625rem 1.5rem !important; /* 10px 24px */
+    font-size: 0.875rem !important; /* 14px */
+    font-weight: 600 !important;
+  }
+
+  /* 5. Bottom CTA Section & Portfolio CTA Section (Impeccable Card & Anti-Overflow) */
+  .portfolio-cta-section {
+    padding: 2rem 1rem !important;
+    margin: 1.5rem 0 !important;
+  }
   .portfolio-cta-section h2 {
-    font-size: 1.5rem;
+    font-size: 1.375rem !important; /* 22px */
+    line-height: 1.25 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .portfolio-cta-section p {
+    font-size: 0.875rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .portfolio-cta-section .cta-buttons .btn {
+    width: 100% !important;
+    min-width: unset !important;
+    margin: 0 !important;
+  }
+
+  .bottom-cta-section {
+    padding: 1rem 0 1.5rem 0 !important;
+  }
+  .team-cta {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%) !important;
+    color: white !important;
+    border-radius: 16px !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 1.25rem 1rem !important;
+    gap: 1.25rem !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2) !important;
+  }
+  .team-cta-content {
+    width: 100% !important;
+  }
+  .team-cta h3,
+  .team-cta h2 {
+    font-size: 1.1rem !important; /* 17.6px */
+    line-height: 1.3 !important;
+    margin-bottom: 0.5rem !important;
+    color: white !important;
+  }
+  .team-cta p {
+    font-size: 0.844rem !important; /* 13.5px */
+    line-height: 1.45 !important;
+    color: white !important;
+  }
+  .team-cta .cta-buttons {
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    display: flex !important;
+  }
+  .team-cta .btn,
+  .team-cta .cta-buttons .btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.938rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    display: inline-flex !important;
   }
 }

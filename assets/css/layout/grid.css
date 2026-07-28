@@ -1,0 +1,68 @@
+/* ========== GRID SYSTEM ========== */
+/* Mobile First Grid */
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+/* 1 Column (Mobile Default) */
+.grid-cols-1 { grid-template-columns: minmax(0, 1fr); }
+
+/* 2 Columns */
+@media (min-width: 640px) {
+  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  
+  /* Asymmetric / Staggered grids */
+  .grid-asym-1-2 { grid-template-columns: 1fr 2fr; }
+  .grid-asym-2-1 { grid-template-columns: 2fr 1fr; }
+}
+
+/* 3 Columns */
+@media (min-width: 768px) {
+  .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* 4 Columns */
+@media (min-width: 1024px) {
+  .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  
+  .grid-asym-lg {
+    grid-template-columns: 1.2fr 0.8fr 1fr;
+  }
+}
+
+/* Professional Card Grid (AGENTS.md) */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+@media (min-width: 640px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .card-grid .card:first-child {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: 1.2fr 0.8fr 1fr;
+    gap: 20px;
+  }
+  .card-grid .card:first-child {
+    grid-column: span 1;
+  }
+}
+
+/* Gap Utilities */
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.gap-8 { gap: 32px; }
