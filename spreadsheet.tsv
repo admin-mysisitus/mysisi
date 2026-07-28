@@ -6,6 +6,17 @@ USER-1782628269873	bokap	semutpeyok@gmail.com			2026-06-28T06:31:09.878Z	2026-06
 USER-1782697159986	lukman hakim	lukmanlooker00@gmail.com	081215289095	https://lh3.googleusercontent.com/a/ACg8ocJqaDVRZvAe-2puas8186cRZdxE-vI66K4eA0kF9xE1EeczAA0=s96-c	2026-06-29T01:39:19.986Z	2026-06-29T01:44:41.123Z	Yes	50a675bf-579b-4569-ac93-093eea49b376-1782697159988	45201f19-5a44-40f0-970a-eb02bcbe6273	active	google	customer
 USER-1783229142585	sopirin.id	sopirin.id@gmail.com			2026-07-05T05:25:42.588Z	2026-07-05T05:27:10.138Z	Yes	82ae6bb9-34d8-4493-92bd-c02163c1f676-1783229142586	0f7e14db-5c2f-4a$d5b355a2949fc9d85541893f2d894a0e4ee36c6eef4b4f5c2b6d8a60edabcee0	active	email	customer
 
+SHEET: SUPPORT_TICKETS
+═══════════════════════════════════════════════════════════════════════════════
+Ticket ID	Subject	User Email	Status	Priority	Created At	Messages
+TICKET-1711359600000	Pertanyaan Layanan Hosting	john@example.com	Open	High	2026-03-27T10:00:00.000Z	[{"sender":"user","text":"Bagaimana cara upgrade hosting?"}]
+TCK-1783424100662	tes	sopirin.id@gmail.com	in_progress	medium	2026-07-07T11:35:00.663Z	[]
+
+SHEET: DNS_RECORDS
+═══════════════════════════════════════════════════════════════════════════════
+Domain	User ID	Records Count	NS Status
+example.com	USER-1711359600000	5	Active
+
 SHEET: ORDERS
 ═══════════════════════════════════════════════════════════════════════════════
 Order ID	User ID	Email	Phone Number	Display Name	Domain Name	Package	Total Amount	Order Status	Payment Status	Snap Token	Transaction ID	Created At	Updated At	Payment Method

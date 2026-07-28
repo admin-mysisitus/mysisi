@@ -2,7 +2,7 @@
 // CONFIGURATION
 // ============================================================================
 
-const SPREADSHEET_ID = '1qA1LzzVXmVaJ5U36lDuaoW2Eo4wiSkqL_0Y9i-Rav5s';
+const SPREADSHEET_ID = '1Cg-9RF1iyWO36yQnvGrHWgCW6IvzdStH5u3hee6JzZU';
 const BASE_URL = 'https://sisitus.com';
 
 const MIDTRANS_SNAP_URL = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
