@@ -158,9 +158,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (time.isExpired) {
       countdownContainer.innerHTML = `
         <div style="text-align: center; padding: 20px; background: #fef3cd; border-radius: 8px;">
-          <strong style="color: #856404;">Promo telah berakhir</strong>
+          <strong style="color: #856404;">Penawaran khusus bulan ini terbatas — amankan slot Anda sebelum kuota habis!</strong>
           <p style="margin: 8px 0 0; font-size: 0.9em; color: #856404;">
-            Terima kasih telah berminat! Tunggu promo berikutnya atau hubungi kami untuk penawaran khusus.
+            Hubungi kami untuk mendapatkan penawaran spesial lainnya!
           </p>
         </div>
       `;
@@ -266,4 +266,90 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error('Failed to copy text:', err);
     });
   };
+  // ========== AUTO SNAP SLIDER UNTUK MOBILE ==========
+  function initAutoSnapSlider(sliderElement) {
+    if (!sliderElement) return;
+
+    let autoScrollInterval;
+    let resumeTimeout;
+    let isAutoScrolling = false;
+    let scrollFlagTimeout;
+    const slideInterval = 3000;
+    const resumeDelay = 3500;
+
+    let track = sliderElement;
+    if (!track || track.children.length === 0) return;
+
+    const scrollToNext = () => {
+      // Hanya aktif jika layar mobile/tablet (dimana scrollWidth > clientWidth)
+      const scrollLeft = sliderElement.scrollLeft;
+      const clientWidth = sliderElement.clientWidth;
+      const scrollWidth = sliderElement.scrollWidth;
+
+      if (clientWidth >= scrollWidth - 5) return;
+
+      isAutoScrolling = true;
+      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
+
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        sliderElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const cardWidth = track.children[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 24; // fallback gap
+        sliderElement.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      }
+
+      scrollFlagTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+      }, 800);
+    };
+
+    const startAutoScroll = () => {
+      stopAutoScroll();
+      // Jangan mulai interval jika tidak ada scroll (desktop view)
+      if (sliderElement.clientWidth < sliderElement.scrollWidth) {
+        autoScrollInterval = setInterval(scrollToNext, slideInterval);
+      }
+    };
+
+    const stopAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+
+    const handleInteraction = (e) => {
+      if (e && e.type === 'scroll' && isAutoScrolling) return;
+
+      stopAutoScroll();
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
+    };
+
+    sliderElement.addEventListener('scroll', handleInteraction, { passive: true });
+    sliderElement.addEventListener('wheel', handleInteraction, { passive: true });
+    sliderElement.addEventListener('touchstart', handleInteraction, { passive: true });
+    sliderElement.addEventListener('mousedown', handleInteraction);
+
+    // Initial check (delay a bit for layout to settle)
+    setTimeout(startAutoScroll, 1000);
+    
+    // Re-check on resize
+    window.addEventListener('resize', () => {
+      stopAutoScroll();
+      setTimeout(startAutoScroll, 500);
+    });
+  }
+
+  // Initialize for all mobile grids
+  const gridsToSnap = [
+    '.promos-grid',
+    '.value-proposition-grid',
+    '.requirements-grid',
+    '.why-grid',
+    '.testimonial-grid'
+  ];
+  
+  gridsToSnap.forEach(selector => {
+    const el = document.querySelector(selector);
+    if (el) initAutoSnapSlider(el);
+  });
 });

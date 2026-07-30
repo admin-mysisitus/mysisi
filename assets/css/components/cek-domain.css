@@ -75,9 +75,11 @@
 .cek-domain-subtitle {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.95);
-  margin: 0;
+  margin: 0 auto;
   font-weight: 300;
   line-height: 1.6;
+  text-align: center;
+  max-width: 800px;
 }
 
 .cek-domain-form-wrapper {
@@ -343,6 +345,12 @@
 .cek-domain-social-proof {
   font-size: 0.9rem;
   opacity: 0.95;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  text-align: center;
 }
 
 #cek-domain-popular-extensions {
@@ -350,6 +358,12 @@
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 15px;
   margin-bottom: 30px;
+}
+
+@media (min-width: 992px) {
+  #cek-domain-popular-extensions {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .cek-domain-ext-item {

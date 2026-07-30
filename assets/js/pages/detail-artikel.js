@@ -122,7 +122,11 @@ function createShareButtons() {
   const buttonsDiv = document.createElement('div');
   buttonsDiv.className = 'share-buttons';
 
-  shareButtons.forEach((btn) => {
+  const primaryKeys = ['facebook', 'whatsapp', 'twitter', 'telegram'];
+  const primaryButtons = shareButtons.filter(btn => primaryKeys.includes(btn.name));
+  const secondaryButtons = shareButtons.filter(btn => !primaryKeys.includes(btn.name));
+
+  const createBtnElement = (btn) => {
     const button = document.createElement('a');
     button.className = `share-btn share-btn-${btn.name}`;
     button.title = btn.title;
@@ -161,11 +165,56 @@ function createShareButtons() {
     } else {
       button.href = btn.url;
     }
+    return button;
+  };
 
-    buttonsDiv.appendChild(button);
+  primaryButtons.forEach((btn) => {
+    buttonsDiv.appendChild(createBtnElement(btn));
   });
 
+  // Add "More" button
+  const moreBtn = document.createElement('button');
+  moreBtn.className = 'share-btn share-btn-more';
+  moreBtn.title = 'Lainnya';
+  moreBtn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
+  buttonsDiv.appendChild(moreBtn);
+
   container.appendChild(buttonsDiv);
+
+  // Create Modal Popup
+  const modalOverlay = document.createElement('div');
+  modalOverlay.className = 'share-modal-overlay';
+  
+  const modalContent = document.createElement('div');
+  modalContent.className = 'share-modal-content';
+  
+  const modalHeader = document.createElement('div');
+  modalHeader.className = 'share-modal-header';
+  modalHeader.innerHTML = '<h3>Bagikan Artikel</h3><button class="share-modal-close" title="Tutup"><i class="fa-solid fa-times"></i></button>';
+  
+  const modalBody = document.createElement('div');
+  modalBody.className = 'share-modal-body';
+  
+  const modalGrid = document.createElement('div');
+  modalGrid.className = 'share-modal-grid';
+  
+  secondaryButtons.forEach((btn) => {
+    modalGrid.appendChild(createBtnElement(btn));
+  });
+  
+  modalBody.appendChild(modalGrid);
+  modalContent.appendChild(modalHeader);
+  modalContent.appendChild(modalBody);
+  modalOverlay.appendChild(modalContent);
+  document.body.appendChild(modalOverlay);
+
+  // Modal logic
+  const closeModal = () => modalOverlay.classList.remove('active');
+  moreBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
+  modalHeader.querySelector('.share-modal-close').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => {
+    if(e.target === modalOverlay) closeModal();
+  });
 }
 
 /**

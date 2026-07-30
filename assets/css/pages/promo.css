@@ -100,6 +100,12 @@
   margin-bottom: 2rem;
 }
 
+@media (min-width: 992px) {
+  .promos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* ========== PROMO CARD STYLING ========== */
 .promo-card {
   background: var(--white);
@@ -132,39 +138,6 @@
   box-shadow: 0 15px 45px rgba(37, 99, 235, 0.2);
 }
 
-/* Responsive: Featured card menjadi grid-column 1/-1 di tablet */
-@media (min-width: 768px) {
-  .promo-card.featured {
-    grid-column: 1 / -1;
-  }
-
-  .promo-card.featured .promo-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: center;
-  }
-
-  .promo-card.featured .promo-content > * {
-    grid-column: 1 / -1;
-  }
-
-  .promo-card.featured .promo-price {
-    grid-column: 1 / -1;
-  }
-
-  .promo-card.featured .promo-includes {
-    grid-column: 1;
-  }
-
-  .promo-card.featured .promo-terms {
-    grid-column: 1;
-  }
-
-  .promo-card.featured .btn {
-    grid-column: 1 / -1;
-  }
-}
 
 /* ========== PROMO BADGE ========== */
 .promo-badge {
@@ -372,6 +345,7 @@
   font-size: 2.5rem;
   margin-bottom: 1rem;
   display: inline-block;
+  color: var(--accent-cyan);
 }
 
 .vp-item h3 {
@@ -471,6 +445,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
+}
+
+@media (min-width: 992px) {
+  .requirements-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* ========== REQUIREMENT ITEM ========== */
@@ -679,16 +659,72 @@
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .promo-banner {
-    padding: 2rem;
+    padding: 2rem 1.5rem;
   }
 
   .promo-banner h2 {
     font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    margin-bottom: 0.5rem;
   }
 
-  .promos-grid {
-    grid-template-columns: 1fr;
+  /* Horizontal Scroll for Grids on Mobile */
+  .promos-grid,
+  .value-proposition-grid,
+  .requirements-grid,
+  .why-grid,
+  .testimonial-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 1.5rem;
+    padding-bottom: 2rem;
     gap: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    /* Memberikan ilusi scroll melewati layar */
+    margin-right: -2rem; 
+    padding-right: 2rem;
+  }
+
+  /* Sembunyikan grid lama */
+  .promos-grid { grid-template-columns: none; }
+  .why-grid { grid-template-columns: none; }
+
+  /* Styling Webkit Scrollbar */
+  .promos-grid::-webkit-scrollbar,
+  .value-proposition-grid::-webkit-scrollbar,
+  .requirements-grid::-webkit-scrollbar,
+  .why-grid::-webkit-scrollbar,
+  .testimonial-grid::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .promos-grid::-webkit-scrollbar-track,
+  .value-proposition-grid::-webkit-scrollbar-track,
+  .requirements-grid::-webkit-scrollbar-track,
+  .why-grid::-webkit-scrollbar-track,
+  .testimonial-grid::-webkit-scrollbar-track {
+    background: var(--gray-light);
+    border-radius: 4px;
+  }
+
+  .promos-grid::-webkit-scrollbar-thumb,
+  .value-proposition-grid::-webkit-scrollbar-thumb,
+  .requirements-grid::-webkit-scrollbar-thumb,
+  .why-grid::-webkit-scrollbar-thumb,
+  .testimonial-grid::-webkit-scrollbar-thumb {
+    background: var(--accent-cyan);
+    border-radius: 4px;
+  }
+
+  .promo-card,
+  .vp-item,
+  .requirement-item,
+  .why-item,
+  .testimonial {
+    scroll-snap-align: start;
+    flex: 0 0 85%;
+    max-width: 85%;
   }
 
   .promo-card.featured {
@@ -697,10 +733,6 @@
 
   .promo-card.featured .promo-content {
     display: block;
-  }
-
-  .why-grid {
-    grid-template-columns: 1fr;
   }
 
   .cta-buttons {
@@ -713,31 +745,70 @@
 }
 
 @media (max-width: 480px) {
+  /* Kepadatan Padding Section (Lebih Compact) */
+  .promo-banner-section,
   .promo-details-section,
+  .promo-value-proposition-section,
   .promo-requirements-section,
   .promo-why-now-section,
   .promo-testimonial-section {
-    padding: 2.5rem 0;
+    padding: 2rem 0; /* Dikurangi dari 2.5rem - 5rem */
+  }
+
+  /* Kepadatan Typografi */
+  h2 {
+    font-size: 1.4rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .section-subtitle {
+    font-size: 0.9rem !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.4 !important;
   }
 
   .promo-content {
-    padding: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .promo-content h3 {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .promo-description {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
   }
 
   .promo-badge {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.7rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.65rem;
   }
 
   .why-item i {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .why-item h3 {
+    font-size: 1rem;
+  }
+
+  .why-item p {
+    font-size: 0.85rem;
+  }
+
+  .requirement-item, .vp-item, .testimonial {
+    padding: 1.25rem;
   }
 
   .contact-info {
-    font-size: var(--teks-kecil);
+    font-size: 0.85rem;
   }
-
-  /* Note: .promo-cta-final-section responsive styling sudah di hero.css */
 }
 
 /* ========== ANIMATION SCROLL REVEAL ========== */

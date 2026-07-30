@@ -188,6 +188,15 @@
   margin-bottom: clamp(2rem, 3vw, 3rem);
 }
 
+@media (min-width: 992px) {
+  .value-images-container {
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+}
+
 .value-img {
   width: 100%;
   height: auto;
@@ -222,17 +231,30 @@
   100% { opacity: 0; transform: translateY(-15px) scale(1.05); }
 }
 
+@media (min-width: 992px) {
+  .value-img {
+    animation: none !important;
+    opacity: 1 !important;
+    width: 33.333%;
+    transform: none !important;
+  }
+  
+  .value-img:not(:first-child) {
+    position: static;
+  }
+}
+
 /* ========== SERVICES GRID CONTAINER ========== */
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: clamp(2rem, 3vw, 2.5rem);
   margin-top: clamp(2.5rem, 4vw, 3.5rem);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .services-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -1300,16 +1322,19 @@
   margin-bottom: 1.25rem;
   color: #ffffff;
   font-size: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sedikit bayangan agar terlihat modern */
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); 
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
 }
 
-/* Background Colors */
-.feature-icon-custom.bg-orange { background-color: #f59e0b; }
-.feature-icon-custom.bg-red { background-color: #ef4444; }
-.feature-icon-custom.bg-purple { background-color: #a855f7; }
-.feature-icon-custom.bg-green { background-color: #22c55e; }
-.feature-icon-custom.bg-blue { background-color: #3b82f6; }
-.feature-icon-custom.bg-cyan { background-color: #06b6d4; }
+/* Background Colors diseragamkan dengan tema utama */
+.feature-icon-custom.bg-orange,
+.feature-icon-custom.bg-red,
+.feature-icon-custom.bg-purple,
+.feature-icon-custom.bg-green,
+.feature-icon-custom.bg-blue,
+.feature-icon-custom.bg-cyan { 
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+}
 
 /* Comparison section icons */
 .comparison-fit h3 i {

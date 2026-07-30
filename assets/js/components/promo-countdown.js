@@ -72,9 +72,9 @@
     if (time.isExpired) {
       countdownContainer.innerHTML = `
         <div style="text-align: center; padding: 20px; background: #fef3cd; border-radius: 8px;">
-          <strong style="color: #856404;">Promo telah berakhir</strong>
+          <strong style="color: #856404;">Penawaran khusus bulan ini terbatas — amankan slot Anda sebelum kuota habis!</strong>
           <p style="margin: 8px 0 0; font-size: 0.9em; color: #856404;">
-            Terima kasih telah berminat! Tunggu promo berikutnya atau hubungi kami untuk penawaran khusus.
+            Hubungi kami untuk mendapatkan penawaran spesial lainnya!
           </p>
         </div>
       `;

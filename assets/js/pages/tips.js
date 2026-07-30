@@ -4,72 +4,165 @@
 document.addEventListener('DOMContentLoaded', function () {
   const tipsCards = document.querySelectorAll('.tips-card, .artikel-card');
   
-  // ========== TIPS FILTER LOGIC ==========
+  // Pagination Elements
+  const paginationLinks = document.querySelectorAll('.pagination .pagination-link');
+  const prevBtn = paginationLinks.length > 0 ? paginationLinks[0] : null;
+  const nextBtn = paginationLinks.length > 1 ? paginationLinks[paginationLinks.length - 1] : null;
+  const pageInfo = document.querySelector('.pagination-info');
+
+  let currentPage = 1;
+  const cardsPerPage = 3;
+  let currentCategory = 'Semua';
+
+  function updateDisplay(scrollToTop = false) {
+    if (tipsCards.length === 0) return;
+
+    // 1. Filter
+    const matchingCards = Array.from(tipsCards).filter(card => {
+      if (currentCategory === 'Semua') return true;
+      const cardCategory = card.getAttribute('data-category') || '';
+      const cardTags = Array.from(card.querySelectorAll('.tag, .artikel-meta span, .tips-meta span')).map(t => t.textContent.trim().toLowerCase());
+      return cardTags.some(t => t.includes(currentCategory.toLowerCase())) || cardCategory.toLowerCase().includes(currentCategory.toLowerCase());
+    });
+
+    // 2. Paginate
+    const totalPages = Math.max(1, Math.ceil(matchingCards.length / cardsPerPage));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    // 3. Hide all
+    tipsCards.forEach(card => {
+      card.style.display = 'none';
+      card.classList.add('hidden');
+      card.classList.remove('visible');
+    });
+
+    // 4. Show current page
+    const startIndex = (currentPage - 1) * cardsPerPage;
+    const pageCards = matchingCards.slice(startIndex, startIndex + cardsPerPage);
+    
+    pageCards.forEach(card => {
+      card.style.display = '';
+      card.classList.remove('hidden');
+      card.classList.add('visible');
+      
+      card.style.animation = 'none';
+      void card.offsetWidth;
+      card.style.animation = 'slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both';
+    });
+
+    if (pageInfo) {
+      pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+    }
+
+    if (prevBtn) {
+      if (currentPage === 1) {
+        prevBtn.classList.add('disabled');
+        prevBtn.style.pointerEvents = 'none';
+        prevBtn.style.opacity = '0.5';
+      } else {
+        prevBtn.classList.remove('disabled');
+        prevBtn.style.pointerEvents = 'auto';
+        prevBtn.style.opacity = '1';
+      }
+    }
+
+    if (nextBtn) {
+      if (currentPage === totalPages || totalPages === 0) {
+        nextBtn.classList.add('disabled');
+        nextBtn.style.pointerEvents = 'none';
+        nextBtn.style.opacity = '0.5';
+      } else {
+        nextBtn.classList.remove('disabled');
+        nextBtn.style.pointerEvents = 'auto';
+        nextBtn.style.opacity = '1';
+      }
+    }
+
+    const grid = document.querySelector('.artikel-grid, .tips-grid');
+    if (grid) {
+      grid.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+
+    if (scrollToTop) {
+      const section = document.querySelector('.artikel-list-section') || document.querySelector('.artikel-grid');
+      if (section) {
+        const offset = 100;
+        const offsetPosition = section.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+    }
+  }
+
+  // ========== EVENT LISTENERS ==========
   const categoryButtons = document.querySelectorAll('.category-btn');
-  
   if (categoryButtons.length > 0) {
     categoryButtons.forEach(button => {
       button.addEventListener('click', function (e) {
         e.preventDefault();
-        
-        const category = this.getAttribute('data-category') || this.textContent.trim();
-        
-        // Update active state
+        currentCategory = this.getAttribute('data-category') || this.textContent.trim();
         categoryButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
-
-        // Filter cards
-        tipsCards.forEach(card => {
-          const cardCategory = card.getAttribute('data-category') || '';
-          const tags = card.querySelectorAll('.tag, .tips-meta span');
-          let hasCategory = false;
-
-          tags.forEach(tag => {
-            if (tag.textContent.toLowerCase().includes(category.toLowerCase())) {
-              hasCategory = true;
-            }
-          });
-          
-          const shouldShow = category === 'Semua' || hasCategory || cardCategory.includes(category);
-          
-          if (shouldShow) {
-            card.classList.remove('hidden');
-            card.style.display = 'block';
-            card.style.animation = 'slideInUp 0.4s ease-out';
-          } else {
-            card.classList.add('hidden');
-            card.style.display = 'none';
-          }
-        });
+        currentPage = 1;
+        updateDisplay(false);
       });
     });
   }
 
-  // ========== TAG FILTER LOGIC ==========
   const tags = document.querySelectorAll('.tag');
-  
   if (tags.length > 0) {
     tags.forEach(tag => {
       tag.addEventListener('click', function (e) {
         e.preventDefault();
         const tagText = this.textContent.trim();
-        
-        tipsCards.forEach(card => {
-          const cardTags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.trim());
-          if (cardTags.includes(tagText)) {
-            card.classList.remove('hidden', 'filtered');
-            card.classList.add('visible');
-            card.style.display = 'block';
-            card.style.opacity = '1';
-          } else {
-            card.classList.remove('visible');
-            card.classList.add('filtered');
-            card.style.display = 'block';
-            card.style.opacity = '0.5';
+        let matchedBtn = false;
+        categoryButtons.forEach(btn => {
+          if (btn.textContent.trim().toLowerCase() === tagText.toLowerCase()) {
+            btn.click();
+            matchedBtn = true;
           }
         });
+        if (!matchedBtn) {
+          currentCategory = tagText;
+          currentPage = 1;
+          categoryButtons.forEach(btn => btn.classList.remove('active'));
+          updateDisplay(true);
+        }
       });
     });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (currentPage > 1) {
+        currentPage--;
+        updateDisplay(true);
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const matchingCount = Array.from(tipsCards).filter(card => {
+        if (currentCategory === 'Semua') return true;
+        const cardCategory = card.getAttribute('data-category') || '';
+        const cardTags = Array.from(card.querySelectorAll('.tag, .artikel-meta span, .tips-meta span')).map(t => t.textContent.trim().toLowerCase());
+        return cardTags.some(t => t.includes(currentCategory.toLowerCase())) || cardCategory.toLowerCase().includes(currentCategory.toLowerCase());
+      }).length;
+      const totalPages = Math.max(1, Math.ceil(matchingCount / cardsPerPage));
+
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateDisplay(true);
+      }
+    });
+  }
+
+  // Initialize display
+  if (document.querySelector('.pagination')) {
+    updateDisplay(false);
   }
 
   // ========== READING TIME CALCULATION ==========
