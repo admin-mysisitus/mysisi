@@ -122,7 +122,8 @@ export class APIClient {
       let url = `${GAS_CONFIG.URL}`;
       let options = {
         method: method,
-        signal: controller.signal
+        signal: controller.signal,
+        redirect: 'follow'
       };
 
       if (method === 'GET') {
