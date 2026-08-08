@@ -1,5 +1,6 @@
 import APIClient from '/assets/js/modules/unified-api.js';
 import { AuthManager } from '/assets/js/modules/unified-auth.js';
+import { normalizeDriveImageUrl, withCacheBust, setButtonLoading, getPasswordStrengthInfo } from '/assets/js/modules/unified-utils.js';
 
 export async function render() {
   try {
@@ -29,8 +30,45 @@ export async function render() {
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
       document.getElementById('input-name').value = user.displayName || '';
+      
+      const photoPreview = document.getElementById('photo-preview');
+      const photoPlaceholder = document.getElementById('photo-placeholder');
+      if (user.photoURL && photoPreview) {
+        const normalized = normalizeDriveImageUrl(user.photoURL, 'w300', '');
+        photoPreview.src = withCacheBust(normalized);
+        photoPreview.style.display = 'block';
+        if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+        photoPreview.onerror = () => {
+          photoPreview.style.display = 'none';
+          if (photoPlaceholder) photoPlaceholder.style.display = 'block';
+        };
+      }
+
       const inputPhoto = document.getElementById('input-photo');
-      if (inputPhoto) inputPhoto.value = user.photoURL || '';
+      if (inputPhoto) {
+        inputPhoto.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            if (file.size > 2 * 1024 * 1024) {
+              Swal.fire('Error', 'Ukuran foto maksimal 2MB', 'error');
+              this.value = '';
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(event) {
+              if (photoPreview) {
+                photoPreview.src = event.target.result;
+                photoPreview.style.display = 'block';
+                inputPhoto.dataset.base64 = event.target.result;
+              }
+              if (photoPlaceholder) {
+                photoPlaceholder.style.display = 'none';
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
       document.getElementById('input-whatsapp').value = user.whatsapp || '';
 
       formEditProfile.addEventListener('submit', async (e) => {
@@ -86,7 +124,7 @@ async function handleProfileUpdate(userId) {
   try {
     const displayName = document.getElementById('input-name').value.trim();
     const photoInput = document.getElementById('input-photo');
-    const photoURL = photoInput ? photoInput.value.trim() : '';
+    const photoBase64 = photoInput && photoInput.dataset.base64 ? photoInput.dataset.base64 : null;
     const whatsapp = document.getElementById('input-whatsapp').value.trim();
 
     if (!displayName || displayName.length < 3) {
@@ -96,18 +134,18 @@ async function handleProfileUpdate(userId) {
 
     // Show loading state (you could implement a spinner button)
     const btn = document.querySelector('#form-edit-profile button[type="submit"]');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-    btn.disabled = true;
+    setButtonLoading(btn, true, 'Menyimpan...');
 
-    const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoURL);
+    const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
 
     if (result.success) {
       // Update session
       const user = AuthManager.getCurrentUser();
       user.displayName = displayName;
       user.whatsapp = whatsapp;
-      user.photoURL = photoURL;
+      if (result.data && result.data.photoURL) {
+        user.photoURL = result.data.photoURL;
+      }
       AuthManager.updateUser(user);
 
       Swal.fire('Sukses', 'Profil berhasil diperbarui', 'success');
@@ -129,10 +167,7 @@ async function handleProfileUpdate(userId) {
     Swal.fire('Error', error.message, 'error');
   } finally {
     const btn = document.querySelector('#form-edit-profile button[type="submit"]');
-    if (btn) {
-      btn.innerHTML = 'Simpan Profil';
-      btn.disabled = false;
-    }
+    setButtonLoading(btn, false, 'Simpan Profil');
   }
 }
 
@@ -158,9 +193,7 @@ async function handlePasswordChange(userId) {
     }
     
     const btn = document.querySelector('#form-change-password button[type="submit"]');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-    btn.disabled = true;
+    setButtonLoading(btn, true, 'Menyimpan...');
 
     const result = await APIClient.changePassword(userId, oldPassword, newPassword);
 
@@ -175,10 +208,7 @@ async function handlePasswordChange(userId) {
     Swal.fire('Error', error.message, 'error');
   } finally {
     const btn = document.querySelector('#form-change-password button[type="submit"]');
-    if (btn) {
-      btn.innerHTML = 'Ubah Password';
-      btn.disabled = false;
-    }
+    setButtonLoading(btn, false, 'Ubah Password');
   }
 }
 
@@ -189,46 +219,15 @@ function updatePasswordStrength(password, strengthDivId, strengthBarId, strength
 
   if (!strengthDiv || !strengthBar || !strengthText) return;
 
-  if (!password) {
+  const strengthInfo = getPasswordStrengthInfo(password);
+  if (!strengthInfo.visible) {
     strengthDiv.style.display = 'none';
     return;
   }
 
   strengthDiv.style.display = 'block';
-
-  let strength = 0;
-  let text = '';
-  let className = '';
-
-  const checks = {
-    length: password.length >= 8,
-    hasLower: /[a-z]/.test(password),
-    hasUpper: /[A-Z]/.test(password),
-    hasNumber: /[0-9]/.test(password),
-    hasSpecial: /[^A-Za-z0-9]/.test(password)
-  };
-
-  strength = Object.values(checks).filter(Boolean).length;
-
-  if (strength <= 2) {
-    text = 'Lemah';
-    className = 'strength-weak';
-    strengthBar.style.background = '#ef4444';
-  } else if (strength === 3) {
-    text = 'Sedang';
-    className = 'strength-fair';
-    strengthBar.style.background = '#f59e0b';
-  } else if (strength === 4) {
-    text = 'Kuat';
-    className = 'strength-good';
-    strengthBar.style.background = '#3b82f6';
-  } else {
-    text = 'Sangat Kuat';
-    className = 'strength-strong';
-    strengthBar.style.background = '#10b981';
-  }
-
-  strengthBar.className = `strength-bar ${className}`;
-  strengthBar.style.width = (strength * 20) + '%';
-  strengthText.textContent = text;
+  strengthBar.className = `strength-bar ${strengthInfo.className}`;
+  strengthBar.style.background = strengthInfo.color;
+  strengthBar.style.width = `${strengthInfo.strength * 20}%`;
+  strengthText.textContent = strengthInfo.text;
 }

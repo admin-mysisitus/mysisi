@@ -109,13 +109,6 @@ export function showConfirm(message = '', onConfirm, onCancel) {
  * Show toast notification (small, auto-dismiss)
  */
 export function showToast(message = '', type = 'success') {
-  const icons = {
-    success: '✓',
-    error: '✕',
-    warning: '⚠',
-    info: 'ℹ'
-  };
-
   return Swal.fire({
     icon: type,
     title: message,
@@ -305,6 +298,73 @@ export function truncate(str, length = 50) {
   return str.substr(0, length) + '...';
 }
 
+/**
+ * Normalize Google Drive image URL so it can be used reliably in <img>.
+ */
+export function normalizeDriveImageUrl(rawUrl, size = 'w200', fallback = '') {
+  if (!rawUrl || typeof rawUrl !== 'string') return fallback;
+
+  const url = rawUrl.trim();
+  if (!url) return fallback;
+
+  const fileMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fileMatch && fileMatch[1]) {
+    return `https://drive.google.com/thumbnail?id=${fileMatch[1]}&sz=${size}`;
+  }
+
+  const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if ((url.includes('drive.google.com/uc') || url.includes('drive.google.com/open')) && idMatch && idMatch[1]) {
+    return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=${size}`;
+  }
+
+  return url;
+}
+
+/**
+ * Append cache-buster query param to force browser refresh for mutable assets.
+ */
+export function withCacheBust(url) {
+  if (!url || typeof url !== 'string') return '';
+  return `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
+}
+
+/**
+ * Compute password strength metadata for shared strength meters.
+ */
+export function getPasswordStrengthInfo(password) {
+  if (!password) {
+    return {
+      visible: false,
+      text: '',
+      className: '',
+      color: '',
+      strength: 0
+    };
+  }
+
+  const checks = {
+    length: password.length >= 8,
+    hasLower: /[a-z]/.test(password),
+    hasUpper: /[A-Z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecial: /[^A-Za-z0-9]/.test(password)
+  };
+
+  const strength = Object.values(checks).filter(Boolean).length;
+
+  if (strength <= 2) {
+    return { visible: true, text: 'Lemah', className: 'strength-weak', color: '#ef4444', strength };
+  }
+  if (strength === 3) {
+    return { visible: true, text: 'Sedang', className: 'strength-fair', color: '#f59e0b', strength };
+  }
+  if (strength === 4) {
+    return { visible: true, text: 'Kuat', className: 'strength-good', color: '#3b82f6', strength };
+  }
+
+  return { visible: true, text: 'Sangat Kuat', className: 'strength-strong', color: '#10b981', strength };
+}
+
 // ========== DOM UTILITIES ==========
 
 /**
@@ -321,6 +381,15 @@ export function setButtonLoading(button, isLoading = true, loadingText = '⏳ Me
     button.textContent = button.dataset.originalText || 'Submit';
     button.disabled = false;
   }
+}
+
+/**
+ * Show a small inline loading status inside a container.
+ */
+export function setInlineStatus(element, text = '', isVisible = true) {
+  if (!element) return;
+  element.textContent = text;
+  element.style.display = isVisible ? 'block' : 'none';
 }
 
 /**
@@ -569,9 +638,11 @@ export const Utilities = {
   
   // DOM utilities
   setButtonLoading,
+  setInlineStatus,
   fadeOut,
   fadeIn,
   initPasswordToggle,
+  getPasswordStrengthInfo,
   
   // Storage
   getStorage,

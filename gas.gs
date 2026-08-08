@@ -4,6 +4,8 @@
 
 const SPREADSHEET_ID = '1Cg-9RF1iyWO36yQnvGrHWgCW6IvzdStH5u3hee6JzZU';
 const BASE_URL = 'https://sisitus.com';
+const PROFILE_PHOTO_DRIVE_FOLDER_ID = '1kBngp8XBcIWIdgDXcrfGWDC0fU1yLbWv';
+const MAX_PROFILE_PHOTO_BYTES = 2 * 1024 * 1024;
 
 const MIDTRANS_SNAP_URL = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
 
@@ -29,30 +31,7 @@ function initializeMidtransConfig() {
  * Get or create Users sheet
  */
 function ensureUsersSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('USERS');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('USERS');
-    // Add headers
-    sheet.appendRow([
-      'User ID',           // A
-      'Display Name',      // B
-      'Email',            // C
-      'WhatsApp',         // D
-      'Photo URL',        // E
-      'Created At',       // F
-      'Updated At',       // G
-      'Email Verified',   // H
-      'Verification Token',  // I
-      'Password Hash',    // J
-      'Status',          // K
-      'Auth Method',     // L
-      'Role'             // M
-    ]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('USERS');
 }
 
 /**
@@ -142,6 +121,72 @@ function formatPhoneNumber(phone) {
     standardPhone = '0' + phone;
   }
   return "'" + standardPhone;
+}
+
+/**
+ * Parse and validate profile photo Data URL from frontend.
+ */
+function parseProfilePhotoBase64(photoBase64) {
+  const match = String(photoBase64 || '').match(/^data:(image\/(?:png|jpeg|jpg));base64,(.+)$/i);
+  if (!match) {
+    throw new Error('INVALID_IMAGE_FORMAT');
+  }
+
+  const mimeType = match[1].toLowerCase() === 'image/jpg' ? 'image/jpeg' : match[1].toLowerCase();
+  const decoded = Utilities.base64Decode(match[2]);
+
+  if (!decoded || decoded.length === 0) {
+    throw new Error('INVALID_IMAGE_DATA');
+  }
+  if (decoded.length > MAX_PROFILE_PHOTO_BYTES) {
+    throw new Error('IMAGE_TOO_LARGE');
+  }
+
+  return {
+    mimeType: mimeType,
+    bytes: decoded
+  };
+}
+
+/**
+ * Upload new profile photo to Drive and return public image URL.
+ */
+function uploadProfilePhotoToDrive(userId, photoBase64) {
+  const parsed = parseProfilePhotoBase64(photoBase64);
+  const folder = DriveApp.getFolderById(PROFILE_PHOTO_DRIVE_FOLDER_ID);
+  const fileName = 'foto_profil_' + userId;
+
+  const oldFiles = folder.getFilesByName(fileName);
+  while (oldFiles.hasNext()) {
+    oldFiles.next().setTrashed(true);
+  }
+
+  const blob = Utilities.newBlob(parsed.bytes, parsed.mimeType, fileName);
+  const file = folder.createFile(blob);
+
+  try {
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  } catch (sharingError) {
+    Logger.log('Warning: gagal set sharing foto profil untuk user ' + userId + ': ' + sharingError);
+  }
+
+  return 'https://drive.google.com/uc?export=view&id=' + file.getId();
+}
+
+/**
+ * Convert helper error code into a user-facing response.
+ */
+function buildProfilePhotoErrorResponse(errorCode) {
+  switch (errorCode) {
+    case 'INVALID_IMAGE_FORMAT':
+      return buildResponse(false, null, 'Format foto tidak valid. Gunakan JPG atau PNG.', 'INVALID_IMAGE_FORMAT');
+    case 'INVALID_IMAGE_DATA':
+      return buildResponse(false, null, 'Data foto kosong atau rusak', 'INVALID_IMAGE_DATA');
+    case 'IMAGE_TOO_LARGE':
+      return buildResponse(false, null, 'Ukuran foto maksimal 2MB', 'IMAGE_TOO_LARGE');
+    default:
+      return null;
+  }
 }
 
 /**
@@ -738,7 +783,7 @@ function getUserProfile(userId) {
 /**
  * UPDATE USER PROFILE
  * POST: /updateUserProfile
- * Body: { userId, displayName, whatsapp }
+ * Body: { userId, displayName, whatsapp, photoBase64 }
  */
 function updateUserProfile(userId, data) {
   try {
@@ -751,9 +796,14 @@ function updateUserProfile(userId, data) {
 
     for (let i = 1; i < sheetData.length; i++) {
       if (sheetData[i][0] === userId) {
+        let nextDisplayName = sheetData[i][1];
+        let nextWhatsapp = sheetData[i][3];
+        let nextPhotoURL = sheetData[i][4];
+
         // Update fields
         if (data.displayName) {
           sheet.getRange(i + 1, 2).setValue(data.displayName);
+          nextDisplayName = data.displayName;
         }
         if (data.whatsapp !== undefined) {
           let formattedPhone = data.whatsapp ? data.whatsapp.replace(/[\s\-]/g, '') : '';
@@ -764,9 +814,20 @@ function updateUserProfile(userId, data) {
             formattedPhone = formatPhoneNumber(formattedPhone);
           }
           sheet.getRange(i + 1, 4).setValue(formattedPhone);
+          nextWhatsapp = formattedPhone;
         }
-        if (data.photoURL !== undefined) {
-          sheet.getRange(i + 1, 5).setValue(data.photoURL);
+
+        if (data.photoBase64) {
+          try {
+            nextPhotoURL = uploadProfilePhotoToDrive(userId, data.photoBase64);
+            sheet.getRange(i + 1, 5).setValue(nextPhotoURL);
+          } catch (photoError) {
+            const photoErrorResponse = buildProfilePhotoErrorResponse(String(photoError.message || photoError));
+            if (photoErrorResponse) {
+              return photoErrorResponse;
+            }
+            throw photoError;
+          }
         }
 
         // Update timestamp
@@ -774,9 +835,9 @@ function updateUserProfile(userId, data) {
 
         return buildResponse(true, {
           userId,
-          displayName: data.displayName || sheetData[i][1],
-          whatsapp: data.whatsapp !== undefined ? data.whatsapp : sheetData[i][3],
-          photoURL: data.photoURL !== undefined ? data.photoURL : sheetData[i][4]
+          displayName: nextDisplayName,
+          whatsapp: nextWhatsapp,
+          photoURL: nextPhotoURL
         }, 'Profil berhasil diperbarui');
       }
     }
@@ -784,6 +845,14 @@ function updateUserProfile(userId, data) {
     return buildResponse(false, null, 'User tidak ditemukan', 'USER_NOT_FOUND');
   } catch (error) {
     Logger.log('Error in updateUserProfile: ' + error);
+    if (String(error).indexOf('DriveApp') !== -1) {
+      return buildResponse(
+        false,
+        null,
+        'Akses DriveApp ditolak. Pastikan deployment Web App dijalankan sebagai owner script dan scope Drive sudah diotorisasi.',
+        'DRIVE_PERMISSION_DENIED'
+      );
+    }
     return buildResponse(false, null, error.toString(), 'UPDATE_ERROR');
   }
 }
@@ -959,32 +1028,7 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
  * Get or create Orders sheet
  */
 function ensureOrdersSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('ORDERS');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('ORDERS');
-    // Add headers
-    sheet.appendRow([
-      'Order ID',                // A
-      'User ID',                 // B
-      'Email',                   // C
-      'Phone Number',            // D
-      'Display Name',            // E
-      'Domain Name',             // F
-      'Package',                 // G
-      'Total Amount',            // H
-      'Order Status',            // I
-      'Payment Status',          // J
-      'Snap Token',              // K
-      'Transaction ID',          // L
-      'Created At',              // M
-      'Updated At',              // N
-      'Payment Method'           // O
-    ]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('ORDERS');
 }
 
 /**
@@ -1059,7 +1103,11 @@ function createOrder(orderData) {
       '',                        // L: Transaction ID
       now,                       // M: Created At
       now,                       // N: Updated At
-      ''                         // O: Payment Method
+      '',                        // O: Payment Method
+      orderData.subtotal || 0,   // P: Subtotal
+      orderData.ppn || 0,        // Q: PPN
+      orderData.discount || 0,   // R: Discount
+      orderData.addons ? (typeof orderData.addons === 'string' ? orderData.addons : JSON.stringify(orderData.addons)) : '[]' // S: Addons (JSON)
     ]);
 
     Logger.log(`Order created: ${orderId}`);
@@ -1130,7 +1178,24 @@ function getOrder(orderId) {
           transactionId: data[i][11],
           createdAt: data[i][12],
           updatedAt: data[i][13],
-          paymentMethod: data[i][14]
+          paymentMethod: data[i][14],
+          subtotal: data[i][15] || undefined,
+          ppn: data[i][16] || undefined,
+          discount: data[i][17] || undefined,
+          addons: (() => {
+            try {
+              let parsed = data[i][18];
+              if (typeof parsed === 'string') {
+                if (parsed.startsWith('"')) {
+                  parsed = JSON.parse(parsed); // Parse double stringification
+                }
+                return JSON.parse(parsed);
+              }
+              return Array.isArray(parsed) ? parsed : [];
+            } catch(e) {
+              return [];
+            }
+          })()
         }, 'Order ditemukan');
       }
     }
@@ -1170,7 +1235,24 @@ function getUserOrders(userId) {
           orderStatus: data[i][8],
           paymentStatus: data[i][9],
           transactionId: data[i][11],
-          createdAt: data[i][12]
+          createdAt: data[i][12],
+          subtotal: data[i][15] || undefined,
+          ppn: data[i][16] || undefined,
+          discount: data[i][17] || undefined,
+          addons: (() => {
+            try {
+              let parsed = data[i][18];
+              if (typeof parsed === 'string') {
+                if (parsed.startsWith('"')) {
+                  parsed = JSON.parse(parsed); // Parse double stringification
+                }
+                return JSON.parse(parsed);
+              }
+              return Array.isArray(parsed) ? parsed : [];
+            } catch(e) {
+              return [];
+            }
+          })()
         });
       }
     }
@@ -1220,38 +1302,7 @@ function getOrderDetail(orderId, userId) {
 /**
  * UPDATE ORDER STATUS - Update order status
  */
-function updateOrderStatus(orderId, newStatus) {
-  try {
-    if (!orderId || !newStatus) {
-      return buildResponse(false, null, 'Order ID dan status diperlukan', 'MISSING_PARAMS');
-    }
 
-    const validStatuses = ['pending', 'processing', 'completed', 'cancelled'];
-    if (!validStatuses.includes(newStatus)) {
-      return buildResponse(false, null, 'Status tidak valid', 'INVALID_STATUS');
-    }
-
-    const sheet = ensureOrdersSheet();
-    const data = sheet.getDataRange().getValues();
-
-    for (let i = 1; i < data.length; i++) {
-      if (data[i][0] === orderId) {
-        const range = sheet.getRange(i + 1, 9);
-        range.setValue(newStatus);
-        
-        const updatedAtRange = sheet.getRange(i + 1, 14);
-        updatedAtRange.setValue(new Date().toISOString());
-
-        return buildResponse(true, { orderId, status: newStatus }, 'Status pesanan berhasil diupdate');
-      }
-    }
-
-    return buildResponse(false, null, 'Order tidak ditemukan', 'ORDER_NOT_FOUND');
-  } catch (error) {
-    Logger.log('Error in updateOrderStatus: ' + error);
-    return buildResponse(false, null, error.toString(), 'ERROR');
-  }
-}
 
 /**
  * SYNC ORDER STATUS WITH MIDTRANS - Direct API check
@@ -1339,6 +1390,10 @@ function syncOrderStatusWithMidtrans(orderId) {
            }
            if (data.payment_type) {
              sheet.getRange(i + 1, 15).setValue(data.payment_type); // Column O
+           }
+           
+           if (paymentStatus === 'paid') {
+             processPaymentSuccess(orderId, data.transaction_id || '', data.payment_type || '', sheetData, i, 'Manual sync from Midtrans API');
            }
            
            return buildResponse(true, { orderId, newStatus: paymentStatus, oldStatus: currentPaymentStatus }, 'Status disinkronisasi dengan Midtrans');
@@ -1482,6 +1537,71 @@ function getDomainPricing(tld) {
  * VALIDATE PROMO CODE
  */
 /**
+ * PROCESS PAYMENT SUCCESS
+ * Helper function to handle everything when an order is successfully paid.
+ */
+function processPaymentSuccess(orderId, transactionId, paymentType, data, orderRowIndex, notes = '', webhookData = {}) {
+  try {
+    const userId = data[orderRowIndex][1];
+    const userEmail = data[orderRowIndex][2];
+    const userName = data[orderRowIndex][4];
+    const domain = data[orderRowIndex][5];
+    const packageName = data[orderRowIndex][6];
+    const total = data[orderRowIndex][7];
+    const oldPaymentStatus = data[orderRowIndex][9] || 'pending';
+
+    // 1. GENERATE INVOICE
+    try {
+      const invoiceData = {
+        orderId: orderId,
+        userId: userId,
+        email: userEmail,
+        customerName: userName,
+        domain: domain,
+        package: packageName,
+        total: total,
+        transactionId: transactionId,
+        paymentMethod: paymentType,
+        paidAt: new Date().toISOString()
+      };
+      
+      // Save to INVOICES sheet
+      saveInvoice(invoiceData);
+      Logger.log(`Invoice generated for order ${orderId}`);
+    } catch (invoiceError) {
+      Logger.log('Warning: Could not generate invoice: ' + invoiceError);
+    }
+
+    // 2. LOG EVENT
+    logPaymentEvent({
+      orderId: orderId,
+      userId: userId,
+      email: userEmail,
+      total: total,
+      notes: notes
+    }, 'payment_update', oldPaymentStatus, 'paid', Object.keys(webhookData).length > 0 ? webhookData : { transaction_id: transactionId, payment_type: paymentType });
+
+    // 3. SEND EMAIL
+    try {
+      const success = sendTemplatedEmail('EMAIL-002', userEmail, {
+        userName: userName,
+        domain: domain,
+        transactionId: transactionId,
+        orderStatus: 'completed'
+      });
+      
+      if (!success) {
+        Logger.log('Gagal mengirim template EMAIL-002 untuk ' + userEmail);
+      }
+    } catch (emailError) {
+      Logger.log('Error sending confirmation email: ' + emailError);
+    }
+  } catch (error) {
+    Logger.log('Error in processPaymentSuccess: ' + error);
+  }
+}
+
+/**
  * HANDLE MIDTRANS WEBHOOK
  * POST: /handleMidtransWebhook
  * Body: { order_id, transaction_id, transaction_status, gross_amount, payment_type }
@@ -1500,7 +1620,7 @@ function handleMidtransWebhook(webhookData) {
 
     // SECURITY: Validate merchant ID matches (basic validation)
     // Production: implement SHA512 signature verification
-    const configuredMerchantId = PropertiesService.getScriptProperties().getProperty('MIDTRANS_MERCHANT_ID');
+    const configuredMerchantId = getConfigValue('MIDTRANS_MERCHANT_ID') || PropertiesService.getScriptProperties().getProperty('MIDTRANS_MERCHANT_ID');
     if (configuredMerchantId && webhookData.merchant_id && webhookData.merchant_id !== configuredMerchantId) {
       Logger.log('SECURITY: Webhook rejected - merchant ID mismatch: ' + webhookData.merchant_id);
       logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 403, Date.now() - startTime, 'Merchant ID mismatch - possible spoofing attempt', JSON.stringify({ received: webhookData.merchant_id, expected: configuredMerchantId }), 'SECURITY: Webhook rejected');
@@ -1572,66 +1692,23 @@ function handleMidtransWebhook(webhookData) {
     const orderStatusRange = sheet.getRange(orderRowIndex + 1, 9);
     orderStatusRange.setValue(orderStatus);
 
-    // GENERATE INVOICE if payment successful (per spec requirement)
-    if (paymentStatus === 'paid') {
-      try {
-        const invoiceData = {
-          orderId: orderId,
-          userId: data[orderRowIndex][1],
-          email: data[orderRowIndex][2],
-          customerName: data[orderRowIndex][4],
-          domain: data[orderRowIndex][5],
-          package: data[orderRowIndex][6],
-          total: data[orderRowIndex][7],
-          transactionId: transactionId,
-          paymentMethod: paymentType,
-          paidAt: new Date().toISOString()
-        };
-        
-        // Save to INVOICES sheet
-        saveInvoice(invoiceData);
-        Logger.log(`Invoice generated for order ${orderId}`);
-      } catch (invoiceError) {
-        Logger.log('Warning: Could not generate invoice, but payment still processed: ' + invoiceError);
-        // Don't fail webhook if invoice generation fails
-      }
+    const oldPaymentStatus = data[orderRowIndex][9] || 'pending'; // Column J
+    
+    if (paymentStatus === 'paid' && oldPaymentStatus !== 'paid') {
+      processPaymentSuccess(orderId, transactionId, paymentType, data, orderRowIndex, `Webhook from Midtrans: ${transactionStatus}`, webhookData);
+    } else {
+      // Log payment event for other statuses or duplicate webhooks
+      logPaymentEvent({
+        orderId: orderId,
+        userId: data[orderRowIndex][1],
+        email: data[orderRowIndex][2],
+        total: data[orderRowIndex][7],
+        notes: `Webhook from Midtrans: ${transactionStatus}`
+      }, 'payment_update', oldPaymentStatus, paymentStatus, webhookData);
     }
 
     // Log the webhook
     Logger.log(`Webhook processed: Order ${orderId}, Status: ${paymentStatus}, Transaction: ${transactionId}`);
-    
-    // Log payment event for audit trail
-    const oldPaymentStatus = data[orderRowIndex][9] || 'pending'; // Previous payment status
-    logPaymentEvent({
-      orderId: orderId,
-      userId: data[orderRowIndex][1],
-      email: data[orderRowIndex][2],
-      total: data[orderRowIndex][7],
-      notes: `Webhook from Midtrans: ${transactionStatus}`
-    }, 'payment_update', oldPaymentStatus, paymentStatus, webhookData);
-
-    // Send confirmation email if payment successful
-    if (paymentStatus === 'paid') {
-      const userEmail = data[orderRowIndex][2]; // Email from column C
-      const userName = data[orderRowIndex][4];  // Name from column E
-      const domain = data[orderRowIndex][5];    // Domain from column F
-      
-      // Send confirmation email (optional)
-      try {
-        const success = sendTemplatedEmail('EMAIL-002', userEmail, {
-          userName: userName,
-          domain: domain,
-          transactionId: transactionId,
-          orderStatus: orderStatus
-        });
-        
-        if (!success) {
-          Logger.log('Gagal mengirim template EMAIL-002 untuk ' + userEmail);
-        }
-      } catch (emailError) {
-        Logger.log('Error sending confirmation email: ' + emailError);
-      }
-    }
 
     // Log webhook success
     logApiCall('handleMidtransWebhook', data[orderRowIndex][1], data[orderRowIndex][2], 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({ orderId, transactionId, paymentStatus }), 'Webhook processed successfully');
@@ -1658,156 +1735,35 @@ function handleMidtransWebhook(webhookData) {
  * PAYMENT_LOGS Sheet - Track all payment events for compliance/audit
  */
 function ensurePaymentLogsSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('PAYMENT_LOGS');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('PAYMENT_LOGS');
-    sheet.appendRow([
-      'Log ID',                   // A
-      'Order ID',                 // B
-      'User ID',                  // C
-      'Email',                    // D
-      'Transaction ID',           // E
-      'Event Type',               // F
-      'Old Status',               // G
-      'New Status',               // H
-      'Amount',                   // I
-      'Payment Method',           // J
-      'Midtrans Status',          // K
-      'Response Data',            // L
-      'Timestamp',                // M
-      'Notes'                     // N
-    ]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('PAYMENT_LOGS');
 }
 
 /**
  * API_LOGS Sheet - Track all API calls for debugging
  */
 function ensureApiLogsSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('API_LOGS');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('API_LOGS');
-    sheet.appendRow([
-      'Log ID',                   // A
-      'Timestamp',                // B
-      'Action',                   // C
-      'User ID',                  // D
-      'Email',                    // E
-      'Method',                   // F
-      'Status',                   // G
-      'Response Code',            // H
-      'Execution Time (ms)',      // I
-      'Error',                    // J
-      'Request Data',             // K
-      'Notes'                     // L
-    ]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('API_LOGS');
 }
 
 /**
  * DOMAIN_PACKAGES_REFERENCE Sheet - Master reference for packages
  */
 function ensureDomainPackagesSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('DOMAIN_PACKAGES');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('DOMAIN_PACKAGES');
-    sheet.appendRow([
-      'Package ID',               // A
-      'Package Name',             // B
-      'Price (Rp)',               // C
-      'Period (Years)',           // D
-      'Description',              // E
-      'Storage (GB)',             // F
-      'Email Accounts',           // G
-      'SSL Certificate',          // H
-      'Backups',                  // I
-      'Support Level',            // J
-      'Status',                   // K
-      'Created At',               // L
-      'Updated At'                // M
-    ]);
-    
-    // Populate with default packages
-    sheet.appendRow(['starter', 'Starter', 199000, 1, 'Basic domain only', 'N/A', 'Limited', 'Free', 'Manual', 'Standard', 'active', new Date().toISOString(), new Date().toISOString()]);
-    sheet.appendRow(['professional', 'Professional', 349000, 1, 'Domain + Basic Hosting', '10', 'Unlimited', 'Free', 'Daily', 'Priority', 'active', new Date().toISOString(), new Date().toISOString()]);
-    sheet.appendRow(['business', 'Business', 599000, 1, 'Domain + Advanced Hosting', '50', 'Unlimited', 'Free', 'Hourly', 'Priority', 'active', new Date().toISOString(), new Date().toISOString()]);
-    sheet.appendRow(['enterprise', 'Enterprise', 1299000, 1, 'Ultimate Package', 'Unlimited', 'Unlimited', 'Premium', 'Real-time', '24/7 Premium', 'active', new Date().toISOString(), new Date().toISOString()]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('DOMAIN_PACKAGES');
 }
 
 /**
  * EMAIL_TEMPLATES Sheet - Master reference for email templates
  */
 function ensureEmailTemplatesSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('EMAIL_TEMPLATES');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('EMAIL_TEMPLATES');
-    sheet.appendRow([
-      'Template ID',              // A
-      'Template Name',            // B
-      'Subject',                  // C
-      'Type',                     // D
-      'Use Case',                 // E
-      'Variables',                // F
-      'Status',                   // G
-      'Created At',               // H
-      'Updated At',               // I
-      'Body Content'              // J
-    ]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('EMAIL_TEMPLATES');
 }
 
 /**
  * CONFIG Sheet - Global configuration settings
  */
 function ensureConfigSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('CONFIG');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('CONFIG');
-    sheet.appendRow([
-      'Config Key',               // A
-      'Config Value',             // B
-      'Config Group',             // C
-      'Description',              // D
-      'Updated At'                // E
-    ]);
-    
-    // Default configs
-    const defaults = [
-      ['ADMIN_EMAIL', 'hello@sisitus.com', 'general', 'Email utama admin'],
-      ['MIDTRANS_SERVER_KEY', '', 'payment', 'Midtrans Server Key (Rahasia)'],
-      ['MIDTRANS_MERCHANT_ID', '', 'payment', 'Midtrans Merchant ID'],
-      ['SMTP_HOST', '', 'email', 'SMTP Server Host'],
-      ['SMTP_PORT', '', 'email', 'SMTP Server Port'],
-      ['SMTP_USER', '', 'email', 'SMTP Username'],
-      ['SMTP_PASS', '', 'email', 'SMTP Password']
-    ];
-    
-    const now = new Date().toISOString();
-    defaults.forEach(config => {
-      sheet.appendRow([...config, now]);
-    });
-  }
-  
-  return sheet;
+  return ensureSheetExists('CONFIG');
 }
 
 /**
@@ -1815,29 +1771,7 @@ function ensureConfigSheet() {
  * Created per spec requirement: "Invoice disimpan SETELAH payment SUCCESS dari Midtrans"
  */
 function ensureInvoicesSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('INVOICES');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('INVOICES');
-    sheet.appendRow([
-      'Invoice ID',               // A - INV-2026-03-28-00001
-      'Order ID',                 // B - ORDER-xxxxx
-      'User ID',                  // C - USER-xxxxx
-      'Email',                    // D
-      'Customer Name',            // E
-      'Domain',                   // F
-      'Package',                  // G
-      'Total Amount',             // H
-      'Transaction ID',           // I
-      'Payment Method',           // J
-      'Paid At',                  // K
-      'Generated At',             // L
-      'Status'                    // M - generated/sent/viewed/archived
-    ]);
-  }
-  
-  return sheet;
+  return ensureSheetExists('INVOICES');
 }
 
 /**
@@ -1900,29 +1834,7 @@ function generateInvoiceId() {
  * PROMO_CODES Sheet - Master reference for promo codes
  */
 function ensurePromoCodesSheet() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = ss.getSheetByName('PROMO_CODES');
-  
-  if (!sheet) {
-    sheet = ss.insertSheet('PROMO_CODES');
-    sheet.appendRow([
-      'Code',                 // A
-      'Discount Type',        // B
-      'Discount Value',       // C
-      'Max Usage',            // D
-      'Current Usage',        // E
-      'Valid From',           // F
-      'Valid Until',          // G
-      'Active',               // H
-      'Description'           // I
-    ]);
-    
-    // Populate with default promo codes
-    sheet.appendRow(['WELCOME10', 'percentage', 10, -1, 0, new Date().toISOString(), new Date(Date.now() + 365*24*60*60*1000).toISOString(), 'Yes', 'Diskon 10% untuk pelanggan baru']);
-    sheet.appendRow(['SAVE20K', 'fixed', 20000, -1, 0, new Date().toISOString(), new Date(Date.now() + 365*24*60*60*1000).toISOString(), 'Yes', 'Hemat Rp 20.000 untuk pembelian sekarang']);
-  }
-  
-  return sheet;
+  return ensureSheetExists('PROMO_CODES');
 }
 
 /**
@@ -2267,7 +2179,8 @@ function doPost(e) {
       case 'updateuserprofile':
         return respondJson(updateUserProfile(params.userId, {
           displayName: params.displayName,
-          whatsapp: params.whatsapp
+          whatsapp: params.whatsapp,
+          photoBase64: params.photoBase64
         }));
       case 'changepassword':
         return respondJson(changePassword(params.userId, params.oldPassword, params.newPassword));
@@ -2285,8 +2198,7 @@ function doPost(e) {
         return respondJson(getUserOrders(params.userId));
       case 'getorderdetail':
         return respondJson(getOrderDetail(params.orderId, params.userId));
-      case 'updateorderstatus':
-        return respondJson(updateOrderStatus(params.orderId, params.status));
+
       case 'syncorderstatus':
         return respondJson(syncOrderStatusWithMidtrans(params.orderId));
       case 'getuserorderstats':
@@ -2504,12 +2416,42 @@ function getAdminStats(adminId) {
       timeStr: act.timeStr || new Date(act.timestamp).toLocaleString('id-ID')
     }));
     
+    // Calculate last 7 days registrations for chart
+    const last7Days = [];
+    const chartDataPoints = [0, 0, 0, 0, 0, 0, 0];
+    const chartLabels = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      chartLabels.push(d.toLocaleDateString('id-ID', { weekday: 'long' }));
+      last7Days.push(d.toDateString());
+    }
+
+    if (usersSheet) {
+      const data = usersSheet.getDataRange().getValues();
+      for (let i = 1; i < data.length; i++) {
+        const row = data[i];
+        if (!row[0] || !row[5]) continue;
+        const regDate = new Date(row[5]);
+        const regDateString = regDate.toDateString();
+        const index = last7Days.indexOf(regDateString);
+        if (index !== -1) {
+          chartDataPoints[index]++;
+        }
+      }
+    }
+    
     return buildResponse(true, {
       users: totalUsers.toString(),
       revenue: 'Rp ' + mrr.toLocaleString('id-ID'),
       subscriptions: activeSubs.toString(),
       tickets: totalTickets.toString(),
-      recentActivities: recentActivities
+      recentActivities: recentActivities,
+      chartData: {
+        labels: chartLabels,
+        dataPoints: chartDataPoints
+      }
     }, 'Stats fetched');
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');
@@ -2899,7 +2841,9 @@ function ensureSheetExists(sheetName, headers) {
   let sheet = ss.getSheetByName(sheetName);
   if (!sheet) {
     sheet = ss.insertSheet(sheetName);
-    sheet.appendRow(headers);
+    if (headers && headers.length > 0) {
+      sheet.appendRow(headers);
+    }
   }
   return sheet;
 }
@@ -2907,7 +2851,7 @@ function ensureSheetExists(sheetName, headers) {
 function getAdminTickets(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    const sheet = ensureSheetExists('SUPPORT_TICKETS', ['Ticket ID', 'Subject', 'User Email', 'Status', 'Priority', 'Created At', 'Messages']);
+    const sheet = ensureSheetExists('SUPPORT_TICKETS');
     
     const data = sheet.getDataRange().getValues();
     const tickets = [];
@@ -2932,7 +2876,7 @@ function saveAdminTicket(adminId, ticketData) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof ticketData === 'string') ticketData = JSON.parse(ticketData);
     
-    const sheet = ensureSheetExists('SUPPORT_TICKETS', ['Ticket ID', 'Subject', 'User Email', 'Status', 'Priority', 'Created At', 'Messages']);
+    const sheet = ensureSheetExists('SUPPORT_TICKETS');
     const data = sheet.getDataRange().getValues();
     
     let rowIndex = -1;
@@ -2971,7 +2915,7 @@ function saveAdminTicket(adminId, ticketData) {
 function deleteAdminTicket(adminId, id) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    const sheet = ensureSheetExists('SUPPORT_TICKETS', ['Ticket ID', 'Subject', 'User Email', 'Status', 'Priority', 'Created At', 'Messages']);
+    const sheet = ensureSheetExists('SUPPORT_TICKETS');
     const data = sheet.getDataRange().getValues();
     
     for (let i = 1; i < data.length; i++) {
@@ -2989,7 +2933,7 @@ function deleteAdminTicket(adminId, id) {
 function getAdminDNS(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    const sheet = ensureSheetExists('DNS_RECORDS', ['Domain', 'User ID', 'Records Count', 'NS Status']);
+    const sheet = ensureSheetExists('DNS_RECORDS');
     
     const data = sheet.getDataRange().getValues();
     const dnsList = [];
@@ -3012,7 +2956,7 @@ function saveAdminDNS(adminId, dnsData) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof dnsData === 'string') dnsData = JSON.parse(dnsData);
     
-    const sheet = ensureSheetExists('DNS_RECORDS', ['Domain', 'User ID', 'Records Count', 'NS Status']);
+    const sheet = ensureSheetExists('DNS_RECORDS');
     const data = sheet.getDataRange().getValues();
     
     let rowIndex = -1;
@@ -3046,7 +2990,7 @@ function saveAdminDNS(adminId, dnsData) {
 function deleteAdminDNS(adminId, domain) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    const sheet = ensureSheetExists('DNS_RECORDS', ['Domain', 'User ID', 'Records Count', 'NS Status']);
+    const sheet = ensureSheetExists('DNS_RECORDS');
     const data = sheet.getDataRange().getValues();
     
     for (let i = 1; i < data.length; i++) {

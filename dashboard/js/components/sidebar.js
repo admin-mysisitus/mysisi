@@ -103,8 +103,8 @@ export class DashboardSidebar {
 
       <div class="sidebar-footer">
         <div class="sidebar-info">
-          <small>SISITUS Client Dashboard</small>
-          <small>v1.0</small>
+          <small class="sidebar-info__title">SISITUS Client Dashboard</small>
+          <small class="sidebar-info__meta">Akses cepat • aman • terintegrasi</small>
         </div>
       </div>
     `;

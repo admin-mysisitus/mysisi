@@ -6,7 +6,7 @@
 
 import APIClient from '/assets/js/modules/unified-api.js?v=2';
 import { AuthManager } from '/assets/js/modules/unified-auth.js';  // NEW
-import { showError, showSuccess, showWarning, showInfo, formatPrice, formatDateTime } from '/assets/js/modules/unified-utils.js';
+import { showError, showSuccess, showWarning, showInfo, formatPrice, formatDateTime, setButtonLoading } from '/assets/js/modules/unified-utils.js';
 
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
@@ -196,10 +196,8 @@ function openMidtransPayment() {
       throw new Error('Midtrans library tidak loaded');
     }
 
-    // Show loading
     const btn = document.getElementById('btn-payment');
-    btn.disabled = true;
-    btn.textContent = 'Membuka pembayaran...';
+    setButtonLoading(btn, true, 'Membuka pembayaran...');
 
     // Open Midtrans Snap
     window.snap.pay(currentTransaction.token, {
@@ -213,13 +211,14 @@ function openMidtransPayment() {
     console.error('Error opening payment:', error);
     showError('Error: ' + error.message);
     const btn = document.getElementById('btn-payment');
-    btn.disabled = false;
-    btn.textContent = 'Lanjut Pembayaran';
+    setButtonLoading(btn, false, 'Lanjut Pembayaran');
   }
 }
 
 function handlePaymentSuccess(result) {
-  updateOrderStatus(currentOrder.orderId, 'paid', result.transaction_id);
+  // Rather than blindly updating status to 'paid', we trigger a sync.
+  // The server will verify the transaction ID with Midtrans API.
+  APIClient.syncOrderStatus(currentOrder.orderId).catch(console.error);
   showSuccess('✓ Pembayaran Berhasil!', 'Terima kasih atas pemesanan Anda. Mengarahkan ke invoice...');
   
   // Redirect to invoice page after 2 seconds
@@ -240,18 +239,11 @@ function handlePaymentClose() {
   // Re-enable button
   const btn = document.getElementById('btn-payment');
   if (btn) {
-    btn.disabled = false;
-    btn.textContent = 'Lanjut Pembayaran';
+    setButtonLoading(btn, false, 'Lanjut Pembayaran');
   }
 }
 
-async function updateOrderStatus(orderId, status, transactionId) {
-  try {
-    await APIClient.updateOrderStatus(orderId, status, transactionId);  // NEW: Pass transactionId
-  } catch (error) {
-    console.error('Error updating order status:', error);
-  }
-}
+
 
 function requestPaymentAfterPreview() {
   try {
@@ -304,27 +296,35 @@ function displayOrderData(orderData) {
     `;
   }
 
-  // Build pricing breakdown if available
-  let pricingBreakdown = '';
-  if (orderData.subtotal !== undefined && orderData.ppn !== undefined) {
-    pricingBreakdown = `
-      <div class="summary-row">
-        <span>Subtotal:</span>
-        <strong>${formatPrice(orderData.subtotal)}</strong>
-      </div>
-      <div class="summary-row">
-        <span>PPN (11%):</span>
-        <strong>${formatPrice(orderData.ppn)}</strong>
-      </div>
-      ${orderData.discount > 0 ? `
-        <div class="summary-row" style="color: #27ae60;">
-          <span>Diskon (${orderData.promoCode || 'Promo'}):</span>
-          <strong>-${formatPrice(orderData.discount)}</strong>
-        </div>
-      ` : ''}
-      <div class="summary-divider"></div>
-    `;
+  // Backwards compatibility calculation for older orders
+  const discount = orderData.discount || 0;
+  let subtotal = orderData.subtotal;
+  let ppn = orderData.ppn;
+  
+  if (subtotal === undefined || ppn === undefined) {
+    subtotal = Math.round((orderData.total + discount) / 1.11);
+    ppn = orderData.total + discount - subtotal;
   }
+
+  // Build pricing breakdown
+  let pricingBreakdown = `
+    <div class="summary-divider"></div>
+    <div class="summary-row">
+      <span>Subtotal (Layanan):</span>
+      <strong>${formatPrice(subtotal)}</strong>
+    </div>
+    <div class="summary-row">
+      <span>PPN (11%):</span>
+      <strong>${formatPrice(ppn)}</strong>
+    </div>
+    ${discount > 0 ? `
+      <div class="summary-row" style="color: #27ae60;">
+        <span>Diskon (${orderData.promoCode || 'Promo'}):</span>
+        <strong>-${formatPrice(discount)}</strong>
+      </div>
+    ` : ''}
+    <div class="summary-divider"></div>
+  `;
 
   content.innerHTML = `
     <div class="dashboard-page-header" style="background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);">

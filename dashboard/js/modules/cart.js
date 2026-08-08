@@ -19,7 +19,7 @@
  */
 
 import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
-import { showSuccess, showError, showInfo, formatPrice, isValidEmail } from '/assets/js/modules/unified-utils.js';
+import { showSuccess, showError, showInfo, formatPrice, isValidEmail, setButtonLoading } from '/assets/js/modules/unified-utils.js';
 import APIClient from '/assets/js/modules/unified-api.js';
 import { AuthManager } from '/assets/js/modules/unified-auth.js';
 import SharedAuthForm from '/assets/js/modules/shared-auth-form.js';
@@ -599,11 +599,18 @@ function renderAuthenticatedCart() {
                 <span class="price-value">${formatPrice(subtotal)}</span>
               </div>
 
-              ${addonsTotal > 0 ? `
-                <div class="price-row">
-                  <span class="price-row-label">Addon (${addons.length}):</span>
-                  <span class="price-value">${formatPrice(addonsTotal)}</span>
+              ${addons.length > 0 ? `
+                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label" style="font-weight: 700; color: var(--text-primary);">Layanan Tambahan (Addon):</span>
                 </div>
+                ${addons.map(addon => `
+                  <div class="price-row" style="padding-left: 10px; font-size: 13px;">
+                    <span class="price-row-label">- ${addon.name}</span>
+                    <span class="price-value">${formatPrice(addon.price)}</span>
+                  </div>
+                `).join('')}
+                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
               ` : ''}
 
               <div class="price-row subtotal">
@@ -638,7 +645,7 @@ function renderAuthenticatedCart() {
                 </label>
                 <div class="promo-input-group">
                   <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
-                  <button onclick="window.applyPromoCode()" class="btn-apply-promo">
+                  <button id="btn-apply-promo" onclick="window.applyPromoCode()" class="btn-apply-promo">
                     Gunakan
                   </button>
                 </div>
@@ -647,7 +654,7 @@ function renderAuthenticatedCart() {
 
               <!-- Action Buttons -->
               <div class="action-section">
-                <button onclick="window.proceedToCheckout()" class="btn btn-primary">
+                <button id="btn-proceed-checkout" onclick="window.proceedToCheckout()" class="btn btn-primary">
                   <i class="fas fa-lock"></i> Lanjut ke Pembayaran
                 </button>
 
@@ -826,6 +833,8 @@ async function applyPromoCode() {
   const input = document.getElementById('promo-code-input');
   if (!input) return;
 
+  const promoBtn = document.getElementById('btn-apply-promo');
+
   const code = input.value.trim().toUpperCase();
   if (!code) {
     showError('Kode Kosong', 'Masukkan kode promo terlebih dahulu');
@@ -837,6 +846,7 @@ async function applyPromoCode() {
   }
 
   cartState.isValidatingPromo = true;
+  setButtonLoading(promoBtn, true, 'Memvalidasi...');
   const promoMsg = document.getElementById('promo-message');
   if (promoMsg) {
     promoMsg.textContent = 'Memvalidasi...';
@@ -895,6 +905,7 @@ async function applyPromoCode() {
     cartState.promoDiscount = 0;
   } finally {
     cartState.isValidatingPromo = false;
+    setButtonLoading(promoBtn, false, 'Gunakan');
   }
 }
 
@@ -907,6 +918,9 @@ async function proceedToCheckout() {
     if (cartState.isProcessingCheckout) {
       return;
     }
+
+    const checkoutBtn = document.getElementById('btn-proceed-checkout');
+    setButtonLoading(checkoutBtn, true, 'Membuat Order...');
 
     const summary = CartManager.getSummary();
     if (summary.itemCount === 0) {
@@ -972,6 +986,9 @@ async function proceedToCheckout() {
       packageId: summary.items[0]?.package || 'starter',
       addons: CartManager.getCart().addons || [],
       promoCode: cartState.promoCode || null,
+      subtotal: subtotal,
+      ppn: ppn,
+      discount: cartState.promoDiscount || 0,
       total: finalTotal
     };
 
@@ -1011,6 +1028,8 @@ async function proceedToCheckout() {
     showError('❌ Error Checkout', error.message);
   } finally {
     cartState.isProcessingCheckout = false;
+    const checkoutBtn = document.getElementById('btn-proceed-checkout');
+    setButtonLoading(checkoutBtn, false, 'Lanjut ke Pembayaran');
   }
 }
 

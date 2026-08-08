@@ -4,7 +4,7 @@
  */
 
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showError, showSuccess, initPasswordToggle } from '/assets/js/modules/unified-utils.js';
+import { showError, showSuccess, initPasswordToggle, normalizeDriveImageUrl, withCacheBust, setButtonLoading, setInlineStatus, getPasswordStrengthInfo } from '/assets/js/modules/unified-utils.js';
 import { DashboardAuth } from './auth.js';
 
 export async function render(currentUser) {
@@ -32,8 +32,54 @@ export async function render(currentUser) {
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
       document.getElementById('input-name').value = user.displayName || '';
+      const photoPreview = document.getElementById('photo-preview');
+      const photoPlaceholder = document.getElementById('photo-placeholder');
+      const photoStatus = document.getElementById('photo-upload-status');
+      if (user.photoURL && photoPreview) {
+        const normalized = normalizeDriveImageUrl(user.photoURL, 'w300', '');
+        photoPreview.src = withCacheBust(normalized);
+        photoPreview.style.display = 'block';
+        if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+        photoPreview.onerror = () => {
+          photoPreview.style.display = 'none';
+          if (photoPlaceholder) photoPlaceholder.style.display = 'block';
+        };
+      }
+
       const inputPhoto = document.getElementById('input-photo');
-      if (inputPhoto) inputPhoto.value = user.photoURL || '';
+      if (inputPhoto) {
+        inputPhoto.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (!file) {
+            delete inputPhoto.dataset.base64;
+            setInlineStatus(photoStatus, '', false);
+            return;
+          }
+
+          if (file.size > 2 * 1024 * 1024) {
+            showError('Ukuran foto maksimal 2MB');
+            this.value = '';
+            delete inputPhoto.dataset.base64;
+            setInlineStatus(photoStatus, 'Foto terlalu besar. Pilih file maksimal 2MB.', true);
+            return;
+          }
+
+          setInlineStatus(photoStatus, 'Pratinjau foto diperbarui. Klik Simpan Profil untuk menyimpan perubahan.', true);
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            if (photoPreview) {
+              photoPreview.src = event.target.result;
+              photoPreview.style.display = 'block';
+            }
+            if (photoPlaceholder) {
+              photoPlaceholder.style.display = 'none';
+            }
+            inputPhoto.dataset.base64 = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
       document.getElementById('input-whatsapp').value = user.whatsapp || '';
 
       formEditProfile.addEventListener('submit', async (e) => {
@@ -57,46 +103,19 @@ export async function render(currentUser) {
           const strengthDiv = document.getElementById('user-password-strength');
           const strengthBar = document.getElementById('user-strength-bar');
           const strengthText = document.getElementById('user-strength-text');
-          
-          if (!this.value) {
+          if (!strengthDiv || !strengthBar || !strengthText) return;
+
+          const strengthInfo = getPasswordStrengthInfo(this.value);
+          if (!strengthInfo.visible) {
             strengthDiv.style.display = 'none';
             return;
           }
-          
+
           strengthDiv.style.display = 'block';
-          
-          const checks = {
-            length: this.value.length >= 8,
-            hasLower: /[a-z]/.test(this.value),
-            hasUpper: /[A-Z]/.test(this.value),
-            hasNumber: /[0-9]/.test(this.value),
-            hasSpecial: /[^A-Za-z0-9]/.test(this.value)
-          };
-          
-          const strength = Object.values(checks).filter(Boolean).length;
-          let text = '', className = '';
-          
-          if (strength <= 2) {
-            text = 'Lemah';
-            className = 'strength-weak';
-            strengthBar.style.background = '#ef4444';
-          } else if (strength === 3) {
-            text = 'Sedang';
-            className = 'strength-fair';
-            strengthBar.style.background = '#f59e0b';
-          } else if (strength === 4) {
-            text = 'Kuat';
-            className = 'strength-good';
-            strengthBar.style.background = '#3b82f6';
-          } else {
-            text = 'Sangat Kuat';
-            className = 'strength-strong';
-            strengthBar.style.background = '#10b981';
-          }
-          
-          strengthBar.className = `strength-bar ${className}`;
-          strengthBar.style.width = (strength * 20) + '%';
-          strengthText.textContent = text;
+          strengthBar.className = `strength-bar ${strengthInfo.className}`;
+          strengthBar.style.background = strengthInfo.color;
+          strengthBar.style.width = `${strengthInfo.strength * 20}%`;
+          strengthText.textContent = strengthInfo.text;
         });
       }
     }
@@ -115,7 +134,7 @@ async function handleProfileUpdate(userId) {
   try {
     const displayName = document.getElementById('input-name').value.trim();
     const photoInput = document.getElementById('input-photo');
-    const photoURL = photoInput ? photoInput.value.trim() : '';
+    const photoBase64 = photoInput && photoInput.dataset.base64 ? photoInput.dataset.base64 : null;
     const whatsapp = document.getElementById('input-whatsapp').value.trim();
 
     if (!displayName || displayName.length < 3) {
@@ -123,15 +142,23 @@ async function handleProfileUpdate(userId) {
       return;
     }
 
-    const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoURL);
+    const btn = document.querySelector('#form-edit-profile button[type="submit"]');
+    setButtonLoading(btn, true, 'Menyimpan...');
+
+    const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
 
     if (result.success) {
       // Update session
       const user = DashboardAuth.getCurrentUser();
       user.displayName = displayName;
       user.whatsapp = whatsapp;
-      user.photoURL = photoURL;
+      if (result.data && result.data.photoURL) {
+        user.photoURL = result.data.photoURL;
+      }
       DashboardAuth.updateSession(user);
+
+      const photoStatus = document.getElementById('photo-upload-status');
+      setInlineStatus(photoStatus, '', false);
 
       showSuccess('Profil berhasil diperbarui');
     } else {
@@ -140,6 +167,9 @@ async function handleProfileUpdate(userId) {
 
   } catch (error) {
     showError('Error: ' + error.message);
+  } finally {
+    const btn = document.querySelector('#form-edit-profile button[type="submit"]');
+    setButtonLoading(btn, false, 'Simpan Profil');
   }
 }
 
@@ -164,6 +194,9 @@ async function handlePasswordChange(userId) {
       return;
     }
 
+    const btn = document.querySelector('#form-change-password button[type="submit"]');
+    setButtonLoading(btn, true, 'Menyimpan...');
+
     const result = await APIClient.changePassword(userId, oldPassword, newPassword);
 
     if (result.success) {
@@ -175,5 +208,8 @@ async function handlePasswordChange(userId) {
 
   } catch (error) {
     showError('Error: ' + error.message);
+  } finally {
+    const btn = document.querySelector('#form-change-password button[type="submit"]');
+    setButtonLoading(btn, false, 'Ubah Password');
   }
 }

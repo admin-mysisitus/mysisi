@@ -28,7 +28,7 @@ export class APIClient {
     let { method = 'POST' } = options;
 
     // Use GET for data retrieval if no complex data
-    const getActions = ['checkdomain', 'getuserprofile', 'getorders', 'getorderdetail', 'getactivepromocodes'];
+    const getActions = ['checkdomain', 'getorders', 'getactivepromocodes'];
     if (getActions.includes(action.toLowerCase())) {
       method = 'GET';
     }
@@ -123,7 +123,8 @@ export class APIClient {
       let options = {
         method: method,
         signal: controller.signal,
-        redirect: 'follow'
+        redirect: 'follow',
+        cache: 'no-store'
       };
 
       if (method === 'GET') {
@@ -254,12 +255,12 @@ export class APIClient {
   /**
    * Update user profile
    */
-  static updateUserProfile(userId, displayName, whatsapp, photoURL) {
+  static updateUserProfile(userId, displayName, whatsapp, photoBase64) {
     return this.call('updateUserProfile', {
       userId,
       displayName,
       whatsapp,
-      photoURL
+      photoBase64
     }, { method: 'POST' });
   }
 
@@ -324,16 +325,7 @@ export class APIClient {
     return this.call('syncorderstatus', { orderId }, { method: 'POST' });
   }
 
-  /**
-   * Update order status
-   */
-  static updateOrderStatus(orderId, status, transactionId = null) {
-    return this.call('updateOrderStatus', {
-      orderId,
-      status,
-      transactionId  // NEW: Pass transaction ID from Midtrans
-    }, { method: 'POST' });
-  }
+
 
   /**
    * Get user order statistics

@@ -13,12 +13,25 @@ export async function render(user) {
   try {
     currentUser = user;
 
+    const tableBody = document.querySelector('#orders-table tbody');
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 10px;">
+              <div style="width: 34px; height: 34px; border: 3px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.9s linear infinite;"></div>
+              <span>Memuat daftar pesanan...</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
     // Load orders
     const result = await APIClient.getUserOrders(user.userId);
     const orders = result.data?.orders || result.orders || [];
 
     // Render orders table
-    const tableBody = document.querySelector('#orders-table tbody');
     if (tableBody) {
       if (orders.length === 0) {
         tableBody.innerHTML = `
@@ -89,6 +102,19 @@ async function syncPendingOrders(pendingOrders) {
 
 async function showOrderDetail(orderId) {
   try {
+    const modal = document.getElementById('order-detail-modal');
+    if (modal) {
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-body" style="padding: 40px 20px; text-align: center; color: #64748b;">
+            <div style="width: 34px; height: 34px; border: 3px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 12px;"></div>
+            <p style="margin: 0;">Memuat detail pesanan...</p>
+          </div>
+        </div>
+      `;
+      modal.style.display = 'flex';
+    }
+
     // Load order details
     const result = await APIClient.getOrderDetail(orderId, currentUser.userId);
     
@@ -98,8 +124,53 @@ async function showOrderDetail(orderId) {
     }
 
     const order = result.data || result.order;
-    const modal = document.getElementById('order-detail-modal');
     
+    // Build addons section if present
+    let addonsSection = '';
+    if (order.addons && Array.isArray(order.addons) && order.addons.length > 0) {
+      const addonsHTML = order.addons.map(addon => `
+        <div class="summary-row">
+          <span>${addon.name} (${addon.duration} tahun)</span>
+          <strong>${formatPrice(addon.price)}</strong>
+        </div>
+      `).join('');
+      addonsSection = `
+        <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
+        <div class="summary-row">
+          <span><strong>Addons (${order.addons.length})</strong></span>
+        </div>
+        ${addonsHTML}
+      `;
+    }
+
+    // Backwards compatibility calculation for older orders
+    const discount = order.discount || 0;
+    let subtotal = order.subtotal;
+    let ppn = order.ppn;
+    
+    if (subtotal === undefined || ppn === undefined) {
+      subtotal = Math.round((order.total + discount) / 1.11);
+      ppn = order.total + discount - subtotal;
+    }
+
+    let pricingBreakdown = `
+      <div class="summary-divider"></div>
+      <div class="summary-row">
+        <span>Subtotal (Layanan):</span>
+        <strong>${formatPrice(subtotal)}</strong>
+      </div>
+      <div class="summary-row">
+        <span>PPN (11%):</span>
+        <strong>${formatPrice(ppn)}</strong>
+      </div>
+      ${discount > 0 ? `
+        <div class="summary-row" style="color: #27ae60;">
+          <span>Diskon (${order.promoCode || 'Promo'}):</span>
+          <strong>-${formatPrice(discount)}</strong>
+        </div>
+      ` : ''}
+    `;
+
     // Render modal content
     modal.innerHTML = `
       <div class="modal-content">
@@ -125,6 +196,8 @@ async function showOrderDetail(orderId) {
                 <span>Durasi:</span>
                 <strong>${order.domainDuration || 1} tahun</strong>
               </div>
+              ${addonsSection}
+              ${pricingBreakdown}
               <div class="summary-divider"></div>
               <div class="summary-row total">
                 <span>Total:</span>
@@ -189,15 +262,15 @@ async function showOrderDetail(orderId) {
       </div>
     `;
 
-    // Show modal
-    modal.style.display = 'flex';
-
-    // Close modal when clicking outside
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
+    // Close modal when clicking outside (bind once)
+    if (!modal.dataset.outsideClickBound) {
+      modal.dataset.outsideClickBound = 'true';
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    }
 
   } catch (error) {
     console.error('Error loading order detail:', error);

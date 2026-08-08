@@ -19,9 +19,8 @@ example.com	USER-1711359600000	5	Active
 
 SHEET: ORDERS
 ═══════════════════════════════════════════════════════════════════════════════
-Order ID	User ID	Email	Phone Number	Display Name	Domain Name	Package	Total Amount	Order Status	Payment Status	Snap Token	Transaction ID	Created At	Updated At	Payment Method
-ORDER-1711359600000	USER-1711359600000	john@example.com	+62812345678	John Doe	example.com	professional	349000	completed	paid	snap_abc123	MID-1711359600000	2026-03-27T10:00:00.000Z	2026-03-27T10:05:00.000Z	credit_card
-
+Order ID	User ID	Email	Phone Number	Display Name	Domain Name	Package	Total Amount	Order Status	Payment Status	Snap Token	Transaction ID	Created At	Updated At	Payment Method	Subtotal	PPN	Discount	Addons JSON
+ORDER-1711359600000	USER-1711359600000	john@example.com	+62812345678	John Doe	example.com	professional	349000	completed	paid	snap_abc123	MID-1711359600000	2026-03-27T10:00:00.000Z	2026-03-27T10:05:00.000Z	credit_card	314414	34586	0	[]
 
 SHEET: PAYMENT_LOGS
 ═══════════════════════════════════════════════════════════════════════════════
@@ -71,7 +70,3 @@ Config Key	Config Value	Config Group	Description	Updated At
 ADMIN_EMAIL	hello@sisitus.com	general	Email utama admin	2026-03-27T10:00:00.000Z
 MIDTRANS_SERVER_KEY	[YOUR_MIDTRANS_SERVER_KEY_HERE]	payment	Midtrans Server Key (Rahasia)	2026-03-27T10:00:00.000Z
 MIDTRANS_MERCHANT_ID	M453755316	payment	Midtrans Merchant ID	2026-03-27T10:00:00.000Z
-SMTP_HOST	smtp.gmail.com	email	SMTP Server Host	2026-03-27T10:00:00.000Z
-SMTP_PORT	587	email	SMTP Server Port	2026-03-27T10:00:00.000Z
-SMTP_USER	admin@sisitus.com	email	SMTP Username	2026-03-27T10:00:00.000Z
-SMTP_PASS	passwordRahasia123	email	SMTP Password	2026-03-27T10:00:00.000Z

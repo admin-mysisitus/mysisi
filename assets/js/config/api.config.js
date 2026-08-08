@@ -9,7 +9,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbwfkceArSXfVTC5bjJVDecMBjjzftZSUcUgQEV6QcvBFNV5Dq03H76MBk5Ikq9lqoYF6g/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbx4KjNhwzJZ9-e9w-UHcLdWsxqIJI0nm-m2QYi66KA1Eb_U5icqXJnljwIH24ek5SLtuQ/exec',
 
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 30000,
@@ -33,7 +33,7 @@ export const GAS_CONFIG = {
     CREATE_ORDER: 'createOrderWithAuth',
     GET_ORDERS: 'getUserOrders',
     GET_ORDER_DETAIL: 'getOrderDetail',
-    UPDATE_ORDER_STATUS: 'updateOrderStatus',
+
     GET_USER_ORDER_STATS: 'getUserOrderStats',
 
     // Payment related
@@ -83,15 +83,15 @@ export const MIDTRANS_CONFIG = {
 };
 
 // ========== DOMAIN PACKAGES CONFIGURATION ==========
-// ✅ SYNCHRONIZED dengan package validation di GAS (gas.js line 119)
+// ✅ SYNCHRONIZED dengan package validation di GAS
 // PENTING: Update keduanya jika ada perubahan paket
 export const DOMAIN_PACKAGES = {
   // Starter Package
   starter: {
     id: 'starter',
-    name: 'Starter',
+    name: 'Paket Starter',
     price: 599000,
-    period: 'Sekali Bayar',
+    period: '1 Tahun',
     periodValue: 1,
     description: 'Sempurna untuk Bisnis Kecil & UMKM',
     features: [
@@ -103,32 +103,32 @@ export const DOMAIN_PACKAGES = {
     ]
   },
 
-  // Professional Package (Grower)
-  professional: {
-    id: 'professional',
-    name: 'Grower',
+  // Grower Package
+  grower: {
+    id: 'grower',
+    name: 'Paket Grower',
     price: 1299000,
-    period: 'Sekali Bayar',
-    periodValue: 1,
+    period: '3 Tahun',
+    periodValue: 3,
     description: 'Untuk Bisnis Menengah & Perusahaan Profesional',
     features: [
       '7–10 Hari Pengerjaan',
       'Hingga 8 Halaman Custom Design',
       'SEO On-Page Lengkap + SEO Lokal',
       'Optimasi Core Web Vitals Advanced',
-      'Domain & Hosting 2 Tahun (Promo: 3 Tahun)',
+      'Domain & Hosting 3 Tahun',
       'SSL, Backup Bulanan & Anti-Malware',
       '3x Revisi Desain',
       '1 Bulan Maintenance Gratis'
     ]
   },
 
-  // Business Package (Pioneer)
-  business: {
-    id: 'business',
-    name: 'Pioneer',
+  // Pioneer Package
+  pioneer: {
+    id: 'pioneer',
+    name: 'Paket Pioneer',
     price: 2399000,
-    period: 'Sekali Bayar',
+    period: '1 Tahun',
     periodValue: 1,
     description: 'Untuk Bisnis E-Commerce & Penjual Produk',
     features: [
@@ -136,40 +136,15 @@ export const DOMAIN_PACKAGES = {
       '12 Halaman + Toko Online Lengkap',
       'Manajemen Produk (Unlimited)',
       'Integrasi Ongkir & Payment Gateway',
-      'Domain & Hosting Cloud Bisnis 1-2 Tahun',
+      'Domain & Hosting Cloud Bisnis 1 Tahun',
       'Dashboard Admin Lengkap',
       'Maintenance Ringan Gratis'
-    ]
-  },
-
-  // Enterprise Package (Custom/Enterprise)
-  enterprise: {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 4999000,
-    period: 'Sekali Bayar',
-    periodValue: 1,
-    description: 'Solusi Kustom & Skala Besar',
-    features: [
-      'Pengerjaan Custom & Kompleks',
-      'Halaman Unlimited',
-      'Sistem Custom Sesuai Kebutuhan',
-      'Integrasi API Kustom & Database',
-      'Hosting Dedicated / Cloud VMS Premium',
-      'Keamanan Tingkat Tinggi & Backup Harian',
-      'Revisi Unlimited',
-      'Dukungan Teknis Prioritas 24/7'
     ]
   }
 };
 
 // ========== PACKAGE VALIDATION ==========
-/**
- * Validated packages list - MUST MATCH GAS backend validPackages array
- * Location: gas.gs
- * Must be updated if domain_packages change
- */
-export const VALID_PACKAGE_IDS = ['starter', 'professional', 'business', 'enterprise'];
+export const VALID_PACKAGE_IDS = ['starter', 'grower', 'pioneer'];
 
 /**
  * Validate package ID exists

@@ -3,23 +3,21 @@
  */
 
 import { DashboardAuth } from '../modules/auth.js';
-import { showConfirm } from '/assets/js/modules/unified-utils.js';
+import { showConfirm, normalizeDriveImageUrl, withCacheBust } from '/assets/js/modules/unified-utils.js';
 
 export class DashboardNavbar {
   constructor() {
     this.user = DashboardAuth.getCurrentUser();
+    this.authListenerBound = false;
+    this.breadcrumbListenerBound = false;
+    this.dropdownOutsideClickHandler = null;
+    this.sidebarOutsideClickHandler = null;
   }
 
   render() {
     const container = document.getElementById('navbar');
-    let photoURL = this.user?.photoURL || '/assets/img/avatar-default.svg';
-    
-    if (photoURL.includes('drive.google.com/file/d/')) {
-      const match = photoURL.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        photoURL = `https://lh3.googleusercontent.com/d/${match[1]}`;
-      }
-    }
+    const photoURL = normalizeDriveImageUrl(this.user?.photoURL, 'w200', '/assets/img/avatar-default.svg');
+    const photoURLWithBust = withCacheBust(photoURL);
     container.innerHTML = `
       <div class="navbar-container">
         <!-- Mobile hamburger menu button -->
@@ -52,7 +50,7 @@ export class DashboardNavbar {
           <!-- User Profile Dropdown -->
           <div class="user-dropdown-container">
             <div class="user-profile-trigger" id="user-profile-trigger">
-              <img src="${photoURL}" alt="${this.user?.displayName || 'User'}" class="user-avatar">
+              <img src="${photoURLWithBust}" alt="${this.user?.displayName || 'User'}" class="user-avatar" onerror="this.src='/assets/img/avatar-default.svg'">
               <span class="user-name">${this.user?.displayName || 'Pelanggan'}</span>
               <i class="fas fa-chevron-down dropdown-arrow"></i>
             </div>
@@ -90,13 +88,17 @@ export class DashboardNavbar {
         }
       });
 
-      document.addEventListener('click', () => {
+      if (this.dropdownOutsideClickHandler) {
+        document.removeEventListener('click', this.dropdownOutsideClickHandler);
+      }
+      this.dropdownOutsideClickHandler = () => {
         dropdownMenu.classList.remove('show');
         const arrow = dropdownTrigger.querySelector('.dropdown-arrow');
         if (arrow) {
           arrow.style.transform = 'rotate(0deg)';
         }
-      });
+      };
+      document.addEventListener('click', this.dropdownOutsideClickHandler);
     }
 
     // Mobile sidebar toggle logic
@@ -108,11 +110,15 @@ export class DashboardNavbar {
         sidebar.classList.toggle('open');
       });
 
-      document.addEventListener('click', (e) => {
+      if (this.sidebarOutsideClickHandler) {
+        document.removeEventListener('click', this.sidebarOutsideClickHandler);
+      }
+      this.sidebarOutsideClickHandler = (e) => {
         if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
           sidebar.classList.remove('open');
         }
-      });
+      };
+      document.addEventListener('click', this.sidebarOutsideClickHandler);
     }
 
     // Logout handler
@@ -124,16 +130,22 @@ export class DashboardNavbar {
     }
 
     // Listen for auth changes
-    window.addEventListener('authStateChanged', (e) => {
-      if (e.detail) {
-        this.user = e.detail;
-        this.render();
-      }
-    });
+    if (!this.authListenerBound) {
+      this.authListenerBound = true;
+      window.addEventListener('authStateChanged', (e) => {
+        if (e.detail) {
+          this.user = e.detail.user || e.detail;
+          this.render();
+        }
+      });
+    }
 
     // Update active breadcrumb name on hashchange
     this.updateActiveBreadcrumb();
-    window.addEventListener('hashchange', () => this.updateActiveBreadcrumb());
+    if (!this.breadcrumbListenerBound) {
+      this.breadcrumbListenerBound = true;
+      window.addEventListener('hashchange', () => this.updateActiveBreadcrumb());
+    }
   }
 
   updateActiveBreadcrumb() {

@@ -22,41 +22,43 @@ export async function render(currentUser) {
 
     if (invoices.length === 0) {
       container.innerHTML = `
-        <div style="text-align: center; padding: 40px;">
-          <p style="color: var(--color-text-light);">Belum ada invoice. Selesaikan pembayaran pesanan terlebih dahulu.</p>
+        <div class="empty-state">
+          <p>Belum ada invoice. Selesaikan pembayaran pesanan terlebih dahulu.</p>
         </div>
       `;
     } else {
       container.innerHTML = `
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Tanggal</th>
-              <th>Order ID</th>
-              <th>Domain</th>
-              <th>Jumlah</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${invoices.map(inv => `
+        <div class="table-shell">
+          <table class="table table--invoices">
+            <thead>
               <tr>
-                <td>${formatDateTime(inv.createdAt)}</td>
-                <td><strong>${inv.orderId}</strong></td>
-                <td>${inv.domain}</td>
-                <td>${formatPrice(inv.total)}</td>
-                <td style="display: flex; gap: 8px;">
-                  <a href="/invoice/?orderId=${inv.orderId}" class="btn btn-sm btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                    👁️ Lihat
-                  </a>
-                  <button class="btn btn-sm btn-outline btn-pdf" data-order-id="${inv.orderId}">
-                    📥 PDF
-                  </button>
-                </td>
+                <th>Tanggal</th>
+                <th>Order ID</th>
+                <th>Domain</th>
+                <th>Jumlah</th>
+                <th>Aksi</th>
               </tr>
-            `).join('')}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              ${invoices.map(inv => `
+                <tr>
+                  <td>${formatDateTime(inv.createdAt)}</td>
+                  <td><strong>${inv.orderId}</strong></td>
+                  <td>${inv.domain}</td>
+                  <td>${formatPrice(inv.total)}</td>
+                  <td class="invoice-actions">
+                    <a href="/invoice/?orderId=${inv.orderId}" class="btn btn-sm btn-primary">
+                      👁️ Lihat
+                    </a>
+                    <button class="btn btn-sm btn-outline btn-pdf" data-order-id="${inv.orderId}">
+                      📥 PDF
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       `;
 
       // Attach event listeners for PDF buttons

@@ -1,8 +1,10 @@
 import { AuthManager } from '/assets/js/modules/unified-auth.js';
+import { normalizeDriveImageUrl, withCacheBust } from '/assets/js/modules/unified-utils.js';
 
 export class AdminNavbar {
   constructor() {
     this.container = document.getElementById('admin-navbar');
+    this.authListenerBound = false;
   }
 
   render() {
@@ -19,16 +21,10 @@ export class AdminNavbar {
       }
 
       if (userData.photoURL) {
-        let finalUrl = userData.photoURL;
-        // Convert Google Drive view links to direct image links
-        if (finalUrl.includes('drive.google.com/file/d/')) {
-          const match = finalUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-          if (match && match[1]) {
-            finalUrl = `https://lh3.googleusercontent.com/d/${match[1]}`;
-          }
-        }
+        const finalUrl = normalizeDriveImageUrl(userData.photoURL, 'w200', '');
+        const finalUrlWithBust = withCacheBust(finalUrl);
         
-        avatarHtml = `<img src="${finalUrl}" alt="${displayName}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--admin-primary);">`;
+        avatarHtml = `<img src="${finalUrlWithBust}" alt="${displayName}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--admin-primary);" onerror="this.src='/assets/img/avatar-default.svg'">`;
       } else {
         const initials = displayName.charAt(0).toUpperCase();
         avatarHtml = `<div class="admin-avatar">${initials}</div>`;
@@ -55,6 +51,15 @@ export class AdminNavbar {
     if (profileBtn) {
       profileBtn.addEventListener('click', () => {
         window.location.hash = '#!/admin/profile';
+      });
+    }
+
+    if (!this.authListenerBound) {
+      this.authListenerBound = true;
+      window.addEventListener('authStateChanged', (e) => {
+        if (e.detail) {
+          this.render();
+        }
       });
     }
   }

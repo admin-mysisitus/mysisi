@@ -106,7 +106,7 @@ async function loadStats() {
         }
       }
 
-      renderChart();
+      renderChart(response.data.chartData);
     } else {
       throw new Error(response.message || 'Gagal mengambil statistik');
     }
@@ -120,7 +120,7 @@ async function loadStats() {
 
 let registrationChart = null;
 
-function renderChart() {
+function renderChart(chartData) {
   const ctx = document.getElementById('registration-chart');
   if (!ctx) return;
   
@@ -129,9 +129,8 @@ function renderChart() {
     registrationChart.destroy();
   }
 
-  // Data dummy yang representatif untuk grafik 7 hari terakhir
-  const labels = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-  const dataPoints = [12, 19, 15, 25, 22, 30, 28];
+  const labels = chartData?.labels || ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+  const dataPoints = chartData?.dataPoints || [0, 0, 0, 0, 0, 0, 0];
 
   registrationChart = new Chart(ctx, {
     type: 'line',

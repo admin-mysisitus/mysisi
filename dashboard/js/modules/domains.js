@@ -30,27 +30,29 @@ export async function render(currentUser) {
 
     if (domains.length === 0) {
       container.innerHTML = `
-        <div style="text-align: center; padding: 40px;">
-          <p style="color: var(--color-text-light); margin-bottom: 20px;">Belum ada domain terdaftar.</p>
+        <div class="empty-state">
+          <p>Belum ada domain terdaftar.</p>
           <a href="#!/dashboard/checkout" class="btn btn-primary">Daftar Domain Baru</a>
         </div>
       `;
     } else {
       container.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        <div class="domain-grid">
           ${domains.map(dom => `
-            <div style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-              <div style="font-size: 18px; font-weight: 700; margin-bottom: 10px; word-break: break-all;">${dom.name}</div>
-              <div style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-bottom: 15px; background-color: rgba(255, 255, 255, 0.25);">${dom.status.text}</div>
-              <div style="font-size: 13px; margin: 15px 0; border-top: 1px solid rgba(255, 255, 255, 0.15); border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 0; line-height: 1.6;">
-                <p style="margin: 5px 0;"><strong>Terdaftar:</strong> ${formatDate(dom.registeredDate)}</p>
-                <p style="margin: 5px 0;"><strong>Kadaluarsa:</strong> ${formatDate(dom.expiryDate)}</p>
+            <article class="domain-card">
+              <div class="domain-card__head">
+                <div class="domain-card__title">${dom.name}</div>
+                <span class="domain-card__badge">${dom.status.text}</span>
               </div>
-              <div style="display: flex; gap: 8px; margin-top: 15px;">
-                <button class="btn btn-sm btn-outline btn-dns" style="flex: 1; border-color: rgba(255,255,255,0.4); color: white;" data-domain="${dom.name}">🔧 DNS</button>
-                <button class="btn btn-sm btn-outline btn-renew" style="flex: 1; border-color: rgba(255,255,255,0.4); color: white;" data-domain="${dom.name}">🔄 Renew</button>
+              <div class="domain-card__meta">
+                <p><strong>Terdaftar:</strong> ${formatDate(dom.registeredDate)}</p>
+                <p><strong>Kadaluarsa:</strong> ${formatDate(dom.expiryDate)}</p>
               </div>
-            </div>
+              <div class="domain-card__actions">
+                <button class="btn btn-sm btn-outline btn-dns" data-domain="${dom.name}">⚙️ DNS</button>
+                <button class="btn btn-sm btn-outline btn-renew" data-domain="${dom.name}">🔄 Renew</button>
+              </div>
+            </article>
           `).join('')}
         </div>
       `;

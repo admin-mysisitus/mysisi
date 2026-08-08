@@ -1,4 +1,4 @@
-<div class="dashboard-page-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+<div class="dashboard-page-header dashboard-page-header--domains">
   <div class="dashboard-page-header-content">
     <h1 class="dashboard-page-header-title">Domain Saya</h1>
     <p class="dashboard-page-header-desc">Kelola registrasi domain Anda, periksa masa aktif, perbarui Nameservers (DNS), serta konfigurasi opsi perpanjangan domain.</p>
@@ -8,11 +8,21 @@
   </div>
 </div>
 
-<div class="card" style="border-top: none;">
-  <div class="card-body" id="domains-list-container">
-    <div style="text-align: center; padding: 40px;">
-      <div class="spinner" style="margin: 0 auto 15px auto;"></div>
-      <p style="color: var(--color-text-light);">Memuat daftar domain...</p>
+<div class="page-shell">
+  <section class="page-card">
+    <div class="page-card__header">
+      <div>
+        <h2>Daftar Domain</h2>
+        <p>Kelola semua domain yang sudah Anda miliki dari satu panel yang konsisten.</p>
+      </div>
+      <span class="page-pill page-pill--success">Aktif</span>
     </div>
-  </div>
+
+    <div class="card card--soft" id="domains-list-container">
+      <div class="card-body card-body--centered">
+        <div class="spinner"></div>
+        <p>Memuat daftar domain...</p>
+      </div>
+    </div>
+  </section>
 </div>

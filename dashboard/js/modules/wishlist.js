@@ -233,7 +233,7 @@ class DashboardWishlist {
 }
 
 // Export render function for dashboard-app compatibility
-export async function render(currentUser) {
+export async function render() {
   const container = document.getElementById('wishlist-container');
   if (!container) {
     console.error('Wishlist container not found');

@@ -6,7 +6,6 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import { formatPrice } from '/assets/js/modules/unified-utils.js';
 
 export async function render(currentUser) {
-  // Redundant check in case dashboard-app.js is cached by the browser
   if (currentUser && currentUser.role === 'admin') {
     window.location.replace('/admin/');
     return;
@@ -82,7 +81,7 @@ export async function render(currentUser) {
     }
 
     // Setup event listeners
-    setupEventListeners(currentUser);
+    setupEventListeners();
 
   } catch (error) {
     console.error('Error rendering dashboard:', error);
@@ -112,26 +111,33 @@ function updateStatisticsDisplay(stats) {
   });
 }
 
-function setupEventListeners(currentUser) {
+function setupEventListeners() {
   // Quick action buttons
   const btnCheckout = document.getElementById('btn-quick-checkout');
   if (btnCheckout) {
     btnCheckout.addEventListener('click', () => {
-      window.location.href = '/?section=cek-domain';
+      window.location.hash = '#!/dashboard/checkout';
     });
   }
 
   const btnOrders = document.getElementById('btn-quick-orders');
   if (btnOrders) {
     btnOrders.addEventListener('click', () => {
-      window.location.hash = '#!orders';
+      window.location.hash = '#!/dashboard/orders';
     });
   }
 
   const btnProfile = document.getElementById('btn-quick-profile');
   if (btnProfile) {
     btnProfile.addEventListener('click', () => {
-      window.location.hash = '#!profile';
+      window.location.hash = '#!/dashboard/profile';
+    });
+  }
+
+  const btnSupport = document.getElementById('btn-quick-support');
+  if (btnSupport) {
+    btnSupport.addEventListener('click', () => {
+      window.location.hash = '#!/dashboard/support';
     });
   }
 }

@@ -145,8 +145,8 @@ function renderInvoice() {
     <div class="inv-header">
       <div class="inv-logo">
         <img src="/assets/img/logo/logo.svg" alt="sisitus.com" onerror="this.outerHTML='<h2 style=\\'margin:0;color:#0f172a;\\'>sisitus.com</h2>'" style="height: 28px; margin-bottom: 6px;">
-        <div style="font-weight: 800; font-size: 14px; color: #0f172a; letter-spacing: 0.5px;">SISITUS.COM</div>
-        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">PT. SINTARA DIGITAL NUSANTARA</div>
+        <div class="inv-logo-title">SISITUS.COM</div>
+        <div class="inv-logo-subtitle">PT. SINTARA DIGITAL NUSANTARA</div>
       </div>
       <div class="inv-title-section">
         <h1 class="inv-title">INVOICE</h1>
@@ -177,8 +177,8 @@ function renderInvoice() {
         <span style="color:#475569;">${invoiceData.phone || ''}</span>
       </div>
       <div class="inv-pay-via">
+        ${isPaid ? '<div class="inv-paid-status">LUNAS / PAID</div>' : ''}
         <div class="inv-label">Pay via:</div>
-        ${isPaid ? '<div style="color:#16a34a;font-weight:800;font-size:14px;margin-bottom:4px;">LUNAS / PAID</div>' : ''}
         <strong>${paymentMethodText}</strong><br>
         <span style="color:#64748b;">Ref: ${invoiceData.transactionId || '-'}</span>
       </div>
@@ -189,6 +189,23 @@ function renderInvoice() {
       <div class="inv-order-id"><strong>Order ID:</strong> &nbsp;${invoiceData.orderId}</div>
     </div>
   `;
+
+  // Backwards compatibility calculation for older orders
+  const discount = invoiceData.discount || 0;
+  let subtotal = invoiceData.subtotal;
+  let ppn = invoiceData.ppn;
+  
+  if (subtotal === undefined || ppn === undefined) {
+    subtotal = Math.round((invoiceData.total + discount) / 1.11);
+    ppn = invoiceData.total + discount - subtotal;
+  }
+
+  // Calculate base layanan (Domain + Package)
+  let addonsTotal = 0;
+  if (invoiceData.addons && Array.isArray(invoiceData.addons)) {
+    addonsTotal = invoiceData.addons.reduce((sum, a) => sum + (a.price || 0), 0);
+  }
+  const baseLayananPrice = subtotal - addonsTotal;
 
   // Refined Watermark
   const watermarkHTML = isPaid ? `
@@ -216,13 +233,13 @@ function renderInvoice() {
           <tbody>
             <tr>
               <td>
-                <strong style="font-size:12px; color:#0f172a;">${invoiceData.domain || 'Domain'}</strong><br>
+                <strong class="inv-item-title">${invoiceData.domain || 'Domain'}</strong><br>
                 <span style="color: #64748b;">Paket ${formatPackageName(invoiceData.packageId || invoiceData.package)} - 1 tahun</span>
               </td>
               <td style="text-align: center;">1</td>
-              <td style="text-align: right;">${formatPrice(invoiceData.total || 0).replace('Rp ', '')}</td>
+              <td style="text-align: right;">${formatPrice(baseLayananPrice).replace('Rp ', '')}</td>
               <td style="text-align: center;">-</td>
-              <td style="text-align: right; font-weight:600; color:#0f172a;">${formatPrice(invoiceData.total || 0).replace('Rp ', '')}</td>
+              <td style="text-align: right; font-weight:600; color:#0f172a;">${formatPrice(baseLayananPrice).replace('Rp ', '')}</td>
             </tr>
             ${renderInvoiceAddons()}
           </tbody>
@@ -231,9 +248,19 @@ function renderInvoice() {
         <div class="inv-summary-container">
           <div class="inv-summary">
             <div class="inv-summary-row">
-              <span>Subtotal</span>
-              <span>${formatPrice(invoiceData.total || 0).replace('Rp ', '')}</span>
+              <span>Subtotal (Layanan & Addons)</span>
+              <span>${formatPrice(subtotal).replace('Rp ', '')}</span>
             </div>
+            <div class="inv-summary-row">
+              <span>PPN (11%)</span>
+              <span>${formatPrice(ppn).replace('Rp ', '')}</span>
+            </div>
+            ${discount > 0 ? `
+            <div class="inv-summary-row" style="color: #27ae60;">
+              <span>Diskon (${invoiceData.promoCode || 'Promo'})</span>
+              <span>-${formatPrice(discount).replace('Rp ', '')}</span>
+            </div>
+            ` : ''}
             <div class="inv-summary-row inv-summary-total">
               <span>Total amount due</span>
               <span style="${isPaid ? 'color:#16a34a;' : ''}">${isPaid ? '0' : formatPrice(invoiceData.total || 0).replace('Rp ', '')}</span>
@@ -242,16 +269,13 @@ function renderInvoice() {
         </div>
 
         <div class="inv-signature">
-          <div style="margin-bottom: 30px; color: #64748b;">Billing Admin,</div>
-          <strong style="font-size:13px; color:#0f172a;">sisitus.com</strong>
+          <div class="inv-sig-text">Billing Admin,</div>
+          <strong class="inv-sig-name">sisitus.com</strong>
         </div>
       </div>
 
       <!-- PAGE 2 -->
       <div class="invoice-page print-page-break">
-        ${watermarkHTML}
-        ${headerHTML}
-
         <div class="inv-terms-section">
           <div class="inv-terms-grid">
             <div class="inv-terms-title">Notes</div>
@@ -279,11 +303,11 @@ function renderInvoice() {
       </div>
 
       <!-- Action Buttons -->
-      <div class="invoice-actions no-print" style="text-align: center; margin-top: 30px; padding-bottom: 40px;">
-        <button onclick="window.print()" class="btn" style="padding: 12px 24px; background: #0f172a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; margin-right: 10px; transition: all 0.2s; box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1);">
+      <div class="invoice-actions no-print">
+        <button onclick="window.print()" class="inv-btn inv-btn-dark">
           <i class="fas fa-print"></i> Download / Print PDF
         </button>
-        <a href="/dashboard/" class="btn" style="padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; transition: all 0.2s; box-shadow: 0 2px 4px -1px rgba(37,99,235,0.2);">
+        <a href="/dashboard/" class="inv-btn inv-btn-primary">
           <i class="fas fa-home"></i> Kembali Dashboard
         </a>
       </div>
@@ -357,6 +381,41 @@ function renderInvoice() {
           color: #64748b;
           font-size: 12px;
           margin-bottom: 2px;
+        }
+
+        .inv-logo-title {
+          font-weight: 800;
+          font-size: 14px;
+          color: #0f172a;
+          letter-spacing: 0.5px;
+        }
+
+        .inv-logo-subtitle {
+          font-size: 11px;
+          color: #64748b;
+          margin-top: 2px;
+        }
+
+        .inv-paid-status {
+          color: #16a34a;
+          font-weight: 800;
+          font-size: 14px;
+          margin-bottom: 4px;
+        }
+
+        .inv-item-title {
+          font-size: 12px;
+          color: #0f172a;
+        }
+
+        .inv-sig-text {
+          margin-bottom: 30px;
+          color: #64748b;
+        }
+
+        .inv-sig-name {
+          font-size: 13px;
+          color: #0f172a;
         }
 
         .inv-due-date {
@@ -512,6 +571,54 @@ function renderInvoice() {
           margin-bottom: 6px;
         }
 
+        /* BUTTONS */
+        .invoice-actions {
+          display: flex;
+          justify-content: center;
+          gap: 15px;
+          margin-top: 30px;
+          padding-bottom: 40px;
+        }
+
+        .inv-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px 24px;
+          border-radius: 6px;
+          font-weight: 700;
+          font-size: 14px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: none;
+          outline: none;
+          font-family: inherit;
+        }
+
+        .inv-btn-dark {
+          background: #0f172a;
+          color: white;
+          box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1);
+        }
+
+        .inv-btn-dark:hover {
+          background: #1e293b;
+          transform: translateY(-1px);
+        }
+
+        .inv-btn-primary {
+          background: #2563EB;
+          color: white;
+          box-shadow: 0 2px 4px -1px rgba(37,99,235,0.2);
+        }
+
+        .inv-btn-primary:hover {
+          background: #1d4ed8;
+          transform: translateY(-1px);
+        }
+
         /* PRINT CONFIGURATION */
         @page {
           size: A4;
@@ -559,15 +666,130 @@ function renderInvoice() {
         }
 
 
-        @media (max-width: 768px) {
+        @media screen and (max-width: 768px) {
+          .invoice-page {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+          }
+          .inv-watermark-stamp {
+            font-size: 40px;
+            padding: 5px 15px;
+          }
+          /* Keep header side-by-side on mobile to save vertical space */
+          .inv-header {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            align-items: flex-start;
+          }
+          .inv-logo-title {
+            font-size: 13px;
+          }
+          .inv-logo-subtitle {
+            font-size: 9px;
+          }
+          .inv-logo img {
+            height: 22px !important;
+          }
+          .inv-title-section {
+            text-align: right;
+          }
+          .inv-title {
+            font-size: 18px;
+            margin-bottom: 2px;
+          }
+          .inv-meta {
+            font-size: 10px;
+          }
+          .inv-due-date {
+            margin-bottom: 15px;
+            padding: 4px 12px;
+            font-size: 11px;
+          }
           .inv-details-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 10px;
+            word-break: break-word; /* Prevents long emails from breaking the grid */
+          }
+          .inv-paid-status {
+            font-size: 12px;
+          }
+          .inv-item-title {
+            font-size: 11px;
+          }
+          .inv-sig-text {
+            margin-bottom: 15px;
+            font-size: 10px;
+          }
+          .inv-sig-name {
+            font-size: 11px;
+          }
+          /* 'Pay via' takes full width on mobile, 'From' and 'Bill to' sit side-by-side */
+          .inv-pay-via {
+            grid-column: span 2;
+            padding: 10px;
+          }
+          .inv-total-section {
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .inv-total-text {
+            font-size: 13px;
+            margin: 0;
+          }
+          .inv-order-id {
+            font-size: 10px;
+          }
+          .inv-table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-bottom: 15px;
+          }
+          .inv-table th, .inv-table td {
+            min-width: 60px;
+            padding: 6px 4px;
+            font-size: 10px;
+          }
+          .inv-table th:first-child, .inv-table td:first-child {
+            min-width: 160px;
+          }
+          .inv-summary-container {
+            margin-bottom: 15px;
           }
           .inv-summary {
             width: 100%;
+            font-size: 11px;
           }
           .inv-terms-grid {
             grid-template-columns: 1fr;
+            gap: 8px;
+          }
+          .inv-terms-title {
+            font-size: 12px;
+            margin-bottom: 2px;
+          }
+          .inv-terms-content {
+            font-size: 11px;
+          }
+          .invoice-actions {
+            flex-direction: column;
+            padding: 0 10px 20px 10px;
+            gap: 10px;
+          }
+          .inv-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 13px;
           }
         }
       </style>
