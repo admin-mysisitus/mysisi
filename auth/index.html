@@ -17,6 +17,16 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <!-- Google Sign-In -->
+  <script>
+    // Pre-define callback to prevent GSI initialization errors
+    window.handleGoogleSignIn = function(response) {
+      if (window.__gsi_deferred_callback) {
+        window.__gsi_deferred_callback(response);
+      } else {
+        window.__gsi_pending_response = response;
+      }
+    };
+  </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="auth-page-body">

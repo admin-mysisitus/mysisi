@@ -18,7 +18,6 @@
  */
 
 import { AuthManager } from '../modules/unified-auth.js';
-import { CartManager } from '../modules/unified-cart.js';
 import APIClient from '../modules/unified-api.js';
 import {
   showSuccess,
@@ -37,13 +36,12 @@ import {
 // GLOBAL STATE - Define early
 // ============================================================================
 
-let googleSignInInitialized = false; // Guard against multiple initialization
+
 
 /**
- * Handle Google OAuth response - Define EARLY before Google SDK loads
- * This must be on window object and defined before Google SDK tries to use it
+ * Handle Google OAuth response - Deferred callback
  */
-window.handleGoogleSignIn = async function(response) {
+window.__gsi_deferred_callback = async function(response) {
   if (!response.credential) {
     console.warn('[Auth Google] No credential in response');
     return;
@@ -73,12 +71,15 @@ window.handleGoogleSignIn = async function(response) {
     );
 
     // Check if there's pending checkout in cart
-    const cartSummary = CartManager.getSummary();
+    let itemCount = 0;
+    try {
+      const cartData = JSON.parse(localStorage.getItem('mysisi_cart') || '{"items":[]}');
+      itemCount = cartData.items ? cartData.items.length : 0;
+    } catch(e) {}
+    
     let redirectUrl = result.data.role === 'admin' ? '/admin/' : '/dashboard/';
     
-    if (cartSummary.itemCount > 0 && result.data.role !== 'admin') {
-      // After login, redirect to CART to view domains + addons
-      // NOT directly to checkout (user should see cart summary first)
+    if (itemCount > 0 && result.data.role !== 'admin') {
       redirectUrl = `/dashboard/#!/dashboard/keranjang`;
     }
 
@@ -91,6 +92,12 @@ window.handleGoogleSignIn = async function(response) {
     handleAPIError(error);
   }
 };
+
+// Process any pending Google Sign-In response that arrived before this script loaded
+if (window.__gsi_pending_response) {
+  window.__gsi_deferred_callback(window.__gsi_pending_response);
+  window.__gsi_pending_response = null;
+}
 
 // ============================================================================
 // INITIALIZATION
@@ -120,7 +127,6 @@ function initPage() {
   // 3. Initialize auth forms & UI
   setupAuthTabs();
   setupAuthForms();
-  initializeGoogleSignIn();
 
   // Initialize password toggles
   initPasswordToggle(document);
@@ -200,12 +206,15 @@ async function handleEmailVerification(token) {
     showSuccess('✓ Email Terverifikasi!', `Selamat datang, ${response.data.displayName}!`);
 
     // Check if there's pending checkout in cart
-    const cartSummary = CartManager.getSummary();
+    let itemCount = 0;
+    try {
+      const cartData = JSON.parse(localStorage.getItem('mysisi_cart') || '{"items":[]}');
+      itemCount = cartData.items ? cartData.items.length : 0;
+    } catch(e) {}
+    
     let redirectUrl = response.data.role === 'admin' ? '/admin/' : '/dashboard/';
     
-    if (cartSummary.itemCount > 0 && response.data.role !== 'admin') {
-      // After email verification, redirect to CART to view domains + addons
-      // NOT directly to checkout (user should see cart summary first)
+    if (itemCount > 0 && response.data.role !== 'admin') {
       redirectUrl = `/dashboard/#!/dashboard/keranjang`;
     }
 
@@ -362,14 +371,16 @@ async function handleLogin(e) {
     );
 
     // Check if there's pending checkout in cart
-    const cartSummary = CartManager.getSummary();
+    let itemCount = 0;
+    try {
+      const cartData = JSON.parse(localStorage.getItem('mysisi_cart') || '{"items":[]}');
+      itemCount = cartData.items ? cartData.items.length : 0;
+    } catch(e) {}
+    
     let redirectUrl = response.data.role === 'admin' ? '/admin/' : '/dashboard/';
     
-    if (cartSummary.itemCount > 0 && response.data.role !== 'admin') {
-      // After login with cart items, redirect to CART to view domains + addons
-      // NOT directly to checkout (user should see cart summary first)
+    if (itemCount > 0 && response.data.role !== 'admin') {
       redirectUrl = `/dashboard/#!/dashboard/keranjang`;
-      // Don't clear cart yet - user might see other items in cart
     }
 
     // Redirect to appropriate page
@@ -382,62 +393,7 @@ async function handleLogin(e) {
   }
 }
 
-// ============================================================================
-// GOOGLE SIGN-IN
-// ============================================================================
 
-// window.handleGoogleSignIn is defined at the top of the file as a global
-// to ensure it's available when Google SDK loads
-
-
-function initializeGoogleSignIn() {
-  // Guard: prevent multiple initialization
-  if (googleSignInInitialized) {
-    console.debug('[Auth Google] Already initialized, skipping');
-    return;
-  }
-
-  // Mark as initializing to prevent race conditions
-  googleSignInInitialized = true;
-
-  const maxAttempts = 100; // 100 * 100ms = 10 seconds max
-  let attempts = 0;
-
-  const initGoogleSDK = () => {
-    attempts++;
-
-    // Check if Google SDK is loaded
-    if (typeof google === 'undefined' || !google.accounts?.id) {
-      if (attempts > maxAttempts) {
-        console.error('[Auth Google] Google SDK failed to load after 10 seconds');
-        googleSignInInitialized = false; // Reset flag on failure
-        return;
-      }
-      setTimeout(initGoogleSDK, 100);
-      return;
-    }
-
-    try {
-      console.info('[Auth Google] SDK loaded, initializing...');
-
-      // Initialize Google Sign-In
-      google.accounts.id.initialize({
-        client_id: '1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com',
-        callback: window.handleGoogleSignIn, // Uses global callback defined earlier
-        auto_select: false,
-        itp_support: false // Avoid third-party cookie conflicts
-      });
-
-      console.info('[Auth Google] Google Sign-In ready');
-    } catch (error) {
-      console.error('[Auth Google] Error initializing:', error.message);
-      googleSignInInitialized = false; // Reset flag on error
-    }
-  };
-
-  // Start initialization
-  initGoogleSDK();
-}
 
 // ============================================================================
 // UI HELPERS
