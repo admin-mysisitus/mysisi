@@ -18,6 +18,7 @@
  */
 
 import { AuthManager } from '../modules/unified-auth.js';
+import { CartManager } from '../modules/unified-cart.js';
 import APIClient from '../modules/unified-api.js';
 import {
   showSuccess,
@@ -71,15 +72,10 @@ window.__gsi_deferred_callback = async function(response) {
     );
 
     // Check if there's pending checkout in cart
-    let itemCount = 0;
-    try {
-      const cartData = JSON.parse(localStorage.getItem('mysisi_cart') || '{"items":[]}');
-      itemCount = cartData.items ? cartData.items.length : 0;
-    } catch(e) {}
-    
+    const cartSummary = CartManager.getSummary();
     let redirectUrl = result.data.role === 'admin' ? '/admin/' : '/dashboard/';
     
-    if (itemCount > 0 && result.data.role !== 'admin') {
+    if (cartSummary.itemCount > 0 && result.data.role !== 'admin') {
       redirectUrl = `/dashboard/#!/dashboard/keranjang`;
     }
 
@@ -204,17 +200,12 @@ async function handleEmailVerification(token) {
     }
 
     showSuccess('✓ Email Terverifikasi!', `Selamat datang, ${response.data.displayName}!`);
-
-    // Check if there's pending checkout in cart
-    let itemCount = 0;
-    try {
-      const cartData = JSON.parse(localStorage.getItem('mysisi_cart') || '{"items":[]}');
-      itemCount = cartData.items ? cartData.items.length : 0;
-    } catch(e) {}
     
+    // Check if there's pending checkout in cart
+    const cartSummary = CartManager.getSummary();
     let redirectUrl = response.data.role === 'admin' ? '/admin/' : '/dashboard/';
     
-    if (itemCount > 0 && response.data.role !== 'admin') {
+    if (cartSummary.itemCount > 0 && response.data.role !== 'admin') {
       redirectUrl = `/dashboard/#!/dashboard/keranjang`;
     }
 
