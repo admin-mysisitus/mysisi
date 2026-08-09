@@ -423,7 +423,8 @@ function loginUser(email, password) {
           photoURL: data[i][4],
           authMethod: data[i][11],
           role: data[i][12] || 'customer',
-          verifiedAt: data[i][6]
+          verifiedAt: data[i][6],
+          hasPassword: data[i][9] && data[i][9].toString().trim().length > 0
         }, 'Login berhasil');
       }
     }
@@ -520,12 +521,14 @@ function verifyGoogleToken(token) {
 
     let userId = null;
     let userFound = false;
+    let hasPassword = false;
 
     // Check if user exists
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === decoded.email) {
         userFound = true;
         userId = data[i][0];
+        hasPassword = data[i][9] && data[i][9].toString().trim().length > 0;
         break;
       }
     }
@@ -546,7 +549,7 @@ function verifyGoogleToken(token) {
         new Date().toISOString(),
         'Yes', // Email auto-verified for Google
         generateVerificationToken(),
-        Utilities.getUuid(), // Random password hash
+        '', // Tidak terisi otomatis agar user bisa set password baru
         'active',
         'google'
       ]);
@@ -559,7 +562,8 @@ function verifyGoogleToken(token) {
       photoURL: decoded.picture || '',
       whatsapp: '',
       authMethod: 'google',
-      isNewUser: !userFound
+      isNewUser: !userFound,
+      hasPassword: hasPassword
     }, 'Google token berhasil diverifikasi');
   } catch (error) {
     Logger.log('Error in verifyGoogleToken: ' + error);
@@ -703,17 +707,13 @@ function validateResetToken(token) {
  */
 function changePassword(userId, oldPassword, newPassword) {
   try {
-    if (!userId || !oldPassword || !newPassword) {
-      return buildResponse(false, null, 'Semua field diperlukan', 'MISSING_DATA');
+    if (!userId || !newPassword) {
+      return buildResponse(false, null, 'User ID dan password baru diperlukan', 'MISSING_DATA');
     }
 
     const pwdValidation = validatePasswordStrength(newPassword);
     if (!pwdValidation.valid) {
       return buildResponse(false, null, pwdValidation.message, 'WEAK_PASSWORD');
-    }
-
-    if (oldPassword === newPassword) {
-      return buildResponse(false, null, 'Password baru tidak boleh sama dengan password lama', 'SAME_PASSWORD');
     }
 
     const sheet = ensureUsersSheet();
@@ -722,10 +722,20 @@ function changePassword(userId, oldPassword, newPassword) {
     // Find user
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === userId) {
-        // Verify old password
-        const storedPassword = data[i][9];
-        if (!verifyPassword(oldPassword, storedPassword)) {
-          return buildResponse(false, null, 'Password lama tidak sesuai', 'INVALID_PASSWORD');
+        const storedPassword = data[i][9] ? data[i][9].toString().trim() : '';
+        const hasStoredPassword = storedPassword.length > 0;
+
+        // Verify old password if they have one
+        if (hasStoredPassword) {
+          if (!oldPassword) {
+            return buildResponse(false, null, 'Password lama diperlukan', 'MISSING_OLD_PASSWORD');
+          }
+          if (!verifyPassword(oldPassword, storedPassword)) {
+            return buildResponse(false, null, 'Password lama tidak sesuai', 'INVALID_PASSWORD');
+          }
+          if (oldPassword === newPassword) {
+            return buildResponse(false, null, 'Password baru tidak boleh sama dengan password lama', 'SAME_PASSWORD');
+          }
         }
 
         // Update password
@@ -733,7 +743,7 @@ function changePassword(userId, oldPassword, newPassword) {
         sheet.getRange(i + 1, 10).setValue(newHash);
         sheet.getRange(i + 1, 7).setValue(new Date().toISOString());
 
-        return buildResponse(true, null, 'Password berhasil diubah');
+        return buildResponse(true, null, hasStoredPassword ? 'Password berhasil diubah' : 'Password berhasil diset');
       }
     }
 
@@ -768,7 +778,8 @@ function getUserProfile(userId) {
           authMethod: data[i][11],
           createdAt: data[i][5],
           updatedAt: data[i][6],
-          emailVerified: data[i][7] === 'Yes'
+          emailVerified: data[i][7] === 'Yes',
+          hasPassword: data[i][9] && data[i][9].toString().trim().length > 0
         }, 'Profil user berhasil diambil');
       }
     }

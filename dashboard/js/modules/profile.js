@@ -107,10 +107,23 @@ export async function render(currentUser) {
     // Setup password change form
     const formChangePassword = document.getElementById('form-change-password');
     if (formChangePassword) {
+      const oldPwdInput = document.getElementById('input-old-password');
+      const submitBtn = formChangePassword.querySelector('button[type="submit"]');
+      const isSetPassword = user.hasPassword === false;
+      
+      // Jika user belum punya password (misal login via Google baru), hide form Password Lama
+      if (isSetPassword && oldPwdInput) {
+        const formGroup = oldPwdInput.closest('.form-group');
+        if (formGroup) formGroup.style.display = 'none';
+        oldPwdInput.removeAttribute('required');
+        oldPwdInput.value = '';
+        if (submitBtn) submitBtn.textContent = 'Set Password';
+      }
+
       initPasswordToggle(formChangePassword);
       formChangePassword.addEventListener('submit', async (e) => {
         e.preventDefault();
-        await handlePasswordChange(currentUser.userId);
+        await handlePasswordChange(currentUser.userId, isSetPassword);
       });
       
       const newPwdInput = document.getElementById('input-new-password');
@@ -189,15 +202,22 @@ async function handleProfileUpdate(userId) {
   }
 }
 
-async function handlePasswordChange(userId) {
+async function handlePasswordChange(userId, isSetPassword = false) {
   try {
     const oldPassword = document.getElementById('input-old-password').value;
     const newPassword = document.getElementById('input-new-password').value;
     const confirmPassword = document.getElementById('input-confirm-password').value;
 
-    if (!oldPassword || !newPassword || !confirmPassword) {
-      showError('Semua field harus diisi');
-      return;
+    if (isSetPassword) {
+      if (!newPassword || !confirmPassword) {
+        showError('Password baru dan konfirmasi harus diisi');
+        return;
+      }
+    } else {
+      if (!oldPassword || !newPassword || !confirmPassword) {
+        showError('Semua field harus diisi');
+        return;
+      }
     }
 
     if (newPassword !== confirmPassword) {
@@ -213,11 +233,19 @@ async function handlePasswordChange(userId) {
     const btn = document.querySelector('#form-change-password button[type="submit"]');
     setButtonLoading(btn, true, 'Menyimpan...');
 
-    const result = await APIClient.changePassword(userId, oldPassword, newPassword);
+    const result = await APIClient.changePassword(userId, isSetPassword ? '' : oldPassword, newPassword);
 
     if (result.success) {
-      showSuccess('Password berhasil diubah');
+      showSuccess(isSetPassword ? 'Password berhasil diatur' : 'Password berhasil diubah');
       document.getElementById('form-change-password').reset();
+      
+      // Update session local state to mark that password is now set
+      const user = DashboardAuth.getCurrentUser();
+      if (user && user.hasPassword === false) {
+        user.hasPassword = true;
+        DashboardAuth.updateSession(user);
+        setTimeout(() => { window.location.reload(); }, 1500); // Reload to reset the UI forms
+      }
     } else {
       throw new Error(result.message || 'Gagal mengubah password');
     }
@@ -226,6 +254,6 @@ async function handlePasswordChange(userId) {
     showError('Error: ' + error.message);
   } finally {
     const btn = document.querySelector('#form-change-password button[type="submit"]');
-    setButtonLoading(btn, false, 'Ubah Password');
+    setButtonLoading(btn, false, isSetPassword ? 'Set Password' : 'Ubah Password');
   }
 }
