@@ -159,15 +159,34 @@ export class CartManager {
   /**
    * Add coupon/promo code
    */
-  static applyCoupon(code) {
+  static async applyCoupon(code) {
     const cart = this.getCart();
     
-    // TODO: Validate coupon dengan GAS backend
-    // For now, just store it
-    cart.coupon = code;
-    this.saveCart(cart);
-    
-    return cart;
+    try {
+      // Validate coupon with GAS backend using APIClient
+      if (!window.APIClient) {
+        throw new Error('API Client not available. Import APIClient before applying coupon.');
+      }
+      
+      const response = await window.APIClient.validatePromoCode(code);
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.message || 'Kode promo tidak valid atau sudah kadaluarsa');
+      }
+      
+      // Simpan data diskon utuh ke cart
+      cart.coupon = {
+        code: code,
+        discountType: response.data.discountType || 'percent',
+        discountValue: response.data.discountValue || 0
+      };
+      
+      this.saveCart(cart);
+      return { success: true, cart };
+    } catch (error) {
+      console.error('[Cart] Error validating coupon:', error);
+      return { success: false, message: error.message };
+    }
   }
 
   /**
@@ -268,14 +287,26 @@ export class CartManager {
     
     let discount = 0;
     
-    // TODO: Calculate discount based on coupon
-    // For now: 0 discount
+    // Kalkulasi diskon berdasarkan tipe kupon (persen atau harga fix)
+    if (cart.coupon) {
+      const type = cart.coupon.discountType;
+      const value = cart.coupon.discountValue;
+      if (type === 'percent') {
+        discount = subtotal * (value / 100);
+      } else if (type === 'fixed') {
+        discount = value;
+      }
+    }
+    
+    let subtotalAfterDiscount = subtotal - discount;
+    let ppn = Math.round(subtotalAfterDiscount * 0.11); // PPN 11%
     
     return {
       ...cart,
       subtotal: Math.round(subtotal),
       discount: Math.round(discount),
-      total: Math.round(subtotal - discount)
+      ppn: ppn,
+      total: Math.round(subtotalAfterDiscount + ppn) // Total akhir yang dibayar ke Midtrans
     };
   }
 

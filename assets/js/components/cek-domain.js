@@ -74,11 +74,11 @@
   function initiatePlaceholderAnimation() {
     const placeholderTexts = [
       'toko online anda...',
-      'bisnis anda.id',
-      'portfolio portfolio.com',
-      'blog digital.my.id',
-      'startup anda.web',
-      'usaha kreatif anda'
+      'contohwebsite.com',
+      'bisnisanda.id',
+      'blogdigital.my.id',
+      'organisasimu.org',
+      'sekolahku.sch.id'
     ];
 
     let textIndex = 0;
