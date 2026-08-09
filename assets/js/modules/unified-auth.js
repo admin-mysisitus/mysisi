@@ -129,7 +129,8 @@ export class AuthManager {
       whatsapp: user.whatsapp || '',
       authMethod: user.authMethod || 'email',
       role: user.role || 'customer',
-      verifiedAt: user.verifiedAt || Date.now()
+      verifiedAt: user.verifiedAt || Date.now(),
+      hasPassword: user.hasPassword
     };
   }
 

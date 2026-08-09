@@ -424,7 +424,7 @@ function loginUser(email, password) {
           authMethod: data[i][11],
           role: data[i][12] || 'customer',
           verifiedAt: data[i][6],
-          hasPassword: data[i][9] && data[i][9].toString().trim().length > 0
+          hasPassword: !!(data[i][9] && data[i][9].toString().trim().length > 0)
         }, 'Login berhasil');
       }
     }
@@ -528,7 +528,7 @@ function verifyGoogleToken(token) {
       if (data[i][2] === decoded.email) {
         userFound = true;
         userId = data[i][0];
-        hasPassword = data[i][9] && data[i][9].toString().trim().length > 0;
+        hasPassword = !!(data[i][9] && data[i][9].toString().trim().length > 0);
         break;
       }
     }
@@ -779,7 +779,7 @@ function getUserProfile(userId) {
           createdAt: data[i][5],
           updatedAt: data[i][6],
           emailVerified: data[i][7] === 'Yes',
-          hasPassword: data[i][9] && data[i][9].toString().trim().length > 0
+          hasPassword: !!(data[i][9] && data[i][9].toString().trim().length > 0)
         }, 'Profil user berhasil diambil');
       }
     }
