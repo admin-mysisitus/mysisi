@@ -479,11 +479,9 @@ details[open] .accordion-icon {
   height: 35px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: grayscale(100%) opacity(40%);
   transition: all 0.3s ease;
 }
 .sponsors-track img:hover {
-  filter: grayscale(0%) opacity(100%);
   transform: scale(1.05);
 }
 
@@ -698,9 +696,12 @@ details[open] .accordion-icon {
   }
 
   /* 6. Sponsors / Partners Marquee */
+  .sponsors-track {
+    gap: 1.75rem;
+  }
   .sponsors-track img {
-    height: 25px;
-    margin: 0 1rem;
+    height: 32px;
+    margin: 0;
   }
 
   /* 7. Bottom CTA Section (Impeccable Mobile Card & Overflow Protection) */

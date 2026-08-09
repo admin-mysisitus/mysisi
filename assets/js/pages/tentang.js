@@ -292,19 +292,25 @@ document.addEventListener('DOMContentLoaded', function () {
   if (template && row1 && row2) {
     const trackTemplate = template.content.querySelector(".sponsors-track");
     if (trackTemplate) {
-      // Clone untuk loop
-      const track1 = trackTemplate.cloneNode(true);
-      const track2 = trackTemplate.cloneNode(true);
-
-      // Gandakan isi berkali-kali agar sangat panjang (karena gambarnya cuma 5)
-      // repeat(10) memastikan cukup untuk layar monitor ultrawide sekalipun
-      track1.innerHTML = track1.innerHTML.repeat(10);
-      track2.innerHTML = track2.innerHTML.repeat(10);
-
-      // Tambahkan class animasi berlawanan arah
-      track1.classList.add("scroll-left");
-      track2.classList.add("scroll-right");
-
+      // Ambil semua logo dari template
+      const allLogos = Array.from(trackTemplate.querySelectorAll('img'));
+      
+      // Bagi dua secara berurutan layaknya rantai
+      const halfIndex = Math.ceil(allLogos.length / 2);
+      const logos1 = allLogos.slice(0, halfIndex).map(img => img.outerHTML).join('');
+      const logos2 = allLogos.slice(halfIndex).map(img => img.outerHTML).join('');
+      
+      // Buat track untuk baris 1
+      const track1 = document.createElement('div');
+      track1.className = 'sponsors-track scroll-left';
+      // Repeat genap (misal 6) agar translasi -50% menghasilkan loop mulus tanpa jeda
+      track1.innerHTML = logos1.repeat(6);
+      
+      // Buat track untuk baris 2
+      const track2 = document.createElement('div');
+      track2.className = 'sponsors-track scroll-right';
+      track2.innerHTML = logos2.repeat(6);
+      
       // Masukkan ke DOM
       row1.appendChild(track1);
       row2.appendChild(track2);

@@ -62,7 +62,7 @@ export class DashboardAuth {
    * @param {Object} user - Updated user details
    */
   static updateSession(user) {
-    AuthManager.updateUser(user);
+    AuthManager.saveSession(user);
   }
 
   /**

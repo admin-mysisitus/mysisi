@@ -31,7 +31,23 @@ export async function render(currentUser) {
     // Setup form with current data
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
-      document.getElementById('input-name').value = user.displayName || '';
+      // Sinkronkan session lokal dengan data API terbaru (agar Navbar langsung update jika berbeda)
+      if (user.displayName !== currentUser.displayName || user.photoURL !== currentUser.photoURL) {
+        DashboardAuth.updateSession(user);
+      }
+
+      const inputName = document.getElementById('input-name');
+      inputName.value = user.displayName || '';
+
+      // Live update nama di navbar saat user mengetik (Premium feel)
+      inputName.addEventListener('input', (e) => {
+        const userNameEl = document.querySelector('.user-profile-trigger .user-name');
+        const dropdownNameEl = document.querySelector('.dropdown-header strong');
+        const newName = e.target.value.trim() || user.displayName || 'Pelanggan';
+        
+        if (userNameEl) userNameEl.textContent = newName;
+        if (dropdownNameEl) dropdownNameEl.textContent = newName;
+      });
       const photoPreview = document.getElementById('photo-preview');
       const photoPlaceholder = document.getElementById('photo-placeholder');
       const photoStatus = document.getElementById('photo-upload-status');

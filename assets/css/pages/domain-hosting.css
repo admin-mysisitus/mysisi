@@ -695,10 +695,10 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none !important;
     gap: 1rem !important;
-    padding: 0.5rem 1.25rem 1.5rem 1.25rem !important;
-    margin: 0 -1.25rem !important;
-    width: calc(100% + 2.5rem) !important;
-    max-width: none !important;
+    padding: 0.5rem 5.5555% 1.5rem 5.5555% !important;
+    margin: 0 -5.5555% !important;
+    width: 111.1111% !important;
+    max-width: 111.1111% !important;
   }
 
   .benefits-grid::-webkit-scrollbar,

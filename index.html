@@ -451,7 +451,7 @@
                   <span><i class="fas fa-check"></i> SSL certificate gratis selamanya</span>
                 </div>
               </div>
-              <p class="cek-domain-other-offer" style="white-space: nowrap;">
+              <p class="cek-domain-other-offer">
                 <i class="fas fa-info-circle"></i> 1.500+ ekstensi tersedia mulai Rp9.900/tahun • Pindahkan domain lama
                 gratis • Tidak ada biaya tersembunyi
               </p>
@@ -868,11 +868,11 @@
       }
       .ig-pro-handle a {
         font-family: var(--font-display, 'Outfit', sans-serif);
-        font-size: 32px;
+        font-size: clamp(24px, 8vw, 32px);
         font-weight: 700;
         color: var(--primary-blue, #2563EB);
         text-decoration: none;
-        margin: 0 25px;
+        margin: 0 clamp(10px, 3vw, 25px);
         letter-spacing: 0.5px;
         transition: var(--transisi-cepat, all 0.2s ease);
       }
@@ -884,6 +884,11 @@
         width: 100%;
         max-width: 540px; /* Standar ukuran Instagram */
         margin: 0 auto;
+        overflow: hidden; /* Tambahan */
+      }
+      .instagram-media {
+        min-width: 100% !important;
+        max-width: 100% !important;
       }
     </style>
     <div class="ig-pro-section">

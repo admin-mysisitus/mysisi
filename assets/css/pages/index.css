@@ -186,6 +186,8 @@
   max-width: 380px;
   margin: 0 auto;
   margin-bottom: clamp(2rem, 3vw, 3rem);
+  overflow: hidden;
+  border-radius: var(--radius-large);
 }
 
 @media (min-width: 992px) {
