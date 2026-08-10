@@ -220,9 +220,8 @@
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.4;
   margin-bottom: 0.3rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  display: block;
+  max-height: calc(1.4 * 0.85rem * 2);
   overflow: hidden;
 }
 

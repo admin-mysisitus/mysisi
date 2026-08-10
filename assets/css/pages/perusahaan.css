@@ -1623,9 +1623,8 @@ details[open] .accordion-icon {
     font-size: 0.813rem !important; /* 13px */
     line-height: 1.4 !important;
     margin-bottom: 0.75rem !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 4 !important; /* Standar awal */
-    -webkit-box-orient: vertical !important;
+    display: block !important;
+    max-height: calc(1.4 * 0.813rem * 4) !important; /* Standar awal 4 baris */
     overflow: hidden !important;
     cursor: pointer;
     transition: color 0.2s ease;
@@ -1633,7 +1632,7 @@ details[open] .accordion-icon {
   
   /* Saat teks ditekan/diklik (expanded) */
   .team-bio.expanded {
-    -webkit-line-clamp: unset !important;
+    max-height: 1000px !important;
     color: var(--text-primary) !important;
   }
   
