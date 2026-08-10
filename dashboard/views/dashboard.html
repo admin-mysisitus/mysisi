@@ -4,9 +4,6 @@
     <h1>Halo, <span id="user-welcome-name">Pelanggan</span>! 👋</h1>
     <p>Selamat datang kembali di Client Area SISITUS. Di sini Anda dapat mengelola layanan digital, domain, tagihan invoice, dan mendapatkan bantuan teknis.</p>
   </div>
-  <div class="dashboard-hero__actions">
-    <a href="#!/dashboard/checkout" class="btn btn-white dashboard-hero__cta">Cari Domain Baru</a>
-  </div>
 </div>
 
 <div class="stats-grid">
@@ -82,7 +79,7 @@
     </div>
     <p>Temukan ekstensi domain terbaik untuk mengamankan merek bisnis digital Anda.</p>
 
-    <form class="form-search" onsubmit="handleDashboardDomainSearch(event)">
+    <form class="form-search" id="dashboard-domain-form">
       <div class="form-search__input-wrap">
         <input type="text" id="dashboard-domain-input" placeholder="Ketik nama domain (misal: websitemurah.com)">
         <i class="fas fa-search"></i>
@@ -102,7 +99,9 @@
     <div class="panel__badge">Promo Terbatas</div>
     <h3>Diskon Hingga 90% Hosting + Website!</h3>
     <p>Gunakan kode promo <strong>SISITUSMAJU</strong> untuk klaim pembuatan website murah gratis 1 domain aktif.</p>
-    <a href="#!/dashboard/checkout" class="btn btn-warning panel__cta">Ambil Promo Sekarang</a>
+    <button onclick="navigator.clipboard.writeText('SISITUSMAJU'); Swal.fire({icon: 'success', title: 'Tersalin!', text: 'Kode promo SISITUSMAJU siap digunakan di keranjang.', timer: 2000, showConfirmButton: false});" class="btn btn-warning panel__cta" style="border:none; cursor:pointer;">
+      <i class="fas fa-copy"></i> Salin Kode Promo
+    </button>
   </div>
 </div>
 
@@ -140,12 +139,3 @@
   </div>
 </div>
 
-<script>
-  function handleDashboardDomainSearch(event) {
-    event.preventDefault();
-    const query = document.getElementById('dashboard-domain-input').value.trim();
-    if (query) {
-      window.location.href = '/?section=cek-domain&q=' + encodeURIComponent(query);
-    }
-  }
-</script>

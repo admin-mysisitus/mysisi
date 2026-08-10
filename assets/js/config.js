@@ -51,6 +51,7 @@ export const menuData = [
 // DATA LAYANAN UTAMA FOOTER
 // =========================
 export const mainServicesData = [
+  { href: "/layanan/", text: "Layanan" },
   { href: "/layanan/pembuatan-website/", text: "Pembuatan Website" },
   { href: "/layanan/domain-hosting/", text: "Domain & Hosting" },
   { href: "/layanan/maintenance/", text: "Maintenance Website" },

@@ -140,4 +140,16 @@ function setupEventListeners() {
       window.location.hash = '#!/dashboard/support';
     });
   }
+
+  // Domain search form in dashboard
+  const domainForm = document.getElementById('dashboard-domain-form');
+  if (domainForm) {
+    domainForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = document.getElementById('dashboard-domain-input').value.trim();
+      if (query) {
+        window.location.href = '../index.html?section=cek-domain&q=' + encodeURIComponent(query);
+      }
+    });
+  }
 }

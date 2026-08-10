@@ -44,7 +44,7 @@ class DashboardApp {
     window.addEventListener('authStateChanged', (e) => {
       if (!e.detail) {
         // User logged out
-        window.location.href = '/auth/';
+        window.location.href = '../auth/index.html';
       } else {
         this.currentUser = e.detail.user || e.detail;
       }
@@ -173,10 +173,10 @@ class DashboardApp {
       // Load module
       const module = await routeConfig.loadModule();
       
-      // Load HTML view
-      const response = await fetch(`/dashboard/views/${routeConfig.page}.html`);
+      // Fetch HTML template menggunakan path relative
+      const response = await fetch(`views/${routeConfig.page}.html`);
       if (!response.ok) {
-        throw new Error(`Failed to load view for ${routeConfig.page}`);
+        throw new Error(`Gagal memuat halaman: ${response.status} ${response.statusText}`);
       }
       const html = await response.text();
 
@@ -187,6 +187,8 @@ class DashboardApp {
       // Initialize page module
       if (module.render) {
         await module.render(this.currentUser);
+      } else if (module.default && typeof module.default === 'function') {
+        await module.default(this.currentUser);
       }
 
       // Scroll to top

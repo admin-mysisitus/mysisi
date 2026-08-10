@@ -797,7 +797,7 @@
 .team-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 2 / 3;
   overflow: hidden;
   background: var(--gray-light);
 }
@@ -806,7 +806,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   transition: transform 0.5s ease;
+  font-size: 0.875rem; /* Ukuran font alt text lebih kecil */
+  padding: 1rem; /* Mencegah alt text mepet ke tepi */
+  text-align: center;
 }
 
 .team-card:hover .team-image img {
@@ -858,10 +862,13 @@
 }
 
 .team-content h3 {
-  font-size: var(--judul-kecil);
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
   font-weight: 700;
   margin-bottom: 4px;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .team-role {
@@ -877,13 +884,14 @@
   color: var(--text-secondary);
   line-height: var(--line-height-relaxed);
   margin-bottom: 16px;
-  flex: 1;
+  /* flex: 1 dihapus agar line-clamp tidak membocorkan teks di baris bawahnya */
 }
 
 .team-skills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: auto; /* Mendorong skills ke paling bawah kartu */
 }
 
 .skill-tag {
@@ -1599,8 +1607,11 @@ details[open] .accordion-icon {
   }
   
   .team-content h3 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.85rem !important; /* 15px -> ~13.6px agar pas 1 baris di mobile */
     margin-bottom: 2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
   
   .team-role {
@@ -1613,9 +1624,17 @@ details[open] .accordion-icon {
     line-height: 1.4 !important;
     margin-bottom: 0.75rem !important;
     display: -webkit-box !important;
-    -webkit-line-clamp: 3 !important;
+    -webkit-line-clamp: 4 !important; /* Standar awal */
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  /* Saat teks ditekan/diklik (expanded) */
+  .team-bio.expanded {
+    -webkit-line-clamp: unset !important;
+    color: var(--text-primary) !important;
   }
   
   .skill-tag {

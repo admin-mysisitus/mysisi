@@ -24,11 +24,7 @@
 }
 
 .section-divider {
-  width: 60px;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
-  border-radius: 2px;
-  animation: slideInHorizontal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: none !important; /* Dihapus sesuai permintaan pengguna */
 }
 
 /* ========== BENEFITS SECTION ========== */

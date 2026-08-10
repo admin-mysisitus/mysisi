@@ -42,9 +42,9 @@ export class DashboardNavbar {
         </div>
 
         <div class="navbar-actions">
-          <!-- Buy Now green button -->
-          <a href="#!/dashboard/checkout" class="btn btn-success btn-buy-now">
-            <i class="fas fa-shopping-cart"></i> <span>Beli Layanan</span>
+          <!-- Kunjungi Website button -->
+          <a href="../" target="_blank" class="btn btn-white" style="border: 1px solid #ddd; margin-right: 15px;">
+            <i class="fas fa-external-link-alt"></i> <span>Kunjungi Website</span>
           </a>
 
           <!-- User Profile Dropdown -->

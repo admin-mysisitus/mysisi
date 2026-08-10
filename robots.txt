@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Allow: /assets/img/team/lukman.webp
+Disallow: /assets/img/team/adhim.webp
+Disallow: /assets/img/team/cicilia.webp
+Disallow: /assets/img/team/faiz.webp
+Disallow: /assets/img/team/natasya.webp
 
 Sitemap: https://sisitus.com/sitemap.xml

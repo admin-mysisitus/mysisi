@@ -34,7 +34,7 @@
   // ============================================
   function debounce(func, delay) {
     let timeoutId;
-    return function(...args) {
+    return function (...args) {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
@@ -150,8 +150,8 @@
         <div class="cek-domain-ext-labels">${labels}</div>
         <div class="cek-domain-ext-name">${ext.ext}</div>
         <div class="cek-domain-ext-prices">
-          ${ext.oldPrice ? `<span class="cek-domain-ext-old">Rp${formatCurrency(ext.oldPrice)}</span>` : ''}
-          <span class="cek-domain-ext-new">Rp${formatCurrency(ext.newPrice)}</span>
+          ${ext.oldPrice ? `<span class="cek-domain-ext-old">${formatCurrency(ext.oldPrice)}</span>` : ''}
+          <span class="cek-domain-ext-new">${formatCurrency(ext.newPrice)}</span>
         </div>
         <div class="cek-domain-ext-info">${ext.info}</div>
       `;
@@ -161,13 +161,13 @@
         const currentInput = cekDomainInput.value;
         const parsed = parseDomain(currentInput);
         const base = parsed.base || '';
-        
+
         cekDomainInput.value = base + ext.ext;
         cekDomainInput.focus();
-        
+
         // Place cursor at start if empty, or at end if they typed a brand
         const cursorPosition = base.length > 0 ? cekDomainInput.value.length : 0;
-        
+
         setTimeout(() => {
           cekDomainInput.setSelectionRange(cursorPosition, cursorPosition);
           cekDomainInput.dispatchEvent(new Event('input')); // trigger suggestions
@@ -265,7 +265,7 @@
 
     const topExts = ['.com', '.id', '.co.id', '.web.id', '.my.id'];
     cekDomainSuggestions.innerHTML = '';
-    
+
     // Abort previous check if still running
     if (suggestionCheckAborter) {
       suggestionCheckAborter.abort();
@@ -285,8 +285,8 @@
       const extLabel = ext.replace('.', '').toUpperCase();
       const priceHTML = extData && extData.newPrice ? `
         <div class="cek-domain-suggestion-price" id="price-${index}" style="display: none;">
-          ${extData.oldPrice ? `<span class="cek-domain-suggestion-price-old">Rp${formatCurrency(extData.oldPrice)}</span>` : ''}
-          <span class="cek-domain-suggestion-price-new">Rp${formatCurrency(extData.newPrice)}</span>
+          ${extData.oldPrice ? `<span class="cek-domain-suggestion-price-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
+          <span class="cek-domain-suggestion-price-new">${formatCurrency(extData.newPrice)}</span>
         </div>
         <div class="cek-domain-suggestion-status" id="status-${index}" style="font-size: 0.85rem; color: #6b7280;">
           <i class="fas fa-spinner fa-spin"></i> Mengecek...
@@ -307,12 +307,12 @@
         if (signal.aborted) return;
         const statusEl = item.querySelector(`#status-${index}`);
         const priceEl = item.querySelector(`#price-${index}`);
-        
+
         if (statusEl && priceEl) {
           if (isAvailable) {
             statusEl.style.display = 'none';
             priceEl.style.display = 'block';
-            
+
             // Only add click listener if available
             item.style.cursor = 'pointer';
             item.addEventListener('click', () => {
@@ -431,7 +431,7 @@
       }
     } catch (error) {
       // Return error state (jangan silent fail)
-      const message = error.name === 'AbortError' 
+      const message = error.name === 'AbortError'
         ? 'Request dibatalkan'
         : `Gagal mengecek ketersediaan: ${error.message}`;
 
@@ -494,9 +494,9 @@
           <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}"></i> ${sanitizeHTML(fullDomain)}
         </h3>
         <p class="cek-domain-result-info">${infoHtml}</p>
-        ${extData.oldPrice ? `<span class="cek-domain-result-old">Rp${formatCurrency(extData.oldPrice)}</span>` : ''}
+        ${extData.oldPrice ? `<span class="cek-domain-result-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
         <p class="cek-domain-result-price">
-          dari <strong>Rp${formatCurrency(extData.newPrice)}</strong> /tahun
+          dari <strong>${formatCurrency(extData.newPrice)}</strong> /tahun
         </p>
         <div class="cek-domain-actions" style="display: flex; gap: 10px; margin-top: 15px;">
           <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
@@ -635,8 +635,8 @@
 
         if (!recommendedResult) {
           recommendedResult = validResults.find(r => r.available === true && r.extData.highlight === 'best') ||
-                              validResults.find(r => r.available === true && r.extData.highlight === 'cheap') ||
-                              validResults.find(r => r.available === true);
+            validResults.find(r => r.available === true && r.extData.highlight === 'cheap') ||
+            validResults.find(r => r.available === true);
         }
       } else {
         recommendedResult = validResults[0];
@@ -848,6 +848,27 @@
         btn.style.color = '#999';
       }
     });
+  }
+
+  // ============================================
+  // AUTO-SEARCH FROM URL PARAMS
+  // ============================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const autoSearchQuery = urlParams.get('q');
+
+  if (autoSearchQuery && cekDomainInput) {
+    // If the user came from dashboard or other places with ?q=domain
+    cekDomainInput.value = autoSearchQuery;
+
+    // Auto trigger search after a small delay to let UI settle
+    setTimeout(() => {
+      // Scroll to section smoothly
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Dispatch submit event on the form to trigger the existing listener
+      const submitEvent = new Event('submit', { cancelable: true, bubbles: true });
+      cekDomainForm.dispatchEvent(submitEvent);
+    }, 500);
   }
 
 })();

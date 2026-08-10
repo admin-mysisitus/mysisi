@@ -120,6 +120,34 @@ export async function render(currentUser) {
         if (submitBtn) submitBtn.textContent = 'Set Password';
       }
 
+      // Handler untuk fitur Lupa Password Inline
+      const forgotPwdBtn = document.getElementById('btn-forgot-password-inline');
+      if (forgotPwdBtn) {
+        if (isSetPassword) {
+          forgotPwdBtn.style.display = 'none'; // Sembunyikan jika tidak butuh password lama
+        } else {
+          forgotPwdBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const originalText = forgotPwdBtn.textContent;
+            forgotPwdBtn.textContent = 'Mengirim...';
+            forgotPwdBtn.style.pointerEvents = 'none';
+            try {
+              const result = await APIClient.requestPasswordReset(currentUser.email);
+              if (result.success) {
+                showSuccess('Link reset password telah dikirim ke email Anda (' + currentUser.email + ').');
+              } else {
+                throw new Error(result.message || 'Gagal mengirim link reset');
+              }
+            } catch (err) {
+              showError(err.message);
+            } finally {
+              forgotPwdBtn.textContent = originalText;
+              forgotPwdBtn.style.pointerEvents = 'auto';
+            }
+          });
+        }
+      }
+
       initPasswordToggle(formChangePassword);
       formChangePassword.addEventListener('submit', async (e) => {
         e.preventDefault();

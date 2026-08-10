@@ -261,6 +261,37 @@ document.addEventListener('DOMContentLoaded', function () {
   initAutoSnapSlider(document.querySelector('.team-slider-container'));
   initAutoSnapSlider(document.querySelector('.compact-metrics-list'));
   initAutoSnapSlider(document.querySelector('.mission-cards-grid'));
+
+  // ========== TEAM BIO EXPAND ==========
+  const teamBios = document.querySelectorAll('.team-bio');
+  const teamSliderContainer = document.querySelector('.team-slider-container');
+  
+  // Fungsi penolong untuk menutup semua bio
+  const closeAllBios = (exceptBio = null) => {
+    teamBios.forEach(bio => {
+      if (bio !== exceptBio) bio.classList.remove('expanded');
+    });
+  };
+
+  teamBios.forEach(bio => {
+    bio.title = "Ketuk untuk memperluas/menyembunyikan teks";
+    bio.addEventListener('click', function(e) {
+      e.stopPropagation(); // Mencegah global click handler membatalkan aksi ini
+      const isExpanded = this.classList.contains('expanded');
+      closeAllBios(); // Tutup yang lain
+      if (!isExpanded) this.classList.add('expanded'); // Buka yang ini jika belum terbuka
+    });
+  });
+
+  // Tutup otomatis saat mulai scroll/geser (swipe)
+  if (teamSliderContainer) {
+    teamSliderContainer.addEventListener('scroll', () => closeAllBios(), { passive: true });
+    teamSliderContainer.addEventListener('touchstart', () => closeAllBios(), { passive: true });
+  }
+
+  // Tutup otomatis jika klik di area layar lainnya
+  document.addEventListener('click', () => closeAllBios());
+
   // ========== EXCLUSIVE ACCORDION (AUTO-CLOSE OTHERS) ==========
   const detailElements = document.querySelectorAll('details');
   detailElements.forEach(detail => {

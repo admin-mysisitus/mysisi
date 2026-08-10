@@ -1255,7 +1255,7 @@
 
 .packages-grid .package-card.featured .btn {
   background-color: var(--accent-cyan);
-  color: #000;
+  color: var(--text-primary);
   border: none;
 }
 

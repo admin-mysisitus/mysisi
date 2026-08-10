@@ -648,6 +648,25 @@ function resetPassword(token, newPassword) {
         // Clear token
         sheet.getRange(i + 1, 9).setValue('');
 
+        // Send email notification using template EMAIL-005
+        try {
+          const userEmail = data[i][2];
+          const userName = data[i][1] || 'Pelanggan';
+          const loginUrl = `${BASE_URL}/auth/`;
+          
+          const success = sendTemplatedEmail('EMAIL-005', userEmail, {
+            displayName: userName,
+            actionText: 'berhasil direset',
+            loginUrl: loginUrl
+          });
+          
+          if (!success) {
+            Logger.log('Gagal mengirim template EMAIL-005 (reset) untuk ' + userEmail);
+          }
+        } catch (e) {
+          Logger.log('Error saat mengirim notifikasi reset password: ' + e);
+        }
+
         return buildResponse(true, null, 'Password berhasil direset. Silakan login dengan password baru.');
       }
     }
@@ -742,6 +761,25 @@ function changePassword(userId, oldPassword, newPassword) {
         const newHash = hashPassword(newPassword);
         sheet.getRange(i + 1, 10).setValue(newHash);
         sheet.getRange(i + 1, 7).setValue(new Date().toISOString());
+
+        // Send email notification using template EMAIL-005
+        try {
+          const userEmail = data[i][2];
+          const userName = data[i][1] || 'Pelanggan';
+          const loginUrl = `${BASE_URL}/auth/`;
+          
+          const success = sendTemplatedEmail('EMAIL-005', userEmail, {
+            displayName: userName,
+            actionText: hasStoredPassword ? 'diubah' : 'dibuat (diset)',
+            loginUrl: loginUrl
+          });
+          
+          if (!success) {
+            Logger.log('Gagal mengirim template EMAIL-005 (change) untuk ' + userEmail);
+          }
+        } catch (e) {
+          Logger.log('Error saat mengirim notifikasi ganti password: ' + e);
+        }
 
         return buildResponse(true, null, hasStoredPassword ? 'Password berhasil diubah' : 'Password berhasil diset');
       }

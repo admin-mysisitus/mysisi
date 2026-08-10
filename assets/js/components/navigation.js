@@ -341,7 +341,8 @@ const setActiveLinks = () => {
 const generateFooterLinks = () => {
   const container = document.getElementById('footer-quick-links');
   if (!container) return;
-  menuData.filter(item => !item.isPromo).forEach(item => {
+  // Sembunyikan Promo dan Layanan (Layanan sudah dipindah ke kolom Layanan Utama)
+  menuData.filter(item => !item.isPromo && item.text !== 'Layanan').forEach(item => {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = item.href;
