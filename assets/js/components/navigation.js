@@ -1,4 +1,4 @@
-import { menuData, mainServicesData, footerSocialData, footerContactData } from '../config.js';
+import { menuData, mainServicesData, footerSocialData, footerContactData, footerTrustBadgesData } from '../config.js';
 
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
@@ -375,9 +375,41 @@ const generateFooterSocial = () => {
     a.href = item.href;
     a.setAttribute('aria-label', item.ariaLabel);
     a.setAttribute('target', '_blank');
-    a.innerHTML = `<i class="${item.icon}"></i>`;
+    a.innerHTML = `
+      <span class="sosmed-icon">${item.svg || '<i class="' + item.icon + '"></i>'}</span>
+      <span class="sosmed-text">${item.name || item.ariaLabel}</span>
+    `;
     container.appendChild(a);
   });
+};
+
+// Generate Footer Trust Badges
+const generateFooterTrustBadges = () => {
+  const container = document.getElementById('footer-trust-badges-container');
+  if (!container) return;
+  
+  container.className = 'footer-trust-badges';
+  container.setAttribute('aria-label', 'Sertifikasi dan Keamanan');
+  
+  const p = document.createElement('p');
+  p.className = 'trust-title';
+  p.textContent = 'Terdaftar & Tersertifikasi Oleh:';
+  container.appendChild(p);
+
+  const logosDiv = document.createElement('div');
+  logosDiv.className = 'trust-logos';
+
+  footerTrustBadgesData.forEach(item => {
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = item.alt;
+    img.loading = 'lazy';
+    img.width = 120;
+    img.height = 40;
+    logosDiv.appendChild(img);
+  });
+  
+  container.appendChild(logosDiv);
 };
 
 // Generate Footer Kontak
@@ -616,4 +648,5 @@ document.addEventListener('DOMContentLoaded', () => {
   generateFooterServices();
   generateFooterSocial();
   generateFooterContact();
+  generateFooterTrustBadges();
 });

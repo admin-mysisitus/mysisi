@@ -4,7 +4,7 @@
   // Import cart managers
   const { CartManager, WishlistManager } = await import('../modules/unified-cart.js');
   const { AuthManager } = await import('../modules/unified-auth.js');
-  const { showSuccess, showError, formatCurrency } = await import('../modules/unified-utils.js');
+  const { showSuccess, showError, showInfo, formatCurrency } = await import('../modules/unified-utils.js');
   const APIClient = (await import('../modules/unified-api.js')).default;
 
   // Get the section container
@@ -28,6 +28,23 @@
     { ext: '.or.id', oldPrice: 150000, newPrice: 130000, info: 'Organisasi nirlaba', highlight: 'none', label: '' },
     { ext: '.sch.id', oldPrice: 59000, newPrice: 59000, info: 'Sekolah & pendidikan', highlight: 'none', label: '' }
   ];
+
+  const extColors = {
+    '.com': '#4285f4', // blue
+    '.id': '#ea4335',  // red
+    '.co.id': '#ea4335',
+    '.my.id': '#ea4335',
+    '.web.id': '#ea4335',
+    '.cloud': '#20c997', // teal
+    '.org': '#6366f1', // indigo
+    '.net': '#4285f4',
+    '.biz.id': '#ea4335',
+    '.ac.id': '#ea4335',
+    '.or.id': '#ea4335',
+    '.sch.id': '#ea4335',
+    '.top': '#20c997',
+    '.xyz': '#a855f7' // purple
+  };
 
   // ============================================
   // UTILITY FUNCTIONS
@@ -63,7 +80,7 @@
   const cekDomainForm = section.querySelector('#cek-domain-form-main');
   const cekDomainPopularExtensions = section.querySelector('#cek-domain-popular-extensions');
   const cekDomainPricingPreview = section.querySelector('.cek-domain-pricing-preview');
-  const cekDomainPromoSection = section.querySelector('.cek-domain-promo-section');
+
 
   // Validate essential elements exist
   if (!cekDomainInput || !cekDomainForm) return;
@@ -146,9 +163,11 @@
         labels += `<span class="cek-domain-ext-discount">-${discount}%</span>`;
       }
 
+      const extColor = extColors[ext.ext] || '#1a1a2e';
+
       item.innerHTML = `
         <div class="cek-domain-ext-labels">${labels}</div>
-        <div class="cek-domain-ext-name">${ext.ext}</div>
+        <div class="cek-domain-ext-name" style="color: ${extColor}; font-weight: 800;">${ext.ext}</div>
         <div class="cek-domain-ext-prices">
           ${ext.oldPrice ? `<span class="cek-domain-ext-old">${formatCurrency(ext.oldPrice)}</span>` : ''}
           <span class="cek-domain-ext-new">${formatCurrency(ext.newPrice)}</span>
@@ -282,6 +301,8 @@
       item.setAttribute('role', 'option');
       item.id = `suggestion-${index}`;
 
+      const extSafe = ext;
+      const extColor = extColors[extSafe] || '#1a1a2e';
       const extLabel = ext.replace('.', '').toUpperCase();
       const priceHTML = extData && extData.newPrice ? `
         <div class="cek-domain-suggestion-price" id="price-${index}" style="display: none;">
@@ -294,9 +315,9 @@
       ` : '';
 
       item.innerHTML = `
-        <div class="cek-domain-suggestion-icon">${extLabel}</div>
+        <div class="cek-domain-suggestion-icon" style="background: ${extColor};">${extLabel}</div>
         <div class="cek-domain-suggestion-content">
-          <div class="cek-domain-suggestion-domain">${sanitizeHTML(fullDomain)}</div>
+          <div class="cek-domain-suggestion-domain">${sanitizeHTML(fullDomain).replace(extSafe, `<span style="color: ${extColor}; font-weight: bold;">${extSafe}</span>`)}</div>
           <div class="cek-domain-suggestion-note">${sanitizeHTML(extData?.info || '')}</div>
         </div>
         ${priceHTML}
@@ -488,21 +509,24 @@
         infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Siapa cepat bayar, dia dapat.</span>`;
       }
 
+      const extColor = extData ? (extColors[extData.ext] || '#1a1a2e') : '#1a1a2e';
+      const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${result.isOrdered ? 'inherit' : extColor};">${extData.ext}</span>`);
+
       card.innerHTML = `
         <div class="cek-domain-result-badges">${badges.join('')}</div>
         <h3 ${result.isOrdered ? 'style="color:#d35400;"' : ''}>
-          <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}"></i> ${sanitizeHTML(fullDomain)}
+          <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}"></i> <span>${coloredDomain}</span>
         </h3>
         <p class="cek-domain-result-info">${infoHtml}</p>
         ${extData.oldPrice ? `<span class="cek-domain-result-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
         <p class="cek-domain-result-price">
           dari <strong>${formatCurrency(extData.newPrice)}</strong> /tahun
         </p>
-        <div class="cek-domain-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+        <div class="cek-domain-actions" style="display: flex; gap: 8px; margin-top: 10px;">
           <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
             <i class="fas fa-lock"></i> Amankan Sekarang
           </button>
-          <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist" style="flex: 0 0 50px; cursor: pointer; border: 1px solid #ddd; background: #f8f9fa; border-radius: 5px; font-size: 18px; color: #999; transition: all 0.3s;">
+          <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist" style="flex: 0 0 40px; cursor: pointer; border: 1px solid #ddd; background: #f8f9fa; border-radius: 5px; font-size: 16px; color: #999; transition: all 0.3s; display: flex; align-items: center; justify-content: center;">
             <i class="far fa-heart"></i>
           </button>
         </div>
@@ -566,12 +590,7 @@
       `;
       cekDomainBtn.disabled = false;
       cekDomainBtn.innerHTML = originalBtnHTML;
-      Swal.fire({
-        icon: 'error',
-        title: 'Format Tidak Valid',
-        text: 'Format domain tidak valid. Contoh: namadomain.com',
-        confirmButtonColor: '#e74c3c'
-      });
+      showError('Format Tidak Valid', 'Format domain tidak valid. Contoh: namadomain.com');
       return;
     }
 
@@ -670,29 +689,13 @@
       `;
       cekDomainResultsList.appendChild(disclaimerLi);
 
-      // Show promo section
-      if (cekDomainPromoSection) {
-        cekDomainPromoSection.classList.add('show');
-      }
 
       // Show success notification
       const availableCount = validResults.filter(r => r.available === true).length;
       if (availableCount > 0) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Pengecekan Selesai!',
-          text: `${availableCount} domain tersedia untuk Anda.`,
-          timer: 3000,
-          timerProgressBar: true,
-          showConfirmButton: false
-        });
+        showSuccess('Pengecekan Selesai!', `${availableCount} domain tersedia untuk Anda.`);
       } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Pengecekan Selesai',
-          text: 'Pengecekan selesai. Silakan coba dengan nama domain lain.',
-          confirmButtonColor: '#2563EB'
-        });
+        showInfo('Pengecekan Selesai', 'Pengecekan selesai. Silakan coba dengan nama domain lain.');
       }
 
     } catch (err) {
@@ -702,12 +705,7 @@
           <i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan
         </li>
       `;
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal Mengecek Domain',
-        text: 'Gagal mengecek domain. Silakan coba lagi.',
-        confirmButtonColor: '#e74c3c'
-      });
+      showError('Gagal Mengecek Domain', 'Terjadi kesalahan saat mengecek ketersediaan domain. Silakan coba lagi nanti.');
     } finally {
       cekDomainBtn.disabled = false;
       cekDomainBtn.innerHTML = originalBtnHTML;

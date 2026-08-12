@@ -12,15 +12,25 @@
  * Show success notification
  */
 export function showSuccess(title = '', message = '') {
+  // Jika parameter kedua kosong, asumsikan message dimasukkan ke title (toast style)
+  const displayTitle = message ? title : '';
+  const displayMessage = message ? message : title;
+
   return Swal.fire({
+    toast: true,
+    position: 'top',
     icon: 'success',
-    title: title || 'Sukses!',
-    text: message,
-    timer: 4000,
-    timerProgressBar: true,
+    iconColor: 'white',
+    title: displayTitle,
+    text: displayMessage,
+    background: '#10b981', // Solid Green
+    color: 'white',
     showConfirmButton: false,
-    toast: false,
-    position: 'center'
+    timer: 3500,
+    timerProgressBar: true,
+    customClass: {
+      popup: 'modern-toast-popup'
+    }
   });
 }
 
@@ -28,12 +38,24 @@ export function showSuccess(title = '', message = '') {
  * Show error notification
  */
 export function showError(title = '', message = '') {
+  const displayTitle = message ? title : '';
+  const displayMessage = message ? message : title;
+
   return Swal.fire({
+    toast: true,
+    position: 'top',
     icon: 'error',
-    title: title || 'Terjadi Kesalahan',
-    text: message,
-    confirmButtonText: 'OK',
-    confirmButtonColor: '#e74c3c'
+    iconColor: 'white',
+    title: displayTitle,
+    text: displayMessage,
+    background: '#ef4444', // Solid Red
+    color: 'white',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    customClass: {
+      popup: 'modern-toast-popup'
+    }
   });
 }
 
@@ -41,11 +63,24 @@ export function showError(title = '', message = '') {
  * Show warning notification
  */
 export function showWarning(title = '', message = '') {
+  const displayTitle = message ? title : '';
+  const displayMessage = message ? message : title;
+
   return Swal.fire({
+    toast: true,
+    position: 'top',
     icon: 'warning',
-    title: title || 'Peringatan',
-    text: message,
-    confirmButtonText: 'OK'
+    iconColor: 'white',
+    title: displayTitle,
+    text: displayMessage,
+    background: '#f59e0b', // Solid Orange
+    color: 'white',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    customClass: {
+      popup: 'modern-toast-popup'
+    }
   });
 }
 
@@ -53,11 +88,24 @@ export function showWarning(title = '', message = '') {
  * Show info notification
  */
 export function showInfo(title = '', message = '') {
+  const displayTitle = message ? title : '';
+  const displayMessage = message ? message : title;
+
   return Swal.fire({
+    toast: true,
+    position: 'top',
     icon: 'info',
-    title: title || 'Informasi',
-    text: message,
-    confirmButtonText: 'OK'
+    iconColor: 'white',
+    title: displayTitle,
+    text: displayMessage,
+    background: '#3b82f6', // Solid Blue
+    color: 'white',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    customClass: {
+      popup: 'modern-toast-popup'
+    }
   });
 }
 

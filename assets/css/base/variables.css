@@ -40,11 +40,12 @@
    /* Legacy variable maps for compatibility */
    --dark-navy: var(--secondary-slate);
    --brand-green: var(--success-green);
-   --bg-darkest: oklch(97% 0.01 260);
+   --bg-soft: oklch(97% 0.01 260);
    --white: var(--bg-white);
    --gray-light: var(--bg-lighter);
    --gray-medium: var(--text-muted);
-   --bg-surface: var(--secondary-slate);
+   --bg-surface: var(--bg-white);
+   --bg-dark-surface: var(--secondary-slate);
 
    /* ========================================================
      TIPOGRAFI

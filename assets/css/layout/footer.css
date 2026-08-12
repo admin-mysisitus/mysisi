@@ -26,29 +26,54 @@ footer {
 
 .footer-sosmed {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 1rem;
 }
 .footer-sosmed a {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-medium);
-  background: rgba(255, 255, 255, 0.1);
+  width: auto;
+  height: 28px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--bg-white);
-  font-size: 1.1rem;
-  transition: var(--transisi-cepat);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  gap: 8px;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  background: transparent;
+  padding: 0;
+  border: none;
 }
 .footer-sosmed a:hover,
 .footer-sosmed a:focus {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
-  color: var(--bg-white);
-  box-shadow: var(--shadow-lg);
-  border-color: transparent;
   transform: translateY(-2px);
+  opacity: 0.8;
+  background: transparent;
+  border: none;
+}
+.sosmed-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  flex-shrink: 0;
+}
+.sosmed-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.sosmed-text {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bg-white, #ffffff);
+}
+
+.footer-map {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-medium);
+  border: none;
+  margin-bottom: 0.5rem;
 }
 
 .footer-judul {
@@ -234,22 +259,22 @@ footer {
 
 .footer-copyright {
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: var(--teks-kecil);
-  opacity: 0.75;
+  opacity: 0.55; /* Lebih transparan */
   margin: 0 auto;
   width: 90%;
   max-width: 1200px;
-  line-height: var(--line-height-relaxed);
 }
 .footer-copyright p {
   max-width: none;
   margin: 0 auto;
+  font-size: 0.8rem; /* Lebih besar sedikit */
+  line-height: 1.5;
 }
 .copyright-link {
   color: var(--accent-cyan);
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   transition: var(--transisi-cepat);
 }
@@ -267,4 +292,88 @@ footer {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ========== FOOTER TRUST BADGES ========== */
+.footer-trust-badges {
+  margin: 1.5rem 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.footer-trust-badges .trust-title {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.trust-logos {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.trust-logos img {
+  height: 80px;
+  width: auto;
+  flex-shrink: 1;
+  max-width: 100%;
+  object-fit: contain;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+}
+
+.trust-logos img:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+@media (max-width: 640px) {
+  .footer-trust-badges {
+    margin: 1.5rem 0;
+    padding-top: 1.5rem;
+    align-items: center;
+    text-align: center;
+  }
+  .footer-sosmed {
+    gap: 28px;
+    justify-content: center;
+  }
+  .footer-sosmed a {
+    width: 28px;
+    height: 28px;
+    gap: 0;
+  }
+  .sosmed-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .sosmed-text {
+    display: none;
+  }
+  .trust-logos {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+  }
+  .trust-logos img {
+    height: 70px;
+    width: auto;
+  }
+  .footer-copyright p {
+    font-size: 0.7rem; /* Lebih besar sedikit di mobile */
+    line-height: 1.5;
+  }
 }

@@ -4,12 +4,12 @@ import APIClient from '/assets/js/modules/unified-api.js';
 document.addEventListener('DOMContentLoaded', function () {
   // ========== SMOOTH SCROLL KE PROMO DETAILS ==========
   const smoothScrollLinks = document.querySelectorAll('a[href="#promo-details"]');
-  
+
   smoothScrollLinks.forEach(link => {
     link.addEventListener('click', function (e) {
       e.preventDefault();
       const target = document.querySelector('#promo-details');
-      
+
       if (target) {
         target.scrollIntoView({
           behavior: 'smooth',
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (!isTouch()) {
     const promoCards = document.querySelectorAll('.promo-card');
-    
+
     promoCards.forEach(card => {
       card.addEventListener('mouseenter', function () {
         this.style.willChange = 'transform';
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ========== ACCESSIBILITY: FOCUS MANAGEMENT ==========
   const allButtons = document.querySelectorAll('.btn');
-  
+
   allButtons.forEach(button => {
     button.addEventListener('focus', function () {
       this.style.outline = '2px solid var(--hijau-muda)';
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         response.data.forEach(promo => {
           const card = document.createElement('div');
           card.className = 'coupon-card';
-          
+
           let discountDisplay = '';
           let typeBadge = '';
           if (promo.discountType === 'percentage') {
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial check (delay a bit for layout to settle)
     setTimeout(startAutoScroll, 1000);
-    
+
     // Re-check on resize
     window.addEventListener('resize', () => {
       stopAutoScroll();
@@ -344,12 +344,49 @@ document.addEventListener('DOMContentLoaded', function () {
     '.promos-grid',
     '.value-proposition-grid',
     '.requirements-grid',
-    '.why-grid',
-    '.testimonial-grid'
+    '.why-grid'
   ];
-  
+
   gridsToSnap.forEach(selector => {
     const el = document.querySelector(selector);
     if (el) initAutoSnapSlider(el);
   });
+
+  // ========== SWIPER CAROUSEL INITIALIZATION ==========
+  if (typeof Swiper !== 'undefined') {
+    const testimonialSwiper = new Swiper('.testimonial-swiper', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      loop: true,
+      coverflowEffect: {
+        rotate: 0,
+        stretch: 0,
+        depth: 100,
+        modifier: 2.5,
+        slideShadows: false,
+      },
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        320: {
+          coverflowEffect: { modifier: 1 }
+        },
+        640: {
+          coverflowEffect: { modifier: 1.5 }
+        },
+        1024: {
+          coverflowEffect: { modifier: 2.5 }
+        }
+      }
+    });
+  }
 });

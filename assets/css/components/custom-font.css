@@ -52,7 +52,7 @@
   letter-spacing: -0.25px;
   font-variant-ligatures: none;
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.75rem; /* Lebih besar dari sebelumnya 0.65rem */
   font-weight: 600;
   line-height: 1;
   color: #ffffff;
@@ -65,8 +65,8 @@
 
 .logo.wm-sc::before {
   content: "";
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   background: var(--favicon-url) no-repeat center / contain;
   opacity: 0.85;
 }

@@ -59,7 +59,7 @@ export class CartManager {
         addedAt: Date.now(),
         id: this._generateId()
       });
-      showSuccess('âœ… Ditambahkan ke Cart', `${domain} sudah di cart`);
+      showSuccess('Ditambahkan ke Cart', `${domain} sudah di cart`);
     }
     
     this.saveCart(cart);
@@ -339,7 +339,7 @@ export class WishlistManager {
     
     // Check if already in wishlist
     if (wishlist.domains.some(d => d.domain.toLowerCase() === domain.toLowerCase())) {
-      showError('âš ï¸ Sudah di Wishlist', `${domain} sudah ada di wishlist`);
+      showError('Sudah di Wishlist', `${domain} sudah ada di wishlist`);
       return wishlist;
     }
     
@@ -352,7 +352,7 @@ export class WishlistManager {
     });
     
     this.saveWishlist(wishlist);
-    showSuccess('â¤ï¸ Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti`);
+    showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti`);
     
     return wishlist;
   }

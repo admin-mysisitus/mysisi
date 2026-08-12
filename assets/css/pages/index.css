@@ -1396,3 +1396,63 @@
     margin-bottom: 2rem;
   }
 }
+
+/* ========== INSTAGRAM EMBED PROFESSIONAL ========== */
+.ig-pro-section {
+  text-align: center;
+  padding: 40px 15px 60px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ig-pro-title {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-muted, #666);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+.ig-pro-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  width: 100%;
+}
+.ig-pro-handle::before,
+.ig-pro-handle::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background-color: var(--border-medium, #dcdcdc);
+  flex: 1;
+  max-width: 280px;
+}
+.ig-pro-handle a {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: clamp(24px, 8vw, 32px);
+  font-weight: 700;
+  color: var(--primary-blue, #2563EB);
+  text-decoration: none;
+  margin: 0 clamp(10px, 3vw, 25px);
+  letter-spacing: 0.5px;
+  transition: var(--transisi-cepat, all 0.2s ease);
+}
+.ig-pro-handle a:hover {
+  color: var(--primary-blue-dark, #1e40af);
+  transform: scale(1.02);
+}
+.ig-pro-embed {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.instagram-media {
+  min-width: 100% !important;
+  max-width: 100% !important;
+}

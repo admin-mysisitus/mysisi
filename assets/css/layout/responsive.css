@@ -180,7 +180,6 @@
     gap: 1rem;
     font-size: clamp(0.9rem, 1.5vw, 1rem);
   }
-  .footer-sosmed a { width: 35px; height: 35px; }
 }
 
 @media (min-width: 992px) {

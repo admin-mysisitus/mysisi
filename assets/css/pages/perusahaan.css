@@ -4,6 +4,45 @@
 /* Hero styling moved to components/hero.css */
 
 /* ========== COMPANY INTRO SECTION ========== */
+/* Specific Hero Background Styling for Perusahaan Page */
+.hero.hero-home {
+  background-image: url('/assets/img/banner-perusahaan.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Hilangkan elemen bulatan dekorasi (circle) bawaan dari komponen hero umum yang menutupi/mengganggu foto */
+.hero.hero-home::before,
+.hero.hero-home::after {
+  display: none !important;
+}
+
+.hero.hero-home .hero-illustration {
+  display: none !important; /* Sembunyikan gambar inline karena kita menggunakan background */
+}
+
+@media (max-width: 768px) {
+  .hero.hero-home {
+    background-image: url('/assets/img/banner-perusahaan.webp') !important;
+    background-position: 0% 100%; /* Mulai dari kiri bawah */
+    background-size: cover; /* Cover sudah cukup jika layarnya sempit dan tinggi */
+    animation: panBackgroundMobile 25s ease-in-out infinite;
+    position: relative;
+  }
+  
+  .hero.hero-home .container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes panBackgroundMobile {
+  0% { background-position: 0% 100%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 100%; }
+}
+
 .company-intro-section {
   padding: 3rem 0;
   background-color: var(--bg-white);
@@ -808,8 +847,10 @@
   object-fit: cover;
   object-position: top center;
   transition: transform 0.5s ease;
-  font-size: 0.875rem; /* Ukuran font alt text lebih kecil */
-  padding: 1rem; /* Mencegah alt text mepet ke tepi */
+  font-size: 0.875rem;
+  /* Ukuran font alt text lebih kecil */
+  padding: 1rem;
+  /* Mencegah alt text mepet ke tepi */
   text-align: center;
 }
 
@@ -891,7 +932,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: auto; /* Mendorong skills ke paling bawah kartu */
+  margin-top: auto;
+  /* Mendorong skills ke paling bawah kartu */
 }
 
 .skill-tag {
@@ -1434,37 +1476,39 @@ details[open] .accordion-icon {
    MOBILE TYPOGRAPHY & SPACE-EFFICIENT OPTIMIZATIONS (IMPECCABLE)
    ========================================================================== */
 @media (max-width: 768px) {
+
   /* --- 1. Hero Section (Compact & Punchy) --- */
   .hero-home {
     padding: 2.25rem 0 !important;
   }
-  
+
   .hero-home .hero-subtitle {
     font-size: 0.938rem !important;
     margin-bottom: 0.5rem !important;
     line-height: 1.4 !important;
   }
-  
+
   .hero-home .hero-content h1 {
     font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
     line-height: 1.15 !important;
     margin-bottom: 0.75rem !important;
   }
-  
+
   .hero-home .hero-content p {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.25rem !important;
   }
-  
+
   .hero-home .hero-illustration img {
     max-width: 280px !important;
   }
-  
+
   .hero-home .cta-buttons {
     gap: 0.75rem !important;
   }
-  
+
   .hero-home .cta-buttons .btn {
     padding: 0.65rem 1.25rem !important;
     font-size: 0.938rem !important;
@@ -1474,121 +1518,135 @@ details[open] .accordion-icon {
   .compact-metrics-list {
     gap: 0.75rem !important;
   }
-  
+
   .metric-list-item {
-    flex: 0 0 75% !important; /* Kartu berikutnya mengintip 25% sebagai petunjuk scroll */
+    flex: 0 0 75% !important;
+    /* Kartu berikutnya mengintip 25% sebagai petunjuk scroll */
     gap: 0.75rem !important;
     align-items: flex-start;
   }
-  
+
   .metric-list-item .metric-number {
-    font-size: 1.75rem !important; /* 28px - lebih hemat ruang namun tetap menonjol */
+    font-size: 1.75rem !important;
+    /* 28px - lebih hemat ruang namun tetap menonjol */
     width: auto !important;
     min-width: 55px;
   }
-  
+
   .metric-list-item .metric-text h3 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     margin-bottom: 0.2rem !important;
     font-weight: 700;
   }
-  
+
   .metric-list-item .metric-text p {
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.4 !important;
     margin: 0 !important;
   }
 
   /* --- 3. Visi Misi & Kenapa Memilih SISITUS (Compact Card Slider) --- */
   .company-differentiation-section .section-subtitle {
-    margin-bottom: 1.25rem !important; /* Mengurangi whitespace 40px menjadi 20px */
+    margin-bottom: 1.25rem !important;
+    /* Mengurangi whitespace 40px menjadi 20px */
   }
-  
+
   .vision-block h2 {
-    font-size: 1.375rem !important; /* 22px (~1.4rem) */
+    font-size: 1.375rem !important;
+    /* 22px (~1.4rem) */
     line-height: 1.25 !important;
     margin-bottom: 0.75rem !important;
   }
-  
+
   .tab-pane-content p {
     font-size: 0.9rem !important;
     line-height: 1.45 !important;
   }
-  
+
   .mission-card {
     flex: 0 0 78% !important;
-    padding: 0.875rem !important; /* 14px */
+    padding: 0.875rem !important;
+    /* 14px */
   }
-  
+
   .mission-card h4 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     margin-bottom: 0.35rem !important;
   }
-  
+
   .mission-card p {
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.4 !important;
   }
-  
+
   .diff-slider-track .feature-card {
     flex: 0 0 78% !important;
-    padding: 0.875rem !important; /* 14px */
+    padding: 0.875rem !important;
+    /* 14px */
   }
-  
+
   .diff-slider-track .feature-card .feature-number {
     font-size: 1.25rem !important;
     margin-bottom: 0.35rem !important;
   }
-  
+
   .diff-slider-track .feature-card .feature-details h3 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     margin-bottom: 0.35rem !important;
     font-weight: 700;
   }
-  
+
   .diff-slider-track .feature-card .feature-details p {
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.4 !important;
   }
 
   /* --- 4. Accordion Nilai-Nilai Kami & Layanan Kami (Full-Width Content) --- */
   .value-summary,
   .service-summary {
-    padding: 0.75rem 0.875rem !important; /* 12px 14px */
+    padding: 0.75rem 0.875rem !important;
+    /* 12px 14px */
   }
-  
+
   .value-num {
     font-size: 1.1rem !important;
   }
-  
+
   .value-summary h3,
   .service-summary-title h3 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     font-weight: 600 !important;
   }
-  
+
   .service-summary-title {
     gap: 0.75rem !important;
   }
-  
+
   .service-summary-title i {
     font-size: 1.1rem !important;
     width: 28px;
   }
-  
+
   .value-content {
     padding: 0 0.875rem 0.875rem 0.875rem !important;
     font-size: 0.844rem !important;
     line-height: 1.45 !important;
   }
-  
+
   /* Hapus padding kiri 60px pada Layanan di mobile agar teks memanfaatkan lebar penuh HP */
   .service-content {
     padding: 0 0.875rem 0.875rem 0.875rem !important;
     font-size: 0.844rem !important;
     line-height: 1.45 !important;
   }
-  
+
   .service-content .btn,
   .service-content .btn-small {
     display: inline-flex !important;
@@ -1601,64 +1659,69 @@ details[open] .accordion-icon {
   .team-slider-track .team-card {
     flex: 0 0 78% !important;
   }
-  
+
   .team-content {
-    padding: 0.875rem !important; /* 14px */
+    padding: 0.875rem !important;
+    /* 14px */
   }
-  
+
   .team-content h3 {
-    font-size: 0.85rem !important; /* 15px -> ~13.6px agar pas 1 baris di mobile */
+    font-size: 0.85rem !important;
+    /* 15px -> ~13.6px agar pas 1 baris di mobile */
     margin-bottom: 2px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
-  
+
   .team-role {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     margin-bottom: 0.5rem !important;
   }
-  
+
   .team-bio {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     line-height: 1.4 !important;
     margin-bottom: 0.75rem !important;
     display: block !important;
-    max-height: calc(1.4 * 0.813rem * 4) !important; /* Standar awal 4 baris */
+    max-height: calc(1.4 * 0.813rem * 4) !important;
+    /* Standar awal 4 baris */
     overflow: hidden !important;
     cursor: pointer;
     transition: color 0.2s ease;
   }
-  
+
   /* Saat teks ditekan/diklik (expanded) */
   .team-bio.expanded {
     max-height: 1000px !important;
     color: var(--text-primary) !important;
   }
-  
+
   .skill-tag {
     width: 28px !important;
     height: 28px !important;
     font-size: 12px !important;
   }
-  
+
   .team-cta {
     padding: 1.25rem 1rem !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
     width: 100% !important;
   }
-  
+
   .team-cta .cta-buttons {
     width: 100% !important;
     flex-direction: column !important;
     gap: 0.75rem !important;
   }
-  
+
   .team-cta h3 {
     font-size: 1.1rem !important;
   }
-  
+
   .team-cta p {
     font-size: 0.844rem !important;
     line-height: 1.4 !important;
@@ -1682,7 +1745,7 @@ details[open] .accordion-icon {
     gap: 0.6rem !important;
     margin-top: 1.25rem !important;
   }
-  
+
   .navigate-pill {
     padding: 0.5rem 1rem !important;
     font-size: 0.844rem !important;
