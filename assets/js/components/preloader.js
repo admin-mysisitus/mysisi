@@ -1,5 +1,6 @@
 // Logika Preloader yang Tetap Stabil
 const PRELOADER_START = performance.now();
+document.body.classList.add("preloading");
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   const supportWrapper = document.querySelector(".support-btn-wrapper");
@@ -10,6 +11,7 @@ window.addEventListener("load", () => {
   const remaining = Math.max(0, MIN_PRELOADER_TIME - elapsed);
   setTimeout(() => {
     preloader.classList.add("hidden");
+    document.body.classList.remove("preloading");
     setTimeout(() => {
       preloader.remove();
       supportWrapper?.classList.add("show");

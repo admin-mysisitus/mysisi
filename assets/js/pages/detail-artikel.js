@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function createShareButtons() {
   const container = document.querySelector('.share-buttons-container');
   if (!container) return;
+  // Hapus inline style agar CSS eksternal (detail-artikel.css) bisa bekerja
+  container.removeAttribute('style');
+  // Kosongkan isi jika sudah ada (mencegah duplikasi)
+  container.innerHTML = '';
   // Get metadata from meta tags untuk share yang lebih lengkap
   const getMetaContent = (property, attribute = 'property') => {
     return document.querySelector(`meta[${attribute}="${property}"]`)?.getAttribute('content') || null;
@@ -201,21 +205,17 @@ function generateTableOfContents() {
   const container = document.querySelector('.artikel-content .container');
   if (!artikelBody || !container) return;
   const headings = artikelBody.querySelectorAll('h2, h3');
-  if (headings.length < 3) return; // Hanya buat TOC jika ada 3+ headings
-  // Create TOC container
+  if (headings.length < 3) return;
+  // Buat elemen TOC
   const tocContainer = document.createElement('div');
   tocContainer.className = 'toc-container';
   tocContainer.innerHTML = '<h3 class="toc-title">Daftar Isi</h3>';
   const tocList = document.createElement('ul');
   tocList.className = 'toc-list';
-  // Generate headings IDs and create TOC items
   headings.forEach((heading, index) => {
-    if (!heading.id) {
-      heading.id = `heading-${index}`;
-    }
+    if (!heading.id) heading.id = `heading-${index}`;
     const li = document.createElement('li');
-    const level = heading.tagName === 'H2' ? 'h2' : 'h3';
-    li.className = `toc-item toc-${level}`;
+    li.className = `toc-item toc-${heading.tagName === 'H2' ? 'h2' : 'h3'}`;
     const a = document.createElement('a');
     a.href = `#${heading.id}`;
     a.textContent = heading.textContent;
@@ -224,8 +224,58 @@ function generateTableOfContents() {
     tocList.appendChild(li);
   });
   tocContainer.appendChild(tocList);
-  // Append TOC ke container (sidebar position) - akan tampil di sebelah kanan di desktop
-  container.appendChild(tocContainer);
+  // ── DESKTOP & MOBILE TOC Logic (Simplified & Jitter-Free) ──
+  function updateTOC() {
+    // Mode Mobile
+    if (window.innerWidth < 768) {
+      tocContainer.style.cssText = '';
+      const ph = document.getElementById('toc-placeholder');
+      if (ph) ph.remove();
+      const shareContainer = document.querySelector('.share-buttons-container');
+      if (shareContainer && shareContainer.parentNode) {
+        shareContainer.parentNode.insertBefore(tocContainer, shareContainer.nextSibling);
+      } else {
+        container.appendChild(tocContainer);
+      }
+      return;
+    }
+    // Mode Desktop
+    if (!container.contains(tocContainer)) {
+      container.insertBefore(tocContainer, container.firstChild);
+    }
+    let placeholder = document.getElementById('toc-placeholder');
+    if (!placeholder) {
+      placeholder = document.createElement('div');
+      placeholder.id = 'toc-placeholder';
+      placeholder.style.cssText = 'grid-column: 2; grid-row: 1 / -1; width: 280px; display: none;';
+      container.insertBefore(placeholder, container.firstChild);
+    }
+    const headerHeight = 80;
+    const rect = container.getBoundingClientRect();
+    const artikelBody = document.querySelector('.artikel-body');
+    const bottomRect = artikelBody ? artikelBody.getBoundingClientRect().bottom : 9999;
+    // Aktifkan floating jika melewati header, dan matikan jika mencapai bawah artikel
+    if (rect.top <= headerHeight && bottomRect > headerHeight + 100) {
+      placeholder.style.display = 'block';
+      tocContainer.style.cssText = `position: fixed; top: ${headerHeight + 10}px; right: ${window.innerWidth - rect.right}px; width: 280px; max-height: calc(100vh - 110px); z-index: 90; box-shadow: 0 4px 20px rgba(0,0,0,0.1);`;
+    } else {
+      placeholder.style.display = 'none';
+      tocContainer.style.cssText = 'position: static; grid-column: 2; grid-row: 1 / -1; align-self: start;';
+    }
+  }
+  // Bind events
+  if (window.__tocScrollHandler) {
+    window.removeEventListener('scroll', window.__tocScrollHandler);
+    window.removeEventListener('resize', window.__tocScrollHandler);
+  }
+  window.__tocScrollHandler = updateTOC;
+  window.addEventListener('scroll', window.__tocScrollHandler, {
+    passive: true
+  });
+  window.addEventListener('resize', window.__tocScrollHandler, {
+    passive: true
+  });
+  updateTOC();
 }
 /**
  * Setup smooth scroll untuk anchor links dan related articles

@@ -9,17 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextBtn = paginationLinks.length > 1 ? paginationLinks[paginationLinks.length - 1] : null;
   const pageInfo = document.querySelector('.pagination-info');
   let currentPage = 1;
-  const cardsPerPage = 3; // 1 baris 3 card per halaman
+  const cardsPerPage = 6; // 1 baris 3 card per halaman, 2 baris = 6
   let currentCategory = 'Semua';
+  let currentSearch = '';
+  const searchInput = document.getElementById('searchInput');
   // Fungsi Utama: Filter Kategori & Paginate 3 Card
   function updateDisplay(scrollToTop = false) {
     if (allCards.length === 0) return;
     // 1. Filter card berdasarkan kategori aktif
     const matchingCards = allCards.filter(card => {
-      if (currentCategory === 'Semua') return true;
-      const cardCategory = card.getAttribute('data-category') || '';
-      const cardTags = Array.from(card.querySelectorAll('.tag, .artikel-meta span')).map(t => t.textContent.trim().toLowerCase());
-      return cardTags.some(t => t.includes(currentCategory.toLowerCase())) || cardCategory.toLowerCase().includes(currentCategory.toLowerCase());
+      let categoryMatch = true;
+      if (currentCategory !== 'Semua') {
+        const cardCategory = card.getAttribute('data-category') || '';
+        const cardTags = Array.from(card.querySelectorAll('.tag, .artikel-meta span')).map(t => t.textContent.trim().toLowerCase());
+        categoryMatch = cardTags.some(t => t.includes(currentCategory.toLowerCase())) || cardCategory.toLowerCase().includes(currentCategory.toLowerCase());
+      }
+      let searchMatch = true;
+      if (currentSearch.trim() !== '') {
+        const searchVal = currentSearch.toLowerCase().trim();
+        const cardText = card.textContent.toLowerCase();
+        searchMatch = cardText.includes(searchVal);
+      }
+      return categoryMatch && searchMatch;
     });
     // 2. Hitung total halaman
     const totalPages = Math.max(1, Math.ceil(matchingCards.length / cardsPerPage));
@@ -145,10 +156,17 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       // Hitung total halaman saat ini
       const matchingCount = allCards.filter(card => {
-        if (currentCategory === 'Semua') return true;
-        const cardCategory = card.getAttribute('data-category') || '';
-        const cardTags = Array.from(card.querySelectorAll('.tag, .artikel-meta span')).map(t => t.textContent.trim().toLowerCase());
-        return cardTags.some(t => t.includes(currentCategory.toLowerCase())) || cardCategory.toLowerCase().includes(currentCategory.toLowerCase());
+        let categoryMatch = true;
+        if (currentCategory !== 'Semua') {
+          const cardCategory = card.getAttribute('data-category') || '';
+          const cardTags = Array.from(card.querySelectorAll('.tag, .artikel-meta span')).map(t => t.textContent.trim().toLowerCase());
+          categoryMatch = cardTags.some(t => t.includes(currentCategory.toLowerCase())) || cardCategory.toLowerCase().includes(currentCategory.toLowerCase());
+        }
+        let searchMatch = true;
+        if (currentSearch.trim() !== '') {
+          searchMatch = card.textContent.toLowerCase().includes(currentSearch.toLowerCase().trim());
+        }
+        return categoryMatch && searchMatch;
       }).length;
       const totalPages = Math.max(1, Math.ceil(matchingCount / cardsPerPage));
       if (currentPage < totalPages) {
@@ -224,4 +242,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inisialisasi slider untuk mobile
   initAutoSnapSlider(document.querySelector('.artikel-grid'));
   initAutoSnapSlider(document.querySelector('.tips-grid'));
+  // ========== SEARCH EVENT LISTENER ==========
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      currentSearch = e.target.value;
+      currentPage = 1;
+      updateDisplay(false);
+    });
+  }
 });

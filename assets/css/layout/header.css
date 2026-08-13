@@ -306,8 +306,6 @@ header.scroll {
   transition: var(--transisi-cepat);
   border-radius: 8px;
   /* Sudut melengkung untuk kotak fokus */
-  margin-right: -0.5rem;
-  /* Menyesuaikan jarak pinggir jika terlalu lebar */
 }
 
 .nav-mobile-dropdown-menu {

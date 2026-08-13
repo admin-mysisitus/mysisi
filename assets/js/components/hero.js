@@ -79,7 +79,6 @@ class HeroComponent {
     const sectionMap = {
       'default': 'hero',
       'home': 'hero hero-home',
-      'artikel': 'hero hero-artikel',
       'cta': 'detail-cta-section',
       'promo-cta': 'promo-cta-final-section',
       'home-cta': 'cta-final-section',

@@ -14,31 +14,56 @@
 .featured-image {
   width: 100%;
   max-width: 800px;
-  height: auto;
+  height: auto !important;
   border-radius: var(--radius-medium);
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 30px auto !important;
   box-shadow: var(--shadow-md);
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+}
+
+/* ========== HEADER SPACING OVERRIDES ========== */
+.artikel-body h1 {
+  margin-bottom: 0.5rem !important;
+}
+
+.artikel-meta {
+  margin-bottom: 0.8rem !important;
+  font-size: 0.9rem !important;
+}
+
+.artikel-meta .meta-item {
+  font-size: 0.9rem !important;
+}
+
+.artikel-meta i {
+  font-size: 0.95rem !important;
 }
 
 /* ========== SHARE BUTTONS - PROFESSIONAL DESIGN ========== */
 .share-buttons-container {
-  margin-top: 40px;
-  padding: 30px 0;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
+  margin: 15px auto 25px auto !important;
+  padding: 20px 0 !important;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
+  gap: 15px;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  width: 100%;
+  max-width: 600px;
 }
 
 .share-buttons-container::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 2px;
-  height: 40%;
-  background: linear-gradient(180deg, transparent, var(--primary-blue), transparent);
-  opacity: 0.3;
+  content: "BAGIKAN:";
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0;
+  letter-spacing: 0.5px;
 }
 
 .share-buttons {
@@ -47,16 +72,6 @@
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
-}
-
-.share-buttons::before {
-  content: 'Bagikan:';
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-right: 8px;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
 }
 
 .share-btn {
@@ -394,9 +409,76 @@
   justify-content: center;
 }
 
-/* Artikel Content */
+/* ========== LAYOUT & TYPOGRAPHY ENHANCEMENTS ========== */
+.artikel-container.new-layout {
+  padding-top: 85px;
+  padding-bottom: 50px;
+}
+
+.artikel-body .featured-image {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  object-fit: cover;
+  aspect-ratio: 16/9;
+}
+
+.artikel-body h1 {
+  text-align: center;
+  color: var(--text-primary);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+}
+
+.artikel-body .artikel-meta {
+  display: flex;
+  justify-content: center;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.artikel-body .artikel-meta i {
+  color: #10b981;
+}
+
+.artikel-body .artikel-meta a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.artikel-body .artikel-meta .reading-time {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.share-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 3rem;
+}
+
+/* Base styles for artikel content */
 .artikel-content {
   padding: clamp(3.5rem, 7vw, 5rem) 20px;
+}
+
+.artikel-container.new-layout {
+  padding-top: 30px !important;
+}
+
+.artikel-container.new-layout .artikel-content {
+  padding-top: 0 !important;
 }
 
 .artikel-content .container {
@@ -404,10 +486,12 @@
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: 40px;
+  align-items: start;
 }
 
 .artikel-body {
   max-width: 100%;
+  grid-column: 1;
 }
 
 .artikel-body h2 {
@@ -433,21 +517,34 @@
 }
 
 .artikel-body p {
-  font-size: 1.0625rem;
+  font-size: clamp(0.938rem, 1.2vw, 1.063rem);
   line-height: 1.8;
   color: #444;
   margin-bottom: 20px;
-  text-align: justify;
+  text-align: left;
 }
 
-.artikel-body a {
+.artikel-body ul,
+.artikel-body ol {
+  margin-bottom: 20px;
+  padding-left: 1.5rem;
+}
+
+.artikel-body li {
+  font-size: clamp(0.938rem, 1.2vw, 1.063rem);
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.artikel-body a:not(.share-btn) {
   color: var(--primary-blue);
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.artikel-body a:hover {
+.artikel-body a:not(.share-btn):hover {
   color: var(--accent-cyan);
 }
 
@@ -517,9 +614,6 @@
   background: var(--accent-cyan);
 }
 
-/* ========== ARTIKEL CTA (moved to components/hero.css) ========== */
-/* Artikel CTA styling sudah di-move ke components/hero.css sebagai komponen reusable */
-/* Lihat .artikel-cta di hero.css */
 /* Related Articles */
 .related-articles-section {
   padding: 60px 20px;
@@ -629,7 +723,7 @@
   grid-column: 1;
 }
 
-.related-content h3 {
+.related-content h2 {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 30px;
@@ -638,47 +732,83 @@
 
 .related-articles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 15px;
 }
 
 .related-article {
-  padding: 20px;
+  /* No padding to allow image to flush */
   background: var(--bg-light);
   border-radius: 8px;
+  border: 1px solid #eaeaea;
   transition: all 0.3s ease;
-  border-left: 3px solid transparent;
+  overflow: hidden;
+}
+
+.related-link-wrapper {
+  display: flex;
+  align-items: stretch;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
 }
 
 .related-article:hover {
   background: #f0f7ff;
-  border-left: 3px solid var(--primary-blue);
-  transform: translateX(8px);
+  border-color: #d4e5f7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.related-article h4 {
-  font-size: 1.0625rem;
+.related-img {
+  flex: 0 0 100px;
+  background: #f5f5f5;
+}
+
+.related-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.related-text {
+  padding: 12px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.related-text h4 {
+  font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 12px;
-  line-height: 1.4;
+  margin-bottom: 6px;
+  line-height: 1.35;
   color: var(--text-primary);
+  transition: color 0.2s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
 }
 
-.related-article h4 a {
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.related-article:hover h4 a {
+.related-article:hover .related-text h4 {
   color: var(--primary-blue);
 }
 
-.related-article p {
-  font-size: 0.9375rem;
+.related-text p {
+  font-size: 0.825rem;
   color: #666;
-  line-height: 1.6;
+  line-height: 1.4;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Artikel Navigation */
@@ -701,16 +831,17 @@
 .toc-container {
   background: linear-gradient(135deg, #f0f7ff 0%, #f8fbff 100%);
   border: 1px solid #d4e5f7;
-  border-radius: 8px;
-  padding: 25px;
   border-left: 4px solid var(--primary-blue);
-  position: sticky;
-  top: 100px;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
+  border-radius: 8px;
+  padding: 20px;
   margin: 0;
-  grid-column: 2;
-  grid-row: 1 / -1;
+  overflow-y: auto;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.toc-container[style*="fixed"] {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .toc-title {
@@ -798,18 +929,16 @@
 /* CTA Section - Styling sudah di components/hero.css */
 /* Menggunakan class .detail-cta-section untuk unifikasi */
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .artikel-content .container {
     grid-template-columns: 1fr;
     gap: 30px;
   }
 
   .toc-container {
-    position: static;
-    grid-column: 1;
-    max-height: none;
-    margin-top: 0;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    max-height: 280px;
+    overflow-y: auto;
   }
 
   .artikel-sidebar {
@@ -836,8 +965,17 @@
 }
 
 @media (max-width: 768px) {
+  .artikel-container.new-layout {
+    padding-top: 25px !important;
+  }
+
   .artikel-content {
-    padding: 40px 20px;
+    padding: 20px 12px;
+  }
+
+  .artikel-body h1 {
+    font-size: 1.6rem !important;
+    line-height: 1.35 !important;
   }
 
   .artikel-body h2 {
@@ -864,25 +1002,19 @@
 
   .related-articles {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
-  .article-image {
-    height: 180px;
-  }
-
-  .related-article {
-    padding: 18px;
-  }
-
-  .related-article h4 {
-    font-size: 1rem;
+  .related-img {
+    flex: 0 0 90px;
   }
 
   .toc-container {
     padding: 20px;
     margin-bottom: 30px;
     position: static;
-    max-height: none;
+    max-height: 280px;
+    overflow-y: auto;
   }
 
   .toc-title {
@@ -898,17 +1030,13 @@
   }
 
   .share-buttons-container {
-    margin-top: 30px;
-    padding: 25px 0;
+    margin: 15px auto !important;
+    padding: 15px 0 !important;
+    row-gap: 8px;
   }
 
   .share-buttons {
     gap: 12px;
-  }
-
-  .share-buttons::before {
-    display: block;
-    margin-right: 2px;
   }
 
   .share-btn {
@@ -920,7 +1048,22 @@
 
 @media (max-width: 480px) {
   .artikel-content {
-    padding: 30px 15px;
+    padding: 20px 16px;
+  }
+
+  .featured-image {
+    width: calc(100% + 24px) !important;
+    max-width: none !important;
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+    border-radius: 10px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .artikel-body h1 {
+    font-size: 1.35rem !important;
+    line-height: 1.3 !important;
+    margin-top: 0 !important;
   }
 
   .artikel-body h2 {
@@ -933,28 +1076,13 @@
   }
 
   .share-buttons-container {
-    margin-top: 25px;
-    padding: 20px 0;
+    margin: 10px auto 20px auto !important;
+    padding: 10px 0 !important;
+    row-gap: 5px;
   }
 
   .share-buttons {
     gap: 10px;
-    margin-top: 10px;
-  }
-
-  .share-buttons::before {
-    content: 'Bagikan:';
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-right: 8px;
-    letter-spacing: 0.2px;
-    text-transform: uppercase;
-    width: 100%;
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
-    margin-right: 0;
   }
 
   .share-btn {
@@ -969,19 +1097,19 @@
 
   .related-articles {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 10px;
   }
 
-  .related-article {
-    padding: 16px;
+  .related-img {
+    flex: 0 0 85px;
   }
 
-  .related-article h4 {
-    font-size: 0.9375rem;
+  .related-text h4 {
+    font-size: 0.9rem;
   }
 
-  .article-image {
-    height: 200px;
+  .related-text p {
+    font-size: 0.8rem;
   }
 
   .artikel-navigation {
@@ -997,7 +1125,8 @@
     padding: 18px;
     margin-bottom: 25px;
     position: static;
-    max-height: none;
+    max-height: 250px;
+    overflow-y: auto;
   }
 
   .toc-title {
@@ -1104,16 +1233,6 @@
   }
 
   /* Hero section di print */
-  .hero-artikel {
-    page-break-after: avoid;
-    padding: 15px 0;
-  }
-
-  .hero-artikel h1 {
-    font-size: 24pt;
-    margin-bottom: 10px;
-  }
-
   .artikel-meta {
     font-size: 9pt;
     margin-top: 10px;
@@ -1170,5 +1289,83 @@
 
   .artikel-meta {
     display: none;
+  }
+}
+
+/* ========== INLINE CTA (Article Content) ========== */
+.inline-cta-box {
+  background: linear-gradient(135deg, #f8fbff 0%, #f0f7ff 100%);
+  border: 1px solid #d4e5f7;
+  border-left: 4px solid var(--primary-blue);
+  border-radius: 8px;
+  padding: 20px 16px;
+  /* Optimized for mobile */
+  margin: 40px 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.inline-cta-content h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  word-wrap: break-word;
+}
+
+.inline-cta-content p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.inline-cta-box .btn {
+  align-self: flex-start;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  background: var(--primary-blue);
+  color: #fff !important;
+  transition: all 0.3s ease;
+  white-space: normal;
+  /* Allow text wrapping if needed */
+  text-align: center;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.inline-cta-box .btn:hover {
+  background: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+@media (min-width: 768px) {
+  .inline-cta-box {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+  }
+
+  .inline-cta-content {
+    flex: 1;
+  }
+
+  .inline-cta-box .btn {
+    align-self: center;
+    flex: 0 0 auto;
+    margin-left: 20px;
+    padding: 12px 24px;
   }
 }
