@@ -64,20 +64,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* Filter states */
-.artikel-card.hidden {
-  display: none !important;
-}
 
-.artikel-card.filtered {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.artikel-card.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 .artikel-header {
   margin-bottom: 1rem;

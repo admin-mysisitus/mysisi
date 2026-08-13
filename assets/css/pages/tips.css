@@ -156,20 +156,7 @@
   position: relative;
 }
 
-/* ========== FILTER STATES ========== */
-.tips-card.hidden {
-  display: none !important;
-}
 
-.tips-card.filtered {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.tips-card.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 /* ========== TIPS CTA SECTION ========== */
 /* Styling sudah di-move ke components/hero.css sebagai komponen reusable */

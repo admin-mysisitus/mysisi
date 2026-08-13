@@ -15,7 +15,7 @@
   const copyrightPara = document.createElement("p");
   const currentYear = new Date().getFullYear();
   copyrightPara.innerHTML = `&copy; <span>${currentYear}</span> — sisitus.com<br>
-                             All Rights Reserved | Developed by: <a href="https://www.instagram.com/lukman_looker?igsh=aTZwbmgxdXg0OTJk" class="copyright-link" aria-label="Designer sisitus">Designer</a><br>
+                             All Rights Reserved | Developed by: <a href="https://www.instagram.com/sisitusdotcom" class="copyright-link" aria-label="Instagram SINTARA TECH">SINTARA TECH</a><br>
                              Powered by`;
   // Buat watermark
   const wm = document.createElement("a");

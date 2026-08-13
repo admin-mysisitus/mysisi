@@ -576,18 +576,24 @@
 
 /* ========== FILTER STATES ========== */
 .featured-post.hidden,
-.article-card.hidden {
+.article-card.hidden,
+.artikel-card.hidden,
+.tips-card.hidden {
   display: none !important;
 }
 
 .featured-post.filtered,
-.article-card.filtered {
+.article-card.filtered,
+.artikel-card.filtered,
+.tips-card.filtered {
   opacity: 0.5;
   pointer-events: none;
 }
 
 .featured-post.visible,
-.article-card.visible {
+.article-card.visible,
+.artikel-card.visible,
+.tips-card.visible {
   opacity: 1;
   pointer-events: auto;
 }
