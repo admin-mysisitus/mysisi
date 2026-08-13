@@ -83,15 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nextBtn.style.opacity = '1';
       }
     }
-    // 8. Reset posisi scroll horizontal pada grid mobile ke awal (kiri)
-    const grid = document.querySelector('.artikel-grid, .tips-grid');
-    if (grid) {
-      grid.scrollTo({
-        left: 0,
-        behavior: 'smooth'
-      });
-    }
-    // 9. Scroll halus ke atas daftar artikel jika diminta (saat ganti halaman)
+    // 8. Scroll halus ke atas daftar artikel jika diminta (saat ganti halaman)
     if (scrollToTop) {
       const section = document.querySelector('.artikel-list-section') || document.querySelector('.artikel-grid');
       if (section) {
@@ -175,73 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-  // ========== AUTO SNAP SLIDER UNTUK MOBILE (HANYA PADA CARD YANG VISIBLE) ==========
-  function initAutoSnapSlider(sliderElement) {
-    if (!sliderElement) return;
-    let autoScrollInterval;
-    let resumeTimeout;
-    let isAutoScrolling = false;
-    let scrollFlagTimeout;
-    const slideInterval = 3500;
-    const resumeDelay = 4000;
-    let track = sliderElement;
-    if (!track) return;
-    const scrollToNext = () => {
-      const scrollLeft = sliderElement.scrollLeft;
-      const clientWidth = sliderElement.clientWidth;
-      const scrollWidth = sliderElement.scrollWidth;
-      if (clientWidth >= scrollWidth - 5) return;
-      const visibleCards = Array.from(track.children).filter(c => c.style.display !== 'none' && !c.classList.contains('hidden'));
-      if (visibleCards.length === 0) return;
-      isAutoScrolling = true;
-      if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
-      if (scrollLeft + clientWidth >= scrollWidth - 10) {
-        sliderElement.scrollTo({
-          left: 0,
-          behavior: 'smooth'
-        });
-      } else {
-        const cardWidth = visibleCards[0].offsetWidth;
-        const gap = parseFloat(window.getComputedStyle(track).gap) || 16;
-        sliderElement.scrollBy({
-          left: cardWidth + gap,
-          behavior: 'smooth'
-        });
-      }
-      scrollFlagTimeout = setTimeout(() => {
-        isAutoScrolling = false;
-      }, 800);
-    };
-    const startAutoScroll = () => {
-      stopAutoScroll();
-      autoScrollInterval = setInterval(scrollToNext, slideInterval);
-    };
-    const stopAutoScroll = () => {
-      if (autoScrollInterval) clearInterval(autoScrollInterval);
-    };
-    const handleInteraction = (e) => {
-      if (e && e.type === 'scroll' && isAutoScrolling) return;
-      stopAutoScroll();
-      if (resumeTimeout) clearTimeout(resumeTimeout);
-      resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
-    };
-    sliderElement.addEventListener('scroll', handleInteraction, {
-      passive: true
-    });
-    sliderElement.addEventListener('wheel', handleInteraction, {
-      passive: true
-    });
-    sliderElement.addEventListener('touchstart', handleInteraction, {
-      passive: true
-    });
-    sliderElement.addEventListener('mousedown', handleInteraction);
-    startAutoScroll();
-  }
-  // Inisialisasi awal tampilan (Halaman 1, 3 Card pertama)
+  // Inisialisasi awal tampilan (Halaman 1, 6 card pertama)
   updateDisplay(false);
-  // Inisialisasi slider untuk mobile
-  initAutoSnapSlider(document.querySelector('.artikel-grid'));
-  initAutoSnapSlider(document.querySelector('.tips-grid'));
   // ========== SEARCH EVENT LISTENER ==========
   if (searchInput) {
     searchInput.addEventListener('input', function(e) {

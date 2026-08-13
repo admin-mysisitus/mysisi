@@ -595,11 +595,9 @@
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
 
-  /* Animasi Scroll Horizontal (Serupa Halaman Perusahaan) untuk Mobile */
+  /* Scroll horizontal hanya untuk blog index (featured & articles grid) */
   .featured-grid,
-  .articles-grid,
-  .artikel-grid,
-  .tips-grid {
+  .articles-grid {
     display: flex !important;
     grid-template-columns: none !important;
     overflow-x: auto !important;
@@ -614,16 +612,12 @@
   }
 
   .featured-grid::-webkit-scrollbar,
-  .articles-grid::-webkit-scrollbar,
-  .artikel-grid::-webkit-scrollbar,
-  .tips-grid::-webkit-scrollbar {
+  .articles-grid::-webkit-scrollbar {
     display: none !important;
   }
 
   .featured-post,
-  .article-card,
-  .artikel-card,
-  .tips-card {
+  .article-card {
     flex: 0 0 calc(85% - 0.5rem) !important;
     width: calc(85% - 0.5rem) !important;
     max-width: calc(85% - 0.5rem) !important;
@@ -631,46 +625,33 @@
     margin: 0 !important;
   }
 
-  /* Typografi lebih padat supaya seimbang di Mobile */
+  /* Typografi blog index cards */
   .featured-content h3,
-  .article-card h3,
-  .artikel-card h3,
-  .tips-card h3,
-  .artikel-header h3,
-  .tips-header h3 {
+  .article-card h3 {
     font-size: 1rem !important;
     margin-bottom: 0.35rem !important;
     line-height: 1.35 !important;
   }
 
   .featured-content p,
-  .article-card p,
-  .artikel-card p,
-  .tips-card p,
-  .tips-preview p {
+  .article-card p {
     font-size: 0.813rem !important;
     line-height: 1.45 !important;
     margin-bottom: 0.75rem !important;
   }
 
   .featured-content time,
-  .article-meta time,
-  .artikel-meta time,
-  .tips-meta time {
+  .article-meta time {
     font-size: 0.75rem !important;
   }
 
-  .article-meta,
-  .artikel-meta,
-  .tips-meta {
+  .article-meta {
     margin-bottom: 0.5rem !important;
     gap: 0.5rem !important;
   }
 
   .featured-content,
-  .article-card,
-  .artikel-card,
-  .tips-card {
+  .article-card {
     padding: 1.25rem !important;
   }
 

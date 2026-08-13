@@ -175,6 +175,13 @@
 /* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
 /* Lihat .tips-cta-section di hero.css untuk styling dan responsive rules */
 /* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .tips-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+}
+
 @media (max-width: 768px) {
   .tips-section {
     padding: 3rem 0;
@@ -182,34 +189,44 @@
 
   .tips-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .tips-card {
+    padding: 14px;
   }
 
   .tips-meta {
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
-  /* .tips-cta-section responsive styling sudah di hero.css */
+  .tips-highlights {
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .tips-card:hover {
+    transform: translateY(-4px);
+  }
 }
 
 @media (max-width: 480px) {
   .tips-section {
-    padding: 2.5rem 0;
+    padding: 2rem 0;
   }
 
   .tips-card {
-    padding: 1.25rem;
+    padding: 12px;
   }
 
   .tips-highlights {
-    padding: 0.75rem;
+    padding: 0.5rem 0.6rem;
   }
 
   .tips-highlights li {
     font-size: 0.75rem;
     padding-left: 1.1rem;
   }
-
-  /* .tips-cta-section responsive styling sudah di hero.css */
 }
 
 /* ========== TIPS CTA DARK (UNIQUE STYLE) ========== */
