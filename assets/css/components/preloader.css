@@ -17,6 +17,7 @@
   z-index: 9999;
   opacity: 1;
   transition: opacity 0.6s ease, transform 0.6s ease;
+  overflow: hidden;
 }
 
 #preloader.hidden {
@@ -91,14 +92,10 @@
 .brand-dot {
   color: var(--primary-blue);
   opacity: 0;
-  transform: translateX(-8px);
-  margin-left: 0;
-  animation:
-    dot-in 0.4s ease-out forwards,
-    dot-push 0.4s ease-out forwards;
-  animation-delay:
-    0.62s,
-    0.62s;
+  transform: translateX(-10px);
+  margin-left: 2px;
+  animation: dot-in 0.4s ease-out forwards;
+  animation-delay: 0.62s;
 }
 
 /* Keyframes Baru untuk Masuk dari Kiri-Kanan */
@@ -178,9 +175,4 @@
     transform: translateX(0);
   }
 }
-
-@keyframes dot-push {
-  to {
-    margin-left: 2px;
-  }
-}
+
