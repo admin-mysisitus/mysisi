@@ -31,6 +31,7 @@ footer {
   gap: 16px;
   margin-top: 1rem;
 }
+
 .footer-sosmed a {
   width: auto;
   height: 28px;
@@ -43,6 +44,7 @@ footer {
   padding: 0;
   border: none;
 }
+
 .footer-sosmed a:hover,
 .footer-sosmed a:focus {
   transform: translateY(-2px);
@@ -50,17 +52,20 @@ footer {
   background: transparent;
   border: none;
 }
+
 .sosmed-icon {
   width: 28px;
   height: 28px;
   display: block;
   flex-shrink: 0;
 }
+
 .sosmed-icon svg {
   width: 100%;
   height: 100%;
   display: block;
 }
+
 .sosmed-text {
   display: block;
   font-size: 14px;
@@ -94,7 +99,9 @@ footer {
   width: 100%;
   padding: 0;
 }
-.link-section, .services-section {
+
+.link-section,
+.services-section {
   min-width: 120px;
   max-width: 200px;
   margin: 0 auto;
@@ -108,13 +115,18 @@ footer {
   transition: var(--transisi-cepat);
   padding: 0.5rem 0;
 }
-.footer-link a:hover, .footer-link a:focus {
+
+.footer-link a:hover,
+.footer-link a:focus {
   color: var(--accent-cyan);
   padding-left: 4px;
   text-decoration: underline;
 }
 
-.footer-link li, .footer-kontak li { margin-bottom: 0.9rem; }
+.footer-link li,
+.footer-kontak li {
+  margin-bottom: 0.9rem;
+}
 
 .footer-kontak li {
   display: flex;
@@ -125,17 +137,20 @@ footer {
   line-height: var(--line-height-relaxed);
   word-break: break-word;
 }
+
 .footer-kontak i {
   margin-top: 0.2rem;
   flex-shrink: 0;
   color: var(--accent-cyan);
   font-size: 1rem;
 }
+
 .footer-kontak-link {
   color: var(--bg-white);
   text-decoration: none;
   transition: var(--transisi-cepat);
 }
+
 .footer-kontak-link:hover {
   color: var(--accent-cyan);
   text-decoration: underline;
@@ -175,10 +190,13 @@ footer {
   justify-content: center;
   align-items: center;
 }
-.datetime-date, .datetime-time {
+
+.datetime-date,
+.datetime-time {
   font-family: 'Courier New', Courier, monospace;
   letter-spacing: 0.5px;
 }
+
 #datetime i {
   flex-shrink: 0;
   width: 14px;
@@ -217,6 +235,7 @@ footer {
   margin: 0 auto;
   gap: 0.6rem;
 }
+
 .icon-text-wrapper i {
   flex-shrink: 0;
   width: 20px;
@@ -226,10 +245,11 @@ footer {
   justify-content: center;
   font-size: 0.9rem;
   color: var(--accent-cyan);
-  background : rgba(6, 182, 212, 0.1);
+  background: rgba(6, 182, 212, 0.1);
   border-radius: var(--radius);
   border: 1px solid rgba(6, 182, 212, 0.3);
 }
+
 .icon-text-content {
   flex: 1;
   display: flex;
@@ -240,6 +260,7 @@ footer {
   overflow: hidden;
   align-items: center;
 }
+
 .icon-text-content .line-1 {
   font-size: clamp(0.8rem, 1.8vw, 0.9rem);
   font-weight: 700;
@@ -248,6 +269,7 @@ footer {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .icon-text-content .line-2 {
   font-size: clamp(0.7rem, 1.5vw, 0.8rem);
   font-weight: 400;
@@ -261,24 +283,29 @@ footer {
   text-align: center;
   padding-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0.55; /* Lebih transparan */
+  opacity: 0.55;
+  /* Lebih transparan */
   margin: 0 auto;
   width: 90%;
   max-width: 1200px;
 }
+
 .footer-copyright p {
   max-width: none;
   margin: 0 auto;
-  font-size: 0.8rem; /* Lebih besar sedikit */
+  font-size: 0.8rem;
+  /* Lebih besar sedikit */
   line-height: 1.5;
 }
+
 .copyright-link {
   color: var(--accent-cyan);
   font-weight: 500;
   text-decoration: none;
   transition: var(--transisi-cepat);
 }
-.copyright-link:hover { 
+
+.copyright-link:hover {
   text-decoration: underline;
 }
 
@@ -345,22 +372,27 @@ footer {
     align-items: center;
     text-align: center;
   }
+
   .footer-sosmed {
     gap: 28px;
     justify-content: center;
   }
+
   .footer-sosmed a {
     width: 28px;
     height: 28px;
     gap: 0;
   }
+
   .sosmed-icon {
     width: 28px;
     height: 28px;
   }
+
   .sosmed-text {
     display: none;
   }
+
   .trust-logos {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -368,12 +400,15 @@ footer {
     justify-content: center;
     width: 100%;
   }
+
   .trust-logos img {
     height: 70px;
     width: auto;
   }
+
   .footer-copyright p {
-    font-size: 0.7rem; /* Lebih besar sedikit di mobile */
+    font-size: 0.7rem;
+    /* Lebih besar sedikit di mobile */
     line-height: 1.5;
   }
 }

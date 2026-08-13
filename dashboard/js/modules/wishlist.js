@@ -6,30 +6,30 @@
  * - Move to cart
  * - Remove items
  */
-
-import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
-import { showSuccess, showError } from '/assets/js/modules/unified-utils.js';
-
+import {
+  CartManager,
+  WishlistManager
+} from '/assets/js/modules/unified-cart.js';
+import {
+  showSuccess,
+  showError
+} from '/assets/js/modules/unified-utils.js';
 class DashboardWishlist {
   constructor() {
     this.wishlist = WishlistManager.getWishlist();
     this.container = null;
   }
-
   /**
    * Render wishlist view
    */
   render(containerElement) {
     this.container = containerElement;
-
     if (WishlistManager.getWishlist().domains.length === 0) {
       this.renderEmptyWishlist();
       return;
     }
-
     this.renderWishlistContent();
   }
-
   /**
    * Render empty wishlist UI
    */
@@ -50,7 +50,6 @@ class DashboardWishlist {
       </div>
     `;
   }
-
   /**
    * Render wishlist with items
    */
@@ -61,9 +60,7 @@ class DashboardWishlist {
       medium: wishlist.domains.filter(d => d.priority === 'medium'),
       low: wishlist.domains.filter(d => d.priority === 'low')
     };
-
     let itemsHTML = '';
-
     // High priority
     if (grouped.high.length > 0) {
       itemsHTML += `
@@ -75,7 +72,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-
     // Medium priority
     if (grouped.medium.length > 0) {
       itemsHTML += `
@@ -87,7 +83,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-
     // Low priority
     if (grouped.low.length > 0) {
       itemsHTML += `
@@ -99,7 +94,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-
     this.container.innerHTML = `
       <div class="dashboard-page-header" style="background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);">
         <div class="dashboard-page-header-content">
@@ -150,19 +144,16 @@ class DashboardWishlist {
         }
       </style>
     `;
-
     // Expose functions to window
     window.moveWishlistToCart = (domain) => this.moveToCart(domain);
     window.removeWishlistItem = (domain) => this.removeItem(domain);
     window.updateWishlistPriority = (domain, priority) => this.updatePriority(domain, priority);
   }
-
   /**
    * Render single wishlist item
    */
   renderWishlistItem(item) {
     const addedDate = new Date(item.addedAt).toLocaleDateString('id-ID');
-
     return `
       <div class="wishlist-item">
         <div style="flex: 1;">
@@ -189,7 +180,6 @@ class DashboardWishlist {
       </div>
     `;
   }
-
   /**
    * Move wishlist item to cart
    */
@@ -202,21 +192,18 @@ class DashboardWishlist {
       showError('❌ Error', error.message);
     }
   }
-
   /**
    * Remove item from wishlist
    */
   removeItem(domain) {
     WishlistManager.remove(domain);
     showSuccess('✓ Dihapus', `${domain} dihapus dari wishlist`);
-    
     if (WishlistManager.getWishlist().domains.length === 0) {
       this.renderEmptyWishlist();
     } else {
       this.render(this.container);
     }
   }
-
   /**
    * Update item priority
    */
@@ -231,7 +218,6 @@ class DashboardWishlist {
     }
   }
 }
-
 // Export render function for dashboard-app compatibility
 export async function render() {
   const container = document.getElementById('wishlist-container');
@@ -239,7 +225,6 @@ export async function render() {
     console.error('Wishlist container not found');
     return;
   }
-
   try {
     const wishlist = new DashboardWishlist();
     wishlist.render(container);

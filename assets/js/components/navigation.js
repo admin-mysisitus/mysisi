@@ -1,12 +1,16 @@
-import { menuData, mainServicesData, footerSocialData, footerContactData, footerTrustBadgesData } from '../config.js';
-
+import {
+  menuData,
+  mainServicesData,
+  footerSocialData,
+  footerContactData,
+  footerTrustBadgesData
+} from '../config.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),
   header: document.querySelector('header'),
   desktopNav: document.querySelector('.nav-desktop')
 };
-
 // Helper: Get logged-in user from localStorage/sessionStorage
 function getLoggedInUser() {
   try {
@@ -20,19 +24,15 @@ function getLoggedInUser() {
     return null;
   }
 }
-
 // Helper: Create profile menu item
 function createProfileMenuItem(user) {
   const li = document.createElement('li');
   li.className = 'nav-desktop-item nav-desktop-profile';
-  
   const link = document.createElement('a');
   link.className = 'nav-desktop-link profile-link';
   link.href = user?.role === 'admin' ? '/admin/' : '/dashboard/';
-  
   // Profile photo
   const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
-  
   let profileSrc = user?.photoURL || defaultAvatarSVG;
   if (profileSrc.includes('drive.google.com/file/d/')) {
     const match = profileSrc.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -40,7 +40,6 @@ function createProfileMenuItem(user) {
       profileSrc = `https://lh3.googleusercontent.com/d/${match[1]}`;
     }
   }
-
   const photoImg = document.createElement('img');
   photoImg.className = 'nav-profile-photo';
   photoImg.src = profileSrc;
@@ -49,35 +48,29 @@ function createProfileMenuItem(user) {
     this.src = defaultAvatarSVG;
   };
   link.appendChild(photoImg);
-  
   // Profile name
   const span = document.createElement('span');
   span.className = 'nav-profile-name';
   span.textContent = user?.displayName || 'User';
   link.appendChild(span);
-  
   li.appendChild(link);
   return li;
 }
-
 // Generate Menu Desktop
 const generateDesktopMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-desktop-list';
   const loggedInUser = getLoggedInUser();
-  
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
       return;
     }
-    
     const li = document.createElement('li');
     li.className = `nav-desktop-item ${item.dropdown ? 'nav-desktop-dropdown' : ''} ${item.isPromo ? 'nav-desktop-promo' : ''} ${item.isAuth ? 'nav-desktop-auth' : ''}`;
     const link = document.createElement('a');
     link.className = `nav-desktop-link ${item.isPromo ? 'promo-link' : ''} ${item.isAuth ? 'auth-link' : ''}`;
     link.href = item.href;
-    
     // Tamahkan icon jika ada
     if (item.icon) {
       const iconSpan = document.createElement('span');
@@ -85,12 +78,10 @@ const generateDesktopMenu = () => {
       iconSpan.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i>`;
       link.appendChild(iconSpan);
     }
-    
     const textSpan = document.createElement('span');
     textSpan.className = 'nav-text';
     textSpan.textContent = item.text;
     link.appendChild(textSpan);
-    
     if (item.dropdown) link.setAttribute('aria-haspopup', 'true');
     li.appendChild(link);
     if (item.dropdown) {
@@ -101,7 +92,6 @@ const generateDesktopMenu = () => {
         const subLink = document.createElement('a');
         subLink.className = `dropdown-item ${sub.isParent ? 'dropdown-parent' : ''}`;
         subLink.href = sub.href;
-        
         // Tambahkan icon untuk dropdown item jika ada
         if (sub.icon) {
           const iconSpan = document.createElement('span');
@@ -109,12 +99,10 @@ const generateDesktopMenu = () => {
           iconSpan.innerHTML = `<i class="${sub.icon}" aria-hidden="true"></i>`;
           subLink.appendChild(iconSpan);
         }
-        
         const textSpan = document.createElement('span');
         textSpan.className = 'dropdown-text';
         textSpan.textContent = sub.text;
         subLink.appendChild(textSpan);
-        
         subLi.appendChild(subLink);
         dropdownMenu.appendChild(subLi);
       });
@@ -122,13 +110,11 @@ const generateDesktopMenu = () => {
     }
     list.appendChild(li);
   });
-  
   // Add profile item if user is logged in
   if (loggedInUser) {
     const profileLi = createProfileMenuItem(loggedInUser);
     list.appendChild(profileLi);
   }
-  
   // Only append to desktop nav if element exists (not on auth page)
   if (navElements.desktopNav) {
     navElements.desktopNav.appendChild(list);
@@ -136,19 +122,16 @@ const generateDesktopMenu = () => {
     console.warn('[Navigation] .nav-desktop element not found - skipping desktop menu');
   }
 };
-
 // Generate Menu Mobile
 const generateMobileMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-mobile-list';
   const loggedInUser = getLoggedInUser();
-  
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
       return;
     }
-    
     const li = document.createElement('li');
     li.className = `nav-mobile-item ${item.dropdown ? 'nav-mobile-dropdown' : ''} ${item.isPromo ? 'nav-mobile-promo' : ''} ${item.isAuth ? 'nav-mobile-auth' : ''}`;
     if (item.dropdown) {
@@ -157,7 +140,6 @@ const generateMobileMenu = () => {
       const mainLink = document.createElement('a');
       mainLink.className = 'nav-mobile-link';
       mainLink.href = item.dropdown.find(sub => sub.isParent).href;
-      
       // Tambahkan icon di mobile menu
       if (item.icon) {
         const iconSpan = document.createElement('span');
@@ -165,12 +147,10 @@ const generateMobileMenu = () => {
         iconSpan.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i>`;
         mainLink.appendChild(iconSpan);
       }
-      
       const textSpan = document.createElement('span');
       textSpan.className = 'nav-text';
       textSpan.textContent = item.dropdown.find(sub => sub.isParent).text;
       mainLink.appendChild(textSpan);
-      
       const toggle = document.createElement('button');
       toggle.className = 'nav-mobile-toggle';
       toggle.setAttribute('aria-expanded', 'false');
@@ -186,7 +166,6 @@ const generateMobileMenu = () => {
         const subLink = document.createElement('a');
         subLink.className = 'nav-mobile-dropdown-link';
         subLink.href = sub.href;
-        
         // Tambahkan icon untuk mobile dropdown item jika ada
         if (sub.icon) {
           const iconSpan = document.createElement('span');
@@ -194,12 +173,10 @@ const generateMobileMenu = () => {
           iconSpan.innerHTML = `<i class="${sub.icon}" aria-hidden="true"></i>`;
           subLink.appendChild(iconSpan);
         }
-        
         const textSpan = document.createElement('span');
         textSpan.className = 'dropdown-text';
         textSpan.textContent = sub.text;
         subLink.appendChild(textSpan);
-        
         subLi.appendChild(subLink);
         dropdownMenu.appendChild(subLi);
       });
@@ -208,7 +185,6 @@ const generateMobileMenu = () => {
       const link = document.createElement('a');
       link.className = `nav-mobile-link ${item.isPromo ? 'promo-link' : ''} ${item.isAuth ? 'auth-link' : ''}`;
       link.href = item.href;
-      
       // Tambahkan icon untuk menu tanpa dropdown
       if (item.icon) {
         const iconSpan = document.createElement('span');
@@ -216,17 +192,14 @@ const generateMobileMenu = () => {
         iconSpan.innerHTML = `<i class="${item.icon}" aria-hidden="true"></i>`;
         link.appendChild(iconSpan);
       }
-      
       const textSpan = document.createElement('span');
       textSpan.className = 'nav-text';
       textSpan.textContent = item.text;
       link.appendChild(textSpan);
-      
       li.appendChild(link);
     }
     list.appendChild(li);
   });
-  
   // Add profile item if user is logged in (mobile version)
   if (loggedInUser) {
     const profileLi = document.createElement('li');
@@ -234,10 +207,8 @@ const generateMobileMenu = () => {
     const link = document.createElement('a');
     link.className = 'nav-mobile-link profile-link';
     link.href = loggedInUser?.role === 'admin' ? '/admin/' : '/dashboard/';
-    
     // Profile photo
     const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
-    
     let profileSrc = loggedInUser?.photoURL || defaultAvatarSVG;
     if (profileSrc.includes('drive.google.com/file/d/')) {
       const match = profileSrc.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -245,7 +216,6 @@ const generateMobileMenu = () => {
         profileSrc = `https://lh3.googleusercontent.com/d/${match[1]}`;
       }
     }
-
     const photoImg = document.createElement('img');
     photoImg.className = 'nav-profile-photo';
     photoImg.src = profileSrc;
@@ -254,17 +224,14 @@ const generateMobileMenu = () => {
       this.src = defaultAvatarSVG;
     };
     link.appendChild(photoImg);
-    
     // Profile name
     const span = document.createElement('span');
     span.className = 'nav-profile-name';
     span.textContent = loggedInUser?.displayName || 'User';
     link.appendChild(span);
-    
     profileLi.appendChild(link);
     list.appendChild(profileLi);
   }
-  
   // Only append to mobile nav if element exists (not on auth page)
   if (navElements.menu) {
     navElements.menu.appendChild(list);
@@ -272,7 +239,6 @@ const generateMobileMenu = () => {
     console.warn('[Navigation] #nav-mobile element not found - skipping mobile menu');
   }
 };
-
 // Setup Dropdown Mobile
 const setupMobileDropdowns = () => {
   document.querySelectorAll('.nav-mobile-dropdown .nav-mobile-toggle').forEach(toggle => {
@@ -294,7 +260,6 @@ const setupMobileDropdowns = () => {
     });
   });
 };
-
 // Toggle Menu Mobile
 const toggleMobileMenu = () => {
   const isOpen = navElements.menu.classList.contains('active');
@@ -304,7 +269,6 @@ const toggleMobileMenu = () => {
   navElements.menu.setAttribute('aria-hidden', String(isOpen));
   document.body.style.overflow = isOpen ? 'auto' : 'hidden';
 };
-
 // Set Active Link
 const setActiveLinks = () => {
   const currentPath = location.pathname.replace(/\/$/, '') || '/';
@@ -336,7 +300,6 @@ const setActiveLinks = () => {
     }
   });
 };
-
 // Generate Footer Link Cepat
 const generateFooterLinks = () => {
   const container = document.getElementById('footer-quick-links');
@@ -351,7 +314,6 @@ const generateFooterLinks = () => {
     container.appendChild(li);
   });
 };
-
 // Generate Footer Layanan Utama
 const generateFooterServices = () => {
   const container = document.getElementById('footer-main-services');
@@ -365,7 +327,6 @@ const generateFooterServices = () => {
     container.appendChild(li);
   });
 };
-
 // Generate Footer Sosmed
 const generateFooterSocial = () => {
   const container = document.getElementById('footer-sosmed-container');
@@ -382,23 +343,18 @@ const generateFooterSocial = () => {
     container.appendChild(a);
   });
 };
-
 // Generate Footer Trust Badges
 const generateFooterTrustBadges = () => {
   const container = document.getElementById('footer-trust-badges-container');
   if (!container) return;
-  
   container.className = 'footer-trust-badges';
   container.setAttribute('aria-label', 'Sertifikasi dan Keamanan');
-  
   const p = document.createElement('p');
   p.className = 'trust-title';
   p.textContent = 'Terdaftar & Tersertifikasi Oleh:';
   container.appendChild(p);
-
   const logosDiv = document.createElement('div');
   logosDiv.className = 'trust-logos';
-
   footerTrustBadgesData.forEach(item => {
     const img = document.createElement('img');
     img.src = item.src;
@@ -408,10 +364,8 @@ const generateFooterTrustBadges = () => {
     img.height = 40;
     logosDiv.appendChild(img);
   });
-  
   container.appendChild(logosDiv);
 };
-
 // Generate Footer Kontak
 const generateFooterContact = () => {
   const container = document.getElementById('footer-kontak-container');
@@ -422,17 +376,14 @@ const generateFooterContact = () => {
     container.appendChild(li);
   });
 };
-
 // Auto-hide Header Handler
 let lastScrollTop = 0;
 let isHideActive = false;
 let scrollWithinThreshold = false;
-
 const handleAutoHideHeader = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop;
   const scrollThreshold = 100; // Mulai hide setelah scroll 100px
   const triggerDistance = 50; // Distance untuk trigger show/hide
-
   // Jika masih dalam threshold awal, tampilkan header
   if (scrollTop <= scrollThreshold) {
     navElements.header?.classList.remove('nav-hidden');
@@ -440,12 +391,9 @@ const handleAutoHideHeader = () => {
     scrollWithinThreshold = true;
     return;
   }
-
   scrollWithinThreshold = false;
-
   // Menentukan arah scroll
   const isScrollingDown = scrollTop > lastScrollTop;
-
   // Hide header ketika scroll down
   if (isScrollingDown && scrollTop > lastScrollTop + triggerDistance && !isHideActive) {
     navElements.header?.classList.add('nav-hidden');
@@ -456,10 +404,8 @@ const handleAutoHideHeader = () => {
     navElements.header?.classList.remove('nav-hidden');
     isHideActive = false;
   }
-
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 };
-
 // Refresh Navigation - Call this after user login/logout to update navbar
 export function refreshNavigation() {
   try {
@@ -469,18 +415,15 @@ export function refreshNavigation() {
       const existingList = desktopNav.querySelector('.nav-desktop-list');
       if (existingList) existingList.remove();
     }
-    
     // Clear existing mobile menu
     const menu = navElements.menu;
     if (menu) {
       const existingList = menu.querySelector('.nav-mobile-list');
       if (existingList) existingList.remove();
     }
-    
     // Re-generate menus with updated user session
     generateDesktopMenu();
     generateMobileMenu();
-    
     // Re-setup interactions
     setActiveLinks();
     setupMobileDropdowns();
@@ -488,7 +431,6 @@ export function refreshNavigation() {
     console.error('Error refreshing navigation:', error);
   }
 }
-
 // Helper: Get cart item count from localStorage
 function getCartItemCount() {
   try {
@@ -500,7 +442,6 @@ function getCartItemCount() {
     return 0;
   }
 }
-
 // Update floating cart display based on cart items count
 function updateFloatingCart() {
   // Don't show floating cart button on the cart page itself
@@ -510,10 +451,8 @@ function updateFloatingCart() {
     if (existing) existing.remove();
     return;
   }
-
   const count = getCartItemCount();
   let el = document.getElementById('floating-cart-btn');
-
   if (count > 0) {
     if (!el) {
       el = document.createElement('a');
@@ -525,7 +464,6 @@ function updateFloatingCart() {
         <span class="floating-cart-badge">${count}</span>
       `;
       document.body.appendChild(el);
-      
       // Inject floating cart styles if not already present
       if (!document.getElementById('floating-cart-styles')) {
         const styles = document.createElement('style');
@@ -597,27 +535,22 @@ function updateFloatingCart() {
     if (el) el.remove();
   }
 }
-
 // Expose refreshNavigation to window for easy access from other scripts
 window.refreshNavigation = refreshNavigation;
-
 // Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
   // Always initialize floating cart
   updateFloatingCart();
-
   // Listen to cart updates
   window.addEventListener('cart:updated', updateFloatingCart);
   window.addEventListener('storage', (e) => {
     if (e.key === 'cart') updateFloatingCart();
   });
-
   // Skip navigation setup if on auth page (no nav-desktop or nav-mobile elements)
   if (!navElements.desktopNav && !navElements.menu) {
     console.info('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
     return;
   }
-  
   generateDesktopMenu();
   generateMobileMenu();
   navElements.menu?.classList.remove('active');
@@ -637,7 +570,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const isScrolled = window.scrollY > 50;
     navElements.header?.classList.toggle('scroll', isScrolled);
     document.body.classList.toggle('header-scroll', isScrolled);
-    
     // Panggil auto-hide header handler
     handleAutoHideHeader();
   });

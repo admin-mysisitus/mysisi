@@ -1,7 +1,6 @@
 /* ============================================
    CEK DOMAIN COMPONENT - OPTIMIZED v2.0
    ============================================ */
-
 /* CSS Variables */
 :root {
   --color-primary: #667eea;
@@ -13,11 +12,9 @@
   --color-text-light: #999;
   --color-bg-white: #fff;
   --color-border: #e0e0e0;
-
   --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
-
   --transition-base: all 0.3s ease;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -938,12 +935,9 @@
   box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
 }
 
-
-
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
-
 /* Desktop Layout - Grid */
 @media (min-width: 769px) {
   .cek-domain-discount-banner {
@@ -1103,8 +1097,6 @@
   .cek-domain-banner-text p {
     font-size: 0.8rem;
   }
-
-
 }
 
 @media (max-width: 480px) {

@@ -1,71 +1,58 @@
 /**
  * Dashboard Sidebar Navigation Component
  */
-
 export class DashboardSidebar {
   constructor(router) {
     this.router = router;
     this.currentRoute = null;
   }
-
   render(currentRoute = '/dashboard/') {
     this.currentRoute = currentRoute;
     const container = document.getElementById('sidebar');
-
-    const menuItems = [
-      {
-        id: 'dashboard',
-        icon: 'fas fa-th-large',
-        label: 'Dashboard',
-        route: '/dashboard/'
-      },
-      {
-        id: 'profile',
-        icon: 'fas fa-user-cog',
-        label: 'Profil Saya',
-        route: '/dashboard/profile'
-      },
-      {
-        id: 'cart',
-        icon: 'fas fa-shopping-cart',
-        label: 'Keranjang Saya',
-        route: '/dashboard/keranjang',
-        isExternal: false,
-        badge: 'cart-badge'
-      },
-      {
-        id: 'wishlist',
-        icon: 'fas fa-heart',
-        label: 'Wishlist Saya',
-        route: '/dashboard/wishlist'
-      },
-      {
-        id: 'orders',
-        icon: 'fas fa-shopping-bag',
-        label: 'Pesanan',
-        route: '/dashboard/orders'
-      },
-      {
-        id: 'invoices',
-        icon: 'fas fa-file-invoice-dollar',
-        label: 'Invoice',
-        route: '/dashboard/invoices',
-        badge: ''
-      },
-      {
-        id: 'domains',
-        icon: 'fas fa-globe',
-        label: 'Domain Saya',
-        route: '/dashboard/domains'
-      },
-      {
-        id: 'support',
-        icon: 'fas fa-headset',
-        label: 'Support',
-        route: '/dashboard/support'
-      }
-    ];
-
+    const menuItems = [{
+      id: 'dashboard',
+      icon: 'fas fa-th-large',
+      label: 'Dashboard',
+      route: '/dashboard/'
+    }, {
+      id: 'profile',
+      icon: 'fas fa-user-cog',
+      label: 'Profil Saya',
+      route: '/dashboard/profile'
+    }, {
+      id: 'cart',
+      icon: 'fas fa-shopping-cart',
+      label: 'Keranjang Saya',
+      route: '/dashboard/keranjang',
+      isExternal: false,
+      badge: 'cart-badge'
+    }, {
+      id: 'wishlist',
+      icon: 'fas fa-heart',
+      label: 'Wishlist Saya',
+      route: '/dashboard/wishlist'
+    }, {
+      id: 'orders',
+      icon: 'fas fa-shopping-bag',
+      label: 'Pesanan',
+      route: '/dashboard/orders'
+    }, {
+      id: 'invoices',
+      icon: 'fas fa-file-invoice-dollar',
+      label: 'Invoice',
+      route: '/dashboard/invoices',
+      badge: ''
+    }, {
+      id: 'domains',
+      icon: 'fas fa-globe',
+      label: 'Domain Saya',
+      route: '/dashboard/domains'
+    }, {
+      id: 'support',
+      icon: 'fas fa-headset',
+      label: 'Support',
+      route: '/dashboard/support'
+    }];
     container.innerHTML = `
       <div class="sidebar-brand-container">
         <a href="#!/dashboard/" class="sidebar-logo">
@@ -82,10 +69,12 @@ export class DashboardSidebar {
           if (item.badge === 'cart-badge') {
             badge = '<span class="menu-badge cart-badge-count" style="display: none;">0</span>';
           } else if (item.badge) {
-            badge = `<span class="menu-badge">${item.badge}</span>`;
-          }
-          const href = item.isExternal ? item.route : `#!${item.route}`;
-          return `
+            badge = ` < span class = "menu-badge" > $ {
+      item.badge
+    } < /span>`;
+  }
+  const href = item.isExternal ? item.route : `#!${item.route}`;
+  return `
             <a 
               href="${href}" 
               class="menu-item ${this.currentRoute === item.route ? 'active' : ''}"
@@ -98,16 +87,10 @@ export class DashboardSidebar {
               ${badge}
             </a>
           `;
-        }).join('')}
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="sidebar-info">
-          <small class="sidebar-info__title">SISITUS Client Dashboard</small>
-          <small class="sidebar-info__meta">Akses cepat • aman • terintegrasi</small>
-        </div>
-      </div>
-    `;
+}).join('')
+} < /nav> < div class = "sidebar-footer" > < div class = "sidebar-info" > < small class = "sidebar-info__title" > SISITUS Client Dashboard < /small > < small class = "sidebar-info__meta" > Akses cepat• aman• terintegrasi < /small> < /
+div > < /div>
+`;
 
     // Add click handlers
     container.querySelectorAll('.menu-item').forEach(item => {
@@ -155,7 +138,7 @@ export class DashboardSidebar {
     document.querySelectorAll('.menu-item').forEach(item => {
       item.classList.remove('active');
     });
-    const activeItem = document.querySelector(`[data-route="${route}"]`);
+    const activeItem = document.querySelector(` [data - route = "${route}"] `);
     if (activeItem) {
       activeItem.classList.add('active');
     }

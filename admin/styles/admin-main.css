@@ -1,26 +1,23 @@
 /* ==========================================================================
    ADMIN DASHBOARD CORE STYLES (Premium Dark Theme & Glassmorphism)
    ========================================================================== */
-
 :root {
   /* Admin Color Palette */
   --admin-bg-dark: #0f111a;
   --admin-surface: rgba(25, 27, 36, 0.7);
   --admin-surface-hover: rgba(35, 38, 51, 0.8);
   --admin-border: rgba(255, 255, 255, 0.08);
-  
-  --admin-primary: #6366f1; /* Indigo */
+  --admin-primary: #6366f1;
+  /* Indigo */
   --admin-primary-glow: rgba(99, 102, 241, 0.4);
-  --admin-secondary: #ec4899; /* Pink */
-  
+  --admin-secondary: #ec4899;
+  /* Pink */
   --admin-text-main: #f8fafc;
   --admin-text-muted: #94a3b8;
-  
   --admin-success: #10b981;
   --admin-warning: #f59e0b;
   --admin-danger: #ef4444;
   --admin-info: #3b82f6;
-
   /* Fonts */
   --font-admin-heading: 'Outfit', sans-serif;
   --font-admin-body: 'Inter', sans-serif;
@@ -31,21 +28,22 @@ body.admin-body {
   margin: 0;
   padding: 0;
   background-color: var(--admin-bg-dark);
-  background-image: 
+  background-image:
     radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
     radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
   background-attachment: fixed;
   color: var(--admin-text-main);
   font-family: var(--font-admin-body);
-  overflow: hidden; /* App takes full screen, content scrolls */
+  overflow: hidden;
+  /* App takes full screen, content scrolls */
 }
 
 /* Override global headings for admin dark theme */
-.admin-body h1, 
-.admin-body h2, 
-.admin-body h3, 
-.admin-body h4, 
-.admin-body h5, 
+.admin-body h1,
+.admin-body h2,
+.admin-body h3,
+.admin-body h4,
+.admin-body h5,
 .admin-body h6 {
   color: var(--admin-text-main);
 }
@@ -233,7 +231,10 @@ body.admin-body {
 
 .admin-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(15, 17, 26, 0.8);
   backdrop-filter: blur(4px);
   z-index: 9999;
@@ -243,7 +244,9 @@ body.admin-body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Common Admin Components */

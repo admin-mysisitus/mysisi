@@ -8,8 +8,6 @@ import './components/date-time.js';
 import './components/hero.js';
 import './components/section-animation.js';
 import './components/popup-promo.js';
-
 // Layout
-
 // wm
 import './wm.js';

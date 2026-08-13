@@ -3,7 +3,6 @@
  * Komponen hero dan CTA sections yang reusable untuk semua halaman
  * Handles dynamic rendering dan initialization
  */
-
 class HeroComponent {
   constructor(options = {}) {
     this.options = {
@@ -15,7 +14,6 @@ class HeroComponent {
       ...options
     };
   }
-
   /**
    * Render hero element
    * @param {string} container - Selector atau element untuk tempat hero
@@ -23,39 +21,32 @@ class HeroComponent {
    */
   render(container = 'main') {
     const target = typeof container === 'string' ? document.querySelector(container) : container;
-    
     if (!target) {
       console.error('Hero: Target container not found');
       return null;
     }
-
     // Tentukan class berdasarkan variant
     const sectionClass = this._getSectionClass();
     const heroSection = document.createElement('section');
     heroSection.className = sectionClass;
-
     const heroDiv = document.createElement('div');
     heroDiv.className = 'container';
-
     // Title
     if (this.options.title) {
       const h1 = document.createElement('h1');
       h1.textContent = this.options.title;
       heroDiv.appendChild(h1);
     }
-
     // Description
     if (this.options.description) {
       const p = document.createElement('p');
       p.textContent = this.options.description;
       heroDiv.appendChild(p);
     }
-
     // CTA Buttons
     if (this.options.cta || this.options.ctaSecondary) {
       const ctaDiv = document.createElement('div');
       ctaDiv.className = 'cta-buttons';
-
       if (this.options.cta) {
         const primaryBtn = document.createElement('a');
         primaryBtn.href = this.options.cta.href;
@@ -63,7 +54,6 @@ class HeroComponent {
         primaryBtn.textContent = this.options.cta.label;
         ctaDiv.appendChild(primaryBtn);
       }
-
       if (this.options.ctaSecondary) {
         const secondaryBtn = document.createElement('a');
         secondaryBtn.href = this.options.ctaSecondary.href;
@@ -71,18 +61,13 @@ class HeroComponent {
         secondaryBtn.textContent = this.options.ctaSecondary.label;
         ctaDiv.appendChild(secondaryBtn);
       }
-
       heroDiv.appendChild(ctaDiv);
     }
-
     heroSection.appendChild(heroDiv);
-    
     // Insert as first child of main
     target.insertBefore(heroSection, target.firstChild);
-
     return heroSection;
   }
-
   /**
    * Get section class based on variant
    * @private
@@ -90,7 +75,6 @@ class HeroComponent {
    */
   _getSectionClass() {
     const variant = this.options.variant || 'default';
-    
     // Map semua CTA section variants ke class name yang sesuai
     const sectionMap = {
       'default': 'hero',
@@ -106,18 +90,18 @@ class HeroComponent {
       'about-cta': 'about-cta-section',
       'kontak-cta': 'kontak-cta-section'
     };
-    
     return sectionMap[variant] || `hero hero-${variant}`;
   }
-
   /**
    * Update hero content
    * @param {object} updates - Object dengan property yang ingin diupdate
    */
   update(updates) {
-    this.options = { ...this.options, ...updates };
+    this.options = {
+      ...this.options,
+      ...updates
+    };
   }
-
   /**
    * Static method untuk render CTA section
    * @static
@@ -139,7 +123,6 @@ class HeroComponent {
     });
     return component.render(container);
   }
-
   /**
    * Initialize CTA buttons interactions untuk semua CTA sections
    * Menambahkan hover effects, animations, dan ripple effect
@@ -157,9 +140,10 @@ class HeroComponent {
       hoverTranslate: -6,
       isTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)
     };
-
-    const config = { ...defaults, ...options };
-
+    const config = {
+      ...defaults,
+      ...options
+    };
     // Setup keyframe animations jika belum ada
     if (config.enableAnimation && !document.querySelector('style[data-hero-animations]')) {
       const style = document.createElement('style');
@@ -188,42 +172,34 @@ class HeroComponent {
       `;
       document.head.appendChild(style);
     }
-
     // Query all CTA containers
     const ctaContainers = document.querySelectorAll(selector);
-    
     if (ctaContainers.length === 0) {
       return;
     }
-
     ctaContainers.forEach(container => {
       const buttons = container.querySelectorAll('.btn');
-      
       buttons.forEach((btn, index) => {
         // Add animated entrance
         if (config.enableAnimation) {
           btn.style.animation = `slideInUp 0.6s ease-out ${config.animationDelay + (index * 0.1)}s backwards`;
         }
-
         // Hover effects (desktop only)
         if (!config.isTouch) {
-          btn.addEventListener('mouseenter', function () {
+          btn.addEventListener('mouseenter', function() {
             this.style.transform = `translateY(${config.hoverTranslate}px) scale(${config.hoverScale})`;
           });
-
-          btn.addEventListener('mouseleave', function () {
+          btn.addEventListener('mouseleave', function() {
             this.style.transform = '';
           });
         }
-
         // Click ripple effect (desktop only)
         if (config.enableRipple && !config.isTouch) {
-          btn.addEventListener('click', function (e) {
+          btn.addEventListener('click', function(e) {
             // Prevent ripple jika button adalah link biasa yang berfungsi normal
             if (this.tagName === 'A' && this.href) {
               // Izinkan default behavior
             }
-
             const ripple = document.createElement('span');
             ripple.style.position = 'absolute';
             ripple.style.borderRadius = '50%';
@@ -232,18 +208,15 @@ class HeroComponent {
             ripple.style.height = '20px';
             ripple.style.animation = 'ripple 0.6s ease-out';
             ripple.style.pointerEvents = 'none';
-            
             this.style.position = 'relative';
             this.style.overflow = 'hidden';
             this.appendChild(ripple);
-            
             setTimeout(() => ripple.remove(), 600);
           });
         }
       });
     });
   }
-
   /**
    * Initialize semua hero dan CTA components di halaman saat DOMContentLoaded
    * @static
@@ -260,7 +233,6 @@ class HeroComponent {
     }
   }
 }
-
 // Auto-initialize CTA buttons saat DOM ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
@@ -269,5 +241,4 @@ if (document.readyState === 'loading') {
 } else {
   HeroComponent.initAll();
 }
-
 // ES6 Module - no CommonJS export needed

@@ -4,22 +4,21 @@
  * MVP Status: ✅ COMPLETE - Shows invoices table with search/filter
  * Future Enhancement: Add invoice download (PDF generation)
  */
-
 import APIClient from '/assets/js/modules/unified-api.js';
-import { formatPrice, formatDateTime, showInfo } from '/assets/js/modules/unified-utils.js';
-
+import {
+  formatPrice,
+  formatDateTime,
+  showInfo
+} from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
     // Load user orders (use as invoices for now)
     const result = await APIClient.getUserOrders(currentUser.userId);
     const orders = result.data?.orders || result.orders || [];
-
     // Filter orders with payment status = paid
     const invoices = orders.filter(o => o.paymentStatus === 'paid');
-
     const container = document.getElementById('invoices-list-container');
     if (!container) return;
-
     if (invoices.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -60,7 +59,6 @@ export async function render(currentUser) {
           </table>
         </div>
       `;
-
       // Attach event listeners for PDF buttons
       container.querySelectorAll('.btn-pdf').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -68,7 +66,6 @@ export async function render(currentUser) {
         });
       });
     }
-
   } catch (error) {
     console.error('Error rendering invoices:', error);
     const container = document.getElementById('invoices-list-container');
@@ -79,5 +76,3 @@ export async function render(currentUser) {
     }
   }
 }
-
-

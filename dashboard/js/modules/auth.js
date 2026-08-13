@@ -10,13 +10,12 @@
  * This module provides backward compatibility for dashboard code
  * while using the centralized auth system.
  */
-
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 import APIClient from '/assets/js/modules/unified-api.js';
-
 export class DashboardAuth {
   static RETURN_TO_KEY = 'dashboard_return_to';
-
   /**
    * Get current logged-in user from unified AuthManager
    * @returns {Object|null} User object or null if not logged in
@@ -24,7 +23,6 @@ export class DashboardAuth {
   static getCurrentUser() {
     return AuthManager.getCurrentUser();
   }
-
   /**
    * Check if user is logged in
    * @returns {boolean}
@@ -32,7 +30,6 @@ export class DashboardAuth {
   static isLoggedIn() {
     return AuthManager.isLoggedIn();
   }
-
   /**
    * Get user ID
    * @returns {string|null}
@@ -41,7 +38,6 @@ export class DashboardAuth {
     const user = this.getCurrentUser();
     return user?.userId || null;
   }
-
   /**
    * Logout - uses unified AuthManager
    */
@@ -56,7 +52,6 @@ export class DashboardAuth {
       window.location.href = '/auth/';
     }
   }
-
   /**
    * Update current user session
    * @param {Object} user - Updated user details
@@ -64,7 +59,6 @@ export class DashboardAuth {
   static updateSession(user) {
     AuthManager.saveSession(user);
   }
-
   /**
    * Set return-to URL (untuk redirect setelah action tertentu)
    * @param {string} url
@@ -72,7 +66,6 @@ export class DashboardAuth {
   static setReturnTo(url) {
     sessionStorage.setItem(this.RETURN_TO_KEY, url);
   }
-
   /**
    * Get and clear return-to URL
    * @returns {string|null}
@@ -82,11 +75,9 @@ export class DashboardAuth {
     sessionStorage.removeItem(this.RETURN_TO_KEY);
     return url;
   }
-
   // ============================================================================
   // API DELEGATES - Forward to unified APIClient
   // ============================================================================
-
   /**
    * Email/Password Login - delegates to APIClient
    */
@@ -97,14 +88,12 @@ export class DashboardAuth {
     }
     return result;
   }
-
   /**
    * Register new user - delegates to APIClient
    */
   static async register(email, password, displayName, whatsapp) {
     return await APIClient.registerUser(email, password, displayName, whatsapp);
   }
-
   /**
    * Verify Google token - delegates to APIClient
    */
@@ -115,35 +104,30 @@ export class DashboardAuth {
     }
     return result;
   }
-
   /**
    * Verify email token - delegates to APIClient
    */
   static async verifyEmail(token) {
     return await APIClient.verifyEmailToken(token);
   }
-
   /**
    * Request password reset - delegates to APIClient
    */
   static async requestPasswordReset(email) {
     return await APIClient.requestPasswordReset(email);
   }
-
   /**
    * Reset password - delegates to APIClient
    */
   static async resetPassword(token, newPassword) {
     return await APIClient.resetPassword(token, newPassword);
   }
-
   /**
    * Change password - delegates to APIClient
    */
   static async changePassword(userId, oldPassword, newPassword) {
     return await APIClient.changePassword(userId, oldPassword, newPassword);
   }
-
   /**
    * Update user profile - delegates to APIClient
    */

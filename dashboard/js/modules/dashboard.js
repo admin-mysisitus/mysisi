@@ -1,16 +1,15 @@
 /**
  * Dashboard Home Page Module
  */
-
 import APIClient from '/assets/js/modules/unified-api.js';
-import { formatPrice } from '/assets/js/modules/unified-utils.js';
-
+import {
+  formatPrice
+} from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   if (currentUser && currentUser.role === 'admin') {
     window.location.replace('/admin/');
     return;
   }
-  
   try {
     // Update welcome name dynamically
     let displayName = currentUser.displayName || 'Pelanggan';
@@ -26,7 +25,6 @@ export async function render(currentUser) {
     if (welcomeName) {
       welcomeName.textContent = displayName;
     }
-
     // Get order statistics from userOrderStats endpoint
     let stats = null;
     try {
@@ -39,10 +37,11 @@ export async function render(currentUser) {
     } catch (error) {
       console.warn('Statistics not available:', error);
     }
-
     // Render cart reminder card at the top if cart is not empty
     try {
-      const { CartManager } = await import('/assets/js/modules/unified-cart.js');
+      const {
+        CartManager
+      } = await import('/assets/js/modules/unified-cart.js');
       const cartSummary = CartManager.getSummary();
       if (cartSummary.itemCount > 0) {
         const cart = CartManager.getCart();
@@ -50,7 +49,6 @@ export async function render(currentUser) {
         const domainName = firstItem?.domain || '';
         const packageId = firstItem?.package || 'starter';
         const packageName = packageId.charAt(0).toUpperCase() + packageId.slice(1);
-
         const reminderHTML = `
           <div class="card cart-reminder-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 5px solid #2563eb; border-top: none; margin-bottom: 20px; animation: slideInUp 0.4s ease-out;">
             <div class="card-body" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 20px;">
@@ -70,7 +68,6 @@ export async function render(currentUser) {
             </div>
           </div>
         `;
-        
         const content = document.getElementById('content');
         if (content) {
           content.insertAdjacentHTML('afterbegin', reminderHTML);
@@ -79,10 +76,8 @@ export async function render(currentUser) {
     } catch (cartError) {
       console.warn('Error rendering cart reminder card:', cartError);
     }
-
     // Setup event listeners
     setupEventListeners();
-
   } catch (error) {
     console.error('Error rendering dashboard:', error);
     document.getElementById('content').innerHTML = `
@@ -102,7 +97,6 @@ function updateStatisticsDisplay(stats) {
     'stat-active-orders': stats.ordersByStatus?.processing || 0,
     'stat-completed': stats.ordersByStatus?.completed || 0
   };
-  
   Object.entries(widgets).forEach(([elementId, value]) => {
     const element = document.getElementById(elementId);
     if (element) {
@@ -119,28 +113,24 @@ function setupEventListeners() {
       window.location.hash = '#!/dashboard/checkout';
     });
   }
-
   const btnOrders = document.getElementById('btn-quick-orders');
   if (btnOrders) {
     btnOrders.addEventListener('click', () => {
       window.location.hash = '#!/dashboard/orders';
     });
   }
-
   const btnProfile = document.getElementById('btn-quick-profile');
   if (btnProfile) {
     btnProfile.addEventListener('click', () => {
       window.location.hash = '#!/dashboard/profile';
     });
   }
-
   const btnSupport = document.getElementById('btn-quick-support');
   if (btnSupport) {
     btnSupport.addEventListener('click', () => {
       window.location.hash = '#!/dashboard/support';
     });
   }
-
   // Domain search form in dashboard
   const domainForm = document.getElementById('dashboard-domain-form');
   if (domainForm) {

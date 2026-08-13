@@ -1,6 +1,5 @@
 /* ========== DOMAIN & HOSTING PAGE STYLING ========== */
 /* Page-specific styling untuk halaman domain & hosting layanan */
-
 /* ========== IMPORT BASE STYLES ========== */
 /* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
 @import url('pembuatan-website.css');
@@ -34,13 +33,12 @@
   border-left: 4px solid var(--primary-blue) !important;
   text-align: left;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   position: relative;
 }
 
 /* Animation delays di-handle otomatis oleh shared-sections.css [class*="item"] selector */
-
 .benefit-item:hover {
   transform: translateY(-6px);
   border-color: #cbd5e1;
@@ -315,7 +313,7 @@
   border-color: #cbd5e1;
   transform: translateY(-3px);
   background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .feature-card-item i {
@@ -459,14 +457,15 @@
 
 /* ========== ANIMATIONS ========== */
 /* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */
-
 @keyframes iconRotate {
   0% {
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     transform: scale(1.1) rotate(15deg);
   }
+
   100% {
     transform: scale(1) rotate(0deg);
   }
@@ -477,6 +476,7 @@
     transform: scale(0);
     opacity: 1;
   }
+
   to {
     transform: scale(4);
     opacity: 0;
@@ -494,6 +494,7 @@
   background: linear-gradient(135deg, var(--accent-cyan), var(--primary-blue));
   color: var(--bg-white);
 }
+
 .feature-card-item {
   background: #fafaf9;
   border: 1px solid #e2e8f0;
@@ -509,7 +510,7 @@
   border-color: #cbd5e1;
   transform: translateY(-3px);
   background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .feature-card-item i {
@@ -631,14 +632,15 @@
 
 /* ========== ANIMATIONS ========== */
 /* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */
-
 @keyframes iconRotate {
   0% {
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     transform: scale(1.1) rotate(15deg);
   }
+
   100% {
     transform: scale(1) rotate(0deg);
   }
@@ -649,6 +651,7 @@
     transform: scale(0);
     opacity: 1;
   }
+
   to {
     transform: scale(4);
     opacity: 0;
@@ -673,6 +676,7 @@
 
 /* ========== RESPONSIVE & HORIZONTAL SCROLL ANIMATION (LIKE PERUSAHAAN) ========== */
 @media (max-width: 768px) {
+
   .detail-benefits-section,
   .detail-domain-packages-section,
   .detail-hosting-packages-section,
@@ -785,6 +789,7 @@
 }
 
 @media (max-width: 480px) {
+
   .detail-benefits-section,
   .detail-domain-packages-section,
   .detail-hosting-packages-section,

@@ -12,11 +12,20 @@
  * - Google Sign-In integration
  * - Inline or standalone usage
  */
-
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showSuccess, showError, showLoading, hideLoading, isValidEmail, isValidPassword, isValidPhoneNumber, initPasswordToggle } from '/assets/js/modules/unified-utils.js';
-
+import {
+  showSuccess,
+  showError,
+  showLoading,
+  hideLoading,
+  isValidEmail,
+  isValidPassword,
+  isValidPhoneNumber,
+  initPasswordToggle
+} from '/assets/js/modules/unified-utils.js';
 export class SharedAuthForm {
   constructor(options = {}) {
     this.options = {
@@ -28,7 +37,6 @@ export class SharedAuthForm {
       onRegisterSuccess: null,
       ...options
     };
-    
     this.container = null;
     this.state = {
       currentTab: 'register',
@@ -36,7 +44,6 @@ export class SharedAuthForm {
       isValidatingEmail: false
     };
   }
-
   /**
    * Initialize and render form
    */
@@ -46,18 +53,15 @@ export class SharedAuthForm {
       console.error(`[SharedAuthForm] Container #${this.options.containerId} not found`);
       return;
     }
-
     this.renderFormHTML();
     this.setupEventListeners();
     this.initGoogleSignIn();
   }
-
   /**
    * Explicitly initialize Google Sign-In for dynamic rendering
    */
   initGoogleSignIn() {
     if (!this.options.showGoogleSignIn) return;
-
     if (window.google && window.google.accounts && window.google.accounts.id) {
       const gBtnContainer = this.container.querySelector('.g_id_signin');
       if (gBtnContainer) {
@@ -65,24 +69,25 @@ export class SharedAuthForm {
           client_id: "1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com",
           callback: window.handleGoogleSignIn
         });
-        
-        window.google.accounts.id.renderButton(
-          gBtnContainer,
-          { theme: "outline", size: "large", type: "standard", shape: "rectangular", logo_alignment: "left", width: 400 }
-        );
+        window.google.accounts.id.renderButton(gBtnContainer, {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          shape: "rectangular",
+          logo_alignment: "left",
+          width: 400
+        });
       }
     } else {
       // Retry in case the Google script hasn't fully loaded yet
       setTimeout(() => this.initGoogleSignIn(), 500);
     }
   }
-
   /**
    * Generate form HTML
    */
   renderFormHTML() {
     const inlineClass = this.options.inlineMode ? 'inline' : '';
-    
     this.container.innerHTML = `
       <div class="shared-auth-form ${inlineClass}">
         <!-- Form Header -->
@@ -406,7 +411,6 @@ export class SharedAuthForm {
       </div>
     `;
   }
-
   /**
    * Setup event listeners
    */
@@ -418,7 +422,6 @@ export class SharedAuthForm {
         btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
       });
     }
-
     // Toggle links for switching view inline (especially in inline mode)
     const toLoginBtns = this.container.querySelectorAll('.switch-to-login, .back-to-login-link');
     toLoginBtns.forEach(btn => {
@@ -427,7 +430,6 @@ export class SharedAuthForm {
         this.switchTab('login');
       });
     });
-
     const toRegisterBtns = this.container.querySelectorAll('.switch-to-register');
     toRegisterBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -435,7 +437,6 @@ export class SharedAuthForm {
         this.switchTab('register');
       });
     });
-
     const forgotPasswordLinks = this.container.querySelectorAll('.forgot-password-link');
     forgotPasswordLinks.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -443,25 +444,21 @@ export class SharedAuthForm {
         this.switchTab('forgot-password');
       });
     });
-
     // Register form
     const registerForm = this.container.querySelector('#register-form');
     if (registerForm) {
       registerForm.addEventListener('submit', (e) => this.handleRegister(e));
     }
-
     // Login form
     const loginForm = this.container.querySelector('#login-form');
     if (loginForm) {
       loginForm.addEventListener('submit', (e) => this.handleLogin(e));
     }
-
     // Forgot password form
     const forgotForm = this.container.querySelector('#forgot-password-form');
     if (forgotForm) {
       forgotForm.addEventListener('submit', (e) => this.handleForgotPassword(e));
     }
-
     // Show register form by default in inline mode
     if (this.options.inlineMode) {
       const registerForm = this.container.querySelector('.register-form');
@@ -471,28 +468,22 @@ export class SharedAuthForm {
       if (loginForm) loginForm.classList.remove('active');
       if (forgotForm) forgotForm.classList.remove('active');
     }
-
     // Auto-show login tab if coming from forgot password
     if (window.location.hash === '#!login') {
       this.switchTab('login');
     }
-
     // Initialize password toggles
     initPasswordToggle(this.container);
-
     // Initialize password strength indicators
     this.initPasswordStrengthIndicators();
-
     // Initialize WhatsApp validation
     this.initWhatsAppValidation();
   }
-
   /**
    * Switch between tabs
    */
   switchTab(tabName) {
     this.state.currentTab = tabName;
-
     // Update tab buttons
     const tabBtns = this.container.querySelectorAll('.tab-btn');
     tabBtns.forEach(btn => {
@@ -501,7 +492,6 @@ export class SharedAuthForm {
         btn.classList.add('active');
       }
     });
-
     // Update forms
     const forms = this.container.querySelectorAll('.auth-form');
     forms.forEach(form => {
@@ -510,40 +500,30 @@ export class SharedAuthForm {
         form.classList.add('active');
       }
     });
-
     // Clear messages
     this.clearMessages();
   }
-
   /**
    * Handle forgot password form submission inline
    */
   async handleForgotPassword(e) {
     e.preventDefault();
-
     if (this.state.isSubmitting) return;
-
     const form = e.target;
     const email = form.querySelector('input[name="email"]').value.trim();
-
     if (!isValidEmail(email)) {
       this.showError('Email tidak valid');
       return;
     }
-
     try {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Mengirim...');
-
       const result = await APIClient.requestPasswordReset(email);
-
       if (!result.success) {
         throw new Error(result.message || 'Gagal mengirim link reset password');
       }
-
       this.showSuccess('✓ Email Terkirim!', 'Silakan cek inbox/spam email Anda.');
       form.reset();
-
     } catch (error) {
       console.error('Forgot password error:', error);
       this.showError(error.message || 'Terjadi kesalahan');
@@ -552,62 +532,49 @@ export class SharedAuthForm {
       this.setSubmitButtonLoading(form, false);
     }
   }
-
   /**
    * Handle register form submission
    */
   async handleRegister(e) {
     e.preventDefault();
-
     if (this.state.isSubmitting) return;
-
     const form = e.target;
     const email = form.querySelector('input[name="email"]').value.trim();
     const password = form.querySelector('input[name="password"]').value;
     const passwordConfirm = form.querySelector('input[name="passwordConfirm"]').value;
     const displayName = form.querySelector('input[name="displayName"]').value.trim();
     const whatsapp = form.querySelector('input[name="whatsapp"]')?.value.trim() || '';
-
     // Validation
     if (!isValidEmail(email)) {
       this.showError('Email tidak valid');
       return;
     }
-
     const pwdValidation = isValidPassword(password);
     if (!pwdValidation.valid) {
       this.showError(pwdValidation.message);
       return;
     }
-
     if (password !== passwordConfirm) {
       this.showError('Password tidak cocok');
       return;
     }
-
     if (!displayName) {
       this.showError('Nama lengkap diperlukan');
       return;
     }
-
     if (whatsapp && !isValidPhoneNumber(whatsapp)) {
       this.showError('Nomor WhatsApp tidak valid');
       return;
     }
-
     try {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Membuat akun...');
-
       // Call register API
       const result = await APIClient.registerUser(email, password, displayName, whatsapp);
-
       if (!result.success) {
         throw new Error(result.message || 'Registrasi gagal');
       }
-
       this.showSuccess('✓ Registrasi Berhasil!', 'Silakan buka email Anda untuk verifikasi akun');
-
       // Auto-login after successful registration
       setTimeout(() => {
         // Save session if API returns user data
@@ -621,9 +588,7 @@ export class SharedAuthForm {
             authMethod: result.data.authMethod || 'email',
             emailVerified: result.data.emailVerified || false
           };
-          
           AuthManager.saveSession(userData);
-
           // Call success callback
           if (this.options.onRegisterSuccess) {
             this.options.onRegisterSuccess(userData);
@@ -633,7 +598,6 @@ export class SharedAuthForm {
           }
         }
       }, 1500);
-
     } catch (error) {
       console.error('Register error:', error);
       this.showError(error.message || 'Terjadi kesalahan saat registrasi');
@@ -642,56 +606,43 @@ export class SharedAuthForm {
       this.setSubmitButtonLoading(form, false);
     }
   }
-
   /**
    * Handle login form submission
    */
   async handleLogin(e) {
     e.preventDefault();
-
     if (this.state.isSubmitting) return;
-
     const form = e.target;
     const email = form.querySelector('input[name="email"]').value.trim();
     const password = form.querySelector('input[name="password"]').value;
-
     // Validation
     if (!isValidEmail(email)) {
       this.showError('Email tidak valid');
       return;
     }
-
     if (!password) {
       this.showError('Password diperlukan');
       return;
     }
-
     try {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Login...');
-
       // Call login API
       const result = await APIClient.loginUser(email, password);
-
       if (!result.success) {
         throw new Error(result.message || 'Login gagal');
       }
-
       if (!result.data) {
         throw new Error('Data pengguna tidak ditemukan');
       }
-
       // CHECK: Email verification status - Bypassed to allow direct login
       // if (!result.data.emailVerified) {
       //   this.showError('Email Anda belum terverifikasi. Silakan cek email untuk link verifikasi.');
       //   return;
       // }
-
       // Save session
       AuthManager.saveSession(result.data);
-
       this.showSuccess('✓ Login Berhasil!', `Selamat datang, ${result.data.displayName}!`);
-
       // Call success callback
       setTimeout(() => {
         if (this.options.onLoginSuccess) {
@@ -701,7 +652,6 @@ export class SharedAuthForm {
           window.location.href = result.data.role === 'admin' ? '/admin/' : '/dashboard/';
         }
       }, 1500);
-
     } catch (error) {
       console.error('Login error:', error);
       this.showError(error.message || 'Terjadi kesalahan saat login');
@@ -710,59 +660,49 @@ export class SharedAuthForm {
       this.setSubmitButtonLoading(form, false);
     }
   }
-
   /**
    * Show error message
    */
   showError(message) {
     const errorDiv = this.container.querySelector('#auth-error');
     const successDiv = this.container.querySelector('#auth-success');
-    
     if (errorDiv) {
       errorDiv.textContent = message;
       errorDiv.style.display = 'block';
     }
-
     if (successDiv) {
       successDiv.style.display = 'none';
     }
   }
-
   /**
    * Show success message
    */
   showSuccess(title, message = '') {
     const successDiv = this.container.querySelector('#auth-success');
     const errorDiv = this.container.querySelector('#auth-error');
-    
     if (successDiv) {
       successDiv.innerHTML = `<strong>${title}</strong>${message ? '<br>' + message : ''}`;
       successDiv.style.display = 'block';
     }
-
     if (errorDiv) {
       errorDiv.style.display = 'none';
     }
   }
-
   /**
    * Clear messages
    */
   clearMessages() {
     const errorDiv = this.container.querySelector('#auth-error');
     const successDiv = this.container.querySelector('#auth-success');
-    
     if (errorDiv) errorDiv.style.display = 'none';
     if (successDiv) successDiv.style.display = 'none';
   }
-
   /**
    * Set submit button loading state
    */
   setSubmitButtonLoading(form, isLoading, loadingText = 'Loading...') {
     const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
-
     if (isLoading) {
       submitBtn.disabled = true;
       submitBtn.dataset.originalText = submitBtn.textContent;
@@ -772,7 +712,6 @@ export class SharedAuthForm {
       submitBtn.textContent = submitBtn.dataset.originalText || 'Submit';
     }
   }
-
   /**
    * Initialize password strength indicators
    */
@@ -780,28 +719,16 @@ export class SharedAuthForm {
     const registerPassword = this.container.querySelector('#register-password-shared');
     if (registerPassword) {
       registerPassword.addEventListener('input', () => {
-        this.updatePasswordStrength(
-          registerPassword.value,
-          'register-password-strength-shared',
-          'register-strength-bar-shared',
-          'register-strength-text-shared'
-        );
+        this.updatePasswordStrength(registerPassword.value, 'register-password-strength-shared', 'register-strength-bar-shared', 'register-strength-text-shared');
       });
     }
-
     const loginPassword = this.container.querySelector('#login-password-shared');
     if (loginPassword) {
       loginPassword.addEventListener('input', () => {
-        this.updatePasswordStrength(
-          loginPassword.value,
-          'login-password-strength-shared',
-          'login-strength-bar-shared',
-          'login-strength-text-shared'
-        );
+        this.updatePasswordStrength(loginPassword.value, 'login-password-strength-shared', 'login-strength-bar-shared', 'login-strength-text-shared');
       });
     }
   }
-
   /**
    * Calculate and display password strength
    */
@@ -809,16 +736,12 @@ export class SharedAuthForm {
     const strengthDiv = this.container.querySelector(`#${strengthDivId}`);
     const strengthBar = this.container.querySelector(`#${strengthBarId}`);
     const strengthText = this.container.querySelector(`#${strengthTextId}`);
-
     if (!strengthDiv || !strengthBar || !strengthText) return;
-
     if (password.length === 0) {
       strengthDiv.style.display = 'none';
       return;
     }
-
     strengthDiv.style.display = 'block';
-
     let strength = 0;
     const checks = {
       length: password.length >= 8,
@@ -827,12 +750,9 @@ export class SharedAuthForm {
       numbers: /[0-9]/.test(password),
       special: /[!@#$%^&*]/.test(password)
     };
-
     strength = Object.values(checks).filter(Boolean).length;
-
     let className = '';
     let text = '';
-
     if (strength <= 1) {
       className = 'strength-weak';
       text = 'Password lemah';
@@ -846,12 +766,10 @@ export class SharedAuthForm {
       className = 'strength-strong';
       text = 'Password sangat kuat';
     }
-
     strengthBar.className = `strength-bar ${className}`;
     strengthBar.style.width = (strength * 20) + '%';
     strengthText.textContent = text;
   }
-
   /**
    * Initialize WhatsApp number validation
    */
@@ -859,16 +777,10 @@ export class SharedAuthForm {
     const whatsappInput = this.container.querySelector('#register-whatsapp-shared');
     if (whatsappInput) {
       whatsappInput.addEventListener('input', () => {
-        this.updateWhatsAppValidation(
-          whatsappInput.value,
-          'register-phone-validation-shared',
-          'register-phone-bar-shared',
-          'register-phone-text-shared'
-        );
+        this.updateWhatsAppValidation(whatsappInput.value, 'register-phone-validation-shared', 'register-phone-bar-shared', 'register-phone-text-shared');
       });
     }
   }
-
   /**
    * Update WhatsApp validation display
    */
@@ -876,18 +788,13 @@ export class SharedAuthForm {
     const div = this.container.querySelector(`#${validationDivId}`);
     const barEl = this.container.querySelector(`#${barId}`);
     const textEl = this.container.querySelector(`#${textId}`);
-    
     if (!div || !barEl || !textEl) return;
-
     if (value.length === 0) {
       div.style.display = 'none';
       return;
     }
-
     div.style.display = 'block';
-
     const cleanValue = value.replace(/[\s\-+]/g, '');
-
     if (isValidPhoneNumber(value)) {
       barEl.className = 'strength-bar strength-strong';
       barEl.style.width = '100%';
@@ -906,5 +813,4 @@ export class SharedAuthForm {
     }
   }
 }
-
 export default SharedAuthForm;

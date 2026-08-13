@@ -13,32 +13,31 @@
  *   APIClient.call('loginUser', {email, password})
  *   APIClient.call('getUserProfile', {userId})
  */
-
-import { AuthManager } from './unified-auth.js';
-import { GAS_CONFIG } from '../config/api.config.js';
-
+import {
+  AuthManager
+} from './unified-auth.js';
+import {
+  GAS_CONFIG
+} from '../config/api.config.js';
 export class APIClient {
   static DEFAULT_TIMEOUT = 30000; // 30 seconds
-
   /**
    * Make API call to GAS backend
    * Simple, direct pattern matching sampel-mekanisme-GAS
    */
   static async call(action, data = {}, options = {}) {
-    let { method = 'POST' } = options;
-
+    let {
+      method = 'POST'
+    } = options;
     // Use GET for data retrieval if no complex data
     const getActions = ['checkdomain', 'getorders', 'getactivepromocodes'];
     if (getActions.includes(action.toLowerCase())) {
       method = 'GET';
     }
-
     try {
       const response = await this.makeRequest(action, data, method, this.DEFAULT_TIMEOUT);
-
       // Response bisa dalam berbagai format, fallback jika tidak sesuai expected
       let result = response;
-
       // Jika response adalah object dengan success field
       if (typeof response === 'object' && response !== null) {
         // Jika ada success field, gunakan sebagai response valid
@@ -72,21 +71,18 @@ export class APIClient {
         console.error('[API] Response bukan object:', typeof response);
         throw new Error('Server response format tidak valid');
       }
-
       // Final validation
       if (result.success === false && (result.errorCode === 'UNAUTHORIZED' || result.errorCode === 'SESSION_EXPIRED')) {
         console.error('[API] Auth error - clearing session');
         AuthManager.clearSession();
         throw new Error('Session expired. Please login again.');
       }
-
       return result;
     } catch (error) {
       console.error(`[API] ${action} failed:`, error.message);
       throw error; // Let caller handle error
     }
   }
-
   /**
    * Make actual HTTP request
    * Using FormData for ALL requests - matches sampel-mekanisme-GAS pattern
@@ -101,13 +97,11 @@ export class APIClient {
   static async makeRequest(action, data, method, timeout) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
-
     try {
       // Build URLSearchParams for application/x-www-form-urlencoded format
       // as required by Google Apps Script rules to avoid CORS preflight errors.
       const postParams = new URLSearchParams();
       postParams.append('action', action);
-      
       // Add all data fields
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -118,7 +112,6 @@ export class APIClient {
           }
         }
       });
-
       let url = `${GAS_CONFIG.URL}`;
       let options = {
         method: method,
@@ -126,18 +119,18 @@ export class APIClient {
         redirect: 'follow',
         cache: 'no-store'
       };
-
       if (method === 'GET') {
         // For GET, append as query string
-        const params = new URLSearchParams({ action, ...data });
+        const params = new URLSearchParams({
+          action,
+          ...data
+        });
         url = `${GAS_CONFIG.URL}?${params}`;
       } else if (method === 'POST') {
         // For POST, use application/x-www-form-urlencoded to prevent CORS preflight issues
         options.body = postParams;
       }
-
       const response = await fetch(url, options);
-
       if (!response.ok) {
         // Try to get error message from response body
         let errorBody = '';
@@ -154,11 +147,9 @@ export class APIClient {
         }
         throw new Error(`HTTP ${response.status}: ${errorBody || response.statusText}`);
       }
-
       // Try parse as JSON
       try {
         const responseText = await response.text();
-        
         // Try parse JSON
         try {
           return JSON.parse(responseText);
@@ -186,9 +177,7 @@ export class APIClient {
       clearTimeout(timeoutId);
     }
   }
-
   // ========== AUTH ENDPOINTS ==========
-
   /**
    * Register new user
    */
@@ -198,9 +187,10 @@ export class APIClient {
       password,
       displayName: displayName || email.split('@')[0],
       whatsapp
-    }, { method: 'POST' });
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Login user
    */
@@ -208,50 +198,66 @@ export class APIClient {
     return this.call('loginUser', {
       email,
       password
-    }, { method: 'POST' });
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Verify email token (auto-login after registration)
    * Using GET request to avoid CORS preflight issues
    */
   static verifyEmailToken(token) {
-    return this.call('verifyEmailToken', { token }, { method: 'GET' });
+    return this.call('verifyEmailToken', {
+      token
+    }, {
+      method: 'GET'
+    });
   }
-
   /**
    * Verify Google OAuth token
    * Using POST request because Google tokens are extremely long and can trigger URL limits or CORS failures on GET
    */
   static verifyGoogleToken(token) {
-    return this.call('verifyGoogleToken', { token }, { method: 'POST' });
+    return this.call('verifyGoogleToken', {
+      token
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Request password reset
    * Using GET request to avoid CORS preflight issues
    */
   static requestPasswordReset(email) {
-    return this.call('requestPasswordReset', { email }, { method: 'POST' });
+    return this.call('requestPasswordReset', {
+      email
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Reset password with token
    */
   static resetPassword(token, password) {
-    return this.call('resetPassword', { token, password }, { method: 'POST' });
+    return this.call('resetPassword', {
+      token,
+      password
+    }, {
+      method: 'POST'
+    });
   }
-
   // ========== USER PROFILE ENDPOINTS ==========
-
   /**
    * Get user profile
    * Using GET request to avoid CORS preflight issues
    */
   static getUserProfile(userId) {
-    return this.call('getUserProfile', { userId }, { method: 'GET' });
+    return this.call('getUserProfile', {
+      userId
+    }, {
+      method: 'GET'
+    });
   }
-
   /**
    * Update user profile
    */
@@ -261,9 +267,10 @@ export class APIClient {
       displayName,
       whatsapp,
       photoBase64
-    }, { method: 'POST' });
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Change password
    */
@@ -272,19 +279,20 @@ export class APIClient {
       userId,
       oldPassword,
       newPassword
-    }, { method: 'POST' });
+    }, {
+      method: 'POST'
+    });
   }
-
   // ========== ORDER ENDPOINTS ==========
-
   /**
    * Create order (authenticated)
    * Accepts userId as part of orderData or will pass-through
    */
   static createOrder(orderData) {
-    return this.call('createOrderWithAuth', orderData, { method: 'POST' });
+    return this.call('createOrderWithAuth', orderData, {
+      method: 'POST'
+    });
   }
-
   /**
    * Create order with separate userId (alternative signature for convenience)
    */
@@ -295,47 +303,61 @@ export class APIClient {
     let data;
     if (typeof userIdOrOrderData === 'string') {
       // Second param provided - merge userId
-      data = { userId: userIdOrOrderData, ...orderDataIfUserIdProvided };
+      data = {
+        userId: userIdOrOrderData,
+        ...orderDataIfUserIdProvided
+      };
     } else {
       // First param is the full object
       data = userIdOrOrderData;
     }
-    return this.call('createOrderWithAuth', data, { method: 'POST' });
+    return this.call('createOrderWithAuth', data, {
+      method: 'POST'
+    });
   }
-
   /**
    * Get user's orders
    */
   static getUserOrders(userId) {
-    return this.call('getUserOrders', { userId }, { method: 'POST' });
+    return this.call('getUserOrders', {
+      userId
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Get order detail
    */
   static getOrderDetail(orderId, userId) {
-    return this.call('getOrderDetail', { orderId, userId }, { method: 'POST' });
+    return this.call('getOrderDetail', {
+      orderId,
+      userId
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Sync order status directly with Midtrans backend
    * @param {string} orderId 
    */
   static syncOrderStatus(orderId) {
-    return this.call('syncorderstatus', { orderId }, { method: 'POST' });
+    return this.call('syncorderstatus', {
+      orderId
+    }, {
+      method: 'POST'
+    });
   }
-
-
-
   /**
    * Get user order statistics
    */
   static getUserOrderStats(userId) {
-    return this.call('getUserOrderStats', { userId }, { method: 'POST' });
+    return this.call('getUserOrderStats', {
+      userId
+    }, {
+      method: 'POST'
+    });
   }
-
   // ========== PAYMENT ENDPOINTS ==========
-
   /**
    * Generate Midtrans payment token
    */
@@ -348,120 +370,197 @@ export class APIClient {
       domain,
       packageId,
       total,
-      addons  // NEW: Pass addons array
-    }, { method: 'POST' });
+      addons // NEW: Pass addons array
+    }, {
+      method: 'POST'
+    });
   }
-
   // ========== DOMAIN ENDPOINTS ==========
-
   /**
    * Check domain availability
    */
   static checkDomain(domain) {
-    return this.call('checkDomain', { domain }, { method: 'POST' });
+    return this.call('checkDomain', {
+      domain
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Get domain pricing
    */
   static getDomainPricing(tld) {
-    return this.call('getDomainPricing', { tld }, { method: 'POST' });
+    return this.call('getDomainPricing', {
+      tld
+    }, {
+      method: 'POST'
+    });
   }
-
   // ========== PROMO ENDPOINTS ==========
-
   /**
    * Validate promo code
    */
   static validatePromoCode(code) {
-    return this.call('validatePromoCode', { code }, { method: 'POST' });
+    return this.call('validatePromoCode', {
+      code
+    }, {
+      method: 'POST'
+    });
   }
-
   /**
    * Get active promo codes list
    */
   static getActivePromoCodes() {
-    return this.call('getActivePromoCodes', {}, { method: 'GET' });
+    return this.call('getActivePromoCodes', {}, {
+      method: 'GET'
+    });
   }
-
   // ========== ADMIN ENDPOINTS ==========
-
   static getAdminStats(adminId = 'ADMIN') {
-    return this.call('getadminstats', { adminId }, { method: 'POST' });
+    return this.call('getadminstats', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static getAllUsers(adminId = 'ADMIN') {
-    return this.call('getallusers', { adminId }, { method: 'POST' });
+    return this.call('getallusers', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static saveAdminUser(adminId, userData) {
-    return this.call('saveadminuser', { adminId, userData: JSON.stringify(userData) }, { method: 'POST' });
+    return this.call('saveadminuser', {
+      adminId,
+      userData: JSON.stringify(userData)
+    }, {
+      method: 'POST'
+    });
   }
-
   static deleteAdminUser(adminId, id) {
-    return this.call('deleteadminuser', { adminId, id }, { method: 'POST' });
+    return this.call('deleteadminuser', {
+      adminId,
+      id
+    }, {
+      method: 'POST'
+    });
   }
-
   static getAllTransactions(adminId = 'ADMIN') {
-    return this.call('getalltransactions', { adminId }, { method: 'POST' });
+    return this.call('getalltransactions', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static saveAdminTransaction(adminId, txData) {
-    return this.call('saveadmintransaction', { adminId, txData: JSON.stringify(txData) }, { method: 'POST' });
+    return this.call('saveadmintransaction', {
+      adminId,
+      txData: JSON.stringify(txData)
+    }, {
+      method: 'POST'
+    });
   }
-
   static deleteAdminTransaction(adminId, id) {
-    return this.call('deleteadmintransaction', { adminId, id }, { method: 'POST' });
+    return this.call('deleteadmintransaction', {
+      adminId,
+      id
+    }, {
+      method: 'POST'
+    });
   }
-
   static getAdminPromos(adminId) {
-    return this.call('getadminpromos', { adminId }, { method: 'POST' });
+    return this.call('getadminpromos', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static saveAdminPromo(adminId, promoData) {
-    return this.call('saveadminpromo', { adminId, promoData: JSON.stringify(promoData) }, { method: 'POST' });
+    return this.call('saveadminpromo', {
+      adminId,
+      promoData: JSON.stringify(promoData)
+    }, {
+      method: 'POST'
+    });
   }
-
   static deleteAdminPromo(adminId, code) {
-    return this.call('deleteadminpromo', { adminId, code }, { method: 'POST' });
+    return this.call('deleteadminpromo', {
+      adminId,
+      code
+    }, {
+      method: 'POST'
+    });
   }
-
   static getAdminPackages(adminId) {
-    return this.call('getadminpackages', { adminId }, { method: 'POST' });
+    return this.call('getadminpackages', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static saveAdminPackage(adminId, packageData) {
-    return this.call('saveadminpackage', { adminId, packageData: JSON.stringify(packageData) }, { method: 'POST' });
+    return this.call('saveadminpackage', {
+      adminId,
+      packageData: JSON.stringify(packageData)
+    }, {
+      method: 'POST'
+    });
   }
-
   static deleteAdminPackage(adminId, id) {
-    return this.call('deleteadminpackage', { adminId, id }, { method: 'POST' });
+    return this.call('deleteadminpackage', {
+      adminId,
+      id
+    }, {
+      method: 'POST'
+    });
   }
-
   static getAdminTickets(adminId) {
-    return this.call('getadmintickets', { adminId }, { method: 'POST' });
+    return this.call('getadmintickets', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static saveAdminTicket(adminId, ticketData) {
-    return this.call('saveadminticket', { adminId, ticketData: JSON.stringify(ticketData) }, { method: 'POST' });
+    return this.call('saveadminticket', {
+      adminId,
+      ticketData: JSON.stringify(ticketData)
+    }, {
+      method: 'POST'
+    });
   }
-
   static deleteAdminTicket(adminId, id) {
-    return this.call('deleteadminticket', { adminId, id }, { method: 'POST' });
+    return this.call('deleteadminticket', {
+      adminId,
+      id
+    }, {
+      method: 'POST'
+    });
   }
-
   static getAdminDNS(adminId) {
-    return this.call('getadmindns', { adminId }, { method: 'POST' });
+    return this.call('getadmindns', {
+      adminId
+    }, {
+      method: 'POST'
+    });
   }
-
   static saveAdminDNS(adminId, dnsData) {
-    return this.call('saveadmindns', { adminId, dnsData: JSON.stringify(dnsData) }, { method: 'POST' });
+    return this.call('saveadmindns', {
+      adminId,
+      dnsData: JSON.stringify(dnsData)
+    }, {
+      method: 'POST'
+    });
   }
-
   static deleteAdminDNS(adminId, domain) {
-    return this.call('deleteadmindns', { adminId, domain }, { method: 'POST' });
+    return this.call('deleteadmindns', {
+      adminId,
+      domain
+    }, {
+      method: 'POST'
+    });
   }
 }
-
 // Export for use
 export default APIClient;

@@ -1,7 +1,7 @@
 /* ========== PROMO PAGE STYLING ========== */
 /* Promo-specific styling utama untuk override shared styles */
-
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
 
@@ -106,7 +106,6 @@ main {
 }
 
 /* Title decorations consolidated */
-
 /* ========== PROMOS GRID ========== */
 .promos-grid {
   display: grid;
@@ -152,7 +151,6 @@ main {
   transform: scale(1.02) translateY(-8px);
   box-shadow: 0 15px 45px rgba(37, 99, 235, 0.2);
 }
-
 
 /* ========== PROMO BADGE ========== */
 .promo-badge {
@@ -471,7 +469,6 @@ main {
 }
 
 /* Title decorations consolidated */
-
 /* ========== REQUIREMENTS GRID ========== */
 .requirements-grid {
   display: grid;
@@ -527,7 +524,6 @@ main {
 }
 
 /* Title decorations consolidated */
-
 /* ========== WHY GRID ========== */
 .why-grid {
   display: grid;
@@ -592,7 +588,6 @@ main {
 }
 
 /* Title decorations consolidated */
-
 /* ========== SWIPER TESTIMONIAL CAROUSEL ========== */
 .testimonial-swiper {
   width: 100%;
@@ -668,7 +663,8 @@ main {
 .testimonial-name {
   padding: 1.2rem 0.5rem 0.5rem;
   text-align: center;
-  font-size: 0.85rem; /* Diperkecil agar lebih ringkas */
+  font-size: 0.85rem;
+  /* Diperkecil agar lebih ringkas */
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
@@ -702,7 +698,6 @@ main {
 /* ========== PROMO CTA FINAL SECTION - STYLING MOVED TO components/hero.css ========== */
 /* Promo CTA section sekarang ditangani oleh .promo-cta-final-section di components/hero.css */
 /* Lihat hero.css untuk styling lengkap */
-
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .promo-banner {
@@ -869,7 +864,6 @@ main {
 
 /* ========== ANIMATION SCROLL REVEAL ========== */
 /* slideInUp dan fadeIn keyframes di-consolidate ke base/shared-sections.css */
-
 @keyframes spinIcon {
   from {
     transform: scale(1.15) rotate(0deg);
@@ -1072,7 +1066,6 @@ main {
  * FAQ styling is now centralized in components/faq.css to ensure consistency
  * across all pages.
  */
-
 @media (max-width: 768px) {
   .faq-section {
     padding: 3rem 0;

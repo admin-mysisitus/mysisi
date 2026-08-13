@@ -48,127 +48,127 @@
   <!-- Inline Styles untuk Tabel Perbandingan -->
   <style>
     /* Desktop & Default */
-    .comparison-table {
-      display: block !important;
-      overflow-x: auto !important;
-      overflow-y: hidden !important;
-      border-radius: var(--radius-large);
-      box-shadow: var(--shadow-md);
-      -webkit-overflow-scrolling: touch;
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-    }
-
-    .comparison-table table {
-      width: 100%;
-      min-width: 600px;
-      border-collapse: collapse;
-      background: var(--bg-white);
-    }
-
-    .comparison-table th {
-      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
-      color: var(--bg-white);
-      padding: 1.5rem;
-      text-align: left;
-      font-weight: 700;
-      font-size: var(--teks-standar);
-      white-space: nowrap;
-    }
-
-    .comparison-table td {
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--border-light);
-      color: var(--text-secondary);
-      font-size: var(--teks-standar);
-      white-space: normal;
-      word-wrap: break-word;
-    }
-
-    .comparison-table tbody tr:hover {
-      background-color: rgba(37, 99, 235, 0.02);
-    }
-
-    .comparison-table tbody tr:nth-child(odd) {
-      background-color: var(--bg-white);
-    }
-
-    .comparison-table tbody tr:nth-child(even) {
-      background-color: var(--bg-light);
-    }
-
-    .comparison-table td:first-child {
-      font-weight: 600;
-      color: var(--text-primary);
-      min-width: 150px;
-    }
-
-    .comparison-table tbody tr:hover td:first-child {
-      color: var(--primary-blue);
-    }
-
-    /* Tablet */
-    @media (max-width: 768px) {
       .comparison-table {
         display: block !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
+        border-radius: var(--radius-large);
+        box-shadow: var(--shadow-md);
+        -webkit-overflow-scrolling: touch;
+        position: relative;
         width: 100%;
         max-width: 100%;
       }
-
+    
       .comparison-table table {
-        min-width: 500px;
-        font-size: 0.9rem;
+        width: 100%;
+        min-width: 600px;
+        border-collapse: collapse;
+        background: var(--bg-white);
       }
-
-      .comparison-table th,
-      .comparison-table td {
-        padding: 1rem;
-      }
-
-      .comparison-table td:first-child {
-        min-width: 130px;
-      }
-    }
-
-    /* Mobile */
-    @media (max-width: 480px) {
-      .artikel-body .comparison-table {
-        width: 100vw;
-        position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
-        max-width: 100vw;
-      }
-
-      .comparison-table {
-        display: block !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        font-size: 0.8rem;
-      }
-
-      .comparison-table table {
-        min-width: 420px;
-      }
-
-      .comparison-table th,
-      .comparison-table td {
-        padding: 0.8rem;
-      }
-
+    
       .comparison-table th {
-        font-size: 0.9rem;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+        color: var(--bg-white);
+        padding: 1.5rem;
+        text-align: left;
+        font-weight: 700;
+        font-size: var(--teks-standar);
+        white-space: nowrap;
       }
-
+    
+      .comparison-table td {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-light);
+        color: var(--text-secondary);
+        font-size: var(--teks-standar);
+        white-space: normal;
+        word-wrap: break-word;
+      }
+    
+      .comparison-table tbody tr:hover {
+        background-color: rgba(37, 99, 235, 0.02);
+      }
+    
+      .comparison-table tbody tr:nth-child(odd) {
+        background-color: var(--bg-white);
+      }
+    
+      .comparison-table tbody tr:nth-child(even) {
+        background-color: var(--bg-light);
+      }
+    
       .comparison-table td:first-child {
-        min-width: 110px;
+        font-weight: 600;
+        color: var(--text-primary);
+        min-width: 150px;
       }
-    }
+    
+      .comparison-table tbody tr:hover td:first-child {
+        color: var(--primary-blue);
+      }
+    
+    /* Tablet */
+      @media (max-width: 768px) {
+        .comparison-table {
+          display: block !important;
+          overflow-x: auto !important;
+          overflow-y: hidden !important;
+          width: 100%;
+          max-width: 100%;
+        }
+    
+        .comparison-table table {
+          min-width: 500px;
+          font-size: 0.9rem;
+        }
+    
+        .comparison-table th,
+        .comparison-table td {
+          padding: 1rem;
+        }
+    
+        .comparison-table td:first-child {
+          min-width: 130px;
+        }
+      }
+    
+    /* Mobile */
+      @media (max-width: 480px) {
+        .artikel-body .comparison-table {
+          width: 100vw;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          max-width: 100vw;
+        }
+    
+        .comparison-table {
+          display: block !important;
+          overflow-x: auto !important;
+          overflow-y: hidden !important;
+          font-size: 0.8rem;
+        }
+    
+        .comparison-table table {
+          min-width: 420px;
+        }
+    
+        .comparison-table th,
+        .comparison-table td {
+          padding: 0.8rem;
+        }
+    
+        .comparison-table th {
+          font-size: 0.9rem;
+        }
+    
+        .comparison-table td:first-child {
+          min-width: 110px;
+        }
+      }
   </style>
   <!-- Speed Optimization -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -413,7 +413,7 @@
     </div>
   </footer>
   <!-- Preloader Component -->
-   <div id="preloader">
+  <div id="preloader">
     <div class="preloader-inner">
       <div class="logo-wrap">
         <div class="logo-spin">

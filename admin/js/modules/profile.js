@@ -1,16 +1,20 @@
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-import { normalizeDriveImageUrl, withCacheBust, setButtonLoading, getPasswordStrengthInfo } from '/assets/js/modules/unified-utils.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
+import {
+  normalizeDriveImageUrl,
+  withCacheBust,
+  setButtonLoading,
+  getPasswordStrengthInfo
+} from '/assets/js/modules/unified-utils.js';
 export async function render() {
   try {
     const currentUser = AuthManager.getCurrentUser();
     if (!currentUser) throw new Error('Not logged in');
-
     // Load user profile data
     const result = await APIClient.getUserProfile(currentUser.userId);
     let user = result.data || currentUser;
-
     // Defensive parsing for corrupt JSON displayName
     if (user.displayName && typeof user.displayName === 'string' && user.displayName.trim().startsWith('{')) {
       try {
@@ -25,12 +29,10 @@ export async function render() {
         console.warn('Failed to parse corrupt user displayName JSON:', e);
       }
     }
-
     // Setup form with current data
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
       document.getElementById('input-name').value = user.displayName || '';
-      
       const photoPreview = document.getElementById('photo-preview');
       const photoPlaceholder = document.getElementById('photo-placeholder');
       if (user.photoURL && photoPreview) {
@@ -43,7 +45,6 @@ export async function render() {
           if (photoPlaceholder) photoPlaceholder.style.display = 'block';
         };
       }
-
       const inputPhoto = document.getElementById('input-photo');
       if (inputPhoto) {
         inputPhoto.addEventListener('change', function(e) {
@@ -70,13 +71,11 @@ export async function render() {
         });
       }
       document.getElementById('input-whatsapp').value = user.whatsapp || '';
-
       formEditProfile.addEventListener('submit', async (e) => {
         e.preventDefault();
         await handleProfileUpdate(currentUser.userId);
       });
     }
-
     // Setup password change form
     const formChangePassword = document.getElementById('form-change-password');
     if (formChangePassword) {
@@ -84,7 +83,6 @@ export async function render() {
         e.preventDefault();
         await handlePasswordChange(currentUser.userId);
       });
-      
       // Setup toggle password visibility
       const toggleBtns = document.querySelectorAll('.toggle-password-btn');
       toggleBtns.forEach(btn => {
@@ -92,7 +90,6 @@ export async function render() {
           const targetId = this.getAttribute('data-target');
           const input = document.getElementById(targetId);
           const icon = this.querySelector('i');
-          
           if (input.type === 'password') {
             input.type = 'text';
             icon.classList.remove('fa-eye');
@@ -104,7 +101,6 @@ export async function render() {
           }
         });
       });
-      
       // Setup password strength indicator
       const newPwdInput = document.getElementById('input-new-password');
       if (newPwdInput) {
@@ -113,31 +109,25 @@ export async function render() {
         });
       }
     }
-
   } catch (error) {
     console.error('Error rendering profile:', error);
     Swal.fire('Error', error.message, 'error');
   }
 }
-
 async function handleProfileUpdate(userId) {
   try {
     const displayName = document.getElementById('input-name').value.trim();
     const photoInput = document.getElementById('input-photo');
     const photoBase64 = photoInput && photoInput.dataset.base64 ? photoInput.dataset.base64 : null;
     const whatsapp = document.getElementById('input-whatsapp').value.trim();
-
     if (!displayName || displayName.length < 3) {
       Swal.fire('Error', 'Nama minimal 3 karakter', 'error');
       return;
     }
-
     // Show loading state (you could implement a spinner button)
     const btn = document.querySelector('#form-edit-profile button[type="submit"]');
     setButtonLoading(btn, true, 'Menyimpan...');
-
     const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
-
     if (result.success) {
       // Update session
       const user = AuthManager.getCurrentUser();
@@ -147,9 +137,7 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       AuthManager.updateUser(user);
-
       Swal.fire('Sukses', 'Profil berhasil diperbarui', 'success');
-      
       // Update Navbar immediately
       const initials = displayName.charAt(0).toUpperCase();
       const profileBtn = document.getElementById('admin-profile-trigger');
@@ -162,7 +150,6 @@ async function handleProfileUpdate(userId) {
     } else {
       throw new Error(result.message || 'Gagal memperbarui profil');
     }
-
   } catch (error) {
     Swal.fire('Error', error.message, 'error');
   } finally {
@@ -170,40 +157,32 @@ async function handleProfileUpdate(userId) {
     setButtonLoading(btn, false, 'Simpan Profil');
   }
 }
-
 async function handlePasswordChange(userId) {
   try {
     const oldPassword = document.getElementById('input-old-password').value;
     const newPassword = document.getElementById('input-new-password').value;
     const confirmPassword = document.getElementById('input-confirm-password').value;
-
     if (!oldPassword || !newPassword || !confirmPassword) {
       Swal.fire('Error', 'Semua field harus diisi', 'error');
       return;
     }
-
     if (newPassword !== confirmPassword) {
       Swal.fire('Error', 'Password baru tidak sesuai', 'error');
       return;
     }
-
     if (newPassword.length < 8) {
       Swal.fire('Error', 'Password minimal 8 karakter', 'error');
       return;
     }
-    
     const btn = document.querySelector('#form-change-password button[type="submit"]');
     setButtonLoading(btn, true, 'Menyimpan...');
-
     const result = await APIClient.changePassword(userId, oldPassword, newPassword);
-
     if (result.success) {
       Swal.fire('Sukses', 'Password berhasil diubah', 'success');
       document.getElementById('form-change-password').reset();
     } else {
       throw new Error(result.message || 'Gagal mengubah password');
     }
-
   } catch (error) {
     Swal.fire('Error', error.message, 'error');
   } finally {
@@ -216,15 +195,12 @@ function updatePasswordStrength(password, strengthDivId, strengthBarId, strength
   const strengthDiv = document.getElementById(strengthDivId);
   const strengthBar = document.getElementById(strengthBarId);
   const strengthText = document.getElementById(strengthTextId);
-
   if (!strengthDiv || !strengthBar || !strengthText) return;
-
   const strengthInfo = getPasswordStrengthInfo(password);
   if (!strengthInfo.visible) {
     strengthDiv.style.display = 'none';
     return;
   }
-
   strengthDiv.style.display = 'block';
   strengthBar.className = `strength-bar ${strengthInfo.className}`;
   strengthBar.style.background = strengthInfo.color;

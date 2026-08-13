@@ -3,11 +3,9 @@
  * Responsive design system-compliant cart page
  * Uses variables from /assets/css/base/variables.css
  */
-
 @import url('/assets/css/base/variables.css');
 
 /* ========== PAGE LAYOUT ========== */
-
 .page-container {
   min-height: 100vh;
   padding: clamp(1rem, 3vw, 2rem);
@@ -29,7 +27,6 @@
 }
 
 /* ========== GRID LAYOUT ========== */
-
 .cart-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -43,7 +40,6 @@
 }
 
 /* ========== CART ITEMS CONTAINER ========== */
-
 .cart-items-section {
   background: var(--bg-white);
   border: 1px solid var(--border-light);
@@ -66,7 +62,6 @@
 }
 
 /* ========== CART ITEM CARD ========== */
-
 .cart-item {
   background: var(--bg-white);
   border: 1px solid var(--border-light);
@@ -163,7 +158,6 @@
 }
 
 /* ========== ADDONS SECTION ========== */
-
 .addons-section {
   background: var(--bg-white);
   border: 1px solid var(--border-light);
@@ -242,7 +236,6 @@
 }
 
 /* ========== CART SUMMARY SIDEBAR ========== */
-
 .cart-summary {
   background: var(--bg-light);
   border-radius: var(--radius-medium);
@@ -262,7 +255,6 @@
 }
 
 /* ========== PRICE ROWS ========== */
-
 .price-row {
   display: flex;
   justify-content: space-between;
@@ -314,7 +306,6 @@
 }
 
 /* ========== PROMO CODE SECTION ========== */
-
 .promo-section {
   margin: clamp(1rem, 2vw, 1.5rem) 0;
   padding-top: clamp(1rem, 2vw, 1.5rem);
@@ -399,7 +390,6 @@
 }
 
 /* ========== ACTION BUTTONS ========== */
-
 .action-section {
   display: grid;
   grid-template-columns: 1fr;
@@ -455,7 +445,6 @@
 }
 
 /* ========== GUEST CHECKOUT LAYOUT ========== */
-
 .guest-checkout-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -545,7 +534,6 @@
 }
 
 /* ========== EMPTY STATE ========== */
-
 .cart-empty {
   text-align: center;
   padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 2vw, 1.5rem);
@@ -572,7 +560,6 @@
 }
 
 /* ========== VERIFICATION PROMPT ========== */
-
 .verification-prompt {
   max-width: 600px;
   margin: clamp(2rem, 4vw, 3rem) auto;
@@ -607,7 +594,6 @@
 }
 
 /* ========== ERROR STATE ========== */
-
 .error-container {
   max-width: 900px;
   margin: 0 auto;
@@ -670,7 +656,6 @@
 }
 
 /* ========== LOADING STATE ========== */
-
 .loading-container {
   text-align: center;
   padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 2vw, 2rem);
@@ -694,10 +679,14 @@
 }
 
 /* ========== ANIMATIONS ========== */
-
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes slideUp {
@@ -705,6 +694,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -712,7 +702,6 @@
 }
 
 /* ========== RESPONSIVE DESIGN ========== */
-
 @media (max-width: 768px) {
   .cart-grid {
     grid-template-columns: 1fr;

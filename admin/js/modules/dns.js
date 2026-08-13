@@ -1,8 +1,8 @@
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 let currentDns = [];
-
 export async function render() {
   console.log('Admin DNS Module Loaded');
   setupEventListeners();
@@ -14,7 +14,6 @@ function setupEventListeners() {
   const btnClose = document.getElementById('btn-close-dns');
   const modal = document.getElementById('dns-modal');
   const form = document.getElementById('dns-form');
-  
   if (btnAdd) {
     btnAdd.addEventListener('click', () => {
       form.reset();
@@ -23,35 +22,34 @@ function setupEventListeners() {
       modal.style.display = 'flex';
     });
   }
-  
   if (btnClose) {
     btnClose.addEventListener('click', () => {
       modal.style.display = 'none';
     });
   }
-  
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const submitBtn = document.getElementById('btn-save-dns');
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
-      
       const dnsData = {
         domain: document.getElementById('dns-domain').value.trim(),
         user: document.getElementById('dns-user').value.trim(),
         records: parseInt(document.getElementById('dns-records').value),
         ns_status: document.getElementById('dns-status').value
       };
-      
       try {
         const adminId = AuthManager.getUserId();
         const res = await APIClient.saveAdminDNS(adminId, dnsData);
         if (res.success) {
           if (typeof Swal !== 'undefined') {
-            Swal.fire({ icon: 'success', title: 'Berhasil', text: 'DNS berhasil disimpan!' });
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'DNS berhasil disimpan!'
+            });
           }
           modal.style.display = 'none';
           await loadDNS();
@@ -61,7 +59,11 @@ function setupEventListeners() {
       } catch (error) {
         console.error(error);
         if (typeof Swal !== 'undefined') {
-          Swal.fire({ icon: 'error', title: 'Gagal', text: error.message });
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: error.message
+          });
         }
       } finally {
         submitBtn.innerHTML = originalText;
@@ -69,21 +71,17 @@ function setupEventListeners() {
       }
     });
   }
-  
   window.editDNS = (domain) => {
     const d = currentDns.find(x => x.domain === domain);
     if (!d) return;
-    
     document.getElementById('dns-modal-title').textContent = 'Edit DNS';
     document.getElementById('dns-domain').value = d.domain;
     document.getElementById('dns-domain').readOnly = true;
     document.getElementById('dns-user').value = d.user;
     document.getElementById('dns-records').value = d.records;
     document.getElementById('dns-status').value = d.ns_status || 'pending';
-    
     document.getElementById('dns-modal').style.display = 'flex';
   };
-  
   window.deleteDNS = async (domain) => {
     if (typeof Swal !== 'undefined') {
       const result = await Swal.fire({
@@ -95,7 +93,6 @@ function setupEventListeners() {
         cancelButtonColor: '#4b5563',
         confirmButtonText: 'Ya, Hapus'
       });
-      
       if (result.isConfirmed) {
         try {
           const res = await APIClient.deleteAdminDNS(AuthManager.getUserId(), domain);
@@ -105,18 +102,16 @@ function setupEventListeners() {
           } else {
             throw new Error(res.message);
           }
-        } catch(err) {
+        } catch (err) {
           Swal.fire('Error', err.message, 'error');
         }
       }
     }
   };
 }
-
 async function loadDNS() {
   const tbody = document.getElementById('dns-table-body');
   if (!tbody) return;
-
   tbody.innerHTML = `
     <tr>
       <td colspan="5" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
@@ -125,11 +120,9 @@ async function loadDNS() {
       </td>
     </tr>
   `;
-
   try {
     const adminId = AuthManager.getUserId();
     const response = await APIClient.getAdminDNS(adminId);
-    
     if (response.success) {
       const mockDns = response.data || [];
       if (mockDns.length === 0) {
@@ -149,17 +142,21 @@ async function loadDNS() {
 function renderDNS(mockDns, tbody) {
   tbody.innerHTML = '';
   currentDns = mockDns;
-  
   mockDns.forEach(d => {
     let statusBg, statusColor, statusIcon;
     if (d.ns_status === 'pointed' || d.ns_status === 'Propagated' || d.ns_status === 'aktif') {
-        statusBg = 'rgba(16, 185, 129, 0.1)'; statusColor = 'var(--admin-success)'; statusIcon = 'fa-check';
+      statusBg = 'rgba(16, 185, 129, 0.1)';
+      statusColor = 'var(--admin-success)';
+      statusIcon = 'fa-check';
     } else if (d.ns_status === 'pending') {
-        statusBg = 'rgba(245, 158, 11, 0.1)'; statusColor = 'var(--admin-warning)'; statusIcon = 'fa-clock';
+      statusBg = 'rgba(245, 158, 11, 0.1)';
+      statusColor = 'var(--admin-warning)';
+      statusIcon = 'fa-clock';
     } else {
-        statusBg = 'rgba(239, 68, 68, 0.1)'; statusColor = 'var(--admin-danger)'; statusIcon = 'fa-times';
+      statusBg = 'rgba(239, 68, 68, 0.1)';
+      statusColor = 'var(--admin-danger)';
+      statusIcon = 'fa-times';
     }
-
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--admin-border)';
     tr.innerHTML = `

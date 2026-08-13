@@ -9,38 +9,38 @@
  * 
  * Usage: /invoice/{order_id}
  */
-
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-import { formatPrice, formatDateTime, formatDate, capitalize, showError } from '/assets/js/modules/unified-utils.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
+import {
+  formatPrice,
+  formatDateTime,
+  formatDate,
+  capitalize,
+  showError
+} from '/assets/js/modules/unified-utils.js';
 let invoiceData = null;
 let currentUser = null;
-
 /**
  * Main render function
  */
 export async function render(user) {
   try {
     currentUser = user || AuthManager.getCurrentUser();
-
     // Get order ID from URL
     const orderId = extractOrderIdFromUrl();
     if (!orderId) {
       throw new Error('Order ID tidak ditemukan di URL');
     }
-
     // Load order data
     await loadOrderData(orderId);
-
     // Render UI
     renderInvoice();
     setupEventListeners();
-
   } catch (error) {
     console.error('Error rendering invoice:', error);
     showError('Error', error.message);
-    
     const container = document.getElementById('invoice-container');
     if (container) {
       container.innerHTML = `
@@ -57,7 +57,6 @@ export async function render(user) {
     }
   }
 }
-
 /**
  * Extract order ID from URL
  * Support both /invoice/ORDER-123 and URL with hash routing
@@ -68,22 +67,18 @@ function extractOrderIdFromUrl() {
   if (pathParts.length >= 3 && pathParts[1] === 'invoice' && pathParts[2]) {
     return pathParts[2];
   }
-
   // Try from search params
   const params = new URLSearchParams(window.location.search);
   const orderId = params.get('orderId') || params.get('orderid');
   if (orderId) return orderId;
-
   // Try from hash
   const hash = window.location.hash;
   if (hash.includes('?')) {
     const hashParams = new URLSearchParams(hash.split('?')[1]);
     return hashParams.get('orderId');
   }
-
   return null;
 }
-
 /**
  * Load order data from backend
  */
@@ -99,48 +94,37 @@ async function loadOrderData(orderId) {
         </div>
       `;
     }
-
     // Fetch order data
     const result = await APIClient.getOrderDetail(orderId, currentUser?.userId);
-    
     if (!result.success) {
       throw new Error(result.message || 'Gagal memuat order');
     }
-
     invoiceData = result.data || result.order;
-    
     if (!invoiceData) {
       throw new Error('Data order tidak ditemukan');
     }
-
     // Verify payment was successful
     if (invoiceData.paymentStatus !== 'paid' && invoiceData.orderStatus !== 'completed') {
       console.warn('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
       // Allow viewing invoice anyway (might be in processing)
     }
-
   } catch (error) {
     console.error('Error loading order data:', error);
     throw error;
   }
 }
-
 /**
  * Render invoice
  */
 function renderInvoice() {
   const container = document.getElementById('invoice-container');
   if (!container || !invoiceData) return;
-
   const invoiceNumber = generateInvoiceNumber(invoiceData.orderId);
   const isPaid = invoiceData.paymentStatus === 'paid';
-  
   // Calculate due date (24 hours from created)
   const createdDate = new Date(invoiceData.createdAt);
   const dueDate = new Date(createdDate.getTime() + (24 * 60 * 60 * 1000));
-  
   const paymentMethodText = invoiceData.paymentMethod ? capitalize(invoiceData.paymentMethod.replace(/_/g, ' ')) : 'Midtrans Payment Gateway';
-
   const headerHTML = `
     <div class="inv-header">
       <div class="inv-logo">
@@ -189,29 +173,24 @@ function renderInvoice() {
       <div class="inv-order-id"><strong>Order ID:</strong> &nbsp;${invoiceData.orderId}</div>
     </div>
   `;
-
   // Backwards compatibility calculation for older orders
   const discount = invoiceData.discount || 0;
   let subtotal = invoiceData.subtotal;
   let ppn = invoiceData.ppn;
-  
   if (subtotal === undefined || ppn === undefined) {
     subtotal = Math.round((invoiceData.total + discount) / 1.11);
     ppn = invoiceData.total + discount - subtotal;
   }
-
   // Calculate base layanan (Domain + Package)
   let addonsTotal = 0;
   if (invoiceData.addons && Array.isArray(invoiceData.addons)) {
     addonsTotal = invoiceData.addons.reduce((sum, a) => sum + (a.price || 0), 0);
   }
   const baseLayananPrice = subtotal - addonsTotal;
-
   // Refined Watermark
   const watermarkHTML = isPaid ? `
     <div class="inv-watermark-stamp">PAID</div>
   ` : '';
-
   container.innerHTML = `
     <div class="invoice-wrapper">
       
@@ -796,7 +775,6 @@ function renderInvoice() {
     </div>
   `;
 }
-
 /**
  * Generate formatted invoice number
  */
@@ -807,10 +785,8 @@ function generateInvoiceNumber(orderId) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const sequence = orderId.replace('ORDER-', '').slice(0, 5);
-  
   return `INV-${year}-${month}-${day}-${sequence}`;
 }
-
 /**
  * Format package name nicely
  */
@@ -821,10 +797,8 @@ function formatPackageName(packageId) {
     'business': 'Business',
     'enterprise': 'Enterprise'
   };
-  
   return names[packageId?.toLowerCase()] || packageId || 'Standard';
 }
-
 /**
  * Setup event listeners
  */
@@ -836,7 +810,6 @@ function setupEventListeners() {
       window.print();
     });
   }
-
   // Keyboard shortcut for print
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
@@ -845,7 +818,6 @@ function setupEventListeners() {
     }
   });
 }
-
 /**
  * Render addons in invoice items table
  * Returns HTML rows for each addon
@@ -854,7 +826,6 @@ function renderInvoiceAddons() {
   if (!invoiceData || !invoiceData.addons || !Array.isArray(invoiceData.addons)) {
     return '';
   }
-
   let html = '';
   for (const addon of invoiceData.addons) {
     if (addon && addon.price && addon.price > 0) {
@@ -872,5 +843,4 @@ function renderInvoiceAddons() {
   }
   return html;
 }
-
 export default render;

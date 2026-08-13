@@ -5,7 +5,6 @@
     <p>Selamat datang kembali di Client Area SISITUS. Di sini Anda dapat mengelola layanan digital, domain, tagihan invoice, dan mendapatkan bantuan teknis.</p>
   </div>
 </div>
-
 <div class="stats-grid">
   <div class="stat-card stat-card--primary">
     <div class="stat-card__body">
@@ -17,11 +16,9 @@
         <i class="fas fa-cubes"></i>
       </div>
     </div>
-    <a href="#!/dashboard/orders" class="stat-card__footer stat-card__footer--primary">
-      Kelola Layanan <i class="fas fa-arrow-right"></i>
+    <a href="#!/dashboard/orders" class="stat-card__footer stat-card__footer--primary"> Kelola Layanan <i class="fas fa-arrow-right"></i>
     </a>
   </div>
-
   <div class="stat-card stat-card--success">
     <div class="stat-card__body">
       <div>
@@ -32,11 +29,9 @@
         <i class="fas fa-globe"></i>
       </div>
     </div>
-    <a href="#!/dashboard/domains" class="stat-card__footer stat-card__footer--success">
-      Kelola Domain Saya <i class="fas fa-arrow-right"></i>
+    <a href="#!/dashboard/domains" class="stat-card__footer stat-card__footer--success"> Kelola Domain Saya <i class="fas fa-arrow-right"></i>
     </a>
   </div>
-
   <div class="stat-card stat-card--warning">
     <div class="stat-card__body">
       <div>
@@ -47,11 +42,9 @@
         <i class="fas fa-spinner"></i>
       </div>
     </div>
-    <a href="#!/dashboard/orders" class="stat-card__footer stat-card__footer--warning">
-      Lihat Status Pesanan <i class="fas fa-arrow-right"></i>
+    <a href="#!/dashboard/orders" class="stat-card__footer stat-card__footer--warning"> Lihat Status Pesanan <i class="fas fa-arrow-right"></i>
     </a>
   </div>
-
   <div class="stat-card stat-card--info">
     <div class="stat-card__body">
       <div>
@@ -62,12 +55,10 @@
         <i class="fas fa-wallet"></i>
       </div>
     </div>
-    <a href="#!/dashboard/orders" class="stat-card__footer stat-card__footer--info">
-      Riwayat Pesanan <i class="fas fa-arrow-right"></i>
+    <a href="#!/dashboard/orders" class="stat-card__footer stat-card__footer--info"> Riwayat Pesanan <i class="fas fa-arrow-right"></i>
     </a>
   </div>
 </div>
-
 <div class="dashboard-grid-sections">
   <div class="panel panel--domain">
     <div class="panel__header">
@@ -78,7 +69,6 @@
       <span class="panel__chip">Promo</span>
     </div>
     <p>Temukan ekstensi domain terbaik untuk mengamankan merek bisnis digital Anda.</p>
-
     <form class="form-search" id="dashboard-domain-form">
       <div class="form-search__input-wrap">
         <input type="text" id="dashboard-domain-input" placeholder="Ketik nama domain (misal: websitemurah.com)">
@@ -86,7 +76,6 @@
       </div>
       <button type="submit" class="btn btn-primary">Cari</button>
     </form>
-
     <div class="search-pill-list">
       <div class="search-pill"><span>.com</span><strong>Rp 125rb</strong></div>
       <div class="search-pill"><span>.id</span><strong>Rp 195rb</strong></div>
@@ -94,22 +83,18 @@
       <div class="search-pill"><span>.web.id</span><strong>Rp 55rb</strong></div>
     </div>
   </div>
-
   <div class="panel panel--promo">
     <div class="panel__badge">Promo Terbatas</div>
     <h3>Diskon Hingga 90% Hosting + Website!</h3>
     <p>Gunakan kode promo <strong>SISITUSMAJU</strong> untuk klaim pembuatan website murah gratis 1 domain aktif.</p>
     <button onclick="navigator.clipboard.writeText('SISITUSMAJU'); Swal.fire({icon: 'success', title: 'Tersalin!', text: 'Kode promo SISITUSMAJU siap digunakan di keranjang.', timer: 2000, showConfirmButton: false});" class="btn btn-warning panel__cta" style="border:none; cursor:pointer;">
-      <i class="fas fa-copy"></i> Salin Kode Promo
-    </button>
+      <i class="fas fa-copy"></i> Salin Kode Promo </button>
   </div>
 </div>
-
 <div class="section-heading">
   <h2>Aksi Cepat Layanan</h2>
   <p>Langkah paling sering dipakai untuk mengelola akun Anda.</p>
 </div>
-
 <div class="quick-actions-grid">
   <div class="quick-action-card">
     <div class="quick-action-card__icon">
@@ -119,7 +104,6 @@
     <p>Perbarui data profil, informasi kontak WhatsApp, serta ganti kata sandi secara berkala.</p>
     <button id="btn-quick-profile" class="btn btn-primary" type="button">Buka Profil</button>
   </div>
-
   <div class="quick-action-card">
     <div class="quick-action-card__icon">
       <i class="fas fa-history"></i>
@@ -128,7 +112,6 @@
     <p>Pantau riwayat pendaftaran domain, tagihan invoice, dan selesaikan pembayaran tertunda.</p>
     <button id="btn-quick-orders" class="btn btn-primary" type="button">Lihat Pesanan</button>
   </div>
-
   <div class="quick-action-card">
     <div class="quick-action-card__icon">
       <i class="fas fa-headset"></i>
@@ -138,4 +121,3 @@
     <button id="btn-quick-support" class="btn btn-primary" type="button">Hubungi Support</button>
   </div>
 </div>
-

@@ -1,5 +1,4 @@
 /* ========== VISIBILITY UTILITIES ========== */
-
 /* Hidden universally */
 .hidden {
   display: none !important;
@@ -10,9 +9,11 @@
   .hidden-mobile {
     display: none !important;
   }
+
   .visible-mobile {
     display: block !important;
   }
+
   .visible-mobile-flex {
     display: flex !important;
   }
@@ -30,9 +31,11 @@
   .hidden-desktop {
     display: none !important;
   }
+
   .visible-desktop {
     display: block !important;
   }
+
   .visible-desktop-flex {
     display: flex !important;
   }

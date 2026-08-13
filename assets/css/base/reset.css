@@ -27,7 +27,8 @@ body.header-scroll {
   padding-top: clamp(45px, 7vw, 55px);
 }
 
-a, button {
+a,
+button {
   text-decoration: none;
   color: inherit;
   background: transparent;
@@ -49,19 +50,28 @@ img {
   display: block;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   color: var(--text-primary);
   line-height: var(--line-height-tight);
   font-weight: 700;
-  letter-spacing: -0.02em; /* Tighter letter-spacing for display headings */
-  text-wrap: balance; /* Impeccable standard */
+  letter-spacing: -0.02em;
+  /* Tighter letter-spacing for display headings */
+  text-wrap: balance;
+  /* Impeccable standard */
 }
 
 p {
   line-height: var(--line-height-relaxed);
-  max-width: 70ch; /* Impeccable standard: 65-75ch limit */
-  text-wrap: pretty; /* Impeccable standard */
+  max-width: 70ch;
+  /* Impeccable standard: 65-75ch limit */
+  text-wrap: pretty;
+  /* Impeccable standard */
 }
 
 /* Status aktif navigasi */
@@ -80,4 +90,3 @@ p {
 .section {
   padding: clamp(4rem, 8vw, 6rem) 0;
 }
-

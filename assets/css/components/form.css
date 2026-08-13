@@ -46,7 +46,8 @@
 }
 
 .form-error-msg {
-  color: #B91C1C; /* Dark red, per AGENTS.md */
+  color: #B91C1C;
+  /* Dark red, per AGENTS.md */
   font-size: 0.813rem;
   margin-top: 6px;
   display: none;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,20 +14,17 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 </head>
-<body class="auth-page-body">
 
+<body class="auth-page-body">
   <div class="auth-split-wrapper">
     <!-- Left Visual Panel (Desktop only) -->
     <div class="auth-visual-panel">
       <a href="/" class="back-home-link-visual">
-        <i class="fas fa-arrow-left"></i> Kembali ke Beranda
-      </a>
-      
+        <i class="fas fa-arrow-left"></i> Kembali ke Beranda </a>
       <div class="auth-visual-content">
         <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS Logo" class="auth-visual-logo">
         <h1 class="auth-visual-title">Verifikasi Akun SISITUS</h1>
         <p class="auth-visual-subtitle">Langkah terakhir untuk mengamankan akun Anda dan mulai mengelola domain & hosting terbaik.</p>
-        
         <div class="auth-features-list">
           <div class="auth-feature-item">
             <i class="fas fa-shield-alt"></i>
@@ -38,25 +36,18 @@
           </div>
         </div>
       </div>
-      
-      <div class="auth-visual-footer">
-        &copy; 2026 SISITUS. All rights reserved.
-      </div>
+      <div class="auth-visual-footer"> &copy; 2026 SISITUS. All rights reserved. </div>
     </div>
-
     <!-- Right Form Panel -->
     <div class="auth-form-panel">
       <!-- Back link -->
       <a href="/" class="back-home-link-form">
-        <i class="fas fa-arrow-left"></i> Kembali ke Beranda
-      </a>
-
+        <i class="fas fa-arrow-left"></i> Kembali ke Beranda </a>
       <!-- Mobile brand logo (visible on mobile only) -->
       <div class="auth-mobile-logo">
         <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS Logo">
         <span>SISITUS</span>
       </div>
-
       <div class="auth-panel-content">
         <div id="status-content">
           <!-- Content will be inserted here by JavaScript -->
@@ -64,7 +55,6 @@
       </div>
     </div>
   </div>
-
   <style>
     .status-icon {
       font-size: 3rem;
@@ -114,7 +104,6 @@
       text-align: center;
     }
   </style>
-
   <script type="module">
     import { GAS_CONFIG } from '/assets/js/config/api.config.js';
     
@@ -122,13 +111,13 @@
     const token = urlParams.get('token');
     const statusContent = document.getElementById('status-content');
     const TIMEOUT = 30000; // 30 second timeout
-
+    
     if (!token) {
-      // Check if this is first visit (no token)
+    // Check if this is first visit (no token)
       const isSent = urlParams.get('sent') === 'true';
       const referrer = document.referrer;
       const fromRegistration = isSent || referrer.includes('/auth') || referrer.includes('register') || referrer.includes('/cart') || referrer.includes('/checkout');
-      
+    
       if (fromRegistration) {
         showInfo(
           '📧 Cek Email Anda!',
@@ -144,114 +133,114 @@
       showLoading('Memverifikasi Email...', 'Mohon tunggu sebentar');
       verifyEmailToken(token);
     }
-
+    
     function showInfo(title, message) {
       statusContent.innerHTML = `
-        <div class="status-icon" style="color: var(--auth-primary);">
-          <i class="fas fa-envelope-open-text"></i>
-        </div>
-        <h2 style="color: var(--auth-primary); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">${title}</h2>
-        <p style="color: var(--auth-text-light); font-size: 0.95rem; line-height: 1.5;">${message}</p>
-        <div class="info-box">
-          <strong><i class="fas fa-lightbulb"></i> Tips:</strong><br>
-          Jika email tidak terlihat, cek folder:
-          <ul style="margin-top: 8px; text-align: left; list-style: inside; padding-left: 5px;">
-            <li><strong>Spam/Junk</strong> - Pindahkan ke Inbox</li>
-            <li><strong>Promotions/Tab lain</strong> - Cek semua tab</li>
-          </ul>
-        </div>
-        <div class="button-group">
-          <a href="/auth/" class="btn btn-secondary"><i class="fas fa-sign-in-alt"></i> Kembali ke Login</a>
-          <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
-        </div>
-      `;
+      <div class="status-icon" style="color: var(--auth-primary);">
+        <i class="fas fa-envelope-open-text"></i>
+      </div>
+      <h2 style="color: var(--auth-primary); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">${title}</h2>
+      <p style="color: var(--auth-text-light); font-size: 0.95rem; line-height: 1.5;">${message}</p>
+      <div class="info-box">
+        <strong><i class="fas fa-lightbulb"></i> Tips:</strong><br>
+        Jika email tidak terlihat, cek folder:
+        <ul style="margin-top: 8px; text-align: left; list-style: inside; padding-left: 5px;">
+          <li><strong>Spam/Junk</strong> - Pindahkan ke Inbox</li>
+          <li><strong>Promotions/Tab lain</strong> - Cek semua tab</li>
+        </ul>
+      </div>
+      <div class="button-group">
+        <a href="/auth/" class="btn btn-secondary"><i class="fas fa-sign-in-alt"></i> Kembali ke Login</a>
+        <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+      </div>
+    `;
     }
-
+    
     function showLoading(title, message) {
       statusContent.innerHTML = `
-        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: var(--auth-text-dark);">${title}</h2>
-        <p style="color: var(--auth-text-light); font-size: 0.95rem;">${message}</p>
-        <div style="margin: 30px 0;">
-          <div class="spinner"></div>
-        </div>
-        <p style="color: var(--auth-text-light); font-size: 12px;">
-          <i class="fas fa-info-circle"></i> Sistem sedang memverifikasi email Anda. Mohon tunggu...
-        </p>
-      `;
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; color: var(--auth-text-dark);">${title}</h2>
+      <p style="color: var(--auth-text-light); font-size: 0.95rem;">${message}</p>
+      <div style="margin: 30px 0;">
+        <div class="spinner"></div>
+      </div>
+      <p style="color: var(--auth-text-light); font-size: 12px;">
+        <i class="fas fa-info-circle"></i> Sistem sedang memverifikasi email Anda. Mohon tunggu...
+      </p>
+    `;
     }
-
+    
     function showSuccess(title, message) {
       const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
       const hasCartItems = cartSummary.domains && cartSummary.domains.length > 0;
-      
-      const primaryBtn = hasCartItems 
+    
+      const primaryBtn = hasCartItems
         ? '<a href="/dashboard/#!/dashboard/keranjang" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Lanjutkan Pembayaran</a>'
         : '<a href="/dashboard/" class="btn btn-primary"><i class="fas fa-chart-line"></i> Buka Dashboard</a>';
-        
+    
       const redirectMsg = hasCartItems
         ? 'Halaman akan otomatis diarahkan ke keranjang belanja dalam 2 detik...'
         : 'Halaman akan otomatis diarahkan ke dashboard dalam 2 detik...';
-
+    
       statusContent.innerHTML = `
-        <div class="status-icon success-message"><i class="fas fa-check-circle"></i></div>
-        <h2 class="success-message" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">${title}</h2>
-        <p style="color: var(--auth-text-light); font-size: 0.95rem; line-height: 1.5;">${message}</p>
-        <div class="info-box">
-          <strong><i class="fas fa-info-circle"></i> Anda sekarang dapat:</strong><br>
-          ${hasCartItems 
-            ? '✅ Lanjutkan checkout di keranjang belanja<br>✅ Melakukan pembayaran via Midtrans<br>' 
-            : '✅ Mengakses dashboard klien Anda<br>✅ Mengelola layanan digital Anda<br>'}
-        </div>
-        <div class="button-group">
-          ${primaryBtn}
-          <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
-        </div>
-        <p style="color: var(--auth-text-light); font-size: 11px; margin-top: 20px;">${redirectMsg}</p>
-      `;
+      <div class="status-icon success-message"><i class="fas fa-check-circle"></i></div>
+      <h2 class="success-message" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">${title}</h2>
+      <p style="color: var(--auth-text-light); font-size: 0.95rem; line-height: 1.5;">${message}</p>
+      <div class="info-box">
+        <strong><i class="fas fa-info-circle"></i> Anda sekarang dapat:</strong><br>
+        ${hasCartItems 
+          ? '✅ Lanjutkan checkout di keranjang belanja<br>✅ Melakukan pembayaran via Midtrans<br>' 
+          : '✅ Mengakses dashboard klien Anda<br>✅ Mengelola layanan digital Anda<br>'}
+      </div>
+      <div class="button-group">
+        ${primaryBtn}
+        <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+      </div>
+      <p style="color: var(--auth-text-light); font-size: 11px; margin-top: 20px;">${redirectMsg}</p>
+    `;
     }
-
+    
     function showError(title, message) {
       statusContent.innerHTML = `
-        <div class="status-icon error-message"><i class="fas fa-times-circle"></i></div>
-        <h2 class="error-message" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">${title}</h2>
-        <p style="color: var(--auth-text-light); font-size: 0.95rem; line-height: 1.5;">${message}</p>
-        <div class="info-box">
-          <strong><i class="fas fa-lightbulb"></i> Solusi:</strong><br>
-          Cek email Anda kembali dan gunakan link verifikasi terbaru. Jika sudah tidak dapat ditemukan, silakan daftar ulang.
-        </div>
-        <div class="button-group">
-          <a href="/auth/" class="btn btn-primary"><i class="fas fa-user-plus"></i> Daftar Ulang</a>
-          <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
-        </div>
-      `;
+      <div class="status-icon error-message"><i class="fas fa-times-circle"></i></div>
+      <h2 class="error-message" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">${title}</h2>
+      <p style="color: var(--auth-text-light); font-size: 0.95rem; line-height: 1.5;">${message}</p>
+      <div class="info-box">
+        <strong><i class="fas fa-lightbulb"></i> Solusi:</strong><br>
+        Cek email Anda kembali dan gunakan link verifikasi terbaru. Jika sudah tidak dapat ditemukan, silakan daftar ulang.
+      </div>
+      <div class="button-group">
+        <a href="/auth/" class="btn btn-primary"><i class="fas fa-user-plus"></i> Daftar Ulang</a>
+        <a href="/" class="btn btn-secondary"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+      </div>
+    `;
     }
-
+    
     async function verifyEmailToken(token) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-
+    
       try {
         const params = new URLSearchParams({
           action: 'verifyEmailToken',
           token: token
         });
-
+    
         const apiUrl = `${GAS_CONFIG.URL}?${params}`;
-
+    
         const response = await fetch(apiUrl, {
           signal: controller.signal
         });
-
+    
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
         }
-
+    
         const data = await response.json();
-
+    
         if (data.success) {
-          // CRITICAL: Save updated user data using AuthManager key
+        // CRITICAL: Save updated user data using AuthManager key
           if (data.data && data.data.userId) {
-            // Save to both localStorage (for cross-tab) and sessionStorage (for current tab)
+          // Save to both localStorage (for cross-tab) and sessionStorage (for current tab)
             const userData = JSON.stringify({
               version: 2,
               user: data.data,
@@ -264,18 +253,18 @@
             localStorage.setItem('currentUser', JSON.stringify(data.data));
             console.log('✅ User session updated with emailVerified:', data.data);
           }
-
+    
           const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
           const hasCartItems = cartSummary.domains && cartSummary.domains.length > 0;
-
+    
           showSuccess(
             'Email Berhasil Diverifikasi!',
-            hasCartItems 
+            hasCartItems
               ? 'Akun Anda sudah aktif. Anda akan diarahkan kembali ke keranjang belanja...'
               : 'Akun Anda sudah aktif. Anda akan diarahkan ke dashboard Anda...'
           );
-          
-          // Auto-redirect after 2 seconds
+    
+        // Auto-redirect after 2 seconds
           setTimeout(() => {
             if (hasCartItems) {
               window.location.href = '/dashboard/#!/dashboard/keranjang';
@@ -292,13 +281,13 @@
       } catch (error) {
         let errorTitle = 'Terjadi Kesalahan';
         let errorMsg = 'Tidak dapat terhubung ke server. Silakan coba lagi nanti.';
-        
+    
         if (error.name === 'AbortError') {
           errorMsg = 'Permintaan timeout (lebih dari 30 detik). Server tidak merespons. Silakan: <br>1. Refresh halaman<br>2. Atau coba lagi dalam beberapa menit';
         } else if (error instanceof TypeError) {
           errorMsg = 'Kesalahan jaringan. Periksa koneksi internet Anda dan coba lagi. Jika masalah berlanjut, hubungi support.';
         }
-        
+    
         showError(errorTitle, errorMsg);
       } finally {
         clearTimeout(timeoutId);
@@ -306,4 +295,5 @@
     }
   </script>
 </body>
+
 </html>

@@ -1,14 +1,11 @@
 // ============================================================================
 // CONFIGURATION
 // ============================================================================
-
 const SPREADSHEET_ID = '1Cg-9RF1iyWO36yQnvGrHWgCW6IvzdStH5u3hee6JzZU';
 const BASE_URL = 'https://sisitus.com';
 const PROFILE_PHOTO_DRIVE_FOLDER_ID = '1kBngp8XBcIWIdgDXcrfGWDC0fU1yLbWv';
 const MAX_PROFILE_PHOTO_BYTES = 2 * 1024 * 1024;
-
 const MIDTRANS_SNAP_URL = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
-
 /**
  * Initialize Midtrans Server Key in Script Properties
  * IMPORTANT: Add your Midtrans key via Google Apps Script UI > Project Settings > Script Properties
@@ -22,18 +19,15 @@ function initializeMidtransConfig() {
     Logger.log('WARNING: MIDTRANS_SERVER_KEY not set in Script Properties. Please set it manually.');
   }
 }
-
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
-
 /**
  * Get or create Users sheet
  */
 function ensureUsersSheet() {
   return ensureSheetExists('USERS');
 }
-
 /**
  * Standardized response builder
  */
@@ -44,30 +38,24 @@ function buildResponse(success, data = null, message = '', errorCode = null) {
     message: message || (success ? 'Operation successful' : 'Operation failed'),
     timestamp: Date.now()
   };
-
   if (!success && errorCode) {
     response.error = {
       code: errorCode,
       details: message
     };
   }
-
   return response;
 }
-
 /**
  * Simple response functions (mengikuti pola sampel-mekanisme-GAS)
  */
 function respondText(text) {
-  return ContentService.createTextOutput(String(text))
-    .setMimeType(ContentService.MimeType.TEXT);
+  return ContentService.createTextOutput(String(text)).setMimeType(ContentService.MimeType.TEXT);
 }
 
 function respondJson(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
-
 /**
  * Send JSON response (untuk backward compatibility)
  */
@@ -75,30 +63,39 @@ function sendResponse(success, data = null, message = '', errorCode = null) {
   const response = buildResponse(success, data, message, errorCode);
   return respondJson(response);
 }
-
 /**
  * Validate password strength
  */
 function validatePasswordStrength(password) {
   if (!password || password.length < 8) {
-    return { valid: false, message: 'Password minimal 8 karakter' };
+    return {
+      valid: false,
+      message: 'Password minimal 8 karakter'
+    };
   }
-
   if (!/[A-Z]/.test(password)) {
-    return { valid: false, message: 'Password harus mengandung huruf besar' };
+    return {
+      valid: false,
+      message: 'Password harus mengandung huruf besar'
+    };
   }
-
   if (!/[a-z]/.test(password)) {
-    return { valid: false, message: 'Password harus mengandung huruf kecil' };
+    return {
+      valid: false,
+      message: 'Password harus mengandung huruf kecil'
+    };
   }
-
   if (!/\d/.test(password)) {
-    return { valid: false, message: 'Password harus mengandung angka' };
+    return {
+      valid: false,
+      message: 'Password harus mengandung angka'
+    };
   }
-
-  return { valid: true, message: 'Password kuat' };
+  return {
+    valid: true,
+    message: 'Password kuat'
+  };
 }
-
 /**
  * Validate Indonesian phone number
  */
@@ -107,7 +104,6 @@ function validatePhoneNumber(phone) {
   phone = phone.replace(/[\s\-]/g, '');
   return /^(\+62|62|0)?8\d{8,12}$/.test(phone);
 }
-
 /**
  * Format phone number to standard format
  */
@@ -122,7 +118,6 @@ function formatPhoneNumber(phone) {
   }
   return "'" + standardPhone;
 }
-
 /**
  * Parse and validate profile photo Data URL from frontend.
  */
@@ -131,23 +126,19 @@ function parseProfilePhotoBase64(photoBase64) {
   if (!match) {
     throw new Error('INVALID_IMAGE_FORMAT');
   }
-
   const mimeType = match[1].toLowerCase() === 'image/jpg' ? 'image/jpeg' : match[1].toLowerCase();
   const decoded = Utilities.base64Decode(match[2]);
-
   if (!decoded || decoded.length === 0) {
     throw new Error('INVALID_IMAGE_DATA');
   }
   if (decoded.length > MAX_PROFILE_PHOTO_BYTES) {
     throw new Error('IMAGE_TOO_LARGE');
   }
-
   return {
     mimeType: mimeType,
     bytes: decoded
   };
 }
-
 /**
  * Upload new profile photo to Drive and return public image URL.
  */
@@ -155,24 +146,19 @@ function uploadProfilePhotoToDrive(userId, photoBase64) {
   const parsed = parseProfilePhotoBase64(photoBase64);
   const folder = DriveApp.getFolderById(PROFILE_PHOTO_DRIVE_FOLDER_ID);
   const fileName = 'foto_profil_' + userId;
-
   const oldFiles = folder.getFilesByName(fileName);
   while (oldFiles.hasNext()) {
     oldFiles.next().setTrashed(true);
   }
-
   const blob = Utilities.newBlob(parsed.bytes, parsed.mimeType, fileName);
   const file = folder.createFile(blob);
-
   try {
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   } catch (sharingError) {
     Logger.log('Warning: gagal set sharing foto profil untuk user ' + userId + ': ' + sharingError);
   }
-
   return 'https://drive.google.com/uc?export=view&id=' + file.getId();
 }
-
 /**
  * Convert helper error code into a user-facing response.
  */
@@ -188,7 +174,6 @@ function buildProfilePhotoErrorResponse(errorCode) {
       return null;
   }
 }
-
 /**
  * Validate domain format
  */
@@ -197,14 +182,12 @@ function validateDomainFormat(domain) {
   domain = domain.replace(/^https?:\/\//i, '').toLowerCase().trim();
   return /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i.test(domain);
 }
-
 /**
  * Generate verification token
  */
 function generateVerificationToken() {
   return Utilities.getUuid() + '-' + Date.now();
 }
-
 /**
  * Hash password using HMAC-SHA256
  */
@@ -217,7 +200,6 @@ function hashPassword(plainPassword) {
   }).join('');
   return salt + '$' + hashHex;
 }
-
 /**
  * Verify password
  */
@@ -226,13 +208,11 @@ function verifyPassword(inputPassword, storedPassword) {
     if (!storedPassword || !storedPassword.includes('$')) {
       return false;
     }
-
     const parts = storedPassword.split('$');
     if (parts.length !== 2) {
       Logger.log('WARNING: Invalid password hash format');
       return false;
     }
-
     const salt = parts[0];
     const storedHash = parts[1];
     const inputHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, inputPassword + salt);
@@ -240,34 +220,28 @@ function verifyPassword(inputPassword, storedPassword) {
       const hex = (byte & 0xff).toString(16);
       return (hex.length === 1 ? '0' : '') + hex;
     }).join('');
-
     return inputHashHex === storedHash;
   } catch (error) {
     Logger.log('Error in verifyPassword: ' + error);
     return false;
   }
 }
-
 /**
  * Send verification email
  */
 function sendVerificationEmail(email, token, displayName) {
   const verificationUrl = `${BASE_URL}/auth/verify-email?token=${encodeURIComponent(token)}`;
-  
   const success = sendTemplatedEmail('EMAIL-001', email, {
     displayName: displayName,
     verificationUrl: verificationUrl
   });
-  
   if (!success) {
     Logger.log('Gagal mengirim template EMAIL-001 untuk ' + email);
   }
 }
-
 // ============================================================================
 // AUTH ENDPOINTS
 // ============================================================================
-
 /**
  * REGISTER USER
  * POST: /registerUser
@@ -277,30 +251,27 @@ function registerUser(userData) {
   const startTime = Date.now();
   try {
     // Log API call
-    logApiCall('registerUser', '', userData.email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({ email: userData.email }), 'User registration started');
-
+    logApiCall('registerUser', '', userData.email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({
+      email: userData.email
+    }), 'User registration started');
     // Validate input
     if (!userData.email) {
       logApiCall('registerUser', '', userData.email || '', 'POST', 'failed', 400, Date.now() - startTime, 'Email diperlukan', JSON.stringify(userData), 'Email validation failed');
       return buildResponse(false, null, 'Email diperlukan', 'INVALID_EMAIL');
     }
-
     if (!userData.authMethod) {
       userData.authMethod = 'email';
     }
-
     // Email/password validation
     if (userData.authMethod === 'email') {
       if (!userData.password) {
         return buildResponse(false, null, 'Password diperlukan', 'MISSING_PASSWORD');
       }
-
       const pwdValidation = validatePasswordStrength(userData.password);
       if (!pwdValidation.valid) {
         return buildResponse(false, null, pwdValidation.message, 'WEAK_PASSWORD');
       }
     }
-
     // Phone validation
     if (userData.whatsapp) {
       if (!validatePhoneNumber(userData.whatsapp)) {
@@ -308,28 +279,23 @@ function registerUser(userData) {
       }
       userData.whatsapp = formatPhoneNumber(userData.whatsapp);
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Check if user already exists
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === userData.email) {
         return buildResponse(false, null, 'Email sudah terdaftar', 'EMAIL_EXISTS');
       }
     }
-
     // Create new user
     const userId = `USER-${Date.now()}`;
     const token = generateVerificationToken();
-
     let passwordHash = '';
     if (userData.authMethod === 'email' && userData.password) {
       passwordHash = hashPassword(userData.password);
     } else if (userData.authMethod === 'google') {
       passwordHash = Utilities.getUuid();
     }
-
     sheet.appendRow([
       userId,
       userData.displayName || userData.email.split('@')[0],
@@ -340,23 +306,17 @@ function registerUser(userData) {
       new Date().toISOString(),
       userData.authMethod === 'google' ? 'Yes' : 'No',
       token,
-      passwordHash,
-      'active',
-      userData.authMethod,
-      'customer'
+      passwordHash, 'active',
+      userData.authMethod, 'customer'
     ]);
-
     // Send verification email for email auth
     if (userData.authMethod === 'email') {
-      sendVerificationEmail(
-        userData.email,
-        token,
-        userData.displayName || userData.email.split('@')[0]
-      );
+      sendVerificationEmail(userData.email, token, userData.displayName || userData.email.split('@')[0]);
     }
-
     // Log success
-    logApiCall('registerUser', userId, userData.email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({ userId }), 'User registered successfully');
+    logApiCall('registerUser', userId, userData.email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({
+      userId
+    }), 'User registered successfully');
     return buildResponse(true, {
       userId: userId,
       displayName: userData.displayName || userData.email.split('@')[0],
@@ -372,7 +332,6 @@ function registerUser(userData) {
     return buildResponse(false, null, error.toString(), 'REGISTER_ERROR');
   }
 }
-
 /**
  * LOGIN USER
  * POST: /loginUser
@@ -381,40 +340,46 @@ function registerUser(userData) {
 function loginUser(email, password) {
   const startTime = Date.now();
   try {
-    logApiCall('loginUser', '', email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({ email }), 'Login attempt');
-
+    logApiCall('loginUser', '', email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({
+      email
+    }), 'Login attempt');
     if (!email || !password) {
-      logApiCall('loginUser', '', email || '', 'POST', 'failed', 400, Date.now() - startTime, 'Credentials missing', JSON.stringify({ email }), 'Missing credentials validation failed');
+      logApiCall('loginUser', '', email || '', 'POST', 'failed', 400, Date.now() - startTime, 'Credentials missing', JSON.stringify({
+        email
+      }), 'Missing credentials validation failed');
       return buildResponse(false, null, 'Email dan password diperlukan', 'MISSING_CREDENTIALS');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === email) {
         // Check if email is verified
         if (data[i][7] !== 'Yes') {
-          logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 403, Date.now() - startTime, 'Email not verified', JSON.stringify({ email }), 'Email verification required');
+          logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 403, Date.now() - startTime, 'Email not verified', JSON.stringify({
+            email
+          }), 'Email verification required');
           return buildResponse(false, null, 'Email belum diverifikasi', 'EMAIL_NOT_VERIFIED');
         }
-
         // Check if account is active
         if (data[i][10] !== 'active') {
-          logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 403, Date.now() - startTime, 'Account inactive', JSON.stringify({ email }), 'Account is not active');
+          logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 403, Date.now() - startTime, 'Account inactive', JSON.stringify({
+            email
+          }), 'Account is not active');
           return buildResponse(false, null, 'Akun tidak aktif', 'ACCOUNT_INACTIVE');
         }
-
         // Verify password
         const storedPassword = data[i][9];
         if (!verifyPassword(password, storedPassword)) {
-          logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 401, Date.now() - startTime, 'Invalid credentials', JSON.stringify({ email }), 'Password verification failed');
+          logApiCall('loginUser', data[i][0], email, 'POST', 'failed', 401, Date.now() - startTime, 'Invalid credentials', JSON.stringify({
+            email
+          }), 'Password verification failed');
           return buildResponse(false, null, 'Email atau password salah', 'INVALID_CREDENTIALS');
         }
-
         // Login successful - return user data
         const userId = data[i][0];
-        logApiCall('loginUser', userId, email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({ userId }), 'Login successful');
+        logApiCall('loginUser', userId, email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({
+          userId
+        }), 'Login successful');
         return buildResponse(true, {
           userId: userId,
           displayName: data[i][1],
@@ -428,16 +393,18 @@ function loginUser(email, password) {
         }, 'Login berhasil');
       }
     }
-
-    logApiCall('loginUser', '', email, 'POST', 'failed', 401, Date.now() - startTime, 'Invalid credentials', JSON.stringify({ email }), 'User not found');
+    logApiCall('loginUser', '', email, 'POST', 'failed', 401, Date.now() - startTime, 'Invalid credentials', JSON.stringify({
+      email
+    }), 'User not found');
     return buildResponse(false, null, 'Email atau password salah', 'INVALID_CREDENTIALS');
   } catch (error) {
     Logger.log('Error in loginUser: ' + error);
-    logApiCall('loginUser', '', email || '', 'POST', 'failed', 500, Date.now() - startTime, error.toString(), JSON.stringify({ email }), 'Login error');
+    logApiCall('loginUser', '', email || '', 'POST', 'failed', 500, Date.now() - startTime, error.toString(), JSON.stringify({
+      email
+    }), 'Login error');
     return buildResponse(false, null, error.toString(), 'LOGIN_ERROR');
   }
 }
-
 /**
  * VERIFY EMAIL TOKEN (Auto-login after registration)
  * GET: /verifyEmailToken?token=xxx
@@ -447,10 +414,8 @@ function verifyEmailToken(token) {
     if (!token) {
       return buildResponse(false, null, 'Token diperlukan', 'MISSING_TOKEN');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Find user with matching token
     for (let i = 1; i < data.length; i++) {
       if (data[i][8] === token) {
@@ -458,11 +423,9 @@ function verifyEmailToken(token) {
         if (data[i][7] === 'Yes') {
           return buildResponse(false, null, 'Email sudah diverifikasi sebelumnya', 'ALREADY_VERIFIED');
         }
-
         // Mark email as verified
         sheet.getRange(i + 1, 8).setValue('Yes'); // H - Email Verified
         sheet.getRange(i + 1, 7).setValue(new Date().toISOString()); // G - Updated At
-
         // Return user data for auto-login
         return buildResponse(true, {
           userId: data[i][0],
@@ -475,14 +438,12 @@ function verifyEmailToken(token) {
         }, 'Email berhasil diverifikasi! Anda sekarang dapat menggunakan akun ini.');
       }
     }
-
     return buildResponse(false, null, 'Token tidak valid atau sudah kadaluarsa', 'INVALID_TOKEN');
   } catch (error) {
     Logger.log('Error in verifyEmailToken: ' + error);
     return buildResponse(false, null, error.toString(), 'VERIFY_ERROR');
   }
 }
-
 /**
  * VERIFY GOOGLE TOKEN
  * POST: /verifyGoogleToken
@@ -493,36 +454,28 @@ function verifyGoogleToken(token) {
     if (!token) {
       return buildResponse(false, null, 'Token diperlukan', 'MISSING_TOKEN');
     }
-
     // Decode JWT token
     const parts = token.split('.');
     if (parts.length !== 3) {
       return buildResponse(false, null, 'Format token tidak valid', 'INVALID_FORMAT');
     }
-
     // Decode payload
     let payload = parts[1];
     payload += '=='.substring(0, (4 - payload.length % 4) % 4);
-
     const decoded = JSON.parse(Utilities.newBlob(Utilities.base64Decode(payload)).getDataAsString());
-
     // Check expiration
     const now = Math.floor(Date.now() / 1000);
     if (decoded.exp && decoded.exp < now) {
       return buildResponse(false, null, 'Token sudah expired', 'TOKEN_EXPIRED');
     }
-
     if (!decoded.email) {
       return buildResponse(false, null, 'Email tidak ditemukan dalam token', 'NO_EMAIL');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     let userId = null;
     let userFound = false;
     let hasPassword = false;
-
     // Check if user exists
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === decoded.email) {
@@ -532,29 +485,22 @@ function verifyGoogleToken(token) {
         break;
       }
     }
-
     // Create new user if doesn't exist
     if (!userFound) {
       userId = `USER-${Date.now()}`;
       const displayName = decoded.name || decoded.email.split('@')[0];
       const photoURL = decoded.picture || '';
-
       sheet.appendRow([
         userId,
         displayName,
-        decoded.email,
-        '',
+        decoded.email, '',
         photoURL,
         new Date().toISOString(),
-        new Date().toISOString(),
-        'Yes', // Email auto-verified for Google
-        generateVerificationToken(),
-        '', // Tidak terisi otomatis agar user bisa set password baru
-        'active',
-        'google'
+        new Date().toISOString(), 'Yes', // Email auto-verified for Google
+        generateVerificationToken(), '', // Tidak terisi otomatis agar user bisa set password baru
+        'active', 'google'
       ]);
     }
-
     return buildResponse(true, {
       userId,
       displayName: decoded.name || decoded.email.split('@')[0],
@@ -570,7 +516,6 @@ function verifyGoogleToken(token) {
     return buildResponse(false, null, error.toString(), 'VERIFY_ERROR');
   }
 }
-
 /**
  * REQUEST PASSWORD RESET
  * POST: /requestPasswordReset
@@ -581,35 +526,27 @@ function requestPasswordReset(email) {
     if (!email) {
       return buildResponse(false, null, 'Email diperlukan', 'MISSING_EMAIL');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Find user
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === email) {
         // Generate reset token
         const resetToken = generateVerificationToken();
-
         // Store reset token in verification token column temporarily
         sheet.getRange(i + 1, 9).setValue(resetToken); // I - Token
-
         // Send reset email
         const resetUrl = `${BASE_URL}/auth/reset-password?token=${encodeURIComponent(resetToken)}`;
-        
         const success = sendTemplatedEmail('EMAIL-004', email, {
           displayName: data[i][1] || 'Pengguna',
           resetUrl: resetUrl
         });
-        
         if (!success) {
           Logger.log('Gagal mengirim template EMAIL-004 untuk ' + email);
         }
-
         return buildResponse(true, null, 'Email reset password telah dikirim');
       }
     }
-
     // Don't reveal if email exists for security
     return buildResponse(true, null, 'Jika email terdaftar, link reset password akan dikirim');
   } catch (error) {
@@ -617,7 +554,6 @@ function requestPasswordReset(email) {
     return buildResponse(false, null, error.toString(), 'RESET_ERROR');
   }
 }
-
 /**
  * RESET PASSWORD
  * POST: /resetPassword
@@ -628,15 +564,12 @@ function resetPassword(token, newPassword) {
     if (!token || !newPassword) {
       return buildResponse(false, null, 'Token dan password diperlukan', 'MISSING_DATA');
     }
-
     const pwdValidation = validatePasswordStrength(newPassword);
     if (!pwdValidation.valid) {
       return buildResponse(false, null, pwdValidation.message, 'WEAK_PASSWORD');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Find user with matching token
     for (let i = 1; i < data.length; i++) {
       if (data[i][8] === token) {
@@ -644,40 +577,33 @@ function resetPassword(token, newPassword) {
         const newHash = hashPassword(newPassword);
         sheet.getRange(i + 1, 10).setValue(newHash); // J - Password
         sheet.getRange(i + 1, 7).setValue(new Date().toISOString()); // G - Updated At
-
         // Clear token
         sheet.getRange(i + 1, 9).setValue('');
-
         // Send email notification using template EMAIL-005
         try {
           const userEmail = data[i][2];
           const userName = data[i][1] || 'Pelanggan';
           const loginUrl = `${BASE_URL}/auth/`;
-          
           const success = sendTemplatedEmail('EMAIL-005', userEmail, {
             displayName: userName,
             actionText: 'berhasil direset',
             loginUrl: loginUrl
           });
-          
           if (!success) {
             Logger.log('Gagal mengirim template EMAIL-005 (reset) untuk ' + userEmail);
           }
         } catch (e) {
           Logger.log('Error saat mengirim notifikasi reset password: ' + e);
         }
-
         return buildResponse(true, null, 'Password berhasil direset. Silakan login dengan password baru.');
       }
     }
-
     return buildResponse(false, null, 'Token tidak valid atau sudah kadaluarsa', 'INVALID_TOKEN');
   } catch (error) {
     Logger.log('Error in resetPassword: ' + error);
     return buildResponse(false, null, error.toString(), 'RESET_ERROR');
   }
 }
-
 /**
  * VALIDATE RESET TOKEN
  * GET: /validateResetToken
@@ -688,10 +614,8 @@ function validateResetToken(token) {
     if (!token) {
       return buildResponse(false, null, 'Token diperlukan', 'MISSING_TOKEN');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Find user with matching token
     for (let i = 1; i < data.length; i++) {
       if (data[i][8] === token) {
@@ -707,18 +631,17 @@ function validateResetToken(token) {
             }
           }
         }
-        
-        return buildResponse(true, { email: data[i][2] }, 'Token valid');
+        return buildResponse(true, {
+          email: data[i][2]
+        }, 'Token valid');
       }
     }
-
     return buildResponse(false, null, 'Token tidak valid atau sudah kadaluarsa', 'INVALID_TOKEN');
   } catch (error) {
     Logger.log('Error in validateResetToken: ' + error);
     return buildResponse(false, null, error.toString(), 'VALIDATE_ERROR');
   }
 }
-
 /**
  * CHANGE PASSWORD (logged-in user)
  * POST: /changePassword
@@ -729,21 +652,17 @@ function changePassword(userId, oldPassword, newPassword) {
     if (!userId || !newPassword) {
       return buildResponse(false, null, 'User ID dan password baru diperlukan', 'MISSING_DATA');
     }
-
     const pwdValidation = validatePasswordStrength(newPassword);
     if (!pwdValidation.valid) {
       return buildResponse(false, null, pwdValidation.message, 'WEAK_PASSWORD');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Find user
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === userId) {
         const storedPassword = data[i][9] ? data[i][9].toString().trim() : '';
         const hasStoredPassword = storedPassword.length > 0;
-
         // Verify old password if they have one
         if (hasStoredPassword) {
           if (!oldPassword) {
@@ -756,42 +675,35 @@ function changePassword(userId, oldPassword, newPassword) {
             return buildResponse(false, null, 'Password baru tidak boleh sama dengan password lama', 'SAME_PASSWORD');
           }
         }
-
         // Update password
         const newHash = hashPassword(newPassword);
         sheet.getRange(i + 1, 10).setValue(newHash);
         sheet.getRange(i + 1, 7).setValue(new Date().toISOString());
-
         // Send email notification using template EMAIL-005
         try {
           const userEmail = data[i][2];
           const userName = data[i][1] || 'Pelanggan';
           const loginUrl = `${BASE_URL}/auth/`;
-          
           const success = sendTemplatedEmail('EMAIL-005', userEmail, {
             displayName: userName,
             actionText: hasStoredPassword ? 'diubah' : 'dibuat (diset)',
             loginUrl: loginUrl
           });
-          
           if (!success) {
             Logger.log('Gagal mengirim template EMAIL-005 (change) untuk ' + userEmail);
           }
         } catch (e) {
           Logger.log('Error saat mengirim notifikasi ganti password: ' + e);
         }
-
         return buildResponse(true, null, hasStoredPassword ? 'Password berhasil diubah' : 'Password berhasil diset');
       }
     }
-
     return buildResponse(false, null, 'User tidak ditemukan', 'USER_NOT_FOUND');
   } catch (error) {
     Logger.log('Error in changePassword: ' + error);
     return buildResponse(false, null, error.toString(), 'CHANGE_ERROR');
   }
 }
-
 /**
  * GET USER PROFILE
  * GET: /getUserProfile?userId=xxx
@@ -801,10 +713,8 @@ function getUserProfile(userId) {
     if (!userId) {
       return buildResponse(false, null, 'User ID diperlukan', 'MISSING_ID');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === userId) {
         return buildResponse(true, {
@@ -821,14 +731,12 @@ function getUserProfile(userId) {
         }, 'Profil user berhasil diambil');
       }
     }
-
     return buildResponse(false, null, 'User tidak ditemukan', 'USER_NOT_FOUND');
   } catch (error) {
     Logger.log('Error in getUserProfile: ' + error);
     return buildResponse(false, null, error.toString(), 'PROFILE_ERROR');
   }
 }
-
 /**
  * UPDATE USER PROFILE
  * POST: /updateUserProfile
@@ -839,16 +747,13 @@ function updateUserProfile(userId, data) {
     if (!userId) {
       return buildResponse(false, null, 'User ID diperlukan', 'MISSING_ID');
     }
-
     const sheet = ensureUsersSheet();
     const sheetData = sheet.getDataRange().getValues();
-
     for (let i = 1; i < sheetData.length; i++) {
       if (sheetData[i][0] === userId) {
         let nextDisplayName = sheetData[i][1];
         let nextWhatsapp = sheetData[i][3];
         let nextPhotoURL = sheetData[i][4];
-
         // Update fields
         if (data.displayName) {
           sheet.getRange(i + 1, 2).setValue(data.displayName);
@@ -865,7 +770,6 @@ function updateUserProfile(userId, data) {
           sheet.getRange(i + 1, 4).setValue(formattedPhone);
           nextWhatsapp = formattedPhone;
         }
-
         if (data.photoBase64) {
           try {
             nextPhotoURL = uploadProfilePhotoToDrive(userId, data.photoBase64);
@@ -878,10 +782,8 @@ function updateUserProfile(userId, data) {
             throw photoError;
           }
         }
-
         // Update timestamp
         sheet.getRange(i + 1, 7).setValue(new Date().toISOString());
-
         return buildResponse(true, {
           userId,
           displayName: nextDisplayName,
@@ -890,22 +792,15 @@ function updateUserProfile(userId, data) {
         }, 'Profil berhasil diperbarui');
       }
     }
-
     return buildResponse(false, null, 'User tidak ditemukan', 'USER_NOT_FOUND');
   } catch (error) {
     Logger.log('Error in updateUserProfile: ' + error);
     if (String(error).indexOf('DriveApp') !== -1) {
-      return buildResponse(
-        false,
-        null,
-        'Akses DriveApp ditolak. Pastikan deployment Web App dijalankan sebagai owner script dan scope Drive sudah diotorisasi.',
-        'DRIVE_PERMISSION_DENIED'
-      );
+      return buildResponse(false, null, 'Akses DriveApp ditolak. Pastikan deployment Web App dijalankan sebagai owner script dan scope Drive sudah diotorisasi.', 'DRIVE_PERMISSION_DENIED');
     }
     return buildResponse(false, null, error.toString(), 'UPDATE_ERROR');
   }
 }
-
 /**
  * GET USER BY EMAIL
  * GET: /getUserByEmail?email=xxx
@@ -915,10 +810,8 @@ function getUserByEmail(email) {
     if (!email) {
       return buildResponse(false, null, 'Email diperlukan', 'MISSING_EMAIL');
     }
-
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-
     for (let i = 1; i < data.length; i++) {
       if (data[i][2] === email) {
         return buildResponse(true, {
@@ -932,14 +825,12 @@ function getUserByEmail(email) {
         }, 'User ditemukan');
       }
     }
-
     return buildResponse(false, null, 'User tidak ditemukan', 'USER_NOT_FOUND');
   } catch (error) {
     Logger.log('Error in getUserByEmail: ' + error);
     return buildResponse(false, null, error.toString(), 'QUERY_ERROR');
   }
 }
-
 /**
  * Generate Midtrans Payment Token
  * Creates a Snap transaction token for payment UI
@@ -958,26 +849,26 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
   try {
     // Convert total to number explicitly to satisfy Midtrans API
     total = Number(total) || 0;
-
     // Log start
-    logApiCall('generateMidtransToken', '', email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({ orderId, total }), 'Payment token generation started');
-
+    logApiCall('generateMidtransToken', '', email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({
+      orderId,
+      total
+    }), 'Payment token generation started');
     // Get Midtrans Server Key from CONFIG sheet
     const serverKey = getConfigValue('MIDTRANS_SERVER_KEY');
-    
     if (!serverKey) {
       Logger.log('CRITICAL: Midtrans Server Key not configured. Run initializeMidtransConfig() first');
-      logApiCall('generateMidtransToken', '', email, 'POST', 'failed', 500, Date.now() - startTime, 'Server Key not configured', JSON.stringify({ orderId }), 'CRITICAL: Midtrans Server Key missing');
+      logApiCall('generateMidtransToken', '', email, 'POST', 'failed', 500, Date.now() - startTime, 'Server Key not configured', JSON.stringify({
+        orderId
+      }), 'CRITICAL: Midtrans Server Key missing');
       return buildResponse(false, null, 'Midtrans Server Key not configured in GAS Properties', 'SERVER_KEY_MISSING');
     }
-
     // Build customer details
     const customerDetails = {
       email: email,
       phone: phone || '',
       first_name: name || 'Customer'
     };
-
     // Build item details - single item representing the total order value to guarantee gross_amount match
     const itemDetails = [{
       id: orderId,
@@ -985,7 +876,6 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
       quantity: 1,
       name: `Layanan Mysisi: ${domain} (${packageId || 'Starter'})`
     }];
-
     // Build transaction data for Midtrans Snap API
     const transactionData = {
       transaction_details: {
@@ -996,14 +886,11 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
       item_details: itemDetails,
       enable_3d_secure: true
     };
-
     // Prepare API request
     const url = MIDTRANS_SNAP_URL;
     const payload = JSON.stringify(transactionData);
-    
     // Create Basic Auth header (Server Key and empty password)
     const auth = Utilities.base64Encode(serverKey + ':');
-    
     const options = {
       method: 'post',
       headers: {
@@ -1013,16 +900,13 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
       payload: payload,
       muteHttpExceptions: true
     };
-
     // Call Midtrans API
     const response = UrlFetchApp.fetch(url, options);
     const responseCode = response.getResponseCode();
     const responseText = response.getContentText();
-
     // Log API call for debugging
     Logger.log('Midtrans API Response Code: ' + responseCode);
     Logger.log('Midtrans API Response: ' + responseText);
-
     // Handle response
     if (responseCode !== 200 && responseCode !== 201) {
       Logger.log('ERROR: Midtrans API returned error code ' + responseCode);
@@ -1039,47 +923,48 @@ function generateMidtransToken(orderId, email, phone, name, domain, packageId, t
       } catch (e) {
         // Use default error message if can't parse response
       }
-      logApiCall('generateMidtransToken', '', email, 'POST', 'failed', responseCode, Date.now() - startTime, errorMessage, JSON.stringify({ orderId }), 'Midtrans API error');
+      logApiCall('generateMidtransToken', '', email, 'POST', 'failed', responseCode, Date.now() - startTime, errorMessage, JSON.stringify({
+        orderId
+      }), 'Midtrans API error');
       return buildResponse(false, null, errorMessage + ' (HTTP ' + responseCode + ')', 'MIDTRANS_API_ERROR');
     }
-
     // Parse successful response
     const snapResponse = JSON.parse(responseText);
-    
     if (!snapResponse.token) {
       Logger.log('ERROR: No snap token in Midtrans response');
-      logApiCall('generateMidtransToken', '', email, 'POST', 'failed', 500, Date.now() - startTime, 'No snap token in response', JSON.stringify({ orderId }), 'Invalid Midtrans response');
+      logApiCall('generateMidtransToken', '', email, 'POST', 'failed', 500, Date.now() - startTime, 'No snap token in response', JSON.stringify({
+        orderId
+      }), 'Invalid Midtrans response');
       return buildResponse(false, null, 'Invalid response from payment gateway', 'INVALID_RESPONSE');
     }
-
     // Log success
-    logApiCall('generateMidtransToken', '', email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({ orderId, total }), 'Payment token generated successfully');
-
+    logApiCall('generateMidtransToken', '', email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({
+      orderId,
+      total
+    }), 'Payment token generated successfully');
     // Return success with snap token
     return buildResponse(true, {
       snapToken: snapResponse.token,
       snapRedirectUrl: snapResponse.redirect_url,
       orderId: orderId
     }, 'Token pembayaran berhasil dibuat');
-
   } catch (error) {
     Logger.log('Error in generateMidtransToken: ' + error.toString());
-    logApiCall('generateMidtransToken', '', email || '', 'POST', 'failed', 500, Date.now() - startTime, error.toString(), JSON.stringify({ orderId }), 'Payment token generation error');
+    logApiCall('generateMidtransToken', '', email || '', 'POST', 'failed', 500, Date.now() - startTime, error.toString(), JSON.stringify({
+      orderId
+    }), 'Payment token generation error');
     return buildResponse(false, null, 'Terjadi kesalahan pada server: ' + error.toString(), 'SERVER_ERROR');
   }
 }
-
 // ============================================================================
 // ORDER MANAGEMENT
 // ============================================================================
-
 /**
  * Get or create Orders sheet
  */
 function ensureOrdersSheet() {
   return ensureSheetExists('ORDERS');
 }
-
 /**
  * CREATE ORDER
  * POST: /createOrder
@@ -1089,84 +974,77 @@ function createOrder(orderData) {
   const startTime = Date.now();
   try {
     // Log start
-    logApiCall('createOrder', orderData.userId || '', orderData.email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({ domain: orderData.domain, package: orderData.packageId }), 'Order creation started');
-
+    logApiCall('createOrder', orderData.userId || '', orderData.email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({
+      domain: orderData.domain,
+      package: orderData.packageId
+    }), 'Order creation started');
     // Validate input
     if (!orderData.userId) {
       logApiCall('createOrder', '', orderData.email || '', 'POST', 'failed', 400, Date.now() - startTime, 'User ID missing', JSON.stringify(orderData), 'Validation: User ID missing');
       return buildResponse(false, null, 'User ID diperlukan', 'MISSING_USER_ID');
     }
-
     if (!orderData.email) {
       logApiCall('createOrder', orderData.userId, '', 'POST', 'failed', 400, Date.now() - startTime, 'Email missing', JSON.stringify(orderData), 'Validation: Email missing');
       return buildResponse(false, null, 'Email diperlukan', 'MISSING_EMAIL');
     }
-
     if (!orderData.domain) {
       logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'failed', 400, Date.now() - startTime, 'Domain missing', JSON.stringify(orderData), 'Validation: Domain missing');
       return buildResponse(false, null, 'Domain diperlukan', 'MISSING_DOMAIN');
     }
-
     if (!validateDomainFormat(orderData.domain)) {
       logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'failed', 400, Date.now() - startTime, 'Invalid domain format', JSON.stringify(orderData), 'Validation: Invalid domain format');
       return buildResponse(false, null, 'Format domain tidak valid (contoh: example.com)', 'INVALID_DOMAIN_FORMAT');
     }
-
     if (!orderData.packageId) {
       logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'failed', 400, Date.now() - startTime, 'Package missing', JSON.stringify(orderData), 'Validation: Package missing');
       return buildResponse(false, null, 'Package diperlukan', 'MISSING_PACKAGE');
     }
-
     if (!orderData.total || orderData.total <= 0) {
       logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'failed', 400, Date.now() - startTime, 'Invalid total', JSON.stringify(orderData), 'Validation: Total invalid');
       return buildResponse(false, null, 'Total harga tidak valid', 'INVALID_TOTAL');
     }
-
     // SECURITY: Server-side promo code validation (if provided)
     if (orderData.promoCode) {
       const promoValidation = validatePromoCode(orderData.promoCode);
       if (!promoValidation.success) {
-        logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'failed', 400, Date.now() - startTime, 'Invalid promo code', JSON.stringify({ promoCode: orderData.promoCode }), 'Validation: Promo code invalid or expired');
+        logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'failed', 400, Date.now() - startTime, 'Invalid promo code', JSON.stringify({
+          promoCode: orderData.promoCode
+        }), 'Validation: Promo code invalid or expired');
         return buildResponse(false, null, promoValidation.message, 'INVALID_PROMO_CODE');
       }
       // Promo is valid - proceed with order
       Logger.log(`Promo code ${orderData.promoCode} validated for order`);
     }
-
     const sheet = ensureOrdersSheet();
     const orderId = `ORDER-${Date.now()}`;
     const now = new Date().toISOString();
-
     sheet.appendRow([
-      orderId,                   // A: Order ID
-      orderData.userId,          // B: User ID
-      orderData.email,           // C: Email
-      orderData.phone || '',     // D: Phone
-      orderData.name || '',      // E: Name
-      orderData.domain,          // F: Domain
-      orderData.packageId,       // G: Package
-      orderData.total,           // H: Total
-      'pending',                 // I: Order Status
-      'pending',                 // J: Payment Status
-      '',                        // K: Snap Token
-      '',                        // L: Transaction ID
-      now,                       // M: Created At
-      now,                       // N: Updated At
-      '',                        // O: Payment Method
-      orderData.subtotal || 0,   // P: Subtotal
-      orderData.ppn || 0,        // Q: PPN
-      orderData.discount || 0,   // R: Discount
+      orderId, // A: Order ID
+      orderData.userId, // B: User ID
+      orderData.email, // C: Email
+      orderData.phone || '', // D: Phone
+      orderData.name || '', // E: Name
+      orderData.domain, // F: Domain
+      orderData.packageId, // G: Package
+      orderData.total, // H: Total
+      'pending', // I: Order Status
+      'pending', // J: Payment Status
+      '', // K: Snap Token
+      '', // L: Transaction ID
+      now, // M: Created At
+      now, // N: Updated At
+      '', // O: Payment Method
+      orderData.subtotal || 0, // P: Subtotal
+      orderData.ppn || 0, // Q: PPN
+      orderData.discount || 0, // R: Discount
       orderData.addons ? (typeof orderData.addons === 'string' ? orderData.addons : JSON.stringify(orderData.addons)) : '[]' // S: Addons (JSON)
     ]);
-
     Logger.log(`Order created: ${orderId}`);
-
     // Increment promo usage if promo code was applied
     if (orderData.promoCode) {
       incrementPromoUsage(orderData.promoCode);
       Logger.log(`Promo code ${orderData.promoCode} applied to order ${orderId}`);
     }
-
     // Send order confirmation email
     try {
       sendTemplatedEmail('EMAIL-003', orderData.email, {
@@ -1178,24 +1056,24 @@ function createOrder(orderData) {
     } catch (emailError) {
       Logger.log('Failed to send order confirmation email: ' + emailError);
     }
-
     // Log success
-    logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({ orderId, total: orderData.total, promoCode: orderData.promoCode || '' }), 'Order created successfully');
-
+    logApiCall('createOrder', orderData.userId, orderData.email, 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({
+      orderId,
+      total: orderData.total,
+      promoCode: orderData.promoCode || ''
+    }), 'Order created successfully');
     return buildResponse(true, {
       orderId,
       orderStatus: 'pending',
       paymentStatus: 'pending',
       createdAt: now
     }, 'Order berhasil dibuat');
-
   } catch (error) {
     Logger.log('Error in createOrder: ' + error);
     logApiCall('createOrder', orderData.userId || '', orderData.email || '', 'POST', 'failed', 500, Date.now() - startTime, error.toString(), JSON.stringify(orderData), 'Order creation error');
     return buildResponse(false, null, error.toString(), 'ORDER_CREATE_ERROR');
   }
 }
-
 /**
  * GET ORDER
  * GET: /getOrder?orderId=ORDER-123
@@ -1205,10 +1083,8 @@ function getOrder(orderId) {
     if (!orderId) {
       return buildResponse(false, null, 'Order ID diperlukan', 'MISSING_ORDER_ID');
     }
-
     const sheet = ensureOrdersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Search for order (skip header row)
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === orderId) {
@@ -1241,22 +1117,19 @@ function getOrder(orderId) {
                 return JSON.parse(parsed);
               }
               return Array.isArray(parsed) ? parsed : [];
-            } catch(e) {
+            } catch (e) {
               return [];
             }
           })()
         }, 'Order ditemukan');
       }
     }
-
     return buildResponse(false, null, 'Order tidak ditemukan', 'ORDER_NOT_FOUND');
-
   } catch (error) {
     Logger.log('Error in getOrder: ' + error);
     return buildResponse(false, null, error.toString(), 'GET_ORDER_ERROR');
   }
 }
-
 /**
  * GET USER ORDERS - Fetch all orders for a user
  */
@@ -1265,11 +1138,9 @@ function getUserOrders(userId) {
     if (!userId) {
       return buildResponse(false, null, 'User ID diperlukan', 'MISSING_USER_ID');
     }
-
     const sheet = ensureOrdersSheet();
     const data = sheet.getDataRange().getValues();
     const orders = [];
-
     for (let i = 1; i < data.length; i++) {
       if (data[i][1] === userId) {
         orders.push({
@@ -1298,21 +1169,22 @@ function getUserOrders(userId) {
                 return JSON.parse(parsed);
               }
               return Array.isArray(parsed) ? parsed : [];
-            } catch(e) {
+            } catch (e) {
               return [];
             }
           })()
         });
       }
     }
-
-    return buildResponse(true, { orders, count: orders.length }, 'Pesanan berhasil diambil');
+    return buildResponse(true, {
+      orders,
+      count: orders.length
+    }, 'Pesanan berhasil diambil');
   } catch (error) {
     Logger.log('Error in getUserOrders: ' + error);
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * GET ORDER DETAIL - Get specific order with ownership check
  */
@@ -1321,17 +1193,13 @@ function getOrderDetail(orderId, userId) {
     if (!orderId) {
       return buildResponse(false, null, 'Order ID diperlukan', 'MISSING_ORDER_ID');
     }
-
     let result = getOrder(orderId);
-    
     if (!result.success) {
       return result;
     }
-
     if (userId && result.data.userId !== userId) {
       return buildResponse(false, null, 'Anda tidak memiliki akses ke order ini', 'UNAUTHORIZED');
     }
-
     // Auto-sync with Midtrans if payment is pending
     if (result.data.paymentStatus === 'pending') {
       const sync = syncOrderStatusWithMidtrans(orderId);
@@ -1340,19 +1208,15 @@ function getOrderDetail(orderId, userId) {
         result = getOrder(orderId);
       }
     }
-
     return result;
   } catch (error) {
     Logger.log('Error in getOrderDetail: ' + error);
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * UPDATE ORDER STATUS - Update order status
  */
-
-
 /**
  * SYNC ORDER STATUS WITH MIDTRANS - Direct API check
  */
@@ -1361,16 +1225,13 @@ function syncOrderStatusWithMidtrans(orderId) {
     if (!orderId) {
       return buildResponse(false, null, 'Order ID diperlukan', 'MISSING_ORDER_ID');
     }
-
     const serverKey = getConfigValue('MIDTRANS_SERVER_KEY');
     if (!serverKey) {
       return buildResponse(false, null, 'Server Key tidak dikonfigurasi', 'SERVER_KEY_MISSING');
     }
-
     // Midtrans API Sandbox Base URL (Update to production URL when going live)
     const baseUrl = 'https://api.sandbox.midtrans.com/v2';
     const url = `${baseUrl}/${orderId}/status`;
-
     const options = {
       method: 'get',
       headers: {
@@ -1380,27 +1241,20 @@ function syncOrderStatusWithMidtrans(orderId) {
       },
       muteHttpExceptions: true
     };
-
     const response = UrlFetchApp.fetch(url, options);
     const responseCode = response.getResponseCode();
-    
     // 404 means the transaction does not exist in Midtrans (not processed yet)
     if (responseCode === 404) {
       return buildResponse(false, null, 'Transaksi belum terdaftar di Midtrans', 'TRANSACTION_NOT_FOUND');
     }
-
     const data = JSON.parse(response.getContentText());
-
     if (responseCode !== 200 || !data.transaction_status) {
       return buildResponse(false, data, 'Gagal mengambil status dari Midtrans', 'API_ERROR');
     }
-
     const transactionStatus = data.transaction_status;
-    
     // Map transaction status to payment status and order status
     let paymentStatus = 'pending';
     let orderStatus = 'processing';
-
     switch (transactionStatus) {
       case 'capture':
       case 'settlement':
@@ -1421,44 +1275,43 @@ function syncOrderStatusWithMidtrans(orderId) {
       default:
         paymentStatus = transactionStatus;
     }
-
     const sheet = ensureOrdersSheet();
     const sheetData = sheet.getDataRange().getValues();
-
     for (let i = 1; i < sheetData.length; i++) {
       if (sheetData[i][0] === orderId) {
         const currentPaymentStatus = sheetData[i][9]; // Column J
-        
         if (currentPaymentStatus !== paymentStatus) {
-           sheet.getRange(i + 1, 9).setValue(orderStatus);      // Column I
-           sheet.getRange(i + 1, 10).setValue(paymentStatus);   // Column J
-           sheet.getRange(i + 1, 14).setValue(new Date().toISOString()); // Updated At
-           
-           if (data.transaction_id) {
-             sheet.getRange(i + 1, 12).setValue(data.transaction_id); // Column L
-           }
-           if (data.payment_type) {
-             sheet.getRange(i + 1, 15).setValue(data.payment_type); // Column O
-           }
-           
-           if (paymentStatus === 'paid') {
-             processPaymentSuccess(orderId, data.transaction_id || '', data.payment_type || '', sheetData, i, 'Manual sync from Midtrans API');
-           }
-           
-           return buildResponse(true, { orderId, newStatus: paymentStatus, oldStatus: currentPaymentStatus }, 'Status disinkronisasi dengan Midtrans');
+          sheet.getRange(i + 1, 9).setValue(orderStatus); // Column I
+          sheet.getRange(i + 1, 10).setValue(paymentStatus); // Column J
+          sheet.getRange(i + 1, 14).setValue(new Date().toISOString()); // Updated At
+          if (data.transaction_id) {
+            sheet.getRange(i + 1, 12).setValue(data.transaction_id); // Column L
+          }
+          if (data.payment_type) {
+            sheet.getRange(i + 1, 15).setValue(data.payment_type); // Column O
+          }
+          if (paymentStatus === 'paid') {
+            processPaymentSuccess(orderId, data.transaction_id || '', data.payment_type || '', sheetData, i, 'Manual sync from Midtrans API');
+          }
+          return buildResponse(true, {
+            orderId,
+            newStatus: paymentStatus,
+            oldStatus: currentPaymentStatus
+          }, 'Status disinkronisasi dengan Midtrans');
         } else {
-           return buildResponse(true, { orderId, currentStatus: paymentStatus }, 'Status sudah up to date');
+          return buildResponse(true, {
+            orderId,
+            currentStatus: paymentStatus
+          }, 'Status sudah up to date');
         }
       }
     }
-
     return buildResponse(false, null, 'Order tidak ditemukan di database', 'ORDER_NOT_FOUND');
   } catch (error) {
     Logger.log('Error in syncOrderStatusWithMidtrans: ' + error);
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * GET USER ORDER STATS - Get user order statistics
  */
@@ -1467,53 +1320,53 @@ function getUserOrderStats(userId) {
     if (!userId) {
       return buildResponse(false, null, 'User ID diperlukan', 'MISSING_USER_ID');
     }
-
     const ordersSheet = ensureOrdersSheet();
     const ordersData = ordersSheet.getDataRange().getValues();
-    
     const stats = {
       totalOrders: 0,
-      ordersByStatus: { pending: 0, processing: 0, completed: 0, cancelled: 0 },
-      paymentStatus: { pending: 0, paid: 0, failed: 0 },
+      ordersByStatus: {
+        pending: 0,
+        processing: 0,
+        completed: 0,
+        cancelled: 0
+      },
+      paymentStatus: {
+        pending: 0,
+        paid: 0,
+        failed: 0
+      },
       totalSpent: 0,
       averageOrderValue: 0,
       lastOrderDate: null
     };
-
     for (let i = 1; i < ordersData.length; i++) {
       if (ordersData[i][1] === userId) {
         stats.totalOrders++;
-        const orderStatus = ordersData[i][8];      // Column I: Order Status
-        const paymentStatus = ordersData[i][9];    // Column J: Payment Status (FIXED: was [10])
-        const totalAmount = ordersData[i][7];      // Column H: Total Amount (FIXED: was [12])
-
+        const orderStatus = ordersData[i][8]; // Column I: Order Status
+        const paymentStatus = ordersData[i][9]; // Column J: Payment Status (FIXED: was [10])
+        const totalAmount = ordersData[i][7]; // Column H: Total Amount (FIXED: was [12])
         if (orderStatus && stats.ordersByStatus.hasOwnProperty(orderStatus)) {
           stats.ordersByStatus[orderStatus]++;
         }
         if (paymentStatus && stats.paymentStatus.hasOwnProperty(paymentStatus)) {
           stats.paymentStatus[paymentStatus]++;
         }
-
         stats.totalSpent += totalAmount || 0;
-        
         const orderDate = new Date(ordersData[i][5]);
         if (!stats.lastOrderDate || orderDate > stats.lastOrderDate) {
           stats.lastOrderDate = ordersData[i][5];
         }
       }
     }
-
     if (stats.totalOrders > 0) {
       stats.averageOrderValue = Math.round(stats.totalSpent / stats.totalOrders);
     }
-
     return buildResponse(true, stats, 'Statistik pesanan berhasil diambil');
   } catch (error) {
     Logger.log('Error in getUserOrderStats: ' + error);
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * CHECK DOMAIN - Check domain availability based on real spreadsheet data
  */
@@ -1522,17 +1375,14 @@ function checkDomain(domain) {
     if (!domain) {
       return buildResponse(false, null, 'Domain diperlukan', 'MISSING_DOMAIN');
     }
-
     const sheet = ensureOrdersSheet();
     const data = sheet.getDataRange().getValues();
-    
     // Check if domain is already ordered and not cancelled/expired
     let isOrdered = false;
     for (let i = 1; i < data.length; i++) {
       if (data[i][5] && data[i][5].toLowerCase() === domain.toLowerCase()) {
         const orderStatus = data[i][8] ? data[i][8].toLowerCase() : '';
         const paymentStatus = data[i][9] ? data[i][9].toLowerCase() : '';
-        
         // If order is not explicitly cancelled or expired, it's considered taken (rebutan/pending/active)
         if (orderStatus !== 'cancelled' && paymentStatus !== 'expire' && paymentStatus !== 'cancel' && paymentStatus !== 'deny' && paymentStatus !== 'failure') {
           isOrdered = true;
@@ -1540,9 +1390,7 @@ function checkDomain(domain) {
         }
       }
     }
-
     const available = !isOrdered;
-
     return buildResponse(true, {
       domain: domain,
       available: available
@@ -1552,7 +1400,6 @@ function checkDomain(domain) {
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * GET DOMAIN PRICING - Get pricing for TLD
  */
@@ -1561,27 +1408,42 @@ function getDomainPricing(tld) {
     if (!tld) {
       return buildResponse(false, null, 'TLD diperlukan', 'MISSING_TLD');
     }
-
     const pricing = {
-      'com': { newPrice: 159900, period: '1 Tahun' },
-      'id': { newPrice: 99000, period: '1 Tahun' },
-      'co.id': { newPrice: 295000, period: '1 Tahun' },
-      'my.id': { newPrice: 9900, period: '1 Tahun' },
-      'web.id': { newPrice: 9900, period: '1 Tahun' }
+      'com': {
+        newPrice: 159900,
+        period: '1 Tahun'
+      },
+      'id': {
+        newPrice: 99000,
+        period: '1 Tahun'
+      },
+      'co.id': {
+        newPrice: 295000,
+        period: '1 Tahun'
+      },
+      'my.id': {
+        newPrice: 9900,
+        period: '1 Tahun'
+      },
+      'web.id': {
+        newPrice: 9900,
+        period: '1 Tahun'
+      }
     };
-
     const data = pricing[tld];
     if (!data) {
       return buildResponse(false, null, 'TLD tidak didukung', 'UNSUPPORTED_TLD');
     }
-
-    return buildResponse(true, { tld, price: data.newPrice, period: data.period }, 'Harga domain berhasil diambil');
+    return buildResponse(true, {
+      tld,
+      price: data.newPrice,
+      period: data.period
+    }, 'Harga domain berhasil diambil');
   } catch (error) {
     Logger.log('Error in getDomainPricing: ' + error);
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * VALIDATE PROMO CODE
  */
@@ -1598,7 +1460,6 @@ function processPaymentSuccess(orderId, transactionId, paymentType, data, orderR
     const packageName = data[orderRowIndex][6];
     const total = data[orderRowIndex][7];
     const oldPaymentStatus = data[orderRowIndex][9] || 'pending';
-
     // 1. GENERATE INVOICE
     try {
       const invoiceData = {
@@ -1613,14 +1474,12 @@ function processPaymentSuccess(orderId, transactionId, paymentType, data, orderR
         paymentMethod: paymentType,
         paidAt: new Date().toISOString()
       };
-      
       // Save to INVOICES sheet
       saveInvoice(invoiceData);
       Logger.log(`Invoice generated for order ${orderId}`);
     } catch (invoiceError) {
       Logger.log('Warning: Could not generate invoice: ' + invoiceError);
     }
-
     // 2. LOG EVENT
     logPaymentEvent({
       orderId: orderId,
@@ -1628,8 +1487,10 @@ function processPaymentSuccess(orderId, transactionId, paymentType, data, orderR
       email: userEmail,
       total: total,
       notes: notes
-    }, 'payment_update', oldPaymentStatus, 'paid', Object.keys(webhookData).length > 0 ? webhookData : { transaction_id: transactionId, payment_type: paymentType });
-
+    }, 'payment_update', oldPaymentStatus, 'paid', Object.keys(webhookData).length > 0 ? webhookData : {
+      transaction_id: transactionId,
+      payment_type: paymentType
+    });
     // 3. SEND EMAIL
     try {
       const success = sendTemplatedEmail('EMAIL-002', userEmail, {
@@ -1638,7 +1499,6 @@ function processPaymentSuccess(orderId, transactionId, paymentType, data, orderR
         transactionId: transactionId,
         orderStatus: 'completed'
       });
-      
       if (!success) {
         Logger.log('Gagal mengirim template EMAIL-002 untuk ' + userEmail);
       }
@@ -1649,7 +1509,6 @@ function processPaymentSuccess(orderId, transactionId, paymentType, data, orderR
     Logger.log('Error in processPaymentSuccess: ' + error);
   }
 }
-
 /**
  * HANDLE MIDTRANS WEBHOOK
  * POST: /handleMidtransWebhook
@@ -1659,31 +1518,32 @@ function handleMidtransWebhook(webhookData) {
   const startTime = Date.now();
   try {
     // Log webhook receipt
-    logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({ orderId: webhookData.order_id, transactionStatus: webhookData.transaction_status }), 'Midtrans webhook received');
-
+    logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'attempting', 200, 0, '', JSON.stringify({
+      orderId: webhookData.order_id,
+      transactionStatus: webhookData.transaction_status
+    }), 'Midtrans webhook received');
     // Validate webhook: check required fields and merchant ID
     if (!webhookData.order_id || !webhookData.transaction_id || !webhookData.transaction_status) {
       logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 400, Date.now() - startTime, 'Incomplete webhook data', JSON.stringify(webhookData), 'Webhook validation failed');
       return buildResponse(false, null, 'Data webhook tidak lengkap', 'INVALID_WEBHOOK');
     }
-
     // SECURITY: Validate merchant ID matches (basic validation)
     // Production: implement SHA512 signature verification
     const configuredMerchantId = getConfigValue('MIDTRANS_MERCHANT_ID') || PropertiesService.getScriptProperties().getProperty('MIDTRANS_MERCHANT_ID');
     if (configuredMerchantId && webhookData.merchant_id && webhookData.merchant_id !== configuredMerchantId) {
       Logger.log('SECURITY: Webhook rejected - merchant ID mismatch: ' + webhookData.merchant_id);
-      logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 403, Date.now() - startTime, 'Merchant ID mismatch - possible spoofing attempt', JSON.stringify({ received: webhookData.merchant_id, expected: configuredMerchantId }), 'SECURITY: Webhook rejected');
+      logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 403, Date.now() - startTime, 'Merchant ID mismatch - possible spoofing attempt', JSON.stringify({
+        received: webhookData.merchant_id,
+        expected: configuredMerchantId
+      }), 'SECURITY: Webhook rejected');
       return buildResponse(false, null, 'Webhook validation failed', 'INVALID_MERCHANT');
     }
-
     const orderId = webhookData.order_id;
     const transactionId = webhookData.transaction_id;
     const transactionStatus = webhookData.transaction_status;
     const paymentType = webhookData.payment_type || '';
-
     const sheet = ensureOrdersSheet();
     const data = sheet.getDataRange().getValues();
-
     // Find the order row
     let orderRowIndex = -1;
     for (let i = 1; i < data.length; i++) {
@@ -1692,27 +1552,23 @@ function handleMidtransWebhook(webhookData) {
         break;
       }
     }
-
     if (orderRowIndex === -1) {
       Logger.log(`Webhook: Order not found: ${orderId}`);
-      logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 404, Date.now() - startTime, 'Order not found', JSON.stringify({ orderId }), 'Order not found in system');
+      logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 404, Date.now() - startTime, 'Order not found', JSON.stringify({
+        orderId
+      }), 'Order not found in system');
       return buildResponse(false, null, 'Order tidak ditemukan', 'ORDER_NOT_FOUND');
     }
-
     // Update transaction ID and payment method
     const range = sheet.getRange(orderRowIndex + 1, 12); // Column L: Transaction ID
     range.setValue(transactionId);
-
     const paymentMethodRange = sheet.getRange(orderRowIndex + 1, 15); // Column O: Payment Method
     paymentMethodRange.setValue(paymentType);
-
     const updatedAtRange = sheet.getRange(orderRowIndex + 1, 14); // Column N: Updated At
     updatedAtRange.setValue(new Date().toISOString());
-
     // Update payment status based on transaction status
     let paymentStatus = 'pending';
     let orderStatus = 'processing';
-
     switch (transactionStatus) {
       case 'capture':
       case 'settlement':
@@ -1732,17 +1588,13 @@ function handleMidtransWebhook(webhookData) {
       default:
         paymentStatus = transactionStatus;
     }
-
     // Update payment status (column J)
     const paymentStatusRange = sheet.getRange(orderRowIndex + 1, 10);
     paymentStatusRange.setValue(paymentStatus);
-
     // Update order status (column I)
     const orderStatusRange = sheet.getRange(orderRowIndex + 1, 9);
     orderStatusRange.setValue(orderStatus);
-
     const oldPaymentStatus = data[orderRowIndex][9] || 'pending'; // Column J
-    
     if (paymentStatus === 'paid' && oldPaymentStatus !== 'paid') {
       processPaymentSuccess(orderId, transactionId, paymentType, data, orderRowIndex, `Webhook from Midtrans: ${transactionStatus}`, webhookData);
     } else {
@@ -1755,66 +1607,59 @@ function handleMidtransWebhook(webhookData) {
         notes: `Webhook from Midtrans: ${transactionStatus}`
       }, 'payment_update', oldPaymentStatus, paymentStatus, webhookData);
     }
-
     // Log the webhook
     Logger.log(`Webhook processed: Order ${orderId}, Status: ${paymentStatus}, Transaction: ${transactionId}`);
-
     // Log webhook success
-    logApiCall('handleMidtransWebhook', data[orderRowIndex][1], data[orderRowIndex][2], 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({ orderId, transactionId, paymentStatus }), 'Webhook processed successfully');
-
+    logApiCall('handleMidtransWebhook', data[orderRowIndex][1], data[orderRowIndex][2], 'POST', 'success', 200, Date.now() - startTime, '', JSON.stringify({
+      orderId,
+      transactionId,
+      paymentStatus
+    }), 'Webhook processed successfully');
     return buildResponse(true, {
       orderId,
       transactionId,
       paymentStatus,
       orderStatus
     }, `Webhook berhasil diproses. Status: ${paymentStatus}`);
-
   } catch (error) {
     Logger.log('Error in handleMidtransWebhook: ' + error);
     logApiCall('handleMidtransWebhook', '', webhookData.customer_email || '', 'POST', 'failed', 500, Date.now() - startTime, error.toString(), JSON.stringify(webhookData), 'Webhook processing error');
     return buildResponse(false, null, error.toString(), 'WEBHOOK_ERROR');
   }
 }
-
 // ============================================================================
 // OPTIONAL SHEETS - AUTO-CREATION & LOGGING
 // ============================================================================
-
 /**
  * PAYMENT_LOGS Sheet - Track all payment events for compliance/audit
  */
 function ensurePaymentLogsSheet() {
   return ensureSheetExists('PAYMENT_LOGS');
 }
-
 /**
  * API_LOGS Sheet - Track all API calls for debugging
  */
 function ensureApiLogsSheet() {
   return ensureSheetExists('API_LOGS');
 }
-
 /**
  * DOMAIN_PACKAGES_REFERENCE Sheet - Master reference for packages
  */
 function ensureDomainPackagesSheet() {
   return ensureSheetExists('DOMAIN_PACKAGES');
 }
-
 /**
  * EMAIL_TEMPLATES Sheet - Master reference for email templates
  */
 function ensureEmailTemplatesSheet() {
   return ensureSheetExists('EMAIL_TEMPLATES');
 }
-
 /**
  * CONFIG Sheet - Global configuration settings
  */
 function ensureConfigSheet() {
   return ensureSheetExists('CONFIG');
 }
-
 /**
  * INVOICES Sheet - Store generated invoices after successful payment
  * Created per spec requirement: "Invoice disimpan SETELAH payment SUCCESS dari Midtrans"
@@ -1822,16 +1667,13 @@ function ensureConfigSheet() {
 function ensureInvoicesSheet() {
   return ensureSheetExists('INVOICES');
 }
-
 /**
  * Save invoice to INVOICES sheet (called after successful payment webhook)
  */
 function saveInvoice(invoiceData) {
   const sheet = ensureInvoicesSheet();
-  
   // Generate Invoice ID
   const invoiceId = generateInvoiceId();
-  
   // Append invoice row
   sheet.appendRow([
     invoiceId,
@@ -1845,14 +1687,11 @@ function saveInvoice(invoiceData) {
     invoiceData.transactionId,
     invoiceData.paymentMethod,
     invoiceData.paidAt,
-    new Date().toISOString(),
-    'generated'
+    new Date().toISOString(), 'generated'
   ]);
-  
   Logger.log(`Invoice saved: ${invoiceId}`);
   return invoiceId;
 }
-
 /**
  * Generate unique invoice ID format: INV-YYYY-MM-DD-NNNNN
  */
@@ -1861,31 +1700,25 @@ function generateInvoiceId() {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
-  
   // Get count for today to create sequence number
   const sheet = ensureInvoicesSheet();
   const data = sheet.getDataRange().getValues();
-  
   let todayCount = 0;
   const todayPrefix = `INV-${year}-${month}-${day}`;
-  
   for (let i = 1; i < data.length; i++) {
     if (String(data[i][0]).startsWith(todayPrefix)) {
       todayCount++;
     }
   }
-  
   const sequence = String(todayCount + 1).padStart(5, '0');
   return `${todayPrefix}-${sequence}`;
 }
-
 /**
  * PROMO_CODES Sheet - Master reference for promo codes
  */
 function ensurePromoCodesSheet() {
   return ensureSheetExists('PROMO_CODES');
 }
-
 /**
  * Get promo details by code
  * Checks validity, expiry, and usage limits
@@ -1895,37 +1728,36 @@ function getPromoByCode(code) {
     if (!code) {
       return null;
     }
-
     const sheet = ensurePromoCodesSheet();
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] && data[i][0].toString().toUpperCase() === code.toUpperCase()) {
         const now = new Date();
         const validFrom = new Date(data[i][5]);
         const validUntil = new Date(data[i][6]);
-        
         // Check if active
         if (data[i][7] !== 'Yes') {
-          logApiCall('getPromoByCode', '', '', 'GET', 'failed', 400, 0, 'Promo code inactive', JSON.stringify({ code }), `Promo ${code} is inactive`);
+          logApiCall('getPromoByCode', '', '', 'GET', 'failed', 400, 0, 'Promo code inactive', JSON.stringify({
+            code
+          }), `Promo ${code} is inactive`);
           return null;
         }
-        
         // Check date range
         if (now < validFrom || now > validUntil) {
-          logApiCall('getPromoByCode', '', '', 'GET', 'failed', 400, 0, 'Promo code expired', JSON.stringify({ code }), `Promo ${code} outside valid date range`);
+          logApiCall('getPromoByCode', '', '', 'GET', 'failed', 400, 0, 'Promo code expired', JSON.stringify({
+            code
+          }), `Promo ${code} outside valid date range`);
           return null;
         }
-        
         // Check max usage
         const maxUsage = parseInt(data[i][3]) || -1;
         const currentUsage = parseInt(data[i][4]) || 0;
-        
         if (maxUsage > 0 && currentUsage >= maxUsage) {
-          logApiCall('getPromoByCode', '', '', 'GET', 'failed', 400, 0, 'Promo code limit exceeded', JSON.stringify({ code }), `Promo ${code} usage limit exceeded`);
+          logApiCall('getPromoByCode', '', '', 'GET', 'failed', 400, 0, 'Promo code limit exceeded', JSON.stringify({
+            code
+          }), `Promo ${code} usage limit exceeded`);
           return null;
         }
-        
         return {
           code: data[i][0],
           discountType: data[i][1],
@@ -1938,14 +1770,12 @@ function getPromoByCode(code) {
         };
       }
     }
-    
     return null;
   } catch (error) {
     Logger.log('Error in getPromoByCode: ' + error);
     return null;
   }
 }
-
 /**
  * VALIDATE PROMO CODE - Updated to use sheet-based system
  */
@@ -1954,13 +1784,10 @@ function validatePromoCode(code) {
     if (!code) {
       return buildResponse(false, null, 'Kode promo diperlukan', 'MISSING_CODE');
     }
-
     const promoData = getPromoByCode(code);
-    
     if (!promoData) {
       return buildResponse(false, null, 'Kode promo tidak valid atau kadaluarsa', 'INVALID_PROMO');
     }
-
     return buildResponse(true, {
       code: promoData.code,
       discount: promoData.discountValue,
@@ -1972,7 +1799,6 @@ function validatePromoCode(code) {
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * GET ACTIVE PROMO CODES LIST
  */
@@ -1982,7 +1808,6 @@ function getActivePromoCodes() {
     const data = sheet.getDataRange().getValues();
     const activePromos = [];
     const now = new Date();
-
     for (let i = 1; i < data.length; i++) {
       const code = data[i][0];
       const discountType = data[i][1];
@@ -1993,7 +1818,6 @@ function getActivePromoCodes() {
       const validUntil = new Date(data[i][6]);
       const active = data[i][7];
       const description = data[i][8];
-
       if (code && active === 'Yes') {
         // Check date range
         if (now >= validFrom && now <= validUntil) {
@@ -2013,14 +1837,12 @@ function getActivePromoCodes() {
         }
       }
     }
-
     return buildResponse(true, activePromos, 'Daftar promo aktif berhasil diambil');
   } catch (error) {
     Logger.log('Error in getActivePromoCodes: ' + error);
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * Increment promo code usage
  * Called when order is created with valid promo code
@@ -2028,31 +1850,28 @@ function getActivePromoCodes() {
 function incrementPromoUsage(code) {
   try {
     if (!code) return false;
-
     const sheet = ensurePromoCodesSheet();
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] && data[i][0].toString().toUpperCase() === code.toUpperCase()) {
         // Get current usage (Column E, index 4)
         const currentUsage = parseInt(data[i][4]) || 0;
         const newUsage = currentUsage + 1;
-        
         // Update usage (Column E, row i+1)
         sheet.getRange(i + 1, 5).setValue(newUsage);
-        
-        logApiCall('incrementPromoUsage', '', '', 'POST', 'success', 200, 0, '', JSON.stringify({ code, newUsage }), `Promo ${code} usage incremented to ${newUsage}`);
+        logApiCall('incrementPromoUsage', '', '', 'POST', 'success', 200, 0, '', JSON.stringify({
+          code,
+          newUsage
+        }), `Promo ${code} usage incremented to ${newUsage}`);
         return true;
       }
     }
-    
     return false;
   } catch (error) {
     Logger.log('Error in incrementPromoUsage: ' + error);
     return false;
   }
 }
-
 /**
  * Log payment event to Payment_Logs sheet
  */
@@ -2060,30 +1879,27 @@ function logPaymentEvent(orderData, eventType, oldStatus, newStatus, midtransRes
   try {
     const sheet = ensurePaymentLogsSheet();
     const logId = `LOG-${Date.now()}`;
-    
     sheet.appendRow([
-      logId,                                      // A: Log ID
-      orderData.orderId,                          // B: Order ID
-      orderData.userId,                           // C: User ID
-      orderData.email,                            // D: Email
-      midtransResponse.transaction_id || '',      // E: Transaction ID
-      eventType,                                  // F: Event Type
-      oldStatus,                                  // G: Old Status
-      newStatus,                                  // H: New Status
-      orderData.total,                            // I: Amount
-      midtransResponse.payment_type || '',        // J: Payment Method
-      midtransResponse.transaction_status || '',  // K: Midtrans Status
+      logId, // A: Log ID
+      orderData.orderId, // B: Order ID
+      orderData.userId, // C: User ID
+      orderData.email, // D: Email
+      midtransResponse.transaction_id || '', // E: Transaction ID
+      eventType, // F: Event Type
+      oldStatus, // G: Old Status
+      newStatus, // H: New Status
+      orderData.total, // I: Amount
+      midtransResponse.payment_type || '', // J: Payment Method
+      midtransResponse.transaction_status || '', // K: Midtrans Status
       JSON.stringify(midtransResponse).substring(0, 500), // L: Response Data
-      new Date().toISOString(),                   // M: Timestamp
-      orderData.notes || ''                       // N: Notes
+      new Date().toISOString(), // M: Timestamp
+      orderData.notes || '' // N: Notes
     ]);
-    
     Logger.log(`Payment event logged: ${eventType} for order ${orderData.orderId}`);
   } catch (error) {
     Logger.log('Error logging payment event: ' + error);
   }
 }
-
 /**
  * Log API call to API_Logs sheet
  */
@@ -2091,84 +1907,72 @@ function logApiCall(action, userId, email, method, status, responseCode, executi
   try {
     const sheet = ensureApiLogsSheet();
     const logId = `API-${Date.now()}`;
-    
     sheet.appendRow([
-      logId,                                      // A: Log ID
-      new Date().toISOString(),                   // B: Timestamp
-      action,                                     // C: Action
-      userId || '',                               // D: User ID
-      email || '',                                // E: Email
-      method,                                     // F: Method
-      status,                                     // G: Status
-      responseCode,                               // H: Response Code
-      executionTime,                              // I: Execution Time (ms)
-      error.substring(0, 500),                    // J: Error (first 500 chars)
-      requestData.substring(0, 500),              // K: Request Data (first 500 chars)
-      notes.substring(0, 200)                     // L: Notes (first 200 chars)
+      logId, // A: Log ID
+      new Date().toISOString(), // B: Timestamp
+      action, // C: Action
+      userId || '', // D: User ID
+      email || '', // E: Email
+      method, // F: Method
+      status, // G: Status
+      responseCode, // H: Response Code
+      executionTime, // I: Execution Time (ms)
+      error.substring(0, 500), // J: Error (first 500 chars)
+      requestData.substring(0, 500), // K: Request Data (first 500 chars)
+      notes.substring(0, 200) // L: Notes (first 200 chars)
     ]);
-    
     Logger.log(`API call logged: ${action} - Status: ${status}`);
   } catch (error) {
     Logger.log('Error logging API call: ' + error);
   }
 }
-
 /**
  * Initialize all sheets (called on first deployment)
  * Creates all sheets with proper structure
  */
 function initializeAllSheets() {
   Logger.log('Initializing all sheets...');
-  
   ensureUsersSheet();
   Logger.log('✓ Users sheet ready');
-  
   ensureOrdersSheet();
   Logger.log('✓ Orders sheet ready');
-  
   ensurePaymentLogsSheet();
   Logger.log('✓ Payment_Logs sheet ready');
-  
   ensureApiLogsSheet();
   Logger.log('✓ API_Logs sheet ready');
-  
   ensureDomainPackagesSheet();
   Logger.log('✓ Domain_Packages sheet ready');
-  
   ensureEmailTemplatesSheet();
   Logger.log('✓ Email_Templates sheet ready');
-  
   ensureInvoicesSheet();
   Logger.log('✓ Invoices sheet ready');
-  
   ensurePromoCodesSheet();
   Logger.log('✓ Promo_Codes sheet ready');
-  
   Logger.log('✅ All sheets initialized successfully!');
-  
   return {
     success: true,
     message: 'All sheets initialized successfully',
     timestamp: Date.now()
   };
 }
-
 /**
  * Log Transaction - Now fully functional
  */
-
-
 // ============================================================================
 // REQUEST HANDLERS - HTTP Entry Points (CORS-Enabled)
 // ============================================================================
-
 /**
  * Handle POST requests - Main entry point for API calls
  * This function routes all API requests to the appropriate handler
  */
 function doPost(e) {
-  e = e || { parameter: {}, postData: { contents: '', type: '' } };
-  
+  e = e || {
+    parameter: {},
+    postData: {
+      contents: '',
+      type: ''
+    }
+  };
   try {
     // 1. Start with query string parameters
     let params = {};
@@ -2177,7 +1981,6 @@ function doPost(e) {
         params[key] = e.parameter[key];
       });
     }
-    
     // 2. Parse JSON body if present (e.g. from Midtrans webhook)
     if (e.postData && e.postData.contents) {
       const contentType = (e.postData.type || '').toLowerCase();
@@ -2194,7 +1997,6 @@ function doPost(e) {
         }
       }
     }
-    
     // 3. Fallback to e.parameters array format (used by Apps Script for FormData/multipart)
     if (e.parameters) {
       Object.keys(e.parameters).forEach(key => {
@@ -2203,10 +2005,8 @@ function doPost(e) {
         }
       });
     }
-
     const action = (params.action || '').toLowerCase();
-    
-    switch(action) {
+    switch (action) {
       case 'registeruser':
         return respondJson(registerUser(params));
       case 'loginuser':
@@ -2247,7 +2047,6 @@ function doPost(e) {
         return respondJson(getUserOrders(params.userId));
       case 'getorderdetail':
         return respondJson(getOrderDetail(params.orderId, params.userId));
-
       case 'syncorderstatus':
         return respondJson(syncOrderStatusWithMidtrans(params.orderId));
       case 'getuserorderstats':
@@ -2268,7 +2067,7 @@ function doPost(e) {
         return respondJson(handleMidtransWebhook(params));
       case 'initializeallsheets':
         return respondJson(initializeAllSheets());
-      // --- ADMIN ENDPOINTS ---
+        // --- ADMIN ENDPOINTS ---
       case 'getadminstats':
         return respondJson(getAdminStats(params.adminId));
       case 'getadminpromos':
@@ -2317,31 +2116,24 @@ function doPost(e) {
     return respondJson(buildResponse(false, null, 'Server error: ' + error.toString(), 'SERVER_ERROR'));
   }
 }
-
 /**
  * Handle CORS preflight OPTIONS requests
  */
 function doOptions(e) {
-  return ContentService.createTextOutput('')
-    .setMimeType(ContentService.MimeType.TEXT)
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    .setHeader('Access-Control-Max-Age', '86400');
+  return ContentService.createTextOutput('').setMimeType(ContentService.MimeType.TEXT).setHeader('Access-Control-Allow-Origin', '*').setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD').setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization').setHeader('Access-Control-Max-Age', '86400');
 }
-
 /**
  * Handle GET requests
  * Routes GET requests to appropriate handlers
  */
 function doGet(e) {
-  e = e || { parameter: {} };
-  
+  e = e || {
+    parameter: {}
+  };
   try {
     const params = e.parameter || {};
     const action = (params.action || '').toLowerCase();
-    
-    switch(action) {
+    switch (action) {
       case 'verifyemailtoken':
         return respondJson(verifyEmailToken(params.token));
       case 'verifygoogletoken':
@@ -2367,7 +2159,6 @@ function doGet(e) {
 // ============================================================================
 // ADMIN DASHBOARD ENDPOINTS
 // ============================================================================
-
 /**
  * Check if a user is an admin
  */
@@ -2386,18 +2177,13 @@ function isAdmin(adminId) {
 function getAdminStats(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    
     const usersSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('USERS');
     const ordersSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('ORDERS');
-    
     let totalUsers = 0;
     if (usersSheet) totalUsers = Math.max(0, usersSheet.getLastRow() - 1);
-    
     let mrr = 0;
     let activeSubs = 0;
-    
     let activities = [];
-    
     // Collect latest users
     if (usersSheet) {
       const data = usersSheet.getDataRange().getValues();
@@ -2413,7 +2199,6 @@ function getAdminStats(adminId) {
         });
       }
     }
-
     // Collect latest orders
     if (ordersSheet) {
       const ordersData = ordersSheet.getDataRange().getValues();
@@ -2423,7 +2208,6 @@ function getAdminStats(adminId) {
           activeSubs++;
         }
       }
-      
       // limit to last 10 for activities
       for (let i = Math.max(1, ordersData.length - 10); i < ordersData.length; i++) {
         const row = ordersData[i];
@@ -2438,7 +2222,6 @@ function getAdminStats(adminId) {
         }
       }
     }
-    
     const ticketsSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('SUPPORT_TICKETS');
     let totalTickets = 0;
     if (ticketsSheet) {
@@ -2455,28 +2238,25 @@ function getAdminStats(adminId) {
         });
       }
     }
-
     // Sort descending by timestamp
     activities.sort((a, b) => b.timestamp - a.timestamp);
-    
     const recentActivities = activities.slice(0, 5).map(act => ({
       type: act.type,
       title: act.title,
       timeStr: act.timeStr || new Date(act.timestamp).toLocaleString('id-ID')
     }));
-    
     // Calculate last 7 days registrations for chart
     const last7Days = [];
     const chartDataPoints = [0, 0, 0, 0, 0, 0, 0];
     const chartLabels = [];
-    
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      chartLabels.push(d.toLocaleDateString('id-ID', { weekday: 'long' }));
+      chartLabels.push(d.toLocaleDateString('id-ID', {
+        weekday: 'long'
+      }));
       last7Days.push(d.toDateString());
     }
-
     if (usersSheet) {
       const data = usersSheet.getDataRange().getValues();
       for (let i = 1; i < data.length; i++) {
@@ -2490,7 +2270,6 @@ function getAdminStats(adminId) {
         }
       }
     }
-    
     return buildResponse(true, {
       users: totalUsers.toString(),
       revenue: 'Rp ' + mrr.toLocaleString('id-ID'),
@@ -2510,13 +2289,10 @@ function getAdminStats(adminId) {
 function getAllUsers(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
     const users = [];
-    
     const dynamicAdminEmail = getConfigValue('ADMIN_EMAIL');
-    
     for (let i = 1; i < data.length; i++) {
       users.push({
         id: data[i][0],
@@ -2527,7 +2303,6 @@ function getAllUsers(adminId) {
         role: data[i][2] === dynamicAdminEmail ? 'admin' : 'customer'
       });
     }
-    
     return buildResponse(true, users.reverse(), 'Users fetched'); // newest first
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');
@@ -2538,10 +2313,8 @@ function saveAdminUser(adminId, userData) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof userData === 'string') userData = JSON.parse(userData);
-    
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-    
     let rowIndex = -1;
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === userData.id) {
@@ -2549,7 +2322,6 @@ function saveAdminUser(adminId, userData) {
         break;
       }
     }
-    
     // User ID, Name, Email, WhatsApp, Photo URL, Created At, Updated At, Email Verified, Verification Token, Password Hash, Status, Auth Method, Role
     const rowData = [
       userData.id || ('USER-' + Date.now()),
@@ -2559,28 +2331,24 @@ function saveAdminUser(adminId, userData) {
       userData.photo || '',
       new Date().toISOString(),
       new Date().toISOString(),
-      userData.verified ? 'Yes' : 'No',
-      '',
-      '',
-      userData.active ? 'active' : 'inactive',
-      'email',
+      userData.verified ? 'Yes' : 'No', '', '',
+      userData.active ? 'active' : 'inactive', 'email',
       userData.role || 'customer'
     ];
-    
     if (rowIndex > -1) {
       rowData[4] = data[rowIndex - 1][4]; // Preserve Photo URL
       rowData[5] = data[rowIndex - 1][5]; // Preserve Created At
       rowData[8] = data[rowIndex - 1][8]; // Preserve Verification Token
       rowData[9] = data[rowIndex - 1][9]; // Preserve Password Hash
       if (userData.password) {
-         // If admin changes password, use the standard hashPassword function (which adds salt)
-         rowData[9] = hashPassword(userData.password);
+        // If admin changes password, use the standard hashPassword function (which adds salt)
+        rowData[9] = hashPassword(userData.password);
       }
       sheet.getRange(rowIndex, 1, 1, 13).setValues([rowData]);
       return buildResponse(true, rowData, 'User updated');
     } else {
       if (userData.password) {
-         rowData[9] = hashPassword(userData.password);
+        rowData[9] = hashPassword(userData.password);
       }
       sheet.appendRow(rowData);
       return buildResponse(true, rowData, 'User created');
@@ -2595,7 +2363,6 @@ function deleteAdminUser(adminId, id) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureUsersSheet();
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === id) {
         sheet.getRange(i + 1, 11).setValue('inactive'); // col 11 is Status
@@ -2611,13 +2378,10 @@ function deleteAdminUser(adminId, id) {
 function getAllTransactions(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('INVOICES');
     if (!sheet) return buildResponse(true, [], 'No invoices yet');
-    
     const data = sheet.getDataRange().getValues();
     const tx = [];
-    
     for (let i = 1; i < data.length; i++) {
       tx.push({
         inv: data[i][0],
@@ -2629,7 +2393,6 @@ function getAllTransactions(adminId) {
         date: data[i][11] || data[i][10] // generated or paid at
       });
     }
-    
     return buildResponse(true, tx.reverse(), 'Transactions fetched');
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');
@@ -2640,10 +2403,8 @@ function saveAdminTransaction(adminId, txData) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof txData === 'string') txData = JSON.parse(txData);
-    
     const sheet = ensureInvoicesSheet();
     const data = sheet.getDataRange().getValues();
-    
     let rowIndex = -1;
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === txData.inv) {
@@ -2651,7 +2412,6 @@ function saveAdminTransaction(adminId, txData) {
         break;
       }
     }
-    
     // Invoice ID, Order ID, User ID, Email, Customer Name, Domain, Package, Total Amount, Transaction ID, Payment Method, Paid At, Generated At, Status
     const rowData = [
       txData.inv || ('INV-MANUAL-' + Date.now()),
@@ -2668,7 +2428,6 @@ function saveAdminTransaction(adminId, txData) {
       txData.date || new Date().toISOString(),
       txData.status || 'unpaid'
     ];
-    
     if (rowIndex > -1) {
       rowData[1] = data[rowIndex - 1][1]; // preserve Order ID
       rowData[2] = data[rowIndex - 1][2]; // preserve User ID
@@ -2694,7 +2453,6 @@ function deleteAdminTransaction(adminId, invId) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureInvoicesSheet();
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === invId) {
         sheet.getRange(i + 1, 13).setValue('failed'); // col 13 is Status
@@ -2712,7 +2470,6 @@ function getAdminPromos(adminId) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('PROMO_CODES');
     if (!sheet) return buildResponse(true, [], 'No promos yet');
-    
     const data = sheet.getDataRange().getValues();
     const promos = [];
     for (let i = 1; i < data.length; i++) {
@@ -2737,10 +2494,8 @@ function saveAdminPromo(adminId, promoData) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof promoData === 'string') promoData = JSON.parse(promoData);
-    
     const sheet = ensurePromoCodesSheet();
     const data = sheet.getDataRange().getValues();
-    
     let rowIndex = -1;
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === promoData.code) {
@@ -2748,7 +2503,6 @@ function saveAdminPromo(adminId, promoData) {
         break;
       }
     }
-    
     const rowData = [
       promoData.code,
       promoData.type,
@@ -2760,7 +2514,6 @@ function saveAdminPromo(adminId, promoData) {
       promoData.active ? 'Yes' : 'No',
       promoData.description || ''
     ];
-    
     if (rowIndex > -1) {
       rowData[4] = data[rowIndex - 1][4] || 0; // Preserve current usage
       sheet.getRange(rowIndex, 1, 1, 9).setValues([rowData]);
@@ -2779,7 +2532,6 @@ function deleteAdminPromo(adminId, code) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensurePromoCodesSheet();
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === code) {
         sheet.getRange(i + 1, 8).setValue('No');
@@ -2797,7 +2549,6 @@ function getAdminPackages(adminId) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('DOMAIN_PACKAGES');
     if (!sheet) return buildResponse(true, [], 'No packages yet');
-    
     const data = sheet.getDataRange().getValues();
     const packages = [];
     for (let i = 1; i < data.length; i++) {
@@ -2826,10 +2577,8 @@ function saveAdminPackage(adminId, packageData) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof packageData === 'string') packageData = JSON.parse(packageData);
-    
     const sheet = ensureDomainPackagesSheet();
     const data = sheet.getDataRange().getValues();
-    
     let rowIndex = -1;
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === packageData.id) {
@@ -2837,7 +2586,6 @@ function saveAdminPackage(adminId, packageData) {
         break;
       }
     }
-    
     const rowData = [
       packageData.id,
       packageData.name,
@@ -2853,7 +2601,6 @@ function saveAdminPackage(adminId, packageData) {
       new Date().toISOString(),
       new Date().toISOString()
     ];
-    
     if (rowIndex > -1) {
       rowData[11] = data[rowIndex - 1][11]; // Preserve created at
       sheet.getRange(rowIndex, 1, 1, 13).setValues([rowData]);
@@ -2872,7 +2619,6 @@ function deleteAdminPackage(adminId, id) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureDomainPackagesSheet();
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === id) {
         sheet.getRange(i + 1, 11).setValue('inactive'); // col 11 is Status
@@ -2901,7 +2647,6 @@ function getAdminTickets(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureSheetExists('SUPPORT_TICKETS');
-    
     const data = sheet.getDataRange().getValues();
     const tickets = [];
     for (let i = 1; i < data.length; i++) {
@@ -2924,10 +2669,8 @@ function saveAdminTicket(adminId, ticketData) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof ticketData === 'string') ticketData = JSON.parse(ticketData);
-    
     const sheet = ensureSheetExists('SUPPORT_TICKETS');
     const data = sheet.getDataRange().getValues();
-    
     let rowIndex = -1;
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === ticketData.id) {
@@ -2935,7 +2678,6 @@ function saveAdminTicket(adminId, ticketData) {
         break;
       }
     }
-    
     // Ticket ID, Subject, User Email, Status, Priority, Created At, Messages
     const rowData = [
       ticketData.id || ('TCK-' + Date.now()),
@@ -2946,7 +2688,6 @@ function saveAdminTicket(adminId, ticketData) {
       ticketData.time || new Date().toISOString(),
       ticketData.messages || '[]'
     ];
-    
     if (rowIndex > -1) {
       rowData[6] = data[rowIndex - 1][6]; // Preserve Messages
       rowData[5] = data[rowIndex - 1][5]; // Preserve Created At
@@ -2966,7 +2707,6 @@ function deleteAdminTicket(adminId, id) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureSheetExists('SUPPORT_TICKETS');
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === id) {
         sheet.getRange(i + 1, 4).setValue('closed'); // col 4 is Status
@@ -2983,7 +2723,6 @@ function getAdminDNS(adminId) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureSheetExists('DNS_RECORDS');
-    
     const data = sheet.getDataRange().getValues();
     const dnsList = [];
     for (let i = 1; i < data.length; i++) {
@@ -3004,10 +2743,8 @@ function saveAdminDNS(adminId, dnsData) {
   try {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     if (typeof dnsData === 'string') dnsData = JSON.parse(dnsData);
-    
     const sheet = ensureSheetExists('DNS_RECORDS');
     const data = sheet.getDataRange().getValues();
-    
     let rowIndex = -1;
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === dnsData.domain) {
@@ -3015,7 +2752,6 @@ function saveAdminDNS(adminId, dnsData) {
         break;
       }
     }
-    
     // Domain, User ID, Records Count, NS Status
     const rowData = [
       dnsData.domain || '',
@@ -3023,7 +2759,6 @@ function saveAdminDNS(adminId, dnsData) {
       dnsData.records || 0,
       dnsData.ns_status || 'pending'
     ];
-    
     if (rowIndex > -1) {
       sheet.getRange(rowIndex, 1, 1, 4).setValues([rowData]);
       return buildResponse(true, rowData, 'DNS updated');
@@ -3041,7 +2776,6 @@ function deleteAdminDNS(adminId, domain) {
     if (!isAdmin(adminId)) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
     const sheet = ensureSheetExists('DNS_RECORDS');
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === domain) {
         sheet.deleteRow(i + 1);
@@ -3053,7 +2787,6 @@ function deleteAdminDNS(adminId, domain) {
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * Helper to get a config value from CONFIG sheet
  */
@@ -3062,7 +2795,6 @@ function getConfigValue(key) {
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName('CONFIG');
     if (!sheet) return '';
-    
     const data = sheet.getDataRange().getValues();
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === key) {
@@ -3075,7 +2807,6 @@ function getConfigValue(key) {
     return '';
   }
 }
-
 /**
  * Helper to set a config value to CONFIG sheet
  */
@@ -3084,10 +2815,8 @@ function setConfigValue(key, value) {
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName('CONFIG');
     if (!sheet) return false;
-    
     const data = sheet.getDataRange().getValues();
     const now = new Date().toISOString();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === key) {
         sheet.getRange(i + 1, 2).setValue(value);
@@ -3095,7 +2824,6 @@ function setConfigValue(key, value) {
         return true;
       }
     }
-    
     // If key not found, add it
     sheet.appendRow([key, value, 'general', 'Added via API', now]);
     return true;
@@ -3104,7 +2832,6 @@ function setConfigValue(key, value) {
     return false;
   }
 }
-
 /**
  * Send an email using a template from EMAIL_TEMPLATES
  */
@@ -3116,25 +2843,20 @@ function sendTemplatedEmail(templateId, recipient, variables) {
       Logger.log('EMAIL_TEMPLATES sheet not found.');
       return false;
     }
-    
     const data = sheet.getDataRange().getValues();
     let templateRow = null;
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === templateId && data[i][6] === 'active') {
         templateRow = data[i];
         break;
       }
     }
-    
     if (!templateRow) {
       Logger.log('Template ' + templateId + ' not found or not active.');
       return false;
     }
-    
     let subject = templateRow[2] || '';
     let htmlBody = templateRow[9] || '';
-    
     // Replace variables in format {variableName}
     if (variables && typeof variables === 'object') {
       for (const [key, value] of Object.entries(variables)) {
@@ -3143,16 +2865,13 @@ function sendTemplatedEmail(templateId, recipient, variables) {
         htmlBody = htmlBody.replace(regex, value);
       }
     }
-    
     // Get Admin Email or SMTP Config (we will use default MailApp for now, but could use SMTP if needed)
     const adminEmail = getConfigValue('ADMIN_EMAIL');
-    
     try {
       const options = {
         htmlBody: htmlBody
       };
       if (adminEmail) options.replyTo = adminEmail;
-      
       MailApp.sendEmail({
         to: recipient,
         subject: subject,
@@ -3167,7 +2886,6 @@ function sendTemplatedEmail(templateId, recipient, variables) {
           htmlBody: htmlBody
         };
         if (adminEmail) fallbackOptions.replyTo = adminEmail;
-        
         GmailApp.sendEmail(recipient, subject, '', fallbackOptions);
         Logger.log(`Sent templated email ${templateId} to ${recipient} via GmailApp`);
         return true;
@@ -3181,7 +2899,6 @@ function sendTemplatedEmail(templateId, recipient, variables) {
     return false;
   }
 }
-
 /**
  * Get all configs as a dictionary
  */
@@ -3192,42 +2909,34 @@ function getSettings() {
     if (!sheet) {
       sheet = ensureConfigSheet();
     }
-    
     const data = sheet.getDataRange().getValues();
     let settings = {};
-    
     for (let i = 1; i < data.length; i++) {
       settings[data[i][0]] = data[i][1];
     }
-    
     return buildResponse(true, settings, 'Settings retrieved successfully');
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * Save multiple settings
  */
 function saveSettings(adminId, settingsObj) {
   try {
     if (!adminId) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    
     // Convert stringified json if needed
     if (typeof settingsObj === 'string') {
       settingsObj = JSON.parse(settingsObj);
     }
-    
     for (const [key, value] of Object.entries(settingsObj)) {
       setConfigValue(key, value);
     }
-    
     return buildResponse(true, null, 'Settings saved successfully');
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * Get all email templates
  */
@@ -3238,10 +2947,8 @@ function getEmailTemplates() {
     if (!sheet) {
       sheet = ensureEmailTemplatesSheet();
     }
-    
     const data = sheet.getDataRange().getValues();
     let templates = [];
-    
     for (let i = 1; i < data.length; i++) {
       templates.push({
         id: data[i][0],
@@ -3256,30 +2963,24 @@ function getEmailTemplates() {
         bodyHtml: data[i][9] || ''
       });
     }
-    
     return buildResponse(true, templates, 'Templates retrieved successfully');
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');
   }
 }
-
 /**
  * Save single email template
  */
 function saveEmailTemplate(adminId, templateObj) {
   try {
     if (!adminId) return buildResponse(false, null, 'Unauthorized', 'UNAUTHORIZED');
-    
     if (typeof templateObj === 'string') {
       templateObj = JSON.parse(templateObj);
     }
-    
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName('EMAIL_TEMPLATES');
     if (!sheet) return buildResponse(false, null, 'Sheet not found');
-    
     const data = sheet.getDataRange().getValues();
-    
     for (let i = 1; i < data.length; i++) {
       if (data[i][0] === templateObj.id) {
         if (templateObj.subject !== undefined) sheet.getRange(i + 1, 3).setValue(templateObj.subject);
@@ -3288,7 +2989,6 @@ function saveEmailTemplate(adminId, templateObj) {
         return buildResponse(true, null, 'Template saved successfully');
       }
     }
-    
     return buildResponse(false, null, 'Template not found', 'NOT_FOUND');
   } catch (error) {
     return buildResponse(false, null, error.toString(), 'ERROR');

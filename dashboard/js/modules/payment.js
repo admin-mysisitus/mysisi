@@ -3,26 +3,31 @@
  * Midtrans payment integration, order status tracking
  * Migrated and fixed from assets/js/pages/payment.js
  */
-
 import APIClient from '/assets/js/modules/unified-api.js?v=2';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';  // NEW
-import { showError, showSuccess, showWarning, showInfo, formatPrice, formatDateTime, setButtonLoading } from '/assets/js/modules/unified-utils.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js'; // NEW
+import {
+  showError,
+  showSuccess,
+  showWarning,
+  showInfo,
+  formatPrice,
+  formatDateTime,
+  setButtonLoading
+} from '/assets/js/modules/unified-utils.js';
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
 let currentOrder = null;
 let currentTransaction = null;
-
 export async function render(user) {
   try {
     // CRITICAL: Refresh user data from storage
     if (!user) {
-      AuthManager.refreshUserData();  // NEW: Load latest user session
+      AuthManager.refreshUserData(); // NEW: Load latest user session
     }
-    
     // Store current user for use in other functions
-    currentUser = user || AuthManager.getCurrentUser();  // NEW: Use refreshed data
-    
+    currentUser = user || AuthManager.getCurrentUser(); // NEW: Use refreshed data
     // Email verification check - Bypassed to allow payment
     /*
     if (!currentUser?.emailVerified) {
@@ -61,7 +66,6 @@ export async function render(user) {
       return;
     }
     */
-    
     // Get order ID from URL (support both search params and hash params)
     let orderId = new URLSearchParams(window.location.search).get('orderId');
     if (!orderId) {
@@ -71,17 +75,13 @@ export async function render(user) {
         orderId = new URLSearchParams(queryPart).get('orderId');
       }
     }
-
     if (!orderId) {
       throw new Error('Order ID tidak ditemukan');
     }
-
     // Load order data
     await loadOrderData(orderId, currentUser);
-
     // Setup buttons
     setupPaymentButtons();
-
   } catch (error) {
     console.error('Error rendering payment page:', error);
     const content = document.getElementById('content');
@@ -94,7 +94,6 @@ export async function render(user) {
     `;
   }
 }
-
 async function loadOrderData(orderId, currentUser) {
   try {
     // Show loading
@@ -107,59 +106,41 @@ async function loadOrderData(orderId, currentUser) {
         </div>
       </div>
     `;
-
     // Fetch order data
     const result = await APIClient.getOrderDetail(orderId, currentUser.userId);
     if (!result.success) {
       throw new Error(result.message || 'Gagal memuat pesanan');
     }
-
     currentOrder = result.data || result.order;
-
     // Display order
     displayOrderData(currentOrder);
-
     // Generate payment token if not yet paid
     if (currentOrder.paymentStatus !== 'paid') {
       await generateMidtransToken(currentOrder);
     }
-
   } catch (error) {
     console.error('Error loading order data:', error);
     throw error;
   }
 }
-
 async function generateMidtransToken(orderData) {
   try {
     if (!currentUser) {
       throw new Error('Data pengguna tidak ditemukan');
     }
-
     // Call GAS to generate Midtrans token with all required parameters
     // NEW: Pass addons as the 8th parameter
-    const result = await APIClient.generateMidtransToken(
-      orderData.orderId,
-      currentUser.email,
-      currentUser.phone || '',
-      currentUser.displayName || currentUser.name || 'Customer',
-      orderData.domain,
-      orderData.packageId || orderData.packageName,
-      orderData.total,
-      orderData.addons || []  // NEW: Pass addons array
+    const result = await APIClient.generateMidtransToken(orderData.orderId, currentUser.email, currentUser.phone || '', currentUser.displayName || currentUser.name || 'Customer', orderData.domain, orderData.packageId || orderData.packageName, orderData.total, orderData.addons || [] // NEW: Pass addons array
     );
-
     if (!result.success || !result.data || !result.data.snapToken) {
       throw new Error(result.message || 'Gagal membuat token pembayaran');
     }
-
     currentTransaction = {
       token: result.data.snapToken,
       redirectUrl: result.data.snapRedirectUrl,
       orderId: orderData.orderId,
       amount: orderData.total
     };
-
   } catch (error) {
     console.error('Error generating Midtrans token:', error);
     // Show error but don't crash
@@ -178,7 +159,6 @@ function setupPaymentButtons() {
   if (btnPayment) {
     btnPayment.addEventListener('click', () => openMidtransPayment());
   }
-
   const btnPreview = document.getElementById('btn-payment-preview');
   if (btnPreview) {
     btnPreview.addEventListener('click', () => requestPaymentAfterPreview());
@@ -191,14 +171,11 @@ function openMidtransPayment() {
       showWarning('Sistem pembayaran belum siap. Coba refresh halaman.');
       return;
     }
-
     if (!window.snap) {
       throw new Error('Midtrans library tidak loaded');
     }
-
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, true, 'Membuka pembayaran...');
-
     // Open Midtrans Snap
     window.snap.pay(currentTransaction.token, {
       onSuccess: handlePaymentSuccess,
@@ -206,7 +183,6 @@ function openMidtransPayment() {
       onError: handlePaymentError,
       onClose: handlePaymentClose
     });
-
   } catch (error) {
     console.error('Error opening payment:', error);
     showError('Error: ' + error.message);
@@ -220,7 +196,6 @@ function handlePaymentSuccess(result) {
   // The server will verify the transaction ID with Midtrans API.
   APIClient.syncOrderStatus(currentOrder.orderId).catch(console.error);
   showSuccess('✓ Pembayaran Berhasil!', 'Terima kasih atas pemesanan Anda. Mengarahkan ke invoice...');
-  
   // Redirect to invoice page after 2 seconds
   setTimeout(() => {
     window.location.href = `/invoice/?orderId=${encodeURIComponent(currentOrder.orderId)}`;
@@ -243,12 +218,9 @@ function handlePaymentClose() {
   }
 }
 
-
-
 function requestPaymentAfterPreview() {
   try {
     if (!currentOrder) return;
-
     // Build addon info if present
     let addonInfo = '';
     if (currentOrder.addons && Array.isArray(currentOrder.addons) && currentOrder.addons.length > 0) {
@@ -257,12 +229,9 @@ function requestPaymentAfterPreview() {
         addonInfo += `- ${addon.name}: ${formatPrice(addon.price)}\n`;
       });
     }
-
     const message = `Halo, saya ingin meminta preview desain untuk order berikut:\n\nOrder ID: ${currentOrder.orderId}\nDomain: ${currentOrder.domain}\nPaket: ${currentOrder.packageName || currentOrder.packageId || 'Starter'}${addonInfo}\nTotal: ${formatPrice(currentOrder.total)}\n\nTerima kasih`;
-
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-
   } catch (error) {
     console.error('Error with WhatsApp:', error);
     showError('Gagal membuka WhatsApp. Hubungi support secara manual.');
@@ -271,11 +240,9 @@ function requestPaymentAfterPreview() {
 
 function displayOrderData(orderData) {
   const content = document.getElementById('content');
-
   const expirationDate = new Date(new Date(orderData.createdAt).getTime() + 24 * 60 * 60 * 1000);
   const isExpired = new Date() > expirationDate;
   const statusInfo = getStatusInfo(orderData.paymentStatus);
-
   // Build addons section if present
   let addonsSection = '';
   if (orderData.addons && Array.isArray(orderData.addons) && orderData.addons.length > 0) {
@@ -285,7 +252,6 @@ function displayOrderData(orderData) {
         <strong>${formatPrice(addon.price)}</strong>
       </div>
     `).join('');
-    
     addonsSection = `
       <div class="summary-row">
         <span><strong>Addon (${orderData.addons.length})</strong></span>
@@ -295,17 +261,14 @@ function displayOrderData(orderData) {
       <div class="summary-divider"></div>
     `;
   }
-
   // Backwards compatibility calculation for older orders
   const discount = orderData.discount || 0;
   let subtotal = orderData.subtotal;
   let ppn = orderData.ppn;
-  
   if (subtotal === undefined || ppn === undefined) {
     subtotal = Math.round((orderData.total + discount) / 1.11);
     ppn = orderData.total + discount - subtotal;
   }
-
   // Build pricing breakdown
   let pricingBreakdown = `
     <div class="summary-divider"></div>
@@ -325,7 +288,6 @@ function displayOrderData(orderData) {
     ` : ''}
     <div class="summary-divider"></div>
   `;
-
   content.innerHTML = `
     <div class="dashboard-page-header" style="background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);">
       <div class="dashboard-page-header-content">
@@ -487,7 +449,6 @@ function getStatusInfo(status) {
       class: 'danger'
     }
   };
-
   return statusMap[status] || statusMap['pending'];
 }
 

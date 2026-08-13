@@ -1,12 +1,10 @@
 /* ========== DETAIL ARTIKEL PAGE STYLES ========== */
-
 /* Artikel Container */
 .artikel-container {
   background: var(--bg-white);
 }
 
 /* Hero dan artikel-meta styling sudah di components/hero.css */
-
 /* Featured Image */
 .artikel-featured-image {
   padding: clamp(2.5rem, 5vw, 3rem) 20px;
@@ -22,6 +20,7 @@
   margin: 0 auto;
   box-shadow: var(--shadow-md);
 }
+
 /* ========== SHARE BUTTONS - PROFESSIONAL DESIGN ========== */
 .share-buttons-container {
   margin-top: 40px;
@@ -310,6 +309,7 @@
   border-color: #d1d5db;
   color: #6b7280;
 }
+
 .share-btn-more:hover {
   transform: scale(1.15);
   box-shadow: 0 8px 20px rgba(107, 114, 128, 0.2);
@@ -520,7 +520,6 @@
 /* ========== ARTIKEL CTA (moved to components/hero.css) ========== */
 /* Artikel CTA styling sudah di-move ke components/hero.css sebagai komponen reusable */
 /* Lihat .artikel-cta di hero.css */
-
 /* Related Articles */
 .related-articles-section {
   padding: 60px 20px;
@@ -621,8 +620,6 @@
   margin-bottom: 12px;
   line-height: 1.6;
 }
-
-
 
 /* Related Content - Styling untuk section konten terkait */
 .related-content {
@@ -791,6 +788,7 @@
     color: var(--text-primary);
     transform: translateY(-2px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -799,7 +797,6 @@
 
 /* CTA Section - Styling sudah di components/hero.css */
 /* Menggunakan class .detail-cta-section untuk unifikasi */
-
 /* Responsive */
 @media (max-width: 1200px) {
   .artikel-content .container {
@@ -1023,6 +1020,7 @@
 
 /* ========== PRINT STYLES ========== */
 @media print {
+
   /* Hide header dan footer */
   header,
   footer,

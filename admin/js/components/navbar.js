@@ -1,36 +1,34 @@
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-import { normalizeDriveImageUrl, withCacheBust } from '/assets/js/modules/unified-utils.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
+import {
+  normalizeDriveImageUrl,
+  withCacheBust
+} from '/assets/js/modules/unified-utils.js';
 export class AdminNavbar {
   constructor() {
     this.container = document.getElementById('admin-navbar');
     this.authListenerBound = false;
   }
-
   render() {
     if (!this.container) return;
-
     // Get real user data from AuthManager
     const userData = AuthManager.getCurrentUser();
     let displayName = 'Administrator';
     let avatarHtml = '<div class="admin-avatar">A</div>';
-
     if (userData) {
       if (userData.displayName) {
         displayName = userData.displayName;
       }
-
       if (userData.photoURL) {
         const finalUrl = normalizeDriveImageUrl(userData.photoURL, 'w200', '');
         const finalUrlWithBust = withCacheBust(finalUrl);
-        
         avatarHtml = `<img src="${finalUrlWithBust}" alt="${displayName}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--admin-primary);" onerror="this.src='/assets/img/avatar-default.svg'">`;
       } else {
         const initials = displayName.charAt(0).toUpperCase();
         avatarHtml = `<div class="admin-avatar">${initials}</div>`;
       }
     }
-
     this.container.innerHTML = `
       <h2 class="admin-nav-title" id="admin-top-title">Overview</h2>
       
@@ -45,7 +43,6 @@ export class AdminNavbar {
         </div>
       </div>
     `;
-
     // Profile click to go to profile settings
     const profileBtn = document.getElementById('admin-profile-trigger');
     if (profileBtn) {
@@ -53,7 +50,6 @@ export class AdminNavbar {
         window.location.hash = '#!/admin/profile';
       });
     }
-
     if (!this.authListenerBound) {
       this.authListenerBound = true;
       window.addEventListener('authStateChanged', (e) => {
@@ -63,7 +59,6 @@ export class AdminNavbar {
       });
     }
   }
-
   setTitle(title) {
     const titleEl = document.getElementById('admin-top-title');
     if (titleEl) {

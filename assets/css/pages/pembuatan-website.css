@@ -1,6 +1,5 @@
 /* ========== DETAIL PAGE STYLING (LAYANAN SUB-PAGES) ========== */
 /* Page-specific styles - shared hero section styles sudah di base/shared-sections.css */
-
 /* ========== DETAIL INTRO SECTION ========== */
 .detail-intro-section,
 .about-story-section,
@@ -97,21 +96,26 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
+
   .feat-card {
     padding: 1.25rem;
   }
+
   .feat-icon-lux {
     width: 48px;
     height: 48px;
     font-size: 1.25rem;
     margin-bottom: 1rem;
   }
+
   .feat-card h3 {
     font-size: 1.05rem;
     margin-bottom: 0.5rem;
   }
+
   .feat-card p {
-    font-size: 0.813rem; /* 13px */
+    font-size: 0.813rem;
+    /* 13px */
     line-height: 1.45;
   }
 }
@@ -290,14 +294,17 @@
     scroll-snap-type: x mandatory;
     gap: 1rem;
   }
+
   .package-overview {
     flex: 0 0 85%;
     scroll-snap-align: center;
     padding: 1.5rem !important;
   }
+
   .overview-price strong {
     font-size: 1.6rem !important;
   }
+
   .overview-description {
     font-size: 0.813rem !important;
   }
@@ -610,16 +617,20 @@
   .process-row {
     padding: 1.25rem;
   }
+
   .proc-num {
     font-size: 2rem;
     margin-bottom: 0.5rem;
   }
+
   .proc-body h3 {
     font-size: 1.15rem;
     margin-bottom: 0.5rem;
   }
+
   .proc-body p {
-    font-size: 0.813rem; /* 13px */
+    font-size: 0.813rem;
+    /* 13px */
     line-height: 1.45;
   }
 }
@@ -713,23 +724,27 @@
 
 @media (max-width: 768px) {
   .premium-portfolio-gallery {
-    grid-template-columns: repeat(2, 1fr); /* Mobile 2 Column to save vertical space */
+    grid-template-columns: repeat(2, 1fr);
+    /* Mobile 2 Column to save vertical space */
     gap: 1rem;
   }
 
   .port-lux-item {
-    height: 180px; /* Sangat hemat ruang di mobile */
+    height: 180px;
+    /* Sangat hemat ruang di mobile */
     border-radius: 12px;
   }
-  
+
   .port-lux-caption {
     padding: 1.5rem 1rem 1rem 1rem;
-    transform: translateY(0); /* Always visible on mobile */
+    transform: translateY(0);
+    /* Always visible on mobile */
   }
-  
+
   .port-lux-caption h3 {
     font-size: 0.9rem;
   }
+
   .port-lux-caption p {
     font-size: 0.75rem;
   }
@@ -859,7 +874,8 @@
 
 @media (max-width: 768px) {
   .premium-bento-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 Column Compact Bento */
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 Column Compact Bento */
     grid-auto-rows: auto;
     gap: 0.75rem;
   }
@@ -867,7 +883,8 @@
   .bento-wide,
   .bento-tall,
   .bento-box {
-    grid-column: span 1 !important; /* Force all to 1 column width of the 2-col grid */
+    grid-column: span 1 !important;
+    /* Force all to 1 column width of the 2-col grid */
     grid-row: span 1 !important;
   }
 
@@ -900,11 +917,9 @@
  * FAQ styling is now centralized in components/faq.css to ensure consistency
  * across all pages.
  */
-
 /* ========== DETAIL CTA SECTION - STYLING MOVED TO components/hero.css ========== */
 /* Detail CTA section sekarang ditangani oleh .detail-cta-section di components/hero.css */
 /* Lihat hero.css untuk styling lengkap */
-
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .features-grid {
@@ -973,82 +988,82 @@
 }
 
 @media (max-width: 768px) {
-.detail-row {
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 
-.overview-actions {
-  flex-direction: column;
-}
+  .overview-actions {
+    flex-direction: column;
+  }
 
-.overview-actions .btn {
-  flex: 1;
-}
+  .overview-actions .btn {
+    flex: 1;
+  }
 
-.timeline::before {
-  left: 0;
-}
+  .timeline::before {
+    left: 0;
+  }
 
-.timeline>.timeline-item:nth-child(odd) .timeline-date,
-.timeline>.timeline-item:nth-child(even) .timeline-date {
-  text-align: left;
-  padding-left: 40px;
-  padding-right: 0;
-}
+  .timeline>.timeline-item:nth-child(odd) .timeline-date,
+  .timeline>.timeline-item:nth-child(even) .timeline-date {
+    text-align: left;
+    padding-left: 40px;
+    padding-right: 0;
+  }
 
-.timeline>.timeline-item:nth-child(odd) .timeline-content,
-.timeline>.timeline-item:nth-child(even) .timeline-content {
-  margin-left: 0;
-  margin-right: auto;
-  width: 100%;
-}
+  .timeline>.timeline-item:nth-child(odd) .timeline-content,
+  .timeline>.timeline-item:nth-child(even) .timeline-content {
+    margin-left: 0;
+    margin-right: auto;
+    width: 100%;
+  }
 
-.artikel-grid {
-  grid-template-columns: 1fr;
-}
+  .artikel-grid {
+    grid-template-columns: 1fr;
+  }
 
-.portfolio-grid {
-  grid-template-columns: 1fr;
-}
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
 
-.faq-grid {
-  grid-template-columns: 1fr;
-}
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
 
-.faq-question {
-  padding: 1.25rem 1.5rem;
-  font-size: 0.95rem;
-}
+  .faq-question {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.95rem;
+  }
 
-.faq-answer {
-  padding: 0 1.5rem 1.25rem 1.5rem;
-  font-size: 0.9rem;
-}
+  .faq-answer {
+    padding: 0 1.5rem 1.25rem 1.5rem;
+    font-size: 0.9rem;
+  }
 
-.additional-services-grid {
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
+  .additional-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
 
-.service-item {
-  padding: 2rem;
-}
+  .service-item {
+    padding: 2rem;
+  }
 
-.cta-buttons {
-  flex-direction: column;
-  align-items: center;
-}
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.cta-buttons .btn {
-  width: 100%;
-  max-width: 300px;
-}
+  .cta-buttons .btn {
+    width: 100%;
+    max-width: 300px;
+  }
 
-.process-timeline .timeline-item {
-  grid-template-columns: 50px 1fr;
-  gap: 1.5rem;
-}
+  .process-timeline .timeline-item {
+    grid-template-columns: 50px 1fr;
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1294,7 +1309,7 @@
   background: var(--bg-white);
   padding: 24px 20px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   text-align: center;
   border: 1px solid var(--border-light);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1305,7 +1320,7 @@
 
 .material-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .material-card.featured-material {

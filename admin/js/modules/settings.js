@@ -1,21 +1,22 @@
-import { APIClient } from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-import { GAS_CONFIG } from '/assets/js/config/api.config.js';
-
+import {
+  APIClient
+} from '/assets/js/modules/unified-api.js';
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
+import {
+  GAS_CONFIG
+} from '/assets/js/config/api.config.js';
 let currentSettings = {};
 let currentTemplates = [];
 let selectedTemplateId = null;
-
 export async function render() {
   console.log('Admin Settings Module Loaded');
-
   // 1. Setup Tab Switching
   setupTabs();
-
   // 2. Fetch Data
   await fetchSettings();
   await fetchTemplates();
-
   // 3. Setup Event Listeners
   setupEventListeners();
 }
@@ -23,7 +24,6 @@ export async function render() {
 function setupTabs() {
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabs = document.querySelectorAll('.settings-tab');
-
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       // Deactivate all
@@ -33,18 +33,15 @@ function setupTabs() {
         b.style.color = 'var(--admin-text-muted)';
       });
       tabs.forEach(t => t.style.display = 'none');
-
       // Activate clicked
       btn.classList.add('active');
       btn.style.background = 'var(--admin-primary)';
       btn.style.color = 'var(--admin-text-main)';
-
       const targetId = btn.getAttribute('data-target');
       document.getElementById(targetId).style.display = 'block';
     });
   });
 }
-
 async function fetchSettings() {
   try {
     const response = await APIClient.call(GAS_CONFIG.ACTIONS.GET_SETTINGS);
@@ -60,16 +57,13 @@ async function fetchSettings() {
     await loadLocalTsvSettings();
   }
 }
-
 async function loadLocalTsvSettings() {
   try {
     const res = await fetch('/spreadsheet.tsv?t=' + Date.now());
     const text = await res.text();
-
     // Parse CONFIG section
     const configSection = text.split('SHEET: CONFIG')[1]?.split('SHEET:')[0] || '';
     const lines = configSection.split('\n');
-
     let isData = false;
     lines.forEach(line => {
       const cols = line.split('\t');
@@ -83,7 +77,6 @@ async function loadLocalTsvSettings() {
         }
       }
     });
-
     populateSettingsForm();
   } catch (e) {
     console.error('Gagal memuat local TSV:', e);
@@ -103,7 +96,6 @@ function populateSettingsForm() {
     }
   });
 }
-
 async function fetchTemplates() {
   try {
     const response = await APIClient.call(GAS_CONFIG.ACTIONS.GET_EMAIL_TEMPLATES);
@@ -119,19 +111,15 @@ async function fetchTemplates() {
     await loadLocalTsvTemplates();
   }
 }
-
 async function loadLocalTsvTemplates() {
   try {
     const res = await fetch('/spreadsheet.tsv?t=' + Date.now());
     const text = await res.text();
-
     // Parse EMAIL_TEMPLATES section
     const templateSection = text.split('SHEET: EMAIL_TEMPLATES')[1]?.split('SHEET:')[0] || '';
     const lines = templateSection.split('\n');
-
     let isData = false;
     currentTemplates = [];
-
     lines.forEach(line => {
       const cols = line.split('\t');
       if (cols.length >= 2) {
@@ -155,7 +143,6 @@ async function loadLocalTsvTemplates() {
         }
       }
     });
-
     populateTemplateSelect();
   } catch (e) {
     console.error('Gagal memuat local TSV untuk templates:', e);
@@ -172,7 +159,6 @@ function populateTemplateSelect() {
       option.textContent = `${template.id} - ${template.name}`;
       select.appendChild(option);
     });
-
     select.addEventListener('change', (e) => {
       selectedTemplateId = e.target.value;
       loadTemplateEditor(selectedTemplateId);
@@ -186,14 +172,12 @@ function loadTemplateEditor(templateId) {
     editor.style.display = 'none';
     return;
   }
-
   const template = currentTemplates.find(t => t.id === templateId);
   if (template) {
     document.getElementById('template-subject').value = template.subject || '';
     document.getElementById('template-body').value = template.bodyHtml || '';
     document.getElementById('template-variables').textContent = template.variables || 'Tidak ada variabel khusus';
     editor.style.display = 'block';
-
     updateIframePreview(template.bodyHtml || '');
   }
 }
@@ -207,7 +191,6 @@ function updateIframePreview(html) {
   doc.close();
   doc.body.contentEditable = "true";
   doc.body.style.margin = "0";
-
   // Sync iframe changes back to textarea
   doc.body.addEventListener('input', () => {
     document.getElementById('template-body').value = doc.body.innerHTML;
@@ -235,18 +218,15 @@ function setupEventListeners() {
         const key = input.id.replace('config-', '');
         newSettings[key] = input.type === 'checkbox' ? input.checked.toString() : input.value;
       });
-
       const originalText = btnSaveSettings.innerHTML;
       btnSaveSettings.disabled = true;
       btnSaveSettings.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-
       try {
         const currentUser = AuthManager.getCurrentUser();
         const response = await APIClient.call(GAS_CONFIG.ACTIONS.SAVE_SETTINGS, {
           adminId: currentUser?.id || 'admin',
           settings: newSettings
         });
-
         if (response.success) {
           Swal.fire({
             icon: 'success',
@@ -266,20 +246,16 @@ function setupEventListeners() {
       }
     });
   }
-
   // Save Individual Template
   const btnSaveTemplate = document.getElementById('btn-save-template');
   if (btnSaveTemplate) {
     btnSaveTemplate.addEventListener('click', async () => {
       if (!selectedTemplateId) return;
-
       const subject = document.getElementById('template-subject').value;
       const bodyHtml = document.getElementById('template-body').value;
-
       const originalText = btnSaveTemplate.innerHTML;
       btnSaveTemplate.disabled = true;
       btnSaveTemplate.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-
       try {
         const currentUser = AuthManager.getCurrentUser();
         const response = await APIClient.call(GAS_CONFIG.ACTIONS.SAVE_EMAIL_TEMPLATE, {
@@ -290,7 +266,6 @@ function setupEventListeners() {
             bodyHtml: bodyHtml
           }
         });
-
         if (response.success) {
           // Update local cache
           const tIndex = currentTemplates.findIndex(t => t.id === selectedTemplateId);
@@ -298,7 +273,6 @@ function setupEventListeners() {
             currentTemplates[tIndex].subject = subject;
             currentTemplates[tIndex].bodyHtml = bodyHtml;
           }
-
           Swal.fire({
             icon: 'success',
             title: 'Berhasil',

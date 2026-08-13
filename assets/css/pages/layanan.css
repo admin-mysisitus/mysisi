@@ -1,8 +1,6 @@
 /* ========== LAYANAN PAGE STYLING ========== */
 /* Styling khusus halaman LAYANAN dengan fokus pada layanan cards dan process flow */
-
 /* Hero styling moved to components/hero.css */
-
 /* ========== LAYANAN INTRO SECTION ========== */
 .layanan-intro-section {
   padding: 2.5rem 0;
@@ -110,7 +108,7 @@
   margin-bottom: 1rem;
 }
 
-.layanan-content-area > p {
+.layanan-content-area>p {
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1.5rem;
@@ -364,8 +362,15 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
@@ -430,29 +435,34 @@
   flex-shrink: 0;
 }
 
-
 @media (max-width: 768px) {
+
   /* 0. Hero Section (Responsiveness Fix) */
   .hero.hero-home {
     padding: 2.25rem 0 !important;
   }
+
   .hero-content h1 {
     font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
     line-height: 1.15 !important;
     margin-bottom: 0.75rem !important;
     letter-spacing: -0.02em !important;
   }
+
   .hero-content p {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.5rem !important;
   }
+
   .hero-content .cta-buttons {
     display: flex !important;
     flex-direction: column !important;
     gap: 0.75rem !important;
     width: 100% !important;
   }
+
   .hero-content .btn {
     width: 100% !important;
   }
@@ -461,10 +471,12 @@
   .layanan-grid-section {
     padding: 2.25rem 0 !important;
   }
+
   .layanan-grid-section h2 {
     font-size: 1.35rem !important;
     margin-bottom: 1.5rem !important;
   }
+
   .layanan-tabs-nav {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -473,28 +485,35 @@
     border-bottom: none !important;
     background: var(--bg-light) !important;
   }
+
   .layanan-tab-btn {
     padding: 0.5rem 0.25rem !important;
-    font-size: 0.65rem !important; /* Diperkecil agar muat di layar 320px */
+    font-size: 0.65rem !important;
+    /* Diperkecil agar muat di layar 320px */
     line-height: 1.25 !important;
     text-align: center !important;
-    white-space: normal !important; /* Izinkan teks wrap */
-    word-break: break-word !important; /* Paksa break jika kepanjangan */
+    white-space: normal !important;
+    /* Izinkan teks wrap */
+    word-break: break-word !important;
+    /* Paksa break jika kepanjangan */
     border: 1px solid transparent !important;
     border-radius: var(--radius-medium) !important;
     border-bottom: none !important;
   }
+
   .layanan-tab-btn.active {
     background: var(--bg-white) !important;
     color: var(--primary-blue) !important;
     border-color: var(--border-light) !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
   }
+
   .layanan-card-horizontal {
     flex-direction: column !important;
     padding: 1.25rem !important;
     gap: 1.25rem !important;
   }
+
   .layanan-icon-area {
     flex: 0 0 64px !important;
     width: 64px !important;
@@ -502,31 +521,40 @@
     font-size: 2rem !important;
     margin: 0 auto !important;
   }
+
   .layanan-content-area {
     text-align: center !important;
   }
+
   .layanan-content-area h3 {
     font-size: 1.15rem !important;
     margin-bottom: 0.5rem !important;
   }
-  .layanan-content-area > p {
-    font-size: 0.813rem !important; /* 13px */
+
+  .layanan-content-area>p {
+    font-size: 0.813rem !important;
+    /* 13px */
     line-height: 1.45 !important;
     margin-bottom: 1rem !important;
   }
+
   .layanan-features {
     margin-bottom: 1.25rem !important;
     text-align: left !important;
   }
+
   .layanan-features ul {
     grid-template-columns: 1fr !important;
     gap: 0.4rem !important;
   }
+
   .layanan-features li {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     line-height: 1.4 !important;
     padding-left: 1.35rem !important;
   }
+
   .layanan-content-area .btn {
     width: 100% !important;
     padding: 0.75rem 1rem !important;
@@ -537,18 +565,22 @@
   .layanan-process-section {
     padding: 2.25rem 0 !important;
   }
+
   .layanan-process-section h2 {
     font-size: 1.35rem !important;
     margin-bottom: 0.5rem !important;
   }
-  .layanan-process-section > .container > p {
+
+  .layanan-process-section>.container>p {
     font-size: 0.813rem !important;
     line-height: 1.45 !important;
     margin-bottom: 1.5rem !important;
   }
+
   .stepper-container {
     gap: 1.25rem !important;
   }
+
   .stepper-nav {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -556,18 +588,23 @@
     padding-bottom: 0 !important;
     overflow-x: visible !important;
   }
+
   .step-btn {
     min-width: 0 !important;
     gap: 0.35rem !important;
   }
+
   .step-btn::after {
-    display: none !important; /* Hilangkan garis penghubung horisontal di mobile grid */
+    display: none !important;
+    /* Hilangkan garis penghubung horisontal di mobile grid */
   }
+
   .step-num {
     width: 36px !important;
     height: 36px !important;
     font-size: 0.875rem !important;
   }
+
   .step-title {
     font-size: 0.7rem !important;
     line-height: 1.2 !important;
@@ -575,17 +612,21 @@
     white-space: normal !important;
     word-break: break-word !important;
   }
+
   .stepper-content {
     padding: 1.25rem !important;
     min-height: auto !important;
   }
+
   .step-pane h3 {
     font-size: 1.05rem !important;
     margin-bottom: 0.5rem !important;
     text-align: center !important;
   }
+
   .step-pane p {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     line-height: 1.45 !important;
     text-align: center !important;
     margin: 0 !important;
@@ -595,29 +636,37 @@
   .layanan-why-section {
     padding: 2.25rem 0 !important;
   }
+
   .layanan-why-section h2 {
     font-size: 1.35rem !important;
     margin-bottom: 1.25rem !important;
   }
+
   .why-accordion {
     grid-template-columns: 1fr !important;
     gap: 0.5rem !important;
   }
+
   .accordion-header {
     padding: 0.65rem 0.75rem !important;
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     line-height: 1.35 !important;
     gap: 0.65rem !important;
   }
+
   .accordion-header i {
     font-size: 1rem !important;
     width: 20px !important;
   }
+
   .accordion-body {
     padding: 0 0.75rem 0.75rem 0.75rem !important;
   }
+
   .accordion-body p {
-    font-size: 0.78rem !important; /* ~12.5px */
+    font-size: 0.78rem !important;
+    /* ~12.5px */
     line-height: 1.4 !important;
     margin: 0 !important;
   }
@@ -626,27 +675,32 @@
   .bottom-cta-section {
     padding: 1rem 0 2rem 0 !important;
   }
+
   .team-cta {
     flex-direction: column !important;
     text-align: center !important;
     padding: 1.5rem 1.25rem !important;
     gap: 1.25rem !important;
   }
+
   .team-cta h2 {
     font-size: 1.25rem !important;
     line-height: 1.25 !important;
     margin-bottom: 0.5rem !important;
   }
+
   .team-cta p {
     font-size: 0.813rem !important;
     line-height: 1.45 !important;
   }
+
   .team-cta .cta-buttons {
     width: 100% !important;
     flex-direction: column !important;
     gap: 0.75rem !important;
     display: flex !important;
   }
+
   .team-cta .btn,
   .team-cta .cta-buttons .btn {
     width: 100% !important;

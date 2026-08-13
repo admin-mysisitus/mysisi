@@ -1,7 +1,6 @@
 /* ========== KARIR PAGE INTERACTIONS ========== */
 /* Halaman lowongan karir dengan job card interactions, process timeline, dan benefit animations */
 /* Sistem animasi yang smooth dan optimal tanpa konflik */
-
 class KarirPageManager {
   constructor() {
     this.config = {
@@ -11,16 +10,13 @@ class KarirPageManager {
       threshold: 0.1,
       debounceDelay: 250
     };
-
     this.state = {
       expandedJobs: new Set(),
       elementsObserved: new WeakSet()
     };
-
     this.observer = null;
     this.init();
   }
-
   // ========== INITIALIZATION ==========
   init() {
     this.injectOptimizedAnimationStyles();
@@ -31,14 +27,10 @@ class KarirPageManager {
     this.setupCultureItems();
     this.setupCtaButtons();
   }
-
   // ========== TOUCH DETECTION ==========
   detectTouchDevice() {
-    return (('ontouchstart' in window) ||
-      (navigator.maxTouchPoints > 0) ||
-      (navigator.msMaxTouchPoints > 0));
+    return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
   }
-
   // ========== INTERSECTION OBSERVER FACTORY ==========
   createObserver(callback, options = {}) {
     return new IntersectionObserver(callback, {
@@ -46,45 +38,47 @@ class KarirPageManager {
       rootMargin: options.rootMargin || '0px'
     });
   }
-
   // ========== REVEAL ANIMATIONS WITH STAGGERING ==========
   setupRevealAnimations() {
-    const elementGroups = [
-      { selector: '.benefit-item', delay: 0.08 },
-      { selector: '.job-card', delay: 0.1 },
-      { selector: '.process-step', delay: 0.08 },
-      { selector: '.culture-item', delay: 0.08 }
-    ];
-
-    elementGroups.forEach(({ selector, delay }) => {
+    const elementGroups = [{
+      selector: '.benefit-item',
+      delay: 0.08
+    }, {
+      selector: '.job-card',
+      delay: 0.1
+    }, {
+      selector: '.process-step',
+      delay: 0.08
+    }, {
+      selector: '.culture-item',
+      delay: 0.08
+    }];
+    elementGroups.forEach(({
+      selector,
+      delay
+    }) => {
       const elements = document.querySelectorAll(selector);
       if (elements.length === 0) return;
-
       const observer = this.createObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !this.state.elementsObserved.has(entry.target)) {
             this.state.elementsObserved.add(entry.target);
             const index = Array.from(elements).indexOf(entry.target);
             const staggerDelay = index * delay;
-            
             // Gunakan CSS class untuk animasi, bukan inline style
             entry.target.style.setProperty('--animation-delay', `${staggerDelay}s`);
             entry.target.classList.add('animate-in');
-            
             observer.unobserve(entry.target);
           }
         });
       });
-
       elements.forEach((el) => observer.observe(el));
     });
   }
-
   // ========== BENEFIT ITEMS ==========
   setupBenefitItems() {
     const benefitItems = document.querySelectorAll('.benefit-item');
     if (benefitItems.length === 0) return;
-
     benefitItems.forEach((item) => {
       if (!this.config.isTouch) {
         item.addEventListener('mouseenter', () => item.classList.add('hover-active'));
@@ -92,12 +86,10 @@ class KarirPageManager {
       }
     });
   }
-
   // ========== JOB CARDS ==========
   setupJobCards() {
     const jobCards = document.querySelectorAll('.job-card');
     if (jobCards.length === 0) return;
-
     // Desktop hover
     if (!this.config.isTouch) {
       jobCards.forEach((card) => {
@@ -105,22 +97,18 @@ class KarirPageManager {
         card.addEventListener('mouseleave', () => card.classList.remove('hover-active'));
       });
     }
-
     // Mobile expand/collapse
     this.setupJobToggle();
     this.setupApplyButtons();
   }
-
   setupJobToggle() {
     const jobHeaders = document.querySelectorAll('.job-header');
     jobHeaders.forEach((header) => {
       header.addEventListener('click', (e) => {
         if (e.target.closest('.btn')) return;
-
         const card = header.closest('.job-card');
         const body = card.querySelector('.job-body');
         const jobTitle = card.querySelector('.job-title');
-
         if (body) {
           const isHidden = body.classList.toggle('hidden');
           this.updateJobToggleState(card, !isHidden, jobTitle?.textContent.trim());
@@ -128,7 +116,6 @@ class KarirPageManager {
       });
     });
   }
-
   updateJobToggleState(card, isExpanded, jobTitle) {
     if (isExpanded) {
       this.state.expandedJobs.add(jobTitle);
@@ -136,36 +123,30 @@ class KarirPageManager {
       this.state.expandedJobs.delete(jobTitle);
     }
   }
-
   setupApplyButtons() {
     const applyButtons = document.querySelectorAll('.job-card .btn-sm');
     applyButtons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        
         const jobCard = btn.closest('.job-card');
         const jobTitle = jobCard.querySelector('.job-title')?.textContent.trim();
-        
         if (jobTitle) {
           // Create URL with job position and auto-submit flag
           const params = new URLSearchParams({
             tipe: 'karir',
             posisi: jobTitle.toLowerCase().replace(/\s+/g, '-'),
-            auto: 'true'  // Flag untuk auto-submit (akan menampilkan form dengan auto-prefill)
+            auto: 'true' // Flag untuk auto-submit (akan menampilkan form dengan auto-prefill)
           });
-          
           // Redirect ke halaman kontak dengan parameter
           window.location.href = `/kontak/?${params.toString()}`;
         }
       });
     });
   }
-
   // ========== PROCESS STEPS ==========
   setupProcessSteps() {
     const processSteps = document.querySelectorAll('.process-step');
     if (processSteps.length === 0) return;
-
     if (!this.config.isTouch) {
       processSteps.forEach((step) => {
         step.addEventListener('mouseenter', () => step.classList.add('hover-active'));
@@ -173,12 +154,10 @@ class KarirPageManager {
       });
     }
   }
-
   // ========== CULTURE ITEMS ==========
   setupCultureItems() {
     const cultureItems = document.querySelectorAll('.culture-item');
     if (cultureItems.length === 0) return;
-
     if (!this.config.isTouch) {
       cultureItems.forEach((item) => {
         item.addEventListener('mouseenter', () => item.classList.add('hover-active'));
@@ -186,28 +165,23 @@ class KarirPageManager {
       });
     }
   }
-
   // ========== CTA BUTTONS ==========
   setupCtaButtons() {
     const ctaButtons = document.querySelectorAll('.cta-buttons .btn');
     if (ctaButtons.length === 0) return;
-
     ctaButtons.forEach((btn) => {
       btn.addEventListener('click', (e) => this.createRippleEffect(e, btn));
-
       if (!this.config.isTouch) {
         btn.addEventListener('mouseenter', () => btn.classList.add('hover-active'));
         btn.addEventListener('mouseleave', () => btn.classList.remove('hover-active'));
       }
     });
   }
-
   // ========== RIPPLE EFFECT ==========
   createRippleEffect(event, button) {
     const rect = button.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-
     const ripple = document.createElement('span');
     ripple.className = 'ripple-effect';
     ripple.style.cssText = `
@@ -222,14 +196,11 @@ class KarirPageManager {
       pointer-events: none;
       transform: translate(-50%, -50%);
     `;
-
     button.style.position = 'relative';
     button.style.overflow = 'hidden';
     button.appendChild(ripple);
-
     setTimeout(() => ripple.remove(), 600);
   }
-
   // ========== OPTIMIZED STYLE INJECTION ==========
   injectOptimizedAnimationStyles() {
     const style = document.createElement('style');
@@ -370,7 +341,6 @@ class KarirPageManager {
     document.head.appendChild(style);
   }
 }
-
 // ========== INITIALIZATION ON DOM READY ==========
 document.addEventListener('DOMContentLoaded', () => {
   new KarirPageManager();

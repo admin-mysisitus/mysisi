@@ -7,7 +7,6 @@
     <i class="fas fa-shopping-bag"></i>
   </div>
 </div>
-
 <div class="page-shell">
   <section class="page-card">
     <div class="page-card__header">
@@ -20,7 +19,6 @@
         <span class="page-pill">Terupdate</span>
       </div>
     </div>
-
     <div class="orders-summary">
       <div class="orders-summary__item">
         <span>Total Pesanan</span>
@@ -35,7 +33,6 @@
         <strong>1</strong>
       </div>
     </div>
-
     <div class="table-shell">
       <table class="table" id="orders-table">
         <thead>
@@ -59,12 +56,10 @@
     </div>
   </section>
 </div>
-
 <!-- Order Detail Modal -->
 <div id="order-detail-modal" class="modal">
   <!-- Modal content will be injected here by orders.js -->
 </div>
-
 <style>
   /* Table Styling */
   #orders-table {
@@ -74,7 +69,7 @@
     font-size: 14px;
     color: var(--color-text-dark);
   }
-
+  
   #orders-table th {
     background-color: #f8fafc;
     color: #475569;
@@ -87,29 +82,29 @@
     border-bottom: 2px solid var(--color-border);
     white-space: nowrap;
   }
-
+  
   #orders-table td {
     padding: 16px;
     border-bottom: 1px solid var(--color-border);
     vertical-align: middle;
     white-space: nowrap;
   }
-
+  
   #orders-table tbody tr {
     transition: all 0.2s ease;
   }
-
+  
   #orders-table tbody tr:hover {
     background-color: #f1f5f9 !important;
   }
-
+  
   #orders-table td strong {
     color: var(--color-primary);
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     font-weight: 700;
   }
-
+  
   /* Badge Styling */
   .badge {
     display: inline-flex;
@@ -123,31 +118,31 @@
     letter-spacing: 0.5px;
     line-height: 1;
   }
-
+  
   .badge-success {
     background-color: #dcfce7;
     color: #15803d;
     border: 1px solid #bbf7d0;
   }
-
+  
   .badge-warning {
     background-color: #fef9c3;
     color: #a16207;
     border: 1px solid #fef08a;
   }
-
+  
   .badge-danger {
     background-color: #fee2e2;
     color: #b91c1c;
     border: 1px solid #fecaca;
   }
-
+  
   .badge-info {
     background-color: #dbeafe;
     color: #1d4ed8;
     border: 1px solid #bfdbfe;
   }
-
+  
   /* Modal Styling */
   .modal {
     display: none;
@@ -163,11 +158,11 @@
     justify-content: center;
     padding: 20px;
   }
-
+  
   .modal.show {
     display: flex;
   }
-
+  
   .modal-content {
     background-color: white;
     border-radius: 20px;
@@ -179,18 +174,19 @@
     animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     border: 1px solid rgba(148, 163, 184, 0.18);
   }
-
+  
   @keyframes slideIn {
     from {
       transform: translateY(20px);
       opacity: 0;
     }
+  
     to {
       transform: translateY(0);
       opacity: 1;
     }
   }
-
+  
   .modal-header {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     color: white;
@@ -199,7 +195,7 @@
     justify-content: space-between;
     align-items: center;
   }
-
+  
   .modal-header h2 {
     margin: 0;
     font-size: 18px;
@@ -207,7 +203,7 @@
     color: white;
     letter-spacing: 0.5px;
   }
-
+  
   .btn-close {
     background: rgba(255, 255, 255, 0.12);
     border: none;
@@ -222,17 +218,17 @@
     justify-content: center;
     transition: all 0.2s ease;
   }
-
+  
   .btn-close:hover {
     background: rgba(255, 255, 255, 0.22);
     color: white;
     transform: rotate(90deg);
   }
-
+  
   .modal-body {
     padding: 24px;
   }
-
+  
   .modal-footer {
     padding: 16px 24px;
     border-top: 1px solid var(--color-border);
@@ -242,20 +238,20 @@
     flex-wrap: wrap;
     background: #f8fafc;
   }
-
+  
   /* Section Styling */
   .modal-body .section {
     margin-bottom: 24px;
     padding-bottom: 20px !important;
     border-bottom: 1px solid var(--color-border);
   }
-
+  
   .modal-body .section:last-of-type {
     margin-bottom: 0;
     padding-bottom: 0 !important;
     border-bottom: none;
   }
-
+  
   .modal-body .section h3 {
     margin-top: 0;
     padding-bottom: 8px;
@@ -267,14 +263,14 @@
     letter-spacing: 0.5px;
     color: var(--color-text-dark);
   }
-
+  
   .order-summary {
     background: #f8fafc;
     border: 1px solid var(--color-border);
     padding: 16px;
     border-radius: 8px;
   }
-
+  
   .summary-row {
     display: flex;
     justify-content: space-between;
@@ -282,11 +278,11 @@
     border-bottom: 1px dashed var(--color-border);
     font-size: 13.5px;
   }
-
+  
   .summary-row:last-of-type {
     border-bottom: none;
   }
-
+  
   .summary-row.total {
     border-top: 1px solid var(--color-border);
     margin-top: 8px;
@@ -295,20 +291,20 @@
     font-weight: 800;
     color: var(--color-primary);
   }
-
+  
   .details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 12px;
   }
-
+  
   .detail-item {
     background: #f8fafc;
     border: 1px solid var(--color-border);
     padding: 12px 16px;
     border-radius: 8px;
   }
-
+  
   .detail-item label {
     display: block;
     font-weight: 700;
@@ -318,14 +314,14 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-
+  
   .detail-item div {
     color: var(--color-text-dark);
     font-weight: 500;
     font-size: 13px;
     word-break: break-word;
   }
-
+  
   @media (max-width: 768px) {
     .modal-content {
       max-width: 100%;
@@ -333,17 +329,17 @@
       height: 100%;
       border-radius: 0;
     }
-
+  
     .modal-header {
       padding: 16px 20px;
     }
-
+  
     .modal-body {
       padding: 20px;
       overflow-y: auto;
       height: calc(100vh - 130px);
     }
-
+  
     .modal-footer {
       padding: 16px 20px;
       position: fixed;
@@ -352,10 +348,9 @@
       right: 0;
       box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
     }
-
+  
     .details-grid {
       grid-template-columns: 1fr;
     }
   }
 </style>
-

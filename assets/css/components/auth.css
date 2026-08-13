@@ -4,7 +4,6 @@
  * Used by: /auth/index.html, /checkout/index.html (auth section)
  * Version: 3.0 (Premium Split Panel Layout)
  */
-
 /* ============================================================================
    CORE CSS CUSTOM VARIABLES & RESET
    ============================================================================ */
@@ -21,7 +20,6 @@
 /* ============================================================================
    PREMIUM SPLIT SCREEN LAYOUT
    ============================================================================ */
-
 body.auth-page-body {
   padding-top: 0 !important;
   background-color: white !important;
@@ -161,14 +159,16 @@ body.auth-page-body {
 }
 
 .auth-mobile-logo {
-  display: none; /* Hidden on desktop */
+  display: none;
+  /* Hidden on desktop */
 }
 
 .back-home-link-form {
   position: absolute;
   top: 30px;
   right: 40px;
-  display: none; /* Hide on desktop */
+  display: none;
+  /* Hide on desktop */
   align-items: center;
   gap: 8px;
   color: var(--auth-text-light);
@@ -191,7 +191,6 @@ body.auth-page-body {
 /* ============================================================================
    FORMS, INPUTS, AND CONTROLS
    ============================================================================ */
-
 .auth-panel-content {
   width: 100%;
   max-width: 420px;
@@ -244,7 +243,7 @@ body.auth-page-body {
 .tab-btn.active {
   background: white;
   color: var(--auth-primary);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .auth-form {
@@ -371,6 +370,7 @@ body.auth-page-body {
 .auth-divider::before {
   margin-right: 15px;
 }
+
 .auth-divider::after {
   margin-left: 15px;
 }
@@ -401,7 +401,6 @@ body.auth-page-body {
 /* ============================================================================
    ALERTS AND MESSAGES
    ============================================================================ */
-
 .form-error,
 .form-success {
   padding: 12px 16px;
@@ -432,7 +431,6 @@ body.auth-page-body {
 /* ============================================================================
    LOGGED IN & PROFILE STATES
    ============================================================================ */
-
 .auth-loggedin-section {
   width: 100%;
 }
@@ -547,7 +545,6 @@ body.auth-page-body {
 /* ============================================================================
    CHECKOUT & STANDALONE PAGE FALLBACKS
    ============================================================================ */
-
 .auth-page {
   min-height: 100vh;
   padding: 60px 20px;
@@ -574,30 +571,36 @@ body.auth-page-body {
 }
 
 .auth-info-box {
-  display: none; /* Hide old info box */
+  display: none;
+  /* Hide old info box */
 }
 
 /* ============================================================================
    ANIMATIONS & RESPONSIVE
    ============================================================================ */
-
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 991px) {
   .auth-visual-panel {
     display: none;
   }
-  
+
   .auth-form-panel {
     width: 100%;
     padding: 16px;
-    min-height: auto; /* Jangan paksa 100vh di panel jika layar kecil */
+    min-height: auto;
+    /* Jangan paksa 100vh di panel jika layar kecil */
     justify-content: flex-start;
   }
-  
+
   .auth-mobile-logo {
     display: flex;
     align-items: center;
@@ -605,17 +608,18 @@ body.auth-page-body {
     gap: 8px;
     margin-bottom: 16px;
   }
-  
+
   .auth-mobile-logo img {
-    height: 32px; /* Lebih kecil */
+    height: 32px;
+    /* Lebih kecil */
   }
-  
+
   .auth-mobile-logo span {
     font-size: 16px;
     font-weight: 800;
     color: var(--auth-primary);
   }
-  
+
   .back-home-link-form {
     position: static;
     margin-bottom: 16px;
@@ -627,6 +631,7 @@ body.auth-page-body {
   .auth-header {
     margin-bottom: 16px;
   }
+
   .auth-header h2 {
     font-size: 1.5rem;
   }
@@ -635,6 +640,7 @@ body.auth-page-body {
     margin-bottom: 16px;
     padding: 4px;
   }
+
   .tab-btn {
     padding: 8px 0;
     font-size: 13px;
@@ -669,7 +675,7 @@ body.auth-page-body {
   display: flex;
   align-items: center;
   z-index: 1000;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .checkout-header-container {
@@ -724,10 +730,18 @@ body.checkout-page-body {
 }
 
 /* ========== PASSWORD STRENGTH METER ========== */
-.strength-weak { background: #ef4444 !important; }
-.strength-fair { background: #f59e0b !important; }
-.strength-good { background: #3b82f6 !important; }
-.strength-strong { background: #10b981 !important; }
+.strength-weak {
+  background: #ef4444 !important;
+}
 
+.strength-fair {
+  background: #f59e0b !important;
+}
 
+.strength-good {
+  background: #3b82f6 !important;
+}
 
+.strength-strong {
+  background: #10b981 !important;
+}

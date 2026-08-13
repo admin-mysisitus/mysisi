@@ -1,5 +1,4 @@
 /* ========== TENTANG PAGE STYLES ========== */
-
 /* --- Typography & Utilities --- */
 .eyebrow-text {
   display: inline-block;
@@ -62,14 +61,26 @@
   width: 100%;
   height: auto;
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 991px) {
-  .about-hero { padding: 6rem 0 3rem; }
-  .about-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .about-hero-content h1 { font-size: 2.5rem; }
-  .about-hero-content p { max-width: 100%; }
+  .about-hero {
+    padding: 6rem 0 3rem;
+  }
+
+  .about-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .about-hero-content p {
+    max-width: 100%;
+  }
 }
 
 /* --- Company Highlight Section (Metrics) --- */
@@ -110,6 +121,7 @@
     flex-wrap: wrap;
     overflow-x: visible;
   }
+
   .metric-list-item {
     flex: 1 1 calc(50% - 1.5rem);
   }
@@ -155,6 +167,7 @@
   max-width: 600px;
   margin-bottom: 2rem;
 }
+
 .section-header-compact.text-center {
   margin-left: auto;
   margin-right: auto;
@@ -180,18 +193,23 @@
   flex-direction: column;
   gap: 0.75rem;
 }
-.service-details, .service-item {
+
+.service-details,
+.service-item {
   background: var(--bg-white, #ffffff);
   border-radius: var(--radius-large, 16px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   border: 1.5px solid var(--border-light, #e2e8f0);
   overflow: hidden;
   transition: all 0.3s ease;
 }
-.service-details[open], .service-item[open] {
-  border-color: rgba(37,99,235,0.25);
-  box-shadow: 0 8px 25px rgba(37,99,235,0.06);
+
+.service-details[open],
+.service-item[open] {
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.06);
 }
+
 .service-summary {
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -201,14 +219,17 @@
   list-style: none;
   user-select: none;
 }
+
 .service-summary::-webkit-details-marker {
   display: none;
 }
+
 .service-summary-title {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
+
 .service-summary-title i {
   color: var(--primary-blue);
   font-size: 1.25rem;
@@ -216,17 +237,21 @@
   flex-shrink: 0;
   text-align: center;
 }
+
 .service-summary-title h3 {
   margin: 0;
   font-size: 1.1rem;
 }
+
 .accordion-icon {
   color: var(--text-secondary);
   transition: transform 0.3s ease;
 }
+
 details[open] .accordion-icon {
   transform: rotate(180deg);
 }
+
 .service-content {
   padding: 0 1.5rem 1.25rem 1.5rem;
   color: var(--text-secondary);
@@ -246,27 +271,34 @@ details[open] .accordion-icon {
   max-width: 800px;
   margin: 0 auto;
 }
+
 .vm-tabs-header {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
   margin-top: 2rem;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   justify-content: center;
   overflow-x: auto;
   flex-wrap: nowrap;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Hide scrollbar Firefox */
+  scrollbar-width: none;
+  /* Hide scrollbar Firefox */
 }
+
 .vm-tabs-header::-webkit-scrollbar {
-  display: none; /* Hide scrollbar Chrome/Safari */
+  display: none;
+  /* Hide scrollbar Chrome/Safari */
 }
+
 @media (max-width: 768px) {
   .vm-tabs-header {
-    justify-content: flex-start; /* Prevent cut-off on left when overflowing */
+    justify-content: flex-start;
+    /* Prevent cut-off on left when overflowing */
     padding-bottom: 2px;
   }
 }
+
 .vm-tab-btn {
   background: none;
   border: none;
@@ -281,12 +313,15 @@ details[open] .accordion-icon {
   white-space: nowrap;
   flex-shrink: 0;
 }
+
 .vm-tab-btn:hover {
   color: var(--primary-blue);
 }
+
 .vm-tab-btn.active {
   color: var(--primary-blue);
 }
+
 .vm-tab-btn.active::after {
   content: '';
   position: absolute;
@@ -297,13 +332,16 @@ details[open] .accordion-icon {
   background: var(--primary-blue);
   border-radius: 3px 3px 0 0;
 }
+
 .vm-tab-content {
   display: none;
   animation: fadeIn 0.4s ease;
 }
+
 .vm-tab-content.active {
   display: block;
 }
+
 .vision-block {
   background: var(--bg-white, #ffffff);
   padding: 2.5rem 2.5rem;
@@ -311,11 +349,13 @@ details[open] .accordion-icon {
   border: 1.5px solid var(--border-light, #e2e8f0);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
+
 .vision-block h2 {
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   line-height: 1.2;
   margin-bottom: 1rem;
 }
+
 .vision-block p {
   color: var(--text-secondary);
   line-height: 1.6;
@@ -337,14 +377,17 @@ details[open] .accordion-icon {
   padding-bottom: 1rem;
   margin-top: 2rem;
 }
+
 .team-slider-container::-webkit-scrollbar {
   display: none;
 }
+
 .team-slider-track {
   display: flex;
   gap: 1.5rem;
   padding: 1.5rem 1rem;
 }
+
 .team-slider-track .team-card {
   flex: 0 0 calc(85% - 1rem);
   scroll-snap-align: center;
@@ -356,11 +399,13 @@ details[open] .accordion-icon {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   transition: all 0.3s ease;
 }
+
 .team-slider-track .team-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(37,99,235,0.08);
-  border-color: rgba(37,99,235,0.25);
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.25);
 }
+
 .team-slider-track .team-avatar {
   width: 110px;
   height: 110px;
@@ -371,6 +416,7 @@ details[open] .accordion-icon {
   border: 3px solid transparent;
   transition: all 0.3s ease;
 }
+
 .team-slider-track .team-avatar img {
   width: 100%;
   height: 100%;
@@ -379,13 +425,16 @@ details[open] .accordion-icon {
   filter: grayscale(20%);
   transition: all 0.3s ease;
 }
+
 .team-slider-track .team-card:hover .team-avatar {
   border-color: var(--primary-blue);
-  box-shadow: 0 8px 16px rgba(37,99,235,0.15);
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
 }
+
 .team-slider-track .team-card:hover .team-avatar img {
   filter: grayscale(0%);
 }
+
 .team-slider-track h4 {
   font-size: clamp(0.85rem, 2vw, 1.05rem);
   font-weight: 700;
@@ -395,16 +444,19 @@ details[open] .accordion-icon {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .team-slider-track .team-role {
   font-size: 0.85rem;
   color: var(--text-secondary);
   display: block;
 }
+
 @media (min-width: 768px) {
   .team-slider-track .team-card {
     flex: 0 0 calc(45% - 1rem);
   }
 }
+
 @media (min-width: 1024px) {
   .team-slider-track .team-card {
     flex: 0 0 calc(30% - 1rem);
@@ -485,6 +537,7 @@ details[open] .accordion-icon {
   flex-shrink: 0;
   transition: all 0.3s ease;
 }
+
 .sponsors-track img:hover {
   transform: scale(1.05);
 }
@@ -493,18 +546,29 @@ details[open] .accordion-icon {
 .scroll-left {
   animation: scroll-left 150s linear infinite;
 }
+
 .scroll-right {
   animation: scroll-right 150s linear infinite;
 }
 
 @keyframes scroll-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes scroll-right {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* Pause saat hover */
@@ -535,7 +599,8 @@ details[open] .accordion-icon {
   flex: 1;
 }
 
-.team-cta h3, .team-cta h2 {
+.team-cta h3,
+.team-cta h2 {
   font-size: var(--judul-kecil);
   font-weight: 700;
   margin-bottom: 0.25rem;
@@ -560,25 +625,31 @@ details[open] .accordion-icon {
    MOBILE TYPOGRAPHY & SPACING OPTIMIZATION (OPTION A - RECOMMENDED)
    ========================================================================== */
 @media (max-width: 768px) {
+
   /* 1. Hero Section (Compact & Punchy) */
   .hero.hero-home {
     padding: 2.25rem 0 !important;
   }
+
   .hero-content h1 {
     font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
     line-height: 1.15 !important;
     margin-bottom: 0.75rem !important;
     letter-spacing: -0.02em !important;
   }
+
   .hero-content p {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.25rem !important;
   }
+
   .hero-subtitle {
     font-size: 0.938rem !important;
     margin-bottom: 0.5rem !important;
   }
+
   .hero-content .btn {
     padding: 0.75rem 1.25rem !important;
     font-size: 0.938rem !important;
@@ -588,20 +659,27 @@ details[open] .accordion-icon {
   .stats-compact-grid {
     gap: 1rem 0.75rem !important;
   }
+
   .stat-compact-item {
     padding-bottom: 0.75rem !important;
   }
+
   .stat-compact-item .metric-number {
-    font-size: 1.75rem !important; /* 28px */
+    font-size: 1.75rem !important;
+    /* 28px */
     line-height: 1.1 !important;
   }
+
   .stat-compact-text h4 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     font-weight: 700 !important;
     margin-bottom: 2px !important;
   }
+
   .stat-compact-text p {
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.35 !important;
   }
 
@@ -609,31 +687,41 @@ details[open] .accordion-icon {
   .technical-approach-section {
     padding: 2rem 0 !important;
   }
+
   .section-header-compact {
     margin-bottom: 1.5rem !important;
   }
+
   .section-header-compact h2 {
-    font-size: 1.5rem !important; /* 24px */
+    font-size: 1.5rem !important;
+    /* 24px */
     line-height: 1.25 !important;
     margin-bottom: 0.5rem !important;
   }
+
   .section-header-compact p {
-    font-size: 0.875rem !important; /* 14px */
+    font-size: 0.875rem !important;
+    /* 14px */
     line-height: 1.45 !important;
   }
+
   .service-summary {
     padding: 0.875rem 1rem !important;
   }
+
   .service-summary-title {
     gap: 0.875rem !important;
     align-items: flex-start !important;
   }
+
   .service-summary-title h3 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     font-weight: 600 !important;
     line-height: 1.4 !important;
     margin: 0 !important;
   }
+
   .service-summary-title i {
     font-size: 1.1rem !important;
     width: 24px !important;
@@ -641,10 +729,12 @@ details[open] .accordion-icon {
     text-align: center !important;
     margin-top: 0.15rem !important;
   }
+
   /* Hapus padding kiri 60px pada konten accordion agar memanfaatkan 100% lebar HP */
   .service-content {
     padding: 0 0.875rem 0.875rem 0.875rem !important;
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.45 !important;
   }
 
@@ -652,22 +742,29 @@ details[open] .accordion-icon {
   .about-values {
     padding: 2rem 0 !important;
   }
+
   .vm-tabs-header {
     gap: 0.5rem !important;
     margin-bottom: 1.5rem !important;
   }
+
   .vm-tab-btn {
-    font-size: 0.875rem !important; /* 14px */
+    font-size: 0.875rem !important;
+    /* 14px */
     font-weight: 600 !important;
     padding: 0.5rem 0.875rem !important;
   }
+
   .vision-block h2 {
-    font-size: 1.375rem !important; /* 22px */
+    font-size: 1.375rem !important;
+    /* 22px */
     line-height: 1.25 !important;
     margin-bottom: 0.5rem !important;
   }
+
   .vision-block p {
-    font-size: 0.9rem !important; /* 14.5px */
+    font-size: 0.9rem !important;
+    /* 14.5px */
     line-height: 1.45 !important;
   }
 
@@ -675,34 +772,43 @@ details[open] .accordion-icon {
   .team-section {
     padding: 2rem 0 !important;
   }
+
   .team-slider-container {
     margin-top: 1.25rem !important;
   }
+
   .team-slider-track {
     gap: 1rem !important;
     padding: 1rem 0.5rem !important;
   }
+
   .team-slider-track .team-card {
     flex: 0 0 75% !important;
   }
+
   .team-slider-track .team-avatar {
     width: 90px !important;
     height: 90px !important;
     margin: 0 auto 0.75rem !important;
   }
+
   .team-slider-track h4 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     font-weight: 700 !important;
     margin-bottom: 2px !important;
   }
+
   .team-slider-track .team-role {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
   }
 
   /* 6. Sponsors / Partners Marquee */
   .sponsors-track {
     gap: 1.75rem;
   }
+
   .sponsors-track img {
     height: 32px;
     margin: 0;
@@ -712,6 +818,7 @@ details[open] .accordion-icon {
   .bottom-cta-section {
     padding: 1rem 0 1.5rem 0 !important;
   }
+
   .team-cta {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%) !important;
     color: white !important;
@@ -725,26 +832,34 @@ details[open] .accordion-icon {
     width: 100% !important;
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2) !important;
   }
+
   .team-cta-content {
     width: 100% !important;
   }
-  .team-cta h3, .team-cta h2 {
-    font-size: 1.1rem !important; /* 17.6px */
+
+  .team-cta h3,
+  .team-cta h2 {
+    font-size: 1.1rem !important;
+    /* 17.6px */
     line-height: 1.3 !important;
     margin-bottom: 0.5rem !important;
     color: white !important;
   }
+
   .team-cta p {
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.45 !important;
     color: white !important;
   }
+
   .team-cta .cta-buttons {
     width: 100% !important;
     flex-direction: column !important;
     gap: 0.75rem !important;
     display: flex !important;
   }
+
   .team-cta .btn,
   .team-cta .cta-buttons .btn {
     width: 100% !important;

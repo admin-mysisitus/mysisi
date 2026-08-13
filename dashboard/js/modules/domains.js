@@ -4,30 +4,25 @@
  * MVP Status: ✅ COMPLETE - Shows list of registered domains
  * Future Enhancement: Add DNS management, renewal, domain settings
  */
-
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showInfo } from '/assets/js/modules/unified-utils.js';
-
+import {
+  showInfo
+} from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
     // Load user orders to get registered domains
     const result = await APIClient.getUserOrders(currentUser.userId);
     const orders = result.data?.orders || result.orders || [];
-
     // Filter completed orders to show as registered domains
-    const domains = orders
-      .filter(o => o.paymentStatus === 'paid')
-      .map(o => ({
-        name: o.domain,
-        registeredDate: o.createdAt,
-        expiryDate: calculateExpiryDate(o.createdAt, o.domainDuration || 1),
-        status: getDomainStatus(o.createdAt, o.domainDuration || 1),
-        orderId: o.orderId
-      }));
-
+    const domains = orders.filter(o => o.paymentStatus === 'paid').map(o => ({
+      name: o.domain,
+      registeredDate: o.createdAt,
+      expiryDate: calculateExpiryDate(o.createdAt, o.domainDuration || 1),
+      status: getDomainStatus(o.createdAt, o.domainDuration || 1),
+      orderId: o.orderId
+    }));
     const container = document.getElementById('domains-list-container');
     if (!container) return;
-
     if (domains.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
@@ -56,21 +51,18 @@ export async function render(currentUser) {
           `).join('')}
         </div>
       `;
-
       // Attach modern event listeners instead of using inline onclick with global fallback
       container.querySelectorAll('.btn-dns').forEach(btn => {
         btn.addEventListener('click', () => {
           showInfo(`Fitur DNS Management untuk domain ${btn.dataset.domain} sedang dikembangkan.`);
         });
       });
-
       container.querySelectorAll('.btn-renew').forEach(btn => {
         btn.addEventListener('click', () => {
           showInfo(`Fitur Renewal untuk domain ${btn.dataset.domain} sedang dikembangkan.`);
         });
       });
     }
-
   } catch (error) {
     console.error('Error rendering domains:', error);
     document.getElementById('content').innerHTML = `
@@ -88,13 +80,21 @@ function calculateExpiryDate(createdDate, years = 1) {
 function getDomainStatus(createdDate, years = 1) {
   const expiryDate = calculateExpiryDate(createdDate, years);
   const daysUntilExpiry = Math.floor((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
-  
   if (daysUntilExpiry < 0) {
-    return { text: 'Kadaluarsa', class: 'danger' };
+    return {
+      text: 'Kadaluarsa',
+      class: 'danger'
+    };
   } else if (daysUntilExpiry < 30) {
-    return { text: `Segera Kadaluarsa (${daysUntilExpiry} hari)`, class: 'warning' };
+    return {
+      text: `Segera Kadaluarsa (${daysUntilExpiry} hari)`,
+      class: 'warning'
+    };
   } else {
-    return { text: 'Aktif', class: 'active' };
+    return {
+      text: 'Aktif',
+      class: 'active'
+    };
   }
 }
 

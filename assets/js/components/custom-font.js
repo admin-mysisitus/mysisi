@@ -35,10 +35,8 @@ const applySisitusComFont = (root = document.body) => {
     node.parentNode.replaceChild(frag, node);
   }
 };
-
 // Jalankan pertama kali untuk seluruh halaman
 applySisitusComFont(document.body);
-
 // Pasang observer untuk elemen baru yang dimuat secara dinamis
 const textObserver = new MutationObserver(mutations => {
   for (const mutation of mutations) {
@@ -49,7 +47,6 @@ const textObserver = new MutationObserver(mutations => {
     }
   }
 });
-
 textObserver.observe(document.body, {
   childList: true,
   subtree: true

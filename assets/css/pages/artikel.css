@@ -3,9 +3,7 @@
 @import url('blog.css');
 
 /* ========== ARTIKEL PAGE SPECIFIC STYLING ========== */
-
 /* Hero styling moved to components/hero.css */
-
 /* ========== ARTIKEL LIST SECTION ========== */
 .artikel-list-section {
   padding: clamp(4rem, 8vw, 6rem) 0;
@@ -45,7 +43,6 @@
 }
 
 /* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
-
 .artikel-card:hover {
   transform: translateY(-10px);
   border-color: var(--primary-blue);

@@ -1,7 +1,6 @@
 /* ===============================
    COMPONENT - BUTTON STYLES
 =============================== */
-
 /* Base Button Styles */
 .btn {
   display: inline-flex;
@@ -29,7 +28,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
   transform: translateX(-100%) skewX(-15deg);
   transition: transform 0.6s ease;
   z-index: -1;
@@ -44,7 +43,7 @@
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
   color: var(--bg-white);
   box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-primary:hover,
@@ -306,7 +305,6 @@
 }
 
 /* ===== BUTTON CONTAINER STYLES ===== */
-
 /* CTA Button Container */
 .cta-buttons {
   display: flex;

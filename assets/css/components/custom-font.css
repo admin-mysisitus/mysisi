@@ -38,11 +38,9 @@
   }
 }
 
-
 /* ===============================
    WATERMARK / CREDIT LOGO
    =============================== */
-
 .logo.wm-sc {
   display: inline-flex;
   align-items: center;
@@ -52,7 +50,8 @@
   letter-spacing: -0.25px;
   font-variant-ligatures: none;
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 0.75rem; /* Lebih besar dari sebelumnya 0.65rem */
+  font-size: 0.75rem;
+  /* Lebih besar dari sebelumnya 0.65rem */
   font-weight: 600;
   line-height: 1;
   color: #ffffff;

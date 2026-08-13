@@ -1,8 +1,6 @@
 /* ========== BLOG PAGE STYLING ========== */
 /* Styling khusus halaman BLOG dengan fokus pada featured posts dan article cards */
-
 /* Hero styling moved to components/hero.css */
-
 /* ========== BLOG CATEGORIES SECTION ========== */
 .blog-categories-section {
   padding: 2rem 0;
@@ -80,7 +78,6 @@
 }
 
 /* Animation delays handled automatically by shared-sections.css [class*="post"] selector */
-
 .featured-post:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 35px rgba(6, 182, 212, 0.15);
@@ -254,7 +251,6 @@
 }
 
 /* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
-
 .article-card:hover {
   transform: translateY(-6px);
   border-color: var(--accent-cyan);
@@ -449,7 +445,6 @@
 }
 
 /* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
-
 .article-card:hover {
   transform: translateY(-6px);
   border-color: var(--accent-cyan);
@@ -599,6 +594,7 @@
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+
   /* Animasi Scroll Horizontal (Serupa Halaman Perusahaan) untuk Mobile */
   .featured-grid,
   .articles-grid,
@@ -696,6 +692,7 @@
 }
 
 @media (max-width: 480px) {
+
   .blog-featured-section,
   .blog-grid-section,
   .blog-newsletter-section {
@@ -740,7 +737,6 @@
 
 /* ========== ANIMATIONS ========== */
 /* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */
-
 /* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;

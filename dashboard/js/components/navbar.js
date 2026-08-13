@@ -1,10 +1,14 @@
 /**
  * Dashboard Top Navigation Bar Component
  */
-
-import { DashboardAuth } from '../modules/auth.js';
-import { showConfirm, normalizeDriveImageUrl, withCacheBust } from '/assets/js/modules/unified-utils.js';
-
+import {
+  DashboardAuth
+} from '../modules/auth.js';
+import {
+  showConfirm,
+  normalizeDriveImageUrl,
+  withCacheBust
+} from '/assets/js/modules/unified-utils.js';
 export class DashboardNavbar {
   constructor() {
     this.user = DashboardAuth.getCurrentUser();
@@ -13,7 +17,6 @@ export class DashboardNavbar {
     this.dropdownOutsideClickHandler = null;
     this.sidebarOutsideClickHandler = null;
   }
-
   render() {
     const container = document.getElementById('navbar');
     const photoURL = normalizeDriveImageUrl(this.user?.photoURL, 'w200', '/assets/img/avatar-default.svg');
@@ -70,7 +73,6 @@ export class DashboardNavbar {
         </div>
       </div>
     `;
-
     // Dropdown toggle logic
     const dropdownTrigger = document.getElementById('user-profile-trigger');
     const dropdownMenu = document.getElementById('user-dropdown-menu');
@@ -87,7 +89,6 @@ export class DashboardNavbar {
           }
         }
       });
-
       if (this.dropdownOutsideClickHandler) {
         document.removeEventListener('click', this.dropdownOutsideClickHandler);
       }
@@ -100,7 +101,6 @@ export class DashboardNavbar {
       };
       document.addEventListener('click', this.dropdownOutsideClickHandler);
     }
-
     // Mobile sidebar toggle logic
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('sidebar');
@@ -109,7 +109,6 @@ export class DashboardNavbar {
         e.stopPropagation();
         sidebar.classList.toggle('open');
       });
-
       if (this.sidebarOutsideClickHandler) {
         document.removeEventListener('click', this.sidebarOutsideClickHandler);
       }
@@ -120,7 +119,6 @@ export class DashboardNavbar {
       };
       document.addEventListener('click', this.sidebarOutsideClickHandler);
     }
-
     // Logout handler
     const btnLogout = document.getElementById('btn-logout-dropdown');
     if (btnLogout) {
@@ -128,7 +126,6 @@ export class DashboardNavbar {
         showConfirm('Yakin ingin logout?', () => DashboardAuth.logout());
       });
     }
-
     // Listen for auth changes
     if (!this.authListenerBound) {
       this.authListenerBound = true;
@@ -139,7 +136,6 @@ export class DashboardNavbar {
         }
       });
     }
-
     // Update active breadcrumb name on hashchange
     this.updateActiveBreadcrumb();
     if (!this.breadcrumbListenerBound) {
@@ -147,26 +143,59 @@ export class DashboardNavbar {
       window.addEventListener('hashchange', () => this.updateActiveBreadcrumb());
     }
   }
-
   updateActiveBreadcrumb() {
     const hash = window.location.hash;
     const pageId = hash.replace('#!', '').split('?')[0].split('/').filter(Boolean).pop() || 'dashboard';
-    
     const pageData = {
-      'dashboard': { label: 'Overview', icon: 'fas fa-th-large' },
-      'profile': { label: 'Profil Saya', icon: 'fas fa-user-cog' },
-      'orders': { label: 'Pesanan Saya', icon: 'fas fa-shopping-bag' },
-      'payment': { label: 'Pembayaran', icon: 'fas fa-credit-card' },
-      'invoices': { label: 'Invoice', icon: 'fas fa-file-invoice-dollar' },
-      'domains': { label: 'Domain Saya', icon: 'fas fa-globe' },
-      'wishlist': { label: 'Wishlist Saya', icon: 'fas fa-heart' },
-      'support': { label: 'Support & Bantuan', icon: 'fas fa-headset' },
-      'checkout': { label: 'Pesan Domain Baru', icon: 'fas fa-shopping-cart' },
-      'cart': { label: 'Keranjang Belanja', icon: 'fas fa-shopping-cart' },
-      'keranjang': { label: 'Keranjang Saya', icon: 'fas fa-shopping-cart' },
-      'keranjang-saya': { label: 'Keranjang Saya', icon: 'fas fa-shopping-cart' }
+      'dashboard': {
+        label: 'Overview',
+        icon: 'fas fa-th-large'
+      },
+      'profile': {
+        label: 'Profil Saya',
+        icon: 'fas fa-user-cog'
+      },
+      'orders': {
+        label: 'Pesanan Saya',
+        icon: 'fas fa-shopping-bag'
+      },
+      'payment': {
+        label: 'Pembayaran',
+        icon: 'fas fa-credit-card'
+      },
+      'invoices': {
+        label: 'Invoice',
+        icon: 'fas fa-file-invoice-dollar'
+      },
+      'domains': {
+        label: 'Domain Saya',
+        icon: 'fas fa-globe'
+      },
+      'wishlist': {
+        label: 'Wishlist Saya',
+        icon: 'fas fa-heart'
+      },
+      'support': {
+        label: 'Support & Bantuan',
+        icon: 'fas fa-headset'
+      },
+      'checkout': {
+        label: 'Pesan Domain Baru',
+        icon: 'fas fa-shopping-cart'
+      },
+      'cart': {
+        label: 'Keranjang Belanja',
+        icon: 'fas fa-shopping-cart'
+      },
+      'keranjang': {
+        label: 'Keranjang Saya',
+        icon: 'fas fa-shopping-cart'
+      },
+      'keranjang-saya': {
+        label: 'Keranjang Saya',
+        icon: 'fas fa-shopping-cart'
+      }
     };
-
     const activeBreadcrumb = document.getElementById('navbar-active-page');
     if (activeBreadcrumb) {
       const data = pageData[pageId] || pageData['dashboard'];

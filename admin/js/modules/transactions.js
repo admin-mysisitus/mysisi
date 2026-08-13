@@ -1,8 +1,8 @@
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 let currentTx = [];
-
 export async function render() {
   console.log('Admin Transactions Module Loaded');
   setupEventListeners();
@@ -14,7 +14,6 @@ function setupEventListeners() {
   const btnClose = document.getElementById('btn-close-tx');
   const modal = document.getElementById('tx-modal');
   const form = document.getElementById('tx-form');
-  
   if (btnAdd) {
     btnAdd.addEventListener('click', () => {
       form.reset();
@@ -23,22 +22,18 @@ function setupEventListeners() {
       modal.style.display = 'flex';
     });
   }
-  
   if (btnClose) {
     btnClose.addEventListener('click', () => {
       modal.style.display = 'none';
     });
   }
-  
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const submitBtn = document.getElementById('btn-save-tx');
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
-      
       const txData = {
         inv: document.getElementById('tx-inv').value.trim(),
         name: document.getElementById('tx-name').value.trim(),
@@ -48,13 +43,16 @@ function setupEventListeners() {
         total: parseInt(document.getElementById('tx-total').value),
         status: document.getElementById('tx-status').value
       };
-      
       try {
         const adminId = AuthManager.getUserId();
         const res = await APIClient.saveAdminTransaction(adminId, txData);
         if (res.success) {
           if (typeof Swal !== 'undefined') {
-            Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Transaksi berhasil disimpan!' });
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Transaksi berhasil disimpan!'
+            });
           }
           modal.style.display = 'none';
           await loadTransactions();
@@ -64,7 +62,11 @@ function setupEventListeners() {
       } catch (error) {
         console.error(error);
         if (typeof Swal !== 'undefined') {
-          Swal.fire({ icon: 'error', title: 'Gagal', text: error.message });
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: error.message
+          });
         }
       } finally {
         submitBtn.innerHTML = originalText;
@@ -72,11 +74,9 @@ function setupEventListeners() {
       }
     });
   }
-  
   window.editTx = (inv) => {
     const tx = currentTx.find(t => t.inv === inv);
     if (!tx) return;
-    
     document.getElementById('tx-modal-title').textContent = 'Edit Invoice';
     document.getElementById('tx-inv').value = tx.inv;
     document.getElementById('tx-name').value = tx.name;
@@ -85,10 +85,8 @@ function setupEventListeners() {
     document.getElementById('tx-domain').value = tx.domain || '';
     document.getElementById('tx-total').value = tx.total;
     document.getElementById('tx-status').value = tx.status || 'unpaid';
-    
     document.getElementById('tx-modal').style.display = 'flex';
   };
-  
   window.deleteTx = async (inv) => {
     if (typeof Swal !== 'undefined') {
       const result = await Swal.fire({
@@ -100,7 +98,6 @@ function setupEventListeners() {
         cancelButtonColor: '#4b5563',
         confirmButtonText: 'Ya, Batalkan'
       });
-      
       if (result.isConfirmed) {
         try {
           const res = await APIClient.deleteAdminTransaction(AuthManager.getUserId(), inv);
@@ -110,18 +107,16 @@ function setupEventListeners() {
           } else {
             throw new Error(res.message);
           }
-        } catch(err) {
+        } catch (err) {
           Swal.fire('Error', err.message, 'error');
         }
       }
     }
   };
 }
-
 async function loadTransactions() {
   const tbody = document.getElementById('tx-table-body');
   if (!tbody) return;
-
   tbody.innerHTML = `
     <tr>
       <td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
@@ -130,7 +125,6 @@ async function loadTransactions() {
       </td>
     </tr>
   `;
-
   try {
     const adminId = AuthManager.getUserId();
     const response = await APIClient.getAllTransactions(adminId);
@@ -152,23 +146,22 @@ async function loadTransactions() {
 function renderTxTable(mockTx, tbody) {
   tbody.innerHTML = '';
   currentTx = mockTx;
-  
   mockTx.forEach(tx => {
     let statusBg, statusColor;
     if (tx.status === 'paid') {
-        statusBg = 'rgba(16, 185, 129, 0.1)'; statusColor = 'var(--admin-success)';
+      statusBg = 'rgba(16, 185, 129, 0.1)';
+      statusColor = 'var(--admin-success)';
     } else if (tx.status === 'unpaid') {
-        statusBg = 'rgba(245, 158, 11, 0.1)'; statusColor = 'var(--admin-warning)';
+      statusBg = 'rgba(245, 158, 11, 0.1)';
+      statusColor = 'var(--admin-warning)';
     } else {
-        statusBg = 'rgba(239, 68, 68, 0.1)'; statusColor = 'var(--admin-danger)';
+      statusBg = 'rgba(239, 68, 68, 0.1)';
+      statusColor = 'var(--admin-danger)';
     }
-    
     const rowOpacity = tx.status === 'failed' ? '0.6' : '1';
-    
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--admin-border)';
     tr.style.opacity = rowOpacity;
-    
     tr.innerHTML = `
       <td style="padding: 16px;">
         <p style="margin: 0; font-weight: 600; color: var(--admin-primary);">${tx.inv}</p>
@@ -200,7 +193,6 @@ function renderTxTable(mockTx, tbody) {
         </div>
       </td>
     `;
-    
     tbody.appendChild(tr);
   });
 }

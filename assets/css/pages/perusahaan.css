@@ -1,8 +1,6 @@
 /* ========== PERUSAHAAN PAGE STYLING ========== */
 /* Styling khusus halaman PERUSAHAAN dengan fokus pada company profile, values, dan highlight cards */
-
 /* Hero styling moved to components/hero.css */
-
 /* ========== COMPANY INTRO SECTION ========== */
 /* Specific Hero Background Styling for Perusahaan Page */
 .hero.hero-home {
@@ -19,18 +17,21 @@
 }
 
 .hero.hero-home .hero-illustration {
-  display: none !important; /* Sembunyikan gambar inline karena kita menggunakan background */
+  display: none !important;
+  /* Sembunyikan gambar inline karena kita menggunakan background */
 }
 
 @media (max-width: 768px) {
   .hero.hero-home {
     background-image: url('/assets/img/banner-perusahaan.webp') !important;
-    background-position: 0% 100%; /* Mulai dari kiri bawah */
-    background-size: cover; /* Cover sudah cukup jika layarnya sempit dan tinggi */
+    background-position: 0% 100%;
+    /* Mulai dari kiri bawah */
+    background-size: cover;
+    /* Cover sudah cukup jika layarnya sempit dan tinggi */
     animation: panBackgroundMobile 25s ease-in-out infinite;
     position: relative;
   }
-  
+
   .hero.hero-home .container {
     position: relative;
     z-index: 1;
@@ -38,9 +39,17 @@
 }
 
 @keyframes panBackgroundMobile {
-  0% { background-position: 0% 100%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 100%; }
+  0% {
+    background-position: 0% 100%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 100%;
+  }
 }
 
 .company-intro-section {
@@ -86,7 +95,6 @@
 }
 
 /* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
-
 .highlight-card:hover {
   transform: translateY(-8px);
   border-color: var(--accent-cyan);
@@ -239,7 +247,6 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
 }
-
 
 /* ========== COMPANY DIFFERENTIATION SECTION ========== */
 .company-differentiation-section {
@@ -428,7 +435,6 @@
   line-height: 1.5;
   margin: 0;
 }
-
 
 /* ========== COMPANY SERVICES OVERVIEW SECTION ========== */
 .company-services-overview-section {
@@ -704,12 +710,9 @@
   transform: translateX(4px);
 }
 
-
-
 /* ========== COMPANY CTA SECTION ========== */
 /* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
 /* Lihat .company-cta-section di hero.css untuk styling dan responsive rules */
-
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .highlight-grid {
@@ -1002,7 +1005,6 @@
 }
 
 /* ========== NEW ASYMMETRICAL LAYOUTS ========== */
-
 /* Metric Bento Grid */
 .metric-bento-grid {
   display: grid;
@@ -1018,9 +1020,7 @@
 }
 
 /* Team section styling consolidated at lines 774-952 */
-
 /* ========== SPACE EFFICIENT LAYOUTS ========== */
-
 /* 1. Compact Metrics List (Highlight) */
 .compact-metrics-list {
   display: flex;

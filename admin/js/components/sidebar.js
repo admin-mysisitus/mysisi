@@ -3,10 +3,8 @@ export class AdminSidebar {
     this.app = app;
     this.container = document.getElementById('admin-sidebar');
   }
-
   render() {
     if (!this.container) return;
-
     this.container.innerHTML = `
       <div class="admin-sidebar-header">
         <i class="fas fa-shield-halved" style="color: var(--admin-primary); font-size: 1.5rem;"></i>
@@ -60,20 +58,20 @@ export class AdminSidebar {
         </button>
       </div>
     `;
-    
     // Setup logout listener
     const logoutBtn = this.container.querySelector('#sidebar-logout-btn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', async () => {
         if (confirm('Apakah Anda yakin ingin keluar dari Admin Panel?')) {
-          const { AuthManager } = await import('/assets/js/modules/unified-auth.js');
+          const {
+            AuthManager
+          } = await import('/assets/js/modules/unified-auth.js');
           AuthManager.clearSession();
           window.location.href = '/admin/login.html';
         }
       });
     }
   }
-
   setActive(route) {
     const items = this.container.querySelectorAll('.admin-nav-item');
     items.forEach(item => {

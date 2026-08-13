@@ -1,9 +1,7 @@
 /* ========== LEGAL PAGE ========== */
 /* Import dari pembuatan-website.css untuk detail pages */
 @import url('pembuatan-website.css');
-
 /* Hero styling moved to components/hero.css */
-
 /* Fix CTA buttons layout on legal page hero */
 @media (min-width: 769px) {
   .hero-home .cta-buttons {
@@ -12,6 +10,7 @@
     flex-wrap: nowrap !important;
     align-items: flex-start !important;
   }
+
   .hero-home .cta-buttons .btn {
     width: auto !important;
     flex: 0 0 auto !important;
@@ -34,7 +33,7 @@
 
 /* Fill the top space when the main navbar hides */
 body:has(header.nav-hidden) .legal-nav-section,
-header.nav-hidden ~ main .legal-nav-section {
+header.nav-hidden~main .legal-nav-section {
   top: 0;
 }
 
@@ -53,7 +52,7 @@ header.nav-hidden ~ main .legal-nav-section {
   padding: 0.5rem;
   border-radius: 50px;
   border: 1px solid var(--border-light);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .legal-nav .nav-link {
@@ -164,7 +163,8 @@ header.nav-hidden ~ main .legal-nav-section {
   border: 1px solid var(--border-light);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   overflow: hidden;
-  min-height: auto; /* Mengatasi space kosong di bawah card pada desktop & mobile */
+  min-height: auto;
+  /* Mengatasi space kosong di bawah card pada desktop & mobile */
   width: 100%;
   box-sizing: border-box;
 }
@@ -173,7 +173,8 @@ header.nav-hidden ~ main .legal-nav-section {
   display: none;
   padding: clamp(1.5rem, 3vw, 2.5rem);
   animation: fadeIn 0.4s ease-out forwards;
-  max-width: 100%; /* Mengatasi space kosong di samping kanan card pada desktop */
+  max-width: 100%;
+  /* Mengatasi space kosong di samping kanan card pada desktop */
   width: 100%;
   box-sizing: border-box;
 }
@@ -302,7 +303,6 @@ header.nav-hidden ~ main .legal-nav-section {
 
 /* ========== ANIMATIONS ========== */
 /* @keyframes fadeIn sudah di-consolidate ke base/shared-sections.css */
-
 /* ========== TEAM CTA SECTION (BASE/DESKTOP STYLES) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;
@@ -366,30 +366,35 @@ header.nav-hidden ~ main .legal-nav-section {
   flex-shrink: 0;
 }
 
-
 /* ==========================================================================
    MOBILE TYPOGRAPHY & SPACING OPTIMIZATION (OPTION A - RECOMMENDED)
    ========================================================================== */
 @media (max-width: 768px) {
+
   /* 1. Hero Section (Compact & Punchy) */
   .hero.hero-home {
     padding: 2.25rem 0 !important;
   }
+
   .hero-content h1 {
     font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
     line-height: 1.15 !important;
     margin-bottom: 0.75rem !important;
     letter-spacing: -0.02em !important;
   }
+
   .hero-content p {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.25rem !important;
   }
+
   .hero-subtitle {
     font-size: 0.938rem !important;
     margin-bottom: 0.5rem !important;
   }
+
   .hero-content .btn,
   .hero-content .cta-buttons .btn {
     padding: 0.75rem 1.25rem !important;
@@ -397,6 +402,7 @@ header.nav-hidden ~ main .legal-nav-section {
     min-width: unset !important;
     width: 100% !important;
   }
+
   .hero-content .cta-buttons {
     flex-direction: column !important;
     gap: 0.75rem !important;
@@ -407,17 +413,22 @@ header.nav-hidden ~ main .legal-nav-section {
     padding: 0.75rem 0 !important;
     top: 70px;
   }
+
   .legal-nav {
     gap: 0.5rem !important;
   }
+
   .legal-nav .nav-link {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     padding: 0.5rem 0.75rem !important;
   }
+
   .legal-layout {
     grid-template-columns: 1fr !important;
     gap: 1.25rem !important;
   }
+
   .legal-sidebar {
     position: static !important;
     padding: 0 !important;
@@ -425,6 +436,7 @@ header.nav-hidden ~ main .legal-nav-section {
     box-shadow: none !important;
     background: transparent !important;
   }
+
   .legal-menu {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
@@ -432,11 +444,14 @@ header.nav-hidden ~ main .legal-nav-section {
     padding: 0.25rem 0 0.75rem 0 !important;
     overflow-x: visible !important;
   }
+
   .legal-menu-btn {
     width: 100% !important;
     flex: unset !important;
-    padding: 0.6rem 0.5rem !important; /* 9.6px 8px */
-    font-size: 0.813rem !important; /* 13px */
+    padding: 0.6rem 0.5rem !important;
+    /* 9.6px 8px */
+    font-size: 0.813rem !important;
+    /* 13px */
     font-weight: 600 !important;
     justify-content: center !important;
     text-align: center !important;
@@ -447,12 +462,14 @@ header.nav-hidden ~ main .legal-nav-section {
     border-radius: 10px !important;
     box-sizing: border-box !important;
   }
+
   .legal-menu-btn.active {
     background: var(--primary-blue) !important;
     color: white !important;
     border-color: var(--primary-blue) !important;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
   }
+
   .legal-menu-btn i {
     display: none !important;
   }
@@ -461,12 +478,14 @@ header.nav-hidden ~ main .legal-nav-section {
   .legal-content-section {
     padding: 0.75rem 0 !important;
   }
+
   .legal-content-area {
     min-height: auto !important;
     border-radius: var(--radius-sedang) !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
+
   .legal-article {
     padding: 1rem !important;
     border: none !important;
@@ -475,17 +494,22 @@ header.nav-hidden ~ main .legal-nav-section {
     max-width: 100% !important;
     box-sizing: border-box !important;
   }
+
   .article-header {
     margin-bottom: 1rem !important;
     padding-bottom: 0.75rem !important;
   }
+
   .article-header h2 {
-    font-size: 1.15rem !important; /* ~18.4px */
+    font-size: 1.15rem !important;
+    /* ~18.4px */
     line-height: 1.25 !important;
     margin-bottom: 0.25rem !important;
   }
+
   .last-updated {
-    font-size: 0.75rem !important; /* 12px */
+    font-size: 0.75rem !important;
+    /* 12px */
   }
 
   /* Compact Typography Overrides for All Text Inside Article Body */
@@ -493,10 +517,12 @@ header.nav-hidden ~ main .legal-nav-section {
   .article-body li,
   .legal-article p,
   .legal-article li {
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     line-height: 1.45 !important;
     margin-bottom: 0.5rem !important;
   }
+
   .article-body ul,
   .article-body ol,
   .legal-article ul,
@@ -505,9 +531,11 @@ header.nav-hidden ~ main .legal-nav-section {
     margin-bottom: 0.75rem !important;
     padding-left: 0 !important;
   }
+
   .article-body h3,
   .legal-article h3 {
-    font-size: 0.938rem !important; /* 15px */
+    font-size: 0.938rem !important;
+    /* 15px */
     line-height: 1.3 !important;
     margin-top: 1rem !important;
     margin-bottom: 0.5rem !important;
@@ -519,13 +547,16 @@ header.nav-hidden ~ main .legal-nav-section {
     margin: 1rem 0 !important;
     border-radius: var(--radius-sedang) !important;
   }
+
   .contact-info p {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 0.25rem !important;
-    font-size: 0.813rem !important; /* 13px */
+    font-size: 0.813rem !important;
+    /* 13px */
     margin-bottom: 0.75rem !important;
   }
+
   .contact-info strong {
     min-width: auto !important;
     color: var(--text-primary) !important;
@@ -535,6 +566,7 @@ header.nav-hidden ~ main .legal-nav-section {
   .bottom-cta-section {
     padding: 1rem 0 1.5rem 0 !important;
   }
+
   .team-cta {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%) !important;
     color: white !important;
@@ -548,27 +580,34 @@ header.nav-hidden ~ main .legal-nav-section {
     width: 100% !important;
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2) !important;
   }
+
   .team-cta-content {
     width: 100% !important;
   }
+
   .team-cta h3,
   .team-cta h2 {
-    font-size: 1.1rem !important; /* 17.6px */
+    font-size: 1.1rem !important;
+    /* 17.6px */
     line-height: 1.3 !important;
     margin-bottom: 0.5rem !important;
     color: white !important;
   }
+
   .team-cta p {
-    font-size: 0.844rem !important; /* 13.5px */
+    font-size: 0.844rem !important;
+    /* 13.5px */
     line-height: 1.45 !important;
     color: white !important;
   }
+
   .team-cta .cta-buttons {
     width: 100% !important;
     flex-direction: column !important;
     gap: 0.75rem !important;
     display: flex !important;
   }
+
   .team-cta .btn,
   .team-cta .cta-buttons .btn {
     width: 100% !important;

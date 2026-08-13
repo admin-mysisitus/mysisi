@@ -1,8 +1,6 @@
 /* ========== KARIR PAGE STYLING ========== */
 /* Styling komprehensif halaman lowongan karir dengan fokus pada job listings, benefits, dan company culture */
-
 /* Hero styling moved to components/hero.css */
-
 /* ========== SECTION HEADER STYLING ========== */
 .section-header {
   display: flex;
@@ -24,7 +22,8 @@
 }
 
 .section-divider {
-  display: none !important; /* Dihapus sesuai permintaan pengguna */
+  display: none !important;
+  /* Dihapus sesuai permintaan pengguna */
 }
 
 /* ========== BENEFITS SECTION ========== */
@@ -530,7 +529,6 @@
 
 /* ========== CTA SECTION ========== */
 /* Styling handled by components/hero.css - .karir-cta-section */
-
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .benefits-grid {
@@ -589,6 +587,7 @@
 
 /* Small screens optimization */
 @media (max-width: 640px) {
+
   .karir-benefits-section,
   .karir-openings-section,
   .karir-process-section,
@@ -633,7 +632,6 @@
 /* ========== ANIMATIONS ========== */
 /* Semua animasi dihandle oleh karir.js untuk menghindari duplikasi dan konflik */
 /* CSS-based animations hanya untuk fallback jika diperlukan */
-
 /* Smooth section divider animation */
 .section-divider {
   opacity: 0;
@@ -645,6 +643,7 @@
     opacity: 0;
     width: 0;
   }
+
   to {
     opacity: 1;
     width: 60px;

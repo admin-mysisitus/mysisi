@@ -1,14 +1,13 @@
 /* ========== SHARED SECTION STYLES ========== */
 /* Reusable styles untuk section patterns yang sama di berbagai halaman */
 /* Hero styling sudah dipindahkan ke components/hero.css */
-
 /* ========== SHARED SECTION TITLE PATTERNS ========== */
 .section-title,
-.services-overview-section > .container > h2,
-.testimonial-section > .container > h2,
-.why-us-section > .container > h2,
-.faq-section > .container > h2,
-.comparison-section > .container > h2 {
+.services-overview-section>.container>h2,
+.testimonial-section>.container>h2,
+.why-us-section>.container>h2,
+.faq-section>.container>h2,
+.comparison-section>.container>h2 {
   font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -101,7 +100,6 @@
 
 /* ========== SHARED GRID PATTERNS - CONSOLIDATED ========== */
 /* Common grid layouts yang digunakan di multiple pages */
-
 /* Standard 280px cards grid (most common) */
 .grid-auto-fit {
   display: grid;
@@ -153,13 +151,14 @@
   .grid-4-col {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .grid-3-col {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
+
   .grid-auto-fit,
   .grid-three-cols,
   .grid-2-col,
@@ -168,7 +167,7 @@
     grid-template-columns: 1fr;
     gap: clamp(1.5rem, 2vw, 2rem);
   }
-  
+
   .grid-two-cols {
     grid-template-columns: 1fr;
     gap: clamp(1.5rem, 2vw, 2rem);
@@ -204,7 +203,6 @@
 
 /* ========== ANIMATION & STAGGER UTILITIES ========== */
 /* Comprehensive staggered animation utilities untuk menghindari inline nth-child definitions */
-
 /* Base animation utilities */
 .fade-in {
   animation: fadeIn 0.6s ease-out forwards;
@@ -221,7 +219,6 @@
 
 /* ========== SMOOTH ANIMATIONS WITH CUBIC-BEZIER EASING ========== */
 /* Animasi dengan easing yang lebih halus dan natural */
-
 /* Slide In Up - Smooth with bounce easing */
 .slide-smooth {
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
@@ -264,88 +261,267 @@
 
 /* ========== AUTO-STAGGER UNTUK CARDS ========== */
 /* Auto-stagger untuk elemen dengan class yang mengandung "card" */
-[class*="card"]:nth-child(1) { animation-delay: 0.1s; }
-[class*="card"]:nth-child(2) { animation-delay: 0.2s; }
-[class*="card"]:nth-child(3) { animation-delay: 0.3s; }
-[class*="card"]:nth-child(4) { animation-delay: 0.4s; }
-[class*="card"]:nth-child(5) { animation-delay: 0.5s; }
-[class*="card"]:nth-child(6) { animation-delay: 0.6s; }
-[class*="card"]:nth-child(7) { animation-delay: 0.7s; }
-[class*="card"]:nth-child(8) { animation-delay: 0.8s; }
-[class*="card"]:nth-child(9) { animation-delay: 0.9s; }
+[class*="card"]:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+[class*="card"]:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+[class*="card"]:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+[class*="card"]:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+[class*="card"]:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+[class*="card"]:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+[class*="card"]:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+[class*="card"]:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+[class*="card"]:nth-child(9) {
+  animation-delay: 0.9s;
+}
 
 /* Auto-stagger untuk elemen dengan class yang mengandung "item" */
-[class*="item"]:nth-child(1) { animation-delay: 0.1s; }
-[class*="item"]:nth-child(2) { animation-delay: 0.2s; }
-[class*="item"]:nth-child(3) { animation-delay: 0.3s; }
-[class*="item"]:nth-child(4) { animation-delay: 0.4s; }
-[class*="item"]:nth-child(5) { animation-delay: 0.5s; }
-[class*="item"]:nth-child(6) { animation-delay: 0.6s; }
-[class*="item"]:nth-child(7) { animation-delay: 0.7s; }
-[class*="item"]:nth-child(8) { animation-delay: 0.8s; }
-[class*="item"]:nth-child(9) { animation-delay: 0.9s; }
+[class*="item"]:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+[class*="item"]:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+[class*="item"]:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+[class*="item"]:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+[class*="item"]:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+[class*="item"]:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+[class*="item"]:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+[class*="item"]:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+[class*="item"]:nth-child(9) {
+  animation-delay: 0.9s;
+}
 
 /* Auto-stagger untuk elemen dengan class yang contain "post" */
-[class*="post"]:nth-child(1) { animation-delay: 0.1s; }
-[class*="post"]:nth-child(2) { animation-delay: 0.2s; }
-[class*="post"]:nth-child(3) { animation-delay: 0.3s; }
-[class*="post"]:nth-child(4) { animation-delay: 0.4s; }
-[class*="post"]:nth-child(5) { animation-delay: 0.5s; }
-[class*="post"]:nth-child(6) { animation-delay: 0.6s; }
+[class*="post"]:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+[class*="post"]:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+[class*="post"]:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+[class*="post"]:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+[class*="post"]:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+[class*="post"]:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* Auto-stagger untuk elemen dengan class yang contain "process" */
-[class*="process"]:nth-child(1) { animation-delay: 0.1s; }
-[class*="process"]:nth-child(2) { animation-delay: 0.2s; }
-[class*="process"]:nth-child(3) { animation-delay: 0.3s; }
-[class*="process"]:nth-child(4) { animation-delay: 0.4s; }
-[class*="process"]:nth-child(5) { animation-delay: 0.5s; }
-[class*="process"]:nth-child(6) { animation-delay: 0.6s; }
+[class*="process"]:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+[class*="process"]:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+[class*="process"]:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+[class*="process"]:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+[class*="process"]:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+[class*="process"]:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* Auto-stagger untuk timeline elements */
-.timeline-item:nth-child(1) { animation-delay: 0.1s; }
-.timeline-item:nth-child(2) { animation-delay: 0.2s; }
-.timeline-item:nth-child(3) { animation-delay: 0.3s; }
-.timeline-item:nth-child(4) { animation-delay: 0.4s; }
-.timeline-item:nth-child(5) { animation-delay: 0.5s; }
-.timeline-item:nth-child(6) { animation-delay: 0.6s; }
+.timeline-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.timeline-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.timeline-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.timeline-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.timeline-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.timeline-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* Auto-stagger untuk package/plan elements */
-[class*="package"]:nth-child(1) { animation-delay: 0.1s; }
-[class*="package"]:nth-child(2) { animation-delay: 0.2s; }
-[class*="package"]:nth-child(3) { animation-delay: 0.3s; }
-[class*="package"]:nth-child(4) { animation-delay: 0.4s; }
-[class*="package"]:nth-child(5) { animation-delay: 0.5s; }
-[class*="package"]:nth-child(6) { animation-delay: 0.6s; }
+[class*="package"]:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+[class*="package"]:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+[class*="package"]:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+[class*="package"]:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+[class*="package"]:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+[class*="package"]:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* ========== EXPLICIT STAGGER UTILITIES ========== */
 /* untuk override atau specific use cases */
-
 /* Standard stagger (0.1s increments) */
-.stagger-child-1 { animation-delay: 0.1s; }
-.stagger-child-2 { animation-delay: 0.2s; }
-.stagger-child-3 { animation-delay: 0.3s; }
-.stagger-child-4 { animation-delay: 0.4s; }
-.stagger-child-5 { animation-delay: 0.5s; }
-.stagger-child-6 { animation-delay: 0.6s; }
-.stagger-child-7 { animation-delay: 0.7s; }
-.stagger-child-8 { animation-delay: 0.8s; }
-.stagger-child-9 { animation-delay: 0.9s; }
+.stagger-child-1 {
+  animation-delay: 0.1s;
+}
+
+.stagger-child-2 {
+  animation-delay: 0.2s;
+}
+
+.stagger-child-3 {
+  animation-delay: 0.3s;
+}
+
+.stagger-child-4 {
+  animation-delay: 0.4s;
+}
+
+.stagger-child-5 {
+  animation-delay: 0.5s;
+}
+
+.stagger-child-6 {
+  animation-delay: 0.6s;
+}
+
+.stagger-child-7 {
+  animation-delay: 0.7s;
+}
+
+.stagger-child-8 {
+  animation-delay: 0.8s;
+}
+
+.stagger-child-9 {
+  animation-delay: 0.9s;
+}
 
 /* Fast stagger (0.05s increments) - untuk banyak elemen */
-.stagger-child-fast-1 { animation-delay: 0.05s; }
-.stagger-child-fast-2 { animation-delay: 0.1s; }
-.stagger-child-fast-3 { animation-delay: 0.15s; }
-.stagger-child-fast-4 { animation-delay: 0.2s; }
-.stagger-child-fast-5 { animation-delay: 0.25s; }
-.stagger-child-fast-6 { animation-delay: 0.3s; }
+.stagger-child-fast-1 {
+  animation-delay: 0.05s;
+}
+
+.stagger-child-fast-2 {
+  animation-delay: 0.1s;
+}
+
+.stagger-child-fast-3 {
+  animation-delay: 0.15s;
+}
+
+.stagger-child-fast-4 {
+  animation-delay: 0.2s;
+}
+
+.stagger-child-fast-5 {
+  animation-delay: 0.25s;
+}
+
+.stagger-child-fast-6 {
+  animation-delay: 0.3s;
+}
 
 /* Extended slow stagger untuk emphasis */
-.stagger-child-slow-1 { animation-delay: 0.2s; }
-.stagger-child-slow-2 { animation-delay: 0.4s; }
-.stagger-child-slow-3 { animation-delay: 0.6s; }
-.stagger-child-slow-4 { animation-delay: 0.8s; }
-.stagger-child-slow-5 { animation-delay: 1s; }
-.stagger-child-slow-6 { animation-delay: 1.2s; }
+.stagger-child-slow-1 {
+  animation-delay: 0.2s;
+}
+
+.stagger-child-slow-2 {
+  animation-delay: 0.4s;
+}
+
+.stagger-child-slow-3 {
+  animation-delay: 0.6s;
+}
+
+.stagger-child-slow-4 {
+  animation-delay: 0.8s;
+}
+
+.stagger-child-slow-5 {
+  animation-delay: 1s;
+}
+
+.stagger-child-slow-6 {
+  animation-delay: 1.2s;
+}
 
 /* ========== AUTOMATICALLY APPLIED STANDARD SECTION PADDING ========== */
 /* Auto-apply standard padding ke common section classes untuk avoid repetisi */
@@ -369,14 +545,21 @@
 /* ========== GLOBAL ANIMATIONS - CONSOLIDATED ========== */
 /* Core animations moved to base/shared-animations.css for deduplication */
 /* @keyframes slideInUp, fadeIn, shake moved to shared-animations.css */
-
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 /* ========== GLOBAL PRINT STYLES ========== */
 @media print {
+
   /* Sembunyikan elemen navigasi dan interaktif */
   header,
   footer,
@@ -388,7 +571,7 @@
   .share-buttons-container,
   [data-print-hide],
   .print-hidden {
-  display: none;
+    display: none;
   }
 
   /* Optimasi untuk printing */
@@ -406,8 +589,17 @@
   }
 
   /* Prevent page breaks dalam konten penting */
-  h1, h2, h3, h4, h5, h6,
-  p, li, dt, dd, blockquote,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  li,
+  dt,
+  dd,
+  blockquote,
   .card-base,
   [class*="article"] {
     page-break-inside: avoid;
@@ -428,11 +620,10 @@
     text-decoration: underline;
   }
 
-
   /* Remove shadows */
   * {
-  box-shadow: none;
-  text-shadow: none;
+    box-shadow: none;
+    text-shadow: none;
   }
 
   /* Margins dan padding untuk print */

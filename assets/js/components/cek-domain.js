@@ -1,37 +1,114 @@
-(async function () {
+(async function() {
   'use strict';
-
   // Import cart managers
-  const { CartManager, WishlistManager } = await import('../modules/unified-cart.js');
-  const { AuthManager } = await import('../modules/unified-auth.js');
-  const { showSuccess, showError, showInfo, formatCurrency } = await import('../modules/unified-utils.js');
+  const {
+    CartManager,
+    WishlistManager
+  } = await import('../modules/unified-cart.js');
+  const {
+    AuthManager
+  } = await import('../modules/unified-auth.js');
+  const {
+    showSuccess,
+    showError,
+    showInfo,
+    formatCurrency
+  } = await import('../modules/unified-utils.js');
   const APIClient = (await import('../modules/unified-api.js')).default;
-
   // Get the section container
   const section = document.querySelector('.cek-domain-section');
   if (!section) return;
-
   // ============================================
   // DOMAIN DATA - Enhanced with more details
   // ============================================
-  const allExtensions = [
-    { ext: '.com', oldPrice: 209900, newPrice: 159900, info: 'Ideal untuk bisnis global', highlight: 'best', label: '<i class="fas fa-star"></i> Terpopuler' },
-    { ext: '.id', oldPrice: 249000, newPrice: 99000, info: 'Domain Indonesia resmi', highlight: 'best', label: '<i class="fas fa-star"></i> Best Deal' },
-    { ext: '.co.id', oldPrice: 299000, newPrice: 295000, info: 'Terpercaya untuk perusahaan', highlight: 'business', label: '<i class="fas fa-briefcase"></i> Bisnis' },
-    { ext: '.my.id', oldPrice: 35000, newPrice: 9900, info: 'Pribadi atau portofolio', highlight: 'cheap', label: '<i class="fas fa-coins"></i> Super Hemat' },
-    { ext: '.web.id', oldPrice: 50000, newPrice: 9900, info: 'Website profesional', highlight: 'cheap', label: '<i class="fas fa-coins"></i> Super Hemat' },
-    { ext: '.cloud', oldPrice: 389000, newPrice: 49900, info: 'Hosting atau cloud', highlight: 'cheap', label: '<i class="fas fa-coins"></i> Super Hemat' },
-    { ext: '.org', oldPrice: 189900, newPrice: 149900, info: 'Organisasi & komunitas', highlight: 'none', label: '' },
-    { ext: '.net', oldPrice: 219900, newPrice: 199900, info: 'Internet & teknologi', highlight: 'none', label: '' },
-    { ext: '.biz.id', oldPrice: 150000, newPrice: 120000, info: 'Bisnis lokal', highlight: 'business', label: '<i class="fas fa-briefcase"></i> Bisnis' },
-    { ext: '.ac.id', oldPrice: 75000, newPrice: 65000, info: 'Lembaga pendidikan', highlight: 'none', label: '' },
-    { ext: '.or.id', oldPrice: 150000, newPrice: 130000, info: 'Organisasi nirlaba', highlight: 'none', label: '' },
-    { ext: '.sch.id', oldPrice: 59000, newPrice: 59000, info: 'Sekolah & pendidikan', highlight: 'none', label: '' }
-  ];
-
+  const allExtensions = [{
+    ext: '.com',
+    oldPrice: 209900,
+    newPrice: 159900,
+    info: 'Ideal untuk bisnis global',
+    highlight: 'best',
+    label: '<i class="fas fa-star"></i> Terpopuler'
+  }, {
+    ext: '.id',
+    oldPrice: 249000,
+    newPrice: 99000,
+    info: 'Domain Indonesia resmi',
+    highlight: 'best',
+    label: '<i class="fas fa-star"></i> Best Deal'
+  }, {
+    ext: '.co.id',
+    oldPrice: 299000,
+    newPrice: 295000,
+    info: 'Terpercaya untuk perusahaan',
+    highlight: 'business',
+    label: '<i class="fas fa-briefcase"></i> Bisnis'
+  }, {
+    ext: '.my.id',
+    oldPrice: 35000,
+    newPrice: 9900,
+    info: 'Pribadi atau portofolio',
+    highlight: 'cheap',
+    label: '<i class="fas fa-coins"></i> Super Hemat'
+  }, {
+    ext: '.web.id',
+    oldPrice: 50000,
+    newPrice: 9900,
+    info: 'Website profesional',
+    highlight: 'cheap',
+    label: '<i class="fas fa-coins"></i> Super Hemat'
+  }, {
+    ext: '.cloud',
+    oldPrice: 389000,
+    newPrice: 49900,
+    info: 'Hosting atau cloud',
+    highlight: 'cheap',
+    label: '<i class="fas fa-coins"></i> Super Hemat'
+  }, {
+    ext: '.org',
+    oldPrice: 189900,
+    newPrice: 149900,
+    info: 'Organisasi & komunitas',
+    highlight: 'none',
+    label: ''
+  }, {
+    ext: '.net',
+    oldPrice: 219900,
+    newPrice: 199900,
+    info: 'Internet & teknologi',
+    highlight: 'none',
+    label: ''
+  }, {
+    ext: '.biz.id',
+    oldPrice: 150000,
+    newPrice: 120000,
+    info: 'Bisnis lokal',
+    highlight: 'business',
+    label: '<i class="fas fa-briefcase"></i> Bisnis'
+  }, {
+    ext: '.ac.id',
+    oldPrice: 75000,
+    newPrice: 65000,
+    info: 'Lembaga pendidikan',
+    highlight: 'none',
+    label: ''
+  }, {
+    ext: '.or.id',
+    oldPrice: 150000,
+    newPrice: 130000,
+    info: 'Organisasi nirlaba',
+    highlight: 'none',
+    label: ''
+  }, {
+    ext: '.sch.id',
+    oldPrice: 59000,
+    newPrice: 59000,
+    info: 'Sekolah & pendidikan',
+    highlight: 'none',
+    label: ''
+  }];
   const extColors = {
     '.com': '#4285f4', // blue
-    '.id': '#ea4335',  // red
+    '.id': '#ea4335', // red
     '.co.id': '#ea4335',
     '.my.id': '#ea4335',
     '.web.id': '#ea4335',
@@ -45,13 +122,12 @@
     '.top': '#20c997',
     '.xyz': '#a855f7' // purple
   };
-
   // ============================================
   // UTILITY FUNCTIONS
   // ============================================
   function debounce(func, delay) {
     let timeoutId;
-    return function (...args) {
+    return function(...args) {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
@@ -67,7 +143,6 @@
     div.textContent = text;
     return div.innerHTML;
   }
-
   // ============================================
   // DOM ELEMENTS CACHE - Query once, use everywhere
   // ============================================
@@ -80,41 +155,26 @@
   const cekDomainForm = section.querySelector('#cek-domain-form-main');
   const cekDomainPopularExtensions = section.querySelector('#cek-domain-popular-extensions');
   const cekDomainPricingPreview = section.querySelector('.cek-domain-pricing-preview');
-
-
   // Validate essential elements exist
   if (!cekDomainInput || !cekDomainForm) return;
-
   // ============================================
   // PLACEHOLDER ANIMATION (Typing Effect)
   // ============================================
   function initiatePlaceholderAnimation() {
-    const placeholderTexts = [
-      'toko online anda...',
-      'contohwebsite.com',
-      'bisnisanda.id',
-      'blogdigital.my.id',
-      'organisasimu.org',
-      'sekolahku.sch.id'
-    ];
-
+    const placeholderTexts = ['toko online anda...', 'contohwebsite.com', 'bisnisanda.id', 'blogdigital.my.id', 'organisasimu.org', 'sekolahku.sch.id'];
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
 
     function typeEffect() {
       const currentText = placeholderTexts[textIndex];
-
       if (isDeleting) {
         charIndex--;
       } else {
         charIndex++;
       }
-
       cekDomainInput.setAttribute('placeholder', currentText.substring(0, charIndex));
-
       let speed = isDeleting ? 50 : 100;
-
       if (!isDeleting && charIndex === currentText.length) {
         speed = 1500;
         isDeleting = true;
@@ -123,13 +183,10 @@
         textIndex = (textIndex + 1) % placeholderTexts.length;
         speed = 300;
       }
-
       setTimeout(typeEffect, speed);
     }
-
     typeEffect();
   }
-
   // ============================================
   // PRICING PREVIEW
   // ============================================
@@ -140,13 +197,16 @@
 
   function renderPricingPreview() {
     if (!cekDomainPopularExtensions) return;
-
     cekDomainPopularExtensions.innerHTML = '';
     const sortedExts = [...allExtensions].sort((a, b) => {
-      const order = { best: 3, cheap: 2, business: 1, none: 0 };
+      const order = {
+        best: 3,
+        cheap: 2,
+        business: 1,
+        none: 0
+      };
       return order[b.highlight] - order[a.highlight];
     }).slice(0, 8);
-
     sortedExts.forEach((ext, idx) => {
       const discount = calculateSavings(ext.oldPrice, ext.newPrice);
       const item = document.createElement('div');
@@ -154,7 +214,6 @@
       item.style.animationDelay = `${idx * 0.08}s`;
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
-
       let labels = '';
       if (ext.label) {
         labels = `<span class="cek-domain-ext-label">${ext.label}</span>`;
@@ -162,9 +221,7 @@
       if (discount > 0) {
         labels += `<span class="cek-domain-ext-discount">-${discount}%</span>`;
       }
-
       const extColor = extColors[ext.ext] || '#1a1a2e';
-
       item.innerHTML = `
         <div class="cek-domain-ext-labels">${labels}</div>
         <div class="cek-domain-ext-name" style="color: ${extColor}; font-weight: 800;">${ext.ext}</div>
@@ -174,19 +231,15 @@
         </div>
         <div class="cek-domain-ext-info">${ext.info}</div>
       `;
-
       const handleSelect = () => {
         // Preserve what they typed, just replace/append extension
         const currentInput = cekDomainInput.value;
         const parsed = parseDomain(currentInput);
         const base = parsed.base || '';
-
         cekDomainInput.value = base + ext.ext;
         cekDomainInput.focus();
-
         // Place cursor at start if empty, or at end if they typed a brand
         const cursorPosition = base.length > 0 ? cekDomainInput.value.length : 0;
-
         setTimeout(() => {
           cekDomainInput.setSelectionRange(cursorPosition, cursorPosition);
           cekDomainInput.dispatchEvent(new Event('input')); // trigger suggestions
@@ -196,28 +249,21 @@
       item.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') handleSelect();
       });
-
       cekDomainPopularExtensions.appendChild(item);
     });
-
     // Show pricing preview
     if (cekDomainPricingPreview) {
       cekDomainPricingPreview.style.display = 'block';
       cekDomainPricingPreview.classList.add('fade-in');
     }
   }
-
   // ============================================
   // DOMAIN CONFIGURATION & VALIDATION
   // ============================================
-  const validMultiPartExtensions = [
-    '.co.id', '.my.id', '.sch.id', '.ac.id', '.go.id',
-    '.or.id', '.web.id', '.biz.id', '.net.id'
-  ];
+  const validMultiPartExtensions = ['.co.id', '.my.id', '.sch.id', '.ac.id', '.go.id', '.or.id', '.web.id', '.biz.id', '.net.id'];
 
   function parseDomain(input) {
     const cleaned = input.toLowerCase().trim();
-
     for (const ext of validMultiPartExtensions) {
       if (cleaned.endsWith(ext)) {
         return {
@@ -228,10 +274,8 @@
         };
       }
     }
-
     if (cleaned.includes('.')) {
       const ext = cleaned.slice(cleaned.lastIndexOf('.'));
-
       if (allExtensions.some(e => e.ext === ext)) {
         return {
           base: cleaned.slice(0, -ext.length),
@@ -240,7 +284,6 @@
           isInvalid: false
         };
       }
-
       return {
         base: cleaned,
         ext: null,
@@ -248,7 +291,6 @@
         isInvalid: true
       };
     }
-
     return {
       base: cleaned,
       ext: null,
@@ -256,11 +298,12 @@
       isInvalid: false
     };
   }
-
   async function fastCheckDNS(domain) {
     try {
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
-        headers: { 'accept': 'application/dns-json' },
+        headers: {
+          'accept': 'application/dns-json'
+        },
       });
       if (!response.ok) return true;
       const data = await response.json();
@@ -269,38 +312,35 @@
       return true;
     }
   }
-
   // To cancel previous checks if user keeps typing
   let suggestionCheckAborter = null;
 
   function renderInstantSuggestions() {
     const inputVal = cekDomainInput.value;
-    const { base, isFullDomain, isInvalid } = parseDomain(inputVal);
-
+    const {
+      base,
+      isFullDomain,
+      isInvalid
+    } = parseDomain(inputVal);
     if (!base || base.length < 2 || isFullDomain || isInvalid) {
       cekDomainSuggestions.style.display = 'none';
       return;
     }
-
     const topExts = ['.com', '.id', '.co.id', '.web.id', '.my.id'];
     cekDomainSuggestions.innerHTML = '';
-
     // Abort previous check if still running
     if (suggestionCheckAborter) {
       suggestionCheckAborter.abort();
     }
     suggestionCheckAborter = new AbortController();
     const signal = suggestionCheckAborter.signal;
-
     topExts.forEach((ext, index) => {
       const fullDomain = `${base}${ext}`;
       const extData = allExtensions.find(item => item.ext === ext);
-
       const item = document.createElement('div');
       item.className = 'cek-domain-suggestion-item';
       item.setAttribute('role', 'option');
       item.id = `suggestion-${index}`;
-
       const extSafe = ext;
       const extColor = extColors[extSafe] || '#1a1a2e';
       const extLabel = ext.replace('.', '').toUpperCase();
@@ -313,7 +353,6 @@
           <i class="fas fa-spinner fa-spin"></i> Mengecek...
         </div>
       ` : '';
-
       item.innerHTML = `
         <div class="cek-domain-suggestion-icon" style="background: ${extColor};">${extLabel}</div>
         <div class="cek-domain-suggestion-content">
@@ -322,18 +361,15 @@
         </div>
         ${priceHTML}
       `;
-
       // Start async check for this specific domain
       fastCheckDNS(fullDomain).then(isAvailable => {
         if (signal.aborted) return;
         const statusEl = item.querySelector(`#status-${index}`);
         const priceEl = item.querySelector(`#price-${index}`);
-
         if (statusEl && priceEl) {
           if (isAvailable) {
             statusEl.style.display = 'none';
             priceEl.style.display = 'block';
-
             // Only add click listener if available
             item.style.cursor = 'pointer';
             item.addEventListener('click', () => {
@@ -349,10 +385,8 @@
           }
         }
       });
-
       cekDomainSuggestions.appendChild(item);
     });
-
     cekDomainSuggestions.style.display = 'block';
   }
 
@@ -362,33 +396,29 @@
       cekDomainError.style.display = 'block';
       return false;
     }
-
-    const { base, isInvalid } = parseDomain(input);
-
+    const {
+      base,
+      isInvalid
+    } = parseDomain(input);
     if (isInvalid) {
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Ekstensi tidak valid. Coba: .com, .id, .co.id, atau ekstensi lainnya';
       cekDomainError.style.display = 'block';
       return false;
     }
-
     if (base.length < 3) {
       cekDomainError.innerHTML = '<i class="fas fa-info-circle"></i> Nama domain minimal 3 karakter';
       cekDomainError.style.display = 'block';
       return false;
     }
-
     const baseRegex = /^(?!-)[a-z0-9-]{1,63}(?<!-)$/;
-
     if (!baseRegex.test(base)) {
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Nama domain hanya boleh mengandung huruf, angka, dan strip (-)';
       cekDomainError.style.display = 'block';
       return false;
     }
-
     cekDomainError.style.display = 'none';
     return true;
   }
-
   /**
    * Check domain availability via Cloudflare DNS API
    * Returns object with explicit result state
@@ -407,21 +437,19 @@
       } catch (backendError) {
         console.warn('[Domain Check] Backend API check failed:', backendError);
       }
-
       // 2. Check Cloudflare DNS for global availability
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
-        headers: { 'accept': 'application/dns-json' },
+        headers: {
+          'accept': 'application/dns-json'
+        },
         signal: abortSignal,
         timeout: 8000
       });
-
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
-
       const data = await response.json();
       const dnsAvailable = !data.Answer || data.Answer.length === 0;
-
       // 3. Determine final state
       if (!dnsAvailable) {
         // Globally registered
@@ -452,10 +480,7 @@
       }
     } catch (error) {
       // Return error state (jangan silent fail)
-      const message = error.name === 'AbortError'
-        ? 'Request dibatalkan'
-        : `Gagal mengecek ketersediaan: ${error.message}`;
-
+      const message = error.name === 'AbortError' ? 'Request dibatalkan' : `Gagal mengecek ketersediaan: ${error.message}`;
       return {
         available: null, // Unknown
         isOrdered: false,
@@ -465,7 +490,6 @@
       };
     }
   }
-
   // ============================================
   // ABORT CONTROLLER STATE
   // ============================================
@@ -474,7 +498,6 @@
   function createResultCard(fullDomain, extData, result, isRecommended = false) {
     const card = document.createElement('li');
     const discount = calculateSavings(extData.oldPrice, extData.newPrice);
-
     if (result.error) {
       // STATE 3: ERROR
       card.className = 'cek-domain-result-card error';
@@ -488,7 +511,6 @@
     } else if (result.available === true) {
       // STATE 1: AVAILABLE OR ORDERED
       card.className = `cek-domain-result-card available ${isRecommended ? 'super-highlight' : ''} ${result.isOrdered ? 'warning' : ''}`;
-
       const badges = [];
       if (result.isOrdered) {
         badges.push(`<span class="cek-domain-ext-label" style="background:#f39c12; color:white;"><i class="fas fa-fire"></i> Rebutan</span>`);
@@ -503,15 +525,12 @@
           badges.push(`<span class="cek-domain-recommended-badge"><i class="fas fa-star"></i> Rekomendasi</span>`);
         }
       }
-
       let infoHtml = sanitizeHTML(extData.info);
       if (result.isOrdered) {
         infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Siapa cepat bayar, dia dapat.</span>`;
       }
-
       const extColor = extData ? (extColors[extData.ext] || '#1a1a2e') : '#1a1a2e';
       const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${result.isOrdered ? 'inherit' : extColor};">${extData.ext}</span>`);
-
       card.innerHTML = `
         <div class="cek-domain-result-badges">${badges.join('')}</div>
         <h3 ${result.isOrdered ? 'style="color:#d35400;"' : ''}>
@@ -551,10 +570,8 @@
         </a>
       `;
     }
-
     return card;
   }
-
   async function displayResults(inputVal) {
     // Hide suggestions dropdown and blur input to prevent UI occlusion
     if (cekDomainSuggestions) {
@@ -563,24 +580,26 @@
     if (cekDomainInput) {
       cekDomainInput.blur();
     }
-
     // Cancel previous request
     if (activeAbortController) {
       activeAbortController.abort();
     }
-
     activeAbortController = new AbortController();
     cekDomainBtn.disabled = true;
     const originalBtnHTML = cekDomainBtn.innerHTML;
     cekDomainBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari...';
-
     cekDomainResultsList.innerHTML = '';
     cekDomainResults.removeAttribute('hidden');
     cekDomainResults.classList.add('show');
-    cekDomainResults.scrollIntoView({ behavior: 'smooth' });
-
-    const { base, ext, isFullDomain, isInvalid } = parseDomain(inputVal);
-
+    cekDomainResults.scrollIntoView({
+      behavior: 'smooth'
+    });
+    const {
+      base,
+      ext,
+      isFullDomain,
+      isInvalid
+    } = parseDomain(inputVal);
     if (isInvalid) {
       cekDomainResultsList.innerHTML = `
         <li style="grid-column: 1/-1; text-align: center; color: #e74c3c;">
@@ -593,81 +612,63 @@
       showError('Format Tidak Valid', 'Format domain tidak valid. Contoh: namadomain.com');
       return;
     }
-
-    const targetExts = isFullDomain
-      ? allExtensions.filter(e => e.ext === ext)
-      : allExtensions;
-
+    const targetExts = isFullDomain ? allExtensions.filter(e => e.ext === ext) : allExtensions;
     try {
-      const resultCards = await Promise.all(
-        targetExts.map(async (extData) => {
-          try {
-            const fullDomain = isFullDomain ? `${base}${ext}` : `${base}${extData.ext}`;
-            const result = await checkDomainAvailability(fullDomain, activeAbortController.signal);
-
-            return {
-              fullDomain,
-              extData,
-              result,
-              available: result.available
-            };
-          } catch (err) {
-            // Catch AbortError too
-            if (err.name === 'AbortError') return null;
-
-            return {
-              fullDomain: `${base}${extData.ext}`,
-              extData,
-              result: { error: true, message: 'Error checking domain', available: null },
+      const resultCards = await Promise.all(targetExts.map(async (extData) => {
+        try {
+          const fullDomain = isFullDomain ? `${base}${ext}` : `${base}${extData.ext}`;
+          const result = await checkDomainAvailability(fullDomain, activeAbortController.signal);
+          return {
+            fullDomain,
+            extData,
+            result,
+            available: result.available
+          };
+        } catch (err) {
+          // Catch AbortError too
+          if (err.name === 'AbortError') return null;
+          return {
+            fullDomain: `${base}${extData.ext}`,
+            extData,
+            result: {
+              error: true,
+              message: 'Error checking domain',
               available: null
-            };
-          }
-        })
-      );
-
+            },
+            available: null
+          };
+        }
+      }));
       // Filter out cancelled requests
       const validResults = resultCards.filter(r => r !== null);
-
       if (!validResults.length) {
         cekDomainBtn.disabled = false;
         cekDomainBtn.innerHTML = originalBtnHTML;
         return;
       }
-
       cekDomainResultsList.innerHTML = '';
-
       // ========== RECOMMENDATION ENGINE ==========
       let recommendedResult = null;
       if (!isFullDomain) {
         const isBusinessIntent = /(bisnis|company|corp|pt|tbk|industri|store|shop|toko|warung)/i.test(base);
         const isPersonalIntent = /(personal|blog|my|aku|saya|profil|portfolio|cv)/i.test(base);
-
         if (isBusinessIntent) {
-          recommendedResult = validResults.find(r =>
-            r.available === true && (r.extData.highlight === 'business' || r.extData.highlight === 'best')
-          );
+          recommendedResult = validResults.find(r => r.available === true && (r.extData.highlight === 'business' || r.extData.highlight === 'best'));
         } else if (isPersonalIntent) {
-          recommendedResult = validResults.find(r =>
-            r.available === true && (r.extData.highlight === 'cheap' || r.extData.highlight === 'best')
-          );
+          recommendedResult = validResults.find(r => r.available === true && (r.extData.highlight === 'cheap' || r.extData.highlight === 'best'));
         }
-
         if (!recommendedResult) {
-          recommendedResult = validResults.find(r => r.available === true && r.extData.highlight === 'best') ||
-            validResults.find(r => r.available === true && r.extData.highlight === 'cheap') ||
-            validResults.find(r => r.available === true);
+          recommendedResult = validResults.find(r => r.available === true && r.extData.highlight === 'best') || validResults.find(r => r.available === true && r.extData.highlight === 'cheap') || validResults.find(r => r.available === true);
         }
       } else {
         recommendedResult = validResults[0];
       }
-
       // ========== RENDER RESULTS ==========
       // Recommended card first
       if (recommendedResult) {
         const card = createResultCard(recommendedResult.fullDomain, recommendedResult.extData, recommendedResult.result, true);
         cekDomainResultsList.appendChild(card);
       }
-
       // Rest of results
       validResults.forEach((item) => {
         if (item !== recommendedResult) {
@@ -675,7 +676,6 @@
           cekDomainResultsList.appendChild(card);
         }
       });
-
       // Add disclaimer
       const disclaimerLi = document.createElement('li');
       disclaimerLi.className = 'cek-domain-disclaimer';
@@ -688,8 +688,6 @@
         </small>
       `;
       cekDomainResultsList.appendChild(disclaimerLi);
-
-
       // Show success notification
       const availableCount = validResults.filter(r => r.available === true).length;
       if (availableCount > 0) {
@@ -697,7 +695,6 @@
       } else {
         showInfo('Pengecekan Selesai', 'Pengecekan selesai. Silakan coba dengan nama domain lain.');
       }
-
     } catch (err) {
       console.error('Display results error:', err);
       cekDomainResultsList.innerHTML = `
@@ -711,24 +708,19 @@
       cekDomainBtn.innerHTML = originalBtnHTML;
     }
   }
-
   // ============================================
   // EVENT LISTENERS & INITIALIZATION
   // ============================================
   const debouncedSuggestions = debounce(() => renderInstantSuggestions(), 300);
-
   // Initialize immediately
   renderPricingPreview();
   initiatePlaceholderAnimation();
-
   cekDomainInput.addEventListener('input', (e) => {
     let value = e.target.value;
-
     if (value !== value.toLowerCase()) {
       e.target.value = value.toLowerCase();
       value = value.toLowerCase();
     }
-
     if (/[^a-z0-9.-]/i.test(value)) {
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Hanya huruf, angka, titik, dan strip yang diperbolehkan';
       cekDomainError.style.display = 'block';
@@ -737,35 +729,29 @@
       debouncedSuggestions();
     }
   });
-
   cekDomainInput.addEventListener('blur', () => {
     setTimeout(() => {
       cekDomainSuggestions.style.display = 'none';
     }, 200);
   });
-
   cekDomainForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = cekDomainInput.value.trim();
-
     if (validateDomainInput(input)) {
       await displayResults(input);
     } else {
       cekDomainError.style.display = 'block';
     }
   });
-
   cekDomainInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       cekDomainBtn.click();
     }
   });
-
   // ============================================
   // DOMAIN PURCHASE & WISHLIST HANDLERS
   // ============================================
-
   section.addEventListener('click', async (e) => {
     // Handle "Amankan Sekarang" button
     if (e.target.closest('.cek-domain-buy-btn')) {
@@ -774,9 +760,10 @@
       const domain = decodeURIComponent(btn.dataset.domain);
       const tld = btn.dataset.tld;
       const price = parseInt(btn.dataset.price) || 0;
-
       try {
-        const { DOMAIN_PACKAGES } = await import('../config/api.config.js');
+        const {
+          DOMAIN_PACKAGES
+        } = await import('../config/api.config.js');
         // Add domain to cart for both guest and authenticated users
         CartManager.add(domain, tld, {
           package: 'starter',
@@ -785,21 +772,18 @@
           renewalPrice: DOMAIN_PACKAGES.starter.price,
           basePrice: DOMAIN_PACKAGES.starter.price
         });
-
         // ALL users (guest or authenticated) → Cart page directly
         window.location.href = '/cart/';
       } catch (error) {
         showError('❌ Gagal', error.message);
       }
     }
-
     // Handle Wishlist heart button
     if (e.target.closest('.cek-domain-wishlist-btn')) {
       e.preventDefault();
       const btn = e.target.closest('.cek-domain-wishlist-btn');
       const domain = btn.dataset.domain;
       const heartIcon = btn.querySelector('i');
-
       try {
         if (WishlistManager.isInWishlist(domain)) {
           // Remove from wishlist
@@ -817,18 +801,15 @@
         showError('❌ Error', error.message);
       }
     }
-
     // Close autocomplete if clicking elsewhere
     if (!cekDomainForm.contains(e.target) && !cekDomainSuggestions.contains(e.target)) {
       cekDomainSuggestions.innerHTML = '';
     }
   });
-
   // Update wishlist heart icons on page load
   document.addEventListener('cart:updated', () => {
     updateWishlistIcons();
   });
-
   document.addEventListener('wishlist:updated', () => {
     updateWishlistIcons();
   });
@@ -847,26 +828,27 @@
       }
     });
   }
-
   // ============================================
   // AUTO-SEARCH FROM URL PARAMS
   // ============================================
   const urlParams = new URLSearchParams(window.location.search);
   const autoSearchQuery = urlParams.get('q');
-
   if (autoSearchQuery && cekDomainInput) {
     // If the user came from dashboard or other places with ?q=domain
     cekDomainInput.value = autoSearchQuery;
-
     // Auto trigger search after a small delay to let UI settle
     setTimeout(() => {
       // Scroll to section smoothly
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
       // Dispatch submit event on the form to trigger the existing listener
-      const submitEvent = new Event('submit', { cancelable: true, bubbles: true });
+      const submitEvent = new Event('submit', {
+        cancelable: true,
+        bubbles: true
+      });
       cekDomainForm.dispatchEvent(submitEvent);
     }, 500);
   }
-
 })();

@@ -3,7 +3,6 @@
  * SPA layout with navbar, sidebar, and main content area
  * Uses main design system colors from assets/css/base/variables.css
  */
-
 /* ========== IMPORT MODULE STYLES ========== */
 @import url('checkout.css');
 @import url('payment.css');
@@ -13,7 +12,6 @@
   /* Dashboard-specific variables only */
   --sidebar-width: 280px;
   --navbar-height: 70px;
-
   /* Shared dashboard surfaces */
   --dashboard-surface: #ffffff;
   --dashboard-surface-muted: #f8fafc;
@@ -21,7 +19,6 @@
   --dashboard-border-soft: rgba(15, 23, 42, 0.08);
   --dashboard-shadow-soft: 0 10px 24px rgba(15, 23, 42, 0.05);
   --dashboard-shadow-elevated: 0 16px 40px rgba(15, 23, 42, 0.08);
-  
   /* Color aliases map to main design system */
   --color-primary: var(--primary-blue);
   --color-primary-dark: #1e40af;
@@ -51,7 +48,6 @@ body.dashboard-page-body {
 }
 
 /* ========== DASHBOARD LAYOUT ========== */
-
 #dashboard {
   display: flex;
   height: 100vh;
@@ -62,7 +58,6 @@ body.dashboard-page-body {
 }
 
 /* ========== SIDEBAR ========== */
-
 .dashboard-sidebar {
   position: fixed;
   left: 0;
@@ -207,7 +202,6 @@ body.dashboard-page-body {
 }
 
 /* ========== TOP NAVBAR & MAIN WRAPPER ========== */
-
 .dashboard-main-wrapper {
   display: flex;
   flex-direction: column;
@@ -264,7 +258,7 @@ body.dashboard-page-body {
     padding-right: 20px;
     margin-right: 20px;
   }
-  
+
   .navbar-brand .logo-img {
     display: none;
   }
@@ -374,7 +368,7 @@ body.dashboard-page-body {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .user-profile-trigger .user-name {
@@ -472,7 +466,6 @@ body.dashboard-page-body {
 }
 
 /* ========== MAIN CONTENT CONTAINER ========== */
-
 .dashboard-container {
   display: flex;
   flex: 1;
@@ -491,15 +484,15 @@ body.dashboard-page-body {
     transform: translateX(-280px);
     width: 280px;
   }
-  
+
   .dashboard-sidebar.open {
     transform: translateX(0);
   }
-  
+
   .sidebar-toggle {
     display: block;
   }
-  
+
   .navbar-brand {
     display: flex;
     align-items: center;
@@ -507,37 +500,37 @@ body.dashboard-page-body {
     padding-right: 0;
     min-width: auto;
   }
-  
+
   .navbar-logo {
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
   }
-  
+
   .logo-img {
     height: 28px;
   }
-  
+
   .logo-text {
     font-size: 14px;
     font-weight: 700;
     color: var(--primary-blue);
   }
-  
+
   .navbar-content {
     display: none;
   }
-  
+
   .btn-buy-now {
     padding: 6px 12px;
     font-size: 11px;
   }
-  
+
   .user-profile-trigger .user-name {
     display: none;
   }
-  
+
   .dashboard-content {
     padding: 20px 16px;
   }
@@ -547,14 +540,13 @@ body.dashboard-page-body {
   .dashboard-main-wrapper {
     padding-left: var(--sidebar-width);
   }
-  
+
   .dashboard-navbar {
     width: calc(100vw - var(--sidebar-width));
   }
 }
 
 /* ========== LOADING OVERLAY ========== */
-
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -578,7 +570,9 @@ body.dashboard-page-body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .content-loading {
@@ -587,7 +581,6 @@ body.dashboard-page-body {
 }
 
 /* ========== COMPONENTS - Mobile First ========== */
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -612,7 +605,7 @@ body.dashboard-page-body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0) 100%);
   transform: translateX(-120%);
   transition: transform 0.45s ease;
 }
@@ -1154,7 +1147,7 @@ textarea.form-control {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0.14) 100%);
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 45%, rgba(255, 255, 255, 0.14) 100%);
   pointer-events: none;
 }
 
@@ -1194,16 +1187,17 @@ textarea.form-control {
   .dashboard-page-header {
     padding: 20px;
   }
+
   .dashboard-page-header-content {
     max-width: 100%;
   }
+
   .dashboard-page-header-visual {
     display: none;
   }
 }
 
 /* ========== RESPONSIVE ========== */
-
 /* Add backdrop overlay when sidebar is open */
 #dashboard::after {
   content: '';
@@ -1685,17 +1679,18 @@ textarea.form-control {
   .form-search {
     grid-template-columns: 1fr;
   }
-  
+
   .form-search__input-wrap {
     width: 100%;
   }
-  
+
   .form-search button {
     width: 100%;
   }
 }
 
 @media (max-width: 480px) {
+
   .panel,
   .quick-action-card {
     padding: 18px;
@@ -1722,6 +1717,7 @@ textarea.form-control {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1839,6 +1835,7 @@ textarea.form-control {
   min-height: 180px;
   text-align: center;
 }
+
 .profile-grid {
   display: grid;
   grid-template-columns: 1.6fr 0.8fr;

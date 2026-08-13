@@ -2,17 +2,25 @@
  * Profile Page Module
  * User account management, profile editing, password change
  */
-
 import APIClient from '/assets/js/modules/unified-api.js';
-import { showError, showSuccess, initPasswordToggle, normalizeDriveImageUrl, withCacheBust, setButtonLoading, setInlineStatus, getPasswordStrengthInfo } from '/assets/js/modules/unified-utils.js';
-import { DashboardAuth } from './auth.js';
-
+import {
+  showError,
+  showSuccess,
+  initPasswordToggle,
+  normalizeDriveImageUrl,
+  withCacheBust,
+  setButtonLoading,
+  setInlineStatus,
+  getPasswordStrengthInfo
+} from '/assets/js/modules/unified-utils.js';
+import {
+  DashboardAuth
+} from './auth.js';
 export async function render(currentUser) {
   try {
     // Load user profile data
     const result = await APIClient.getUserProfile(currentUser.userId);
     let user = result.data || currentUser;
-
     // Defensive parsing for corrupt JSON displayName
     if (user.displayName && typeof user.displayName === 'string' && user.displayName.trim().startsWith('{')) {
       try {
@@ -27,7 +35,6 @@ export async function render(currentUser) {
         console.warn('Failed to parse corrupt user displayName JSON:', e);
       }
     }
-
     // Setup form with current data
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
@@ -35,16 +42,13 @@ export async function render(currentUser) {
       if (user.displayName !== currentUser.displayName || user.photoURL !== currentUser.photoURL) {
         DashboardAuth.updateSession(user);
       }
-
       const inputName = document.getElementById('input-name');
       inputName.value = user.displayName || '';
-
       // Live update nama di navbar saat user mengetik (Premium feel)
       inputName.addEventListener('input', (e) => {
         const userNameEl = document.querySelector('.user-profile-trigger .user-name');
         const dropdownNameEl = document.querySelector('.dropdown-header strong');
         const newName = e.target.value.trim() || user.displayName || 'Pelanggan';
-        
         if (userNameEl) userNameEl.textContent = newName;
         if (dropdownNameEl) dropdownNameEl.textContent = newName;
       });
@@ -61,7 +65,6 @@ export async function render(currentUser) {
           if (photoPlaceholder) photoPlaceholder.style.display = 'block';
         };
       }
-
       const inputPhoto = document.getElementById('input-photo');
       if (inputPhoto) {
         inputPhoto.addEventListener('change', function(e) {
@@ -71,7 +74,6 @@ export async function render(currentUser) {
             setInlineStatus(photoStatus, '', false);
             return;
           }
-
           if (file.size > 2 * 1024 * 1024) {
             showError('Ukuran foto maksimal 2MB');
             this.value = '';
@@ -79,7 +81,6 @@ export async function render(currentUser) {
             setInlineStatus(photoStatus, 'Foto terlalu besar. Pilih file maksimal 2MB.', true);
             return;
           }
-
           setInlineStatus(photoStatus, 'Pratinjau foto diperbarui. Klik Simpan Profil untuk menyimpan perubahan.', true);
           const reader = new FileReader();
           reader.onload = function(event) {
@@ -95,22 +96,18 @@ export async function render(currentUser) {
           reader.readAsDataURL(file);
         });
       }
-
       document.getElementById('input-whatsapp').value = user.whatsapp || '';
-
       formEditProfile.addEventListener('submit', async (e) => {
         e.preventDefault();
         await handleProfileUpdate(currentUser.userId);
       });
     }
-
     // Setup password change form
     const formChangePassword = document.getElementById('form-change-password');
     if (formChangePassword) {
       const oldPwdInput = document.getElementById('input-old-password');
       const submitBtn = formChangePassword.querySelector('button[type="submit"]');
       const isSetPassword = user.hasPassword === false;
-      
       // Jika user belum punya password (misal login via Google baru), hide form Password Lama
       if (isSetPassword && oldPwdInput) {
         const formGroup = oldPwdInput.closest('.form-group');
@@ -119,7 +116,6 @@ export async function render(currentUser) {
         oldPwdInput.value = '';
         if (submitBtn) submitBtn.textContent = 'Set Password';
       }
-
       // Handler untuk fitur Lupa Password Inline
       const forgotPwdBtn = document.getElementById('btn-forgot-password-inline');
       if (forgotPwdBtn) {
@@ -147,13 +143,11 @@ export async function render(currentUser) {
           });
         }
       }
-
       initPasswordToggle(formChangePassword);
       formChangePassword.addEventListener('submit', async (e) => {
         e.preventDefault();
         await handlePasswordChange(currentUser.userId, isSetPassword);
       });
-      
       const newPwdInput = document.getElementById('input-new-password');
       if (newPwdInput) {
         newPwdInput.addEventListener('input', function() {
@@ -161,13 +155,11 @@ export async function render(currentUser) {
           const strengthBar = document.getElementById('user-strength-bar');
           const strengthText = document.getElementById('user-strength-text');
           if (!strengthDiv || !strengthBar || !strengthText) return;
-
           const strengthInfo = getPasswordStrengthInfo(this.value);
           if (!strengthInfo.visible) {
             strengthDiv.style.display = 'none';
             return;
           }
-
           strengthDiv.style.display = 'block';
           strengthBar.className = `strength-bar ${strengthInfo.className}`;
           strengthBar.style.background = strengthInfo.color;
@@ -176,7 +168,6 @@ export async function render(currentUser) {
         });
       }
     }
-
   } catch (error) {
     console.error('Error rendering profile:', error);
     document.getElementById('content').innerHTML = `
@@ -186,24 +177,19 @@ export async function render(currentUser) {
     `;
   }
 }
-
 async function handleProfileUpdate(userId) {
   try {
     const displayName = document.getElementById('input-name').value.trim();
     const photoInput = document.getElementById('input-photo');
     const photoBase64 = photoInput && photoInput.dataset.base64 ? photoInput.dataset.base64 : null;
     const whatsapp = document.getElementById('input-whatsapp').value.trim();
-
     if (!displayName || displayName.length < 3) {
       showError('Nama minimal 3 karakter');
       return;
     }
-
     const btn = document.querySelector('#form-edit-profile button[type="submit"]');
     setButtonLoading(btn, true, 'Menyimpan...');
-
     const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
-
     if (result.success) {
       // Update session
       const user = DashboardAuth.getCurrentUser();
@@ -213,15 +199,12 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       DashboardAuth.updateSession(user);
-
       const photoStatus = document.getElementById('photo-upload-status');
       setInlineStatus(photoStatus, '', false);
-
       showSuccess('Profil berhasil diperbarui');
     } else {
       throw new Error(result.message || 'Gagal memperbarui profil');
     }
-
   } catch (error) {
     showError('Error: ' + error.message);
   } finally {
@@ -229,13 +212,11 @@ async function handleProfileUpdate(userId) {
     setButtonLoading(btn, false, 'Simpan Profil');
   }
 }
-
 async function handlePasswordChange(userId, isSetPassword = false) {
   try {
     const oldPassword = document.getElementById('input-old-password').value;
     const newPassword = document.getElementById('input-new-password').value;
     const confirmPassword = document.getElementById('input-confirm-password').value;
-
     if (isSetPassword) {
       if (!newPassword || !confirmPassword) {
         showError('Password baru dan konfirmasi harus diisi');
@@ -247,37 +228,32 @@ async function handlePasswordChange(userId, isSetPassword = false) {
         return;
       }
     }
-
     if (newPassword !== confirmPassword) {
       showError('Password baru tidak sesuai');
       return;
     }
-
     if (newPassword.length < 8) {
       showError('Password minimal 8 karakter');
       return;
     }
-
     const btn = document.querySelector('#form-change-password button[type="submit"]');
     setButtonLoading(btn, true, 'Menyimpan...');
-
     const result = await APIClient.changePassword(userId, isSetPassword ? '' : oldPassword, newPassword);
-
     if (result.success) {
       showSuccess(isSetPassword ? 'Password berhasil diatur' : 'Password berhasil diubah');
       document.getElementById('form-change-password').reset();
-      
       // Update session local state to mark that password is now set
       const user = DashboardAuth.getCurrentUser();
       if (user && user.hasPassword === false) {
         user.hasPassword = true;
         DashboardAuth.updateSession(user);
-        setTimeout(() => { window.location.reload(); }, 1500); // Reload to reset the UI forms
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500); // Reload to reset the UI forms
       }
     } else {
       throw new Error(result.message || 'Gagal mengubah password');
     }
-
   } catch (error) {
     showError('Error: ' + error.message);
   } finally {

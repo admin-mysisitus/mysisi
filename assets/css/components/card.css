@@ -1,7 +1,6 @@
 /* ========== SHARED CARD COMPONENTS ========== */
 /* Reusable card styling patterns used across multiple pages */
 /* Base card styles already in shared-sections.css - this file extends with specific patterns */
-
 /* ========== STANDARD ITEM CARD PATTERN ========== */
 /* Used by: feature-item, benefit-item, problem-item, why-item, contact-item, highlight-card */
 .item-card {

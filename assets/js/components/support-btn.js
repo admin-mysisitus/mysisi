@@ -1,25 +1,19 @@
 // Support Button Builder & Dynamic WhatsApp Links untuk SISITUS.COM
 window.addEventListener("load", () => {
   const supportWrapper = document.querySelector(".support-btn-wrapper");
-
   // Jika wrapper tidak ada, hentikan
   if (!supportWrapper) return;
-
   // Daftar nomor WA placeholder
-  const waContacts = [
-    {
-      label: "Customer Service",
-      number: "6281215289095",
-      schedule: "(Senin-Jumat: 08.00-17.00 WIB)",
-      class: "wa-cs-link"
-    },
-    {
-      label: "Admin Pembuatan Website",
-      number: "6281215289095",
-      class: "wa-admin1-link"
-    }
-  ];
-
+  const waContacts = [{
+    label: "Customer Service",
+    number: "6281215289095",
+    schedule: "(Senin-Jumat: 08.00-17.00 WIB)",
+    class: "wa-cs-link"
+  }, {
+    label: "Admin Pembuatan Website",
+    number: "6281215289095",
+    class: "wa-admin1-link"
+  }];
   // Mapping path halaman ke pesan WA
   const pathMessageMap = {
     "/": "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang layanan Anda.",
@@ -38,11 +32,9 @@ window.addEventListener("load", () => {
     "/perusahaan/tentang/index.html": "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang perusahaan Anda.",
     "/perusahaan/legal/index.html": "Halo SISITUS.COM! Saya ingin informasi mengenai aspek legal perusahaan."
   };
-
   const currentPath = window.location.pathname;
   const defaultMessage = "Halo SISITUS.COM! Saya ingin mengetahui lebih banyak tentang layanan Anda.";
   const message = pathMessageMap[currentPath] || defaultMessage;
-
   // Bangun HTML support button
   supportWrapper.innerHTML = `
     <button class="support-btn" aria-expanded="false" aria-controls="support-panel" aria-label="Toggle Support Panel">
@@ -78,13 +70,11 @@ window.addEventListener("load", () => {
       </ul>
     </nav>
   `;
-
   // Reuse event listener JS yang sudah ada
   const supportBtn = supportWrapper.querySelector(".support-btn");
   const whatsappHeader = supportWrapper.querySelector(".whatsapp-header");
   const whatsappSublist = supportWrapper.querySelector("#whatsapp-sublist");
   const kontakLi = supportWrapper.querySelector(".info");
-
   let isAnimatingBack = false;
 
   function closeSupportPanel() {
@@ -97,7 +87,6 @@ window.addEventListener("load", () => {
       supportBtn.setAttribute("aria-expanded", "false");
     }, 600);
   }
-
   supportBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     if (supportWrapper.classList.contains("active")) {
@@ -108,20 +97,17 @@ window.addEventListener("load", () => {
       whatsappHeader.focus();
     }
   });
-
   supportBtn.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       supportBtn.click();
     }
   });
-
   document.addEventListener("click", (event) => {
     if (!supportWrapper.contains(event.target) && supportWrapper.classList.contains("active")) {
       closeSupportPanel();
     }
   });
-
   whatsappHeader.addEventListener("click", () => {
     const expanded = whatsappHeader.getAttribute("aria-expanded") === "true";
     const newExpanded = !expanded;
@@ -129,18 +115,15 @@ window.addEventListener("load", () => {
     whatsappSublist.hidden = !newExpanded;
     whatsappSublist.setAttribute("aria-hidden", String(!newExpanded));
   });
-
   whatsappHeader.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       whatsappHeader.click();
     }
   });
-
   kontakLi.addEventListener("click", () => {
     window.location.href = "/kontak/";
   });
-
   kontakLi.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();

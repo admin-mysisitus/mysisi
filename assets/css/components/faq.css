@@ -2,7 +2,6 @@
  * FAQ Component CSS - Standarisasi gaya untuk semua halaman
  * Digunakan sebagai pengganti CSS FAQ yang tersebar
  */
-
 /* ========== FAQ SECTION CONTAINER ========== */
 .faq-section {
   padding: clamp(4rem, 8vw, 6rem) 0;
@@ -17,7 +16,6 @@
 }
 
 /* Garis bawah pada judul FAQ telah dihapus sesuai permintaan */
-
 /* ========== FAQ GRID LAYOUT ========== */
 .faq-grid {
   display: grid;
@@ -89,7 +87,6 @@
   z-index: 1;
   gap: 1rem;
   user-select: none;
-  
   /* Hapus default details marker */
 }
 
@@ -151,8 +148,8 @@
 }
 
 /* Add extra space before lists and after paragraphs */
-.faq-answer p + ul,
-.faq-answer p + ol {
+.faq-answer p+ul,
+.faq-answer p+ol {
   margin-top: 0.8rem;
 }
 
@@ -169,8 +166,8 @@
 }
 
 /* Add space after lists for following content */
-.faq-answer ul + p,
-.faq-answer ol + p {
+.faq-answer ul+p,
+.faq-answer ol+p {
   margin-top: 1rem;
 }
 
@@ -208,8 +205,8 @@
 }
 
 /* Additional spacing utilities for FAQ content */
-.faq-answer > strong + ul,
-.faq-answer > strong + ol {
+.faq-answer>strong+ul,
+.faq-answer>strong+ol {
   margin-top: 0.8rem;
 }
 
@@ -219,6 +216,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -230,6 +228,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -253,7 +252,8 @@
   }
 
   .faq-grid {
-    gap: 0.875rem !important; /* 14px */
+    gap: 0.875rem !important;
+    /* 14px */
     margin-top: 1.5rem !important;
   }
 
@@ -262,21 +262,27 @@
   }
 
   .faq-question {
-    padding: 0.65rem 0.75rem !important; /* ~10.4px 12px */
-    font-size: 0.813rem !important; /* 13px */
+    padding: 0.65rem 0.75rem !important;
+    /* ~10.4px 12px */
+    font-size: 0.813rem !important;
+    /* 13px */
     font-weight: 600 !important;
     line-height: 1.35 !important;
-    gap: 0.5rem !important; /* 8px */
+    gap: 0.5rem !important;
+    /* 8px */
   }
 
   .faq-answer {
-    padding: 0 0.75rem 0.75rem 0.75rem !important; /* 0 12px 12px 12px */
-    font-size: 0.78rem !important; /* ~12.5px */
+    padding: 0 0.75rem 0.75rem 0.75rem !important;
+    /* 0 12px 12px 12px */
+    font-size: 0.78rem !important;
+    /* ~12.5px */
     line-height: 1.4 !important;
   }
 
   .faq-answer p {
-    font-size: 0.78rem !important; /* ~12.5px */
+    font-size: 0.78rem !important;
+    /* ~12.5px */
     line-height: 1.4 !important;
     margin-top: 0.25rem !important;
     margin-bottom: 0.35rem !important;
@@ -289,9 +295,11 @@
   }
 
   .faq-answer li {
-    font-size: 0.78rem !important; /* ~12.5px */
+    font-size: 0.78rem !important;
+    /* ~12.5px */
     line-height: 1.4 !important;
-    margin-bottom: 0.25rem !important; /* 4px */
+    margin-bottom: 0.25rem !important;
+    /* 4px */
   }
 
   .faq-icon {

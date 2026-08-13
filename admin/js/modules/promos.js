@@ -1,8 +1,8 @@
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 let currentPromos = [];
-
 export async function render() {
   console.log('Admin Promos Module Loaded');
   setupEventListeners();
@@ -14,7 +14,6 @@ function setupEventListeners() {
   const btnClose = document.getElementById('btn-close-promo');
   const modal = document.getElementById('promo-modal');
   const form = document.getElementById('promo-form');
-  
   if (btnAdd) {
     btnAdd.addEventListener('click', () => {
       form.reset();
@@ -23,22 +22,18 @@ function setupEventListeners() {
       modal.style.display = 'flex';
     });
   }
-  
   if (btnClose) {
     btnClose.addEventListener('click', () => {
       modal.style.display = 'none';
     });
   }
-  
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const submitBtn = document.getElementById('btn-save-promo');
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
-      
       const promoData = {
         code: document.getElementById('promo-code').value.trim(),
         type: document.getElementById('promo-type').value,
@@ -49,13 +44,16 @@ function setupEventListeners() {
         end: document.getElementById('promo-end').value,
         active: document.getElementById('promo-active').checked
       };
-      
       try {
         const adminId = AuthManager.getUserId();
         const res = await APIClient.saveAdminPromo(adminId, promoData);
         if (res.success) {
           if (typeof Swal !== 'undefined') {
-            Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Promo berhasil disimpan!' });
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Promo berhasil disimpan!'
+            });
           }
           modal.style.display = 'none';
           await loadPromos(); // reload table
@@ -65,7 +63,11 @@ function setupEventListeners() {
       } catch (error) {
         console.error(error);
         if (typeof Swal !== 'undefined') {
-          Swal.fire({ icon: 'error', title: 'Gagal', text: error.message });
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: error.message
+          });
         }
       } finally {
         submitBtn.innerHTML = originalText;
@@ -73,12 +75,10 @@ function setupEventListeners() {
       }
     });
   }
-  
   // Expose edit and delete to window so inline onclick can use it
   window.editPromo = (code) => {
     const promo = currentPromos.find(p => p.code === code);
     if (!promo) return;
-    
     document.getElementById('promo-modal-title').textContent = 'Edit Promo';
     document.getElementById('promo-code').value = promo.code;
     document.getElementById('promo-code').readOnly = true; // prevent changing code
@@ -86,18 +86,14 @@ function setupEventListeners() {
     document.getElementById('promo-value').value = promo.value;
     document.getElementById('promo-limit').value = promo.limit;
     document.getElementById('promo-desc').value = promo.description || promo.desc || '';
-    
     // Format dates for datetime-local (YYYY-MM-DDThh:mm)
     try {
-      if (promo.start) document.getElementById('promo-start').value = new Date(promo.start).toISOString().slice(0,16);
-      if (promo.end) document.getElementById('promo-end').value = new Date(promo.end).toISOString().slice(0,16);
-    } catch(e) {}
-    
+      if (promo.start) document.getElementById('promo-start').value = new Date(promo.start).toISOString().slice(0, 16);
+      if (promo.end) document.getElementById('promo-end').value = new Date(promo.end).toISOString().slice(0, 16);
+    } catch (e) {}
     document.getElementById('promo-active').checked = promo.active;
-    
     document.getElementById('promo-modal').style.display = 'flex';
   };
-  
   window.deletePromo = async (code) => {
     if (typeof Swal !== 'undefined') {
       const result = await Swal.fire({
@@ -109,7 +105,6 @@ function setupEventListeners() {
         cancelButtonColor: '#4b5563',
         confirmButtonText: 'Ya, Nonaktifkan'
       });
-      
       if (result.isConfirmed) {
         try {
           const res = await APIClient.deleteAdminPromo(AuthManager.getUserId(), code);
@@ -119,18 +114,16 @@ function setupEventListeners() {
           } else {
             throw new Error(res.message);
           }
-        } catch(err) {
+        } catch (err) {
           Swal.fire('Error', err.message, 'error');
         }
       }
     }
   };
 }
-
 async function loadPromos() {
   const tbody = document.getElementById('promos-table-body');
   if (!tbody) return;
-
   tbody.innerHTML = `
     <tr>
       <td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
@@ -139,11 +132,9 @@ async function loadPromos() {
       </td>
     </tr>
   `;
-
   try {
     const adminId = AuthManager.getUserId();
     const response = await APIClient.getAdminPromos(adminId);
-    
     if (response.success) {
       const promos = response.data || [];
       if (promos.length === 0) {
@@ -163,16 +154,17 @@ async function loadPromos() {
 function renderPromos(promos, tbody) {
   tbody.innerHTML = '';
   currentPromos = promos;
-  
   promos.forEach(p => {
     let valStr = p.type === 'percentage' ? `${p.value}%` : `Rp ${p.value.toLocaleString('id-ID')}`;
     let usageStr = p.limit === -1 || p.limit === undefined || p.limit === null || p.limit === '' ? `${p.usage || 0} / ∞` : `${p.usage || 0} / ${p.limit}`;
     let statusBg = p.active ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
     let statusColor = p.active ? 'var(--admin-success)' : 'var(--admin-danger)';
     let statusText = p.active ? 'Aktif' : 'Nonaktif';
-    
-    let endDate = p.end ? new Date(p.end).toLocaleDateString('id-ID', { month: 'short', year: 'numeric', day: 'numeric' }) : '-';
-
+    let endDate = p.end ? new Date(p.end).toLocaleDateString('id-ID', {
+      month: 'short',
+      year: 'numeric',
+      day: 'numeric'
+    }) : '-';
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--admin-border)';
     tr.innerHTML = `

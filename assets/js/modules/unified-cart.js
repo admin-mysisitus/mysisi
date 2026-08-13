@@ -12,13 +12,13 @@
  *   CartManager.getTotal()
  *   WishlistManager.add(domain, reason)
  */
-
-import { showSuccess, showError } from './unified-utils.js';
-
+import {
+  showSuccess,
+  showError
+} from './unified-utils.js';
 // ============================================================================
 // CART MANAGER
 // ============================================================================
-
 export class CartManager {
   /**
    * Add domain to cart
@@ -30,12 +30,9 @@ export class CartManager {
     if (!domain || !tld) {
       throw new Error('Domain dan TLD diperlukan');
     }
-
     const cart = this.getCart();
-    
     // Check if already in cart
     const existingIndex = cart.domains.findIndex(d => d.domain.toLowerCase() === domain.toLowerCase());
-    
     if (existingIndex >= 0) {
       cart.domains[existingIndex] = {
         ...cart.domains[existingIndex],
@@ -61,11 +58,9 @@ export class CartManager {
       });
       showSuccess('Ditambahkan ke Cart', `${domain} sudah di cart`);
     }
-    
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Remove domain from cart
    */
@@ -75,28 +70,23 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Update domain details in cart
    */
   static update(domain, updates) {
     const cart = this.getCart();
     const index = cart.domains.findIndex(d => d.domain.toLowerCase() === domain.toLowerCase());
-    
     if (index < 0) {
       throw new Error('Domain tidak ditemukan di cart');
     }
-    
     cart.domains[index] = {
       ...cart.domains[index],
       ...updates,
       lastUpdated: Date.now()
     };
-    
     this.saveCart(cart);
     return cart.domains[index];
   }
-
   /**
    * Get all items in cart
    */
@@ -104,15 +94,28 @@ export class CartManager {
     try {
       const stored = localStorage.getItem('cart');
       if (!stored) {
-        return { domains: [], addons: [], coupon: null, subtotal: 0, discount: 0, total: 0 };
+        return {
+          domains: [],
+          addons: [],
+          coupon: null,
+          subtotal: 0,
+          discount: 0,
+          total: 0
+        };
       }
       return JSON.parse(stored);
     } catch (err) {
       console.error('[Cart] Parse error:', err);
-      return { domains: [], addons: [], coupon: null, subtotal: 0, discount: 0, total: 0 };
+      return {
+        domains: [],
+        addons: [],
+        coupon: null,
+        subtotal: 0,
+        discount: 0,
+        total: 0
+      };
     }
   }
-
   /**
    * Save cart to localStorage
    */
@@ -120,12 +123,13 @@ export class CartManager {
     try {
       const calculated = this._calculatePrices(cart);
       localStorage.setItem('cart', JSON.stringify(calculated));
-      window.dispatchEvent(new CustomEvent('cart:updated', { detail: calculated }));
+      window.dispatchEvent(new CustomEvent('cart:updated', {
+        detail: calculated
+      }));
     } catch (err) {
       console.error('[Cart] Save error:', err);
     }
   }
-
   /**
    * Clear cart
    */
@@ -133,14 +137,12 @@ export class CartManager {
     localStorage.removeItem('cart');
     window.dispatchEvent(new CustomEvent('cart:cleared'));
   }
-
   /**
    * Check if cart has items
    */
   static isEmpty() {
     return this.getCart().domains.length === 0;
   }
-
   /**
    * Get cart summary (for display)
    */
@@ -155,40 +157,39 @@ export class CartManager {
       coupon: cart.coupon || null
     };
   }
-
   /**
    * Add coupon/promo code
    */
   static async applyCoupon(code) {
     const cart = this.getCart();
-    
     try {
       // Validate coupon with GAS backend using APIClient
       if (!window.APIClient) {
         throw new Error('API Client not available. Import APIClient before applying coupon.');
       }
-      
       const response = await window.APIClient.validatePromoCode(code);
-      
       if (!response.success || !response.data) {
         throw new Error(response.message || 'Kode promo tidak valid atau sudah kadaluarsa');
       }
-      
       // Simpan data diskon utuh ke cart
       cart.coupon = {
         code: code,
         discountType: response.data.discountType || 'percent',
         discountValue: response.data.discountValue || 0
       };
-      
       this.saveCart(cart);
-      return { success: true, cart };
+      return {
+        success: true,
+        cart
+      };
     } catch (error) {
       console.error('[Cart] Error validating coupon:', error);
-      return { success: false, message: error.message };
+      return {
+        success: false,
+        message: error.message
+      };
     }
   }
-
   /**
    * Remove coupon
    */
@@ -198,7 +199,6 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Add addons to cart
    * @param {array} addons - Array of addon objects [{id, name, price, duration, quantity}]
@@ -207,18 +207,14 @@ export class CartManager {
     if (!Array.isArray(addons)) {
       throw new Error('Addon harus berupa array');
     }
-
     const cart = this.getCart();
-    
     // Initialize addons array if doesn't exist
     if (!cart.addons) {
       cart.addons = [];
     }
-
     // Add each addon
     addons.forEach(addon => {
       const existingIndex = cart.addons.findIndex(a => a.id.toLowerCase() === addon.id.toLowerCase());
-      
       if (existingIndex >= 0) {
         // Update existing addon
         cart.addons[existingIndex] = {
@@ -237,11 +233,9 @@ export class CartManager {
         });
       }
     });
-
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Remove addon from cart
    */
@@ -253,7 +247,6 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Clear all addons from cart
    */
@@ -263,30 +256,25 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Calculate prices (subtotal, discount, total)
    * @private
    */
   static _calculatePrices(cart) {
     let subtotal = 0;
-    
     // Calculate domain prices
     if (cart.domains && Array.isArray(cart.domains)) {
       cart.domains.forEach(domain => {
         subtotal += (domain.price || 0) * (domain.duration || 1);
       });
     }
-    
     // Calculate addon prices
     if (cart.addons && Array.isArray(cart.addons)) {
       cart.addons.forEach(addon => {
         subtotal += (addon.price || 0) * (addon.quantity || 1);
       });
     }
-    
     let discount = 0;
-    
     // Kalkulasi diskon berdasarkan tipe kupon (persen atau harga fix)
     if (cart.coupon) {
       const type = cart.coupon.discountType;
@@ -297,10 +285,8 @@ export class CartManager {
         discount = value;
       }
     }
-    
     let subtotalAfterDiscount = subtotal - discount;
     let ppn = Math.round(subtotalAfterDiscount * 0.11); // PPN 11%
-    
     return {
       ...cart,
       subtotal: Math.round(subtotal),
@@ -309,7 +295,6 @@ export class CartManager {
       total: Math.round(subtotalAfterDiscount + ppn) // Total akhir yang dibayar ke Midtrans
     };
   }
-
   /**
    * Generate unique ID for cart item
    * @private
@@ -318,11 +303,9 @@ export class CartManager {
     return `cart_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
-
 // ============================================================================
 // WISHLIST MANAGER
 // ============================================================================
-
 export class WishlistManager {
   /**
    * Add domain to wishlist
@@ -334,15 +317,12 @@ export class WishlistManager {
     if (!domain) {
       throw new Error('Domain diperlukan');
     }
-
     const wishlist = this.getWishlist();
-    
     // Check if already in wishlist
     if (wishlist.domains.some(d => d.domain.toLowerCase() === domain.toLowerCase())) {
       showError('Sudah di Wishlist', `${domain} sudah ada di wishlist`);
       return wishlist;
     }
-    
     wishlist.domains.push({
       domain: domain.toLowerCase(),
       reason: reason || 'Domain impian',
@@ -350,13 +330,10 @@ export class WishlistManager {
       addedAt: Date.now(),
       id: this._generateId()
     });
-    
     this.saveWishlist(wishlist);
     showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti`);
-    
     return wishlist;
   }
-
   /**
    * Remove domain from wishlist
    */
@@ -366,28 +343,27 @@ export class WishlistManager {
     this.saveWishlist(wishlist);
     return wishlist;
   }
-
   /**
    * Move wishlist item to cart
    */
   static moveToCart(domain) {
     const wishlist = this.getWishlist();
     const item = wishlist.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
-    
     if (!item) {
       throw new Error('Item tidak ditemukan di wishlist');
     }
-    
     // Add to cart
     const tld = domain.split('.').pop();
-    CartManager.add(domain, tld, { priority: item.priority });
-    
+    CartManager.add(domain, tld, {
+      priority: item.priority
+    });
     // Remove from wishlist
     this.remove(domain);
-    
-    return { cart: CartManager.getCart(), wishlist: this.getWishlist() };
+    return {
+      cart: CartManager.getCart(),
+      wishlist: this.getWishlist()
+    };
   }
-
   /**
    * Get all wishlist items
    */
@@ -395,34 +371,37 @@ export class WishlistManager {
     try {
       const stored = localStorage.getItem('wishlist');
       if (!stored) {
-        return { domains: [] };
+        return {
+          domains: []
+        };
       }
       return JSON.parse(stored);
     } catch (err) {
       console.error('[Wishlist] Parse error:', err);
-      return { domains: [] };
+      return {
+        domains: []
+      };
     }
   }
-
   /**
    * Save wishlist to localStorage
    */
   static saveWishlist(wishlist) {
     try {
       localStorage.setItem('wishlist', JSON.stringify(wishlist));
-      window.dispatchEvent(new CustomEvent('wishlist:updated', { detail: wishlist }));
+      window.dispatchEvent(new CustomEvent('wishlist:updated', {
+        detail: wishlist
+      }));
     } catch (err) {
       console.error('[Wishlist] Save error:', err);
     }
   }
-
   /**
    * Check if domain is in wishlist
    */
   static isInWishlist(domain) {
     return this.getWishlist().domains.some(d => d.domain.toLowerCase() === domain.toLowerCase());
   }
-
   /**
    * Get wishlist summary
    */
@@ -432,12 +411,15 @@ export class WishlistManager {
       itemCount: wishlist.domains.length,
       highPriority: wishlist.domains.filter(d => d.priority === 'high').length,
       items: wishlist.domains.sort((a, b) => {
-        const priorityMap = { high: 1, medium: 2, low: 3 };
+        const priorityMap = {
+          high: 1,
+          medium: 2,
+          low: 3
+        };
         return priorityMap[a.priority] - priorityMap[b.priority];
       })
     };
   }
-
   /**
    * Generate unique ID for wishlist item
    * @private
@@ -446,18 +428,15 @@ export class WishlistManager {
     return `wish_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
-
 // ============================================================================
 // CART ANALYTICS (Optional: for future tracking)
 // ============================================================================
-
 export class CartAnalytics {
   /**
    * Track abandoned carts (for later email reminder)
    */
   static trackAbandonedCart() {
     if (CartManager.isEmpty()) return;
-    
     const cart = CartManager.getCart();
     const abandoned = {
       cartId: `abandoned_${Date.now()}`,
@@ -466,17 +445,14 @@ export class CartAnalytics {
       abandonedAt: Date.now(),
       userEmail: null // Will be filled in if logged in
     };
-    
     // Store in localStorage for recovery
     let abandoned_carts = [];
     try {
       abandoned_carts = JSON.parse(localStorage.getItem('abandoned_carts')) || [];
     } catch (err) {}
-    
     abandoned_carts.push(abandoned);
     localStorage.setItem('abandoned_carts', JSON.stringify(abandoned_carts));
   }
-
   /**
    * Get abandoned carts
    */
@@ -488,5 +464,8 @@ export class CartAnalytics {
     }
   }
 }
-
-export default { CartManager, WishlistManager, CartAnalytics };
+export default {
+  CartManager,
+  WishlistManager,
+  CartAnalytics
+};
