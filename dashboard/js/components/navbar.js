@@ -38,7 +38,7 @@ export class DashboardNavbar {
         <div class="navbar-content">
           <!-- Breadcrumb or Title -->
           <div class="navbar-breadcrumbs">
-            <a href="#!/dashboard/" class="breadcrumb-link"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#!/dashboard/" class="breadcrumb-link"><i class="fas fa-home"></i> <span class="breadcrumb-text">Dashboard</span></a>
             <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
             <span class="breadcrumb-item active" id="navbar-active-page">Overview</span>
           </div>
@@ -46,8 +46,8 @@ export class DashboardNavbar {
 
         <div class="navbar-actions">
           <!-- Kunjungi Website button -->
-          <a href="../" target="_blank" class="btn btn-white" style="border: 1px solid #ddd; margin-right: 15px;">
-            <i class="fas fa-external-link-alt"></i> <span>Kunjungi Website</span>
+          <a href="../" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
+            <i class="fas fa-external-link-alt"></i> <span class="btn-text">Kunjungi Website</span>
           </a>
 
           <!-- User Profile Dropdown -->

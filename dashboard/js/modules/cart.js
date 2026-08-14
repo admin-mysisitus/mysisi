@@ -70,11 +70,25 @@ window.changeItemPackage = (domain, packageId) => {
       price: newPrice,
       renewalPrice: newPrice
     });
+    
+    // Prevent jumping by preserving scroll
+    const scrollY = window.scrollY;
+    const container = cartState.container;
+    if (container) {
+      container.style.minHeight = `${container.getBoundingClientRect().height}px`;
+    }
+    
     if (cartState.currentUser) {
       render(cartState.currentUser);
     } else if (window.updateCartPreview) {
       window.updateCartPreview();
     }
+    
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    if (container) {
+      setTimeout(() => { container.style.minHeight = ''; }, 50);
+    }
+    
     showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
     console.error('Error changing package:', error);
@@ -95,10 +109,23 @@ window.toggleCartAddon = (addonId, isChecked) => {
     } else {
       CartManager.removeAddon(addonId);
     }
+    
+    // Prevent jumping by preserving scroll
+    const scrollY = window.scrollY;
+    const container = cartState.container;
+    if (container) {
+      container.style.minHeight = `${container.getBoundingClientRect().height}px`;
+    }
+    
     if (cartState.currentUser) {
       render(cartState.currentUser);
     } else if (window.updateCartPreview) {
       window.updateCartPreview();
+    }
+    
+    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    if (container) {
+      setTimeout(() => { container.style.minHeight = ''; }, 50);
     }
   } catch (error) {
     console.error('Error toggling addon:', error);
@@ -531,9 +558,7 @@ function renderAuthenticatedCart() {
   cartState.container.innerHTML = `
     <div class="page-container">
       <div class="cart-page">
-        <h2 class="cart-page-title">
-          <i class="fas fa-shopping-cart"></i> Keranjang Saya
-        </h2>
+        <!-- Removed redundant Keranjang Saya title -->
 
         <div class="cart-grid">
           
@@ -651,7 +676,7 @@ function renderCartItemSelectors(item) {
             ${isSelected ? '✓ ' : ''}${pkg.name}
           </div>
           <div class="cart-item-package-price">
-            Rp ${formatPrice(priceDisplay)}
+            ${formatPrice(priceDisplay)}
           </div>
         </div>
         <div class="cart-item-package-desc">${pkg.description}</div>
@@ -669,7 +694,7 @@ function renderCartItemSelectors(item) {
                onchange="window.toggleCartAddon('${addon.id}', this.checked)">
         <div class="cart-item-addon-info">
           <span class="cart-item-addon-name">${addon.name}</span>
-          <span class="cart-item-addon-price">${addon.price === 0 ? 'Gratis' : `+Rp ${formatPrice(addon.price)}`}</span>
+          <span class="cart-item-addon-price">${addon.price === 0 ? 'Gratis' : `+${formatPrice(addon.price)}`}</span>
         </div>
       </label>
     `;
@@ -701,12 +726,12 @@ function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="fas fa-sync"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
   return `
     <div class="cart-item" style="display: block; margin-bottom: 1.5rem;">
-      <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: center; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: 0.75rem;">
-        <div style="flex: 1; user-select: none;">
-          <h4 class="cart-item-domain" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); margin: 0; font-size: 16px;">
+      <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: 0.75rem;">
+        <div style="flex: 1; min-width: 0; user-select: none;">
+          <h4 class="cart-item-domain" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); margin: 0; font-size: 16px; word-break: break-word;">
             ${item.domain}
           </h4>
-          <div class="cart-item-details" style="display: flex; gap: 8px; align-items: center; margin-top: 6px; border: none; padding: 0;">
+          <div class="cart-item-details" style="display: flex; gap: 8px; align-items: center; margin-top: 6px; border: none; padding: 0; flex-wrap: wrap;">
             <span class="cart-item-badge" style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.package ? item.package.toUpperCase() : 'STARTER'}</span>
             <span class="cart-item-duration" style="color: var(--text-light); font-size: 11px;"><i class="fas fa-calendar"></i> ${item.duration || 1} tahun</span>
           </div>

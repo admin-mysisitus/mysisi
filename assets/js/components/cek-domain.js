@@ -18,110 +18,7 @@
   // Get the section container
   const section = document.querySelector('.cek-domain-section');
   if (!section) return;
-  // ============================================
-  // DOMAIN DATA - Enhanced with more details
-  // ============================================
-  const allExtensions = [{
-    ext: '.com',
-    oldPrice: 209900,
-    newPrice: 159900,
-    info: 'Ideal untuk bisnis global',
-    highlight: 'best',
-    label: '<i class="fas fa-star"></i> Terpopuler'
-  }, {
-    ext: '.id',
-    oldPrice: 249000,
-    newPrice: 99000,
-    info: 'Domain Indonesia resmi',
-    highlight: 'best',
-    label: '<i class="fas fa-star"></i> Best Deal'
-  }, {
-    ext: '.co.id',
-    oldPrice: 299000,
-    newPrice: 295000,
-    info: 'Terpercaya untuk perusahaan',
-    highlight: 'business',
-    label: '<i class="fas fa-briefcase"></i> Bisnis'
-  }, {
-    ext: '.my.id',
-    oldPrice: 35000,
-    newPrice: 9900,
-    info: 'Pribadi atau portofolio',
-    highlight: 'cheap',
-    label: '<i class="fas fa-coins"></i> Super Hemat'
-  }, {
-    ext: '.web.id',
-    oldPrice: 50000,
-    newPrice: 9900,
-    info: 'Website profesional',
-    highlight: 'cheap',
-    label: '<i class="fas fa-coins"></i> Super Hemat'
-  }, {
-    ext: '.cloud',
-    oldPrice: 389000,
-    newPrice: 49900,
-    info: 'Hosting atau cloud',
-    highlight: 'cheap',
-    label: '<i class="fas fa-coins"></i> Super Hemat'
-  }, {
-    ext: '.org',
-    oldPrice: 189900,
-    newPrice: 149900,
-    info: 'Organisasi & komunitas',
-    highlight: 'none',
-    label: ''
-  }, {
-    ext: '.net',
-    oldPrice: 219900,
-    newPrice: 199900,
-    info: 'Internet & teknologi',
-    highlight: 'none',
-    label: ''
-  }, {
-    ext: '.biz.id',
-    oldPrice: 150000,
-    newPrice: 120000,
-    info: 'Bisnis lokal',
-    highlight: 'business',
-    label: '<i class="fas fa-briefcase"></i> Bisnis'
-  }, {
-    ext: '.ac.id',
-    oldPrice: 75000,
-    newPrice: 65000,
-    info: 'Lembaga pendidikan',
-    highlight: 'none',
-    label: ''
-  }, {
-    ext: '.or.id',
-    oldPrice: 150000,
-    newPrice: 130000,
-    info: 'Organisasi nirlaba',
-    highlight: 'none',
-    label: ''
-  }, {
-    ext: '.sch.id',
-    oldPrice: 59000,
-    newPrice: 59000,
-    info: 'Sekolah & pendidikan',
-    highlight: 'none',
-    label: ''
-  }];
-  const extColors = {
-    '.com': '#4285f4', // blue
-    '.id': '#ea4335', // red
-    '.co.id': '#ea4335',
-    '.my.id': '#ea4335',
-    '.web.id': '#ea4335',
-    '.cloud': '#20c997', // teal
-    '.org': '#6366f1', // indigo
-    '.net': '#4285f4',
-    '.biz.id': '#ea4335',
-    '.ac.id': '#ea4335',
-    '.or.id': '#ea4335',
-    '.sch.id': '#ea4335',
-    '.top': '#20c997',
-    '.xyz': '#a855f7' // purple
-  };
+  const { domainPricingData: allExtensions, parseDomain, validateDomain } = await import('../config.js');
   // ============================================
   // UTILITY FUNCTIONS
   // ============================================
@@ -221,7 +118,7 @@
       if (discount > 0) {
         labels += `<span class="cek-domain-ext-discount">-${discount}%</span>`;
       }
-      const extColor = extColors[ext.ext] || '#1a1a2e';
+      const extColor = ext.color || '#1a1a2e';
       item.innerHTML = `
         <div class="cek-domain-ext-labels">${labels}</div>
         <div class="cek-domain-ext-name" style="color: ${extColor}; font-weight: 800;">${ext.ext}</div>
@@ -259,45 +156,8 @@
   }
   // ============================================
   // DOMAIN CONFIGURATION & VALIDATION
+  // (Validation and parsing logic moved to config.js)
   // ============================================
-  const validMultiPartExtensions = ['.co.id', '.my.id', '.sch.id', '.ac.id', '.go.id', '.or.id', '.web.id', '.biz.id', '.net.id'];
-
-  function parseDomain(input) {
-    const cleaned = input.toLowerCase().trim();
-    for (const ext of validMultiPartExtensions) {
-      if (cleaned.endsWith(ext)) {
-        return {
-          base: cleaned.slice(0, -ext.length),
-          ext,
-          isFullDomain: true,
-          isInvalid: false
-        };
-      }
-    }
-    if (cleaned.includes('.')) {
-      const ext = cleaned.slice(cleaned.lastIndexOf('.'));
-      if (allExtensions.some(e => e.ext === ext)) {
-        return {
-          base: cleaned.slice(0, -ext.length),
-          ext,
-          isFullDomain: true,
-          isInvalid: false
-        };
-      }
-      return {
-        base: cleaned,
-        ext: null,
-        isFullDomain: false,
-        isInvalid: true
-      };
-    }
-    return {
-      base: cleaned,
-      ext: null,
-      isFullDomain: false,
-      isInvalid: false
-    };
-  }
   async function fastCheckDNS(domain) {
     try {
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
@@ -342,7 +202,7 @@
       item.setAttribute('role', 'option');
       item.id = `suggestion-${index}`;
       const extSafe = ext;
-      const extColor = extColors[extSafe] || '#1a1a2e';
+      const extColor = extData?.color || '#1a1a2e';
       const extLabel = ext.replace('.', '').toUpperCase();
       const priceHTML = extData && extData.newPrice ? `
         <div class="cek-domain-suggestion-price" id="price-${index}" style="display: none;">
@@ -391,28 +251,10 @@
   }
 
   function validateDomainInput(input) {
-    if (!input || !input.trim()) {
-      cekDomainError.innerHTML = '<i class="fas fa-info-circle"></i> Masukkan nama domain untuk memulai (minimal 3 karakter)';
-      cekDomainError.style.display = 'block';
-      return false;
-    }
-    const {
-      base,
-      isInvalid
-    } = parseDomain(input);
-    if (isInvalid) {
-      cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Ekstensi tidak valid. Coba: .com, .id, .co.id, atau ekstensi lainnya';
-      cekDomainError.style.display = 'block';
-      return false;
-    }
-    if (base.length < 3) {
-      cekDomainError.innerHTML = '<i class="fas fa-info-circle"></i> Nama domain minimal 3 karakter';
-      cekDomainError.style.display = 'block';
-      return false;
-    }
-    const baseRegex = /^(?!-)[a-z0-9-]{1,63}(?<!-)$/;
-    if (!baseRegex.test(base)) {
-      cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Nama domain hanya boleh mengandung huruf, angka, dan strip (-)';
+    const { valid, error } = validateDomain(input);
+    if (!valid) {
+      const icon = error.includes('minimal') ? 'fa-info-circle' : 'fa-warning';
+      cekDomainError.innerHTML = `<i class="fas ${icon}"></i> ${error}`;
       cekDomainError.style.display = 'block';
       return false;
     }
@@ -529,7 +371,7 @@
       if (result.isOrdered) {
         infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Siapa cepat bayar, dia dapat.</span>`;
       }
-      const extColor = extData ? (extColors[extData.ext] || '#1a1a2e') : '#1a1a2e';
+      const extColor = extData?.color || '#1a1a2e';
       const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${result.isOrdered ? 'inherit' : extColor};">${extData.ext}</span>`);
       card.innerHTML = `
         <div class="cek-domain-result-badges">${badges.join('')}</div>
@@ -683,8 +525,8 @@
       disclaimerLi.innerHTML = `
         <i class="fas fa-info-circle"></i>
         <small>
-          Pengecekan menggunakan DNS check. Hasil akan dikonfirmasi saat checkout.
-          <strong>Garansi uang kembali 100%</strong> jika domain tidak tersedia.
+          Ketersediaan dicek secara <em>real-time</em>. Status final akan dikonfirmasi saat checkout.
+          <strong>Garansi uang kembali 100%</strong> jika domain pilihan Anda keduluan didaftarkan orang lain.
         </small>
       `;
       cekDomainResultsList.appendChild(disclaimerLi);
@@ -699,10 +541,10 @@
       console.error('Display results error:', err);
       cekDomainResultsList.innerHTML = `
         <li style="grid-column: 1/-1; text-align: center;">
-          <i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan
+          <i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan: ${err.message}
         </li>
       `;
-      showError('Gagal Mengecek Domain', 'Terjadi kesalahan saat mengecek ketersediaan domain. Silakan coba lagi nanti.');
+      showError('Gagal Mengecek Domain', 'Terjadi kesalahan: ' + err.message);
     } finally {
       cekDomainBtn.disabled = false;
       cekDomainBtn.innerHTML = originalBtnHTML;

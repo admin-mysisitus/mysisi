@@ -146,9 +146,16 @@ async function generateMidtransToken(orderData) {
     // Show error but don't crash
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert alert-warning';
+    errorDiv.style.marginTop = '16px';
+    errorDiv.style.display = 'flex';
+    errorDiv.style.flexDirection = 'column';
+    errorDiv.style.gap = '12px';
+    errorDiv.style.alignItems = 'flex-start';
     errorDiv.innerHTML = `
-      Gagal memuat sistem pembayaran. Coba refresh halaman atau hubungi support.
-      <br><a href="https://wa.me/${ADMIN_WHATSAPP}" target="_blank" class="btn btn-primary btn-sm">Chat Support</a>
+      <div style="line-height: 1.5;">Gagal memuat sistem pembayaran. Coba muat ulang halaman atau hubungi Support.</div>
+      <a href="https://wa.me/${ADMIN_WHATSAPP}" target="_blank" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">
+        <i class="fab fa-whatsapp"></i> Chat Support
+      </a>
     `;
     document.getElementById('payment-actions').appendChild(errorDiv);
   }
@@ -281,7 +288,7 @@ function displayOrderData(orderData) {
       <strong>${formatPrice(ppn)}</strong>
     </div>
     ${discount > 0 ? `
-      <div class="summary-row" style="color: #27ae60;">
+      <div class="summary-row summary-row--discount">
         <span>Diskon (${orderData.promoCode || 'Promo'}):</span>
         <strong>-${formatPrice(discount)}</strong>
       </div>
@@ -289,9 +296,9 @@ function displayOrderData(orderData) {
     <div class="summary-divider"></div>
   `;
   content.innerHTML = `
-    <div class="dashboard-page-header" style="background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);">
+    <div class="dashboard-page-header dashboard-page-header--invoice">
       <div class="dashboard-page-header-content">
-        <h1 class="dashboard-page-header-title">Invoice #${orderData.orderId}</h1>
+        <h1 class="dashboard-page-header-title invoice-title">Invoice #${orderData.orderId}</h1>
         <p class="dashboard-page-header-desc">Dibuat pada: ${formatDateTime(orderData.createdAt)}. Silakan lakukan pembayaran tagihan pesanan Anda.</p>
       </div>
       <div class="dashboard-page-header-visual">
@@ -299,11 +306,11 @@ function displayOrderData(orderData) {
       </div>
     </div>
 
-    <div class="card" style="border-top: none;">
+    <div class="card payment-card">
       <div class="card-header">
-        <div class="order-header" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <div class="order-header">
           <div>
-            <h4 style="margin: 0; color: var(--color-text-dark);">Detail Transaksi</h4>
+            <h4 class="card-title">Detail Transaksi</h4>
           </div>
           <div class="status-badge ${statusInfo.class}">
             <span class="status-icon">${statusInfo.icon}</span>

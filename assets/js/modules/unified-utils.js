@@ -412,14 +412,21 @@ export function getPasswordStrengthInfo(password) {
 /**
  * Set button loading state
  */
-export function setButtonLoading(button, isLoading = true, loadingText = '⏳ Memproses...') {
+export function setButtonLoading(button, isLoading = true, loadingText = 'Memproses...') {
   if (!button) return;
   if (isLoading) {
-    button.dataset.originalText = button.textContent;
-    button.textContent = loadingText;
+    if (!button.dataset.originalHtml) {
+      button.dataset.originalHtml = button.innerHTML;
+    }
+    const cleanText = loadingText.replace('⏳ ', '');
+    button.innerHTML = `<i class="fas fa-circle-notch fa-spin" style="margin-right: 6px;"></i> ${cleanText}`;
     button.disabled = true;
   } else {
-    button.textContent = button.dataset.originalText || 'Submit';
+    if (button.dataset.originalHtml) {
+      button.innerHTML = button.dataset.originalHtml;
+    } else {
+      button.textContent = 'Submit';
+    }
     button.disabled = false;
   }
 }

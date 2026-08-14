@@ -288,13 +288,9 @@ async function handleLogin(e) {
     // Show success message
     showSuccess('✓ Login Berhasil!', `Selamat datang kembali, ${response.data.displayName}!`);
     // Check if there's pending checkout in cart
-    let itemCount = 0;
-    try {
-      const cartData = JSON.parse(localStorage.getItem('mysisi_cart') || '{"items":[]}');
-      itemCount = cartData.items ? cartData.items.length : 0;
-    } catch (e) {}
+    const cartSummary = CartManager.getSummary();
     let redirectUrl = response.data.role === 'admin' ? '/admin/' : '/dashboard/';
-    if (itemCount > 0 && response.data.role !== 'admin') {
+    if (cartSummary.itemCount > 0 && response.data.role !== 'admin') {
       redirectUrl = `/dashboard/#!/dashboard/keranjang`;
     }
     // Redirect to appropriate page

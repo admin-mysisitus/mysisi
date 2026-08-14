@@ -5,21 +5,12 @@
 /* ============================================================================
    CHECKOUT SECTIONS
    ============================================================================ */
-.section {
-  margin-bottom: clamp(1.2rem, 2.5vw, 1.8rem);
-}
-
 .section h3 {
-  margin-top: 0;
-  margin-bottom: clamp(0.9rem, 1.8vw, 1.2rem);
-  padding-bottom: clamp(0.6rem, 1vw, 0.8rem);
-  border-bottom: 2px solid var(--color-primary);
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  color: var(--color-text-dark);
-  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  border-bottom-color: var(--color-primary);
+  color: var(--color-text-dark);
 }
 
 /* ============================================================================
@@ -458,18 +449,6 @@
 .summary-divider {
   border-top: 1px solid var(--color-border, #e0e0e0);
   margin: 1rem 0;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 2rem;
-  color: #7f8c8d;
-}
-
-.empty-state i {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  opacity: 0.5;
 }
 
 /* ============================================================================

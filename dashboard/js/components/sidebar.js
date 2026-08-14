@@ -69,12 +69,10 @@ export class DashboardSidebar {
           if (item.badge === 'cart-badge') {
             badge = '<span class="menu-badge cart-badge-count" style="display: none;">0</span>';
           } else if (item.badge) {
-            badge = ` < span class = "menu-badge" > $ {
-      item.badge
-    } < /span>`;
-  }
-  const href = item.isExternal ? item.route : `#!${item.route}`;
-  return `
+            badge = `<span class="menu-badge">${item.badge}</span>`;
+          }
+          const href = item.isExternal ? item.route : `#!${item.route}`;
+          return `
             <a 
               href="${href}" 
               class="menu-item ${this.currentRoute === item.route ? 'active' : ''}"
@@ -87,9 +85,14 @@ export class DashboardSidebar {
               ${badge}
             </a>
           `;
-}).join('')
-} < /nav> < div class = "sidebar-footer" > < div class = "sidebar-info" > < small class = "sidebar-info__title" > SISITUS Client Dashboard < /small > < small class = "sidebar-info__meta" > Akses cepat• aman• terintegrasi < /small> < /
-div > < /div>
+        }).join('')}
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-info">
+          <small class="sidebar-info__title">SISITUS Client Dashboard</small>
+          <small class="sidebar-info__meta">Akses cepat &bull; aman &bull; terintegrasi</small>
+        </div>
+      </div>
 `;
 
     // Add click handlers
@@ -99,6 +102,13 @@ div > < /div>
           return;
         }
         e.preventDefault();
+        
+        // Auto-close sidebar on mobile
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+        }
+        
         const route = item.dataset.route;
         window.location.hash = '#!' + route;
       });
@@ -138,7 +148,7 @@ div > < /div>
     document.querySelectorAll('.menu-item').forEach(item => {
       item.classList.remove('active');
     });
-    const activeItem = document.querySelector(` [data - route = "${route}"] `);
+    const activeItem = document.querySelector(`[data-route="${route}"]`);
     if (activeItem) {
       activeItem.classList.add('active');
     }

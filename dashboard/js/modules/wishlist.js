@@ -105,10 +105,11 @@ class DashboardWishlist {
         </div>
       </div>
 
-      <div class="wishlist-content" style="padding-top: 15px;">
-        <div class="wishlist-items-list">
-          ${itemsHTML}
-        </div>
+      <div class="page-shell">
+        <div class="page-card wishlist-content">
+          <div class="wishlist-items-list">
+            ${itemsHTML}
+          </div>
 
         <div style="margin-top: 40px; text-align: center; padding: 20px; background: #f8f9fa; border-radius: 8px;">
           <p style="color: #666; margin-bottom: 15px;">
@@ -119,28 +120,51 @@ class DashboardWishlist {
           </a>
         </div>
       </div>
+      </div>
 
       <style>
         .wishlist-items-list {
           display: flex;
           flex-direction: column;
-          gap: 15px;
+          gap: 12px;
         }
         .wishlist-item {
           background: white;
           border: 1px solid #e0e0e0;
-          border-radius: 8px;
-          padding: 15px;
+          border-radius: 12px;
+          padding: 14px 16px;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 12px;
+        }
+        .wishlist-item-info {
+          flex: 1;
+          min-width: 0;
+        }
+        .wishlist-item-actions {
+          display: flex;
+          gap: 8px;
         }
         .wishlist-group {
           border-left: 4px solid;
-          padding-left: 15px;
+          padding-left: 12px;
+          margin-bottom: 24px;
         }
         .wishlist-group:has(h3 .fa-star) {
           border-left-color: #e74c3c;
+        }
+        @media (max-width: 480px) {
+          .wishlist-item {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .wishlist-item-actions {
+            width: 100%;
+          }
+          .wishlist-item-actions button:first-child {
+            flex: 1;
+          }
         }
       </style>
     `;
@@ -156,24 +180,24 @@ class DashboardWishlist {
     const addedDate = new Date(item.addedAt).toLocaleDateString('id-ID');
     return `
       <div class="wishlist-item">
-        <div style="flex: 1;">
-          <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">
+        <div class="wishlist-item-info">
+          <h4 style="margin: 0 0 6px 0; font-size: 15px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             ${item.domain}
           </h4>
-          <p style="margin: 0 0 5px 0; color: #666; font-size: 13px;">
+          <p style="margin: 0 0 4px 0; color: #666; font-size: 12.5px;">
             ${item.reason || 'Domain impian'}
           </p>
-          <p style="margin: 0; color: #999; font-size: 12px;">
+          <p style="margin: 0; color: #999; font-size: 11.5px;">
             Ditambahkan: ${addedDate}
           </p>
         </div>
-        <div style="display: flex; gap: 8px; margin-left: 15px;">
+        <div class="wishlist-item-actions">
           <button onclick="window.moveWishlistToCart && window.moveWishlistToCart('${item.domain}')"
-            class="btn" style="background: #e8f5e9; color: #27ae60; border: 1px solid #c8e6c9; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px;">
+            class="btn" style="background: #e8f5e9; color: #27ae60; border: 1px solid #c8e6c9; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12.5px;">
             <i class="fas fa-shopping-cart"></i> Beli
           </button>
           <button onclick="window.removeWishlistItem && window.removeWishlistItem('${item.domain}')"
-            class="btn" style="background: #fee; color: #e74c3c; border: 1px solid #fcc; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">
+            class="btn" style="background: #fee; color: #e74c3c; border: 1px solid #fcc; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12.5px; flex: none;">
             <i class="fas fa-trash"></i>
           </button>
         </div>
