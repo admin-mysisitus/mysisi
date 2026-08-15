@@ -1,0 +1,89 @@
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-page-title">Live Chat</h1>
+    <p class="admin-page-desc">Tanggapi pertanyaan pelanggan secara langsung (real-time).</p>
+  </div>
+</div>
+
+<div id="livechat-spa-container" class="lc-admin-wrapper">
+  <div id="notification" style="display: none;"><i class="fas fa-bell"></i> Ada pesan baru masuk!</div>
+
+  <!-- Left Column: Rooms List -->
+  <div class="admin-card lc-rooms-panel">
+    <div class="lc-rooms-header">
+      <h4 class="lc-rooms-title">Daftar Chat</h4>
+      <div id="adminNotificationBell" class="lc-notification-bell">
+        <i class="fas fa-bell"></i>
+        <span id="adminUnreadBadge" class="lc-unread-badge" style="display: none;">0</span>
+      </div>
+    </div>
+    <div id="roomsList" class="lc-rooms-list rooms-loading">
+      <div class="lc-loading-state">
+        <i class="fas fa-circle-notch fa-spin lc-loading-icon"></i>
+        <div class="lc-loading-text">Memuat daftar chat...</div>
+      </div>
+    </div>
+    <div id="currentRoom" style="display: none;"></div>
+  </div>
+
+  <!-- Right Column: Chat Box -->
+  <div class="admin-card lc-chat-panel">
+    <!-- Empty State -->
+    <div id="emptyStateContainer" class="lc-empty-state empty-dashboard-state">
+      <div class="lc-empty-icon-wrap">
+        <i class="fas fa-comment-dots lc-empty-icon"></i>
+      </div>
+      <h3 class="lc-empty-title">Belum ada obrolan terpilih</h3>
+      <p class="lc-empty-desc">Pilih salah satu obrolan dari daftar di sebelah kiri untuk mulai membalas pesan.</p>
+    </div>
+
+    <!-- Active Chat -->
+    <div id="activeChatContainer" class="lc-active-chat-wrapper" style="display: none;">
+      <div class="lc-chat-header chat-header">
+        <div class="lc-chat-header-avatar">
+            <i class="fas fa-user lc-chat-header-icon"></i>
+        </div>
+        <div class="lc-chat-header-info">
+            <span class="lc-chat-header-name">Customer Service</span>
+            <span class="lc-chat-header-status">Online</span>
+        </div>
+      </div>
+
+      <div id="chatBox" class="lc-chat-box"></div>
+
+      <div class="lc-input-area input-area">
+        <!-- Quick Reply Popup injected dynamically here -->
+        <div id="quickReplyPopup" class="quick-reply-popup"></div>
+        
+        <input type="text" id="replyInput" class="lc-reply-input" placeholder="Ketik pesan atau gunakan '/' untuk quick reply..." aria-label="Pesan balasan">
+        <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" aria-label="Pilih dokumen">
+        <button id="attachBtn" class="admin-btn lc-attach-btn attach-btn" title="Kirim File" aria-label="Kirim Lampiran"><i class="fas fa-paperclip" style="font-size: 1.1rem;"></i></button>
+        <button id="sendBtn" class="admin-btn lc-send-btn" aria-label="Kirim Pesan"><i class="fas fa-paper-plane"></i> <span class="btn-text">Kirim</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Attachment Modal -->
+<div id="attachmentModal" class="modal-backdrop">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>
+    <div class="attachment-modal-header">
+      <h3 id="attachmentModalTitle"><i class="fas fa-file-alt" aria-hidden="true"></i> Lampiran</h3>
+    </div>
+    <div class="attachment-modal-body">
+      <div id="attachmentLoading" class="attachment-loading">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p>Memuat dokumen dari server...</p>
+      </div>
+      <div id="attachmentError" class="attachment-error" style="display: none;">
+        <i class="fas fa-exclamation-triangle fa-2x"></i>
+        <p>Gagal memuat dokumen.</p>
+      </div>
+      <img id="attachmentImg" style="display: none;" alt="Lampiran Gambar" />
+      <iframe id="attachmentFrame" style="display: none;" title="Lampiran Dokumen"></iframe>
+    </div>
+  </div>
+</div>
+
+

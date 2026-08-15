@@ -1,0 +1,47 @@
+﻿[
+  {
+    "trigger": "halo",
+    "title": "Sapaan",
+    "text": "Halo, selamat datang di layanan pelanggan Mysisi. Ada yang bisa saya bantu hari ini?"
+  },
+  {
+    "trigger": "harga",
+    "title": "Info Layanan",
+    "text": "Untuk detail harga dan paket lengkap, Anda bisa langsung mengunjungi mysisi.co.id/layanan."
+  },
+  {
+    "trigger": "tunggu",
+    "title": "Mohon Tunggu",
+    "text": "Mohon ditunggu sebentar ya, saya sedang melakukan pengecekan data Anda."
+  },
+  {
+    "trigger": "terima",
+    "title": "Terima Kasih",
+    "text": "Terima kasih telah menghubungi Mysisi. Semoga hari Anda menyenangkan!"
+  },
+  {
+    "trigger": "booking",
+    "title": "Pemesanan",
+    "text": "Tentu! Untuk memulai pemesanan, mohon informasikan detail layanan yang Anda butuhkan serta tanggal rencana layanan."
+  },
+  {
+    "trigger": "domain",
+    "title": "Informasi Domain",
+    "text": "Tentu. Silakan sampaikan nama domain yang ingin Anda daftarkan, atau jika Anda sudah punya, sampaikan nama domain dan ekstensi yang diinginkan."
+  },
+  {
+    "trigger": "hosting",
+    "title": "Informasi Hosting",
+    "text": "Tentu, saya bantu cek. Silakan sebutkan paket hosting yang Anda butuhkan atau ukuran ruang penyimpanan yang Anda perlukan."
+  },
+  {
+    "trigger": "billing",
+    "title": "Layanan Billing",
+    "text": "Tentu. Untuk keperluan billing, mohon informasikan detail layanan yang terkait serta informasi tagihan yang Anda butuhkan."
+  },
+  {
+    "trigger": "teknis",
+    "title": "Dukungan Teknis",
+    "text": "Tentu. Untuk pertanyaan teknis, mohon sampaikan detail teknis serta pesan kesalahan yang Anda alami."
+  }
+]

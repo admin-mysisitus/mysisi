@@ -62,6 +62,11 @@ class AdminApp {
         title: 'Kode Promo',
         loadModule: () => import('./modules/promos.js')
       },
+      '/admin/livechat': {
+        page: 'livechat',
+        title: 'Live Chat',
+        loadModule: () => import('./modules/livechat.js')
+      },
       '/admin/support': {
         page: 'support',
         title: 'Support Tickets',

@@ -4,7 +4,7 @@
 .support-btn-wrapper {
   position: fixed;
   bottom: 16px;
-  right: 16px;
+  left: 16px;
   z-index: 9999;
   opacity: 0;
   visibility: hidden;
@@ -94,7 +94,7 @@
 .support-panel {
   position: absolute;
   bottom: 60px;
-  right: 0;
+  left: 0;
   background: rgba(255 255 255 / 0.9);
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
