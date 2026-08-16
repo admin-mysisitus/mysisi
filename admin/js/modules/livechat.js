@@ -13,6 +13,15 @@ export async function render() {
     document.head.appendChild(css);
   }
 
+  // Load global modal CSS for attachment modal
+  if (!document.getElementById('global-modal-css')) {
+    const modalCss = document.createElement('link');
+    modalCss.id = 'global-modal-css';
+    modalCss.rel = 'stylesheet';
+    modalCss.href = '/assets/css/components/modal.css';
+    document.head.appendChild(modalCss);
+  }
+
   // Load DOMPurify if not exists
   if (!window.DOMPurify) {
     await loadScript("https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js");
@@ -64,3 +73,4 @@ function loadScript(src, id = null) {
     document.body.appendChild(script);
   });
 }
+

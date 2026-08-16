@@ -42,7 +42,7 @@ async function openAttachmentModal(rawUrl, isPdfHint) {
   if (!modal) return;
 
   // Reset and Show Modal
-  modal.style.display = 'flex';
+  modal.classList.add('active');
   loader.style.display = 'flex';
   errorEl.style.display = 'none';
   imgFrame.style.display = 'none';
@@ -66,7 +66,7 @@ async function openAttachmentModal(rawUrl, isPdfHint) {
       const isActualPdf = isPdfHint || mime.includes('pdf');
 
       if (isActualPdf) {
-        pdfFrame.src = data.fileData;
+        pdfFrame.src = data.fileData + "#toolbar=0&navpanes=0&scrollbar=0";
         pdfFrame.style.display = 'block';
       } else {
         imgFrame.src = data.fileData;
@@ -85,7 +85,7 @@ async function openAttachmentModal(rawUrl, isPdfHint) {
 function closeAttachmentModal() {
   const modal = document.getElementById('attachmentModal');
   if (modal) {
-    modal.style.display = 'none';
+    modal.classList.remove('active');
     const imgFrame = document.getElementById('attachmentImg');
     const pdfFrame = document.getElementById('attachmentFrame');
     if (imgFrame) imgFrame.src = '';
@@ -99,3 +99,4 @@ document.addEventListener('keydown', (e) => {
     closeAttachmentModal();
   }
 });
+

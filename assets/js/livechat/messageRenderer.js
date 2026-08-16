@@ -366,9 +366,10 @@ class MessageRenderer {
         const img = document.createElement('img');
         img.style.display = 'none';
         img.alt = 'Lampiran Gambar';
-        img.style.maxWidth = '100%';
-        img.style.maxHeight = '250px';
-        img.style.objectFit = 'contain';
+        img.style.width = '100%';
+        img.style.height = '200px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '6px';
 
         imgContainer.appendChild(spinner);
         imgContainer.appendChild(img);
@@ -533,3 +534,4 @@ class MessageRenderer {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = MessageRenderer;
 }
+

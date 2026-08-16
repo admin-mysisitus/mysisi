@@ -39,8 +39,8 @@ window.addEventListener("load", () => {
       </div>
     </div>
     <!-- Attachment Modal -->
-    <div id="attachmentModal" class="modal-backdrop">
-      <div class="modal-content">
+    <div id="attachmentModal" class="modal-backdrop" onclick="if(event.target === this) closeAttachmentModal()">
+      <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto;">
         <button class="modal-close" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>
         <div class="attachment-modal-header">
           <h3 id="attachmentModalTitle"><i class="fas fa-file-alt" aria-hidden="true"></i> Lampiran</h3>
@@ -99,4 +99,7 @@ window.addEventListener("load", () => {
       document.body.appendChild(script);
   });
 });
+
+
+
 
