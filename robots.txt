@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /cart/
+Disallow: /dashboard/
+Disallow: /invoice/
+Disallow: /spreadsheet.tsv
 Allow: /assets/img/team/lukman.webp
 Disallow: /assets/img/team/adhim.webp
 Disallow: /assets/img/team/cicilia.webp

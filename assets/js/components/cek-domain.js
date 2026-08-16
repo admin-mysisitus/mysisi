@@ -1,4 +1,4 @@
-(async function() {
+(async function () {
   'use strict';
   // Import cart managers
   const {
@@ -34,7 +34,7 @@
   // ============================================
   function debounce(func, delay) {
     let timeoutId;
-    return function(...args) {
+    return function (...args) {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
@@ -626,7 +626,7 @@
         }
       }
       if (matchedIntent) {
-        intentBadge.innerHTML = '<i class="fas fa-lightbulb"></i> Kategori <strong>' + matchedIntent.name + '</strong> terdeteksi. Sebaiknya gunakan <strong>' + matchedIntent.priorities[0] + '</strong>';
+        intentBadge.innerHTML = '<i class="fas fa-lightbulb"></i> <span>Situs <strong>' + matchedIntent.name + '</strong> sebaiknya gunakan <strong>' + matchedIntent.priorities[0] + '</strong></span>';
         intentBadge.classList.add('visible');
       } else {
         intentBadge.classList.remove('visible');
