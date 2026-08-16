@@ -135,7 +135,7 @@ export const footerSocialData = [{
 // =========================
 export const footerContactData = [{
   icon: "fas fa-map-marker-alt",
-  text: "Indonesia – Layanan Online sisitus.com"
+  text: "<a href=\"https://share.google/UJstmjkDDtpHyCMRm\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"footer-kontak-link\" aria-label=\"Buka Google Maps\">PT SINTARA DIGITAL NUSANTARA</a>"
 }, {
   icon: "fas fa-phone-alt",
   text: "<a href=\"tel:+62-812-1528-9095\" class=\"footer-kontak-link\">+62 812-1528-9095</a>"
