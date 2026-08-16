@@ -53,6 +53,18 @@ export class DashboardSidebar {
       label: 'Support',
       route: '/dashboard/support'
     }];
+    const menuHtml = menuItems.map(item => {
+      let badge = '';
+      if (item.badge === 'cart-badge') {
+        badge = '<span class="menu-badge cart-badge-count" style="display: none;">0</span>';
+      } else if (item.badge) {
+        badge = '<span class="menu-badge">' + item.badge + '</span>';
+      }
+      const href = item.isExternal ? item.route : '#!' + item.route;
+      const activeClass = this.currentRoute === item.route ? 'active' : '';
+      const extAttr = item.isExternal ? 'data-external="true"' : '';
+      return '<a href="' + href + '" class="menu-item ' + activeClass + '" data-route="' + item.route + '" ' + extAttr + ' title="' + item.label + '">' + '<span class="menu-icon ' + item.icon + '"></span>' + '<span class="menu-label">' + item.label + '</span>' + badge + '</a>';
+    }).join('');
     container.innerHTML = `
       <div class="sidebar-brand-container">
         <a href="#!/dashboard/" class="sidebar-logo">
@@ -64,28 +76,7 @@ export class DashboardSidebar {
       <div class="sidebar-menu-header">MENU UTAMA</div>
       
       <nav class="sidebar-menu">
-        ${menuItems.map(item => {
-          let badge = '';
-          if (item.badge === 'cart-badge') {
-            badge = '<span class="menu-badge cart-badge-count" style="display: none;">0</span>';
-          } else if (item.badge) {
-            badge = `<span class="menu-badge">${item.badge}</span>`;
-          }
-          const href = item.isExternal ? item.route : `#!${item.route}`;
-          return `
-            <a 
-              href="${href}" 
-              class="menu-item ${this.currentRoute === item.route ? 'active' : ''}"
-              data-route="${item.route}"
-              ${item.isExternal ? 'data-external="true"' : ''}
-              title="${item.label}"
-            >
-              <span class="menu-icon ${item.icon}"></span>
-              <span class="menu-label">${item.label}</span>
-              ${badge}
-            </a>
-          `;
-        }).join('')}
+        ${menuHtml}
       </nav>
       <div class="sidebar-footer">
         <div class="sidebar-info">
@@ -93,8 +84,7 @@ export class DashboardSidebar {
           <small class="sidebar-info__meta">Akses cepat &bull; aman &bull; terintegrasi</small>
         </div>
       </div>
-`;
-
+    `;
     // Add click handlers
     container.querySelectorAll('.menu-item').forEach(item => {
       item.addEventListener('click', (e) => {
@@ -102,32 +92,29 @@ export class DashboardSidebar {
           return;
         }
         e.preventDefault();
-        
         // Auto-close sidebar on mobile
         const sidebar = document.getElementById('sidebar');
         if (sidebar && sidebar.classList.contains('open')) {
           sidebar.classList.remove('open');
         }
-        
         const route = item.dataset.route;
         window.location.hash = '#!' + route;
       });
     });
-
     // Update cart badge on cart changes
     this.updateCartBadge();
     window.addEventListener('cart:updated', () => this.updateCartBadge());
   }
-
   /**
    * Update cart item count badge
    */
   async updateCartBadge() {
     try {
-      const { CartManager } = await import('/assets/js/modules/unified-cart.js');
+      const {
+        CartManager
+      } = await import('/assets/js/modules/unified-cart.js');
       const cartSummary = CartManager.getSummary();
       const badge = document.querySelector('.cart-badge-count');
-      
       if (badge) {
         if (cartSummary.itemCount > 0) {
           badge.textContent = cartSummary.itemCount;
@@ -140,7 +127,6 @@ export class DashboardSidebar {
       // CartManager not available, skip silently
     }
   }
-
   /**
    * Set active menu item
    */
@@ -148,7 +134,7 @@ export class DashboardSidebar {
     document.querySelectorAll('.menu-item').forEach(item => {
       item.classList.remove('active');
     });
-    const activeItem = document.querySelector(`[data-route="${route}"]`);
+    const activeItem = document.querySelector('[data-route="' + route + '"]');
     if (activeItem) {
       activeItem.classList.add('active');
     }

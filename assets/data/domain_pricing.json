@@ -1,0 +1,17 @@
+[
+  {"ext": ".com", "oldPrice": 209900, "newPrice": 114900, "info": "Ideal untuk bisnis global", "highlight": "best", "label": "<i class=\"fas fa-star\"></i> Terpopuler", "color": "#2563eb"},
+  {"ext": ".id", "oldPrice": 219900, "newPrice": 190000, "info": "Domain Indonesia resmi", "highlight": "best", "label": "<i class=\"fas fa-star\"></i> Best Deal", "color": "#ef4444"},
+  {"ext": ".co.id", "oldPrice": 299000, "newPrice": 295000, "info": "Terpercaya untuk perusahaan", "highlight": "business", "label": "<i class=\"fas fa-briefcase\"></i> Bisnis", "color": "#ea4335"},
+  {"ext": ".my.id", "oldPrice": 35000, "newPrice": 9900, "info": "Pribadi atau portofolio", "highlight": "cheap", "label": "<i class=\"fas fa-coins\"></i> Super Hemat", "color": "#ea4335"},
+  {"ext": ".web.id", "oldPrice": 50000, "newPrice": 9900, "info": "Website profesional", "highlight": "cheap", "label": "<i class=\"fas fa-coins\"></i> Super Hemat", "color": "#ea4335"},
+  {"ext": ".cloud", "oldPrice": 389000, "newPrice": 49900, "info": "Hosting atau cloud", "highlight": "cheap", "label": "<i class=\"fas fa-coins\"></i> Super Hemat", "color": "#20c997"},
+  {"ext": ".org", "oldPrice": 229900, "newPrice": 149900, "info": "Organisasi & komunitas", "highlight": "none", "label": "", "color": "#6366f1"},
+  {"ext": ".net", "oldPrice": 219900, "newPrice": 199900, "info": "Internet & teknologi", "highlight": "none", "label": "", "color": "#4285f4"},
+  {"ext": ".biz.id", "oldPrice": 150000, "newPrice": 120000, "info": "Bisnis lokal", "highlight": "business", "label": "<i class=\"fas fa-briefcase\"></i> Bisnis", "color": "#ea4335"},
+  {"ext": ".ac.id", "oldPrice": 75000, "newPrice": 65000, "info": "Lembaga pendidikan", "highlight": "none", "label": "", "color": "#ea4335"},
+  {"ext": ".or.id", "oldPrice": 150000, "newPrice": 130000, "info": "Organisasi nirlaba", "highlight": "none", "label": "", "color": "#ea4335"},
+  {"ext": ".sch.id", "oldPrice": 59000, "newPrice": 59000, "info": "Sekolah & pendidikan", "highlight": "none", "label": "", "color": "#ea4335"},
+  {"ext": ".top", "oldPrice": null, "newPrice": 230000, "info": "Pilihan unik & murah", "highlight": "cheap", "label": "<i class=\"fas fa-coins\"></i> Super Hemat", "color": "#14b8a6"},
+  {"ext": ".xyz", "oldPrice": 189900, "newPrice": 29900, "info": "Generasi digital", "highlight": "cheap", "label": "<i class=\"fas fa-coins\"></i> Super Hemat", "color": "#a855f7"},
+  {"ext": ".it.com", "oldPrice": 499900, "newPrice": 114900, "info": "Domain IT global", "highlight": "best", "label": "<i class=\"fas fa-star\"></i> Terpopuler", "color": "#3b82f6"}
+]

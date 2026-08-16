@@ -1,10 +1,9 @@
 // Live Chat Loader Component
 // Menyisipkan fitur chat secara dinamis ke seluruh halaman
-
 window.addEventListener("load", () => {
   // 1. Bangun HTML DOM
   const chatHTML = `
-  <div class="livechat-widget">
+  <div class="livechat-widget" style="opacity: 0; visibility: hidden;">
     <button class="chat-button" id="chatBtn" aria-label="Buka Live Chat">
       <i class="fas fa-comments" aria-hidden="true"></i> Live Chat
       <span id="unreadBadge" class="badge" style="display: none;" aria-label="Pesan belum dibaca">0</span>
@@ -61,45 +60,21 @@ window.addEventListener("load", () => {
     </div>
   </div>
   `;
-
   document.body.insertAdjacentHTML('beforeend', chatHTML);
-
   // 2. Load CSS
-  const styles = [
-      "/assets/css/components/livechat.css"
-  ];
+  const styles = ["/assets/css/components/livechat.css"];
   styles.forEach(href => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      document.head.appendChild(link);
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
   });
-
   // 3. Load JavaScript (berurutan)
-  const scripts = [
-      "https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js",
-      "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js",
-      "https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js",
-      "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js",
-      "/assets/js/livechat/firebase-init.js",
-      "/assets/js/livechat/config.js",
-      "/assets/js/livechat/sessionCache.js",
-      "/assets/js/livechat/messageStore.js",
-      "/assets/js/livechat/messageRenderer.js",
-      "/assets/js/livechat/syncEngine.js",
-      "/assets/js/livechat/sendQueue.js",
-      "/assets/js/livechat/utils.js",
-      "/assets/js/livechat/user.js?v=11"
-  ];
-
+  const scripts = ["https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js", "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js", "https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js", "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js", "/assets/js/livechat/firebase-init.js", "/assets/js/livechat/config.js", "/assets/js/livechat/sessionCache.js", "/assets/js/livechat/messageStore.js", "/assets/js/livechat/messageRenderer.js", "/assets/js/livechat/syncEngine.js", "/assets/js/livechat/sendQueue.js", "/assets/js/livechat/utils.js", "/assets/js/livechat/user.js?v=11"];
   scripts.forEach(src => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = false; // Menjamin script dieksekusi sesuai urutan append
-      document.body.appendChild(script);
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = false; // Menjamin script dieksekusi sesuai urutan append
+    document.body.appendChild(script);
   });
 });
-
-
-
-

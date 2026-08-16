@@ -70,25 +70,26 @@ window.changeItemPackage = (domain, packageId) => {
       price: newPrice,
       renewalPrice: newPrice
     });
-    
     // Prevent jumping by preserving scroll
     const scrollY = window.scrollY;
     const container = cartState.container;
     if (container) {
       container.style.minHeight = `${container.getBoundingClientRect().height}px`;
     }
-    
     if (cartState.currentUser) {
       render(cartState.currentUser);
     } else if (window.updateCartPreview) {
       window.updateCartPreview();
     }
-    
-    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    window.scrollTo({
+      top: scrollY,
+      behavior: 'instant'
+    });
     if (container) {
-      setTimeout(() => { container.style.minHeight = ''; }, 50);
+      setTimeout(() => {
+        container.style.minHeight = '';
+      }, 50);
     }
-    
     showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
     console.error('Error changing package:', error);
@@ -109,23 +110,25 @@ window.toggleCartAddon = (addonId, isChecked) => {
     } else {
       CartManager.removeAddon(addonId);
     }
-    
     // Prevent jumping by preserving scroll
     const scrollY = window.scrollY;
     const container = cartState.container;
     if (container) {
       container.style.minHeight = `${container.getBoundingClientRect().height}px`;
     }
-    
     if (cartState.currentUser) {
       render(cartState.currentUser);
     } else if (window.updateCartPreview) {
       window.updateCartPreview();
     }
-    
-    window.scrollTo({ top: scrollY, behavior: 'instant' });
+    window.scrollTo({
+      top: scrollY,
+      behavior: 'instant'
+    });
     if (container) {
-      setTimeout(() => { container.style.minHeight = ''; }, 50);
+      setTimeout(() => {
+        container.style.minHeight = '';
+      }, 50);
     }
   } catch (error) {
     console.error('Error toggling addon:', error);

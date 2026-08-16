@@ -3,7 +3,6 @@ const PRELOADER_START = performance.now();
 document.body.classList.add("preloading");
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
-  const supportWrapper = document.querySelector(".support-btn-wrapper");
   if (!preloader) return;
   const MIN_PRELOADER_TIME = 1800;
   const EXIT_ANIMATION_TIME = 600;
@@ -14,7 +13,12 @@ window.addEventListener("load", () => {
     document.body.classList.remove("preloading");
     setTimeout(() => {
       preloader.remove();
-      supportWrapper?.classList.add("show");
+      const widget = document.querySelector(".livechat-widget");
+      if (widget) {
+        widget.style.opacity = "";
+        widget.style.visibility = "";
+        widget.classList.add("show");
+      }
     }, EXIT_ANIMATION_TIME);
   }, remaining);
 });

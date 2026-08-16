@@ -19,20 +19,26 @@ const CONFIG = {
       inactivity_warning: 110000,
     }
   },
-
   RANDOM_AGENT_RANGE: 10000,
-
   MAX_MESSAGE_LENGTH: 1000,
-
   ROOM_MESSAGE_PREVIEW_LENGTH: 15,
   ROOM_ID_DISPLAY_LENGTH: 8,
   ROOM_NAME_DISPLAY_LENGTH: 20,
-
-  AGENTS: [
-    { name: "@adam", avatar: "/assets/img/livechat/agents/adam.webp", department: "Layanan & Pemesanan" },
-    { name: "@diva", avatar: "/assets/img/livechat/agents/diva.webp", department: "Domain & Produk Digital" },
-    { name: "@kevin", avatar: "/assets/img/livechat/agents/kevin.webp", department: "Teknis & Dukungan" },
-    { name: "@siti", avatar: "/assets/img/livechat/agents/siti.webp", department: "Billing & Payment" }
-  ]
+  AGENTS: [{
+    name: "@adam",
+    avatar: "/assets/img/livechat/agents/adam.webp",
+    department: "Layanan & Pemesanan"
+  }, {
+    name: "@diva",
+    avatar: "/assets/img/livechat/agents/diva.webp",
+    department: "Domain & Produk Digital"
+  }, {
+    name: "@kevin",
+    avatar: "/assets/img/livechat/agents/kevin.webp",
+    department: "Teknis & Dukungan"
+  }, {
+    name: "@siti",
+    avatar: "/assets/img/livechat/agents/siti.webp",
+    department: "Billing & Payment"
+  }]
 };
-

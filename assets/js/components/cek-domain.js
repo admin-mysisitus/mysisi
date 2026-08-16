@@ -1,4 +1,4 @@
-(async function() {
+(async function () {
   'use strict';
   // Import cart managers
   const {
@@ -18,13 +18,23 @@
   // Get the section container
   const section = document.querySelector('.cek-domain-section');
   if (!section) return;
-  const { domainPricingData: allExtensions, parseDomain, validateDomain } = await import('../config.js');
+  const {
+    parseDomain,
+    validateDomain
+  } = await import('../modules/domain-utils.js');
+  let allExtensions = [];
+  try {
+    const res = await fetch('/assets/data/domain_pricing.json');
+    allExtensions = await res.json();
+  } catch (err) {
+    console.error('Failed to load domain pricing:', err);
+  }
   // ============================================
   // UTILITY FUNCTIONS
   // ============================================
   function debounce(func, delay) {
     let timeoutId;
-    return function(...args) {
+    return function (...args) {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
@@ -131,7 +141,7 @@
       const handleSelect = () => {
         // Preserve what they typed, just replace/append extension
         const currentInput = cekDomainInput.value;
-        const parsed = parseDomain(currentInput);
+        const parsed = parseDomain(currentInput, allExtensions);
         const base = parsed.base || '';
         cekDomainInput.value = base + ext.ext;
         cekDomainInput.focus();
@@ -181,7 +191,7 @@
       base,
       isFullDomain,
       isInvalid
-    } = parseDomain(inputVal);
+    } = parseDomain(inputVal, allExtensions);
     if (!base || base.length < 2 || isFullDomain || isInvalid) {
       cekDomainSuggestions.style.display = 'none';
       return;
@@ -251,7 +261,10 @@
   }
 
   function validateDomainInput(input) {
-    const { valid, error } = validateDomain(input);
+    const {
+      valid,
+      error
+    } = validateDomain(input, allExtensions);
     if (!valid) {
       const icon = error.includes('minimal') ? 'fa-info-circle' : 'fa-warning';
       cekDomainError.innerHTML = `<i class="fas ${icon}"></i> ${error}`;
@@ -369,7 +382,7 @@
       }
       let infoHtml = sanitizeHTML(extData.info);
       if (result.isOrdered) {
-        infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Siapa cepat bayar, dia dapat.</span>`;
+        infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! <strong>checkout now!!</strong> <br> Siapa cepat, dia dapat!!!.</span>`;
       }
       const extColor = extData?.color || '#1a1a2e';
       const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${result.isOrdered ? 'inherit' : extColor};">${extData.ext}</span>`);
@@ -441,7 +454,7 @@
       ext,
       isFullDomain,
       isInvalid
-    } = parseDomain(inputVal);
+    } = parseDomain(inputVal, allExtensions);
     if (isInvalid) {
       cekDomainResultsList.innerHTML = `
         <li style="grid-column: 1/-1; text-align: center; color: #e74c3c;">

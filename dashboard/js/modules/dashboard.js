@@ -74,11 +74,12 @@ export async function render(currentUser) {
     }
     // Render dynamic domain pricing
     try {
-      const config = await import('/assets/js/config.js');
-      if (config.domainPricingData) {
+      const response = await fetch('/assets/data/domain_pricing.json');
+      const pricingData = await response.json();
+      if (pricingData) {
         const pricingContainer = document.getElementById('dynamic-domain-pricing');
         if (pricingContainer) {
-          pricingContainer.innerHTML = config.domainPricingData.map(domain => {
+          pricingContainer.innerHTML = pricingData.map(domain => {
             const hasDiscount = domain.oldPrice && domain.oldPrice > domain.newPrice;
             const formatNumber = (num) => num.toLocaleString('id-ID');
             return `
@@ -94,9 +95,8 @@ export async function render(currentUser) {
         }
       }
     } catch (pricingError) {
-      console.warn('Error loading dynamic domain pricing:', pricingError);
+      console.warn('Error fetching domain pricing:', pricingError);
     }
-
     // Setup event listeners
     setupEventListeners();
   } catch (error) {

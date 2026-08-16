@@ -2,10 +2,6 @@
   box-sizing: border-box;
 }
 
-
-
-
-
 /* ATTACHMENT STYLES */
 .attach-btn {
   background: none;
@@ -46,9 +42,11 @@
   margin: -6px -10px;
   border-radius: 12px;
 }
+
 .livechat-widget .message.user .chat-image-preview.only-image {
   border-radius: 12px 12px 2px 12px;
 }
+
 .livechat-widget .message.agent .chat-image-preview.only-image {
   border-radius: 12px 12px 12px 2px;
 }
@@ -207,7 +205,6 @@
   margin-top: 0px;
 }
 
-
 @keyframes typingBounce {
 
   0%,
@@ -221,86 +218,116 @@
     transform: translateY(-3px);
   }
 }
+
 /* 
   LIVE CHAT WIDGET STYLES 
   Scoped to .livechat-widget to avoid conflicts when embedded
 */
-
 .livechat-widget {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 @keyframes livechat-messageSlide {
-  from { 
+  from {
     transform: translateY(10px) scale(0.98);
     opacity: 0;
   }
-  to { 
+
+  to {
     transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
 @keyframes livechat-fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes livechat-slideUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(30px) scale(0.95); 
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
 @keyframes livechat-avatarPop {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes livechat-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
 }
 
 /* --- CHAT BUTTON --- */
 .livechat-widget .chat-button {
   position: fixed;
-  bottom: 28px;
+  bottom: 24px;
   right: 24px;
   background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
   color: white;
-  border: none;
-  padding: 14px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 20px;
   border-radius: 50px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
   z-index: 9999;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.4s ease;
   touch-action: manipulation;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+}
+
+.livechat-widget.show .chat-button {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .livechat-widget .chat-button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
   background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
 }
 
 .livechat-widget .chat-button:active {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .livechat-widget .chat-button i {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .livechat-widget .chat-button .badge {
@@ -349,15 +376,13 @@
   height: 70vh;
   max-height: 700px;
   min-height: 450px;
-  
   /* Glassmorphism */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  
   border-radius: 20px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 10px 25px rgba(0,0,0,0.05);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 10px 25px rgba(0, 0, 0, 0.05);
   flex-direction: column;
   overflow: hidden;
   z-index: 9998;
@@ -375,7 +400,7 @@
   font-weight: 600;
   font-size: 15px;
   flex-shrink: 0;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   z-index: 2;
 }
 
@@ -413,10 +438,10 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   opacity: 0;
   transition: all 0.5s ease;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: block;
 }
 
@@ -440,7 +465,7 @@
   border: 2px solid #2563eb;
   border-radius: 50%;
   z-index: 2;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -538,7 +563,7 @@
   flex-direction: column;
   gap: 4px;
   position: relative;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .livechat-widget .message.user .msg-content {
@@ -551,7 +576,7 @@
   background: #f1f5f9;
   color: #0f172a;
   border-radius: 12px 12px 12px 2px;
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .livechat-widget .msg-text {
@@ -561,26 +586,31 @@
   font-size: 14px;
 }
 
-.livechat-widget .message.user .msg-text { color: #fff; }
-.livechat-widget .message.agent .msg-text { color: #1e293b; }
+.livechat-widget .message.user .msg-text {
+  color: #fff;
+}
 
-  .livechat-widget .time {
-    font-size: 11px;
-    margin-top: 2px;
-    padding: 0 4px;
-    color: #94a3b8;
-    align-self: flex-end;
-  }
-  
-  .livechat-widget .agent-label {
-    font-size: 11.5px;
-    font-weight: 600;
-    margin-bottom: 2px;
-    padding: 0 4px;
-    letter-spacing: 0.3px;
-    color: #3b82f6;
-    align-self: flex-start;
-  }
+.livechat-widget .message.agent .msg-text {
+  color: #1e293b;
+}
+
+.livechat-widget .time {
+  font-size: 11px;
+  margin-top: 2px;
+  padding: 0 4px;
+  color: #94a3b8;
+  align-self: flex-end;
+}
+
+.livechat-widget .agent-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  padding: 0 4px;
+  letter-spacing: 0.3px;
+  color: #3b82f6;
+  align-self: flex-start;
+}
 
 /* --- CHAT INPUT --- */
 .livechat-widget .chat-input {
@@ -638,6 +668,7 @@
   color: #64748b;
   box-shadow: none;
 }
+
 .livechat-widget .chat-input button#attachBtn:hover {
   background: #f1f5f9;
   color: #3b82f6;
@@ -695,10 +726,14 @@
 
 @media (max-width: 480px) {
   .livechat-widget .chat-button {
-    bottom: 16px;
-    right: 16px;
-    padding: 12px 18px;
-    font-size: 14px;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .livechat-widget .chat-button i {
+    font-size: 16px;
   }
 
   .livechat-widget .chat-modal {
@@ -715,16 +750,16 @@
   .livechat-widget .chat-header {
     padding: 8px 12px;
   }
-  
+
   .livechat-widget .chat-header img {
     width: 36px;
     height: 36px;
   }
-  
+
   .livechat-widget .chat-header-info #headerName {
     font-size: 14px;
   }
-  
+
   .livechat-widget .chat-header-info .header-role {
     font-size: 10.5px;
   }
@@ -733,7 +768,7 @@
     padding: 8px;
     gap: 4px;
   }
-  
+
   .livechat-widget .message {
     margin-bottom: 4px;
   }
@@ -762,6 +797,7 @@
   .livechat-widget .chat-image-preview.only-image {
     margin: -5px -8px;
   }
+
   .livechat-widget .chat-image-preview.with-text {
     margin: -5px -8px 6px -8px;
   }
@@ -770,17 +806,17 @@
     padding: 6px 8px;
     gap: 6px;
   }
-  
+
   .livechat-widget .chat-input input {
     padding: 6px 10px;
     font-size: 13px;
   }
-  
+
   .livechat-widget .chat-input button#sendBtn {
     width: 32px;
     height: 32px;
   }
-  
+
   .livechat-widget .chat-input button i {
     font-size: 13px;
   }
@@ -792,18 +828,6 @@
   outline-offset: 2px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* --- MESSAGE LINK STYLES --- */
 .livechat-widget .message.agent .msg-content a {
   color: #2563eb;
@@ -811,15 +835,18 @@
   font-weight: 500;
   transition: opacity 0.2s;
 }
+
 .livechat-widget .message.agent .msg-content a:hover {
   opacity: 0.8;
 }
+
 .livechat-widget .message.user .msg-content a {
   color: #bfdbfe;
   text-decoration: underline;
   font-weight: 500;
   transition: opacity 0.2s;
 }
+
 .livechat-widget .message.user .msg-content a:hover {
   opacity: 0.8;
 }

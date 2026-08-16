@@ -1,13 +1,18 @@
-<div class="admin-page-header">
+<div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center;">
   <div>
     <h1 class="admin-page-title">Live Chat</h1>
     <p class="admin-page-desc">Tanggapi pertanyaan pelanggan secara langsung (real-time).</p>
   </div>
+  <div class="lc-status-toggle">
+    <span class="lc-status-label" id="lcStatusLabel">Online</span>
+    <label class="switch">
+      <input type="checkbox" id="lcOnlineToggle" checked>
+      <span class="slider round"></span>
+    </label>
+  </div>
 </div>
-
 <div id="livechat-spa-container" class="lc-admin-wrapper">
   <div id="notification" style="display: none;"><i class="fas fa-bell"></i> Ada pesan baru masuk!</div>
-
   <!-- Left Column: Rooms List -->
   <div class="admin-card lc-rooms-panel">
     <div class="lc-rooms-header">
@@ -25,7 +30,6 @@
     </div>
     <div id="currentRoom" style="display: none;"></div>
   </div>
-
   <!-- Right Column: Chat Box -->
   <div class="admin-card lc-chat-panel">
     <!-- Empty State -->
@@ -36,25 +40,21 @@
       <h3 class="lc-empty-title">Belum ada obrolan terpilih</h3>
       <p class="lc-empty-desc">Pilih salah satu obrolan dari daftar di sebelah kiri untuk mulai membalas pesan.</p>
     </div>
-
     <!-- Active Chat -->
     <div id="activeChatContainer" class="lc-active-chat-wrapper" style="display: none;">
       <div class="lc-chat-header chat-header">
         <div class="lc-chat-header-avatar">
-            <i class="fas fa-user lc-chat-header-icon"></i>
+          <i class="fas fa-user lc-chat-header-icon"></i>
         </div>
         <div class="lc-chat-header-info">
-            <span class="lc-chat-header-name">Customer Service</span>
-            <span class="lc-chat-header-status">Online</span>
+          <span class="lc-chat-header-name">Customer Service</span>
+          <span class="lc-chat-header-status">Online</span>
         </div>
       </div>
-
       <div id="chatBox" class="lc-chat-box"></div>
-
       <div class="lc-input-area input-area">
         <!-- Quick Reply Popup injected dynamically here -->
         <div id="quickReplyPopup" class="quick-reply-popup"></div>
-        
         <input type="text" id="replyInput" class="lc-reply-input" placeholder="Ketik pesan atau gunakan '/' untuk quick reply..." aria-label="Pesan balasan">
         <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" aria-label="Pilih dokumen">
         <button id="attachBtn" class="admin-btn lc-attach-btn attach-btn" title="Kirim File" aria-label="Kirim Lampiran"><i class="fas fa-paperclip" style="font-size: 1.1rem;"></i></button>
@@ -63,7 +63,6 @@
     </div>
   </div>
 </div>
-
 <!-- Attachment Modal -->
 <div id="attachmentModal" class="modal-backdrop" onclick="if(event.target === this) closeAttachmentModal()">
   <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto;">
@@ -85,8 +84,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-
