@@ -1,4 +1,4 @@
-(async function () {
+(async function() {
   'use strict';
   // Import cart managers
   const {
@@ -34,11 +34,41 @@
   // ============================================
   function debounce(func, delay) {
     let timeoutId;
-    return function (...args) {
+    return function(...args) {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
   }
+  // Definisikan Niat (Intent) & Bobot Prioritas Ekstensi
+  const DOMAIN_INTENTS = [{
+    name: 'Pendidikan',
+    regex: /(sekolah|kampus|univ|akademi|belajar|kursus|edu|sdn|smpn|sman|smkn|ponpes|pesantren)/i,
+    priorities: ['.sch.id', '.ac.id', '.id', '.com']
+  }, {
+    name: 'Organisasi',
+    regex: /(komunitas|yayasan|forum|club|klub|peduli|asosiasi|org|panti)/i,
+    priorities: ['.or.id', '.org', '.id', '.com']
+  }, {
+    name: 'Pemerintahan',
+    regex: /(pemkab|pemkot|pemprov|dinas|desa|kabupaten)/i,
+    priorities: ['.go.id', '.id']
+  }, {
+    name: 'IT / Tech',
+    regex: /(tech|tekno|digital|cyber|net|host|cloud|app|soft|dev)/i,
+    priorities: ['.it.com', '.cloud', '.net', '.com', '.id']
+  }, {
+    name: 'Bisnis / Perusahaan',
+    regex: /(pt|cv|corp|company|industri|pabrik|group|holding)/i,
+    priorities: ['.co.id', '.com', '.biz.id', '.id']
+  }, {
+    name: 'Toko Online / Retail',
+    regex: /(toko|shop|mart|store|grosir|jual|beli|murah|official|boutique)/i,
+    priorities: ['.com', '.id', '.co.id', '.biz.id']
+  }, {
+    name: 'Personal / Portofolio',
+    regex: /(blog|my|aku|saya|profil|portfolio|catatan|jurnal|galeri|foto)/i,
+    priorities: ['.my.id', '.web.id', '.xyz', '.id']
+  }];
 
   function calculateSavings(oldP, newP) {
     if (!oldP) return 0;
@@ -64,6 +94,11 @@
   const cekDomainPricingPreview = section.querySelector('.cek-domain-pricing-preview');
   // Validate essential elements exist
   if (!cekDomainInput || !cekDomainForm) return;
+  // Create intent badge dynamically
+  const intentBadge = document.createElement('div');
+  intentBadge.className = 'cek-domain-intent-badge';
+  // Insert it before the form
+  cekDomainForm.parentNode.insertBefore(intentBadge, cekDomainForm);
   // ============================================
   // PLACEHOLDER ANIMATION (Typing Effect)
   // ============================================
@@ -410,7 +445,7 @@
       card.className = 'cek-domain-result-card unavailable';
       card.innerHTML = `
         <h3><i class="fas fa-times-circle"></i> ${sanitizeHTML(fullDomain)}</h3>
-        <p class="cek-domain-result-info">Domain sudah diambil/tidak tersedia</p>
+        <p class="cek-domain-result-info">Domain sudah diambil / tidak tersedia</p>
         <p style="font-size: 0.85rem; color: #999;">Coba variasi nama lain atau hubungi support kami</p>
       `;
     } else {
@@ -420,9 +455,7 @@
         <h3><i class="fas fa-question-circle"></i> ${sanitizeHTML(fullDomain)}</h3>
         <p class="cek-domain-result-info">Status ketersediaan tidak jelas</p>
         <p style="font-size: 0.85rem; color: #999;">Silakan hubungi support atau lihat detail</p>
-        <a href="/cart/" class="cek-domain-action-btn">
-          Lihat Keranjang
-        </a>
+        <a href="/cart/" class="cek-domain-action-btn">Lihat Keranjang</a>
       `;
     }
     return card;
@@ -456,12 +489,7 @@
       isInvalid
     } = parseDomain(inputVal, allExtensions);
     if (isInvalid) {
-      cekDomainResultsList.innerHTML = `
-        <li style="grid-column: 1/-1; text-align: center; color: #e74c3c;">
-          <i class="fas fa-exclamation-circle"></i> Format domain tidak valid
-          <p style="font-size: 0.9rem; margin: 5px 0 0;">Contoh benar: namadomain.com, bisnis.id</p>
-        </li>
-      `;
+      cekDomainResultsList.innerHTML = '<li style="grid-column: 1/-1; text-align: center; color: #e74c3c;"><i class="fas fa-exclamation-circle"></i> Format domain tidak valid <p style="font-size: 0.9rem; margin: 5px 0 0;">Contoh benar: namadomain.com, bisnis.id</p></li>';
       cekDomainBtn.disabled = false;
       cekDomainBtn.innerHTML = originalBtnHTML;
       showError('Format Tidak Valid', 'Format domain tidak valid. Contoh: namadomain.com');
@@ -471,7 +499,7 @@
     try {
       const resultCards = await Promise.all(targetExts.map(async (extData) => {
         try {
-          const fullDomain = isFullDomain ? `${base}${ext}` : `${base}${extData.ext}`;
+          const fullDomain = isFullDomain ? base + ext : base + extData.ext;
           const result = await checkDomainAvailability(fullDomain, activeAbortController.signal);
           return {
             fullDomain,
@@ -483,7 +511,7 @@
           // Catch AbortError too
           if (err.name === 'AbortError') return null;
           return {
-            fullDomain: `${base}${extData.ext}`,
+            fullDomain: base + extData.ext,
             extData,
             result: {
               error: true,
@@ -502,16 +530,28 @@
         return;
       }
       cekDomainResultsList.innerHTML = '';
-      // ========== RECOMMENDATION ENGINE ==========
+      // ========== ADVANCED RECOMMENDATION ENGINE ==========
       let recommendedResult = null;
       if (!isFullDomain) {
-        const isBusinessIntent = /(bisnis|company|corp|pt|tbk|industri|store|shop|toko|warung)/i.test(base);
-        const isPersonalIntent = /(personal|blog|my|aku|saya|profil|portfolio|cv)/i.test(base);
-        if (isBusinessIntent) {
-          recommendedResult = validResults.find(r => r.available === true && (r.extData.highlight === 'business' || r.extData.highlight === 'best'));
-        } else if (isPersonalIntent) {
-          recommendedResult = validResults.find(r => r.available === true && (r.extData.highlight === 'cheap' || r.extData.highlight === 'best'));
+        // 2. Deteksi Niat Berdasarkan Input User
+        let detectedIntent = null;
+        for (const intent of DOMAIN_INTENTS) {
+          if (intent.regex.test(base)) {
+            detectedIntent = intent;
+            break;
+          }
         }
+        // 3. Temukan Rekomendasi Domain Berdasarkan Niat
+        if (detectedIntent) {
+          for (const ext of detectedIntent.priorities) {
+            const match = validResults.find(r => r.available === true && r.extData.ext === ext);
+            if (match) {
+              recommendedResult = match;
+              break;
+            }
+          }
+        }
+        // 4. Fallback: Jika tidak terdeteksi niat, gunakan ranking default (Best/Cheap)
         if (!recommendedResult) {
           recommendedResult = validResults.find(r => r.available === true && r.extData.highlight === 'best') || validResults.find(r => r.available === true && r.extData.highlight === 'cheap') || validResults.find(r => r.available === true);
         }
@@ -535,28 +575,18 @@
       const disclaimerLi = document.createElement('li');
       disclaimerLi.className = 'cek-domain-disclaimer';
       disclaimerLi.style.gridColumn = '1 / -1';
-      disclaimerLi.innerHTML = `
-        <i class="fas fa-info-circle"></i>
-        <small>
-          Ketersediaan dicek secara <em>real-time</em>. Status final akan dikonfirmasi saat checkout.
-          <strong>Garansi uang kembali 100%</strong> jika domain pilihan Anda keduluan didaftarkan orang lain.
-        </small>
-      `;
+      disclaimerLi.innerHTML = '<i class="fas fa-info-circle"></i> <small>Ketersediaan dicek secara <em>real-time</em>. Status final akan dikonfirmasi saat checkout. <strong>Garansi uang kembali 100%</strong> jika domain pilihan Anda keduluan didaftarkan orang lain.</small>';
       cekDomainResultsList.appendChild(disclaimerLi);
       // Show success notification
       const availableCount = validResults.filter(r => r.available === true).length;
       if (availableCount > 0) {
-        showSuccess('Pengecekan Selesai!', `${availableCount} domain tersedia untuk Anda.`);
+        showSuccess('Pengecekan Selesai!', availableCount + ' domain tersedia untuk Anda.');
       } else {
         showInfo('Pengecekan Selesai', 'Pengecekan selesai. Silakan coba dengan nama domain lain.');
       }
     } catch (err) {
       console.error('Display results error:', err);
-      cekDomainResultsList.innerHTML = `
-        <li style="grid-column: 1/-1; text-align: center;">
-          <i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan: ${err.message}
-        </li>
-      `;
+      cekDomainResultsList.innerHTML = '<li style="grid-column: 1/-1; text-align: center;"><i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan: ' + err.message + '</li>';
       showError('Gagal Mengecek Domain', 'Terjadi kesalahan: ' + err.message);
     } finally {
       cekDomainBtn.disabled = false;
@@ -579,9 +609,28 @@
     if (/[^a-z0-9.-]/i.test(value)) {
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Hanya huruf, angka, titik, dan strip yang diperbolehkan';
       cekDomainError.style.display = 'block';
+      intentBadge.classList.remove('visible');
     } else {
       cekDomainError.style.display = 'none';
       debouncedSuggestions();
+      // Update intent badge
+      const parsed = parseDomain(value, allExtensions);
+      const baseVal = parsed.base || value;
+      let matchedIntent = null;
+      if (baseVal.length > 2 && !parsed.isFullDomain) {
+        for (const intent of DOMAIN_INTENTS) {
+          if (intent.regex.test(baseVal)) {
+            matchedIntent = intent;
+            break;
+          }
+        }
+      }
+      if (matchedIntent) {
+        intentBadge.innerHTML = '<i class="fas fa-lightbulb"></i> Kategori <strong>' + matchedIntent.name + '</strong> terdeteksi. Sebaiknya gunakan <strong>' + matchedIntent.priorities[0] + '</strong>';
+        intentBadge.classList.add('visible');
+      } else {
+        intentBadge.classList.remove('visible');
+      }
     }
   });
   cekDomainInput.addEventListener('blur', () => {
