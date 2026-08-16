@@ -21,7 +21,7 @@ var roomUnreadCounts = JSON.parse(localStorage.getItem('roomUnreadCounts') || '{
 var adminUnreadCount = parseInt(localStorage.getItem('adminUnreadCount') || '0', 10);
 
 // Notification audio
-var audio = new Audio('/live-chat/assets/notification.mp3');
+var audio = new Audio('/assets/audio/notification.mp3');
 
 // NEW: Module instances (initialized per room)
 var messageStore = null;
@@ -634,3 +634,4 @@ document.addEventListener('visibilitychange', () => {
     }
   }
 });
+

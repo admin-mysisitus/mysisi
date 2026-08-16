@@ -43,7 +43,7 @@ let initialSpinnerRemoved = false;
 // Notifications
 let lastReadTimestamp = parseInt(localStorage.getItem('lastReadTimestamp') || '0', 10);
 let userUnreadCount = 0; // We'll recalculate this
-const notificationAudio = new Audio('/live-chat/assets/notification.mp3');
+const notificationAudio = new Audio('/assets/audio/notification.mp3');
 
 // NEW: Module instances (initialized on chat open)
 let messageStore = null;
@@ -588,3 +588,4 @@ if (window.firebaseDB) {
 } else {
   window.addEventListener('firebase-ready', initUser);
 }
+

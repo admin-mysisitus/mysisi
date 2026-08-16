@@ -2,46 +2,46 @@
   {
     "trigger": "halo",
     "title": "Sapaan",
-    "text": "Halo, selamat datang di layanan pelanggan Mysisi. Ada yang bisa saya bantu hari ini?"
+    "text": "Halo! 👋 Selamat datang di layanan pelanggan <b>Mysisi</b>.<br><br>Ada yang bisa saya bantu hari ini? 😊"
   },
   {
     "trigger": "harga",
     "title": "Info Layanan",
-    "text": "Untuk detail harga dan paket lengkap, Anda bisa langsung mengunjungi mysisi.co.id/layanan."
+    "text": "Untuk detail harga dan paket lengkap, Anda bisa langsung mengunjungi tautan berikut:<br>🌐 <a href='https://mysisi.co.id' target='_blank'><b>mysisi.co.id/layanan</b></a>"
   },
   {
     "trigger": "tunggu",
     "title": "Mohon Tunggu",
-    "text": "Mohon ditunggu sebentar ya, saya sedang melakukan pengecekan data Anda."
+    "text": "⏳ <i>Mohon ditunggu sebentar ya...</i><br>Saya sedang melakukan pengecekan data Anda. Terima kasih atas kesabarannya."
   },
   {
     "trigger": "terima",
     "title": "Terima Kasih",
-    "text": "Terima kasih telah menghubungi Mysisi. Semoga hari Anda menyenangkan!"
+    "text": "Terima kasih telah menghubungi <b>Mysisi</b>. ✨<br>Semoga hari Anda menyenangkan! 🙏"
   },
   {
     "trigger": "booking",
     "title": "Pemesanan",
-    "text": "Tentu! Untuk memulai pemesanan, mohon informasikan detail layanan yang Anda butuhkan serta tanggal rencana layanan."
+    "text": "Tentu! ✨ Untuk memulai pemesanan, mohon informasikan:<br>1. <b>Detail layanan</b> yang Anda butuhkan<br>2. <b>Tanggal rencana</b> pelaksanaan layanan"
   },
   {
     "trigger": "domain",
     "title": "Informasi Domain",
-    "text": "Tentu. Silakan sampaikan nama domain yang ingin Anda daftarkan, atau jika Anda sudah punya, sampaikan nama domain dan ekstensi yang diinginkan."
+    "text": "Tentu, saya bantu. 🌐 Silakan sampaikan:<br>• <b>Nama domain baru</b> yang ingin Anda daftarkan, ATAU<br>• <b>Nama domain & ekstensi</b> yang sudah Anda miliki saat ini."
   },
   {
     "trigger": "hosting",
     "title": "Informasi Hosting",
-    "text": "Tentu, saya bantu cek. Silakan sebutkan paket hosting yang Anda butuhkan atau ukuran ruang penyimpanan yang Anda perlukan."
+    "text": "Tentu, saya bantu cek. 🗄️ Silakan sebutkan:<br>• <b>Paket hosting</b> yang Anda butuhkan, ATAU<br>• <b>Ukuran ruang penyimpanan</b> (storage) yang Anda perlukan."
   },
   {
     "trigger": "billing",
     "title": "Layanan Billing",
-    "text": "Tentu. Untuk keperluan billing, mohon informasikan detail layanan yang terkait serta informasi tagihan yang Anda butuhkan."
+    "text": "Tentu, mari kita cek. 💳 Untuk keperluan billing, mohon informasikan:<br>• <b>Detail layanan</b> yang terkait<br>• <b>Informasi tagihan</b> yang Anda butuhkan"
   },
   {
     "trigger": "teknis",
     "title": "Dukungan Teknis",
-    "text": "Tentu. Untuk pertanyaan teknis, mohon sampaikan detail teknis serta pesan kesalahan yang Anda alami."
+    "text": "Tentu, mari kita selesaikan. 🛠️ Untuk pertanyaan teknis, mohon sampaikan:<br>• <b>Detail masalah</b> yang dihadapi<br>• <b>Pesan kesalahan (error message)</b> yang muncul di layar Anda"
   }
 ]
