@@ -803,3 +803,23 @@
 
 
 
+
+/* --- MESSAGE LINK STYLES --- */
+.livechat-widget .message.agent .msg-content a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.livechat-widget .message.agent .msg-content a:hover {
+  opacity: 0.8;
+}
+.livechat-widget .message.user .msg-content a {
+  color: #bfdbfe;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.livechat-widget .message.user .msg-content a:hover {
+  opacity: 0.8;
+}

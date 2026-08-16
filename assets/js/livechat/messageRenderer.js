@@ -322,7 +322,7 @@ class MessageRenderer {
     if (message.message && message.message.trim().length > 0) {
       const textNode = document.createElement('div');
       textNode.classList.add('msg-text');
-      textNode.textContent = this._sanitize(message.message);
+      textNode.innerHTML = this._sanitize(message.message);
       msgContent.appendChild(textNode);
     }
 
@@ -463,8 +463,8 @@ class MessageRenderer {
 
     // Update text if different
     const textNode = msgEl.querySelector('.msg-text');
-    if (textNode && textNode.textContent !== message.message) {
-      textNode.textContent = this._sanitize(message.message);
+    if (textNode && textNode.innerHTML !== this._sanitize(message.message)) {
+      textNode.innerHTML = this._sanitize(message.message);
       changed = true;
     }
 
@@ -489,7 +489,10 @@ class MessageRenderer {
    */
   _sanitize(text) {
     if (typeof DOMPurify !== 'undefined') {
-      return DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+      return DOMPurify.sanitize(text, { 
+        ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'br', 'a'], 
+        ALLOWED_ATTR: ['href', 'target'] 
+      });
     }
 
     const div = document.createElement('div');
@@ -534,4 +537,6 @@ class MessageRenderer {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = MessageRenderer;
 }
+
+
 
