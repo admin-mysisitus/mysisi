@@ -30,7 +30,11 @@ export class AdminNavbar {
       }
     }
     this.container.innerHTML = `
-      <h2 class="admin-nav-title" id="admin-top-title">Overview</h2>
+      <div class="admin-navbar-left">
+        <button id="admin-menu-toggle" class="admin-menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
       
       <div class="admin-nav-actions">
         <button class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main); padding: 8px 12px;">
@@ -50,6 +54,23 @@ export class AdminNavbar {
         window.location.hash = '#!/admin/profile';
       });
     }
+    // Setup Sidebar Toggle Logic for Mobile
+    const menuToggle = document.getElementById('admin-menu-toggle');
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('admin-sidebar-overlay');
+    
+    if (menuToggle && sidebar && overlay) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+      });
+      
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      });
+    }
+
     if (!this.authListenerBound) {
       this.authListenerBound = true;
       window.addEventListener('authStateChanged', (e) => {

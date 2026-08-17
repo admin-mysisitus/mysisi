@@ -1482,11 +1482,6 @@ details[open] .accordion-icon {
     padding: 2.25rem 0 !important;
   }
 
-  .hero-home .hero-subtitle {
-    font-size: 0.938rem !important;
-    margin-bottom: 0.5rem !important;
-    line-height: 1.4 !important;
-  }
 
   .hero-home .hero-content h1 {
     font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;

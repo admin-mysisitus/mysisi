@@ -116,9 +116,11 @@ async function loadTickets() {
   const listContainer = document.getElementById('ticket-list');
   if (!listContainer) return;
   listContainer.innerHTML = `
-    <div style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
-      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
-      Memuat tiket...
+    <div style="padding: 16px;">
+      <div class="admin-skeleton" style="height: 70px; margin-bottom: 12px;"></div>
+      <div class="admin-skeleton" style="height: 70px; margin-bottom: 12px;"></div>
+      <div class="admin-skeleton" style="height: 70px; margin-bottom: 12px;"></div>
+      <div class="admin-skeleton" style="height: 70px; margin-bottom: 12px;"></div>
     </div>
   `;
   try {

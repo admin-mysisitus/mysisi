@@ -118,6 +118,7 @@
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   text-wrap: balance;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 0;
 }
 
 .hero-home .hero-content p {
@@ -126,14 +127,24 @@
   color: var(--bg-white);
 }
 
-/* Hero Subtitle Styling - Home Page */
-.hero-home .hero-subtitle {
+/* Hero Subtitle Styling - Consistent across pages */
+.hero-subtitle {
   text-align: left;
-  font-size: clamp(1.3rem, 3vw, 1.5rem);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   font-weight: 600;
   letter-spacing: 0.5px;
   line-height: 1.6;
   color: var(--bg-white);
+}
+
+@media (max-width: 768px) {
+  .hero-subtitle {
+    white-space: nowrap;
+    font-size: clamp(1rem, 5vw, 1.25rem) !important;
+    padding-top: 1.25rem;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0;
+  }
 }
 
 /* Highlight Text - "Naik Level!" */
@@ -305,11 +316,15 @@
   }
 
   .hero-home .hero-highlights {
-    text-align: center;
+    text-align: left;
   }
 
   .hero-home .hero-highlights li {
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    margin-bottom: 0.85rem;
   }
 }
 
@@ -320,10 +335,29 @@
   }
 
   .hero-home .hero-content {
-    text-align: center;
+    text-align: left;
+  }
+  
+  .hero-home .hero-content h1 {
+    font-size: clamp(1.9rem, 8vw, 2.3rem) !important;
+    line-height: 1.15;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
   }
 
   .hero-home .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  .hero-home .cta-buttons .btn {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    min-height: 44px;
     justify-content: center;
   }
 

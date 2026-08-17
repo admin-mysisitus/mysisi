@@ -3,12 +3,12 @@
     <h1 class="admin-page-title">Support Tickets</h1>
     <p class="admin-page-desc">Tanggapi pertanyaan dan keluhan teknis dari pengguna.</p>
   </div>
-  <div style="display: flex; gap: 12px;">
+  <div class="admin-actions">
     <button class="admin-btn" id="btn-add-ticket">
       <i class="fas fa-plus"></i> Buat Tiket Manual </button>
   </div>
 </div>
-<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px; height: 60vh;">
+<div class="admin-support-grid">
   <!-- Ticket List -->
   <div class="admin-card" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
     <div style="padding: 16px; border-bottom: 1px solid var(--admin-border);">
@@ -53,23 +53,23 @@
   </div>
 </div>
 <!-- Modal Form Ticket -->
-<div id="ticket-modal" class="admin-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div class="admin-card" style="width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;">
-    <h3 id="ticket-modal-title" style="margin: 0 0 20px 0;">Buat Tiket Baru</h3>
+<div id="ticket-modal" class="admin-modal">
+  <div class="admin-card admin-modal-content">
+    <h3 id="ticket-modal-title" class="admin-section-title">Buat Tiket Baru</h3>
     <form id="ticket-form">
       <input type="hidden" id="tck-id">
-      <div style="margin-bottom: 16px;">
+      <div class="admin-form-group">
         <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Subjek Tiket</label>
-        <input type="text" id="tck-subject" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); ">
+        <input type="text" id="tck-subject" required class="admin-input-control">
       </div>
-      <div style="margin-bottom: 16px;">
+      <div class="admin-form-group">
         <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Email Pelanggan</label>
-        <input type="email" id="tck-user" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); ">
+        <input type="email" id="tck-user" required class="admin-input-control">
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+      <div class="admin-form-grid-2" style="margin-bottom: 24px;">
         <div>
           <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Prioritas</label>
-          <select id="tck-priority" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface); ">
+          <select id="tck-priority" class="admin-input-control">
             <option value="low">Rendah (Low)</option>
             <option value="medium" selected>Sedang (Medium)</option>
             <option value="high">Tinggi (High)</option>
@@ -77,7 +77,7 @@
         </div>
         <div>
           <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Status</label>
-          <select id="tck-status" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface); ">
+          <select id="tck-status" class="admin-input-control">
             <option value="open">Open</option>
             <option value="in_progress">In Progress</option>
             <option value="resolved">Resolved</option>
@@ -85,7 +85,7 @@
           </select>
         </div>
       </div>
-      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+      <div class="admin-actions" style="justify-content: flex-end;">
         <button type="button" id="btn-close-ticket" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
         <button type="submit" id="btn-save-ticket" class="admin-btn"><i class="fas fa-save"></i> Simpan</button>
       </div>

@@ -8,7 +8,7 @@
       <i class="fas fa-save"></i> Simpan Perubahan </button>
   </div>
 </div>
-<div style="display: grid; grid-template-columns: 250px 1fr; gap: 32px;">
+<div class="admin-settings-grid">
   <!-- Settings Navigation -->
   <div style="display: flex; flex-direction: column; gap: 8px;">
     <button class="admin-btn tab-btn active" data-target="tab-email" style="background: var(--admin-primary); justify-content: flex-start; text-align: left;">
@@ -17,57 +17,57 @@
       <i class="fas fa-credit-card" style="width: 24px;"></i> Payment Gateway </button>
   </div>
   <!-- Settings Content -->
-  <div class="admin-card" style="padding: 32px;">
+  <div class="admin-card">
     <!-- TAB EMAIL & SMTP -->
     <div id="tab-email" class="settings-tab">
       <h3 style="margin: 0 0 24px 0; font-family: var(--font-admin-heading); border-bottom: 1px solid var(--admin-border); padding-bottom: 16px;">Pengaturan Email & SMTP</h3>
-      <div style="margin-bottom: 30px;">
+      <div class="admin-form-group">
         <h4 style="margin-bottom: 16px;">Alamat Email Sistem</h4>
         <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">Email Admin Induk (Pengirim/Penerima Notifikasi)</label>
-          <input type="email" id="config-ADMIN_EMAIL" class="form-control" style="width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main); font-family: var(--font-admin-body);">
+          <label class="admin-form-label">Email Admin Induk (Pengirim/Penerima Notifikasi)</label>
+          <input type="email" id="config-ADMIN_EMAIL" class="admin-input-control" style="max-width: 400px;">
         </div>
       </div>
-      <div style="margin-bottom: 30px;">
+      <div class="admin-form-group">
         <h4 style="margin-bottom: 16px;">Pengaturan SMTP (Opsional)</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 600px;">
+        <div class="admin-form-grid-2" style="max-width: 600px;">
           <div>
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">SMTP Host</label>
-            <input type="text" id="config-SMTP_HOST" class="form-control" placeholder="smtp.gmail.com" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+            <label class="admin-form-label">SMTP Host</label>
+            <input type="text" id="config-SMTP_HOST" class="admin-input-control" placeholder="smtp.gmail.com">
           </div>
           <div>
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">SMTP Port</label>
-            <input type="text" id="config-SMTP_PORT" class="form-control" placeholder="587" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+            <label class="admin-form-label">SMTP Port</label>
+            <input type="text" id="config-SMTP_PORT" class="admin-input-control" placeholder="587">
           </div>
           <div>
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">SMTP Username</label>
-            <input type="text" id="config-SMTP_USER" class="form-control" placeholder="user@domain.com" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+            <label class="admin-form-label">SMTP Username</label>
+            <input type="text" id="config-SMTP_USER" class="admin-input-control" placeholder="user@domain.com">
           </div>
           <div>
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">SMTP Password</label>
-            <input type="password" id="config-SMTP_PASS" class="form-control" placeholder="***" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+            <label class="admin-form-label">SMTP Password</label>
+            <input type="password" id="config-SMTP_PASS" class="admin-input-control" placeholder="***">
           </div>
         </div>
       </div>
       <div style="border-top: 1px solid var(--admin-border); padding-top: 24px;">
         <h4 style="margin-bottom: 16px;">Template Email (HTML)</h4>
-        <div style="margin-bottom: 16px;">
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">Pilih Template</label>
-          <select id="select-email-template" class="form-control" style="width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Pilih Template</label>
+          <select id="select-email-template" class="admin-input-control" style="max-width: 400px;">
             <option value="">-- Pilih Template --</option>
           </select>
         </div>
         <div id="email-template-editor" style="display: none;">
-          <div style="margin-bottom: 16px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">Subject Email</label>
-            <input type="text" id="template-subject" class="form-control" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Subject Email</label>
+            <input type="text" id="template-subject" class="admin-input-control">
           </div>
-          <div style="margin-bottom: 16px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">Body HTML & Live Preview</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Body HTML & Live Preview</label>
+            <div class="admin-form-grid-2">
               <div>
                 <div style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 4px;">Kode HTML Mentah</div>
-                <textarea id="template-body" class="form-control" rows="16" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main); font-family: monospace; resize: vertical;"></textarea>
+                <textarea id="template-body" class="admin-input-control" rows="16" style="font-family: monospace; resize: vertical;"></textarea>
               </div>
               <div style="display: flex; flex-direction: column;">
                 <div style="font-size: 0.85rem; color: var(--admin-info); margin-bottom: 4px;">Visual Preview (Bisa langsung ketik & edit teks di sini)</div>
@@ -91,13 +91,13 @@
         <div style="background: rgba(255, 152, 0, 0.1); border: 1px solid var(--admin-warning); padding: 16px; border-radius: 8px; color: var(--admin-warning);">
           <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i> Pastikan URL Webhook di Midtrans Dashboard diarahkan ke Web App URL SISITUS.
         </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">Merchant ID</label>
-          <input type="text" id="config-MIDTRANS_MERCHANT_ID" class="form-control" placeholder="G..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Merchant ID</label>
+          <input type="text" id="config-MIDTRANS_MERCHANT_ID" class="admin-input-control" placeholder="G...">
         </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--admin-text-muted);">Server Key (Rahasia)</label>
-          <input type="password" id="config-MIDTRANS_SERVER_KEY" class="form-control" placeholder="SB-Mid-server-..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Server Key (Rahasia)</label>
+          <input type="password" id="config-MIDTRANS_SERVER_KEY" class="admin-input-control" placeholder="SB-Mid-server-...">
         </div>
       </div>
     </div>

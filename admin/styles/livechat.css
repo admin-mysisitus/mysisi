@@ -31,11 +31,15 @@
 #livechat-spa-container .message.user .msg-content {
   background: rgba(255, 255, 255, 0.1) !important;
   color: var(--admin-text-main) !important;
+  border-radius: 12px 12px 12px 2px !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
 #livechat-spa-container .message.admin .msg-content {
   background: var(--admin-primary) !important;
   color: white !important;
+  border-radius: 12px 12px 2px 12px !important;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2) !important;
 }
 
 #livechat-spa-container #replyInput:focus {
@@ -53,6 +57,26 @@
   opacity: 0.55;
   display: inline-block;
   margin-top: 0px;
+}
+
+#livechat-spa-container .typing-indicator {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 6px;
+  background: transparent !important;
+  margin: 10px 0 5px 10px !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+#livechat-spa-container .typing-text {
+  font-size: 12.5px;
+  color: var(--admin-text-muted);
+  font-weight: 400;
+  font-style: italic !important;
+  white-space: nowrap;
 }
 
 /* Fix Notification Positioning */
@@ -721,16 +745,24 @@ button:focus-visible,
   background: transparent;
 }
 
-.admin-body .message.user-message {
-  background: var(--admin-surface);
+.admin-body .message.user .msg-content {
+  background: rgba(0,0,0,0.2);
   color: var(--admin-text-main);
   border: 1px solid var(--admin-border);
 }
 
-.admin-body .message.agent-message {
+.admin-body .message.user .msg-text {
+  color: var(--admin-text-main);
+}
+
+.admin-body .message.agent .msg-content {
   background: var(--admin-primary);
   color: #fff;
   border: none;
+}
+
+.admin-body .message.agent .msg-text {
+  color: #fff;
 }
 
 .admin-body .message-time {
@@ -765,18 +797,17 @@ button:focus-visible,
 .lc-admin-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  height: calc(100vh - 180px);
-  min-height: 500px;
+  gap: 24px;
   position: relative;
 }
 
 @media (min-width: 1024px) {
   .lc-admin-wrapper {
     display: grid;
-    grid-template-columns: 1fr 2.2fr;
+    grid-template-columns: 1fr 2.5fr;
     gap: 24px;
-    flex-direction: row;
+    height: calc(100vh - 150px);
+    min-height: 600px;
   }
 }
 
@@ -785,7 +816,13 @@ button:focus-visible,
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 100%;
+  height: 400px;
+}
+
+@media (min-width: 1024px) {
+  .lc-rooms-panel {
+    height: 100%;
+  }
 }
 
 .lc-rooms-header {
@@ -860,7 +897,13 @@ button:focus-visible,
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  height: 100%;
+  height: 600px;
+}
+
+@media (min-width: 1024px) {
+  .lc-chat-panel {
+    height: 100%;
+  }
 }
 
 .lc-empty-state {
@@ -973,6 +1016,7 @@ button:focus-visible,
 
 .lc-reply-input {
   flex: 1;
+  min-width: 0;
   padding: 14px 18px;
   border-radius: 24px;
   border: 1px solid var(--admin-border);
@@ -1006,6 +1050,32 @@ button:focus-visible,
   gap: 8px;
   font-weight: 500;
 }
+
+@media (max-width: 640px) {
+  .lc-input-area {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  .lc-reply-input {
+    height: 44px;
+    padding: 0 16px;
+  }
+  .lc-attach-btn,
+  #quickRepliesTrigger,
+  .lc-send-btn {
+    height: 44px;
+    width: 44px;
+  }
+  .lc-send-btn {
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .lc-send-btn .btn-text {
+    display: none;
+  }
+}
+
 
 /* --- QUICK REPLIES SYSTEM --- */
 /* Button di input chat */

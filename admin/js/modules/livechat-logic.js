@@ -24,6 +24,14 @@ var messageStore = null;
 var messageRenderer = null;
 var syncEngine = null;
 var sendQueue = null;
+var typingTimeout = null;
+var QUICK_REPLIES = [];
+
+// ============================================================================
+// QUICK REPLIES LOGIC
+// ============================================================================
+var quickReplySelectedIndex = -1;
+var lastQuickReplyFilter = null;
 // ============================================================================
 // MODULE INITIALIZATION
 // ============================================================================
@@ -103,7 +111,7 @@ function handleTypingIndicator(isTyping) {
 // ============================================================================
 // ROOMS MANAGEMENT
 // ============================================================================
-let unsubscribeRooms = null;
+var unsubscribeRooms = null;
 async function loadRooms() {
   if (unsubscribeRooms) return; // Already listening
   if (!window.firebaseHelpers) {
@@ -332,8 +340,8 @@ function showNotif() {
 // DOM EVENT HANDLERS
 // ============================================================================
 // File Upload Handlers
-const fileInput = document.getElementById('fileInput');
-const attachBtn = document.getElementById('attachBtn');
+var fileInput = document.getElementById('fileInput');
+var attachBtn = document.getElementById('attachBtn');
 if (attachBtn && fileInput) {
   attachBtn.addEventListener('click', () => {
     if (!activeRoom) return;
@@ -397,14 +405,14 @@ if (attachBtn && fileInput) {
     }
   });
 }
-let typingTimeout = null;
-let QUICK_REPLIES = [];
+var typingTimeout = null;
+var QUICK_REPLIES = [];
 // Fetch quick replies from external JSON configuration
 fetch('/assets/data/livechat/quick_replies.json').then(res => res.json()).then(data => {
   QUICK_REPLIES = data;
 }).catch(err => console.error("Gagal memuat template Quick Reply:", err));
-let quickReplySelectedIndex = -1;
-let lastQuickReplyFilter = null;
+var quickReplySelectedIndex = -1;
+var lastQuickReplyFilter = null;
 
 function renderQuickReplies(filterText = "") {
   const popup = document.getElementById('quickReplyPopup');

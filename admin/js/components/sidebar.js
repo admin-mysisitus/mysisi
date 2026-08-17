@@ -7,7 +7,7 @@ export class AdminSidebar {
     if (!this.container) return;
     this.container.innerHTML = `
       <div class="admin-sidebar-header">
-        <i class="fas fa-shield-halved" style="color: var(--admin-primary); font-size: 1.5rem;"></i>
+        <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS Logo" style="width: 28px; height: 28px; object-fit: contain;">
         <span class="admin-logo-text">SISITUS Admin</span>
       </div>
       <nav class="admin-nav-menu">
@@ -50,16 +50,16 @@ export class AdminSidebar {
         <a href="#!/admin/profile" class="admin-nav-item" data-route="/admin/profile">
           <i class="fas fa-user-circle"></i> Profil Admin
         </a>
-      </nav>
-      
-      <div style="padding: 20px; border-top: 1px solid var(--admin-border); display: flex; flex-direction: column; gap: 10px;">
+        
+        <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px; border-top: 1px solid var(--admin-border); padding-top: 20px;">Lainnya</div>
+
         <a href="/" class="admin-nav-item" style="color: var(--admin-text-muted);">
           <i class="fas fa-arrow-left"></i> Kembali ke Web
         </a>
         <button id="sidebar-logout-btn" class="admin-nav-item" style="color: var(--admin-danger); background: transparent; border: none; text-align: left; width: 100%; cursor: pointer;">
           <i class="fas fa-sign-out-alt"></i> Keluar
         </button>
-      </div>
+      </nav>
     `;
     // Setup logout listener
     const logoutBtn = this.container.querySelector('#sidebar-logout-btn');
@@ -74,6 +74,19 @@ export class AdminSidebar {
         }
       });
     }
+
+    // Auto-close sidebar on mobile when a link is clicked
+    const navLinks = this.container.querySelectorAll('.admin-nav-item');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          const sidebar = document.getElementById('admin-sidebar');
+          const overlay = document.getElementById('admin-sidebar-overlay');
+          if (sidebar) sidebar.classList.remove('open');
+          if (overlay) overlay.classList.remove('show');
+        }
+      });
+    });
   }
   setActive(route) {
     const items = this.container.querySelectorAll('.admin-nav-item');

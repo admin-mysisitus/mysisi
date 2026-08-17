@@ -65,6 +65,11 @@ export async function render() {
               if (photoPlaceholder) {
                 photoPlaceholder.style.display = 'none';
               }
+              const nameDisplay = document.getElementById('file-name-display');
+              if (nameDisplay) {
+                nameDisplay.textContent = file.name;
+                nameDisplay.style.display = 'inline-block';
+              }
             };
             reader.readAsDataURL(file);
           }

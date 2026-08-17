@@ -21,24 +21,18 @@
 }
 
 .cek-domain-section {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-  padding: 80px 20px;
-  margin: 80px 0;
-  border-radius: 24px;
+  background: #f8fafc;
+  padding: 60px 20px;
+  margin: 60px 0;
+  border-radius: 16px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 30px 60px rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .cek-domain-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
-  pointer-events: none;
+  display: none;
 }
 
 .cek-domain-section .container {
@@ -61,22 +55,22 @@
 }
 
 .cek-domain-title {
-  font-size: 3rem;
+  font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 800;
-  color: white;
+  color: var(--brand-dark);
   margin: 0 0 15px;
-  letter-spacing: -1px;
+  letter-spacing: -0.02em;
   line-height: 1.2;
 }
 
 .cek-domain-subtitle {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-muted);
   margin: 0 auto;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.6;
   text-align: center;
-  max-width: 800px;
+  max-width: 650px;
 }
 
 .cek-domain-form-wrapper {
@@ -90,53 +84,58 @@
   align-items: center;
   background: white;
   padding: 6px;
-  border-radius: 50px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   animation: slideUp 0.8s ease;
   transition: var(--transition-base);
 }
 
 .cek-domain-form:focus-within {
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
 }
 
 .cek-domain-intent-badge {
   display: inline-flex;
   align-items: flex-start;
-  gap: 8px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 12px;
+  gap: 6px;
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   line-height: 1.4;
   text-align: left;
-  margin-bottom: 12px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(8px);
   pointer-events: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(4px);
+  z-index: 10;
+  
+  /* Collapsed state to avoid empty gaps */
+  max-height: 0;
+  margin-bottom: 0;
+  padding: 0 4px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cek-domain-intent-badge i {
   margin-top: 3px;
-  color: #ffd700;
+  color: var(--primary-blue);
 }
 
 .cek-domain-intent-badge.visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  max-height: 100px;
+  margin-bottom: 12px;
 }
 
 .cek-domain-intent-badge strong {
-  color: #ffd700;
-  font-weight: 800;
+  color: var(--brand-dark);
+  font-weight: 700;
 }
 
 .cek-domain-form #cek-domain-input {
@@ -157,12 +156,12 @@
 }
 
 .cek-domain-form #cek-domain-btn {
-  padding: 14px 32px;
-  background: var(--color-primary);
+  padding: 14px 28px;
+  background: var(--primary-blue);
   color: white;
   border: none;
-  border-radius: 40px;
-  font-weight: 700;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   transition: var(--transition-base);
@@ -170,12 +169,13 @@
 }
 
 .cek-domain-form #cek-domain-btn:hover:not(:disabled) {
-  background: var(--color-primary-light);
-  transform: scale(1.02);
+  background: var(--primary-blue-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 .cek-domain-form #cek-domain-btn:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 .cek-domain-form #cek-domain-btn:disabled {
@@ -1480,20 +1480,39 @@
    MOBILE RESPONSIVE FIX FOR FORM
    ============================================ */
 @media (max-width: 768px) {
+  .cek-domain-section {
+    padding: 32px 16px;
+    margin: 40px 0;
+  }
+
+  .cek-domain-header {
+    margin-bottom: 24px;
+  }
+
+  .cek-domain-title {
+    font-size: clamp(1.6rem, 6vw, 2rem);
+  }
+
+  .cek-domain-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
   .cek-domain-form {
     flex-direction: column;
-    border-radius: 24px;
-    padding: 8px;
+    border-radius: 12px;
+    padding: 6px;
   }
 
   .cek-domain-form #cek-domain-input {
     text-align: center;
-    padding: 12px 16px;
+    padding: 10px 16px;
   }
 
   .cek-domain-form #cek-domain-btn {
     width: 100%;
-    border-radius: 18px;
-    padding: 12px 24px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin-top: 4px;
   }
 }
