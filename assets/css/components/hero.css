@@ -123,15 +123,17 @@
 .hero-home .hero-content p {
   margin-bottom: clamp(2rem, 4vw, 2.5rem);
   animation: slideInUp 0.8s ease-out 0.2s both;
+  color: var(--bg-white);
 }
 
 /* Hero Subtitle Styling - Home Page */
 .hero-home .hero-subtitle {
-  text-align: center;
+  text-align: left;
   font-size: clamp(1.3rem, 3vw, 1.5rem);
   font-weight: 600;
   letter-spacing: 0.5px;
   line-height: 1.6;
+  color: var(--bg-white);
 }
 
 /* Highlight Text - "Naik Level!" */
@@ -211,6 +213,75 @@
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-5px);
+}
+
+/* ========== HERO LIGHT BG MODIFIER ========== */
+.hero-light-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  bottom: auto;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(255, 255, 255, 0) 100%);
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-light-bg::before {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 50%, rgba(255, 255, 255, 0) 100%);
+  }
+}
+
+.hero-light-bg .hero-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-light-bg .hero-content h1 {
+  color: #1e293b;
+  text-shadow: none;
+}
+
+.hero-light-bg .hero-content p {
+  color: #475569;
+}
+
+.hero-light-bg .hero-subtitle {
+  color: #334155;
+}
+
+.hero-light-bg .hero-subtitle .highlight-text {
+  color: #ea580c;
+}
+
+.hero-light-bg .hero-highlights li {
+  color: #475569;
+}
+
+.hero-light-bg .hero-highlights i {
+  color: #0284c7;
+}
+
+.hero-light-bg .btn-secondary {
+  background: rgba(255, 255, 255, 0.85);
+  color: #1e293b;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.hero-light-bg .btn-secondary:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #0f172a;
+  border-color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .hero-home .hero-feature-item i {
@@ -930,114 +1001,68 @@
 
 /* ========== PAGE SPECIFIC HERO BACKGROUNDS ========== */
 .hero-blog {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-blog.webp');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-domain-hosting {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-domain-hosting.webp?v=3');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-kontak {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-kontak.webp');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-layanan {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-layanan.webp?v=1.1');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-legal {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-legal.webp');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-maintenance {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-maintenance.webp?v=1.1');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-pembuatan-web {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-pembuatan-web.webp?v=1.1');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-perusahaan {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-perusahaan.webp');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-promo {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-promo.webp');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-tentang {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-tentang.webp');
+
   background-size: cover;
   background-position: center;
 }
 
 .hero-tips {
-  background-image: url('/assets/img/banner/banner-dekstop/banner-tips.webp');
+
   background-size: cover;
   background-position: center;
 }
 
-/* Mobile responsive background swap */
-@media (max-width: 768px) {
-  .hero-blog {
-    background-image: url('/assets/img/banner/banner-mobile/banner-blog.webp');
-  }
-
-  .hero-domain-hosting {
-    background-image: url('/assets/img/banner/banner-mobile/banner-domain-hosting.webp?v=3');
-  }
-
-  .hero-kontak {
-    background-image: url('/assets/img/banner/banner-mobile/banner-kontak.webp');
-  }
-
-  .hero-layanan {
-    background-image: url('/assets/img/banner/banner-mobile/banner-layanan.webp?v=1.1');
-  }
-
-  .hero-legal {
-    background-image: url('/assets/img/banner/banner-mobile/banner-legal.webp');
-  }
-
-  .hero-maintenance {
-    background-image: url('/assets/img/banner/banner-mobile/banner-maintenance.webp?v=1.1');
-  }
-
-  .hero-pembuatan-web {
-    background-image: url('/assets/img/banner/banner-mobile/banner-pembuatan-web.webp?v=1.1');
-  }
-
-  .hero-perusahaan {
-    background-image: url('/assets/img/banner/banner-mobile/banner-perusahaan.webp');
-  }
-
-  .hero-promo {
-    background-image: url('/assets/img/banner/banner-mobile/banner-promo.webp');
-  }
-
-  .hero-tentang {
-    background-image: url('/assets/img/banner/banner-mobile/banner-tentang.webp');
-  }
-
-  .hero-tips {
-    background-image: url('/assets/img/banner/banner-mobile/banner-tips.webp');
-  }
-}

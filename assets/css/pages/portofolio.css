@@ -64,38 +64,11 @@
 }
 
 .portfolio-grid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   animation: fadeInUp 0.6s ease-out;
-}
-
-.portfolio-row {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  gap: 1rem;
-  padding-bottom: 1rem;
-}
-
-.portfolio-row::-webkit-scrollbar {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-
-  .portfolio-row {
-    display: contents;
-  }
 }
 
 @keyframes fadeInUp {
@@ -103,131 +76,13 @@
     opacity: 0;
     transform: translateY(20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.portfolio-card {
-  flex: 0 0 85%;
-  /* 85% width for nice swiping on mobile */
-  scroll-snap-align: center;
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: #0f172a;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  height: 280px;
-  display: block;
-  opacity: 0;
-  /* For fadeInUp animation */
-}
-
-.portfolio-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.25);
-}
-
-/* Portfolio Card Image Wrapper */
-.portfolio-card-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.portfolio-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
-}
-
-.portfolio-card:hover .portfolio-card-image img {
-  transform: scale(1.1);
-}
-
-/* Portfolio Overlay (Gradient) */
-.portfolio-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 60%, transparent 100%);
-  z-index: 2;
-  opacity: 1;
-  /* Always visible */
-}
-
-.btn-view {
-  padding: 0.6rem 1.2rem;
-  background-color: var(--primary-blue);
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  display: inline-block;
-  margin-top: 1rem;
-}
-
-.btn-view:hover {
-  background-color: var(--accent-cyan);
-  color: #0f172a;
-  transform: scale(1.05);
-}
-
-/* Portfolio Content */
-.portfolio-card-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 1.5rem;
-  z-index: 3;
-  opacity: 1;
-  /* Always visible */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.portfolio-card-info h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 0.25rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.portfolio-type {
-  font-size: 0.85rem;
-  color: var(--accent-cyan);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.portfolio-detail {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.4;
-  margin-bottom: 0.3rem;
-  display: block;
-  max-height: calc(1.4 * 0.85rem * 2);
-  overflow: hidden;
-}
-
-.portfolio-detail span {
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-}
+/* .portfolio-card removed, now in components/portfolio-card.css */
 
 /* ========== LOAD MORE SECTION ========== */
 .portfolio-load-more {
@@ -404,11 +259,12 @@
   }
 
   .portfolio-card {
-    height: 240px !important;
+    height: auto !important; /* Allow card to grow with content */
   }
 
   .portfolio-card-image {
-    height: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16/10 !important;
   }
 
   .portfolio-card-info {
@@ -416,31 +272,25 @@
   }
 
   .portfolio-card-info h3 {
-    font-size: 0.938rem !important;
-    /* 15px */
+    font-size: 1.05rem !important;
     font-weight: 700 !important;
-    margin-bottom: 2px !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
+    margin-bottom: 0.25rem !important;
   }
 
   .portfolio-type {
-    font-size: 0.78rem !important;
-    /* 12.5px */
+    font-size: 0.8rem !important;
     font-weight: 600 !important;
-    margin-bottom: 0.35rem !important;
+    margin-bottom: 0.75rem !important;
   }
 
-  .portfolio-detail {
-    font-size: 0.813rem !important;
-    /* 13px */
-    line-height: 1.35 !important;
-    margin-bottom: 0 !important;
+  .portfolio-meta {
+    font-size: 0.8rem !important;
+    margin-bottom: 1rem !important;
   }
-
-  .btn-view {
-    padding: 0.5rem 1rem !important;
-    font-size: 0.844rem !important;
-    margin-top: 0.5rem !important;
+  
+  .feature-tag {
+    font-size: 0.7rem !important;
+    padding: 0.25rem 0.6rem !important;
   }
 
   /* 4. Load More Section (Tight & Seamless) */

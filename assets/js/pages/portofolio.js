@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.error('Failed to load portfolio data:', error);
   }
   // ========== KONFIGURASI TAMPILAN ==========
-  const INITIAL_ITEMS = 3; // Jumlah item yang ditampilkan awalnya
+  const INITIAL_ITEMS = 8; // Jumlah item yang ditampilkan awalnya
   let currentFilter = 'all';
   let displayedItems = INITIAL_ITEMS;
   const portfolioGrid = document.getElementById('portfolio-grid');
@@ -23,17 +23,27 @@ document.addEventListener('DOMContentLoaded', async function() {
     card.dataset.category = item.category;
     card.dataset.id = item.id;
     card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+    
+    // Split features into array for pill tags
+    const featureTags = item.features.split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('');
+    
     card.innerHTML = `
-      <div class="portfolio-card-image" onclick="window.open('${item.url}', '_blank')" style="cursor: pointer;">
+      <div class="portfolio-card-image" onclick="window.open('${item.url}', '_blank')">
         <img src="${item.image}" alt="${item.imageAlt}" loading="lazy">
-        <div class="portfolio-overlay"></div>
+        <div class="portfolio-image-overlay">
+          <a href="${item.url}" target="_blank" class="btn btn-view-hover" aria-label="Kunjungi Website ${item.name}">Kunjungi Website</a>
+        </div>
       </div>
       <div class="portfolio-card-info">
         <h3>${item.name}</h3>
         <span class="portfolio-type">${item.type}</span>
-        <div class="portfolio-detail"><span>Selesai:</span> ${item.completed}</div>
-        <div class="portfolio-detail"><span>Fitur:</span> ${item.features}</div>
-        <a href="${item.url}" target="_blank" class="btn btn-view" style="align-self: flex-start;">Lihat Website</a>
+        <div class="portfolio-meta">
+          <span class="meta-icon"><i class="fas fa-calendar-check"></i></span>
+          <span class="meta-text">${item.completed}</span>
+        </div>
+        <div class="portfolio-features">
+          ${featureTags}
+        </div>
       </div>
     `;
     return card;
@@ -48,18 +58,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
     // Tentukan jumlah item yang akan ditampilkan
     const itemsToShow = limit ? Math.min(limit, filteredItems.length) : filteredItems.length;
-    // Tambahkan card ke grid dengan mengelompokkan per 3 item (1 baris)
-    for (let i = 0; i < itemsToShow; i += 3) {
-      const row = document.createElement('div');
-      row.className = 'portfolio-row';
-      for (let j = i; j < i + 3 && j < itemsToShow; j++) {
-        row.appendChild(createPortfolioCard(filteredItems[j]));
-      }
-      portfolioGrid.appendChild(row);
-      // Terapkan animasi scroll horizontal hanya pada tampilan mobile
-      if (window.innerWidth <= 768) {
-        initAutoSnapSlider(row);
-      }
+    // Tambahkan card ke grid secara langsung (tanpa row)
+    for (let i = 0; i < itemsToShow; i++) {
+      portfolioGrid.appendChild(createPortfolioCard(filteredItems[i]));
     }
     // Sembunyikan tombol jika semua item sudah ditampilkan
     if (filteredItems.length <= itemsToShow) {

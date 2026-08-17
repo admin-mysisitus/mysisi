@@ -4,7 +4,7 @@
 /* ========== COMPANY INTRO SECTION ========== */
 /* Specific Hero Background Styling for Perusahaan Page */
 .hero.hero-home {
-  background-image: url('/assets/img/banner-perusahaan.webp');
+  background-image: url('/assets/img/banner/banner-perusahaan.webp');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -23,7 +23,7 @@
 
 @media (max-width: 768px) {
   .hero.hero-home {
-    background-image: url('/assets/img/banner-perusahaan.webp') !important;
+    background-image: url('/assets/img/banner/banner-perusahaan.webp') !important;
     background-position: 0% 100%;
     /* Mulai dari kiri bawah */
     background-size: cover;

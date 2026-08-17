@@ -39,20 +39,20 @@
     <form id="dns-form">
       <div style="margin-bottom: 16px;">
         <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Nama Domain</label>
-        <input type="text" id="dns-domain" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: white;">
+        <input type="text" id="dns-domain" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); ">
       </div>
       <div style="margin-bottom: 16px;">
         <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Email Pemilik / User ID</label>
-        <input type="text" id="dns-user" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: white;">
+        <input type="text" id="dns-user" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); ">
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
         <div>
           <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Total Records</label>
-          <input type="number" id="dns-records" min="0" value="0" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: white;">
+          <input type="number" id="dns-records" min="0" value="0" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); ">
         </div>
         <div>
           <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Status Nameserver</label>
-          <select id="dns-status" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface); color: white;">
+          <select id="dns-status" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface); ">
             <option value="pending">Pending</option>
             <option value="pointed">Pointed (Aktif)</option>
             <option value="error">Error</option>

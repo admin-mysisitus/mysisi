@@ -22,7 +22,8 @@
 @import url('components/preloader.css');
 @import url('components/custom-font.css');
 @import url('components/button.css');
-@import url('components/hero.css');
+@import url('components/hero.css?v=1.3');
+@import url('components/portfolio-card.css?v=1.2');
 @import url('components/popup-promo.css');
 @import url('components/faq.css');
 @import url('components/custom-icons.css');

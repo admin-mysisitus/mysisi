@@ -1465,10 +1465,6 @@
     scroll-snap-align: center !important;
     margin: 0 !important;
   }
-
-  #portfolio-grid .portfolio-row {
-    display: contents !important;
-  }
 }
 
 /* Note: slideInUp keyframe sudah di-handle oleh hero.js */
