@@ -158,15 +158,21 @@
       item.setAttribute('tabindex', '0');
       let labels = '';
       if (ext.label) {
-        labels = `<span class="cek-domain-ext-label">${ext.label}</span>`;
+        labels = `<span class="cek-domain-badge cek-domain-badge--label">${ext.label}</span>`;
       }
       if (discount > 0) {
-        labels += `<span class="cek-domain-ext-discount">-${discount}%</span>`;
+        labels += `<span class="cek-domain-badge cek-domain-badge--discount">-${discount}%</span>`;
       }
       const extColor = ext.color || '#1a1a2e';
+      const extLabel = ext.ext.replace('.', '').toUpperCase();
+      const extFilename = `tld-${ext.ext.replace(/\./g, '')}.svg`;
+      const fallbackIconHtml = `<div class="cek-domain-badge cek-domain-badge--label" style="background: ${extColor}; display: none; margin: 0 4px;">${extLabel}</div>`;
       item.innerHTML = `
-        <div class="cek-domain-ext-labels">${labels}</div>
-        <div class="cek-domain-ext-name" style="color: ${extColor}; font-weight: 800;">${ext.ext}</div>
+        <div class="cek-domain-badge-group cek-domain-badge-group--centered">${labels}</div>
+        <div class="cek-domain-ext-name" style="color: ${extColor}; font-weight: 800;">
+          <img src="/assets/img/tld/${extFilename}" alt="${ext.ext}" class="tld-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+          ${fallbackIconHtml}
+        </div>
         <div class="cek-domain-ext-prices">
           ${ext.oldPrice ? `<span class="cek-domain-ext-old">${formatCurrency(ext.oldPrice)}</span>` : ''}
           <span class="cek-domain-ext-new">${formatCurrency(ext.newPrice)}</span>
@@ -249,6 +255,13 @@
       const extSafe = ext;
       const extColor = extData?.color || '#1a1a2e';
       const extLabel = ext.replace('.', '').toUpperCase();
+      const extFilename = `tld-${ext.replace(/\./g, '')}.svg`;
+      const fallbackIconHtml = `<div class="cek-domain-suggestion-icon" style="background: ${extColor}; display: none;">${extLabel}</div>`;
+      const iconHtml = `<div class="cek-domain-suggestion-icon-wrapper" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <img src="/assets/img/tld/${extFilename}" alt="${ext}" class="tld-logo-suggestion" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        ${fallbackIconHtml}
+      </div>`;
+
       const priceHTML = extData && extData.newPrice ? `
         <div class="cek-domain-suggestion-price" id="price-${index}" style="display: none;">
           ${extData.oldPrice ? `<span class="cek-domain-suggestion-price-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
@@ -259,7 +272,7 @@
         </div>
       ` : '';
       item.innerHTML = `
-        <div class="cek-domain-suggestion-icon" style="background: ${extColor};">${extLabel}</div>
+        ${iconHtml}
         <div class="cek-domain-suggestion-content">
           <div class="cek-domain-suggestion-domain">${sanitizeHTML(fullDomain).replace(extSafe, `<span style="color: ${extColor}; font-weight: bold;">${extSafe}</span>`)}</div>
           <div class="cek-domain-suggestion-note">${sanitizeHTML(extData?.info || '')}</div>
@@ -274,7 +287,7 @@
         if (statusEl && priceEl) {
           if (isAvailable) {
             statusEl.style.display = 'none';
-            priceEl.style.display = 'block';
+            priceEl.style.display = 'flex';
             // Only add click listener if available
             item.style.cursor = 'pointer';
             item.addEventListener('click', () => {
@@ -403,16 +416,16 @@
       card.className = `cek-domain-result-card available ${isRecommended ? 'super-highlight' : ''} ${result.isOrdered ? 'warning' : ''}`;
       const badges = [];
       if (result.isOrdered) {
-        badges.push(`<span class="cek-domain-ext-label" style="background:#f39c12; color:white;"><i class="fas fa-fire"></i> Rebutan</span>`);
+        badges.push(`<span class="cek-domain-badge cek-domain-badge--label" style="background:#f39c12; color:white;"><i class="fas fa-fire"></i> Rebutan</span>`);
       } else {
         if (extData.label) {
-          badges.push(`<span class="cek-domain-ext-label">${extData.label}</span>`);
+          badges.push(`<span class="cek-domain-badge cek-domain-badge--label">${extData.label}</span>`);
         }
         if (discount > 0) {
-          badges.push(`<span class="cek-domain-ext-discount">-${discount}%</span>`);
+          badges.push(`<span class="cek-domain-badge cek-domain-badge--discount">-${discount}%</span>`);
         }
         if (isRecommended) {
-          badges.push(`<span class="cek-domain-recommended-badge"><i class="fas fa-star"></i> Rekomendasi</span>`);
+          badges.push(`<span class="cek-domain-recommended-badge cek-domain-badge cek-domain-badge--neutral"><i class="fas fa-star"></i> Rekomendasi</span>`);
         }
       }
       let infoHtml = sanitizeHTML(extData.info);
@@ -420,9 +433,19 @@
         infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! <strong>checkout now!!</strong> <br> Siapa cepat, dia dapat!!!.</span>`;
       }
       const extColor = extData?.color || '#1a1a2e';
-      const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${result.isOrdered ? 'inherit' : extColor};">${extData.ext}</span>`);
+      const extFilename = `tld-${extData.ext.replace(/\./g, '')}.svg`;
+      const fallbackColor = result.isOrdered ? 'inherit' : extColor;
+
+      const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${fallbackColor};">${extData.ext}</span>`);
+      const extLabel = extData.ext.replace('.', '').toUpperCase();
+      const watermarkTag = `
+        <img src="/assets/img/tld/${extFilename}" alt="${extData.ext}" class="tld-logo-watermark" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+        <div class="cek-domain-badge cek-domain-badge--label" style="background: ${extColor}; display: none; opacity: 0.8;">${extLabel}</div>
+      `;
+
       card.innerHTML = `
-        <div class="cek-domain-result-badges">${badges.join('')}</div>
+        <div class="cek-domain-card-watermark">${watermarkTag}</div>
+        <div class="cek-domain-badge-group cek-domain-badge-group--result">${badges.join('')}</div>
         <h3 ${result.isOrdered ? 'style="color:#d35400;"' : ''}>
           <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}"></i> <span>${coloredDomain}</span>
         </h3>
@@ -626,7 +649,7 @@
         }
       }
       if (matchedIntent) {
-        intentBadge.innerHTML = '<i class="fas fa-lightbulb"></i> <span>Situs <strong>' + matchedIntent.name + '</strong> sebaiknya gunakan <strong>' + matchedIntent.priorities[0] + '</strong></span>';
+        intentBadge.innerHTML = '<i class="fas fa-lightbulb"></i> <span>Untuk situs web <strong>' + matchedIntent.name + '</strong> sebaiknya gunakan <strong>' + matchedIntent.priorities[0] + '</strong></span>';
         intentBadge.classList.add('visible');
       } else {
         intentBadge.classList.remove('visible');

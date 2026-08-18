@@ -280,6 +280,14 @@
   font-weight: 600;
 }
 
+.tld-logo-suggestion {
+  height: 24px;
+  width: auto;
+  max-width: 36px;
+  object-fit: contain;
+  transform: scale(var(--logo-scale, 1));
+}
+
 .cek-domain-suggestion-content {
   flex: 1;
   min-width: 0;
@@ -323,6 +331,12 @@
   font-size: 0.75rem;
 }
 
+.cek-domain-suggestion-status {
+  flex-shrink: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+
 /* Mobile responsive for suggestions dropdown */
 @media (max-width: 768px) {
   .cek-domain-suggestion-item {
@@ -350,16 +364,18 @@
     display: none;
   }
 
-  .cek-domain-suggestion-price {
+  .cek-domain-suggestion-price,
+  .cek-domain-suggestion-status {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
     width: auto;
     text-align: left;
     margin: 0;
+  }
+
+  .cek-domain-suggestion-price {
+    align-items: flex-start;
+    justify-content: center;
   }
 
   .cek-domain-suggestion-price-new {
@@ -477,17 +493,26 @@
   color: white;
 }
 
-.cek-domain-ext-labels {
-  min-height: 20px;
-  margin-bottom: 10px;
+.cek-domain-badge-group {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  min-height: 20px;
 }
 
-.cek-domain-ext-label,
-.cek-domain-ext-discount {
-  display: inline-block;
+.cek-domain-badge-group--centered {
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.cek-domain-badge-group--result {
+  padding-right: 90px;
+}
+
+.cek-domain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -495,21 +520,64 @@
   white-space: nowrap;
 }
 
-.cek-domain-ext-item .cek-domain-ext-label,
-.cek-domain-ext-item .cek-domain-ext-discount {
-  background: rgba(255, 255, 255, 0.2);
+.cek-domain-badge i {
+  font-size: 0.9em;
+  line-height: 1;
 }
 
-.cek-domain-ext-item:not(.highlight-best):not(.highlight-cheap):not(.highlight-business) .cek-domain-ext-label,
-.cek-domain-ext-item:not(.highlight-best):not(.highlight-cheap):not(.highlight-business) .cek-domain-ext-discount {
+.cek-domain-badge--label {
+  background: var(--color-primary);
+  color: white;
+}
+
+.cek-domain-badge--discount {
+  background: var(--color-warning);
+  color: white;
+}
+
+.cek-domain-badge--light {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.cek-domain-badge--neutral {
   background: #f0f0f0;
-  color: #667eea;
+  color: var(--color-primary);
 }
 
 .cek-domain-ext-name {
   font-size: 1.3rem;
   font-weight: 700;
   margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+}
+
+.tld-logo {
+  height: 30px;
+  width: auto;
+  max-width: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+  transition: transform 0.3s ease;
+  transform: scale(var(--logo-scale, 1));
+}
+
+/* Penyesuaian skala spesifik untuk menyeimbangkan ukuran SVG (Visual Balance) */
+img[src*="tld-com"] { --logo-scale: 0.85; --logo-scale-hover: 0.9; }
+img[src*="tld-id"] { --logo-scale: 1; --logo-scale-hover: 1.05; }
+img[src*="tld-myid"], img[src*="tld-webid"], img[src*="tld-bizid"], img[src*="tld-orid"], img[src*="tld-coid"], img[src*="tld-acid"], img[src*="tld-schid"], img[src*="tld-goid"], img[src*="tld-netid"], img[src*="tld-ponpesid"] { --logo-scale: 1.05; --logo-scale-hover: 1.1; }
+img[src*="tld-cloud"] { --logo-scale: 1.05; --logo-scale-hover: 1.1; }
+img[src*="tld-itcom"] { --logo-scale: 1.4; --logo-scale-hover: 1.45; }
+img[src*="tld-xyz"] { --logo-scale: 1.4; --logo-scale-hover: 1.45; }
+img[src*="tld-top"] { --logo-scale: 1.05; --logo-scale-hover: 1.1; }
+img[src*="tld-net"] { --logo-scale: 0.85; --logo-scale-hover: 0.9; }
+img[src*="tld-org"] { --logo-scale: 1.15; --logo-scale-hover: 1.2; }
+
+.cek-domain-ext-item:hover .tld-logo {
+  transform: scale(var(--logo-scale-hover, 1.05));
 }
 
 .cek-domain-ext-prices {
@@ -776,38 +844,7 @@
   background: linear-gradient(135deg, #fff5f5 0%, white 100%);
 }
 
-.cek-domain-result-badges {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  min-height: 20px;
-}
-
-.cek-domain-result-card .cek-domain-ext-label,
-.cek-domain-result-card .cek-domain-ext-discount {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 5px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: white;
-}
-
-.cek-domain-result-card .cek-domain-ext-label i,
-.cek-domain-result-card .cek-domain-ext-discount i {
-  font-size: 0.9em;
-  line-height: 1;
-}
-
-.cek-domain-result-card .cek-domain-ext-label {
-  background: #667eea;
-}
-
-.cek-domain-result-card .cek-domain-ext-discount {
-  background: #f5576c;
-}
+/* Badge styles are now consolidated in the popular extensions section */
 
 .cek-domain-result-card h3 {
   margin: 0;
@@ -818,6 +855,25 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.cek-domain-card-watermark {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.tld-logo-watermark {
+  height: 26px;
+  width: auto;
+  max-width: 80px;
+  object-fit: contain;
+  object-position: right top;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05));
+  transform: scale(var(--logo-scale, 1));
+  transform-origin: right top;
 }
 
 .cek-domain-result-card h3 i {
@@ -986,6 +1042,12 @@
   .cek-domain-ext-name {
     font-size: 0.95rem;
     margin: 8px 0;
+    height: 28px;
+  }
+
+  .tld-logo {
+    height: 26px;
+    max-width: 80px;
   }
 
   .cek-domain-ext-new {
@@ -1075,6 +1137,12 @@
   .cek-domain-ext-name {
     font-size: 0.9rem;
     margin: 8px 0;
+    height: 28px;
+    justify-content: center;
+  }
+
+  .tld-logo {
+    height: 24px;
   }
 
   .cek-domain-ext-prices {
