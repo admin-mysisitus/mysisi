@@ -233,7 +233,9 @@
       isFullDomain,
       isInvalid
     } = parseDomain(inputVal, allExtensions);
-    if (!base || base.length < 2 || isFullDomain || isInvalid) {
+    const { valid } = validateDomain(inputVal, allExtensions);
+    
+    if (!valid || !base || base.length < 2 || isFullDomain) {
       cekDomainSuggestions.style.display = 'none';
       return;
     }
@@ -317,6 +319,9 @@
       const icon = error.includes('minimal') ? 'fa-info-circle' : 'fa-warning';
       cekDomainError.innerHTML = `<i class="fas ${icon}"></i> ${error}`;
       cekDomainError.style.display = 'block';
+      if (cekDomainSuggestions) {
+        cekDomainSuggestions.style.display = 'none';
+      }
       return false;
     }
     cekDomainError.style.display = 'none';
@@ -509,6 +514,7 @@
       base,
       ext,
       isFullDomain,
+      isUnsupportedExt,
       isInvalid
     } = parseDomain(inputVal, allExtensions);
     if (isInvalid) {
@@ -518,11 +524,22 @@
       showError('Format Tidak Valid', 'Format domain tidak valid. Contoh: namadomain.com');
       return;
     }
-    const targetExts = isFullDomain ? allExtensions.filter(e => e.ext === ext) : allExtensions;
+    let targetExts = allExtensions;
+    let effectiveIsFullDomain = isFullDomain;
+    let showUnsupportedWarning = false;
+    
+    if (isFullDomain) {
+      if (isUnsupportedExt) {
+        showUnsupportedWarning = true;
+        effectiveIsFullDomain = false;
+      } else {
+        targetExts = allExtensions.filter(e => e.ext === ext);
+      }
+    }
     try {
       const resultCards = await Promise.all(targetExts.map(async (extData) => {
         try {
-          const fullDomain = isFullDomain ? base + ext : base + extData.ext;
+          const fullDomain = effectiveIsFullDomain ? base + ext : base + extData.ext;
           const result = await checkDomainAvailability(fullDomain, activeAbortController.signal);
           return {
             fullDomain,
@@ -553,9 +570,24 @@
         return;
       }
       cekDomainResultsList.innerHTML = '';
+      
+      if (showUnsupportedWarning) {
+        const warningDiv = document.createElement('div');
+        warningDiv.style.gridColumn = '1 / -1';
+        warningDiv.style.background = '#fffbeb';
+        warningDiv.style.color = '#b45309';
+        warningDiv.style.padding = '12px 16px';
+        warningDiv.style.borderRadius = '8px';
+        warningDiv.style.marginBottom = '16px';
+        warningDiv.style.fontSize = '0.95rem';
+        warningDiv.style.border = '1px solid #fde68a';
+        warningDiv.innerHTML = `<i class="fas fa-info-circle"></i> Maaf, ekstensi <strong>${sanitizeHTML(ext)}</strong> belum didukung. Berikut adalah rekomendasi ekstensi terbaik untuk <strong>${sanitizeHTML(base)}</strong>:`;
+        cekDomainResultsList.appendChild(warningDiv);
+      }
+
       // ========== ADVANCED RECOMMENDATION ENGINE ==========
       let recommendedResult = null;
-      if (!isFullDomain) {
+      if (!effectiveIsFullDomain) {
         // 2. Deteksi Niat Berdasarkan Input User
         let detectedIntent = null;
         for (const intent of DOMAIN_INTENTS) {
@@ -633,6 +665,9 @@
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Hanya huruf, angka, titik, dan strip yang diperbolehkan';
       cekDomainError.style.display = 'block';
       intentBadge.classList.remove('visible');
+      if (cekDomainSuggestions) {
+        cekDomainSuggestions.style.display = 'none';
+      }
     } else {
       cekDomainError.style.display = 'none';
       debouncedSuggestions();
