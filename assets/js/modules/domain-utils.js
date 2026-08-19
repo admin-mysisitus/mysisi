@@ -60,7 +60,7 @@ export function validateDomain(domain, pricingData = []) {
   if (!domain || !domain.trim()) {
     return {
       valid: false,
-      error: 'Masukkan nama domain untuk memulai (minimal 3 karakter)'
+      error: 'Masukkan nama domain untuk memulai (minimal 2 karakter)'
     };
   }
   const {
@@ -73,10 +73,10 @@ export function validateDomain(domain, pricingData = []) {
       error: 'Ekstensi tidak valid. Coba: .com, .id, .co.id, atau ekstensi lainnya'
     };
   }
-  if (base.length < 3) {
+  if (base.length < 2) {
     return {
       valid: false,
-      error: 'Nama domain minimal 3 karakter'
+      error: 'Nama domain minimal 2 karakter'
     };
   }
   const baseRegex = /^(?!-)[a-z0-9-]{1,63}(?<!-)$/;

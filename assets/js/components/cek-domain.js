@@ -209,20 +209,9 @@
   // DOMAIN CONFIGURATION & VALIDATION
   // (Validation and parsing logic moved to config.js)
   // ============================================
-  async function fastCheckDNS(domain) {
-    try {
-      const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
-        headers: {
-          'accept': 'application/dns-json'
-        },
-      });
-      if (!response.ok) return true;
-      const data = await response.json();
-      return !data.Answer || data.Answer.length === 0;
-    } catch (e) {
-      return true;
-    }
-  }
+
+  // In-memory cache for Zero-Latency checking
+  const domainCheckCache = new Map();
   // To cancel previous checks if user keeps typing
   let suggestionCheckAborter = null;
 
@@ -239,7 +228,7 @@
       cekDomainSuggestions.style.display = 'none';
       return;
     }
-    const topExts = ['.com', '.id', '.co.id', '.web.id', '.my.id'];
+    const topExts = allExtensions.map(e => e.ext);
     cekDomainSuggestions.innerHTML = '';
     // Abort previous check if still running
     if (suggestionCheckAborter) {
@@ -281,9 +270,10 @@
         </div>
         ${priceHTML}
       `;
-      // Start async check for this specific domain
-      fastCheckDNS(fullDomain).then(isAvailable => {
+      // Start async check for this specific domain (Skip Backend for autocomplete speed)
+      checkDomainAvailability(fullDomain, signal, { skipBackend: true }).then(result => {
         if (signal.aborted) return;
+        const isAvailable = result.available === true;
         const statusEl = item.querySelector(`#status-${index}`);
         const priceEl = item.querySelector(`#price-${index}`);
         if (statusEl && priceEl) {
@@ -328,12 +318,80 @@
     return true;
   }
   /**
-   * Check domain availability via Cloudflare DNS API
-   * Returns object with explicit result state
+   * Check domain availability via Cloudflare DNS API and Backend
+   * Uses memory caching for instant results when user submits form
    */
-  async function checkDomainAvailability(domain, abortSignal) {
+  async function checkDomainAvailability(domain, abortSignal, options = { skipBackend: false }) {
     try {
-      // 1. Check internal backend database first (Orders spreadsheet via GAS)
+      let isAvailableGlobally = true;
+      
+      // 1. Check Memory Cache for DNS Request
+      let dnsPromise = domainCheckCache.get(domain);
+      
+      if (!dnsPromise) {
+        dnsPromise = (async () => {
+          const [resA, resNS] = await Promise.all([
+            fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
+              headers: { 'accept': 'application/dns-json' },
+              signal: abortSignal,
+              timeout: 5000
+            }),
+            fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=NS`, {
+              headers: { 'accept': 'application/dns-json' },
+              signal: abortSignal,
+              timeout: 5000
+            })
+          ]);
+
+          if (!resA.ok || !resNS.ok) throw new Error('DNS Query Failed');
+          
+          const [dataA, dataNS] = await Promise.all([resA.json(), resNS.json()]);
+          
+          const hasA = dataA.Answer && dataA.Answer.length > 0;
+          const hasNS = dataNS.Answer && dataNS.Answer.length > 0;
+          
+          if (hasA || hasNS) {
+            return false;
+          } else if (dataA.Status === 3 || dataNS.Status === 3) {
+            return true;
+          } else {
+            return true;
+          }
+        })();
+        
+        domainCheckCache.set(domain, dnsPromise);
+      }
+      
+      try {
+        isAvailableGlobally = await dnsPromise;
+      } catch (dnsError) {
+        domainCheckCache.delete(domain); // Remove failed cache
+        if (dnsError.name === 'AbortError') throw dnsError;
+        console.warn('Hybrid DNS check failed:', dnsError);
+        isAvailableGlobally = false;
+      }
+      
+      // 2. Early return if globally registered or backend skip requested
+      if (!isAvailableGlobally) {
+        return {
+          available: false,
+          error: false,
+          method: 'dns-check',
+          message: 'Domain sudah terdaftar secara global'
+        };
+      }
+      
+      if (options.skipBackend) {
+        return {
+          available: true,
+          error: false,
+          isOrdered: false,
+          method: 'dns-check',
+          message: null
+        };
+      }
+
+      // 3. Lazy Backend Check (Only performed for domains available in DNS)
       let backendSaysTaken = false;
       try {
         const backendCheck = await APIClient.checkDomain(domain);
@@ -345,30 +403,8 @@
       } catch (backendError) {
         console.warn('[Domain Check] Backend API check failed:', backendError);
       }
-      // 2. Check Cloudflare DNS for global availability
-      const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
-        headers: {
-          'accept': 'application/dns-json'
-        },
-        signal: abortSignal,
-        timeout: 8000
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      const data = await response.json();
-      const dnsAvailable = !data.Answer || data.Answer.length === 0;
-      // 3. Determine final state
-      if (!dnsAvailable) {
-        // Globally registered
-        return {
-          available: false,
-          error: false,
-          method: 'dns-check',
-          message: 'Domain sudah terdaftar secara global'
-        };
-      } else if (backendSaysTaken) {
-        // Available globally, but already ordered in our DB spreadsheet
+      
+      if (backendSaysTaken) {
         return {
           available: true,
           isOrdered: true,
@@ -377,7 +413,6 @@
           message: 'Domain sedang dipesan orang lain. Siapa cepat dia dapat!'
         };
       } else {
-        // Completely available
         return {
           available: true,
           isOrdered: false,
@@ -630,7 +665,7 @@
       const disclaimerLi = document.createElement('li');
       disclaimerLi.className = 'cek-domain-disclaimer';
       disclaimerLi.style.gridColumn = '1 / -1';
-      disclaimerLi.innerHTML = '<i class="fas fa-info-circle"></i> <small>Ketersediaan dicek secara <em>real-time</em>. Status final akan dikonfirmasi saat checkout. <strong>Garansi uang kembali 100%</strong> jika domain pilihan Anda keduluan didaftarkan orang lain.</small>';
+      disclaimerLi.innerHTML = '<i class="fas fa-info-circle"></i> <small>Ketersediaan dicek secara <em>real-time</em> ke Registry pusat. <strong>Harga dapat berubah</strong> untuk domain berstatus <em>Premium</em>. Status final akan dikonfirmasi saat pendaftaran.</small>';
       cekDomainResultsList.appendChild(disclaimerLi);
       // Show success notification
       const availableCount = validResults.filter(r => r.available === true).length;
