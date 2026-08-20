@@ -271,8 +271,8 @@
         </div>
         ${priceHTML}
       `;
-      // Start async check for this specific domain (Skip Backend for autocomplete speed)
-      checkDomainAvailability(fullDomain, signal, { skipBackend: true }).then(result => {
+      // Start async check for this specific domain
+      checkDomainAvailability(fullDomain, signal).then(result => {
         if (signal.aborted) return;
         const isAvailable = result.available === true;
         const statusEl = item.querySelector(`#status-${index}`);
@@ -282,6 +282,15 @@
             statusEl.style.display = 'none';
             priceEl.style.display = 'flex';
             // Only add click listener if available
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', () => {
+              cekDomainInput.value = fullDomain;
+              cekDomainSuggestions.style.display = 'none';
+              cekDomainBtn.click();
+            });
+          } else if (result.isOrdered) {
+            statusEl.innerHTML = '<span style="color: #e67e22;"><i class="fas fa-fire"></i> Rebutan</span>';
+            priceEl.style.display = 'flex';
             item.style.cursor = 'pointer';
             item.addEventListener('click', () => {
               cekDomainInput.value = fullDomain;
@@ -322,7 +331,10 @@
    * Check domain availability via Cloudflare DNS API and Backend
    * Uses memory caching for instant results when user submits form
    */
-  async function checkDomainAvailability(domain, abortSignal, options = { skipBackend: false }) {
+  async function checkDomainAvailability(domain, abortSignal) {
+    if (availabilityCache.has(domain)) {
+      return availabilityCache.get(domain);
+    }
     try {
       let isAvailableGlobally = true;
       
@@ -382,46 +394,39 @@
         };
       }
       
-      if (options.skipBackend) {
-        return {
-          available: true,
-          error: false,
-          isOrdered: false,
-          method: 'dns-check',
-          message: null
-        };
-      }
-
-      // 3. Lazy Backend Check (Only performed for domains available in DNS)
+      // 3. Backend Check (RTDB Only)
       let backendSaysTaken = false;
+      let isOrderedInBackend = false;
       try {
         const backendCheck = await APIClient.checkDomain(domain);
         if (backendCheck && backendCheck.success === false) {
           backendSaysTaken = true;
         } else if (backendCheck && backendCheck.success && backendCheck.data?.available === false) {
           backendSaysTaken = true;
+          isOrderedInBackend = false;
+        } else if (backendCheck && backendCheck.success && backendCheck.data?.isOrdered === true) {
+          backendSaysTaken = true;
+          isOrderedInBackend = true;
         }
       } catch (backendError) {
         console.warn('[Domain Check] Backend API check failed:', backendError);
       }
       
-      if (backendSaysTaken) {
-        return {
-          available: true,
-          isOrdered: true,
-          error: false,
-          method: 'hybrid-check',
-          message: 'Domain sedang dipesan orang lain. Siapa cepat dia dapat!'
-        };
-      } else {
-        return {
-          available: true,
-          isOrdered: false,
-          error: false,
-          method: 'hybrid-check',
-          message: null
-        };
+      // Cache the successful result
+      const finalResult = {
+        available: true,
+        isOrdered: backendSaysTaken && isOrderedInBackend,
+        error: false,
+        method: 'hybrid-check',
+        message: backendSaysTaken ? (isOrderedInBackend ? 'Domain sedang dipesan orang lain (Rebutan).' : 'Domain sudah aktif') : null
+      };
+      
+      // If it's taken in backend but not ordered, it shouldn't be available
+      if (backendSaysTaken && !isOrderedInBackend) {
+          finalResult.available = false;
       }
+      availabilityCache.set(domain, finalResult);
+      return finalResult;
     } catch (error) {
       // Return error state (jangan silent fail)
       const message = error.name === 'AbortError' ? 'Request dibatalkan' : `Gagal mengecek ketersediaan: ${error.message}`;

@@ -206,7 +206,6 @@ export class APIClient {
       if (db) {
         await db.ref(`users/${user.uid}`).set(profile);
       }
-      this.call('registerUser', profile, { method: 'POST' }).catch(e => console.warn('GAS mirror failed', e));
       return { success: true, data: profile, message: 'Pendaftaran berhasil. Silakan cek email Anda untuk verifikasi.' };
     } catch (e) {
       console.error('[Auth] Register error:', e);
@@ -291,7 +290,6 @@ export class APIClient {
       if (db) {
         await db.ref(`users/${user.uid}`).set(profile);
       }
-      this.call('registerUser', profile, { method: 'POST' }).catch(e => console.warn('GAS mirror failed', e));
       return { success: true, data: profile, message: 'Google sign-in berhasil' };
     } catch (e) {
       console.error('Google sign in error', e);
@@ -491,48 +489,44 @@ export class APIClient {
     // Normalize domain for Firebase key (replace dots with underscores)
     const domainKey = domain.toLowerCase().replace(/\./g, '_');
     
-    let dbInstance = null;
-    // 1. Check Firebase RTDB first (Instan lookup)
     try {
       const { db } = await getFirebase();
-      dbInstance = db;
-      if (db) {
-        const snapshot = await db.ref(`domains/${domainKey}`).once('value');
-        if (snapshot.exists()) {
-          const domainInfo = snapshot.val();
-          if (domainInfo.status === 'taken' || domainInfo.status === 'ordered') {
-            return { 
-              success: true, 
-              data: { domain: domain, available: false }, 
-              message: 'Domain sedang dipesan atau sudah aktif' 
-            };
-          }
+      if (!db) {
+        throw new Error("Firebase DB not initialized");
+      }
+      
+      const snapshot = await db.ref(`domains/${domainKey}`).once('value');
+      
+      if (snapshot.exists()) {
+        const domainInfo = snapshot.val();
+        // Domain is registered in our RTDB
+        if (domainInfo.status === 'ordered') {
+          return { 
+            success: true, 
+            data: { domain: domain, available: true, isOrdered: true, status: 'ordered' }, 
+            message: 'Domain sedang dipesan (Rebutan)' 
+          };
+        } else if (domainInfo.status === 'taken' || domainInfo.status === 'active') {
+          return { 
+            success: true, 
+            data: { domain: domain, available: false, isOrdered: false, status: 'taken' }, 
+            message: 'Domain sudah aktif' 
+          };
         }
       }
+      
+      // If not in RTDB or status is somehow cleared, it's available!
+      return {
+        success: true,
+        data: { domain: domain, available: true, isOrdered: false, status: 'available' },
+        message: 'Domain tersedia'
+      };
+      
     } catch (e) {
-      console.warn('[API] Firebase domain check failed, falling back to GAS', e);
+      console.warn('[API] Firebase domain check failed', e);
+      // Fallback response if RTDB fails (don't block the user, just assume unknown/available)
+      return { success: true, data: { domain: domain, available: true, isOrdered: false, status: 'unknown' }, message: 'Gagal mengecek ke database lokal' };
     }
-    
-    // 2. Fallback to GAS if not in Firebase (or Firebase error)
-    const response = await this.call('checkDomain', { domain }, { method: 'GET' });
-    
-    // 3. Cache the result in Firebase for future checks
-    if (response.success && dbInstance) {
-       try {
-         const isTaken = !response.data.available;
-         if (isTaken) {
-           await dbInstance.ref(`domains/${domainKey}`).set({
-             domain: domain.toLowerCase(),
-             status: response.data.status || 'ordered',
-             updatedAt: new Date().toISOString()
-           });
-         }
-       } catch(e) {
-         // ignore cache errors silently
-       }
-    }
-    
-    return response;
   }
   /**
    * Get domain pricing
