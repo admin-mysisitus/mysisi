@@ -193,7 +193,14 @@ export class APIClient {
       
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
-      await user.sendEmailVerification();
+      
+      const actionCodeSettings = {
+        url: window.location.origin + '/dashboard/', // Akan memunculkan tombol 'Continue' ke dashboard
+        handleCodeInApp: false
+      };
+      
+      await user.sendEmailVerification(actionCodeSettings);
+      
       const profile = {
         userId: user.uid,
         email: user.email,
@@ -267,7 +274,7 @@ export class APIClient {
     });
   }
   /**
-   * Verify Google OAuth token
+   * Verify Google OAuth token (Legacy GIS fallback)
    * Using POST request because Google tokens are extremely long and can trigger URL limits or CORS failures on GET
    */
   static async verifyGoogleToken(token) {
@@ -285,6 +292,7 @@ export class APIClient {
         photoURL: user.photoURL || '',
         whatsapp: '',
         authMethod: 'google',
+        emailVerified: user.emailVerified || true,
         createdAt: new Date().toISOString()
       };
       if (db) {
@@ -293,6 +301,52 @@ export class APIClient {
       return { success: true, data: profile, message: 'Google sign-in berhasil' };
     } catch (e) {
       console.error('Google sign in error', e);
+      return { success: false, message: e.message || 'Gagal login dengan Google' };
+    }
+  }
+
+  /**
+   * Native Firebase Google Sign In with Popup
+   * Bypasses COOP header issues associated with Google Identity Services
+   */
+  static async signInWithGooglePopup() {
+    try {
+      const { auth, db, firebase } = await getFirebase();
+      if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
+      
+      const provider = new firebase.auth.GoogleAuthProvider();
+      // Optional: Add custom parameters if needed
+      // provider.setCustomParameters({ prompt: 'select_account' });
+      
+      const userCredential = await auth.signInWithPopup(provider);
+      const user = userCredential.user;
+      
+      const profile = {
+        userId: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email.split('@')[0],
+        photoURL: user.photoURL || '',
+        whatsapp: '',
+        authMethod: 'google',
+        emailVerified: user.emailVerified || true,
+        createdAt: new Date().toISOString()
+      };
+      
+      if (db) {
+        // Retrieve existing user data to avoid overwriting properties
+        const snapshot = await db.ref(`users/${user.uid}`).once('value');
+        const existingData = snapshot.val();
+        if (existingData) {
+          profile.whatsapp = existingData.whatsapp || '';
+          profile.role = existingData.role || 'customer';
+          profile.createdAt = existingData.createdAt || profile.createdAt;
+        }
+        await db.ref(`users/${user.uid}`).update(profile);
+      }
+      
+      return { success: true, data: profile, message: 'Google sign-in berhasil' };
+    } catch (e) {
+      console.error('Google popup sign in error', e);
       return { success: false, message: e.message };
     }
   }
