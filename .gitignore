@@ -21,6 +21,9 @@ yarn.lock
 Thumbs.db
 desktop.ini
 
+# Firebase
+firebase-rules.json
+
 # Google App Script
 gas.gs
 spreadsheet.tsv

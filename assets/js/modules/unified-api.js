@@ -19,6 +19,8 @@ import {
 import {
   GAS_CONFIG
 } from '../config/api.config.js';
+import { getFirebase } from './firebase-core.js';
+
 export class APIClient {
   static DEFAULT_TIMEOUT = 30000; // 30 seconds
   /**
@@ -29,6 +31,7 @@ export class APIClient {
     let {
       method = 'POST'
     } = options;
+
     // Use GET for data retrieval if no complex data
     const getActions = ['checkdomain', 'getorders', 'getactivepromocodes'];
     if (getActions.includes(action.toLowerCase())) {
@@ -181,26 +184,77 @@ export class APIClient {
   /**
    * Register new user
    */
-  static registerUser(email, password, displayName = '', whatsapp = '') {
-    return this.call('registerUser', {
-      email,
-      password,
-      displayName: displayName || email.split('@')[0],
-      whatsapp
-    }, {
-      method: 'POST'
-    });
+  static async registerUser(email, password, displayName = '', whatsapp = '') {
+    try {
+      const { auth, db } = await getFirebase();
+      if (!auth) {
+        return { success: false, message: 'Firebase Auth tidak tersedia' };
+      }
+      
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      await user.sendEmailVerification();
+      const profile = {
+        userId: user.uid,
+        email: user.email,
+        displayName: displayName || email.split('@')[0],
+        whatsapp: whatsapp || '',
+        photoURL: '',
+        authMethod: 'email',
+        createdAt: new Date().toISOString()
+      };
+      if (db) {
+        await db.ref(`users/${user.uid}`).set(profile);
+      }
+      this.call('registerUser', profile, { method: 'POST' }).catch(e => console.warn('GAS mirror failed', e));
+      return { success: true, data: profile, message: 'Pendaftaran berhasil. Silakan cek email Anda untuk verifikasi.' };
+    } catch (e) {
+      console.error('[Auth] Register error:', e);
+      let errorMsg = 'Pendaftaran gagal';
+      if (e.code === 'auth/email-already-in-use') {
+        errorMsg = 'Email sudah terdaftar. Silakan gunakan email lain atau login.';
+      } else if (e.code === 'auth/weak-password') {
+        errorMsg = 'Password terlalu lemah (minimal 6 karakter).';
+      } else if (e.code === 'auth/invalid-email') {
+        errorMsg = 'Format email tidak valid.';
+      } else if (e.message) {
+        errorMsg = e.message;
+      }
+      return { success: false, message: errorMsg };
+    }
   }
   /**
    * Login user
    */
-  static loginUser(email, password) {
-    return this.call('loginUser', {
-      email,
-      password
-    }, {
-      method: 'POST'
-    });
+  static async loginUser(email, password) {
+    try {
+      const { auth, db } = await getFirebase();
+      if (!auth) {
+        return { success: false, message: 'Firebase Auth tidak tersedia' };
+      }
+      
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      let profile = null;
+      if (db) {
+        const snapshot = await db.ref(`users/${user.uid}`).once('value');
+        profile = snapshot.val();
+      }
+      return { success: true, data: profile || { userId: user.uid, email: user.email, displayName: user.email.split('@')[0] }, message: 'Login berhasil' };
+    } catch (e) {
+      console.error('[Auth] Login error:', e);
+      let errorMsg = 'Login gagal';
+      if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
+        errorMsg = 'Email atau password yang Anda masukkan salah.';
+      } else if (e.code === 'auth/too-many-requests') {
+        errorMsg = 'Terlalu banyak percobaan login. Silakan coba lagi beberapa saat lagi.';
+      } else if (e.code === 'auth/invalid-email') {
+        errorMsg = 'Format email tidak valid.';
+      } else if (e.message) {
+        errorMsg = e.message;
+      }
+      return { success: false, message: errorMsg };
+    }
   }
   /**
    * Verify email token (auto-login after registration)
@@ -217,12 +271,32 @@ export class APIClient {
    * Verify Google OAuth token
    * Using POST request because Google tokens are extremely long and can trigger URL limits or CORS failures on GET
    */
-  static verifyGoogleToken(token) {
-    return this.call('verifyGoogleToken', {
-      token
-    }, {
-      method: 'POST'
-    });
+  static async verifyGoogleToken(token) {
+    try {
+      const { auth, db, firebase } = await getFirebase();
+      if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
+
+      const credential = firebase.auth.GoogleAuthProvider.credential(token);
+      const userCredential = await auth.signInWithCredential(credential);
+      const user = userCredential.user;
+      const profile = {
+        userId: user.uid,
+        email: user.email,
+        displayName: user.displayName || user.email.split('@')[0],
+        photoURL: user.photoURL || '',
+        whatsapp: '',
+        authMethod: 'google',
+        createdAt: new Date().toISOString()
+      };
+      if (db) {
+        await db.ref(`users/${user.uid}`).set(profile);
+      }
+      this.call('registerUser', profile, { method: 'POST' }).catch(e => console.warn('GAS mirror failed', e));
+      return { success: true, data: profile, message: 'Google sign-in berhasil' };
+    } catch (e) {
+      console.error('Google sign in error', e);
+      return { success: false, message: e.message };
+    }
   }
   /**
    * Request password reset
@@ -251,37 +325,53 @@ export class APIClient {
    * Get user profile
    * Using GET request to avoid CORS preflight issues
    */
-  static getUserProfile(userId) {
-    return this.call('getUserProfile', {
-      userId
-    }, {
-      method: 'GET'
-    });
+  static async getUserProfile(userId) {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+        const snapshot = await db.ref(`users/${userId}`).once('value');
+        const profile = snapshot.val();
+        if (profile) return { success: true, data: profile };
+      }
+      return { success: false, message: 'Profil tidak ditemukan di Firebase' };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
   }
   /**
    * Update user profile
    */
-  static updateUserProfile(userId, displayName, whatsapp, photoBase64) {
-    return this.call('updateUserProfile', {
-      userId,
-      displayName,
-      whatsapp,
-      photoBase64
-    }, {
-      method: 'POST'
-    });
+  static async updateUserProfile(userId, displayName, whatsapp, photoBase64) {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+        const updates = { displayName, whatsapp };
+        if (photoBase64) updates.photoURL = photoBase64;
+        await db.ref(`users/${userId}`).update(updates);
+        return { success: true, message: 'Profil berhasil diupdate' };
+      }
+      return { success: false, message: 'Firebase DB tidak tersedia' };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
   }
   /**
    * Change password
    */
-  static changePassword(userId, oldPassword, newPassword) {
-    return this.call('changePassword', {
-      userId,
-      oldPassword,
-      newPassword
-    }, {
-      method: 'POST'
-    });
+  static async changePassword(userId, oldPassword, newPassword) {
+    try {
+      const { auth, firebase } = await getFirebase();
+      if (auth && auth.currentUser) {
+         const user = auth.currentUser;
+         const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
+         await user.reauthenticateWithCredential(credential);
+         await user.updatePassword(newPassword);
+         return { success: true, message: 'Password berhasil diubah' };
+      }
+    } catch (e) {
+      return { success: false, message: 'Password lama salah atau gagal mengubah password.' };
+    }
+    return { success: false, message: 'User tidak terautentikasi' };
   }
   // ========== ORDER ENDPOINTS ==========
   /**
@@ -296,24 +386,40 @@ export class APIClient {
   /**
    * Create order with separate userId (alternative signature for convenience)
    */
-  static createOrderWithAuth(userIdOrOrderData, orderDataIfUserIdProvided) {
-    // Support both signatures:
-    // createOrderWithAuth({userId, domain, ...}) 
-    // createOrderWithAuth(userId, {domain, ...})
+  static async createOrderWithAuth(userIdOrOrderData, orderDataIfUserIdProvided) {
     let data;
     if (typeof userIdOrOrderData === 'string') {
-      // Second param provided - merge userId
       data = {
         userId: userIdOrOrderData,
         ...orderDataIfUserIdProvided
       };
     } else {
-      // First param is the full object
       data = userIdOrOrderData;
     }
-    return this.call('createOrderWithAuth', data, {
+    
+    const response = await this.call('createOrderWithAuth', data, {
       method: 'POST'
     });
+    
+    // Mirror the domain to Firebase RTDB for fast checking later
+    if (response.success && data.domain) {
+       try {
+         const { db } = await getFirebase();
+         if (db) {
+           const domainKey = data.domain.toLowerCase().replace(/\./g, '_');
+           await db.ref(`domains/${domainKey}`).set({
+               domain: data.domain.toLowerCase(),
+               status: 'ordered',
+               userId: data.userId || 'anonymous',
+               updatedAt: new Date().toISOString()
+           });
+         }
+       } catch(e) {
+         console.warn('[API] Failed to mirror domain order to Firebase', e);
+       }
+    }
+    
+    return response;
   }
   /**
    * Get user's orders
@@ -379,12 +485,54 @@ export class APIClient {
   /**
    * Check domain availability
    */
-  static checkDomain(domain) {
-    return this.call('checkDomain', {
-      domain
-    }, {
-      method: 'POST'
-    });
+  static async checkDomain(domain) {
+    if (!domain) return { success: false, message: 'Domain diperlukan' };
+    
+    // Normalize domain for Firebase key (replace dots with underscores)
+    const domainKey = domain.toLowerCase().replace(/\./g, '_');
+    
+    let dbInstance = null;
+    // 1. Check Firebase RTDB first (Instan lookup)
+    try {
+      const { db } = await getFirebase();
+      dbInstance = db;
+      if (db) {
+        const snapshot = await db.ref(`domains/${domainKey}`).once('value');
+        if (snapshot.exists()) {
+          const domainInfo = snapshot.val();
+          if (domainInfo.status === 'taken' || domainInfo.status === 'ordered') {
+            return { 
+              success: true, 
+              data: { domain: domain, available: false }, 
+              message: 'Domain sedang dipesan atau sudah aktif' 
+            };
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[API] Firebase domain check failed, falling back to GAS', e);
+    }
+    
+    // 2. Fallback to GAS if not in Firebase (or Firebase error)
+    const response = await this.call('checkDomain', { domain }, { method: 'GET' });
+    
+    // 3. Cache the result in Firebase for future checks
+    if (response.success && dbInstance) {
+       try {
+         const isTaken = !response.data.available;
+         if (isTaken) {
+           await dbInstance.ref(`domains/${domainKey}`).set({
+             domain: domain.toLowerCase(),
+             status: response.data.status || 'ordered',
+             updatedAt: new Date().toISOString()
+           });
+         }
+       } catch(e) {
+         // ignore cache errors silently
+       }
+    }
+    
+    return response;
   }
   /**
    * Get domain pricing
@@ -423,20 +571,42 @@ export class APIClient {
       method: 'POST'
     });
   }
-  static getAllUsers(adminId = 'ADMIN') {
-    return this.call('getallusers', {
-      adminId
-    }, {
-      method: 'POST'
-    });
+  static async getAllUsers(adminId = 'ADMIN') {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+        const snapshot = await db.ref('users').once('value');
+        const usersObj = snapshot.val() || {};
+        const usersArray = Object.values(usersObj).map(u => ({ id: u.userId, name: u.displayName || 'Unknown', email: u.email, role: u.role || 'customer', status: u.status || 'active' }));
+        return { success: true, data: usersArray };
+      }
+      return { success: false, message: 'Firebase DB not available' };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
   }
-  static saveAdminUser(adminId, userData) {
-    return this.call('saveadminuser', {
-      adminId,
-      userData: JSON.stringify(userData)
-    }, {
-      method: 'POST'
-    });
+  static async saveAdminUser(adminId, userData) {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+         const userId = userData.id || ('USER-' + Date.now());
+         userData.userId = userId;
+         await db.ref(`users/${userId}`).set({
+             userId: userId,
+             displayName: userData.name,
+             email: userData.email,
+             whatsapp: userData.whatsapp || '',
+             photoURL: userData.photo || '',
+             role: userData.role || 'customer',
+             status: userData.active ? 'active' : 'inactive',
+             authMethod: 'email',
+             createdAt: new Date().toISOString()
+         });
+      }
+    } catch (e) {
+       console.error('Failed to save user to Firebase', e);
+    }
+    return this.call('saveadminuser', { adminId, userData: JSON.stringify(userData) }, { method: 'POST' });
   }
   static deleteAdminUser(adminId, id) {
     return this.call('deleteadminuser', {

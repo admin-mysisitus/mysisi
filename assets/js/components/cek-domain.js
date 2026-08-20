@@ -212,6 +212,7 @@
 
   // In-memory cache for Zero-Latency checking
   const domainCheckCache = new Map();
+  const availabilityCache = new Map();
   // To cancel previous checks if user keeps typing
   let suggestionCheckAborter = null;
 

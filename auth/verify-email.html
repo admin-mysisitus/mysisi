@@ -105,34 +105,35 @@
     }
   </style>
   <script type="module">
-    import { GAS_CONFIG } from '/assets/js/config/api.config.js';
-    
+    import { getFirebase } from '/assets/js/modules/firebase-core.js';
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    // Firebase uses oobCode for verification links
+    const oobCode = urlParams.get('oobCode') || urlParams.get('token');
     const statusContent = document.getElementById('status-content');
-    const TIMEOUT = 30000; // 30 second timeout
     
-    if (!token) {
-    // Check if this is first visit (no token)
-      const isSent = urlParams.get('sent') === 'true';
-      const referrer = document.referrer;
-      const fromRegistration = isSent || referrer.includes('/auth') || referrer.includes('register') || referrer.includes('/cart') || referrer.includes('/checkout');
-    
-      if (fromRegistration) {
-        showInfo(
-          '📧 Cek Email Anda!',
-          'Link verifikasi telah dikirim ke email Anda. Silakan buka email dan klik link verifikasi untuk mengaktifkan akun Anda.'
-        );
+    window.addEventListener('load', async () => {
+      if (!oobCode) {
+        // Check if this is first visit (no token)
+        const isSent = urlParams.get('sent') === 'true';
+        const referrer = document.referrer;
+        const fromRegistration = isSent || referrer.includes('/auth') || referrer.includes('register') || referrer.includes('/cart') || referrer.includes('/checkout');
+      
+        if (fromRegistration) {
+          showInfo(
+            '📧 Cek Email Anda!',
+            'Link verifikasi telah dikirim ke email Anda. Silakan buka email dan klik link verifikasi untuk mengaktifkan akun Anda.'
+          );
+        } else {
+          showError(
+            'Token Tidak Ditemukan',
+            'Silakan gunakan link verifikasi email yang lengkap dari email Anda.'
+          );
+        }
       } else {
-        showError(
-          'Token Tidak Ditemukan',
-          'Silakan gunakan link verifikasi email yang lengkap dari email Anda. Link harus berformat: https://sisitus.com/auth/verify-email.html?token=xxxxx'
-        );
+        showLoading('Memverifikasi Email...', 'Mohon tunggu sebentar');
+        await verifyEmailToken(oobCode);
       }
-    } else {
-      showLoading('Memverifikasi Email...', 'Mohon tunggu sebentar');
-      verifyEmailToken(token);
-    }
+    });
     
     function showInfo(title, message) {
       statusContent.innerHTML = `
@@ -215,82 +216,39 @@
     `;
     }
     
-    async function verifyEmailToken(token) {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-    
+    async function verifyEmailToken(code) {
       try {
-        const params = new URLSearchParams({
-          action: 'verifyEmailToken',
-          token: token
-        });
-    
-        const apiUrl = `${GAS_CONFIG.URL}?${params}`;
-    
-        const response = await fetch(apiUrl, {
-          signal: controller.signal
-        });
-    
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
+        const { auth } = await getFirebase();
+        if (!auth) {
+          throw new Error('Firebase SDK tidak termuat');
         }
+        
+        await auth.applyActionCode(code);
     
-        const data = await response.json();
+        const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
+        const hasCartItems = cartSummary.domains && cartSummary.domains.length > 0;
     
-        if (data.success) {
-        // CRITICAL: Save updated user data using AuthManager key
-          if (data.data && data.data.userId) {
-          // Save to both localStorage (for cross-tab) and sessionStorage (for current tab)
-            const userData = JSON.stringify({
-              version: 2,
-              user: data.data,
-              isLoggedIn: true,
-              lastActivity: Date.now(),
-              expiresAt: Date.now() + (30 * 60 * 1000) // 30 min expiry
-            });
-            localStorage.setItem('sisitus_user', userData);
-            sessionStorage.setItem('sisitus_user', userData);
-            localStorage.setItem('currentUser', JSON.stringify(data.data));
-            console.log('✅ User session updated with emailVerified:', data.data);
-          }
-    
-          const cartSummary = JSON.parse(localStorage.getItem('cart') || '{"domains":[]}');
-          const hasCartItems = cartSummary.domains && cartSummary.domains.length > 0;
-    
-          showSuccess(
-            'Email Berhasil Diverifikasi!',
-            hasCartItems
-              ? 'Akun Anda sudah aktif. Anda akan diarahkan kembali ke keranjang belanja...'
-              : 'Akun Anda sudah aktif. Anda akan diarahkan ke dashboard Anda...'
-          );
+        showSuccess(
+          'Email Berhasil Diverifikasi!',
+          hasCartItems
+            ? 'Akun Anda sudah aktif. Anda akan diarahkan kembali ke keranjang belanja...'
+            : 'Akun Anda sudah aktif. Anda akan diarahkan ke dashboard Anda...'
+        );
     
         // Auto-redirect after 2 seconds
-          setTimeout(() => {
-            if (hasCartItems) {
-              window.location.href = '/dashboard/#!/dashboard/keranjang';
-            } else {
-              window.location.href = '/dashboard/';
-            }
-          }, 2000);
-        } else {
-          showError(
-            'Verifikasi Gagal',
-            data.message || 'Token verifikasi tidak valid atau sudah kadaluarsa. Link verifikasi berlaku 24 jam.'
-          );
-        }
+        setTimeout(() => {
+          if (hasCartItems) {
+            window.location.href = '/dashboard/#!/dashboard/keranjang';
+          } else {
+            window.location.href = '/dashboard/';
+          }
+        }, 2000);
       } catch (error) {
-        let errorTitle = 'Terjadi Kesalahan';
-        let errorMsg = 'Tidak dapat terhubung ke server. Silakan coba lagi nanti.';
-    
-        if (error.name === 'AbortError') {
-          errorMsg = 'Permintaan timeout (lebih dari 30 detik). Server tidak merespons. Silakan: <br>1. Refresh halaman<br>2. Atau coba lagi dalam beberapa menit';
-        } else if (error instanceof TypeError) {
-          errorMsg = 'Kesalahan jaringan. Periksa koneksi internet Anda dan coba lagi. Jika masalah berlanjut, hubungi support.';
-        }
-    
-        showError(errorTitle, errorMsg);
-      } finally {
-        clearTimeout(timeoutId);
+        console.error('Error verifying email:', error);
+        showError(
+          'Verifikasi Gagal',
+          'Link verifikasi tidak valid atau sudah kadaluarsa. Silakan minta link baru.'
+        );
       }
     }
   </script>

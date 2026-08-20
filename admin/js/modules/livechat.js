@@ -22,15 +22,13 @@ export async function render() {
   if (!window.DOMPurify) {
     await loadScript("https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js");
   }
-  // Load Firebase if not exists
+  // Load Firebase using core module
   if (!window.firebase) {
-    await loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js");
-    await loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js");
-    await loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js");
+    const { getFirebase } = await import('/assets/js/modules/firebase-core.js');
+    await getFirebase();
   }
   // Ensure config and dependencies are loaded
   if (typeof CONFIG === 'undefined') {
-    await loadScript("/assets/js/livechat/firebase-init.js");
     await loadScript("/assets/js/livechat/config.js");
     await loadScript("/assets/js/livechat/sessionCache.js");
     await loadScript("/assets/js/livechat/messageStore.js");
