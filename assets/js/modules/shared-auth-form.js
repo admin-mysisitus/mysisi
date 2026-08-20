@@ -65,8 +65,8 @@ export class SharedAuthForm {
     if (window.google && window.google.accounts && window.google.accounts.id) {
       const gBtnContainer = this.container.querySelector('.g_id_signin');
       if (gBtnContainer) {
-        window.google.accounts.id.initialize({
-          client_id: "1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com",
+        google.accounts.id.initialize({
+          client_id: "802713479795-v6eshpb9lkqrvf7tndhi6llv3fjg2qsi.apps.googleusercontent.com",
           callback: window.handleGoogleSignIn
         });
         window.google.accounts.id.renderButton(gBtnContainer, {
@@ -112,7 +112,8 @@ export class SharedAuthForm {
         ${this.options.showGoogleSignIn ? `
           <div style="margin-top: 20px; display: flex; justify-content: center; width: 100%;">
             <div id="g_id_onload"
-              data-client_id="1077896753927-npj3ma45dsqrgqmp9bcrioumk6lneo60.apps.googleusercontent.com"
+              data-client_id="802713479795-v6eshpb9lkqrvf7tndhi6llv3fjg2qsi.apps.googleusercontent.com"
+              data-context="signin"
               data-callback="handleGoogleSignIn">
             </div>
             <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
