@@ -63,26 +63,33 @@ export class SharedAuthForm {
   initGoogleSignIn() {
     if (!this.options.showGoogleSignIn) return;
     
-    const gBtn = this.container.querySelector('#google-signin-btn-shared');
-    if (gBtn) {
-      gBtn.addEventListener('click', async () => {
+    const container = this.container.querySelector('#google-signin-btn-shared');
+    if (!container) return;
+
+    if (!window.google || !window.google.accounts) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => this.renderGSIButton(container);
+      document.head.appendChild(script);
+    } else {
+      this.renderGSIButton(container);
+    }
+  }
+
+  renderGSIButton(container) {
+    window.google.accounts.id.initialize({
+      client_id: '802713479795-v6eshpb9lkqrvf7tndhi6llv3fjg2qsi.apps.googleusercontent.com',
+      callback: async (response) => {
         try {
-          // Add visual feedback
-          const originalText = gBtn.innerHTML;
-          gBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghubungkan...';
-          gBtn.disabled = true;
+          // Native spinner on the container (although GSI button might hide it)
+          const errorDiv = this.container.querySelector('#auth-error');
+          if (errorDiv) errorDiv.style.display = 'none';
           
-          const result = await APIClient.signInWithGooglePopup();
+          const result = await APIClient.verifyGoogleToken(response.credential);
+          if (!result.success) throw new Error(result.message || 'Gagal login dengan Google');
           
-          if (!result.success) {
-            throw new Error(result.message || 'Gagal login dengan Google');
-          }
-          
-          if (!result.data) {
-            throw new Error('Data pengguna tidak ditemukan');
-          }
-          
-          // Call success handler
           if (this.options.onLoginSuccess) {
             this.options.onLoginSuccess(result.data);
           } else {
@@ -98,22 +105,14 @@ export class SharedAuthForm {
             errorDiv.innerHTML = error.message;
             errorDiv.style.display = 'block';
           }
-        } finally {
-          if (gBtn) {
-            gBtn.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20px" height="20px">
-                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
-              </svg>
-              Lanjutkan dengan Google
-            `;
-            gBtn.disabled = false;
-          }
         }
-      });
-    }
+      }
+    });
+
+    window.google.accounts.id.renderButton(
+      container,
+      { theme: 'outline', size: 'large', type: 'standard', text: this.options.inlineMode ? 'continue_with' : 'signin_with', shape: 'rectangular', logo_alignment: 'left' }
+    );
   }
   /**
    * Generate form HTML
@@ -143,15 +142,7 @@ export class SharedAuthForm {
         <!-- Google Sign-In Button -->
         ${this.options.showGoogleSignIn ? `
           <div style="margin-top: 20px; display: flex; justify-content: center; width: 100%;">
-            <button type="button" class="btn btn-google" id="google-signin-btn-shared" style="width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 5px; font-weight: bold; color: #555; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: background 0.2s;">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20px" height="20px">
-                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
-              </svg>
-              Lanjutkan dengan Google
-            </button>
+            <div id="google-signin-btn-shared" style="width: 100%; display: flex; justify-content: center;"></div>
           </div>
           <!-- Divider -->
           <div class="auth-divider" style="text-align: center; margin: 20px 0; color: #999; font-size: 14px;">atau dengan email</div>
@@ -276,8 +267,14 @@ export class SharedAuthForm {
         ` : ''}
 
         <style>
+          .shared-auth-form, .shared-auth-form * {
+            box-sizing: border-box !important;
+          }
+
           .shared-auth-form {
             width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
           }
 
           .auth-form-header h2 {
@@ -341,12 +338,13 @@ export class SharedAuthForm {
 
           .form-group input,
           .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
+            width: 100% !important;
+            max-width: 100%;
+            padding: 10px 14px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
-            box-sizing: border-box;
+            box-sizing: border-box !important;
             font-family: inherit;
           }
 

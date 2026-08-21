@@ -438,8 +438,8 @@
 }
 
 .preview-items {
-  max-height: 300px;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .preview-item {

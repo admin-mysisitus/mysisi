@@ -97,7 +97,7 @@ window.changeItemPackage = (domain, packageId) => {
     showError('Gagal', error.message);
   }
 };
-window.toggleCartAddon = (addonId, isChecked) => {
+window.toggleCartAddon = async (addonId, isChecked) => {
   try {
     const addon = ADDON_PACKAGES[addonId];
     if (!addon) return;
@@ -111,25 +111,40 @@ window.toggleCartAddon = (addonId, isChecked) => {
     } else {
       CartManager.removeAddon(addonId);
     }
-    // Prevent jumping by preserving scroll
-    const scrollY = window.scrollY;
+    // Prevent jumping by preserving scroll (Dashboard scrolls on #content, not window)
+    const scrollContainer = document.getElementById('content');
+    const scrollYContent = scrollContainer ? scrollContainer.scrollTop : 0;
+    const scrollYWindow = window.scrollY;
+    
     const container = cartState.container;
     if (container) {
       container.style.minHeight = `${container.getBoundingClientRect().height}px`;
     }
+    
     if (cartState.currentUser) {
-      render(cartState.currentUser);
+      await render(cartState.currentUser);
     } else if (window.updateCartPreview) {
       window.updateCartPreview();
     }
-    window.scrollTo({
-      top: scrollY,
-      behavior: 'instant'
-    });
+    
+    // Restore scroll aggressively to fight browser auto-scrolling when focused elements are removed
+    const restoreScroll = () => {
+      if (scrollContainer) scrollContainer.scrollTop = scrollYContent;
+      window.scrollTo({
+        top: scrollYWindow,
+        behavior: 'instant'
+      });
+    };
+    
+    restoreScroll();
+    requestAnimationFrame(restoreScroll);
+    setTimeout(restoreScroll, 10);
+    setTimeout(restoreScroll, 50);
+    
     if (container) {
       setTimeout(() => {
         container.style.minHeight = '';
-      }, 50);
+      }, 60);
     }
   } catch (error) {
     console.error('Error toggling addon:', error);
@@ -246,6 +261,11 @@ function renderGuestCheckout() {
   `;
   // Function to render the cart preview card reactively
   const updateCartPreview = () => {
+    // Blur active element to prevent browser's auto-scroll on focus loss
+    if (document.activeElement && document.activeElement.tagName !== 'BODY') {
+      document.activeElement.blur();
+    }
+    
     const cartData = CartManager.getCart();
     const items = (cartData && cartData.domains) || [];
     const addons = (cartData && cartData.addons) || [];
@@ -258,18 +278,62 @@ function renderGuestCheckout() {
     const finalTotal = subtotalCombined + ppn - promoDiscount;
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
+    
+    // FAST PATH: Only update the breakdown and total if the DOM is already rendered.
+    // This prevents destroying the active checkbox and completely eliminates browser focus scroll jumps.
+    const existingBreakdown = previewContainer.querySelector('.preview-breakdown');
+    const existingTotal = previewContainer.querySelector('.preview-total');
+    
+    if (existingBreakdown && existingTotal) {
+      existingBreakdown.innerHTML = `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+          <span>Domain (${items.length}):</span>
+          <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(domainSubtotal)}</span>
+        </div>
+        ${addonsTotal > 0 ? `
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <span>Layanan Tambahan:</span>
+            <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(addonsTotal)}</span>
+          </div>
+        ` : ''}
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem; font-weight: 600;">
+          <span>Subtotal:</span>
+          <span style="font-family: 'Courier New', monospace; color: var(--text-primary);">${formatPrice(subtotalCombined)}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+          <span>PPN (11%):</span>
+          <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(ppn)}</span>
+        </div>
+        ${promoDiscount > 0 ? `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem; color: #27ae60;">
+            <div style="display: flex; flex-direction: column; text-align: left;">
+              <span>Diskon Promo:</span>
+              ${cartState.promoDescription ? `<span style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px;">(${cartState.promoDescription})</span>` : ''}
+            </div>
+            <span style="font-family: 'Courier New', monospace; font-weight: 600;">-${formatPrice(promoDiscount)}</span>
+          </div>
+        ` : ''}
+      `;
+      existingTotal.innerHTML = `
+        <span>Total Pembayaran:</span>
+        <span style="font-family: 'Courier New', monospace;">${formatPrice(finalTotal)}</span>
+      `;
+      return;
+    }
+    
+    // FULL RENDER PATH (initial render or items changed)
     previewContainer.innerHTML = `
       <div class="cart-preview">
-        <h3 class="preview-title">
+        <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
           <i class="fas fa-shopping-cart"></i> Preview Keranjang
         </h3>
-        <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(1rem, 2vw, 1.25rem);">
+        <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(0.75rem, 2vw, 1.25rem);">
           ${items.length > 0 ? `
-            <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 1rem; padding-bottom: 0.5rem;">
+            <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
               ${items.map(item => {
                 return `
-                  <div class="preview-item-container" style="border-bottom: 1px dashed var(--border-light); padding: 1rem 0;">
-                    <div class="preview-item" style="align-items: center; display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 0.75rem;">
+                  <div class="preview-item-container" style="border-bottom: 1px dashed var(--border-light); padding: 0.75rem 0;">
+                    <div class="preview-item" style="align-items: center; display: flex; justify-content: space-between; gap: 0.5rem; padding-bottom: 0.5rem;">
                       <div style="flex: 1; user-select: none;">
                         <div class="preview-item-name" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); font-size: 14px;">
                           ${item.domain}
@@ -297,7 +361,7 @@ function renderGuestCheckout() {
             </div>
 
             <!-- Detailed Price Breakdown -->
-            <div class="preview-breakdown" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; border-bottom: 2px solid var(--border-light); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+            <div class="preview-breakdown" style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
                 <span>Domain (${items.length}):</span>
                 <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(domainSubtotal)}</span>
@@ -327,7 +391,7 @@ function renderGuestCheckout() {
               ` : ''}
             </div>
 
-            <div class="preview-total" style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; color: var(--primary-blue);">
+            <div class="preview-total" style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: var(--primary-blue);">
               <span>Total Pembayaran:</span>
               <span style="font-family: 'Courier New', monospace;">${formatPrice(finalTotal)}</span>
             </div>
