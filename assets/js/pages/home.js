@@ -1,6 +1,28 @@
 /* ========== HOME PAGE INTERACTIONS ========== */
 document.addEventListener('DOMContentLoaded', function() {
   // ========== SPECIFIC HOME PAGE LOGIC ==========
+  // ========== SOLUTIONS TABS ==========
+  const solutionTabs = document.querySelectorAll('.solution-tab-btn');
+  const solutionPanes = document.querySelectorAll('.solution-pane');
+  if (solutionTabs.length > 0) {
+    solutionTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and panes
+        solutionTabs.forEach(t => t.classList.remove('active'));
+        solutionPanes.forEach(p => p.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Show corresponding pane
+        const targetId = tab.getAttribute('data-target');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) {
+          targetPane.classList.add('active');
+        }
+      });
+    });
+  }
   // FAQ functionality is now handled by faq.js component
   // ========== SERVICE CARD FEATURES TOGGLE (POPUP) ==========
   const toggleButtons = document.querySelectorAll('.toggle-features');

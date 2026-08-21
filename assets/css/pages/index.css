@@ -577,7 +577,7 @@
 
 /* Prevent double padding between adjacent sections with the same background */
 .services-overview-section + .why-us-section,
-.comparison-section + .testimonial-section {
+.solutions-tabs-section + .testimonial-section {
   padding-top: 0 !important;
 }
 
@@ -590,8 +590,8 @@
 
 .testimonial-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(2rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem; /* Lebih padat */
   margin-top: clamp(2.5rem, 4vw, 3.5rem);
 }
 
@@ -600,80 +600,56 @@
   display: flex;
   flex-direction: column;
   background: var(--bg-white);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--radius-large);
-  padding: clamp(2rem, 3vw, 2.5rem);
-  box-shadow: var(--shadow-md);
-  transition: var(--transisi);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-medium);
+  padding: 1.5rem; /* Padding efisien */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
-.testimonial-card::before {
-  content: '"';
-  position: absolute;
-  top: -20px;
-  right: -10px;
-  font-size: 120px;
-  color: var(--primary-blue);
-  opacity: 0.1;
-  font-weight: 700;
-  pointer-events: none;
-}
-
-/* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
 .testimonial-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--accent-cyan);
-  box-shadow: var(--shadow-lg);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 .testimonial-card .rating {
   display: flex;
-  gap: 0.3rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-  z-index: 1;
+  gap: 0.15rem;
+  margin-bottom: 0.75rem;
 }
 
 .testimonial-card .rating i {
-  color: #FBBF24;
-  font-size: 1.15rem;
+  color: #F59E0B; /* Authentic amber */
+  font-size: 0.95rem;
 }
 
 .testimonial-text {
-  color: var(--text-secondary);
-  font-size: var(--teks-standar);
-  line-height: var(--line-height-relaxed);
-  margin-bottom: 1.5rem;
-  font-style: italic;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
   flex-grow: 1;
-  position: relative;
-  z-index: 1;
 }
 
 .testimonial-author {
-  border-top: 1.5px solid var(--border-light);
-  padding-top: 1.5rem;
   margin-top: auto;
-  position: relative;
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .testimonial-author h4 {
   color: var(--text-primary);
-  font-size: var(--teks-standar);
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0;
 }
 
 .testimonial-author p {
-  color: var(--text-light);
-  font-size: var(--teks-kecil);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 0;
 }
 
 /* ========== WHY US SECTION ========== */
@@ -898,143 +874,6 @@
 /* ========== CTA FINAL SECTION ========== */
 /* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
 /* Lihat .cta-final-section di hero.css */
-/* ========== COMPARISON SECTION ========== */
-.comparison-section {
-  padding: clamp(2.5rem, 4vw, 3.5rem) 0;
-  background-color: var(--bg-lighter);
-}
-
-.comparison-section h2 {
-  font-size: var(--judul-sedang);
-  color: var(--text-primary);
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
-
-/* Title decoration handled by shared-sections.css */
-.comparison-card {
-  background: var(--bg-white);
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--radius-large);
-  padding: clamp(2rem, 4vw, 3rem);
-  box-shadow: var(--shadow-md);
-  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  animation-delay: 0.1s;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.comparison-card:hover {
-  border-color: var(--primary-blue);
-  box-shadow: var(--shadow-lg);
-}
-
-.comparison-header {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 2.5px solid var(--primary-blue);
-}
-
-.comparison-header-item {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  font-weight: 700;
-  color: var(--text-primary);
-  text-align: center;
-}
-
-.comparison-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.comparison-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.comparison-row:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.comparison-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.comparison-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  margin-top: 2px;
-  border-radius: 50%;
-}
-
-.comparison-sisitus .comparison-icon {
-  color: var(--bg-white);
-  background: var(--success-green);
-  font-size: 1.2rem;
-}
-
-.comparison-other .comparison-icon {
-  color: var(--bg-white);
-  background: var(--error-red);
-  font-size: 1.2rem;
-}
-
-.comparison-text {
-  color: var(--text-secondary);
-  font-size: var(--teks-standar);
-  line-height: var(--line-height-relaxed);
-}
-
-/* ========== COMPARISON CTA (moved to components/hero.css) ========== */
-/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
-/* Lihat .comparison-cta di hero.css */
-/* ========== ENHANCED COMPARISON CTA STYLES FOR HOME ========== */
-.comparison-cta {
-  text-align: center;
-  margin-top: 2.5rem;
-  padding: 2.5rem;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(0, 216, 255, 0.08) 100%);
-  border-radius: var(--radius-large);
-  border: 2px solid var(--primary-blue);
-}
-
-.comparison-cta h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-}
-
-.comparison-cta p {
-  color: var(--text-secondary);
-  font-size: var(--teks-standar);
-  margin-bottom: 1.5rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: var(--line-height-relaxed);
-}
-
-.comparison-cta .btn {
-  transition: var(--transisi);
-}
-
-
-
 /* ========== PACKAGE PRICING STYLES FOOTER CTA (moved to components/hero.css) ========== */
 /* Services CTA footer styling sudah di-move ke components/hero.css */
 /* Lihat .services-cta-footer di hero.css */
@@ -1085,112 +924,212 @@
   margin: 0.75rem 0 0 0 !important;
 }
 
-/* ========== COMPARISON FIT/NOT FIT STYLES ========== */
-.comparison-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(2rem, 4vw, 3rem);
-  margin-bottom: 2.5rem;
+/* ========== SOLUTIONS TABS SECTION ========== */
+.solutions-tabs-section {
+  padding: clamp(3rem, 5vw, 5rem) 0;
+  background-color: #f8fafc;
 }
 
-.comparison-fit,
-.comparison-not-fit {
-  background: var(--bg-white);
-  padding: clamp(2rem, 3vw, 2.5rem);
-  border-radius: var(--radius-large);
-  border: 1.5px solid var(--border-light);
-  box-shadow: var(--shadow-md);
-  transition: var(--transisi);
-  animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  position: relative;
-  overflow: hidden;
+.solutions-tabs-section h2 {
+  font-size: var(--judul-sedang);
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
 }
 
-.comparison-fit {
-  animation-delay: 0.1s;
-  border-left: 4px solid var(--success-green);
+.solutions-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.comparison-fit::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, var(--success-green) 0%, rgba(34, 197, 94, 0.5) 100%);
-  opacity: 0.08;
-  border-radius: 0 var(--radius-large) 0 100%;
-  pointer-events: none;
+@media (min-width: 992px) {
+  .solutions-layout {
+    flex-direction: row;
+    gap: 3rem;
+    align-items: flex-start;
+  }
 }
 
-.comparison-not-fit {
-  animation-delay: 0.2s;
-  border-left: 4px solid var(--error-red);
+/* Vertical Tabs Sidebar */
+.solutions-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
-.comparison-not-fit::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, var(--error-red) 0%, rgba(239, 68, 68, 0.5) 100%);
-  opacity: 0.08;
-  border-radius: 0 var(--radius-large) 0 100%;
-  pointer-events: none;
+@media (min-width: 992px) {
+  .solutions-sidebar {
+    width: 350px;
+    flex-shrink: 0;
+  }
 }
 
-.comparison-fit:hover,
-.comparison-not-fit:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-.comparison-fit h3,
-.comparison-not-fit h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+.solution-tab-btn {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-large);
+  text-align: left;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+}
+
+.solution-tab-btn i {
+  font-size: 1.35rem;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.solution-tab-btn:hover {
+  border-color: rgba(37, 99, 235, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+.solution-tab-btn.active {
+  background: linear-gradient(135deg, var(--primary-blue), var(--accent-cyan));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+}
+
+.solution-tab-btn.active i {
+  color: white;
+}
+
+/* Content Area */
+.solutions-content-area {
+  flex-grow: 1;
+  background: var(--bg-white);
+  border-radius: var(--radius-large);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
+  overflow: hidden;
   position: relative;
-  z-index: 1;
+  min-height: 400px;
 }
 
-.comparison-fit h3 {
-  color: var(--success-green);
+.solution-pane {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
 }
 
-.comparison-not-fit h3 {
-  color: var(--error-red);
+.solution-pane.active {
+  display: block;
 }
 
-.comparison-fit ul,
-.comparison-not-fit ul {
+.solution-pane-inner {
+  padding: clamp(2rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .solution-pane-inner {
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+}
+
+/* Image/Hero Icon Container */
+.solution-image-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+@media (min-width: 768px) {
+  .solution-image-container {
+    width: 160px;
+    height: 160px;
+    border-radius: 32px;
+  }
+}
+
+.bg-blue-tint {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(0, 216, 255, 0.1));
+}
+
+.bg-red-tint {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(244, 63, 94, 0.1));
+}
+
+.solution-hero-icon {
+  font-size: 4rem;
+}
+
+@media (min-width: 768px) {
+  .solution-hero-icon {
+    font-size: 5rem;
+  }
+}
+
+/* Text Content */
+.solution-text {
+  flex-grow: 1;
+}
+
+.solution-text h3 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.solution-desc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.solution-list {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.solution-list li {
   position: relative;
-  z-index: 1;
+  padding-left: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  font-size: 0.95rem;
 }
 
-.comparison-fit li,
-.comparison-not-fit li {
-  padding: 0.7rem 0;
-  border-bottom: 1px solid var(--border-light);
-  color: var(--text-secondary);
-  font-size: var(--teks-standar);
-  line-height: 1.6;
+.solution-list li:last-child {
+  margin-bottom: 0;
 }
 
-.comparison-fit li:last-child,
-.comparison-not-fit li:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.solution-list li i {
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  font-size: 1.25rem;
 }
+
+.text-success { color: var(--success-green); }
+.text-danger { color: var(--error-red); }
+.text-primary { color: var(--primary-blue); }
 
 /* ========== TESTIMONIAL PROJECT INFO ========== */
 .testimonial-project {
@@ -1221,10 +1160,6 @@
 
   .package-price {
     font-size: 1.3rem;
-  }
-
-  .comparison-grid {
-    grid-template-columns: 1fr;
   }
 
   .cta-final-section .cta-buttons {
@@ -1262,7 +1197,7 @@
   .services-overview-section,
   .why-us-section,
   .stats-section,
-  .comparison-section,
+  .solutions-tabs-section,
   .cta-final-section,
   .testimonial-section {
     padding: clamp(1.5rem, 4vw, 2rem) 0;
@@ -1270,42 +1205,6 @@
 
   .service-card {
     padding: clamp(1.5rem, 3vw, 2rem);
-  }
-
-  .comparison-card {
-    padding: clamp(1.5rem, 3vw, 2rem);
-  }
-
-  .comparison-grid {
-    gap: 1rem;
-  }
-
-  .comparison-column {
-    padding: 0 1rem !important;
-  }
-
-  .comparison-header {
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .comparison-header-item {
-    font-size: 1.05rem;
-  }
-
-  .comparison-row {
-    gap: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .comparison-text {
-    font-size: 0.95rem;
-  }
-
-  .comparison-icon {
-    width: 24px;
-    height: 24px;
   }
 
   .stats-grid {
@@ -1360,32 +1259,6 @@
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 1rem;
-}
-
-/* ========== COMPARISON SECTION UPDATED ========== */
-.comparison-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 2rem 0;
-}
-
-.comparison-group h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
-
-.comparison-group ul {
-  list-style: none;
-  padding: 0;
-}
-
-.comparison-group li {
-  padding: 0.8rem 0;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.6;
 }
 
 /* ========== FAQ SECTION - REMOVED DUPLICATE (see line 682) ========== */
@@ -1450,37 +1323,6 @@
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
 }
 
-/* Comparison section icons */
-.comparison-fit h3 i {
-  color: #ffffff;
-  background-color: var(--success-green);
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  /* Squircle */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.7rem;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
-}
-
-.comparison-not-fit h3 i {
-  color: #ffffff;
-  background-color: var(--error-red);
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  /* Squircle */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.7rem;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-}
-
 /* Stats section icons */
 .stat-item h3 i {
   color: #ffffff;
@@ -1500,10 +1342,6 @@
 @media (max-width: 768px) {
   .service-card.featured {
     transform: scale(1);
-  }
-
-  .comparison-content {
-    grid-template-columns: 1fr;
   }
 
   .faq-section h2 {
@@ -1752,3 +1590,7 @@
     font-size: 12px;
   }
 }
+
+
+
+
