@@ -56,6 +56,39 @@ let cartState = {
   // UI state
   isProcessingCheckout: false
 };
+// Helper for operations that might trigger full re-renders and browser scroll jumps
+async function withScrollPreservation(action) {
+  const scrollContainer = document.getElementById('content');
+  const scrollYContent = scrollContainer ? scrollContainer.scrollTop : 0;
+  const scrollYWindow = window.scrollY;
+  
+  const container = cartState.container;
+  if (container) {
+    container.style.minHeight = `${container.getBoundingClientRect().height}px`;
+  }
+  
+  await action();
+  
+  const restoreScroll = () => {
+    if (scrollContainer) scrollContainer.scrollTop = scrollYContent;
+    window.scrollTo({
+      top: scrollYWindow,
+      behavior: 'instant'
+    });
+  };
+  
+  restoreScroll();
+  requestAnimationFrame(restoreScroll);
+  setTimeout(restoreScroll, 10);
+  setTimeout(restoreScroll, 50);
+  
+  if (container) {
+    setTimeout(() => {
+      container.style.minHeight = '';
+    }, 60);
+  }
+}
+
 // Expose package & addon update handlers globally
 window.changeItemPackage = (domain, packageId) => {
   try {
@@ -71,32 +104,22 @@ window.changeItemPackage = (domain, packageId) => {
       // Jika none, renewal price ikut harga domain. Jika ada paket, ikut paket.
       renewalPrice: packageId === 'none' ? (item.domainPrice || 0) : newPrice
     });
-    // Prevent jumping by preserving scroll
-    const scrollY = window.scrollY;
-    const container = cartState.container;
-    if (container) {
-      container.style.minHeight = `${container.getBoundingClientRect().height}px`;
-    }
-    if (cartState.currentUser) {
-      render(cartState.currentUser);
-    } else if (window.updateCartPreview) {
-      window.updateCartPreview();
-    }
-    window.scrollTo({
-      top: scrollY,
-      behavior: 'instant'
+    
+    withScrollPreservation(async () => {
+      if (cartState.currentUser) {
+        await render(cartState.currentUser);
+      } else if (window.updateCartPreview) {
+        window.updateCartPreview();
+      }
     });
-    if (container) {
-      setTimeout(() => {
-        container.style.minHeight = '';
-      }, 50);
-    }
+    
     showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
     console.error('Error changing package:', error);
     showError('Gagal', error.message);
   }
 };
+
 window.toggleCartAddon = async (addonId, isChecked) => {
   try {
     const addon = ADDON_PACKAGES[addonId];
@@ -111,41 +134,14 @@ window.toggleCartAddon = async (addonId, isChecked) => {
     } else {
       CartManager.removeAddon(addonId);
     }
-    // Prevent jumping by preserving scroll (Dashboard scrolls on #content, not window)
-    const scrollContainer = document.getElementById('content');
-    const scrollYContent = scrollContainer ? scrollContainer.scrollTop : 0;
-    const scrollYWindow = window.scrollY;
     
-    const container = cartState.container;
-    if (container) {
-      container.style.minHeight = `${container.getBoundingClientRect().height}px`;
-    }
-    
-    if (cartState.currentUser) {
-      await render(cartState.currentUser);
-    } else if (window.updateCartPreview) {
-      window.updateCartPreview();
-    }
-    
-    // Restore scroll aggressively to fight browser auto-scrolling when focused elements are removed
-    const restoreScroll = () => {
-      if (scrollContainer) scrollContainer.scrollTop = scrollYContent;
-      window.scrollTo({
-        top: scrollYWindow,
-        behavior: 'instant'
-      });
-    };
-    
-    restoreScroll();
-    requestAnimationFrame(restoreScroll);
-    setTimeout(restoreScroll, 10);
-    setTimeout(restoreScroll, 50);
-    
-    if (container) {
-      setTimeout(() => {
-        container.style.minHeight = '';
-      }, 60);
-    }
+    await withScrollPreservation(async () => {
+      if (cartState.currentUser) {
+        await render(cartState.currentUser);
+      } else if (window.updateCartPreview) {
+        window.updateCartPreview();
+      }
+    });
   } catch (error) {
     console.error('Error toggling addon:', error);
     showError('Gagal', error.message);
@@ -204,26 +200,19 @@ export async function render(currentUser) {
     // Load saved promo if exists
     loadSavedPromo();
     // Route based on auth state
+    if (cartState.verificationPollInterval) {
+      clearInterval(cartState.verificationPollInterval);
+      cartState.verificationPollInterval = null;
+    }
+
     if (!cartState.currentUser) {
       // Guest: show inline auth + cart preview
-      if (cartState.verificationPollInterval) {
-        clearInterval(cartState.verificationPollInterval);
-        cartState.verificationPollInterval = null;
-      }
       renderGuestCheckout();
     } else if (CartManager.isEmpty()) {
       // Empty cart
-      if (cartState.verificationPollInterval) {
-        clearInterval(cartState.verificationPollInterval);
-        cartState.verificationPollInterval = null;
-      }
       renderEmptyCart();
     } else {
       // Authenticated + verified: show full cart
-      if (cartState.verificationPollInterval) {
-        clearInterval(cartState.verificationPollInterval);
-        cartState.verificationPollInterval = null;
-      }
       renderAuthenticatedCart();
     }
   } catch (error) {
@@ -361,39 +350,42 @@ function renderGuestCheckout() {
             </div>
 
             <!-- Detailed Price Breakdown -->
-            <div class="preview-breakdown" style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-                <span>Domain (${items.length}):</span>
-                <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(domainSubtotal)}</span>
+            <div class="preview-breakdown" style="font-size: 13px; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+              <div class="price-row" style="margin-bottom: 4px;">
+                <span class="price-row-label">Domain (${items.length}):</span>
+                <span class="price-value">${formatPrice(domainSubtotal)}</span>
               </div>
               ${addonsTotal > 0 ? `
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-                  <span>Layanan Tambahan:</span>
-                  <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(addonsTotal)}</span>
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label">Layanan Tambahan:</span>
+                  <span class="price-value">${formatPrice(addonsTotal)}</span>
                 </div>
               ` : ''}
-              <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem; font-weight: 600;">
-                <span>Subtotal:</span>
-                <span style="font-family: 'Courier New', monospace; color: var(--text-primary);">${formatPrice(subtotalCombined)}</span>
+              
+              <div class="price-row subtotal" style="padding-top: 0.5rem; margin-top: 0.5rem;">
+                <span class="price-row-label">Subtotal:</span>
+                <span class="price-value">${formatPrice(subtotalCombined)}</span>
               </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-                <span>PPN (11%):</span>
-                <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(ppn)}</span>
+              
+              <div class="price-row ppn" style="margin-bottom: 4px;">
+                <span class="price-row-label">PPN (11%):</span>
+                <span class="price-value">${formatPrice(ppn)}</span>
               </div>
+
               ${promoDiscount > 0 ? `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem; color: #27ae60;">
+                <div class="price-row discount" style="align-items: flex-start; padding: 4px 0;">
                   <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span>Diskon Promo:</span>
-                    ${cartState.promoDescription ? `<span style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px;">(${cartState.promoDescription})</span>` : ''}
+                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                    ${cartState.promoDescription ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>` : ''}
                   </div>
-                  <span style="font-family: 'Courier New', monospace; font-weight: 600;">-${formatPrice(promoDiscount)}</span>
+                  <span class="price-value">-${formatPrice(promoDiscount)}</span>
                 </div>
               ` : ''}
             </div>
 
-            <div class="preview-total" style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: var(--primary-blue);">
+            <div class="price-row total" style="padding-top: 0.5rem;">
               <span>Total Pembayaran:</span>
-              <span style="font-family: 'Courier New', monospace;">${formatPrice(finalTotal)}</span>
+              <span class="price-value">${formatPrice(finalTotal)}</span>
             </div>
           ` : '<div class="preview-empty">Keranjang kosong</div>'}
         </div>
@@ -737,7 +729,6 @@ function renderAuthenticatedCart() {
   window.applyPromoCode = applyPromoCode;
   window.proceedToCheckout = proceedToCheckout;
   window.removeCartItem = removeCartItem;
-  window.removeAddon = removeAddon;
 }
 
 function renderCartItemSelectors(item) {
@@ -1082,11 +1073,4 @@ function removeCartItem(domain) {
   }
 }
 
-function removeAddon(addonId) {
-  const cart = CartManager.getCart();
-  if (cart.addons) {
-    CartManager.addAddons(cart.addons.filter(a => a.id !== addonId));
-    render(cartState.currentUser);
-  }
-}
 export default render;
