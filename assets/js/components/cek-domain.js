@@ -260,7 +260,7 @@
           <span class="cek-domain-suggestion-price-new">${formatCurrency(extData.newPrice)}</span>
         </div>
         <div class="cek-domain-suggestion-status" id="status-${index}" style="font-size: 0.85rem; color: #6b7280;">
-          <i class="fas fa-spinner fa-spin"></i> Mengecek...
+          <span class="css-spinner" style="border-color: rgba(0,0,0,0.1); border-top-color: var(--color-primary);"></span> Mengecek...
         </div>
       ` : '';
       item.innerHTML = `

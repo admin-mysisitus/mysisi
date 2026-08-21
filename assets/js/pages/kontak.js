@@ -132,8 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isValid) return;
       // Disable submit button
       if (submitBtn) {
+        // Ubah state tombol menjadi loading
+        submitBtn.innerHTML = '<span class="css-spinner"></span> Mengirim...';
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
       }
       try {
         // Create WhatsApp message

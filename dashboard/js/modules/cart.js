@@ -466,7 +466,7 @@ function renderEmailVerificationPrompt() {
 
         <div style="text-align: center; margin-bottom: 25px;">
           <div style="display: inline-flex; align-items: center; gap: 10px; color: #2563eb; font-weight: 500; font-size: 0.95rem; margin-bottom: 15px; padding: 8px 16px; background-color: #eff6ff; border-radius: 20px; animation: pulse 2s infinite;">
-            <i class="fas fa-spinner fa-spin"></i> Menunggu verifikasi email...
+            <span class="css-spinner" style="border-color: rgba(0,0,0,0.1); border-top-color: var(--color-primary);"></span> Menunggu verifikasi email...
           </div>
           <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Halaman ini akan otomatis diperbarui setelah Anda memverifikasi email Anda.</p>
           <button onclick="location.reload()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">

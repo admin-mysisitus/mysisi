@@ -162,12 +162,35 @@ class DashboardApp {
       this.showLoadingOverlay();
       // Load module
       const module = await routeConfig.loadModule();
-      // Fetch HTML template menggunakan path relative
-      const response = await fetch(`views/${routeConfig.page}.html`);
-      if (!response.ok) {
-        throw new Error(`Gagal memuat halaman: ${response.status} ${response.statusText}`);
+      // Fetch HTML template dengan mekanisme retry
+      let html = '';
+      let fetchSuccess = false;
+      let retries = 3;
+      
+      while (retries > 0 && !fetchSuccess) {
+        try {
+          const response = await fetch(`views/${routeConfig.page}.html`);
+          if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+          }
+          html = await response.text();
+          
+          // Deteksi Soft 404 dari hosting (seperti drv.tw / Google Drive) yang me-return 200 OK
+          if (html.includes('HTTP 404') || html.includes('drive.google.com') || html.includes('<title>Error</title>')) {
+            throw new Error('Soft 404 dari Server Hosting');
+          }
+          
+          fetchSuccess = true;
+        } catch (fetchErr) {
+          retries--;
+          console.warn(`[Router] Gagal memuat template ${routeConfig.page}.html, sisa percobaan: ${retries}`, fetchErr);
+          if (retries === 0) {
+            throw new Error(`Gagal memuat antarmuka halaman. Server hosting mungkin sedang sibuk. Silakan muat ulang (refresh) halaman ini.`);
+          }
+          // Tunggu sebentar sebelum mencoba lagi (500ms)
+          await new Promise(res => setTimeout(res, 500));
+        }
       }
-      const html = await response.text();
       // Render content
       const contentArea = document.getElementById('content');
       contentArea.innerHTML = html;

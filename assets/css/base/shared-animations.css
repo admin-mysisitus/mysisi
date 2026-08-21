@@ -271,3 +271,16 @@
     transform: rotate(360deg);
   }
 }
+
+/* Native CSS Spinner (replaces FontAwesome fa-spin for better mobile support) */
+.css-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}

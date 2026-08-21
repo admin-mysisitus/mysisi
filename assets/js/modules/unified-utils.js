@@ -419,7 +419,7 @@ export function setButtonLoading(button, isLoading = true, loadingText = 'Mempro
       button.dataset.originalHtml = button.innerHTML;
     }
     const cleanText = loadingText.replace('⏳ ', '');
-    button.innerHTML = `<i class="fas fa-circle-notch fa-spin" style="margin-right: 6px;"></i> ${cleanText}`;
+    button.innerHTML = `<span class="css-spinner"></span> ${cleanText}`;
     button.disabled = true;
   } else {
     if (button.dataset.originalHtml) {
