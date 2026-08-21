@@ -27,9 +27,8 @@ class AdminApp {
     
     // SECURITY: Firebase Admin Probe Check
     try {
-      const { database, ref, get } = await getFirebase();
-      const adminProbeRef = ref(database, 'users'); 
-      await get(adminProbeRef); // This will throw Permission Denied if not admin
+      const { db } = await getFirebase();
+      await db.ref('users').once('value'); // This will throw Permission Denied if not admin
     } catch (e) {
       console.error('Admin verification failed!', e);
       AuthManager.clearSession();
