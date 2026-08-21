@@ -6,7 +6,7 @@
 
 /* ========== DETAIL PROBLEMS SECTION ========== */
 .detail-problems-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-light);
 }
 
@@ -93,7 +93,7 @@
 
 /* ========== DETAIL SERVICES SECTION ========== */
 .detail-services-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -183,7 +183,7 @@
 
 /* ========== DETAIL WHAT INCLUDED SECTION ========== */
 .detail-what-included-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-light);
 }
 
@@ -257,7 +257,7 @@
 
 /* ========== DETAIL COMPARISON SECTION ========== */
 .detail-comparison-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-white);
 }
 

@@ -152,32 +152,39 @@
     sortedExts.forEach((ext, idx) => {
       const discount = calculateSavings(ext.oldPrice, ext.newPrice);
       const item = document.createElement('div');
-      item.className = `cek-domain-ext-item ${ext.highlight !== 'none' ? `highlight-${ext.highlight}` : ''}`;
-      item.style.animationDelay = `${idx * 0.08}s`;
+      item.className = 'cek-domain-ext-item-simple';
+      item.style.animationDelay = `${idx * 0.05}s`;
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
+
+      const extColor = ext.color || '#1a1a2e';
+      const extLabel = ext.ext.replace('.', '').toUpperCase();
+      const extFilename = `tld-${ext.ext.replace(/\./g, '')}.svg`;
+      const fallbackIconHtml = `<span class="cek-domain-fallback-text" style="color: ${extColor}; display: none;">${ext.ext}</span>`;
+
       let labels = '';
       if (ext.label) {
-        labels = `<span class="cek-domain-badge cek-domain-badge--label">${ext.label}</span>`;
+        labels += `<span class="cek-domain-badge cek-domain-badge--label">${ext.label}</span>`;
       }
       if (discount > 0) {
         labels += `<span class="cek-domain-badge cek-domain-badge--discount">-${discount}%</span>`;
       }
-      const extColor = ext.color || '#1a1a2e';
-      const extLabel = ext.ext.replace('.', '').toUpperCase();
-      const extFilename = `tld-${ext.ext.replace(/\./g, '')}.svg`;
-      const fallbackIconHtml = `<div class="cek-domain-badge cek-domain-badge--label" style="background: ${extColor}; display: none; margin: 0 4px;">${extLabel}</div>`;
+      const badgeGroup = labels ? `<div class="cek-domain-badge-group-simple">${labels}</div>` : '';
+
       item.innerHTML = `
-        <div class="cek-domain-badge-group cek-domain-badge-group--centered">${labels}</div>
-        <div class="cek-domain-ext-name" style="color: ${extColor}; font-weight: 800;">
-          <img src="/assets/img/tld/${extFilename}" alt="${ext.ext}" class="tld-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-          ${fallbackIconHtml}
+        <div class="cek-domain-ext-content-simple">
+          ${badgeGroup}
+          <div class="cek-domain-ext-main-simple">
+            <div class="cek-domain-ext-logo-wrap">
+              <img src="/assets/img/tld/${extFilename}" alt="${ext.ext}" class="tld-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+              ${fallbackIconHtml}
+            </div>
+            <div class="cek-domain-ext-prices-simple">
+              ${ext.oldPrice ? `<span class="cek-domain-ext-old">${formatCurrency(ext.oldPrice)}</span>` : ''}
+              <span class="cek-domain-ext-new">${formatCurrency(ext.newPrice)}</span>
+            </div>
+          </div>
         </div>
-        <div class="cek-domain-ext-prices">
-          ${ext.oldPrice ? `<span class="cek-domain-ext-old">${formatCurrency(ext.oldPrice)}</span>` : ''}
-          <span class="cek-domain-ext-new">${formatCurrency(ext.newPrice)}</span>
-        </div>
-        <div class="cek-domain-ext-info">${ext.info}</div>
       `;
       const handleSelect = () => {
         // Preserve what they typed, just replace/append extension
@@ -460,6 +467,7 @@
     } else if (result.available === true) {
       // STATE 1: AVAILABLE OR ORDERED
       card.className = `cek-domain-result-card available ${isRecommended ? 'super-highlight' : ''} ${result.isOrdered ? 'warning' : ''}`;
+      
       const badges = [];
       if (result.isOrdered) {
         badges.push(`<span class="cek-domain-badge cek-domain-badge--label" style="background:#f39c12; color:white;"><i class="fas fa-fire"></i> Rebutan</span>`);
@@ -474,39 +482,49 @@
           badges.push(`<span class="cek-domain-recommended-badge cek-domain-badge cek-domain-badge--neutral"><i class="fas fa-star"></i> Rekomendasi</span>`);
         }
       }
+      const badgeGroupHtml = badges.length > 0 ? `<div class="cek-domain-badge-group-simple" style="margin-bottom: 6px; display: flex; gap: 4px; flex-wrap: wrap;">${badges.join('')}</div>` : '';
+
       let infoHtml = sanitizeHTML(extData.info);
       if (result.isOrdered) {
-        infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! <strong>checkout now!!</strong> <br> Siapa cepat, dia dapat!!!.</span>`;
+        infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Cepat amankan!</span>`;
       }
+      
       const extColor = extData?.color || '#1a1a2e';
       const extFilename = `tld-${extData.ext.replace(/\./g, '')}.svg`;
       const fallbackColor = result.isOrdered ? 'inherit' : extColor;
-
       const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${fallbackColor};">${extData.ext}</span>`);
       const extLabel = extData.ext.replace('.', '').toUpperCase();
+      
       const watermarkTag = `
-        <img src="/assets/img/tld/${extFilename}" alt="${extData.ext}" class="tld-logo-watermark" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-        <div class="cek-domain-badge cek-domain-badge--label" style="background: ${extColor}; display: none; opacity: 0.8;">${extLabel}</div>
+        <img src="/assets/img/tld/${extFilename}" alt="${extData.ext}" class="tld-logo-result" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+        <span class="cek-domain-fallback-text" style="color: ${extColor}; display: none;">${extLabel}</span>
       `;
 
       card.innerHTML = `
-        <div class="cek-domain-card-watermark">${watermarkTag}</div>
-        <div class="cek-domain-badge-group cek-domain-badge-group--result">${badges.join('')}</div>
-        <h3 ${result.isOrdered ? 'style="color:#d35400;"' : ''}>
-          <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}"></i> <span>${coloredDomain}</span>
-        </h3>
-        <p class="cek-domain-result-info">${infoHtml}</p>
-        ${extData.oldPrice ? `<span class="cek-domain-result-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
-        <p class="cek-domain-result-price">
-          dari <strong>${formatCurrency(extData.newPrice)}</strong> /tahun
-        </p>
-        <div class="cek-domain-actions" style="display: flex; gap: 8px; margin-top: 10px;">
-          <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
-            <i class="fas fa-lock"></i> Amankan Sekarang
-          </button>
-          <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist" style="flex: 0 0 40px; cursor: pointer; border: 1px solid #ddd; background: #f8f9fa; border-radius: 5px; font-size: 16px; color: #999; transition: all 0.3s; display: flex; align-items: center; justify-content: center;">
-            <i class="far fa-heart"></i>
-          </button>
+        <div class="cek-domain-result-main">
+          ${badgeGroupHtml}
+          <h3 class="cek-domain-result-title" ${result.isOrdered ? 'style="color:#d35400;"' : ''}>
+            <i class="${result.isOrdered ? 'fas fa-exclamation-circle' : 'fas fa-check-circle'}" style="color: ${result.isOrdered ? '#d35400' : '#10b981'};"></i> 
+            <span>${coloredDomain}</span>
+          </h3>
+          <p class="cek-domain-result-info">${infoHtml}</p>
+        </div>
+        <div class="cek-domain-result-side">
+          <div class="cek-domain-result-logo">
+            ${watermarkTag}
+          </div>
+          <div class="cek-domain-result-prices">
+            ${extData.oldPrice ? `<span class="cek-domain-result-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
+            <span class="cek-domain-result-new"><strong>${formatCurrency(extData.newPrice)}</strong> <small>/tahun</small></span>
+          </div>
+          <div class="cek-domain-actions">
+            <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
+              Amankan
+            </button>
+            <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
         </div>
       `;
     } else if (result.available === false) {

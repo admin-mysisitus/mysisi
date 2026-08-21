@@ -54,11 +54,11 @@
 /* ========== SECTION PADDING VARIANTS ========== */
 /* Responsive padding untuk berbagai section types */
 .section-large-padding {
-  padding: clamp(5rem, 10vw, 7rem) 0;
+  padding: clamp(2.5rem, 5vw, 4rem) 0;
 }
 
 .section-medium-padding {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
 }
 
 .section-small-padding {
@@ -539,7 +539,7 @@
 .included-section,
 .service-category-section,
 .value-section {
-  padding: clamp(4rem, 8vw, 6rem) 0;
+  padding: clamp(2rem, 4vw, 3.5rem) 0;
 }
 
 /* ========== GLOBAL ANIMATIONS - CONSOLIDATED ========== */

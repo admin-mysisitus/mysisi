@@ -5,7 +5,7 @@
 /* Styling handled by components/hero.css - .hero and base classes */
 /* ========== KONTAK INFO SECTION ========== */
 .kontak-info-section {
-  padding: clamp(4rem, 8vw, 6rem) 0;
+  padding: clamp(2rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-light);
 }
 

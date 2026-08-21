@@ -28,7 +28,7 @@
 
 /* ========== BENEFITS SECTION ========== */
 .karir-benefits-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -84,7 +84,7 @@
 
 /* ========== JOB OPENINGS SECTION ========== */
 .karir-openings-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-light);
 }
 
@@ -377,7 +377,7 @@
 
 /* ========== PROCESS SECTION ========== */
 .karir-process-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -460,7 +460,7 @@
 
 /* ========== COMPANY CULTURE SECTION ========== */
 .karir-culture-section {
-  padding: clamp(3rem, 6vw, 4rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background: linear-gradient(180deg, var(--bg-light) 0%, #FAFBFF 100%);
 }
 
