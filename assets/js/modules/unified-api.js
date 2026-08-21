@@ -22,7 +22,7 @@ import {
 import { getFirebase } from './firebase-core.js';
 
 export class APIClient {
-  static DEFAULT_TIMEOUT = 30000; // 30 seconds
+  static DEFAULT_TIMEOUT = GAS_CONFIG.TIMEOUT || 30000; // Use configured timeout
   /**
    * Make API call to GAS backend
    * Simple, direct pattern matching sampel-mekanisme-GAS
@@ -431,9 +431,7 @@ export class APIClient {
    * Accepts userId as part of orderData or will pass-through
    */
   static createOrder(orderData) {
-    return this.call('createOrderWithAuth', orderData, {
-      method: 'POST'
-    });
+    return this.createOrderWithAuth(orderData);
   }
   /**
    * Create order with separate userId (alternative signature for convenience)
@@ -449,29 +447,88 @@ export class APIClient {
       data = userIdOrOrderData;
     }
     
-    const response = await this.call('createOrderWithAuth', data, {
-      method: 'POST'
-    });
-    
-    // Mirror the domain to Firebase RTDB for fast checking later
-    if (response.success && data.domain) {
-       try {
-         const { db } = await getFirebase();
-         if (db) {
-           const domainKey = data.domain.toLowerCase().replace(/\./g, '_');
-           await db.ref(`domains/${domainKey}`).set({
-               domain: data.domain.toLowerCase(),
-               status: 'ordered',
-               userId: data.userId || 'anonymous',
-               updatedAt: new Date().toISOString()
-           });
-         }
-       } catch(e) {
-         console.warn('[API] Failed to mirror domain order to Firebase', e);
-       }
+    try {
+      // 1. Call GAS to Create Order AND Generate Token simultaneously
+      const response = await this.call('createOrderWithAuth', data, {
+        method: 'POST'
+      });
+      
+      if (response.success && response.data) {
+        // GAS returns orderId and snapToken
+        const orderId = response.data.orderId;
+        const snapToken = response.data.snapToken || '';
+        const snapRedirectUrl = response.data.snapRedirectUrl || '';
+        
+        // 2. Prepare full order for RTDB cache
+        const fullOrder = {
+          orderId: orderId,
+          userId: data.userId || 'anonymous',
+          email: data.email || '',
+          phone: data.phone || '',
+          name: data.name || '',
+          domain: data.domain || '',
+          packageId: data.packageId || '',
+          total: data.total || 0,
+          orderStatus: 'processing',
+          paymentStatus: 'pending',
+          snapToken: snapToken,
+          snapRedirectUrl: snapRedirectUrl,
+          transactionId: '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          paymentMethod: '',
+          subtotal: data.subtotal || 0,
+          ppn: data.ppn || 0,
+          discount: data.discount || 0,
+          addons: data.addons || [],
+          promoCode: data.promoCode || ''
+        };
+        
+        // 3. Save to RTDB for instantaneous access on the payment page
+        try {
+          const { db } = await getFirebase();
+          if (db) {
+            await db.ref(`orders/${orderId}`).set(fullOrder);
+            
+            // Mirror domain
+            if (data.domain) {
+              const domainKey = data.domain.toLowerCase().replace(/\./g, '_');
+              db.ref(`domains/${domainKey}`).set({
+                  domain: data.domain.toLowerCase(),
+                  status: 'ordered',
+                  userId: data.userId || 'anonymous',
+                  updatedAt: new Date().toISOString()
+              }).catch(e => console.warn('[API] Failed to mirror domain', e));
+            }
+          }
+        } catch(e) {
+          console.warn('[API] Failed to save cache to RTDB', e);
+        }
+        
+        return response;
+      } else {
+        throw new Error(response.message || 'Gagal membuat pesanan');
+      }
+    } catch(e) {
+      console.error('[API] Error in createOrderWithAuth:', e);
+      return { success: false, message: e.message || 'Terjadi kesalahan sistem' };
     }
-    
-    return response;
+  }
+  
+  /**
+   * Update order in RTDB (only updates specific fields)
+   */
+  static async updateOrderRTDB(orderId, updateData) {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+        await db.ref(`orders/${orderId}`).update(updateData);
+        return { success: true };
+      }
+    } catch(e) {
+      console.warn('[API] Failed to update order in RTDB', e);
+    }
+    return { success: false };
   }
   /**
    * Get user's orders
@@ -486,13 +543,23 @@ export class APIClient {
   /**
    * Get order detail
    */
-  static getOrderDetail(orderId, userId) {
-    return this.call('getOrderDetail', {
-      orderId,
-      userId
-    }, {
-      method: 'POST'
-    });
+  static async getOrderDetail(orderId, userId) {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+        const snapshot = await db.ref(`orders/${orderId}`).once('value');
+        if (snapshot.exists()) {
+          const order = snapshot.val();
+          return { success: true, data: order };
+        } else {
+          return { success: false, message: 'Pesanan tidak ditemukan di database' };
+        }
+      }
+    } catch(e) {
+      console.error('[API] RTDB getOrderDetail failed:', e);
+      return { success: false, message: 'Akses ditolak: Gagal memuat data pesanan' };
+    }
+    return { success: false, message: 'Gagal menghubungi database' };
   }
   /**
    * Sync order status directly with Midtrans backend

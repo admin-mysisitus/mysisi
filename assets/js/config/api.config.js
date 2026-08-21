@@ -8,9 +8,9 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbylE5k22kBBKBt4mkZPsiNFp5K4X39zkfefRlD2xW8vw4bcZL4DtSELSOdSKED0e4bUOQ/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbwfJEOc0dRi16fFQxmV60yADlI0hA2PQ7L3rLiQND2Unkj2dKlxgbchsxdXW03MY4-Taw/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
-  TIMEOUT: 30000,
+  TIMEOUT: 60000,
   // Actions/endpoints yang dipanggil
   ACTIONS: {
     // Auth related
@@ -100,10 +100,20 @@ export const DOMAIN_PACKAGES = {
     periodValue: 1,
     description: 'Untuk Bisnis E-Commerce & Penjual Produk',
     features: ['14–21 Hari Pengerjaan', '12 Halaman + Toko Online Lengkap', 'Manajemen Produk (Unlimited)', 'Integrasi Ongkir & Payment Gateway', 'Domain & Hosting Cloud Bisnis 1 Tahun', 'Dashboard Admin Lengkap', 'Maintenance Ringan Gratis']
+  },
+  // Opsi Tanpa Paket (Hanya Domain)
+  none: {
+    id: 'none',
+    name: 'Tanpa Paket (Hanya Domain)',
+    price: 0,
+    period: 'Sesuai Domain',
+    periodValue: 0,
+    description: 'Beli domain saja tanpa layanan pembuatan website (Paket Bundling Bebas Pilih)',
+    features: ['Hanya Domain & Akses Kontrol Penuh', 'Akses DNS Management']
   }
 };
 // ========== PACKAGE VALIDATION ==========
-export const VALID_PACKAGE_IDS = ['starter', 'grower', 'pioneer'];
+export const VALID_PACKAGE_IDS = ['starter', 'grower', 'pioneer', 'none'];
 /**
  * Validate package ID exists
  */

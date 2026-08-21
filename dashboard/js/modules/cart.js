@@ -67,8 +67,9 @@ window.changeItemPackage = (domain, packageId) => {
     const newPrice = pkg.price;
     CartManager.update(domain, {
       package: packageId,
-      price: newPrice,
-      renewalPrice: newPrice
+      packagePrice: newPrice,
+      // Jika none, renewal price ikut harga domain. Jika ada paket, ikut paket.
+      renewalPrice: packageId === 'none' ? (item.domainPrice || 0) : newPrice
     });
     // Prevent jumping by preserving scroll
     const scrollY = window.scrollY;
@@ -581,10 +582,22 @@ function renderAuthenticatedCart() {
             <div class="cart-summary">
               <h3 class="summary-title">Ringkasan Pesanan</h3>
               
-              <div class="price-row">
-                <span class="price-row-label">Domain (${items.length}):</span>
-                <span class="price-value">${formatPrice(subtotal)}</span>
-              </div>
+              ${items.map(item => `
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label">Domain (${item.domain}):</span>
+                  <span class="price-value">${formatPrice(item.domainPrice || 0)}</span>
+                </div>
+                ${item.package && item.package !== 'none' ? `
+                <div class="price-row" style="margin-bottom: 4px; padding-left: 10px; font-size: 13px;">
+                  <span class="price-row-label">+ ${DOMAIN_PACKAGES[item.package]?.name || item.package}</span>
+                  <span class="price-value">${formatPrice(item.packagePrice || 0)}</span>
+                </div>
+                <div class="price-row" style="margin-bottom: 8px; padding-left: 10px; font-size: 13px; color: #10b981;">
+                  <span class="price-row-label"><i class="fas fa-gift"></i> Diskon Bundle Domain</span>
+                  <span class="price-value">-${formatPrice(item.domainPrice || 0)}</span>
+                </div>
+                ` : ''}
+              `).join('')}
 
               ${addons.length > 0 ? `
                 <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
@@ -735,7 +748,7 @@ function renderCartItem(item) {
             ${item.domain}
           </h4>
           <div class="cart-item-details" style="display: flex; gap: 8px; align-items: center; margin-top: 6px; border: none; padding: 0; flex-wrap: wrap;">
-            <span class="cart-item-badge" style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.package ? item.package.toUpperCase() : 'STARTER'}</span>
+            <span class="cart-item-badge" style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${(!item.package || item.package === 'none') ? 'HANYA DOMAIN' : item.package.toUpperCase()}</span>
             <span class="cart-item-duration" style="color: var(--text-light); font-size: 11px;"><i class="fas fa-calendar"></i> ${item.duration || 1} tahun</span>
           </div>
           ${renewalInfo}

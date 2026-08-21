@@ -116,7 +116,16 @@ async function loadOrderData(orderId, currentUser) {
     displayOrderData(currentOrder);
     // Generate payment token if not yet paid
     if (currentOrder.paymentStatus !== 'paid') {
-      await generateMidtransToken(currentOrder);
+      if (currentOrder.snapToken) {
+        currentTransaction = {
+          token: currentOrder.snapToken,
+          redirectUrl: currentOrder.snapRedirectUrl || '',
+          orderId: currentOrder.orderId,
+          amount: currentOrder.total
+        };
+      } else {
+        await generateMidtransToken(currentOrder);
+      }
     }
   } catch (error) {
     console.error('Error loading order data:', error);
@@ -141,6 +150,12 @@ async function generateMidtransToken(orderData) {
       orderId: orderData.orderId,
       amount: orderData.total
     };
+    
+    // Save token to RTDB so we don't have to fetch it again
+    await APIClient.updateOrderRTDB(orderData.orderId, {
+      snapToken: result.data.snapToken,
+      snapRedirectUrl: result.data.snapRedirectUrl || ''
+    });
   } catch (error) {
     console.error('Error generating Midtrans token:', error);
     // Show error but don't crash

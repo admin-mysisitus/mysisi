@@ -15,6 +15,8 @@
  *   AuthManager.getCurrentUser()
  *   AuthManager.on('authChanged', handler)
  */
+import { getFirebase } from './firebase-core.js';
+
 export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;
@@ -157,6 +159,12 @@ export class AuthManager {
     try {
       sessionStorage.clear();
     } catch (e) {}
+    
+    // Completely invalidate the Firebase Auth session to prevent ghost sessions
+    getFirebase().then(({auth}) => {
+      if (auth) auth.signOut();
+    }).catch(e => console.error('[AuthManager] Firebase signout error:', e));
+
     // Clear all cookies for the current domain
     try {
       document.cookie.split(";").forEach(function(c) {

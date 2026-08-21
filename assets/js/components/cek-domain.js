@@ -771,7 +771,10 @@
         CartManager.add(domain, tld, {
           package: 'starter',
           duration: 1,
-          price: DOMAIN_PACKAGES.starter.price,
+          domainPrice: price,
+          packagePrice: DOMAIN_PACKAGES.starter.price,
+          // Legacy properties for backwards compatibility
+          price: DOMAIN_PACKAGES.starter.price, 
           renewalPrice: DOMAIN_PACKAGES.starter.price,
           basePrice: DOMAIN_PACKAGES.starter.price
         });

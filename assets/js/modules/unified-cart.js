@@ -37,6 +37,8 @@ export class CartManager {
       cart.domains[existingIndex] = {
         ...cart.domains[existingIndex],
         ...options,
+        domainPrice: options.domainPrice || cart.domains[existingIndex].domainPrice || 0,
+        packagePrice: options.packagePrice || cart.domains[existingIndex].packagePrice || 0,
         basePrice: options.basePrice || cart.domains[existingIndex].basePrice || options.price || cart.domains[existingIndex].price || 0,
         lastUpdated: Date.now()
       };
@@ -48,6 +50,8 @@ export class CartManager {
         extension: `.${tld.toLowerCase()}`,
         package: options.package || 'starter',
         duration: options.duration || 1,
+        domainPrice: options.domainPrice || 0,
+        packagePrice: options.packagePrice || 0,
         price: options.price || 0,
         basePrice: options.basePrice || options.price || 0,
         renewalPrice: options.renewalPrice || 0,
@@ -265,7 +269,21 @@ export class CartManager {
     // Calculate domain prices
     if (cart.domains && Array.isArray(cart.domains)) {
       cart.domains.forEach(domain => {
-        subtotal += (domain.price || 0) * (domain.duration || 1);
+        // Logika Harga Baru: 
+        // Jika paket 'none', gunakan domainPrice (harga domain).
+        // Jika paket dipilih, gunakan packagePrice (domain gratis).
+        // Fallback ke legacy `domain.price` jika data lama
+        let itemPrice = domain.price || 0;
+        if (domain.package === 'none') {
+            itemPrice = domain.domainPrice || itemPrice;
+        } else if (domain.package && domain.packagePrice > 0) {
+            itemPrice = domain.packagePrice;
+        }
+        
+        // Simpan harga terhitung kembali ke price properti agar sinkron (legacy support)
+        domain.price = itemPrice;
+        
+        subtotal += itemPrice * (domain.duration || 1);
       });
     }
     // Calculate addon prices
