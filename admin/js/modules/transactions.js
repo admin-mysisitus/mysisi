@@ -147,47 +147,57 @@ function renderTxTable(mockTx, tbody) {
   tbody.innerHTML = '';
   currentTx = mockTx;
   mockTx.forEach(tx => {
+    // Map Firebase properties to expected table properties
+    const inv = tx.inv || tx.orderId || '-';
+    const date = tx.date || tx.createdAt || new Date().toISOString();
+    const name = tx.name || '-';
+    const email = tx.email || '-';
+    const item = tx.item || tx.domain || tx.packageId || '-';
+    const total = tx.total || 0;
+    const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
+
     let statusBg, statusColor;
-    if (tx.status === 'paid') {
+    if (status === 'paid' || status === 'settlement' || status === 'capture') {
       statusBg = 'rgba(16, 185, 129, 0.1)';
       statusColor = 'var(--admin-success)';
-    } else if (tx.status === 'unpaid') {
+    } else if (status === 'pending' || status === 'unpaid') {
       statusBg = 'rgba(245, 158, 11, 0.1)';
       statusColor = 'var(--admin-warning)';
     } else {
       statusBg = 'rgba(239, 68, 68, 0.1)';
       statusColor = 'var(--admin-danger)';
     }
-    const rowOpacity = tx.status === 'failed' ? '0.6' : '1';
+    const rowOpacity = (status === 'failed' || status === 'expire' || status === 'cancel' || status === 'deny') ? '0.6' : '1';
+    
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--admin-border)';
     tr.style.opacity = rowOpacity;
     tr.innerHTML = `
       <td style="padding: 16px;">
-        <p style="margin: 0; font-weight: 600; color: var(--admin-primary);">${tx.inv}</p>
-        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${new Date(tx.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+        <p style="margin: 0; font-weight: 600; color: var(--admin-primary);">${inv}</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
       </td>
       <td style="padding: 16px;">
-        <p style="margin: 0; font-weight: 500;">${tx.name}</p>
-        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${tx.email}</p>
+        <p style="margin: 0; font-weight: 500;">${name}</p>
+        <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${email}</p>
       </td>
       <td style="padding: 16px; color: var(--admin-text-muted);">
-        ${tx.item}
+        ${item}
       </td>
       <td style="padding: 16px; font-weight: 600;">
-        Rp ${parseInt(tx.total || 0).toLocaleString('id-ID')}
+        Rp ${parseInt(total || 0).toLocaleString('id-ID')}
       </td>
       <td style="padding: 16px;">
         <span style="background: ${statusBg}; color: ${statusColor}; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">
-          ${tx.status}
+          ${status === 'settlement' || status === 'capture' ? 'PAID' : status}
         </span>
       </td>
       <td style="padding: 16px; text-align: right;">
         <div style="display: flex; gap: 8px; justify-content: flex-end;">
-          <button class="admin-btn" onclick="window.editTx('${tx.inv}')" style="background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); padding: 8px; border-radius: 6px;" title="Edit">
+          <button class="admin-btn" onclick="window.editTx('${inv}')" style="background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); padding: 8px; border-radius: 6px;" title="Edit">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="admin-btn" onclick="window.deleteTx('${tx.inv}')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Batalkan">
+          <button class="admin-btn" onclick="window.deleteTx('${inv}')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Batalkan">
             <i class="fas fa-ban"></i>
           </button>
         </div>

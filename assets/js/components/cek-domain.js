@@ -406,15 +406,18 @@
       let isOrderedInBackend = false;
       try {
         const backendCheck = await APIClient.checkDomain(domain);
-        if (backendCheck && backendCheck.success === false) {
-          backendSaysTaken = true;
-        } else if (backendCheck && backendCheck.success && backendCheck.data?.available === false) {
-          backendSaysTaken = true;
-          isOrderedInBackend = false;
-        } else if (backendCheck && backendCheck.success && backendCheck.data?.isOrdered === true) {
-          backendSaysTaken = true;
-          isOrderedInBackend = true;
+        // Only trust a positive "taken" signal from backend.
+        // If success=false, backend had an error — don't penalize the user.
+        if (backendCheck && backendCheck.success === true) {
+          if (backendCheck.data?.available === false) {
+            backendSaysTaken = true;
+            isOrderedInBackend = false;
+          } else if (backendCheck.data?.isOrdered === true) {
+            backendSaysTaken = true;
+            isOrderedInBackend = true;
+          }
         }
+        // If success=false → backend error, skip silently (don't block domain)
       } catch (backendError) {
         console.warn('[Domain Check] Backend API check failed:', backendError);
       }

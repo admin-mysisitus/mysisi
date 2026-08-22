@@ -33,7 +33,7 @@ export class APIClient {
     } = options;
 
     // Use GET for data retrieval if no complex data
-    const getActions = ['checkdomain', 'getorders', 'getactivepromocodes'];
+    const getActions = ['getorders', 'getactivepromocodes'];
     if (getActions.includes(action.toLowerCase())) {
       method = 'GET';
     }
@@ -465,6 +465,14 @@ export class APIClient {
       data = userIdOrOrderData;
     }
     
+    // Safety net: generate orderId if caller didn't provide one
+    if (!data.orderId) {
+      const ts = Date.now();
+      const rnd = Math.random().toString(36).substring(2, 8).toUpperCase();
+      data.orderId = `INV-${ts}-${rnd}`;
+      console.warn('[API] orderId was missing, auto-generated:', data.orderId);
+    }
+    
     try {
       // 1. Call GAS to Create Order AND Generate Token simultaneously
       const response = await this.call('createOrderWithAuth', data, {
@@ -502,20 +510,24 @@ export class APIClient {
           promoCode: data.promoCode || ''
         };
         
-        // 3. Save to RTDB for instantaneous access on the payment page
+        // 3. Save to RTDB — tulis ke orders dan userOrders agar user bisa baca sendiri
         try {
           const { db } = await getFirebase();
           if (db) {
-            await db.ref(`orders/${orderId}`).set(fullOrder);
+            const writes = {
+              [`orders/${orderId}`]: fullOrder,
+              [`userOrders/${fullOrder.userId}/${orderId}`]: fullOrder
+            };
+            await db.ref().update(writes);
             
-            // Mirror domain
+            // Mirror domain sebagai 'ordered' (belum aktif, masih bisa rebutan)
             if (data.domain) {
               const domainKey = data.domain.toLowerCase().replace(/\./g, '_');
               db.ref(`domains/${domainKey}`).set({
-                  domain: data.domain.toLowerCase(),
-                  status: 'ordered',
-                  userId: data.userId || 'anonymous',
-                  updatedAt: new Date().toISOString()
+                domain: data.domain.toLowerCase(),
+                status: 'ordered',
+                userId: data.userId || 'anonymous',
+                updatedAt: new Date().toISOString()
               }).catch(e => console.warn('[API] Failed to mirror domain', e));
             }
           }
@@ -540,7 +552,16 @@ export class APIClient {
     try {
       const { db } = await getFirebase();
       if (db) {
+        // Update order utama
         await db.ref(`orders/${orderId}`).update(updateData);
+        
+        // Juga update userOrders index agar tab pesanan user terupdate
+        const orderSnap = await db.ref(`orders/${orderId}`).once('value');
+        const order = orderSnap.val();
+        if (order && order.userId) {
+          db.ref(`userOrders/${order.userId}/${orderId}`).update(updateData)
+            .catch(e => console.warn('[API] userOrders update failed:', e));
+        }
         return { success: true };
       }
     } catch(e) {
@@ -554,23 +575,218 @@ export class APIClient {
   static async getUserOrders(userId) {
     try {
       const { db } = await getFirebase();
-      if (db) {
-        const snapshot = await db.ref('orders').orderByChild('userId').equalTo(userId).once('value');
-        const ordersData = snapshot.val() || {};
-        const ordersArray = Object.values(ordersData);
-        // Sort newest first
-        ordersArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        return { success: true, data: { orders: ordersArray, count: ordersArray.length }, message: 'Pesanan berhasil diambil' };
+      if (!db) return { success: false, message: 'Firebase DB not available' };
+      
+      // Primary: baca dari userOrders/{userId} — node yang bisa diakses user sendiri
+      const userOrdersSnap = await db.ref(`userOrders/${userId}`).once('value');
+      let ordersArray = [];
+      
+      if (userOrdersSnap.exists()) {
+        const raw = userOrdersSnap.val() || {};
+        ordersArray = Object.values(raw);
+      } else {
+        // Fallback untuk user lama: query orders langsung (mungkin diblokir rules, tapi coba)
+        try {
+          const snapshot = await db.ref('orders').orderByChild('userId').equalTo(userId).once('value');
+          const data = snapshot.val() || {};
+          ordersArray = Object.values(data);
+          // Rebuild userOrders index jika berhasil (otomatis perbaiki user lama)
+          if (ordersArray.length > 0) {
+            const updates = {};
+            ordersArray.forEach(o => {
+              if (o.orderId) updates[`userOrders/${userId}/${o.orderId}`] = o;
+            });
+            db.ref().update(updates).catch(() => {});
+          }
+        } catch(fallbackErr) {
+          console.info('[API] orders query fallback failed (permission):', fallbackErr.message);
+        }
       }
-      return { success: false, message: 'Firebase DB not available' };
+      
+      ordersArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      return { success: true, data: { orders: ordersArray, count: ordersArray.length }, message: 'Pesanan berhasil diambil' };
     } catch(e) {
       console.error('[API] RTDB getUserOrders failed:', e);
       return { success: false, message: e.message };
     }
   }
 
-  static getUserOrderStats(userId) {
-    return this.call('getUserOrderStats', { userId }, { method: 'POST' });
+  static async getOrderDetail(orderId) {
+    try {
+      const { db } = await getFirebase();
+      if (!db) return { success: false, message: 'Firebase DB not available' };
+      
+      const snap = await db.ref(`orders/${orderId}`).once('value');
+      if (snap.exists()) {
+        return { success: true, data: snap.val() };
+      }
+      return { success: false, message: 'Order tidak ditemukan' };
+    } catch(e) {
+      console.error('[API] RTDB getOrderDetail failed:', e);
+      return { success: false, message: e.message };
+    }
+  }
+
+  static async getUserOrderStats(userId) {
+    try {
+      const { db } = await getFirebase();
+      if (!db) return { success: false, message: 'Firebase DB not available' };
+      
+      const snapshot = await db.ref('orders').orderByChild('userId').equalTo(userId).once('value');
+      const ordersData = snapshot.val() || {};
+      const orders = Object.values(ordersData);
+      
+      const stats = {
+        totalOrders: orders.length,
+        ordersByStatus: { pending: 0, processing: 0, completed: 0, cancelled: 0 },
+        paymentStatus: { pending: 0, paid: 0, unpaid: 0, expired: 0, failed: 0 },
+        totalSpent: 0,
+        averageOrderValue: 0,
+        lastOrderDate: null
+      };
+      
+      orders.forEach(o => {
+        if (o.orderStatus && stats.ordersByStatus[o.orderStatus] !== undefined) {
+          stats.ordersByStatus[o.orderStatus]++;
+        }
+        if (o.paymentStatus && stats.paymentStatus[o.paymentStatus] !== undefined) {
+          stats.paymentStatus[o.paymentStatus]++;
+        }
+        stats.totalSpent += (Number(o.total) || 0);
+        
+        if (!stats.lastOrderDate || new Date(o.createdAt) > new Date(stats.lastOrderDate)) {
+          stats.lastOrderDate = o.createdAt;
+        }
+      });
+      
+      if (stats.totalOrders > 0) {
+        stats.averageOrderValue = Math.round(stats.totalSpent / stats.totalOrders);
+      }
+      
+      return { success: true, data: stats };
+    } catch(e) {
+      console.error('[API] RTDB getUserOrderStats failed:', e);
+      return { success: false, message: e.message };
+    }
+  }
+
+  static async syncOrderStatus(orderId) {
+    try {
+      const response = await this.call('checkPaymentStatus', { orderId }, { method: 'GET' });
+      if (response && response.success && response.data) {
+        const { db } = await getFirebase();
+        if (db) {
+          const paymentStatus = response.data.paymentStatus || 'pending';
+          const orderStatus = response.data.orderStatus || 'processing';
+          const updatePayload = { paymentStatus, orderStatus, updatedAt: new Date().toISOString() };
+          
+          // Update order utama
+          await db.ref(`orders/${orderId}`).update(updatePayload);
+          
+          const PAID = ['paid', 'settlement', 'capture', 'success'];
+          const orderSnap = await db.ref(`orders/${orderId}`).once('value');
+          const order = orderSnap.val();
+          
+          if (order) {
+            // Sync userOrders index agar tab pesanan user terupdate
+            if (order.userId) {
+              db.ref(`userOrders/${order.userId}/${orderId}`).update(updatePayload)
+                .catch(e => console.warn('[API] userOrders sync failed:', e));
+            }
+            
+            // Update domain ke 'active' kalau bayar berhasil
+            if (PAID.includes(paymentStatus.toLowerCase()) && order.domain) {
+              const domainKey = order.domain.toLowerCase().replace(/\./g, '_');
+              db.ref(`domains/${domainKey}`).update({
+                status: 'active',
+                paidAt: new Date().toISOString()
+              }).catch(e => console.warn('[API] Failed to update domain status:', e));
+            }
+          }
+        }
+      }
+      return response;
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  }
+
+  static async updateOrderStatus(orderId, updateData) {
+    try {
+      const { db } = await getFirebase();
+      if (db) {
+        await db.ref(`orders/${orderId}`).update(updateData);
+        return { success: true };
+      }
+    } catch(e) {
+      console.warn('[API] Failed to update order in RTDB', e);
+    }
+    return { success: false };
+  }
+
+  static generateMidtransToken(orderId, email, phone, name, domain, packageId, total) {
+    return this.call('generateMidtransToken', {
+      orderId, email, phone, name, domain, packageId, total
+    }, { method: 'POST' });
+  }
+
+  static async checkDomain(domain) {
+    try {
+      if (!domain) return { success: false, message: 'Domain diperlukan' };
+      const { db } = await getFirebase();
+      if (!db) return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi – anggap tersedia' };
+      
+      const domainLower = domain.toLowerCase();
+      const domainKey = domainLower.replace(/\./g, '_');
+      
+      // Status pembayaran yang dianggap "sudah berhasil" (domain resmi milik orang)
+      const PAID_STATUSES = ['paid', 'settlement', 'capture', 'success', 'active'];
+      
+      // 1. Fast path: check `domains` mirror node (public readable)
+      // Node ini di-update oleh webhook Midtrans ketika pembayaran berhasil
+      const domainSnap = await db.ref(`domains/${domainKey}`).once('value');
+      if (domainSnap.exists()) {
+        const domainData = domainSnap.val();
+        // Hanya block jika sudah AKTIF (bayar berhasil). Status 'ordered' = masih rebutan
+        const isTaken = domainData.status === 'active';
+        return {
+          success: true,
+          data: { 
+            domain, 
+            available: !isTaken,
+            isOrdered: domainData.status === 'ordered' // sedang dipesan tapi belum bayar
+          },
+          message: isTaken ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
+        };
+      }
+      
+      // 2. Fallback: scan orders node (butuh auth, mungkin diblokir rules untuk guest)
+      try {
+        const ordersSnap = await db.ref('orders').orderByChild('domain').equalTo(domainLower).once('value');
+        if (ordersSnap.exists()) {
+          const orders = Object.values(ordersSnap.val());
+          // Hanya block kalau ada order yang SUDAH BERHASIL DIBAYAR
+          const hasPaidOrder = orders.some(o => {
+            const pStatus = (o.paymentStatus || '').toLowerCase();
+            return PAID_STATUSES.includes(pStatus);
+          });
+          return {
+            success: true,
+            data: { domain, available: !hasPaidOrder },
+            message: hasPaidOrder ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
+          };
+        }
+      } catch(rtdbErr) {
+        // permission_denied untuk guest — normal, lanjut anggap tersedia
+        console.info('[API] Orders RTDB check skipped (permission):', rtdbErr.message);
+      }
+      
+      // Tidak ada data → domain tersedia
+      return { success: true, data: { domain, available: true }, message: 'Domain tersedia' };
+    } catch(e) {
+      console.error('[API] checkDomain failed:', e);
+      return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi' };
+    }
   }
 
   static async getDomainPricing(tld) {
@@ -667,7 +883,9 @@ export class APIClient {
       let subsCount = 0;
       
       Object.values(orders).forEach(o => {
-        if (o.status === 'success' || o.status === 'settlement' || o.status === 'active') {
+        // Support both old `status` field and new `paymentStatus` field
+        const pStatus = (o.paymentStatus || o.status || '').toLowerCase();
+        if (pStatus === 'paid' || pStatus === 'settlement' || pStatus === 'capture' || pStatus === 'success' || pStatus === 'active') {
           revenue += (Number(o.total) || 0);
           subsCount++;
         }
@@ -742,7 +960,15 @@ export class APIClient {
       if (!db) return { success: false, message: 'Firebase DB not available' };
       const snap = await db.ref('users').once('value');
       const data = snap.val() || {};
-      return { success: true, data: Object.values(data) };
+      // Inject Firebase key (uid) into each user object in case it's missing
+      const users = Object.entries(data).map(([key, val]) => ({
+        uid: key,
+        id: key,
+        ...val,
+        // Ensure uid is always present (might be stored inside the object too)
+        ...(val.uid ? {} : { uid: key })
+      }));
+      return { success: true, data: users };
     } catch (e) { return { success: false, message: e.message }; }
   }
 

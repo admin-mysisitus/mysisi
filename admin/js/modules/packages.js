@@ -157,7 +157,8 @@ function renderPackages(packages, container) {
   packages.forEach((pkg, index) => {
     // Determine if we should highlight this package
     const isPopular = index === 1; // Highlight the second package visually
-    const inactiveStyle = pkg.active ? '' : 'opacity: 0.6; filter: grayscale(1);';
+    const isActive = pkg.active !== false; // default to active if undefined
+    const inactiveStyle = isActive ? '' : 'opacity: 0.6; filter: grayscale(1);';
     const card = document.createElement('div');
     card.style.background = isPopular ? 'linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(0, 0, 0, 0.2))' : 'rgba(0, 0, 0, 0.2)';
     card.style.border = isPopular ? '1px solid var(--admin-primary)' : '1px solid var(--admin-border)';
@@ -168,31 +169,41 @@ function renderPackages(packages, container) {
     card.style.flexDirection = 'column';
     card.style.cssText += inactiveStyle;
     let popularBadge = isPopular ? `<div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--admin-primary); color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Paling Populer</div>` : '';
-    let inactiveBadge = !pkg.active ? `<div style="position: absolute; top: 10px; right: 10px; background: var(--admin-danger); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">NONAKTIF</div>` : '';
-    let featuresHtml = pkg.features.filter(f => f.trim().length > 0).map(f => `
+    let inactiveBadge = !isActive ? `<div style="position: absolute; top: 10px; right: 10px; background: var(--admin-danger); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">NONAKTIF</div>` : '';
+    let featuresArr = [];
+    if (Array.isArray(pkg.features)) {
+      featuresArr = pkg.features;
+    } else if (typeof pkg.features === 'string' && pkg.features.trim()) {
+      featuresArr = pkg.features.split('\\n');
+    }
+    let featuresHtml = featuresArr.filter(f => f && f.trim().length > 0).map(f => `
       <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
         <i class="fas fa-check-circle" style="color: var(--admin-primary);"></i>
         <span style="color: var(--admin-text-muted);">${f.trim()}</span>
       </li>
     `).join('');
+    const displayPrice = pkg.price != null ? Number(pkg.price).toLocaleString('id-ID') : '0';
+    const displayCycle = pkg.cycle || '1';
+    const pkgId = pkg.id || '';
+    const pkgName = pkg.name || 'Paket Tanpa Nama';
     card.innerHTML = `
       ${popularBadge}
       ${inactiveBadge}
-      <h3 style="margin: 0 0 8px 0; color: var(--admin-text-main); font-size: 1.25rem;">${pkg.name}</h3>
+      <h3 style="margin: 0 0 8px 0; color: var(--admin-text-main); font-size: 1.25rem;">${pkgName}</h3>
       <div style="margin-bottom: 24px;">
-        <span style="font-size: 2rem; font-weight: 700; color: var(--admin-text-main);">Rp ${pkg.price.toLocaleString('id-ID')}</span>
-        <span style="color: var(--admin-text-muted);">/${pkg.cycle} Tahun</span>
+        <span style="font-size: 2rem; font-weight: 700; color: var(--admin-text-main);">Rp ${displayPrice}</span>
+        <span style="color: var(--admin-text-muted);">/${displayCycle} Tahun</span>
       </div>
       
       <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; flex-grow: 1;">
-        ${featuresHtml}
+        ${featuresHtml || '<li style="color: var(--admin-text-muted); font-style: italic;">-</li>'}
       </ul>
       
       <div style="display: flex; gap: 12px; margin-top: auto;">
-        <button class="admin-btn" onclick="window.editPackage('${pkg.id}')" style="flex: 1; background: var(--admin-primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600;">
+        <button class="admin-btn" onclick="window.editPackage('${pkgId}')" style="flex: 1; background: var(--admin-primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600;">
           Edit Paket
         </button>
-        <button class="admin-btn" onclick="window.deletePackage('${pkg.id}')" style="width: 44px; background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); border: none; border-radius: 8px;" title="Nonaktifkan">
+        <button class="admin-btn" onclick="window.deletePackage('${pkgId}')" style="width: 44px; background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); border: none; border-radius: 8px;" title="Nonaktifkan">
           <i class="fas fa-trash"></i>
         </button>
       </div>

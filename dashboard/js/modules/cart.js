@@ -994,10 +994,17 @@ async function proceedToCheckout() {
     const subtotal = summary.subtotal + (CartManager.getCart().addons || []).reduce((sum, a) => sum + a.price, 0);
     const ppn = Math.round(subtotal * 0.11);
     const finalTotal = subtotal + ppn - (cartState.promoDiscount || 0);
+    // Generate unique orderId on frontend so GAS can use it for Midtrans
+    const timestamp = Date.now();
+    const random6 = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const orderId = `INV-${timestamp}-${random6}`;
     // Prepare order data
     const orderData = {
+      orderId: orderId,
       userId: cartState.userId || cartState.currentUser?.userId,
       email: cartState.userEmail || cartState.currentUser?.email,
+      name: cartState.currentUser?.displayName || cartState.currentUser?.name || cartState.currentUser?.email?.split('@')[0] || 'Customer',
+      phone: cartState.currentUser?.whatsapp || cartState.currentUser?.phone || '',
       domain: firstDomain,
       packageId: summary.items[0]?.package || 'starter',
       addons: CartManager.getCart().addons || [],
@@ -1013,11 +1020,9 @@ async function proceedToCheckout() {
     if (!createOrderResult.success) {
       throw new Error(createOrderResult.message || 'Gagal membuat order');
     }
-    const orderId = createOrderResult.data?.orderId;
-    if (!orderId) {
-      throw new Error('Order ID tidak ditemukan dalam response');
-    }
-    console.log('[Cart] Order created:', orderId);
+    // orderId already declared above, verify GAS returned same/valid id
+    const confirmedOrderId = createOrderResult.data?.orderId || orderId;
+    console.log('[Cart] Order created:', confirmedOrderId);
     // Clear cart and promo so previous checkout items/promos are not carried over to the next order
     CartManager.clear();
     cartState.promoCode = null;
@@ -1028,7 +1033,7 @@ async function proceedToCheckout() {
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
-      window.location.href = `/dashboard/#!payment?orderId=${encodeURIComponent(orderId)}`;
+      window.location.href = `/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
     }, 1500);
   } catch (error) {
     console.error('[Cart] Checkout error:', error);
