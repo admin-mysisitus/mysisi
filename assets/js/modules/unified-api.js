@@ -32,11 +32,7 @@ export class APIClient {
       method = 'POST'
     } = options;
 
-    // Use GET for data retrieval if no complex data
-    const getActions = ['getorders', 'getactivepromocodes'];
-    if (getActions.includes(action.toLowerCase())) {
-      method = 'GET';
-    }
+    // DO NOT force GET for GAS, as it requires a doGet function which doesn't exist, causing CORS errors.
     try {
       const response = await this.makeRequest(action, data, method, this.DEFAULT_TIMEOUT);
       // Response bisa dalam berbagai format, fallback jika tidak sesuai expected
@@ -101,10 +97,24 @@ export class APIClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     try {
+      // Get Firebase ID Token if user is logged in
+      const { auth } = await getFirebase();
+      let idToken = '';
+      if (auth && auth.currentUser) {
+        try {
+          idToken = await auth.currentUser.getIdToken(false);
+        } catch (e) {
+          console.warn('[API] Failed to get ID token', e);
+        }
+      }
+
       // Build URLSearchParams for application/x-www-form-urlencoded format
       // as required by Google Apps Script rules to avoid CORS preflight errors.
       const postParams = new URLSearchParams();
       postParams.append('action', action);
+      if (idToken) {
+        postParams.append('idToken', idToken);
+      }
       // Add all data fields
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -126,6 +136,7 @@ export class APIClient {
         // For GET, append as query string
         const params = new URLSearchParams({
           action,
+          ...(idToken ? { idToken } : {}),
           ...data
         });
         url = `${GAS_CONFIG.URL}?${params}`;
@@ -190,17 +201,17 @@ export class APIClient {
       if (!auth) {
         return { success: false, message: 'Firebase Auth tidak tersedia' };
       }
-      
+
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
-      
+
       const actionCodeSettings = {
         url: window.location.origin + '/dashboard/', // Akan memunculkan tombol 'Continue' ke dashboard
         handleCodeInApp: false
       };
-      
+
       await user.sendEmailVerification(actionCodeSettings);
-      
+
       const profile = {
         userId: user.uid,
         email: user.email,
@@ -238,7 +249,7 @@ export class APIClient {
       if (!auth) {
         return { success: false, message: 'Firebase Auth tidak tersedia' };
       }
-      
+
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
       let profile = null;
@@ -313,14 +324,14 @@ export class APIClient {
     try {
       const { auth, db, firebase } = await getFirebase();
       if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
-      
+
       const provider = new firebase.auth.GoogleAuthProvider();
       // Optional: Add custom parameters if needed
       // provider.setCustomParameters({ prompt: 'select_account' });
-      
+
       const userCredential = await auth.signInWithPopup(provider);
       const user = userCredential.user;
-      
+
       const profile = {
         userId: user.uid,
         email: user.email,
@@ -331,7 +342,7 @@ export class APIClient {
         emailVerified: user.emailVerified || true,
         createdAt: new Date().toISOString()
       };
-      
+
       if (db) {
         // Retrieve existing user data to avoid overwriting properties
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
@@ -343,23 +354,23 @@ export class APIClient {
         }
         await db.ref(`users/${user.uid}`).update(profile);
       }
-      
+
       return { success: true, data: profile, message: 'Google sign-in berhasil' };
     } catch (e) {
       console.error('Google popup sign in error', e);
       return { success: false, message: e.message };
     }
   }
-    static async requestPasswordReset(email) {
+  static async requestPasswordReset(email) {
     try {
       const { auth } = await getFirebase();
       if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
-      
+
       const actionCodeSettings = {
         url: window.location.origin + '/auth/',
         handleCodeInApp: false
       };
-      
+
       await auth.sendPasswordResetEmail(email, actionCodeSettings);
       return { success: true, message: 'Link reset password telah dikirim ke email Anda.' };
     } catch (error) {
@@ -373,11 +384,11 @@ export class APIClient {
   }
 
   static async resetPassword(token, password) {
-      return { success: false, message: 'Harap gunakan link resmi dari email.' };
+    return { success: false, message: 'Harap gunakan link resmi dari email.' };
   }
-  
+
   static async verifyEmailToken(token) {
-      return { success: true, message: 'Verifikasi diproses oleh Firebase.' };
+    return { success: true, message: 'Verifikasi diproses oleh Firebase.' };
   }
   /**
    * Reset password with token
@@ -432,11 +443,11 @@ export class APIClient {
     try {
       const { auth, firebase } = await getFirebase();
       if (auth && auth.currentUser) {
-         const user = auth.currentUser;
-         const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
-         await user.reauthenticateWithCredential(credential);
-         await user.updatePassword(newPassword);
-         return { success: true, message: 'Password berhasil diubah' };
+        const user = auth.currentUser;
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
+        await user.reauthenticateWithCredential(credential);
+        await user.updatePassword(newPassword);
+        return { success: true, message: 'Password berhasil diubah' };
       }
     } catch (e) {
       return { success: false, message: 'Password lama salah atau gagal mengubah password.' };
@@ -464,7 +475,7 @@ export class APIClient {
     } else {
       data = userIdOrOrderData;
     }
-    
+
     // Safety net: generate orderId if caller didn't provide one
     if (!data.orderId) {
       const ts = Date.now();
@@ -472,19 +483,19 @@ export class APIClient {
       data.orderId = `INV-${ts}-${rnd}`;
       console.warn('[API] orderId was missing, auto-generated:', data.orderId);
     }
-    
+
     try {
       // 1. Call GAS to Create Order AND Generate Token simultaneously
       const response = await this.call('createOrderWithAuth', data, {
         method: 'POST'
       });
-      
+
       if (response.success && response.data) {
         // GAS returns orderId and snapToken
         const orderId = response.data.orderId;
         const snapToken = response.data.snapToken || '';
         const snapRedirectUrl = response.data.snapRedirectUrl || '';
-        
+
         // 2. Prepare full order for RTDB cache
         const fullOrder = {
           orderId: orderId,
@@ -509,8 +520,8 @@ export class APIClient {
           addons: data.addons || [],
           promoCode: data.promoCode || ''
         };
-        
-        // 3. Save to RTDB — tulis ke orders dan userOrders agar user bisa baca sendiri
+
+        // 3. Save to RTDB â€” tulis ke orders dan userOrders agar user bisa baca sendiri
         try {
           const { db } = await getFirebase();
           if (db) {
@@ -519,7 +530,7 @@ export class APIClient {
               [`userOrders/${fullOrder.userId}/${orderId}`]: fullOrder
             };
             await db.ref().update(writes);
-            
+
             // Mirror domain sebagai 'ordered' (belum aktif, masih bisa rebutan)
             if (data.domain) {
               const domainKey = data.domain.toLowerCase().replace(/\./g, '_');
@@ -531,20 +542,20 @@ export class APIClient {
               }).catch(e => console.warn('[API] Failed to mirror domain', e));
             }
           }
-        } catch(e) {
+        } catch (e) {
           console.warn('[API] Failed to save cache to RTDB', e);
         }
-        
+
         return response;
       } else {
         throw new Error(response.message || 'Gagal membuat pesanan');
       }
-    } catch(e) {
+    } catch (e) {
       console.error('[API] Error in createOrderWithAuth:', e);
       return { success: false, message: e.message || 'Terjadi kesalahan sistem' };
     }
   }
-  
+
   /**
    * Update order in RTDB (only updates specific fields)
    */
@@ -554,7 +565,7 @@ export class APIClient {
       if (db) {
         // Update order utama
         await db.ref(`orders/${orderId}`).update(updateData);
-        
+
         // Juga update userOrders index agar tab pesanan user terupdate
         const orderSnap = await db.ref(`orders/${orderId}`).once('value');
         const order = orderSnap.val();
@@ -564,7 +575,7 @@ export class APIClient {
         }
         return { success: true };
       }
-    } catch(e) {
+    } catch (e) {
       console.warn('[API] Failed to update order in RTDB', e);
     }
     return { success: false };
@@ -576,11 +587,11 @@ export class APIClient {
     try {
       const { db } = await getFirebase();
       if (!db) return { success: false, message: 'Firebase DB not available' };
-      
-      // Primary: baca dari userOrders/{userId} — node yang bisa diakses user sendiri
+
+      // Primary: baca dari userOrders/{userId} â€” node yang bisa diakses user sendiri
       const userOrdersSnap = await db.ref(`userOrders/${userId}`).once('value');
       let ordersArray = [];
-      
+
       if (userOrdersSnap.exists()) {
         const raw = userOrdersSnap.val() || {};
         ordersArray = Object.values(raw);
@@ -596,16 +607,16 @@ export class APIClient {
             ordersArray.forEach(o => {
               if (o.orderId) updates[`userOrders/${userId}/${o.orderId}`] = o;
             });
-            db.ref().update(updates).catch(() => {});
+            db.ref().update(updates).catch(() => { });
           }
-        } catch(fallbackErr) {
+        } catch (fallbackErr) {
           console.info('[API] orders query fallback failed (permission):', fallbackErr.message);
         }
       }
-      
+
       ordersArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return { success: true, data: { orders: ordersArray, count: ordersArray.length }, message: 'Pesanan berhasil diambil' };
-    } catch(e) {
+    } catch (e) {
       console.error('[API] RTDB getUserOrders failed:', e);
       return { success: false, message: e.message };
     }
@@ -615,13 +626,13 @@ export class APIClient {
     try {
       const { db } = await getFirebase();
       if (!db) return { success: false, message: 'Firebase DB not available' };
-      
+
       const snap = await db.ref(`orders/${orderId}`).once('value');
       if (snap.exists()) {
         return { success: true, data: snap.val() };
       }
       return { success: false, message: 'Order tidak ditemukan' };
-    } catch(e) {
+    } catch (e) {
       console.error('[API] RTDB getOrderDetail failed:', e);
       return { success: false, message: e.message };
     }
@@ -631,11 +642,11 @@ export class APIClient {
     try {
       const { db } = await getFirebase();
       if (!db) return { success: false, message: 'Firebase DB not available' };
-      
+
       const snapshot = await db.ref('orders').orderByChild('userId').equalTo(userId).once('value');
       const ordersData = snapshot.val() || {};
       const orders = Object.values(ordersData);
-      
+
       const stats = {
         totalOrders: orders.length,
         ordersByStatus: { pending: 0, processing: 0, completed: 0, cancelled: 0 },
@@ -644,7 +655,7 @@ export class APIClient {
         averageOrderValue: 0,
         lastOrderDate: null
       };
-      
+
       orders.forEach(o => {
         if (o.orderStatus && stats.ordersByStatus[o.orderStatus] !== undefined) {
           stats.ordersByStatus[o.orderStatus]++;
@@ -653,18 +664,18 @@ export class APIClient {
           stats.paymentStatus[o.paymentStatus]++;
         }
         stats.totalSpent += (Number(o.total) || 0);
-        
+
         if (!stats.lastOrderDate || new Date(o.createdAt) > new Date(stats.lastOrderDate)) {
           stats.lastOrderDate = o.createdAt;
         }
       });
-      
+
       if (stats.totalOrders > 0) {
         stats.averageOrderValue = Math.round(stats.totalSpent / stats.totalOrders);
       }
-      
+
       return { success: true, data: stats };
-    } catch(e) {
+    } catch (e) {
       console.error('[API] RTDB getUserOrderStats failed:', e);
       return { success: false, message: e.message };
     }
@@ -672,28 +683,28 @@ export class APIClient {
 
   static async syncOrderStatus(orderId) {
     try {
-      const response = await this.call('checkPaymentStatus', { orderId }, { method: 'GET' });
+      const response = await this.call('checkPaymentStatus', { orderId }, { method: 'POST' });
       if (response && response.success && response.data) {
         const { db } = await getFirebase();
         if (db) {
           const paymentStatus = response.data.paymentStatus || 'pending';
           const orderStatus = response.data.orderStatus || 'processing';
           const updatePayload = { paymentStatus, orderStatus, updatedAt: new Date().toISOString() };
-          
+
           // Update order utama
           await db.ref(`orders/${orderId}`).update(updatePayload);
-          
+
           const PAID = ['paid', 'settlement', 'capture', 'success'];
           const orderSnap = await db.ref(`orders/${orderId}`).once('value');
           const order = orderSnap.val();
-          
+
           if (order) {
             // Sync userOrders index agar tab pesanan user terupdate
             if (order.userId) {
               db.ref(`userOrders/${order.userId}/${orderId}`).update(updatePayload)
                 .catch(e => console.warn('[API] userOrders sync failed:', e));
             }
-            
+
             // Update domain ke 'active' kalau bayar berhasil
             if (PAID.includes(paymentStatus.toLowerCase()) && order.domain) {
               const domainKey = order.domain.toLowerCase().replace(/\./g, '_');
@@ -718,7 +729,7 @@ export class APIClient {
         await db.ref(`orders/${orderId}`).update(updateData);
         return { success: true };
       }
-    } catch(e) {
+    } catch (e) {
       console.warn('[API] Failed to update order in RTDB', e);
     }
     return { success: false };
@@ -734,14 +745,14 @@ export class APIClient {
     try {
       if (!domain) return { success: false, message: 'Domain diperlukan' };
       const { db } = await getFirebase();
-      if (!db) return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi – anggap tersedia' };
-      
+      if (!db) return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi â€“ anggap tersedia' };
+
       const domainLower = domain.toLowerCase();
       const domainKey = domainLower.replace(/\./g, '_');
-      
+
       // Status pembayaran yang dianggap "sudah berhasil" (domain resmi milik orang)
       const PAID_STATUSES = ['paid', 'settlement', 'capture', 'success', 'active'];
-      
+
       // 1. Fast path: check `domains` mirror node (public readable)
       // Node ini di-update oleh webhook Midtrans ketika pembayaran berhasil
       const domainSnap = await db.ref(`domains/${domainKey}`).once('value');
@@ -751,15 +762,15 @@ export class APIClient {
         const isTaken = domainData.status === 'active';
         return {
           success: true,
-          data: { 
-            domain, 
+          data: {
+            domain,
             available: !isTaken,
             isOrdered: domainData.status === 'ordered' // sedang dipesan tapi belum bayar
           },
           message: isTaken ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
         };
       }
-      
+
       // 2. Fallback: scan orders node (butuh auth, mungkin diblokir rules untuk guest)
       try {
         const ordersSnap = await db.ref('orders').orderByChild('domain').equalTo(domainLower).once('value');
@@ -776,14 +787,14 @@ export class APIClient {
             message: hasPaidOrder ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
           };
         }
-      } catch(rtdbErr) {
-        // permission_denied untuk guest — normal, lanjut anggap tersedia
+      } catch (rtdbErr) {
+        // permission_denied untuk guest â€” normal, lanjut anggap tersedia
         console.info('[API] Orders RTDB check skipped (permission):', rtdbErr.message);
       }
-      
-      // Tidak ada data → domain tersedia
+
+      // Tidak ada data â†’ domain tersedia
       return { success: true, data: { domain, available: true }, message: 'Domain tersedia' };
-    } catch(e) {
+    } catch (e) {
       console.error('[API] checkDomain failed:', e);
       return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi' };
     }
@@ -811,12 +822,12 @@ export class APIClient {
         'go.id': { price: 250000, period: '1 Tahun' },
         'net.id': { price: 130000, period: '1 Tahun' }
       };
-      
+
       const data = fallbackPricing[tld];
       if (!data) return { success: false, message: 'TLD tidak didukung' };
-      
+
       return { success: true, data: { tld, price: data.price, period: data.period } };
-    } catch(e) {
+    } catch (e) {
       return { success: false, message: e.message };
     }
   }
@@ -826,20 +837,20 @@ export class APIClient {
     try {
       const { db } = await getFirebase();
       if (!db) return { success: false, message: 'Firebase DB not available' };
-      
+
       const snap = await db.ref(`promos/${code.toUpperCase()}`).once('value');
       if (!snap.exists()) return { success: false, message: 'Kode promo tidak ditemukan' };
-      
+
       const promo = snap.val();
       if (!promo.isActive) return { success: false, message: 'Kode promo sudah tidak aktif' };
-      
+
       const now = new Date();
       if (promo.validFrom && new Date(promo.validFrom) > now) return { success: false, message: 'Kode promo belum aktif' };
       if (promo.validUntil && new Date(promo.validUntil) < now) return { success: false, message: 'Kode promo sudah kedaluwarsa' };
       if (promo.maxUses > 0 && promo.currentUses >= promo.maxUses) return { success: false, message: 'Kuota promo sudah habis' };
-      
+
       return { success: true, data: promo, message: 'Promo berhasil diterapkan' };
-    } catch(e) {
+    } catch (e) {
       return { success: false, message: 'Gagal memvalidasi promo: ' + e.message };
     }
   }
@@ -848,10 +859,10 @@ export class APIClient {
     try {
       const { db } = await getFirebase();
       if (!db) return { success: false, message: 'Firebase DB not available' };
-      
+
       const snap = await db.ref('promos').orderByChild('isActive').equalTo(true).once('value');
       if (!snap.exists()) return { success: true, data: [] };
-      
+
       const promos = Object.values(snap.val());
       const now = new Date();
       const activePromos = promos.filter(p => {
@@ -861,7 +872,7 @@ export class APIClient {
         return true;
       });
       return { success: true, data: activePromos };
-    } catch(e) {
+    } catch (e) {
       return { success: false, message: e.message };
     }
   }
@@ -873,15 +884,15 @@ export class APIClient {
       const usersSnap = await db.ref('users').once('value');
       const ordersSnap = await db.ref('orders').once('value');
       const ticketsSnap = await db.ref('tickets').once('value');
-      
+
       const users = usersSnap.val() || {};
       const orders = ordersSnap.val() || {};
       const tickets = ticketsSnap.val() || {};
-      
+
       const usersCount = Object.keys(users).length;
       let revenue = 0;
       let subsCount = 0;
-      
+
       Object.values(orders).forEach(o => {
         // Support both old `status` field and new `paymentStatus` field
         const pStatus = (o.paymentStatus || o.status || '').toLowerCase();
@@ -890,7 +901,7 @@ export class APIClient {
           subsCount++;
         }
       });
-      
+
       const ticketsCount = Object.keys(tickets).length;
       const labels = [];
       const dataPoints = [];
@@ -900,7 +911,7 @@ export class APIClient {
         labels.push(d.toLocaleDateString('id-ID', { weekday: 'long' }));
         dataPoints.push(0);
       }
-      
+
       const recentActivities = [];
       Object.values(users).forEach(u => {
         if (u.createdAt) {
@@ -909,37 +920,37 @@ export class APIClient {
             const diffDays = Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
             if (diffDays >= 0 && diffDays <= 6) dataPoints[6 - diffDays]++;
             recentActivities.push({
-               type: 'user', title: `User baru mendaftar: ${u.displayName || u.email}`,
-               timeStr: u.createdAt, timestamp: date.getTime()
+              type: 'user', title: `User baru mendaftar: ${u.displayName || u.email}`,
+              timeStr: u.createdAt, timestamp: date.getTime()
             });
-          } catch(e) {}
+          } catch (e) { }
         }
       });
-      
+
       Object.values(orders).forEach(o => {
         if (o.createdAt) {
           try {
-             recentActivities.push({
-                 type: 'transaction', title: `Order baru: ${o.orderId || 'Order'}`,
-                 timeStr: o.createdAt, timestamp: new Date(o.createdAt).getTime()
-             });
-          } catch(e) {}
+            recentActivities.push({
+              type: 'transaction', title: `Order baru: ${o.orderId || 'Order'}`,
+              timeStr: o.createdAt, timestamp: new Date(o.createdAt).getTime()
+            });
+          } catch (e) { }
         }
       });
-      
+
       Object.values(tickets).forEach(t => {
-         if (t.createdAt) {
-           try {
-             recentActivities.push({
-                 type: 'ticket', title: `Tiket baru: ${t.subject || 'Support'}`,
-                 timeStr: t.createdAt, timestamp: new Date(t.createdAt).getTime()
-             });
-           } catch(e) {}
-         }
+        if (t.createdAt) {
+          try {
+            recentActivities.push({
+              type: 'ticket', title: `Tiket baru: ${t.subject || 'Support'}`,
+              timeStr: t.createdAt, timestamp: new Date(t.createdAt).getTime()
+            });
+          } catch (e) { }
+        }
       });
-      
+
       recentActivities.sort((a, b) => b.timestamp - a.timestamp);
-      
+
       return {
         success: true,
         data: {
@@ -978,10 +989,10 @@ export class APIClient {
       if (!db) return { success: false, message: 'Firebase DB not available' };
       const id = userData.uid || userData.id;
       if (id) {
-         await db.ref(`users/${id}`).update(userData);
+        await db.ref(`users/${id}`).update(userData);
       } else {
-         const newRef = db.ref('users').push();
-         await newRef.set({ ...userData, uid: newRef.key, createdAt: new Date().toISOString() });
+        const newRef = db.ref('users').push();
+        await newRef.set({ ...userData, uid: newRef.key, createdAt: new Date().toISOString() });
       }
       return { success: true, message: 'User berhasil disimpan', data: userData };
     } catch (e) { return { success: false, message: e.message }; }
@@ -1067,8 +1078,8 @@ export class APIClient {
       return { success: true, data: Object.values(DOMAIN_PACKAGES) };
     } catch (e) {
       try {
-         const { DOMAIN_PACKAGES } = await import('../config/api.config.js');
-         return { success: true, data: Object.values(DOMAIN_PACKAGES) };
+        const { DOMAIN_PACKAGES } = await import('../config/api.config.js');
+        return { success: true, data: Object.values(DOMAIN_PACKAGES) };
       } catch (err) { return { success: false, message: e.message }; }
     }
   }
