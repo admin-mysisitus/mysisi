@@ -998,9 +998,35 @@ async function proceedToCheckout() {
     const timestamp = Date.now();
     const random6 = Math.random().toString(36).substring(2, 8).toUpperCase();
     const orderId = `INV-${timestamp}-${random6}`;
+    let idToken = '';
+    try {
+      // Get auth instance properly instead of relying on window.firebaseAuth
+      const { getFirebase } = await import('/assets/js/modules/firebase-core.js');
+      const { auth } = await getFirebase();
+      
+      if (auth) {
+        const fbUser = await new Promise(resolve => {
+          const unsubscribe = auth.onAuthStateChanged(user => {
+            unsubscribe();
+            resolve(user);
+          });
+        });
+        
+        if (!fbUser) {
+          console.error('[Cart] fbUser is null. Firebase Auth state is lost.');
+          window.location.href = '/auth/';
+          return;
+        }
+        idToken = await fbUser.getIdToken(true);
+      }
+    } catch (e) {
+      console.warn('[Cart] Failed to get fresh ID token:', e);
+    }
+
     // Prepare order data
     const orderData = {
       orderId: orderId,
+      idToken: idToken,
       userId: cartState.userId || cartState.currentUser?.userId,
       email: cartState.userEmail || cartState.currentUser?.email,
       name: cartState.currentUser?.displayName || cartState.currentUser?.name || cartState.currentUser?.email?.split('@')[0] || 'Customer',

@@ -104,23 +104,47 @@ class DashboardApp {
         requiresAuth: true,
         loadModule: () => import('./modules/support.js')
       },
+      '/dashboard/domain-saya': {
+        page: 'domains',
+        title: 'Domain Saya',
+        requiresAuth: true,
+        loadModule: () => import('./modules/domains.js?v=' + Date.now())
+      },
+      '/dashboard/pesanan': {
+        page: 'orders',
+        title: 'Pesanan',
+        requiresAuth: true,
+        loadModule: () => import('./modules/orders.js?v=' + Date.now())
+      },
+      '/dashboard/pengaturan': {
+        page: 'settings',
+        title: 'Pengaturan Akun',
+        requiresAuth: true,
+        loadModule: () => import('./modules/settings.js?v=' + Date.now())
+      },
+      '/dashboard/checkout': {
+        page: 'checkout',
+        title: 'Selesaikan Pesanan',
+        requiresAuth: true,
+        loadModule: () => import('./modules/cart.js?v=' + Date.now())
+      },
       '/dashboard/cart': {
         page: 'cart',
         title: 'Keranjang Belanja',
         requiresAuth: true,
-        loadModule: () => import('./modules/cart.js')
+        loadModule: () => import('./modules/cart.js?v=' + Date.now())
       },
       '/dashboard/keranjang': {
         page: 'cart',
         title: 'Keranjang Saya',
         requiresAuth: true,
-        loadModule: () => import('./modules/cart.js')
+        loadModule: () => import('./modules/cart.js?v=' + Date.now())
       },
       '/dashboard/keranjang-saya': {
         page: 'cart',
         title: 'Keranjang Saya',
         requiresAuth: true,
-        loadModule: () => import('./modules/cart.js')
+        loadModule: () => import('./modules/cart.js?v=' + Date.now())
       }
     };
   }

@@ -496,55 +496,9 @@ export class APIClient {
         const snapToken = response.data.snapToken || '';
         const snapRedirectUrl = response.data.snapRedirectUrl || '';
 
-        // 2. Prepare full order for RTDB cache
-        const fullOrder = {
-          orderId: orderId,
-          userId: data.userId || 'anonymous',
-          email: data.email || '',
-          phone: data.phone || '',
-          name: data.name || '',
-          domain: data.domain || '',
-          packageId: data.packageId || '',
-          total: data.total || 0,
-          orderStatus: 'processing',
-          paymentStatus: 'pending',
-          snapToken: snapToken,
-          snapRedirectUrl: snapRedirectUrl,
-          transactionId: '',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          paymentMethod: '',
-          subtotal: data.subtotal || 0,
-          ppn: data.ppn || 0,
-          discount: data.discount || 0,
-          addons: data.addons || [],
-          promoCode: data.promoCode || ''
-        };
+        // GAS handles the RTDB writes for initial order via createOrderWithAuth endpoint.
+        // We simply return the response to the caller.
 
-        // 3. Save to RTDB â€” tulis ke orders dan userOrders agar user bisa baca sendiri
-        try {
-          const { db } = await getFirebase();
-          if (db) {
-            const writes = {
-              [`orders/${orderId}`]: fullOrder,
-              [`userOrders/${fullOrder.userId}/${orderId}`]: fullOrder
-            };
-            await db.ref().update(writes);
-
-            // Mirror domain sebagai 'ordered' (belum aktif, masih bisa rebutan)
-            if (data.domain) {
-              const domainKey = data.domain.toLowerCase().replace(/\./g, '_');
-              db.ref(`domains/${domainKey}`).set({
-                domain: data.domain.toLowerCase(),
-                status: 'ordered',
-                userId: data.userId || 'anonymous',
-                updatedAt: new Date().toISOString()
-              }).catch(e => console.warn('[API] Failed to mirror domain', e));
-            }
-          }
-        } catch (e) {
-          console.warn('[API] Failed to save cache to RTDB', e);
-        }
 
         return response;
       } else {
@@ -556,30 +510,7 @@ export class APIClient {
     }
   }
 
-  /**
-   * Update order in RTDB (only updates specific fields)
-   */
-  static async updateOrderRTDB(orderId, updateData) {
-    try {
-      const { db } = await getFirebase();
-      if (db) {
-        // Update order utama
-        await db.ref(`orders/${orderId}`).update(updateData);
 
-        // Juga update userOrders index agar tab pesanan user terupdate
-        const orderSnap = await db.ref(`orders/${orderId}`).once('value');
-        const order = orderSnap.val();
-        if (order && order.userId) {
-          db.ref(`userOrders/${order.userId}/${orderId}`).update(updateData)
-            .catch(e => console.warn('[API] userOrders update failed:', e));
-        }
-        return { success: true };
-      }
-    } catch (e) {
-      console.warn('[API] Failed to update order in RTDB', e);
-    }
-    return { success: false };
-  }
   /**
    * Get user's orders
    */
@@ -684,56 +615,15 @@ export class APIClient {
   static async syncOrderStatus(orderId) {
     try {
       const response = await this.call('checkPaymentStatus', { orderId }, { method: 'POST' });
-      if (response && response.success && response.data) {
-        const { db } = await getFirebase();
-        if (db) {
-          const paymentStatus = response.data.paymentStatus || 'pending';
-          const orderStatus = response.data.orderStatus || 'processing';
-          const updatePayload = { paymentStatus, orderStatus, updatedAt: new Date().toISOString() };
-
-          // Update order utama
-          await db.ref(`orders/${orderId}`).update(updatePayload);
-
-          const PAID = ['paid', 'settlement', 'capture', 'success'];
-          const orderSnap = await db.ref(`orders/${orderId}`).once('value');
-          const order = orderSnap.val();
-
-          if (order) {
-            // Sync userOrders index agar tab pesanan user terupdate
-            if (order.userId) {
-              db.ref(`userOrders/${order.userId}/${orderId}`).update(updatePayload)
-                .catch(e => console.warn('[API] userOrders sync failed:', e));
-            }
-
-            // Update domain ke 'active' kalau bayar berhasil
-            if (PAID.includes(paymentStatus.toLowerCase()) && order.domain) {
-              const domainKey = order.domain.toLowerCase().replace(/\./g, '_');
-              db.ref(`domains/${domainKey}`).update({
-                status: 'active',
-                paidAt: new Date().toISOString()
-              }).catch(e => console.warn('[API] Failed to update domain status:', e));
-            }
-          }
-        }
-      }
+      // Frontend simply queries GAS and returns response. 
+      // RTDB sync should only be handled by GAS webhook or GAS endpoint, not frontend.
       return response;
     } catch (e) {
       return { success: false, message: e.message };
     }
   }
 
-  static async updateOrderStatus(orderId, updateData) {
-    try {
-      const { db } = await getFirebase();
-      if (db) {
-        await db.ref(`orders/${orderId}`).update(updateData);
-        return { success: true };
-      }
-    } catch (e) {
-      console.warn('[API] Failed to update order in RTDB', e);
-    }
-    return { success: false };
-  }
+
 
   static generateMidtransToken(orderId, email, phone, name, domain, packageId, total) {
     return this.call('generateMidtransToken', {
@@ -771,26 +661,6 @@ export class APIClient {
         };
       }
 
-      // 2. Fallback: scan orders node (butuh auth, mungkin diblokir rules untuk guest)
-      try {
-        const ordersSnap = await db.ref('orders').orderByChild('domain').equalTo(domainLower).once('value');
-        if (ordersSnap.exists()) {
-          const orders = Object.values(ordersSnap.val());
-          // Hanya block kalau ada order yang SUDAH BERHASIL DIBAYAR
-          const hasPaidOrder = orders.some(o => {
-            const pStatus = (o.paymentStatus || '').toLowerCase();
-            return PAID_STATUSES.includes(pStatus);
-          });
-          return {
-            success: true,
-            data: { domain, available: !hasPaidOrder },
-            message: hasPaidOrder ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
-          };
-        }
-      } catch (rtdbErr) {
-        // permission_denied untuk guest â€” normal, lanjut anggap tersedia
-        console.info('[API] Orders RTDB check skipped (permission):', rtdbErr.message);
-      }
 
       // Tidak ada data â†’ domain tersedia
       return { success: true, data: { domain, available: true }, message: 'Domain tersedia' };

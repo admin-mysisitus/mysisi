@@ -116,6 +116,37 @@ function setupEventListeners() {
       }
     }
   };
+
+  const searchInput = document.getElementById('search-users');
+  const filterSelect = document.getElementById('filter-user-status');
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (filterSelect) filterSelect.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+  const tbody = document.getElementById('users-table-body');
+  if (!tbody) return;
+  
+  const searchVal = (document.getElementById('search-users')?.value || '').toLowerCase();
+  const filterVal = document.getElementById('filter-user-status')?.value || 'all';
+  
+  let filteredUsers = currentUsers;
+  
+  if (searchVal) {
+    filteredUsers = filteredUsers.filter(u => 
+      (u.name && u.name.toLowerCase().includes(searchVal)) || 
+      (u.email && u.email.toLowerCase().includes(searchVal))
+    );
+  }
+  
+  if (filterVal !== 'all') {
+    filteredUsers = filteredUsers.filter(u => {
+      const status = (u.status || 'active').toLowerCase();
+      return status === filterVal;
+    });
+  }
+  
+  renderTable(filteredUsers, tbody);
 }
 async function loadUsers() {
   const tbody = document.getElementById('users-table-body');
@@ -136,7 +167,8 @@ async function loadUsers() {
       if (response.data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Belum ada user.</td></tr>';
       } else {
-        renderTable(response.data, tbody);
+        currentUsers = response.data;
+        applyFilters();
       }
     } else {
       throw new Error(response.message || 'Gagal memuat user');
@@ -149,7 +181,10 @@ async function loadUsers() {
 
 function renderTable(users, tbody) {
   tbody.innerHTML = '';
-  currentUsers = users;
+  if (users.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Tidak ada user yang sesuai.</td></tr>';
+    return;
+  }
   users.forEach(user => {
     const name = user.name || user.displayName || 'Unknown';
     const email = user.email || '-';

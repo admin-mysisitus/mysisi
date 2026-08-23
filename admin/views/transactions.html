@@ -13,15 +13,15 @@
 <div class="admin-layout-grid-3" style="margin-bottom: 24px;">
   <div class="admin-card" style="padding: 16px 24px;">
     <p style="color: var(--admin-text-muted); margin: 0 0 4px 0; font-size: 0.9rem;">Total Pendapatan</p>
-    <h3 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-text-main);">Rp 45.500.000</h3>
+    <h3 id="stat-revenue" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-text-main);">Rp -</h3>
   </div>
   <div class="admin-card" style="padding: 16px 24px;">
     <p style="color: var(--admin-text-muted); margin: 0 0 4px 0; font-size: 0.9rem;">Menunggu Pembayaran</p>
-    <h3 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-warning);">Rp 3.250.000</h3>
+    <h3 id="stat-pending" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-warning);">Rp -</h3>
   </div>
   <div class="admin-card" style="padding: 16px 24px;">
     <p style="color: var(--admin-text-muted); margin: 0 0 4px 0; font-size: 0.9rem;">Transaksi Sukses (Bulan ini)</p>
-    <h3 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-success);">142</h3>
+    <h3 id="stat-success" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-success);">-</h3>
   </div>
 </div>
 <div class="admin-card">
@@ -31,7 +31,7 @@
       <input type="text" id="search-tx" class="admin-input-control" placeholder="Cari No Invoice / Email...">
     </div>
     <div class="admin-filter-group">
-      <select class="admin-input-control">
+      <select id="filter-status" class="admin-input-control">
         <option value="all">Semua Status</option>
         <option value="paid">Lunas (Paid)</option>
         <option value="unpaid">Menunggu (Unpaid)</option>

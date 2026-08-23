@@ -16,6 +16,7 @@ import {
   showSuccess,
   showError
 } from './unified-utils.js';
+import { DOMAIN_PACKAGES } from '../config/api.config.js';
 // ============================================================================
 // CART MANAGER
 // ============================================================================
@@ -331,7 +332,7 @@ export class WishlistManager {
    * @param {string} reason - Why user wants this domain
    * @param {string} priority - low, medium, high
    */
-  static add(domain, reason = '', priority = 'medium') {
+  static add(domain, reason = '', priority = 'medium', options = {}) {
     if (!domain) {
       throw new Error('Domain diperlukan');
     }
@@ -346,7 +347,8 @@ export class WishlistManager {
       reason: reason || 'Domain impian',
       priority: priority,
       addedAt: Date.now(),
-      id: this._generateId()
+      id: this._generateId(),
+      ...options
     });
     this.saveWishlist(wishlist);
     showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti`);
@@ -371,9 +373,15 @@ export class WishlistManager {
       throw new Error('Item tidak ditemukan di wishlist');
     }
     // Add to cart
-    const tld = domain.split('.').pop();
+    const tld = item.tld || domain.split('.').pop();
     CartManager.add(domain, tld, {
-      priority: item.priority
+      priority: item.priority,
+      price: item.price || 0,
+      domainPrice: item.domainPrice || item.price || 0,
+      renewalPrice: item.renewalPrice || item.price || 0,
+      basePrice: item.basePrice || item.price || 0,
+      package: 'starter',
+      packagePrice: DOMAIN_PACKAGES.starter.price
     });
     // Remove from wishlist
     this.remove(domain);

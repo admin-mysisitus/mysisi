@@ -106,7 +106,20 @@ async function loadOrderData(orderId) {
     // Verify payment was successful
     if (invoiceData.paymentStatus !== 'paid' && invoiceData.orderStatus !== 'completed') {
       console.warn('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
-      // Allow viewing invoice anyway (might be in processing)
+      // Proactively sync order status to catch late webhook or slow Midtrans updates
+      try {
+        const syncResult = await APIClient.syncOrderStatus(orderId);
+        if (syncResult.success && syncResult.data && syncResult.data.paymentStatus === 'paid') {
+           console.log('[Invoice] Late payment status updated to paid via sync!');
+           // Sync returned paid! Re-fetch order data
+           const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
+           if (newResult.success && (newResult.data || newResult.order)) {
+              invoiceData = newResult.data || newResult.order;
+           }
+        }
+      } catch (e) { 
+        console.warn('Failed to sync', e); 
+      }
     }
   } catch (error) {
     console.error('Error loading order data:', error);

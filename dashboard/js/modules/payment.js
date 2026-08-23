@@ -151,11 +151,7 @@ async function generateMidtransToken(orderData) {
       amount: orderData.total
     };
     
-    // Save token to RTDB so we don't have to fetch it again
-    await APIClient.updateOrderRTDB(orderData.orderId, {
-      snapToken: result.data.snapToken,
-      snapRedirectUrl: result.data.snapRedirectUrl || ''
-    });
+    // Token already saved to RTDB by GAS createOrderWithAuth
   } catch (error) {
     console.error('Error generating Midtrans token:', error);
     // Show error but don't crash
@@ -216,30 +212,16 @@ function openMidtransPayment() {
 
 async function handlePaymentSuccess(result) {
   const orderId = currentOrder?.orderId;
-  showSuccess('✓ Pembayaran Berhasil!', 'Memperbarui status pesanan...');
+  showSuccess('✓ Pembayaran Berhasil!', 'Sistem sedang memverifikasi pembayaran Anda...');
   
-  try {
-    // Langsung update RTDB tanpa menunggu GAS — lebih cepat untuk user
-    await APIClient.updateOrderRTDB(orderId, {
-      paymentStatus: 'paid',
-      orderStatus: 'completed',
-      transactionId: result?.transaction_id || result?.order_id || '',
-      paymentMethod: result?.payment_type || '',
-      paidAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
-    
-    // Sync ke GAS di background (untuk invoice Sheets + email)
-    APIClient.syncOrderStatus(orderId).catch(e => console.warn('[Payment] Background sync error:', e));
-  } catch(e) {
-    console.warn('[Payment] Immediate RTDB update failed, falling back to sync:', e);
-    APIClient.syncOrderStatus(orderId).catch(console.error);
-  }
+  // Biarkan Webhook (Backend) yang meng-update RTDB. Frontend tidak berwewenang.
+  // Panggil sync (yang akan mentrigger cek di GAS secara pasif) tanpa update RTDB di Frontend.
+  APIClient.syncOrderStatus(orderId).catch(console.error);
   
-  // Redirect ke invoice setelah 1.5 detik (lebih cepat dari sebelumnya)
+  // Redirect ke invoice setelah 2 detik untuk memberi waktu webhook masuk
   setTimeout(() => {
-    window.location.href = `/dashboard/#!invoice?orderId=${encodeURIComponent(orderId)}`;
-  }, 1500);
+    window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
+  }, 2000);
 }
 
 

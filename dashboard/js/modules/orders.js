@@ -29,6 +29,16 @@ export async function render(user) {
     // Load orders
     const result = await APIClient.getUserOrders(user.userId);
     const orders = result.data?.orders || result.orders || [];
+
+    // Update stats
+    const statTotal = document.getElementById('stat-total');
+    const statProcessing = document.getElementById('stat-processing');
+    const statCompleted = document.getElementById('stat-completed');
+    
+    if (statTotal) statTotal.innerText = orders.length;
+    if (statProcessing) statProcessing.innerText = orders.filter(o => o.paymentStatus === 'pending' || o.paymentStatus === 'tertunda').length;
+    if (statCompleted) statCompleted.innerText = orders.filter(o => o.paymentStatus === 'paid' || o.paymentStatus === 'settlement' || o.paymentStatus === 'selesai' || o.paymentStatus === 'success').length;
+
     // Render orders table
     if (tableBody) {
       if (orders.length === 0) {

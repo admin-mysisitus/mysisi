@@ -120,6 +120,39 @@ function setupEventListeners() {
       }
     }
   };
+
+  const searchInput = document.getElementById('search-promos');
+  const filterSelect = document.getElementById('filter-promo-status');
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (filterSelect) filterSelect.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+  const tbody = document.getElementById('promos-table-body');
+  if (!tbody) return;
+  
+  const searchVal = (document.getElementById('search-promos')?.value || '').toLowerCase();
+  const filterVal = document.getElementById('filter-promo-status')?.value || 'all';
+  
+  let filteredPromos = currentPromos;
+  
+  if (searchVal) {
+    filteredPromos = filteredPromos.filter(p => 
+      (p.code && p.code.toLowerCase().includes(searchVal)) || 
+      (p.type && p.type.toLowerCase().includes(searchVal))
+    );
+  }
+  
+  if (filterVal !== 'all') {
+    filteredPromos = filteredPromos.filter(p => {
+      const active = p.active;
+      if (filterVal === 'active') return active;
+      if (filterVal === 'inactive' || filterVal === 'expired') return !active;
+      return true;
+    });
+  }
+  
+  renderPromos(filteredPromos, tbody);
 }
 async function loadPromos() {
   const tbody = document.getElementById('promos-table-body');
@@ -140,7 +173,8 @@ async function loadPromos() {
       if (promos.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Belum ada kode promo.</td></tr>';
       } else {
-        renderPromos(promos, tbody);
+        currentPromos = promos;
+        applyFilters();
       }
     } else {
       throw new Error(response.message);
@@ -153,7 +187,10 @@ async function loadPromos() {
 
 function renderPromos(promos, tbody) {
   tbody.innerHTML = '';
-  currentPromos = promos;
+  if (promos.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Tidak ada kode promo yang sesuai.</td></tr>';
+    return;
+  }
   promos.forEach(p => {
     let valStr = p.type === 'percentage' ? `${p.value}%` : `Rp ${p.value.toLocaleString('id-ID')}`;
     let usageStr = p.limit === -1 || p.limit === undefined || p.limit === null || p.limit === '' ? `${p.usage || 0} / ∞` : `${p.usage || 0} / ${p.limit}`;

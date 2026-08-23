@@ -113,6 +113,74 @@ function setupEventListeners() {
       }
     }
   };
+
+  const searchInput = document.getElementById('search-tx');
+  const filterSelect = document.getElementById('filter-status');
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (filterSelect) filterSelect.addEventListener('change', applyFilters);
+}
+
+function applyFilters() {
+  const tbody = document.getElementById('tx-table-body');
+  if (!tbody) return;
+  
+  const searchVal = (document.getElementById('search-tx')?.value || '').toLowerCase();
+  const filterVal = document.getElementById('filter-status')?.value || 'all';
+  
+  let filteredTx = currentTx;
+  
+  if (searchVal) {
+    filteredTx = filteredTx.filter(tx => 
+      (tx.inv && tx.inv.toLowerCase().includes(searchVal)) || 
+      (tx.email && tx.email.toLowerCase().includes(searchVal)) ||
+      (tx.name && tx.name.toLowerCase().includes(searchVal))
+    );
+  }
+  
+  if (filterVal !== 'all') {
+    filteredTx = filteredTx.filter(tx => {
+      const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
+      if (filterVal === 'paid') return status === 'paid' || status === 'settlement' || status === 'capture' || status === 'selesai' || status === 'success';
+      if (filterVal === 'unpaid') return status === 'unpaid' || status === 'pending' || status === 'tertunda';
+      if (filterVal === 'failed') return status === 'failed' || status === 'expire' || status === 'cancel' || status === 'deny';
+      return true;
+    });
+  }
+  
+  updateStats(currentTx); // Stats usually show based on ALL data, or filtered? Usually ALL data.
+  renderTxTable(filteredTx, tbody);
+}
+
+function updateStats(allTx) {
+  let revenue = 0;
+  let pendingAmount = 0;
+  let successCount = 0;
+  
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  allTx.forEach(tx => {
+    const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
+    const total = parseInt(tx.total || 0);
+    const date = new Date(tx.date || tx.createdAt || new Date());
+    
+    if (status === 'paid' || status === 'settlement' || status === 'capture' || status === 'selesai' || status === 'success') {
+      revenue += total;
+      if (date.getMonth() === currentMonth && date.getFullYear() === currentYear) {
+        successCount++;
+      }
+    } else if (status === 'unpaid' || status === 'pending' || status === 'tertunda') {
+      pendingAmount += total;
+    }
+  });
+
+  const statRevenue = document.getElementById('stat-revenue');
+  const statPending = document.getElementById('stat-pending');
+  const statSuccess = document.getElementById('stat-success');
+
+  if (statRevenue) statRevenue.textContent = `Rp ${revenue.toLocaleString('id-ID')}`;
+  if (statPending) statPending.textContent = `Rp ${pendingAmount.toLocaleString('id-ID')}`;
+  if (statSuccess) statSuccess.textContent = successCount;
 }
 async function loadTransactions() {
   const tbody = document.getElementById('tx-table-body');
@@ -131,8 +199,10 @@ async function loadTransactions() {
     if (response.success && response.data) {
       if (response.data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Belum ada transaksi.</td></tr>';
+        updateStats([]);
       } else {
-        renderTxTable(response.data, tbody);
+        currentTx = response.data;
+        applyFilters();
       }
     } else {
       throw new Error(response.message || 'Gagal memuat transaksi');
@@ -145,7 +215,10 @@ async function loadTransactions() {
 
 function renderTxTable(mockTx, tbody) {
   tbody.innerHTML = '';
-  currentTx = mockTx;
+  if (mockTx.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Tidak ada transaksi yang sesuai.</td></tr>';
+    return;
+  }
   mockTx.forEach(tx => {
     // Map Firebase properties to expected table properties
     const inv = tx.inv || tx.orderId || '-';

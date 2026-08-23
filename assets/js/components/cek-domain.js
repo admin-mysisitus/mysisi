@@ -524,7 +524,7 @@
             <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
               Amankan
             </button>
-            <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" title="Tambah ke Wishlist">
+            <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" title="Tambah ke Wishlist">
               <i class="far fa-heart"></i>
             </button>
           </div>
@@ -810,6 +810,8 @@
       e.preventDefault();
       const btn = e.target.closest('.cek-domain-wishlist-btn');
       const domain = btn.dataset.domain;
+      const tld = btn.dataset.tld;
+      const price = parseInt(btn.dataset.price) || 0;
       const heartIcon = btn.querySelector('i');
       try {
         if (WishlistManager.isInWishlist(domain)) {
@@ -820,7 +822,13 @@
           showSuccess('❤️ Dihapus', `${domain} dihapus dari wishlist`);
         } else {
           // Add to wishlist
-          WishlistManager.add(domain, 'Domain impian', 'medium');
+          WishlistManager.add(domain, 'Domain impian', 'medium', {
+            tld: tld,
+            price: price,
+            domainPrice: price,
+            renewalPrice: price,
+            basePrice: price
+          });
           heartIcon.className = 'fas fa-heart';
           btn.style.color = '#e74c3c';
         }
