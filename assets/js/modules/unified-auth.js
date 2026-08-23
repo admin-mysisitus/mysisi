@@ -42,15 +42,44 @@ export class AuthManager {
    * - Setup session timeout
    * - Setup storage listener
    */
-  static init() {
-    // Load saved session
+  static async init() {
     this.loadSession();
-    // Setup session timeout
-    this.setupSessionTimeout();
-    // Setup storage listener for multi-tab sync
+
+    try {
+      const { auth, db } = await getFirebase();
+      if (auth) {
+        auth.onAuthStateChanged(async (firebaseUser) => {
+          if (firebaseUser) {
+            let profile = null;
+            if (db) {
+              try {
+                const snap = await db.ref(`users/${firebaseUser.uid}`).once('value');
+                profile = snap.val();
+              } catch (e) {
+                console.warn('[AuthManager] Failed to fetch user profile:', e);
+              }
+            }
+            const userObj = profile || {
+              userId: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+              emailVerified: firebaseUser.emailVerified
+            };
+            // Ensure state updates without causing infinite loop
+            if (JSON.stringify(this.state.user) !== JSON.stringify(userObj)) {
+              this.saveSession(userObj);
+            }
+          } else {
+            if (this.state.isLoggedIn) {
+              this.clearSession();
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('[AuthManager] Error initializing Firebase Auth:', error);
+    }
     this.setupStorageListener();
-    // Setup activity tracker
-    this.setupActivityTracker();
   }
   /**
    * Load session from storage
@@ -74,20 +103,12 @@ export class AuthManager {
         this.clearSession();
         return;
       }
-      // Check expiration
-      if (data.expiresAt && Date.now() > data.expiresAt) {
-        console.warn('[AuthManager] Session expired');
-        this.clearSession();
-        this.emit('sessionExpired');
-        return;
-      }
+
       // Validate user data structure
       if (data.user && typeof data.user === 'object') {
         this.state = {
           user: this.validateUserData(data.user),
-          isLoggedIn: !!data.user,
-          lastActivity: data.lastActivity || Date.now(),
-          expiresAt: data.expiresAt
+          isLoggedIn: !!data.user
         };
       }
     } catch (error) {
@@ -133,19 +154,14 @@ export class AuthManager {
       if (!validatedUser) {
         throw new Error('Invalid user data');
       }
-      const expiresAt = Date.now() + this.SESSION_TIMEOUT;
       const data = {
         version: this.SESSION_VERSION,
-        user: validatedUser,
-        lastActivity: Date.now(),
-        expiresAt
+        user: validatedUser
       };
       window[this.STORAGE_TYPE].setItem(this.SESSION_KEY, JSON.stringify(data));
       this.state = {
         user: validatedUser,
-        isLoggedIn: true,
-        lastActivity: Date.now(),
-        expiresAt
+        isLoggedIn: true
       };
       this.emit('authChanged', validatedUser);
     } catch (error) {
@@ -174,9 +190,7 @@ export class AuthManager {
     } catch (e) {}
     this.state = {
       user: null,
-      isLoggedIn: false,
-      lastActivity: null,
-      expiresAt: null
+      isLoggedIn: false
     };
     this.emit('authChanged', null);
   }
@@ -245,55 +259,7 @@ export class AuthManager {
     };
     this.saveSession(updatedUser);
   }
-  /**
-   * Setup session timeout
-   */
-  static setupSessionTimeout() {
-    // Check expiration periodically (every 5 minutes)
-    setInterval(() => {
-      if (this.isLoggedIn() && this.state.expiresAt) {
-        if (Date.now() > this.state.expiresAt) {
-          this.clearSession();
-          this.emit('sessionExpired');
-        }
-      }
-    }, 5 * 60 * 1000);
-  }
-  /**
-   * Setup activity tracker to extend session
-   */
-  static setupActivityTracker() {
-    let lastSavedTime = Date.now();
-    const updateActivity = () => {
-      if (this.isLoggedIn()) {
-        const now = Date.now();
-        this.state.lastActivity = now;
-        this.state.expiresAt = now + this.SESSION_TIMEOUT;
-        // Throttle writing to localStorage to once every 1 minute
-        if (now - lastSavedTime > 60 * 1000) {
-          lastSavedTime = now;
-          try {
-            const stored = window[this.STORAGE_TYPE].getItem(this.SESSION_KEY);
-            if (stored) {
-              const data = JSON.parse(stored);
-              data.lastActivity = now;
-              data.expiresAt = this.state.expiresAt;
-              window[this.STORAGE_TYPE].setItem(this.SESSION_KEY, JSON.stringify(data));
-            }
-          } catch (e) {
-            console.error('[AuthManager] Error persisting extended activity:', e);
-          }
-        }
-      }
-    };
-    // Track user activity
-    document.addEventListener('click', updateActivity, {
-      passive: true
-    });
-    document.addEventListener('keydown', updateActivity, {
-      passive: true
-    });
-  }
+
   /**
    * Setup storage listener for multi-tab sync
    */

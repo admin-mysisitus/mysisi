@@ -6,7 +6,8 @@
 import APIClient from '/assets/js/modules/unified-api.js?v=2';
 import {
   AuthManager
-} from '/assets/js/modules/unified-auth.js'; // NEW
+} from '/assets/js/modules/unified-auth.js';
+import { getFirebase } from '/assets/js/modules/firebase-core.js';
 import {
   showError,
   showSuccess,
@@ -207,32 +208,109 @@ function openMidtransPayment() {
     setButtonLoading(btn, false, 'Lanjut Pembayaran');
   }
 }
-async function handlePaymentSuccess(result) {
-  const orderId = currentOrder?.orderId;
-  showSuccess('✓ Pembayaran Berhasil!', 'Sistem sedang memverifikasi pembayaran Anda...');
-  // Biarkan Webhook (Backend) yang meng-update RTDB. Frontend tidak berwewenang.
-  // Panggil sync (yang akan mentrigger cek di GAS secara pasif) tanpa update RTDB di Frontend.
-  APIClient.syncOrderStatus(orderId).catch(console.error);
-  // Redirect ke invoice setelah 2 detik untuk memberi waktu webhook masuk
+let paymentPollingInterval = null;
+let paymentStatusListener = null;
+
+function handlePaymentLunas(orderId) {
+  if (paymentPollingInterval) {
+    clearInterval(paymentPollingInterval);
+    paymentPollingInterval = null;
+  }
+  
+  // Cleanup listener
+  getFirebase().then(({ db }) => {
+    if (db && paymentStatusListener) {
+      db.ref(`orders/${orderId}/paymentStatus`).off('value', paymentStatusListener);
+      paymentStatusListener = null;
+    }
+  }).catch(console.error);
+
+  showSuccess('✓ Pembayaran Dikonfirmasi!', 'Mengarahkan ke Invoice...');
+  const btn = document.getElementById('btn-payment');
+  if (btn) setButtonLoading(btn, false, 'Selesai');
+  
   setTimeout(() => {
     window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
-  }, 2000);
+  }, 300); // 300ms so they can read the toast slightly
+}
+
+async function startPaymentPolling() {
+  const orderId = currentOrder?.orderId;
+  if (!orderId) return;
+  
+  // 1. Listener RTDB untuk respon Instan (Real-time)
+  try {
+    const { db } = await getFirebase();
+    if (db) {
+      if (paymentStatusListener) {
+        db.ref(`orders/${orderId}/paymentStatus`).off('value', paymentStatusListener);
+      }
+      paymentStatusListener = db.ref(`orders/${orderId}/paymentStatus`).on('value', (snapshot) => {
+        if (snapshot.val() === 'paid') {
+          handlePaymentLunas(orderId);
+        }
+      });
+    }
+  } catch(e) {
+    console.error('Firebase DB listener error', e);
+  }
+
+  // 2. Polling API sebagai fallback
+  if (paymentPollingInterval) clearInterval(paymentPollingInterval);
+  let pollCount = 0;
+  paymentPollingInterval = setInterval(async () => {
+    try {
+      pollCount++;
+      const res = await APIClient.syncOrderStatus(orderId);
+      if (res && res.data && (res.data.paymentStatus === 'paid' || res.data.status === 'paid' || res.data.orderStatus === 'completed')) {
+        handlePaymentLunas(orderId);
+      }
+      
+      if (pollCount >= 36) { // Stop after 3 minutes
+        clearInterval(paymentPollingInterval);
+      }
+    } catch (e) {
+      console.error('Polling error:', e);
+    }
+  }, 4000);
+}
+
+function handlePaymentSuccess(result) {
+  const orderId = currentOrder?.orderId;
+  showSuccess('✓ Pembayaran Berhasil!', 'Mengarahkan ke Invoice...');
+  APIClient.syncOrderStatus(orderId).catch(console.error);
+  setTimeout(() => {
+    window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
+  }, 500); // Instant redirect
 }
 
 function handlePaymentPending(result) {
-  showInfo('Pembayaran sedang diproses. Anda akan menerima konfirmasi dalam waktu singkat.');
+  showInfo('Pembayaran sedang diproses. Menunggu konfirmasi dari bank...');
+  const btn = document.getElementById('btn-payment');
+  if (btn) {
+    setButtonLoading(btn, false, 'Cek Status Pembayaran');
+  }
+  startPaymentPolling();
 }
 
 function handlePaymentError(result) {
   showError('Pembayaran gagal. Silakan coba lagi.');
-}
-
-function handlePaymentClose() {
-  // Re-enable button
   const btn = document.getElementById('btn-payment');
   if (btn) {
     setButtonLoading(btn, false, 'Lanjut Pembayaran');
   }
+}
+
+function handlePaymentClose() {
+  const btn = document.getElementById('btn-payment');
+  if (btn) {
+    if (paymentPollingInterval) {
+      setButtonLoading(btn, false, 'Cek Status Pembayaran');
+    } else {
+      setButtonLoading(btn, false, 'Lanjut Pembayaran');
+    }
+  }
+  startPaymentPolling();
 }
 
 function requestPaymentAfterPreview() {

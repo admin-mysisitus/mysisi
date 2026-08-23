@@ -155,8 +155,18 @@ function handleTypingIndicator(isTyping) {
 
 function setAgent() {
   const savedIndex = localStorage.getItem('currentAgentIndex');
-  // Ensure conversationId exists ONCE per user
-  if (!conversationId) {
+  let userId = null;
+  try {
+    const session = JSON.parse(localStorage.getItem('sisitus_user') || '{}');
+    if (session && session.user && session.user.userId) {
+      userId = session.user.userId;
+    }
+  } catch (e) {}
+
+  if (userId) {
+    conversationId = 'room-' + userId;
+    localStorage.setItem('conversationId', conversationId);
+  } else if (!conversationId) {
     conversationId = 'room-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
     localStorage.setItem('conversationId', conversationId);
   }
