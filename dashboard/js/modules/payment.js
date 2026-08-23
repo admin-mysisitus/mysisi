@@ -150,7 +150,6 @@ async function generateMidtransToken(orderData) {
       orderId: orderData.orderId,
       amount: orderData.total
     };
-    
     // Token already saved to RTDB by GAS createOrderWithAuth
   } catch (error) {
     console.error('Error generating Midtrans token:', error);
@@ -208,22 +207,17 @@ function openMidtransPayment() {
     setButtonLoading(btn, false, 'Lanjut Pembayaran');
   }
 }
-
-
 async function handlePaymentSuccess(result) {
   const orderId = currentOrder?.orderId;
   showSuccess('✓ Pembayaran Berhasil!', 'Sistem sedang memverifikasi pembayaran Anda...');
-  
   // Biarkan Webhook (Backend) yang meng-update RTDB. Frontend tidak berwewenang.
   // Panggil sync (yang akan mentrigger cek di GAS secara pasif) tanpa update RTDB di Frontend.
   APIClient.syncOrderStatus(orderId).catch(console.error);
-  
   // Redirect ke invoice setelah 2 detik untuk memberi waktu webhook masuk
   setTimeout(() => {
     window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
   }, 2000);
 }
-
 
 function handlePaymentPending(result) {
   showInfo('Pembayaran sedang diproses. Anda akan menerima konfirmasi dalam waktu singkat.');

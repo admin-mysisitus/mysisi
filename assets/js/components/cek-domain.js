@@ -1,4 +1,4 @@
-(async function () {
+(async function() {
   'use strict';
   // Import cart managers
   const {
@@ -34,7 +34,7 @@
   // ============================================
   function debounce(func, delay) {
     let timeoutId;
-    return function (...args) {
+    return function(...args) {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
     };
@@ -156,12 +156,10 @@
       item.style.animationDelay = `${idx * 0.05}s`;
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
-
       const extColor = ext.color || '#1a1a2e';
       const extLabel = ext.ext.replace('.', '').toUpperCase();
       const extFilename = `tld-${ext.ext.replace(/\./g, '')}.svg`;
       const fallbackIconHtml = `<span class="cek-domain-fallback-text" style="color: ${extColor}; display: none;">${ext.ext}</span>`;
-
       let labels = '';
       if (ext.label) {
         labels += `<span class="cek-domain-badge cek-domain-badge--label">${ext.label}</span>`;
@@ -170,7 +168,6 @@
         labels += `<span class="cek-domain-badge cek-domain-badge--discount">-${discount}%</span>`;
       }
       const badgeGroup = labels ? `<div class="cek-domain-badge-group-simple">${labels}</div>` : '';
-
       item.innerHTML = `
         <div class="cek-domain-ext-content-simple">
           ${badgeGroup}
@@ -216,7 +213,6 @@
   // DOMAIN CONFIGURATION & VALIDATION
   // (Validation and parsing logic moved to config.js)
   // ============================================
-
   // In-memory cache for Zero-Latency checking
   const domainCheckCache = new Map();
   const availabilityCache = new Map();
@@ -230,8 +226,9 @@
       isFullDomain,
       isInvalid
     } = parseDomain(inputVal, allExtensions);
-    const { valid } = validateDomain(inputVal, allExtensions);
-    
+    const {
+      valid
+    } = validateDomain(inputVal, allExtensions);
     if (!valid || !base || base.length < 2 || isFullDomain) {
       cekDomainSuggestions.style.display = 'none';
       return;
@@ -260,7 +257,6 @@
         <img src="/assets/img/tld/${extFilename}" alt="${ext}" class="tld-logo-suggestion" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         ${fallbackIconHtml}
       </div>`;
-
       const priceHTML = extData && extData.newPrice ? `
         <div class="cek-domain-suggestion-price" id="price-${index}" style="display: none;">
           ${extData.oldPrice ? `<span class="cek-domain-suggestion-price-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
@@ -344,32 +340,30 @@
     }
     try {
       let isAvailableGlobally = true;
-      
       // 1. Check Memory Cache for DNS Request
       let dnsPromise = domainCheckCache.get(domain);
-      
       if (!dnsPromise) {
         dnsPromise = (async () => {
           const [resA, resNS] = await Promise.all([
             fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`, {
-              headers: { 'accept': 'application/dns-json' },
+              headers: {
+                'accept': 'application/dns-json'
+              },
               signal: abortSignal,
               timeout: 5000
             }),
             fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=NS`, {
-              headers: { 'accept': 'application/dns-json' },
+              headers: {
+                'accept': 'application/dns-json'
+              },
               signal: abortSignal,
               timeout: 5000
             })
           ]);
-
           if (!resA.ok || !resNS.ok) throw new Error('DNS Query Failed');
-          
           const [dataA, dataNS] = await Promise.all([resA.json(), resNS.json()]);
-          
           const hasA = dataA.Answer && dataA.Answer.length > 0;
           const hasNS = dataNS.Answer && dataNS.Answer.length > 0;
-          
           if (hasA || hasNS) {
             return false;
           } else if (dataA.Status === 3 || dataNS.Status === 3) {
@@ -378,10 +372,8 @@
             return true;
           }
         })();
-        
         domainCheckCache.set(domain, dnsPromise);
       }
-      
       try {
         isAvailableGlobally = await dnsPromise;
       } catch (dnsError) {
@@ -390,7 +382,6 @@
         console.warn('Hybrid DNS check failed:', dnsError);
         isAvailableGlobally = false;
       }
-      
       // 2. Early return if globally registered or backend skip requested
       if (!isAvailableGlobally) {
         return {
@@ -400,7 +391,6 @@
           message: 'Domain sudah terdaftar secara global'
         };
       }
-      
       // 3. Backend Check (RTDB Only)
       let backendSaysTaken = false;
       let isOrderedInBackend = false;
@@ -421,7 +411,6 @@
       } catch (backendError) {
         console.warn('[Domain Check] Backend API check failed:', backendError);
       }
-      
       // Cache the successful result
       const finalResult = {
         available: true,
@@ -430,10 +419,9 @@
         method: 'hybrid-check',
         message: backendSaysTaken ? (isOrderedInBackend ? 'Domain sedang dipesan orang lain (Rebutan).' : 'Domain sudah aktif') : null
       };
-      
       // If it's taken in backend but not ordered, it shouldn't be available
       if (backendSaysTaken && !isOrderedInBackend) {
-          finalResult.available = false;
+        finalResult.available = false;
       }
       availabilityCache.set(domain, finalResult);
       return finalResult;
@@ -470,7 +458,6 @@
     } else if (result.available === true) {
       // STATE 1: AVAILABLE OR ORDERED
       card.className = `cek-domain-result-card available ${isRecommended ? 'super-highlight' : ''} ${result.isOrdered ? 'warning' : ''}`;
-      
       const badges = [];
       if (result.isOrdered) {
         badges.push(`<span class="cek-domain-badge cek-domain-badge--label" style="background:#f39c12; color:white;"><i class="fas fa-fire"></i> Rebutan</span>`);
@@ -486,23 +473,19 @@
         }
       }
       const badgeGroupHtml = badges.length > 0 ? `<div class="cek-domain-badge-group-simple" style="margin-bottom: 6px; display: flex; gap: 4px; flex-wrap: wrap;">${badges.join('')}</div>` : '';
-
       let infoHtml = sanitizeHTML(extData.info);
       if (result.isOrdered) {
         infoHtml = `<span style="color: #d35400; font-weight: 600;"><i class="fas fa-exclamation-circle"></i> Sedang dipesan orang lain! Cepat amankan!</span>`;
       }
-      
       const extColor = extData?.color || '#1a1a2e';
       const extFilename = `tld-${extData.ext.replace(/\./g, '')}.svg`;
       const fallbackColor = result.isOrdered ? 'inherit' : extColor;
       const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${fallbackColor};">${extData.ext}</span>`);
       const extLabel = extData.ext.replace('.', '').toUpperCase();
-      
       const watermarkTag = `
         <img src="/assets/img/tld/${extFilename}" alt="${extData.ext}" class="tld-logo-result" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
         <span class="cek-domain-fallback-text" style="color: ${extColor}; display: none;">${extLabel}</span>
       `;
-
       card.innerHTML = `
         <div class="cek-domain-result-main">
           ${badgeGroupHtml}
@@ -589,7 +572,6 @@
     let targetExts = allExtensions;
     let effectiveIsFullDomain = isFullDomain;
     let showUnsupportedWarning = false;
-    
     if (isFullDomain) {
       if (isUnsupportedExt) {
         showUnsupportedWarning = true;
@@ -632,7 +614,6 @@
         return;
       }
       cekDomainResultsList.innerHTML = '';
-      
       if (showUnsupportedWarning) {
         const warningDiv = document.createElement('div');
         warningDiv.style.gridColumn = '1 / -1';
@@ -646,7 +627,6 @@
         warningDiv.innerHTML = `<i class="fas fa-info-circle"></i> Maaf, ekstensi <strong>${sanitizeHTML(ext)}</strong> belum didukung. Berikut adalah rekomendasi ekstensi terbaik untuk <strong>${sanitizeHTML(base)}</strong>:`;
         cekDomainResultsList.appendChild(warningDiv);
       }
-
       // ========== ADVANCED RECOMMENDATION ENGINE ==========
       let recommendedResult = null;
       if (!effectiveIsFullDomain) {
@@ -795,7 +775,7 @@
           domainPrice: price,
           packagePrice: DOMAIN_PACKAGES.starter.price,
           // Legacy properties for backwards compatibility
-          price: DOMAIN_PACKAGES.starter.price, 
+          price: DOMAIN_PACKAGES.starter.price,
           renewalPrice: DOMAIN_PACKAGES.starter.price,
           basePrice: DOMAIN_PACKAGES.starter.price
         });

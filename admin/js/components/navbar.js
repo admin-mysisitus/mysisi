@@ -58,19 +58,16 @@ export class AdminNavbar {
     const menuToggle = document.getElementById('admin-menu-toggle');
     const sidebar = document.getElementById('admin-sidebar');
     const overlay = document.getElementById('admin-sidebar-overlay');
-    
     if (menuToggle && sidebar && overlay) {
       menuToggle.addEventListener('click', () => {
         sidebar.classList.add('open');
         overlay.classList.add('show');
       });
-      
       overlay.addEventListener('click', () => {
         sidebar.classList.remove('open');
         overlay.classList.remove('show');
       });
     }
-
     if (!this.authListenerBound) {
       this.authListenerBound = true;
       window.addEventListener('authStateChanged', (e) => {

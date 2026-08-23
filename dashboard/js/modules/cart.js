@@ -61,14 +61,11 @@ async function withScrollPreservation(action) {
   const scrollContainer = document.getElementById('content');
   const scrollYContent = scrollContainer ? scrollContainer.scrollTop : 0;
   const scrollYWindow = window.scrollY;
-  
   const container = cartState.container;
   if (container) {
     container.style.minHeight = `${container.getBoundingClientRect().height}px`;
   }
-  
   await action();
-  
   const restoreScroll = () => {
     if (scrollContainer) scrollContainer.scrollTop = scrollYContent;
     window.scrollTo({
@@ -76,19 +73,16 @@ async function withScrollPreservation(action) {
       behavior: 'instant'
     });
   };
-  
   restoreScroll();
   requestAnimationFrame(restoreScroll);
   setTimeout(restoreScroll, 10);
   setTimeout(restoreScroll, 50);
-  
   if (container) {
     setTimeout(() => {
       container.style.minHeight = '';
     }, 60);
   }
 }
-
 // Expose package & addon update handlers globally
 window.changeItemPackage = (domain, packageId) => {
   try {
@@ -104,7 +98,6 @@ window.changeItemPackage = (domain, packageId) => {
       // Jika none, renewal price ikut harga domain. Jika ada paket, ikut paket.
       renewalPrice: packageId === 'none' ? (item.domainPrice || 0) : newPrice
     });
-    
     withScrollPreservation(async () => {
       if (cartState.currentUser) {
         await render(cartState.currentUser);
@@ -112,14 +105,12 @@ window.changeItemPackage = (domain, packageId) => {
         window.updateCartPreview();
       }
     });
-    
     showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
     console.error('Error changing package:', error);
     showError('Gagal', error.message);
   }
 };
-
 window.toggleCartAddon = async (addonId, isChecked) => {
   try {
     const addon = ADDON_PACKAGES[addonId];
@@ -134,7 +125,6 @@ window.toggleCartAddon = async (addonId, isChecked) => {
     } else {
       CartManager.removeAddon(addonId);
     }
-    
     await withScrollPreservation(async () => {
       if (cartState.currentUser) {
         await render(cartState.currentUser);
@@ -204,7 +194,6 @@ export async function render(currentUser) {
       clearInterval(cartState.verificationPollInterval);
       cartState.verificationPollInterval = null;
     }
-
     if (!cartState.currentUser) {
       // Guest: show inline auth + cart preview
       renderGuestCheckout();
@@ -254,7 +243,6 @@ function renderGuestCheckout() {
     if (document.activeElement && document.activeElement.tagName !== 'BODY') {
       document.activeElement.blur();
     }
-    
     const cartData = CartManager.getCart();
     const items = (cartData && cartData.domains) || [];
     const addons = (cartData && cartData.addons) || [];
@@ -267,12 +255,10 @@ function renderGuestCheckout() {
     const finalTotal = subtotalCombined + ppn - promoDiscount;
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
-    
     // FAST PATH: Only update the breakdown and total if the DOM is already rendered.
     // This prevents destroying the active checkbox and completely eliminates browser focus scroll jumps.
     const existingBreakdown = previewContainer.querySelector('.preview-breakdown');
     const existingTotal = previewContainer.querySelector('.preview-total');
-    
     if (existingBreakdown && existingTotal) {
       existingBreakdown.innerHTML = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
@@ -309,7 +295,6 @@ function renderGuestCheckout() {
       `;
       return;
     }
-    
     // FULL RENDER PATH (initial render or items changed)
     previewContainer.innerHTML = `
       <div class="cart-preview">
@@ -320,7 +305,7 @@ function renderGuestCheckout() {
           ${items.length > 0 ? `
             <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
               ${items.map(item => {
-                return `
+      return `
                   <div class="preview-item-container" style="border-bottom: 1px dashed var(--border-light); padding: 0.75rem 0;">
                     <div class="preview-item" style="align-items: center; display: flex; justify-content: space-between; gap: 0.5rem; padding-bottom: 0.5rem;">
                       <div style="flex: 1; user-select: none;">
@@ -346,7 +331,7 @@ function renderGuestCheckout() {
                     </div>
                   </div>
                 `;
-              }).join('')}
+    }).join('')}
             </div>
 
             <!-- Detailed Price Breakdown -->
@@ -893,10 +878,12 @@ async function applyPromoCode() {
       const summary = CartManager.getSummary();
       const subtotal = summary.subtotal || 0;
       let discount = 0;
-      if (result.data.discountType === 'percentage') {
-        discount = Math.round(subtotal * (result.data.discount / 100));
+      const pType = (result.data.type || '').toLowerCase();
+      const pValue = parseFloat(result.data.value) || 0;
+      if (pType === 'percentage' || pType === 'percent') {
+        discount = Math.round(subtotal * (pValue / 100));
       } else {
-        discount = result.data.discount;
+        discount = pValue;
       }
       cartState.promoCode = code;
       cartState.promoDiscount = discount;
@@ -1001,9 +988,12 @@ async function proceedToCheckout() {
     let idToken = '';
     try {
       // Get auth instance properly instead of relying on window.firebaseAuth
-      const { getFirebase } = await import('/assets/js/modules/firebase-core.js');
-      const { auth } = await getFirebase();
-      
+      const {
+        getFirebase
+      } = await import('/assets/js/modules/firebase-core.js');
+      const {
+        auth
+      } = await getFirebase();
       if (auth) {
         const fbUser = await new Promise(resolve => {
           const unsubscribe = auth.onAuthStateChanged(user => {
@@ -1011,7 +1001,6 @@ async function proceedToCheckout() {
             resolve(user);
           });
         });
-        
         if (!fbUser) {
           console.error('[Cart] fbUser is null. Firebase Auth state is lost.');
           window.location.href = '/auth/';
@@ -1022,7 +1011,6 @@ async function proceedToCheckout() {
     } catch (e) {
       console.warn('[Cart] Failed to get fresh ID token:', e);
     }
-
     // Prepare order data
     const orderData = {
       orderId: orderId,
@@ -1103,5 +1091,4 @@ function removeCartItem(domain) {
     }
   }
 }
-
 export default render;

@@ -1,7 +1,8 @@
 // Live Chat Loader Component
 // Menyisipkan fitur chat secara dinamis ke seluruh halaman
-import { getFirebase } from '../modules/firebase-core.js';
-
+import {
+  getFirebase
+} from '../modules/firebase-core.js';
 window.addEventListener("load", async () => {
   // 1. Bangun HTML DOM
   const chatHTML = `
@@ -78,19 +79,8 @@ window.addEventListener("load", async () => {
     console.error('[LiveChat] Gagal memuat Firebase:', error);
     return;
   }
-
   // 4. Load sisa JavaScript (berurutan)
-  const scripts = [
-    "https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js", 
-    "/assets/js/livechat/config.js", 
-    "/assets/js/livechat/sessionCache.js", 
-    "/assets/js/livechat/messageStore.js", 
-    "/assets/js/livechat/messageRenderer.js", 
-    "/assets/js/livechat/syncEngine.js", 
-    "/assets/js/livechat/sendQueue.js", 
-    "/assets/js/livechat/utils.js", 
-    "/assets/js/livechat/user.js?v=11"
-  ];
+  const scripts = ["https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js", "/assets/js/livechat/config.js", "/assets/js/livechat/sessionCache.js", "/assets/js/livechat/messageStore.js", "/assets/js/livechat/messageRenderer.js", "/assets/js/livechat/syncEngine.js", "/assets/js/livechat/sendQueue.js", "/assets/js/livechat/utils.js", "/assets/js/livechat/user.js?v=11"];
   scripts.forEach(src => {
     const script = document.createElement('script');
     script.src = src;

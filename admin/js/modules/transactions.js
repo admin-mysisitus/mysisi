@@ -113,7 +113,6 @@ function setupEventListeners() {
       }
     }
   };
-
   const searchInput = document.getElementById('search-tx');
   const filterSelect = document.getElementById('filter-status');
   if (searchInput) searchInput.addEventListener('input', applyFilters);
@@ -123,20 +122,15 @@ function setupEventListeners() {
 function applyFilters() {
   const tbody = document.getElementById('tx-table-body');
   if (!tbody) return;
-  
   const searchVal = (document.getElementById('search-tx')?.value || '').toLowerCase();
   const filterVal = document.getElementById('filter-status')?.value || 'all';
-  
   let filteredTx = currentTx;
-  
   if (searchVal) {
-    filteredTx = filteredTx.filter(tx => 
-      (tx.inv && tx.inv.toLowerCase().includes(searchVal)) || 
-      (tx.email && tx.email.toLowerCase().includes(searchVal)) ||
-      (tx.name && tx.name.toLowerCase().includes(searchVal))
-    );
+    filteredTx = filteredTx.filter(tx => {
+      const txInv = (tx.inv || tx.orderId || '').toLowerCase();
+      return txInv.includes(searchVal) || (tx.email && tx.email.toLowerCase().includes(searchVal)) || (tx.name && tx.name.toLowerCase().includes(searchVal));
+    });
   }
-  
   if (filterVal !== 'all') {
     filteredTx = filteredTx.filter(tx => {
       const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
@@ -146,7 +140,6 @@ function applyFilters() {
       return true;
     });
   }
-  
   updateStats(currentTx); // Stats usually show based on ALL data, or filtered? Usually ALL data.
   renderTxTable(filteredTx, tbody);
 }
@@ -155,15 +148,12 @@ function updateStats(allTx) {
   let revenue = 0;
   let pendingAmount = 0;
   let successCount = 0;
-  
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-
   allTx.forEach(tx => {
     const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
     const total = parseInt(tx.total || 0);
     const date = new Date(tx.date || tx.createdAt || new Date());
-    
     if (status === 'paid' || status === 'settlement' || status === 'capture' || status === 'selesai' || status === 'success') {
       revenue += total;
       if (date.getMonth() === currentMonth && date.getFullYear() === currentYear) {
@@ -173,11 +163,9 @@ function updateStats(allTx) {
       pendingAmount += total;
     }
   });
-
   const statRevenue = document.getElementById('stat-revenue');
   const statPending = document.getElementById('stat-pending');
   const statSuccess = document.getElementById('stat-success');
-
   if (statRevenue) statRevenue.textContent = `Rp ${revenue.toLocaleString('id-ID')}`;
   if (statPending) statPending.textContent = `Rp ${pendingAmount.toLocaleString('id-ID')}`;
   if (statSuccess) statSuccess.textContent = successCount;
@@ -228,7 +216,6 @@ function renderTxTable(mockTx, tbody) {
     const item = tx.item || tx.domain || tx.packageId || '-';
     const total = tx.total || 0;
     const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
-
     let statusBg, statusColor;
     if (status === 'paid' || status === 'settlement' || status === 'capture') {
       statusBg = 'rgba(16, 185, 129, 0.1)';
@@ -241,7 +228,6 @@ function renderTxTable(mockTx, tbody) {
       statusColor = 'var(--admin-danger)';
     }
     const rowOpacity = (status === 'failed' || status === 'expire' || status === 'cancel' || status === 'deny') ? '0.6' : '1';
-    
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--admin-border)';
     tr.style.opacity = rowOpacity;

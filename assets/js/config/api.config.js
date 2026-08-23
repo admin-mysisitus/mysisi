@@ -8,7 +8,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbwDTL4Uk_oO6Yxza4__fR-Dbb3XHYqLklrx-eEr45gWf2XCROB2v8EyG6OxIg8bkwLs/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbx5DBwGaiYyS9Hgqe2YOQVZNWIwtzIMe1jAyzHuugiZskvwRQNtsF-awTCEKPHpsZ2N/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 60000,
   // Actions/endpoints yang dipanggil

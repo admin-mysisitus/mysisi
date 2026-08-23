@@ -116,7 +116,8 @@ function updateStatisticsDisplay(stats) {
     'stat-total-spent': stats.totalSpent ? formatPrice(stats.totalSpent) : 'Rp 0',
     'stat-average-order': stats.averageOrderValue ? formatPrice(stats.averageOrderValue) : 'Rp 0',
     'stat-active-orders': stats.ordersByStatus?.processing || 0,
-    'stat-completed': stats.ordersByStatus?.completed || 0
+    'stat-completed': stats.ordersByStatus?.completed || 0,
+    'stat-active-domains': stats.activeDomains || 0
   };
   Object.entries(widgets).forEach(([elementId, value]) => {
     const element = document.getElementById(elementId);

@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   async function fetchActiveCoupons() {
     try {
-      const response = await APIClient.getActivePromoCodes();
+      const response = await APIClient.getPublicPromos();
       if (response.success && Array.isArray(response.data) && response.data.length > 0) {
         couponsList.innerHTML = '';
         response.data.forEach(promo => {
@@ -165,19 +165,19 @@ document.addEventListener('DOMContentLoaded', function() {
           card.className = 'coupon-card';
           let discountDisplay = '';
           let typeBadge = '';
-          if (promo.discountType === 'percentage') {
-            discountDisplay = `${promo.discountValue}%`;
+          if (promo.type === 'percentage') {
+            discountDisplay = `${promo.value}%`;
             typeBadge = 'DISKON %';
           } else {
-            discountDisplay = `Rp ${new Intl.NumberFormat('id-ID').format(promo.discountValue)}`;
+            discountDisplay = `Rp ${new Intl.NumberFormat('id-ID').format(promo.value || 0)}`;
             typeBadge = 'DISKON RP';
           }
-          const expiryDate = new Date(promo.validUntil);
-          const expiryFormatted = expiryDate.toLocaleDateString('id-ID', {
+          const expiryDate = promo.end ? new Date(promo.end) : null;
+          const expiryFormatted = (expiryDate && !isNaN(expiryDate.getTime())) ? expiryDate.toLocaleDateString('id-ID', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
-          });
+          }) : 'Tanpa batas waktu';
           card.innerHTML = `
             <div>
               <div class="coupon-header">

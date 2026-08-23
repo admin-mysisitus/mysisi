@@ -76,6 +76,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -83,7 +84,6 @@
 }
 
 /* .portfolio-card removed, now in components/portfolio-card.css */
-
 /* ========== LOAD MORE SECTION ========== */
 .portfolio-load-more {
   display: flex;
@@ -202,7 +202,6 @@
     margin-bottom: 1.25rem !important;
   }
 
-
   .hero-home .cta-buttons {
     gap: 0.75rem !important;
   }
@@ -255,7 +254,8 @@
   }
 
   .portfolio-card {
-    height: auto !important; /* Allow card to grow with content */
+    height: auto !important;
+    /* Allow card to grow with content */
   }
 
   .portfolio-card-image {
@@ -283,7 +283,7 @@
     font-size: 0.8rem !important;
     margin-bottom: 1rem !important;
   }
-  
+
   .feature-tag {
     font-size: 0.7rem !important;
     padding: 0.25rem 0.6rem !important;

@@ -10,7 +10,9 @@ import {
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
-import { getFirebase } from '/assets/js/modules/firebase-core.js';
+import {
+  getFirebase
+} from '/assets/js/modules/firebase-core.js';
 class AdminApp {
   constructor() {
     this.currentRoute = null;
@@ -24,10 +26,11 @@ class AdminApp {
     this.sidebar.render();
     this.navbar = new AdminNavbar();
     this.navbar.render();
-    
     // SECURITY: Firebase Admin Probe Check
     try {
-      const { db } = await getFirebase();
+      const {
+        db
+      } = await getFirebase();
       await db.ref('users').once('value'); // This will throw Permission Denied if not admin
     } catch (e) {
       console.error('Admin verification failed!', e);
@@ -35,7 +38,6 @@ class AdminApp {
       window.location.href = '/admin/login.html?error=unauthorized';
       return;
     }
-
     // Setup routes
     this.setupRoutes();
     // Listen for hash changes

@@ -24,7 +24,9 @@ export async function render() {
   }
   // Load Firebase using core module
   if (!window.firebase) {
-    const { getFirebase } = await import('/assets/js/modules/firebase-core.js');
+    const {
+      getFirebase
+    } = await import('/assets/js/modules/firebase-core.js');
     await getFirebase();
   }
   // Ensure config and dependencies are loaded

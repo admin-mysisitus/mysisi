@@ -337,7 +337,7 @@
   .hero-home .hero-content {
     text-align: left;
   }
-  
+
   .hero-home .hero-content h1 {
     font-size: clamp(1.9rem, 8vw, 2.3rem) !important;
     line-height: 1.15;
@@ -1035,68 +1035,56 @@
 
 /* ========== PAGE SPECIFIC HERO BACKGROUNDS ========== */
 .hero-blog {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-domain-hosting {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-kontak {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-layanan {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-legal {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-maintenance {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-pembuatan-web {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-perusahaan {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-promo {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-tentang {
-
   background-size: cover;
   background-position: center;
 }
 
 .hero-tips {
-
   background-size: cover;
   background-position: center;
 }
-

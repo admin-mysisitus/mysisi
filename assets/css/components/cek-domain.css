@@ -112,7 +112,6 @@
   transform: translateY(8px);
   pointer-events: none;
   z-index: 10;
-  
   /* Collapsed state to avoid empty gaps */
   max-height: 0;
   margin-bottom: 0;
@@ -337,7 +336,6 @@
 }
 
 /* Mobile responsive for suggestions dropdown */
-
 /* ============================================
    PRICING PREVIEW
    ============================================ */
@@ -490,15 +488,21 @@
 }
 
 /* Visual Balance Tweaks (Desktop) */
-img[alt=".com"].tld-logo, img[alt=".net"].tld-logo {
+img[alt=".com"].tld-logo,
+img[alt=".net"].tld-logo {
   height: 14px;
 }
-img[alt=".xyz"].tld-logo, img[alt=".org"].tld-logo, img[alt=".top"].tld-logo {
+
+img[alt=".xyz"].tld-logo,
+img[alt=".org"].tld-logo,
+img[alt=".top"].tld-logo {
   height: 28px;
 }
+
 img[alt=".it.com"].tld-logo {
   height: 38px;
 }
+
 /* Default Red ID family will use the base 24px */
 .tld-logo {
   height: 24px;
@@ -729,11 +733,25 @@ img[alt=".it.com"].tld-logo {
   max-width: 100%;
 }
 
-.cek-domain-result-card:nth-child(1) { animation-delay: 0.05s; }
-.cek-domain-result-card:nth-child(2) { animation-delay: 0.1s; }
-.cek-domain-result-card:nth-child(3) { animation-delay: 0.15s; }
-.cek-domain-result-card:nth-child(4) { animation-delay: 0.2s; }
-.cek-domain-result-card:nth-child(5) { animation-delay: 0.25s; }
+.cek-domain-result-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.cek-domain-result-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.cek-domain-result-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.cek-domain-result-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.cek-domain-result-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
 
 .cek-domain-result-card.available {
   border-left: 4px solid var(--color-success, #10b981);
@@ -855,12 +873,17 @@ img[alt=".it.com"].tld-logo {
 }
 
 /* Visual Balance Tweaks (Desktop) */
-img[alt=".com"].tld-logo-result, img[alt=".net"].tld-logo-result {
+img[alt=".com"].tld-logo-result,
+img[alt=".net"].tld-logo-result {
   height: 14px;
 }
-img[alt=".xyz"].tld-logo-result, img[alt=".org"].tld-logo-result, img[alt=".top"].tld-logo-result {
+
+img[alt=".xyz"].tld-logo-result,
+img[alt=".org"].tld-logo-result,
+img[alt=".top"].tld-logo-result {
   height: 28px;
 }
+
 img[alt=".it.com"].tld-logo-result {
   height: 38px;
 }
@@ -1093,55 +1116,117 @@ img[alt=".it.com"].tld-logo-result {
    ANIMATIONS
    ============================================ */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes cekDomainFireAnim {
-  0% { background-position: 0% center; }
-  100% { background-position: -200% center; }
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: -200% center;
+  }
 }
 
 @keyframes scroll {
-  from { transform: translateX(100%); }
-  to { transform: translateX(-100%); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 @keyframes carouselFade {
-  0% { opacity: 0; z-index: 1; }
-  5% { opacity: 1; z-index: 2; }
-  30% { opacity: 1; z-index: 2; }
-  35% { opacity: 0; z-index: 1; }
-  100% { opacity: 0; z-index: 1; }
+  0% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  5% {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  30% {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  35% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  100% {
+    opacity: 0;
+    z-index: 1;
+  }
 }
 
 /* ============================================
    RESPONSIVE UNIFIED BLOCKS
    ============================================ */
-
 @media (max-width: 768px) {
-.cek-domain-suggestion-item {
+  .cek-domain-suggestion-item {
     display: grid;
     grid-template-columns: 36px minmax(0, 1fr);
     grid-template-rows: auto auto;
@@ -1184,7 +1269,7 @@ img[alt=".it.com"].tld-logo-result {
     font-size: 0.9rem;
   }
 
-.cek-domain-section {
+  .cek-domain-section {
     padding: 24px 12px;
     margin: 16px 0 32px 0;
     border-radius: 16px;
@@ -1325,137 +1410,165 @@ img[alt=".it.com"].tld-logo-result {
 }
 
 @media (max-width: 639px) {
-#cek-domain-popular-extensions {
+  #cek-domain-popular-extensions {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
     margin-bottom: 20px;
   }
+
   .cek-domain-ext-item-simple {
     padding: 8px 10px;
     gap: 8px;
     justify-content: flex-start;
   }
+
   .cek-domain-ext-main-simple {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
   }
+
   .cek-domain-ext-logo-wrap {
     min-width: unset;
     height: 28px;
     margin-bottom: 4px;
   }
+
   .cek-domain-ext-prices-simple {
     flex-direction: column;
     align-items: flex-start;
     gap: 0px;
   }
+
   .cek-domain-ext-old {
     font-size: 0.65rem;
   }
+
   .cek-domain-ext-new {
     font-size: 0.85rem;
   }
+
   .tld-logo {
-    height: 22px; /* Base height for mobile increased */
+    height: 22px;
+    /* Base height for mobile increased */
     max-width: 120px;
   }
-  img[alt=".com"].tld-logo, img[alt=".net"].tld-logo {
-    height: 14px; /* Sweet spot for mobile and desktop */
+
+  img[alt=".com"].tld-logo,
+  img[alt=".net"].tld-logo {
+    height: 14px;
+    /* Sweet spot for mobile and desktop */
   }
-  img[alt=".xyz"].tld-logo, img[alt=".org"].tld-logo, img[alt=".top"].tld-logo {
-    height: 26px; /* Bumped up for mobile */
+
+  img[alt=".xyz"].tld-logo,
+  img[alt=".org"].tld-logo,
+  img[alt=".top"].tld-logo {
+    height: 26px;
+    /* Bumped up for mobile */
   }
+
   img[alt=".it.com"].tld-logo {
     height: 34px;
   }
+
   .cek-domain-fallback-text {
     font-size: 1.1rem;
   }
 
-#cek-domain-results {
+  #cek-domain-results {
     padding: 20px 0;
     margin: 24px 0;
     background: transparent;
     box-shadow: none;
   }
 
-.cek-domain-result-card {
+  .cek-domain-result-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
     padding: 12px;
-    position: relative; /* For absolute logo */
+    position: relative;
+    /* For absolute logo */
   }
 
   .cek-domain-result-badges {
-    padding-right: 60px; /* Prevent badges from overlapping logo */
+    padding-right: 60px;
+    /* Prevent badges from overlapping logo */
   }
 
-.cek-domain-result-main {
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
+  .cek-domain-result-main {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   .cek-domain-result-title {
-      display: flex;
+    display: flex;
   }
-  .cek-domain-result-info {
-      display: block;
-      margin: 4px 0 0 0;
-      border-left: none;
-      padding-left: 0;
-  }
-    .cek-domain-result-side {
-      width: 100%;
-      max-width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-      margin-top: 8px;
-    }
-  
-  .cek-domain-result-prices {
-      align-items: flex-start;
-    }
-  
-  .cek-domain-actions {
-      width: 100%;
-      display: flex;
-    }
-  
-  .cek-domain-result-logo {
-      display: flex;
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      padding: 0;
-    }
 
-.cek-domain-buy-btn {
+  .cek-domain-result-info {
+    display: block;
+    margin: 4px 0 0 0;
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .cek-domain-result-side {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .cek-domain-result-prices {
+    align-items: flex-start;
+  }
+
+  .cek-domain-actions {
+    width: 100%;
+    display: flex;
+  }
+
+  .cek-domain-result-logo {
+    display: flex;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 0;
+  }
+
+  .cek-domain-buy-btn {
     flex: 1;
     justify-content: center;
   }
 
-.tld-logo-result {
+  .tld-logo-result {
     height: 20px;
     max-width: 100px;
   }
-  img[alt=".com"].tld-logo-result, img[alt=".net"].tld-logo-result {
+
+  img[alt=".com"].tld-logo-result,
+  img[alt=".net"].tld-logo-result {
     height: 12px;
   }
-  img[alt=".xyz"].tld-logo-result, img[alt=".org"].tld-logo-result, img[alt=".top"].tld-logo-result {
+
+  img[alt=".xyz"].tld-logo-result,
+  img[alt=".org"].tld-logo-result,
+  img[alt=".top"].tld-logo-result {
     height: 24px;
   }
+
   img[alt=".it.com"].tld-logo-result {
     height: 32px;
   }
 }
 
 @media (max-width: 480px) {
-#cek-domain-popular-extensions {
+  #cek-domain-popular-extensions {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
@@ -1650,4 +1763,3 @@ img[alt=".it.com"].tld-logo-result {
     font-size: 0.8rem;
   }
 }
-

@@ -1,5 +1,4 @@
 export const MULTI_PART_EXTENSIONS = ['.co.id', '.my.id', '.sch.id', '.ac.id', '.go.id', '.or.id', '.web.id', '.biz.id', '.net.id', '.ponpes.id', '.desa.id', '.it.com'];
-
 /**
  * Parse domain into base and extension
  * @param {string} input - Domain to parse
@@ -8,15 +7,8 @@ export const MULTI_PART_EXTENSIONS = ['.co.id', '.my.id', '.sch.id', '.ac.id', '
  */
 export function parseDomain(input, pricingData = []) {
   const cleaned = input.toLowerCase().trim();
-  
   // 1. Compile all known extensions (from pricing + hardcoded multi-parts)
-  const knownExtensions = [
-    ...new Set([
-      ...pricingData.map(p => p.ext),
-      ...MULTI_PART_EXTENSIONS
-    ])
-  ].sort((a, b) => b.length - a.length); // Sort longest first to match .ponpes.id before .id
-
+  const knownExtensions = [...new Set([...pricingData.map(p => p.ext), ...MULTI_PART_EXTENSIONS])].sort((a, b) => b.length - a.length); // Sort longest first to match .ponpes.id before .id
   // 2. Check against known extensions
   for (const ext of knownExtensions) {
     if (cleaned.endsWith(ext)) {
@@ -28,7 +20,6 @@ export function parseDomain(input, pricingData = []) {
       };
     }
   }
-
   // 3. Fallback for unknown extensions (split at the first dot)
   if (cleaned.includes('.')) {
     const firstDotIndex = cleaned.indexOf('.');
@@ -42,7 +33,6 @@ export function parseDomain(input, pricingData = []) {
       isInvalid: false
     };
   }
-
   return {
     base: cleaned,
     ext: null,

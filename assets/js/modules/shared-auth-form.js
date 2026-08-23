@@ -62,10 +62,8 @@ export class SharedAuthForm {
    */
   initGoogleSignIn() {
     if (!this.options.showGoogleSignIn) return;
-    
     const container = this.container.querySelector('#google-signin-btn-shared');
     if (!container) return;
-
     if (!window.google || !window.google.accounts) {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
@@ -77,7 +75,6 @@ export class SharedAuthForm {
       this.renderGSIButton(container);
     }
   }
-
   renderGSIButton(container) {
     window.google.accounts.id.initialize({
       client_id: '802713479795-v6eshpb9lkqrvf7tndhi6llv3fjg2qsi.apps.googleusercontent.com',
@@ -86,10 +83,8 @@ export class SharedAuthForm {
           // Native spinner on the container (although GSI button might hide it)
           const errorDiv = this.container.querySelector('#auth-error');
           if (errorDiv) errorDiv.style.display = 'none';
-          
           const result = await APIClient.verifyGoogleToken(response.credential);
           if (!result.success) throw new Error(result.message || 'Gagal login dengan Google');
-          
           if (this.options.onLoginSuccess) {
             this.options.onLoginSuccess(result.data);
           } else {
@@ -108,11 +103,14 @@ export class SharedAuthForm {
         }
       }
     });
-
-    window.google.accounts.id.renderButton(
-      container,
-      { theme: 'outline', size: 'large', type: 'standard', text: this.options.inlineMode ? 'continue_with' : 'signin_with', shape: 'rectangular', logo_alignment: 'left' }
-    );
+    window.google.accounts.id.renderButton(container, {
+      theme: 'outline',
+      size: 'large',
+      type: 'standard',
+      text: this.options.inlineMode ? 'continue_with' : 'signin_with',
+      shape: 'rectangular',
+      logo_alignment: 'left'
+    });
   }
   /**
    * Generate form HTML

@@ -1,6 +1,5 @@
 /* Blog Page Script - Auto Snap Slider untuk Mobile & Filter */
 document.addEventListener('DOMContentLoaded', () => {
-
   // Fungsi Inisialisasi Slider Horizontal dengan Auto-Snap (serupa halaman Perusahaan & Domain Hosting)
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;

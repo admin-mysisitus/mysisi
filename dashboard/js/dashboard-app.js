@@ -190,7 +190,6 @@ class DashboardApp {
       let html = '';
       let fetchSuccess = false;
       let retries = 3;
-      
       while (retries > 0 && !fetchSuccess) {
         try {
           const response = await fetch(`views/${routeConfig.page}.html`);
@@ -198,12 +197,10 @@ class DashboardApp {
             throw new Error(`HTTP Error: ${response.status}`);
           }
           html = await response.text();
-          
           // Deteksi Soft 404 dari hosting (seperti drv.tw / Google Drive) yang me-return 200 OK
           if (html.includes('HTTP 404') || html.includes('drive.google.com') || html.includes('<title>Error</title>')) {
             throw new Error('Soft 404 dari Server Hosting');
           }
-          
           fetchSuccess = true;
         } catch (fetchErr) {
           retries--;

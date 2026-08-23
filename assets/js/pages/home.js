@@ -10,10 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove active class from all tabs and panes
         solutionTabs.forEach(t => t.classList.remove('active'));
         solutionPanes.forEach(p => p.classList.remove('active'));
-        
         // Add active class to clicked tab
         tab.classList.add('active');
-        
         // Show corresponding pane
         const targetId = tab.getAttribute('data-target');
         const targetPane = document.getElementById(targetId);

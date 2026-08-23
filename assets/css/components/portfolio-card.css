@@ -67,7 +67,8 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 2;
-  pointer-events: none; /* Let clicks pass to the image wrapper */
+  pointer-events: none;
+  /* Let clicks pass to the image wrapper */
 }
 
 .portfolio-card:hover .portfolio-overlay,
@@ -85,7 +86,8 @@
   font-size: 0.95rem;
   transition: all 0.3s ease;
   transform: translateY(15px);
-  pointer-events: auto; /* Buttons inside overlay should be clickable */
+  pointer-events: auto;
+  /* Buttons inside overlay should be clickable */
 }
 
 .portfolio-card:hover .btn-view-hover {

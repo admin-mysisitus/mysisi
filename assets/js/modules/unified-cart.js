@@ -16,7 +16,9 @@ import {
   showSuccess,
   showError
 } from './unified-utils.js';
-import { DOMAIN_PACKAGES } from '../config/api.config.js';
+import {
+  DOMAIN_PACKAGES
+} from '../config/api.config.js';
 // ============================================================================
 // CART MANAGER
 // ============================================================================
@@ -276,14 +278,12 @@ export class CartManager {
         // Fallback ke legacy `domain.price` jika data lama
         let itemPrice = domain.price || 0;
         if (domain.package === 'none') {
-            itemPrice = domain.domainPrice || itemPrice;
+          itemPrice = domain.domainPrice || itemPrice;
         } else if (domain.package && domain.packagePrice > 0) {
-            itemPrice = domain.packagePrice;
+          itemPrice = domain.packagePrice;
         }
-        
         // Simpan harga terhitung kembali ke price properti agar sinkron (legacy support)
         domain.price = itemPrice;
-        
         subtotal += itemPrice * (domain.duration || 1);
       });
     }

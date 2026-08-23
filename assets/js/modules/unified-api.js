@@ -19,8 +19,9 @@ import {
 import {
   GAS_CONFIG
 } from '../config/api.config.js';
-import { getFirebase } from './firebase-core.js';
-
+import {
+  getFirebase
+} from './firebase-core.js';
 export class APIClient {
   static DEFAULT_TIMEOUT = GAS_CONFIG.TIMEOUT || 30000; // Use configured timeout
   /**
@@ -31,7 +32,6 @@ export class APIClient {
     let {
       method = 'POST'
     } = options;
-
     // DO NOT force GET for GAS, as it requires a doGet function which doesn't exist, causing CORS errors.
     try {
       const response = await this.makeRequest(action, data, method, this.DEFAULT_TIMEOUT);
@@ -98,7 +98,9 @@ export class APIClient {
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     try {
       // Get Firebase ID Token if user is logged in
-      const { auth } = await getFirebase();
+      const {
+        auth
+      } = await getFirebase();
       let idToken = '';
       if (auth && auth.currentUser) {
         try {
@@ -107,7 +109,6 @@ export class APIClient {
           console.warn('[API] Failed to get ID token', e);
         }
       }
-
       // Build URLSearchParams for application/x-www-form-urlencoded format
       // as required by Google Apps Script rules to avoid CORS preflight errors.
       const postParams = new URLSearchParams();
@@ -136,7 +137,9 @@ export class APIClient {
         // For GET, append as query string
         const params = new URLSearchParams({
           action,
-          ...(idToken ? { idToken } : {}),
+          ...(idToken ? {
+            idToken
+          } : {}),
           ...data
         });
         url = `${GAS_CONFIG.URL}?${params}`;
@@ -197,21 +200,23 @@ export class APIClient {
    */
   static async registerUser(email, password, displayName = '', whatsapp = '') {
     try {
-      const { auth, db } = await getFirebase();
+      const {
+        auth,
+        db
+      } = await getFirebase();
       if (!auth) {
-        return { success: false, message: 'Firebase Auth tidak tersedia' };
+        return {
+          success: false,
+          message: 'Firebase Auth tidak tersedia'
+        };
       }
-
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
-
       const actionCodeSettings = {
         url: window.location.origin + '/dashboard/', // Akan memunculkan tombol 'Continue' ke dashboard
         handleCodeInApp: false
       };
-
       await user.sendEmailVerification(actionCodeSettings);
-
       const profile = {
         userId: user.uid,
         email: user.email,
@@ -224,7 +229,11 @@ export class APIClient {
       if (db) {
         await db.ref(`users/${user.uid}`).set(profile);
       }
-      return { success: true, data: profile, message: 'Pendaftaran berhasil. Silakan cek email Anda untuk verifikasi.' };
+      return {
+        success: true,
+        data: profile,
+        message: 'Pendaftaran berhasil. Silakan cek email Anda untuk verifikasi.'
+      };
     } catch (e) {
       console.error('[Auth] Register error:', e);
       let errorMsg = 'Pendaftaran gagal';
@@ -237,7 +246,10 @@ export class APIClient {
       } else if (e.message) {
         errorMsg = e.message;
       }
-      return { success: false, message: errorMsg };
+      return {
+        success: false,
+        message: errorMsg
+      };
     }
   }
   /**
@@ -245,11 +257,16 @@ export class APIClient {
    */
   static async loginUser(email, password) {
     try {
-      const { auth, db } = await getFirebase();
+      const {
+        auth,
+        db
+      } = await getFirebase();
       if (!auth) {
-        return { success: false, message: 'Firebase Auth tidak tersedia' };
+        return {
+          success: false,
+          message: 'Firebase Auth tidak tersedia'
+        };
       }
-
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
       let profile = null;
@@ -257,7 +274,15 @@ export class APIClient {
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
         profile = snapshot.val();
       }
-      return { success: true, data: profile || { userId: user.uid, email: user.email, displayName: user.email.split('@')[0] }, message: 'Login berhasil' };
+      return {
+        success: true,
+        data: profile || {
+          userId: user.uid,
+          email: user.email,
+          displayName: user.email.split('@')[0]
+        },
+        message: 'Login berhasil'
+      };
     } catch (e) {
       console.error('[Auth] Login error:', e);
       let errorMsg = 'Login gagal';
@@ -270,7 +295,10 @@ export class APIClient {
       } else if (e.message) {
         errorMsg = e.message;
       }
-      return { success: false, message: errorMsg };
+      return {
+        success: false,
+        message: errorMsg
+      };
     }
   }
   /**
@@ -290,9 +318,15 @@ export class APIClient {
    */
   static async verifyGoogleToken(token) {
     try {
-      const { auth, db, firebase } = await getFirebase();
-      if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
-
+      const {
+        auth,
+        db,
+        firebase
+      } = await getFirebase();
+      if (!auth) return {
+        success: false,
+        message: 'Firebase Auth tidak tersedia'
+      };
       const credential = firebase.auth.GoogleAuthProvider.credential(token);
       const userCredential = await auth.signInWithCredential(credential);
       const user = userCredential.user;
@@ -309,29 +343,39 @@ export class APIClient {
       if (db) {
         await db.ref(`users/${user.uid}`).set(profile);
       }
-      return { success: true, data: profile, message: 'Google sign-in berhasil' };
+      return {
+        success: true,
+        data: profile,
+        message: 'Google sign-in berhasil'
+      };
     } catch (e) {
       console.error('Google sign in error', e);
-      return { success: false, message: e.message || 'Gagal login dengan Google' };
+      return {
+        success: false,
+        message: e.message || 'Gagal login dengan Google'
+      };
     }
   }
-
   /**
    * Native Firebase Google Sign In with Popup
    * Bypasses COOP header issues associated with Google Identity Services
    */
   static async signInWithGooglePopup() {
     try {
-      const { auth, db, firebase } = await getFirebase();
-      if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
-
+      const {
+        auth,
+        db,
+        firebase
+      } = await getFirebase();
+      if (!auth) return {
+        success: false,
+        message: 'Firebase Auth tidak tersedia'
+      };
       const provider = new firebase.auth.GoogleAuthProvider();
       // Optional: Add custom parameters if needed
       // provider.setCustomParameters({ prompt: 'select_account' });
-
       const userCredential = await auth.signInWithPopup(provider);
       const user = userCredential.user;
-
       const profile = {
         userId: user.uid,
         email: user.email,
@@ -342,7 +386,6 @@ export class APIClient {
         emailVerified: user.emailVerified || true,
         createdAt: new Date().toISOString()
       };
-
       if (db) {
         // Retrieve existing user data to avoid overwriting properties
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
@@ -354,41 +397,60 @@ export class APIClient {
         }
         await db.ref(`users/${user.uid}`).update(profile);
       }
-
-      return { success: true, data: profile, message: 'Google sign-in berhasil' };
+      return {
+        success: true,
+        data: profile,
+        message: 'Google sign-in berhasil'
+      };
     } catch (e) {
       console.error('Google popup sign in error', e);
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
   static async requestPasswordReset(email) {
     try {
-      const { auth } = await getFirebase();
-      if (!auth) return { success: false, message: 'Firebase Auth tidak tersedia' };
-
+      const {
+        auth
+      } = await getFirebase();
+      if (!auth) return {
+        success: false,
+        message: 'Firebase Auth tidak tersedia'
+      };
       const actionCodeSettings = {
         url: window.location.origin + '/auth/',
         handleCodeInApp: false
       };
-
       await auth.sendPasswordResetEmail(email, actionCodeSettings);
-      return { success: true, message: 'Link reset password telah dikirim ke email Anda.' };
+      return {
+        success: true,
+        message: 'Link reset password telah dikirim ke email Anda.'
+      };
     } catch (error) {
       console.error('[Auth] Reset password error:', error);
       let errorMsg = 'Gagal mengirim email reset password';
       if (error.code === 'auth/user-not-found') {
         errorMsg = 'Email tidak terdaftar di sistem kami.';
       }
-      return { success: false, message: errorMsg };
+      return {
+        success: false,
+        message: errorMsg
+      };
     }
   }
-
   static async resetPassword(token, password) {
-    return { success: false, message: 'Harap gunakan link resmi dari email.' };
+    return {
+      success: false,
+      message: 'Harap gunakan link resmi dari email.'
+    };
   }
-
   static async verifyEmailToken(token) {
-    return { success: true, message: 'Verifikasi diproses oleh Firebase.' };
+    return {
+      success: true,
+      message: 'Verifikasi diproses oleh Firebase.'
+    };
   }
   /**
    * Reset password with token
@@ -408,15 +470,26 @@ export class APIClient {
    */
   static async getUserProfile(userId) {
     try {
-      const { db } = await getFirebase();
+      const {
+        db
+      } = await getFirebase();
       if (db) {
         const snapshot = await db.ref(`users/${userId}`).once('value');
         const profile = snapshot.val();
-        if (profile) return { success: true, data: profile };
+        if (profile) return {
+          success: true,
+          data: profile
+        };
       }
-      return { success: false, message: 'Profil tidak ditemukan di Firebase' };
+      return {
+        success: false,
+        message: 'Profil tidak ditemukan di Firebase'
+      };
     } catch (e) {
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
   /**
@@ -424,16 +497,30 @@ export class APIClient {
    */
   static async updateUserProfile(userId, displayName, whatsapp, photoBase64) {
     try {
-      const { db } = await getFirebase();
+      const {
+        db
+      } = await getFirebase();
       if (db) {
-        const updates = { displayName, whatsapp };
+        const updates = {
+          displayName,
+          whatsapp
+        };
         if (photoBase64) updates.photoURL = photoBase64;
         await db.ref(`users/${userId}`).update(updates);
-        return { success: true, message: 'Profil berhasil diupdate' };
+        return {
+          success: true,
+          message: 'Profil berhasil diupdate'
+        };
       }
-      return { success: false, message: 'Firebase DB tidak tersedia' };
+      return {
+        success: false,
+        message: 'Firebase DB tidak tersedia'
+      };
     } catch (e) {
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
   /**
@@ -441,18 +528,30 @@ export class APIClient {
    */
   static async changePassword(userId, oldPassword, newPassword) {
     try {
-      const { auth, firebase } = await getFirebase();
+      const {
+        auth,
+        firebase
+      } = await getFirebase();
       if (auth && auth.currentUser) {
         const user = auth.currentUser;
         const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
         await user.reauthenticateWithCredential(credential);
         await user.updatePassword(newPassword);
-        return { success: true, message: 'Password berhasil diubah' };
+        return {
+          success: true,
+          message: 'Password berhasil diubah'
+        };
       }
     } catch (e) {
-      return { success: false, message: 'Password lama salah atau gagal mengubah password.' };
+      return {
+        success: false,
+        message: 'Password lama salah atau gagal mengubah password.'
+      };
     }
-    return { success: false, message: 'User tidak terautentikasi' };
+    return {
+      success: false,
+      message: 'User tidak terautentikasi'
+    };
   }
   // ========== ORDER ENDPOINTS ==========
   /**
@@ -475,7 +574,6 @@ export class APIClient {
     } else {
       data = userIdOrOrderData;
     }
-
     // Safety net: generate orderId if caller didn't provide one
     if (!data.orderId) {
       const ts = Date.now();
@@ -483,46 +581,45 @@ export class APIClient {
       data.orderId = `INV-${ts}-${rnd}`;
       console.warn('[API] orderId was missing, auto-generated:', data.orderId);
     }
-
     try {
       // 1. Call GAS to Create Order AND Generate Token simultaneously
       const response = await this.call('createOrderWithAuth', data, {
         method: 'POST'
       });
-
       if (response.success && response.data) {
         // GAS returns orderId and snapToken
         const orderId = response.data.orderId;
         const snapToken = response.data.snapToken || '';
         const snapRedirectUrl = response.data.snapRedirectUrl || '';
-
         // GAS handles the RTDB writes for initial order via createOrderWithAuth endpoint.
         // We simply return the response to the caller.
-
-
         return response;
       } else {
         throw new Error(response.message || 'Gagal membuat pesanan');
       }
     } catch (e) {
       console.error('[API] Error in createOrderWithAuth:', e);
-      return { success: false, message: e.message || 'Terjadi kesalahan sistem' };
+      return {
+        success: false,
+        message: e.message || 'Terjadi kesalahan sistem'
+      };
     }
   }
-
-
   /**
    * Get user's orders
    */
   static async getUserOrders(userId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
-
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       // Primary: baca dari userOrders/{userId} â€” node yang bisa diakses user sendiri
       const userOrdersSnap = await db.ref(`userOrders/${userId}`).once('value');
       let ordersArray = [];
-
       if (userOrdersSnap.exists()) {
         const raw = userOrdersSnap.val() || {};
         ordersArray = Object.values(raw);
@@ -538,55 +635,88 @@ export class APIClient {
             ordersArray.forEach(o => {
               if (o.orderId) updates[`userOrders/${userId}/${o.orderId}`] = o;
             });
-            db.ref().update(updates).catch(() => { });
+            db.ref().update(updates).catch(() => {});
           }
         } catch (fallbackErr) {
           console.info('[API] orders query fallback failed (permission):', fallbackErr.message);
         }
       }
-
       ordersArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      return { success: true, data: { orders: ordersArray, count: ordersArray.length }, message: 'Pesanan berhasil diambil' };
+      return {
+        success: true,
+        data: {
+          orders: ordersArray,
+          count: ordersArray.length
+        },
+        message: 'Pesanan berhasil diambil'
+      };
     } catch (e) {
       console.error('[API] RTDB getUserOrders failed:', e);
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
   static async getOrderDetail(orderId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
-
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref(`orders/${orderId}`).once('value');
       if (snap.exists()) {
-        return { success: true, data: snap.val() };
+        return {
+          success: true,
+          data: snap.val()
+        };
       }
-      return { success: false, message: 'Order tidak ditemukan' };
+      return {
+        success: false,
+        message: 'Order tidak ditemukan'
+      };
     } catch (e) {
       console.error('[API] RTDB getOrderDetail failed:', e);
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
   static async getUserOrderStats(userId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
-
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snapshot = await db.ref('orders').orderByChild('userId').equalTo(userId).once('value');
       const ordersData = snapshot.val() || {};
       const orders = Object.values(ordersData);
-
       const stats = {
         totalOrders: orders.length,
-        ordersByStatus: { pending: 0, processing: 0, completed: 0, cancelled: 0 },
-        paymentStatus: { pending: 0, paid: 0, unpaid: 0, expired: 0, failed: 0 },
+        ordersByStatus: {
+          pending: 0,
+          processing: 0,
+          completed: 0,
+          cancelled: 0
+        },
+        paymentStatus: {
+          pending: 0,
+          paid: 0,
+          unpaid: 0,
+          expired: 0,
+          failed: 0
+        },
         totalSpent: 0,
         averageOrderValue: 0,
         lastOrderDate: null
       };
-
       orders.forEach(o => {
         if (o.orderStatus && stats.ordersByStatus[o.orderStatus] !== undefined) {
           stats.ordersByStatus[o.orderStatus]++;
@@ -595,54 +725,76 @@ export class APIClient {
           stats.paymentStatus[o.paymentStatus]++;
         }
         stats.totalSpent += (Number(o.total) || 0);
-
         if (!stats.lastOrderDate || new Date(o.createdAt) > new Date(stats.lastOrderDate)) {
           stats.lastOrderDate = o.createdAt;
         }
       });
-
       if (stats.totalOrders > 0) {
         stats.averageOrderValue = Math.round(stats.totalSpent / stats.totalOrders);
       }
-
-      return { success: true, data: stats };
+      return {
+        success: true,
+        data: stats
+      };
     } catch (e) {
       console.error('[API] RTDB getUserOrderStats failed:', e);
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
   static async syncOrderStatus(orderId) {
     try {
-      const response = await this.call('checkPaymentStatus', { orderId }, { method: 'POST' });
+      const response = await this.call('checkPaymentStatus', {
+        orderId
+      }, {
+        method: 'POST'
+      });
       // Frontend simply queries GAS and returns response. 
       // RTDB sync should only be handled by GAS webhook or GAS endpoint, not frontend.
       return response;
     } catch (e) {
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
-
-
   static generateMidtransToken(orderId, email, phone, name, domain, packageId, total) {
     return this.call('generateMidtransToken', {
-      orderId, email, phone, name, domain, packageId, total
-    }, { method: 'POST' });
+      orderId,
+      email,
+      phone,
+      name,
+      domain,
+      packageId,
+      total
+    }, {
+      method: 'POST'
+    });
   }
-
   static async checkDomain(domain) {
     try {
-      if (!domain) return { success: false, message: 'Domain diperlukan' };
-      const { db } = await getFirebase();
-      if (!db) return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi â€“ anggap tersedia' };
-
+      if (!domain) return {
+        success: false,
+        message: 'Domain diperlukan'
+      };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: true,
+        data: {
+          domain,
+          available: true
+        },
+        message: 'Tidak dapat memverifikasi â€“ anggap tersedia'
+      };
       const domainLower = domain.toLowerCase();
       const domainKey = domainLower.replace(/\./g, '_');
-
       // Status pembayaran yang dianggap "sudah berhasil" (domain resmi milik orang)
       const PAID_STATUSES = ['paid', 'settlement', 'capture', 'success', 'active'];
-
       // 1. Fast path: check `domains` mirror node (public readable)
       // Node ini di-update oleh webhook Midtrans ketika pembayaran berhasil
       const domainSnap = await db.ref(`domains/${domainKey}`).once('value');
@@ -660,79 +812,185 @@ export class APIClient {
           message: isTaken ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
         };
       }
-
-
       // Tidak ada data â†’ domain tersedia
-      return { success: true, data: { domain, available: true }, message: 'Domain tersedia' };
+      return {
+        success: true,
+        data: {
+          domain,
+          available: true
+        },
+        message: 'Domain tersedia'
+      };
     } catch (e) {
       console.error('[API] checkDomain failed:', e);
-      return { success: true, data: { domain, available: true }, message: 'Tidak dapat memverifikasi' };
+      return {
+        success: true,
+        data: {
+          domain,
+          available: true
+        },
+        message: 'Tidak dapat memverifikasi'
+      };
     }
   }
-
   static async getDomainPricing(tld) {
     try {
       const fallbackPricing = {
-        'com': { price: 114900, period: '1 Tahun' },
-        'id': { price: 190000, period: '1 Tahun' },
-        'co.id': { price: 295000, period: '1 Tahun' },
-        'my.id': { price: 9900, period: '1 Tahun' },
-        'web.id': { price: 9900, period: '1 Tahun' },
-        'cloud': { price: 49900, period: '1 Tahun' },
-        'org': { price: 149900, period: '1 Tahun' },
-        'net': { price: 199900, period: '1 Tahun' },
-        'biz.id': { price: 120000, period: '1 Tahun' },
-        'ac.id': { price: 65000, period: '1 Tahun' },
-        'or.id': { price: 130000, period: '1 Tahun' },
-        'sch.id': { price: 59000, period: '1 Tahun' },
-        'top': { price: 230000, period: '1 Tahun' },
-        'xyz': { price: 29900, period: '1 Tahun' },
-        'it.com': { price: 114900, period: '1 Tahun' },
-        'ponpes.id': { price: 59000, period: '1 Tahun' },
-        'go.id': { price: 250000, period: '1 Tahun' },
-        'net.id': { price: 130000, period: '1 Tahun' }
+        'com': {
+          price: 114900,
+          period: '1 Tahun'
+        },
+        'id': {
+          price: 190000,
+          period: '1 Tahun'
+        },
+        'co.id': {
+          price: 295000,
+          period: '1 Tahun'
+        },
+        'my.id': {
+          price: 9900,
+          period: '1 Tahun'
+        },
+        'web.id': {
+          price: 9900,
+          period: '1 Tahun'
+        },
+        'cloud': {
+          price: 49900,
+          period: '1 Tahun'
+        },
+        'org': {
+          price: 149900,
+          period: '1 Tahun'
+        },
+        'net': {
+          price: 199900,
+          period: '1 Tahun'
+        },
+        'biz.id': {
+          price: 120000,
+          period: '1 Tahun'
+        },
+        'ac.id': {
+          price: 65000,
+          period: '1 Tahun'
+        },
+        'or.id': {
+          price: 130000,
+          period: '1 Tahun'
+        },
+        'sch.id': {
+          price: 59000,
+          period: '1 Tahun'
+        },
+        'top': {
+          price: 230000,
+          period: '1 Tahun'
+        },
+        'xyz': {
+          price: 29900,
+          period: '1 Tahun'
+        },
+        'it.com': {
+          price: 114900,
+          period: '1 Tahun'
+        },
+        'ponpes.id': {
+          price: 59000,
+          period: '1 Tahun'
+        },
+        'go.id': {
+          price: 250000,
+          period: '1 Tahun'
+        },
+        'net.id': {
+          price: 130000,
+          period: '1 Tahun'
+        }
       };
-
       const data = fallbackPricing[tld];
-      if (!data) return { success: false, message: 'TLD tidak didukung' };
-
-      return { success: true, data: { tld, price: data.price, period: data.period } };
+      if (!data) return {
+        success: false,
+        message: 'TLD tidak didukung'
+      };
+      return {
+        success: true,
+        data: {
+          tld,
+          price: data.price,
+          period: data.period
+        }
+      };
     } catch (e) {
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
   static async validatePromoCode(code) {
-    if (!code) return { success: false, message: 'Kode promo diperlukan' };
+    if (!code) return {
+      success: false,
+      message: 'Kode promo diperlukan'
+    };
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
-
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref(`promos/${code.toUpperCase()}`).once('value');
-      if (!snap.exists()) return { success: false, message: 'Kode promo tidak ditemukan' };
-
+      if (!snap.exists()) return {
+        success: false,
+        message: 'Kode promo tidak ditemukan'
+      };
       const promo = snap.val();
-      if (!promo.isActive) return { success: false, message: 'Kode promo sudah tidak aktif' };
-
+      if (!promo.active) return {
+        success: false,
+        message: 'Kode promo sudah tidak aktif'
+      };
       const now = new Date();
-      if (promo.validFrom && new Date(promo.validFrom) > now) return { success: false, message: 'Kode promo belum aktif' };
-      if (promo.validUntil && new Date(promo.validUntil) < now) return { success: false, message: 'Kode promo sudah kedaluwarsa' };
-      if (promo.maxUses > 0 && promo.currentUses >= promo.maxUses) return { success: false, message: 'Kuota promo sudah habis' };
-
-      return { success: true, data: promo, message: 'Promo berhasil diterapkan' };
+      if (promo.start && new Date(promo.start) > now) return {
+        success: false,
+        message: 'Kode promo belum aktif'
+      };
+      if (promo.end && new Date(promo.end) < now) return {
+        success: false,
+        message: 'Kode promo sudah kedaluwarsa'
+      };
+      if (promo.limit > 0 && (promo.usage || 0) >= promo.limit) return {
+        success: false,
+        message: 'Kuota promo sudah habis'
+      };
+      return {
+        success: true,
+        data: promo,
+        message: 'Promo berhasil diterapkan'
+      };
     } catch (e) {
-      return { success: false, message: 'Gagal memvalidasi promo: ' + e.message };
+      return {
+        success: false,
+        message: 'Gagal memvalidasi promo: ' + e.message
+      };
     }
   }
-
   static async getActivePromoCodes() {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
-
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('promos').orderByChild('isActive').equalTo(true).once('value');
-      if (!snap.exists()) return { success: true, data: [] };
-
+      if (!snap.exists()) return {
+        success: true,
+        data: []
+      };
       const promos = Object.values(snap.val());
       const now = new Date();
       const activePromos = promos.filter(p => {
@@ -741,28 +999,35 @@ export class APIClient {
         if (p.maxUses > 0 && p.currentUses >= p.maxUses) return false;
         return true;
       });
-      return { success: true, data: activePromos };
+      return {
+        success: true,
+        data: activePromos
+      };
     } catch (e) {
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
   static async getAdminStats(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const usersSnap = await db.ref('users').once('value');
       const ordersSnap = await db.ref('orders').once('value');
       const ticketsSnap = await db.ref('tickets').once('value');
-
       const users = usersSnap.val() || {};
       const orders = ordersSnap.val() || {};
       const tickets = ticketsSnap.val() || {};
-
       const usersCount = Object.keys(users).length;
       let revenue = 0;
       let subsCount = 0;
-
       Object.values(orders).forEach(o => {
         // Support both old `status` field and new `paymentStatus` field
         const pStatus = (o.paymentStatus || o.status || '').toLowerCase();
@@ -771,17 +1036,17 @@ export class APIClient {
           subsCount++;
         }
       });
-
       const ticketsCount = Object.keys(tickets).length;
       const labels = [];
       const dataPoints = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        labels.push(d.toLocaleDateString('id-ID', { weekday: 'long' }));
+        labels.push(d.toLocaleDateString('id-ID', {
+          weekday: 'long'
+        }));
         dataPoints.push(0);
       }
-
       const recentActivities = [];
       Object.values(users).forEach(u => {
         if (u.createdAt) {
@@ -790,37 +1055,39 @@ export class APIClient {
             const diffDays = Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
             if (diffDays >= 0 && diffDays <= 6) dataPoints[6 - diffDays]++;
             recentActivities.push({
-              type: 'user', title: `User baru mendaftar: ${u.displayName || u.email}`,
-              timeStr: u.createdAt, timestamp: date.getTime()
+              type: 'user',
+              title: `User baru mendaftar: ${u.displayName || u.email}`,
+              timeStr: u.createdAt,
+              timestamp: date.getTime()
             });
-          } catch (e) { }
+          } catch (e) {}
         }
       });
-
       Object.values(orders).forEach(o => {
         if (o.createdAt) {
           try {
             recentActivities.push({
-              type: 'transaction', title: `Order baru: ${o.orderId || 'Order'}`,
-              timeStr: o.createdAt, timestamp: new Date(o.createdAt).getTime()
+              type: 'transaction',
+              title: `Order baru: ${o.orderId || 'Order'}`,
+              timeStr: o.createdAt,
+              timestamp: new Date(o.createdAt).getTime()
             });
-          } catch (e) { }
+          } catch (e) {}
         }
       });
-
       Object.values(tickets).forEach(t => {
         if (t.createdAt) {
           try {
             recentActivities.push({
-              type: 'ticket', title: `Tiket baru: ${t.subject || 'Support'}`,
-              timeStr: t.createdAt, timestamp: new Date(t.createdAt).getTime()
+              type: 'ticket',
+              title: `Tiket baru: ${t.subject || 'Support'}`,
+              timeStr: t.createdAt,
+              timestamp: new Date(t.createdAt).getTime()
             });
-          } catch (e) { }
+          } catch (e) {}
         }
       });
-
       recentActivities.sort((a, b) => b.timestamp - a.timestamp);
-
       return {
         success: true,
         data: {
@@ -829,16 +1096,28 @@ export class APIClient {
           subscriptions: subsCount,
           tickets: ticketsCount,
           recentActivities: recentActivities.slice(0, 10),
-          chartData: { labels, dataPoints }
+          chartData: {
+            labels,
+            dataPoints
+          }
         }
       };
-    } catch (e) { return { success: false, message: e.message }; }
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async getAllUsers(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('users').once('value');
       const data = snap.val() || {};
       // Inject Firebase key (uid) into each user object in case it's missing
@@ -847,202 +1126,468 @@ export class APIClient {
         id: key,
         ...val,
         // Ensure uid is always present (might be stored inside the object too)
-        ...(val.uid ? {} : { uid: key })
+        ...(val.uid ? {} : {
+          uid: key
+        })
       }));
-      return { success: true, data: users };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        data: users
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async saveAdminUser(adminId, userData) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const id = userData.uid || userData.id;
       if (id) {
         await db.ref(`users/${id}`).update(userData);
       } else {
         const newRef = db.ref('users').push();
-        await newRef.set({ ...userData, uid: newRef.key, createdAt: new Date().toISOString() });
+        await newRef.set({
+          ...userData,
+          uid: newRef.key,
+          createdAt: new Date().toISOString()
+        });
       }
-      return { success: true, message: 'User berhasil disimpan', data: userData };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'User berhasil disimpan',
+        data: userData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async deleteAdminUser(adminId, id) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       await db.ref(`users/${id}`).remove();
-      return { success: true, message: 'User berhasil dihapus' };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'User berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async getAllTransactions(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('orders').once('value');
       const data = snap.val() || {};
-      return { success: true, data: Object.values(data) };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async saveAdminTransaction(adminId, txData) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const id = txData.orderId || txData.id || ('INV-' + Date.now());
       txData.orderId = id;
       await db.ref(`orders/${id}`).update(txData);
-      return { success: true, message: 'Transaksi berhasil disimpan', data: txData };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Transaksi berhasil disimpan',
+        data: txData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async deleteAdminTransaction(adminId, id) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       await db.ref(`orders/${id}`).remove();
-      return { success: true, message: 'Transaksi berhasil dihapus' };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Transaksi berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async getAdminPromos(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('promos').once('value');
       const data = snap.val() || {};
-      return { success: true, data: Object.values(data) };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
+  static async getPublicPromos() {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      const snap = await db.ref('promos').once('value');
+      const data = snap.val() || {};
+      const promos = Object.values(data).filter(p => p.active);
+      return {
+        success: true,
+        data: promos
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
   static async saveAdminPromo(adminId, promoData) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const code = promoData.code || ('PROMO-' + Date.now());
       promoData.code = code;
       await db.ref(`promos/${code}`).set(promoData);
-      return { success: true, message: 'Promo berhasil disimpan', data: promoData };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Promo berhasil disimpan',
+        data: promoData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async deleteAdminPromo(adminId, code) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       await db.ref(`promos/${code}`).remove();
-      return { success: true, message: 'Promo berhasil dihapus' };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Promo berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async getPackages() {
     try {
-      const { db } = await getFirebase();
+      const {
+        db
+      } = await getFirebase();
       if (!db) throw new Error('Firebase DB not available');
       const snap = await db.ref('packages').once('value');
       const data = snap.val();
-      if (data) return { success: true, data: Object.values(data).filter(p => p.active !== false) };
-      const { DOMAIN_PACKAGES } = await import('../config/api.config.js');
-      return { success: true, data: Object.values(DOMAIN_PACKAGES) };
+      if (data) return {
+        success: true,
+        data: Object.values(data).filter(p => p.active !== false)
+      };
+      const {
+        DOMAIN_PACKAGES
+      } = await import('../config/api.config.js');
+      return {
+        success: true,
+        data: Object.values(DOMAIN_PACKAGES)
+      };
     } catch (e) {
       try {
-        const { DOMAIN_PACKAGES } = await import('../config/api.config.js');
-        return { success: true, data: Object.values(DOMAIN_PACKAGES) };
-      } catch (err) { return { success: false, message: e.message }; }
+        const {
+          DOMAIN_PACKAGES
+        } = await import('../config/api.config.js');
+        return {
+          success: true,
+          data: Object.values(DOMAIN_PACKAGES)
+        };
+      } catch (err) {
+        return {
+          success: false,
+          message: e.message
+        };
+      }
     }
   }
-
   static async getAdminPackages(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('packages').once('value');
       const data = snap.val() || {};
-      return { success: true, data: Object.values(data) };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async saveAdminPackage(adminId, packageData) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const id = packageData.id || ('PKG-' + Date.now());
       packageData.id = id;
       await db.ref(`packages/${id}`).set(packageData);
-      return { success: true, message: 'Paket berhasil disimpan', data: packageData };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Paket berhasil disimpan',
+        data: packageData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async deleteAdminPackage(adminId, id) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       await db.ref(`packages/${id}`).remove();
-      return { success: true, message: 'Paket berhasil dihapus' };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Paket berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async getAdminTickets(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('tickets').once('value');
       const data = snap.val() || {};
-      return { success: true, data: Object.values(data) };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async saveAdminTicket(adminId, ticketData) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const id = ticketData.id || ('TICKET-' + Date.now());
       ticketData.id = id;
       await db.ref(`tickets/${id}`).update(ticketData);
-      return { success: true, message: 'Tiket berhasil disimpan', data: ticketData };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Tiket berhasil disimpan',
+        data: ticketData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async deleteAdminTicket(adminId, id) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       await db.ref(`tickets/${id}`).remove();
-      return { success: true, message: 'Tiket berhasil dihapus' };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'Tiket berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async getAdminDNS(adminId) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const snap = await db.ref('dns').once('value');
       const data = snap.val() || {};
-      return { success: true, data: Object.values(data) };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async saveAdminDNS(adminId, dnsData) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const domainKey = (dnsData.domain || '').replace(/\./g, '_');
       if (!domainKey) throw new Error("Domain invalid");
       await db.ref(`dns/${domainKey}`).update(dnsData);
-      return { success: true, message: 'DNS berhasil disimpan', data: dnsData };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'DNS berhasil disimpan',
+        data: dnsData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
-
   static async deleteAdminDNS(adminId, domain) {
     try {
-      const { db } = await getFirebase();
-      if (!db) return { success: false, message: 'Firebase DB not available' };
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
       const domainKey = (domain || '').replace(/\./g, '_');
       await db.ref(`dns/${domainKey}`).remove();
-      return { success: true, message: 'DNS berhasil dihapus' };
-    } catch (e) { return { success: false, message: e.message }; }
+      return {
+        success: true,
+        message: 'DNS berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
   }
 }
 // Export for use

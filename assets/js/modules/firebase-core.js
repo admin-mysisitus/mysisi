@@ -5,7 +5,6 @@
  * Prevents race conditions by returning a Promise that resolves 
  * to the Firebase instances (db, auth, storage).
  */
-
 const firebaseConfig = {
   apiKey: "AIzaSyBkzS96QoH4nTcFOGDLMSkIbiKrkCUcA58",
   authDomain: "sisitus-project.firebaseapp.com",
@@ -15,7 +14,6 @@ const firebaseConfig = {
   messagingSenderId: "802713479795",
   appId: "1:802713479795:web:0e1d6d3c84ec57bd5b5806"
 };
-
 let firebaseInitPromise = null;
 
 function loadScript(src) {
@@ -33,7 +31,6 @@ function loadScript(src) {
     document.head.appendChild(script);
   });
 }
-
 export async function getFirebase() {
   // If already loaded and initialized, return immediately
   if (window.firebase && window.firebaseDB && window.firebaseAuth) {
@@ -44,7 +41,6 @@ export async function getFirebase() {
       firebase: window.firebase
     };
   }
-
   // If initialization is already in progress, wait for it
   if (!firebaseInitPromise) {
     firebaseInitPromise = (async () => {
@@ -59,16 +55,13 @@ export async function getFirebase() {
             loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js")
           ]);
         }
-
         if (!window.firebase.apps.length) {
           window.firebase.initializeApp(firebaseConfig);
         }
-
         // Expose globally for legacy components
         window.firebaseDB = window.firebase.database();
         window.firebaseStorage = window.firebase.storage();
         window.firebaseAuth = window.firebase.auth();
-        
         // Polyfill the v9 modular functions using v8 compat SDK so we don't have to rewrite everything
         if (!window.firebaseHelpers) {
           window.firebaseHelpers = {
@@ -96,10 +89,8 @@ export async function getFirebase() {
             getDownloadURL: (ref) => ref.getDownloadURL()
           };
         }
-
         // Dispatch event for legacy scripts (like sendQueue.js)
         window.dispatchEvent(new Event('firebase-ready'));
-
         return {
           db: window.firebaseDB,
           auth: window.firebaseAuth,
@@ -113,6 +104,5 @@ export async function getFirebase() {
       }
     })();
   }
-
   return firebaseInitPromise;
 }

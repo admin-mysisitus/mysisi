@@ -110,15 +110,15 @@ async function loadOrderData(orderId) {
       try {
         const syncResult = await APIClient.syncOrderStatus(orderId);
         if (syncResult.success && syncResult.data && syncResult.data.paymentStatus === 'paid') {
-           console.log('[Invoice] Late payment status updated to paid via sync!');
-           // Sync returned paid! Re-fetch order data
-           const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
-           if (newResult.success && (newResult.data || newResult.order)) {
-              invoiceData = newResult.data || newResult.order;
-           }
+          console.log('[Invoice] Late payment status updated to paid via sync!');
+          // Sync returned paid! Re-fetch order data
+          const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
+          if (newResult.success && (newResult.data || newResult.order)) {
+            invoiceData = newResult.data || newResult.order;
+          }
         }
-      } catch (e) { 
-        console.warn('Failed to sync', e); 
+      } catch (e) {
+        console.warn('Failed to sync', e);
       }
     }
   } catch (error) {

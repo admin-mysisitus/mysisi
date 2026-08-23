@@ -74,7 +74,6 @@ export class AdminSidebar {
         }
       });
     }
-
     // Auto-close sidebar on mobile when a link is clicked
     const navLinks = this.container.querySelectorAll('.admin-nav-item');
     navLinks.forEach(link => {

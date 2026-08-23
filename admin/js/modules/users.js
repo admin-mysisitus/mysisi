@@ -116,7 +116,6 @@ function setupEventListeners() {
       }
     }
   };
-
   const searchInput = document.getElementById('search-users');
   const filterSelect = document.getElementById('filter-user-status');
   if (searchInput) searchInput.addEventListener('input', applyFilters);
@@ -126,26 +125,18 @@ function setupEventListeners() {
 function applyFilters() {
   const tbody = document.getElementById('users-table-body');
   if (!tbody) return;
-  
   const searchVal = (document.getElementById('search-users')?.value || '').toLowerCase();
   const filterVal = document.getElementById('filter-user-status')?.value || 'all';
-  
   let filteredUsers = currentUsers;
-  
   if (searchVal) {
-    filteredUsers = filteredUsers.filter(u => 
-      (u.name && u.name.toLowerCase().includes(searchVal)) || 
-      (u.email && u.email.toLowerCase().includes(searchVal))
-    );
+    filteredUsers = filteredUsers.filter(u => (u.name && u.name.toLowerCase().includes(searchVal)) || (u.email && u.email.toLowerCase().includes(searchVal)));
   }
-  
   if (filterVal !== 'all') {
     filteredUsers = filteredUsers.filter(u => {
       const status = (u.status || 'active').toLowerCase();
       return status === filterVal;
     });
   }
-  
   renderTable(filteredUsers, tbody);
 }
 async function loadUsers() {
@@ -181,6 +172,10 @@ async function loadUsers() {
 
 function renderTable(users, tbody) {
   tbody.innerHTML = '';
+  const countLabel = document.getElementById('users-count');
+  if (countLabel) {
+    countLabel.textContent = `Menampilkan ${users.length} user`;
+  }
   if (users.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Tidak ada user yang sesuai.</td></tr>';
     return;
@@ -192,7 +187,6 @@ function renderTable(users, tbody) {
     const status = user.status || 'active';
     const joinedDate = user.joined || user.createdAt || new Date().toISOString();
     const uid = user.id || user.uid || user.userId || '';
-    
     const statusColor = status === 'active' ? 'var(--admin-success)' : 'var(--admin-danger)';
     const statusBg = status === 'active' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
     const roleColor = role === 'admin' ? 'var(--admin-primary)' : (role === 'support' ? 'var(--admin-warning)' : 'var(--admin-text-muted)');

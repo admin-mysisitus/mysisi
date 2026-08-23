@@ -23,10 +23,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     card.dataset.category = item.category;
     card.dataset.id = item.id;
     card.style.animation = 'fadeInUp 0.6s ease-out forwards';
-    
     // Split features into array for pill tags
     const featureTags = item.features.split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('');
-    
     card.innerHTML = `
       <div class="portfolio-card-image" onclick="window.open('${item.url}', '_blank')">
         <img src="${item.image}" alt="${item.imageAlt}" loading="lazy">

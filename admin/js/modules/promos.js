@@ -120,7 +120,6 @@ function setupEventListeners() {
       }
     }
   };
-
   const searchInput = document.getElementById('search-promos');
   const filterSelect = document.getElementById('filter-promo-status');
   if (searchInput) searchInput.addEventListener('input', applyFilters);
@@ -130,19 +129,12 @@ function setupEventListeners() {
 function applyFilters() {
   const tbody = document.getElementById('promos-table-body');
   if (!tbody) return;
-  
   const searchVal = (document.getElementById('search-promos')?.value || '').toLowerCase();
   const filterVal = document.getElementById('filter-promo-status')?.value || 'all';
-  
   let filteredPromos = currentPromos;
-  
   if (searchVal) {
-    filteredPromos = filteredPromos.filter(p => 
-      (p.code && p.code.toLowerCase().includes(searchVal)) || 
-      (p.type && p.type.toLowerCase().includes(searchVal))
-    );
+    filteredPromos = filteredPromos.filter(p => (p.code && p.code.toLowerCase().includes(searchVal)) || (p.type && p.type.toLowerCase().includes(searchVal)));
   }
-  
   if (filterVal !== 'all') {
     filteredPromos = filteredPromos.filter(p => {
       const active = p.active;
@@ -151,7 +143,6 @@ function applyFilters() {
       return true;
     });
   }
-  
   renderPromos(filteredPromos, tbody);
 }
 async function loadPromos() {

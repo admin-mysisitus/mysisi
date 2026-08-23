@@ -26,7 +26,6 @@ var syncEngine = null;
 var sendQueue = null;
 var typingTimeout = null;
 var QUICK_REPLIES = [];
-
 // ============================================================================
 // QUICK REPLIES LOGIC
 // ============================================================================
