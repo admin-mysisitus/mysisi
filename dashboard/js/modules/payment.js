@@ -387,7 +387,7 @@ function displayOrderData(orderData) {
     <div class="dashboard-page-header dashboard-page-header--invoice">
       <div class="dashboard-page-header-content">
         <h1 class="dashboard-page-header-title invoice-title">Invoice #${orderData.orderId}</h1>
-        <p class="dashboard-page-header-desc">Dibuat pada: ${formatDateTime(orderData.createdAt)}. Silakan lakukan pembayaran tagihan pesanan Anda.</p>
+        <p class="dashboard-page-header-desc">Dibuat pada: ${formatDateTime(orderData.createdAt)}. ${orderData.paymentStatus === 'paid' ? 'Terima kasih, pembayaran untuk tagihan pesanan ini telah lunas.' : 'Silakan lakukan pembayaran tagihan pesanan Anda.'}</p>
       </div>
       <div class="dashboard-page-header-visual">
         <i class="fas fa-credit-card"></i>
@@ -496,7 +496,7 @@ function displayOrderData(orderData) {
 
         <!-- Payment Actions -->
         <div id="payment-actions" class="section">
-          <h3>Opsi Pembayaran</h3>
+          ${orderData.paymentStatus !== 'paid' ? '<h3>Opsi Pembayaran</h3>' : ''}
           <div class="button-group">
             ${orderData.paymentStatus !== 'paid' && !isExpired ? `
               <button id="btn-payment" class="btn btn-primary btn-lg">
