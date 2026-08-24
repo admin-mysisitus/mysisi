@@ -33,36 +33,20 @@
         </div>
         <div>
           <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Periode (Tahun)</label>
-          <input type="number" id="pkg-cycle" required min="1" value="1" class="admin-input-control">
+          <input type="number" id="pkg-periodValue" required min="1" value="1" class="admin-input-control">
+        </div>
+        <div style="flex: 1;">
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Urutan (Order)</label>
+          <input type="number" id="pkg-order" required min="0" value="99" class="admin-input-control">
         </div>
       </div>
       <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Deskripsi Singkat (Gunakan koma untuk list fitur - misal: Domain Gratis,Hosting SSD,Support 24/7)</label>
-        <textarea id="pkg-desc" rows="3" class="admin-input-control" style="resize: vertical;"></textarea>
+        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Deskripsi Singkat</label>
+        <textarea id="pkg-description" rows="2" class="admin-input-control" style="resize: vertical;"></textarea>
       </div>
-      <div class="admin-form-grid-2">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Penyimpanan</label>
-          <input type="text" id="pkg-storage" value="N/A" class="admin-input-control">
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Akun Email</label>
-          <input type="text" id="pkg-email" value="Limited" class="admin-input-control">
-        </div>
-      </div>
-      <div class="admin-form-grid-3">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">SSL</label>
-          <input type="text" id="pkg-ssl" value="Free" class="admin-input-control">
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Backup</label>
-          <input type="text" id="pkg-backup" value="Manual" class="admin-input-control">
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Support</label>
-          <input type="text" id="pkg-support" value="Standard" class="admin-input-control">
-        </div>
+      <div class="admin-form-group">
+        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Daftar Fitur (Gunakan baris baru/Enter untuk setiap fitur)</label>
+        <textarea id="pkg-features" rows="5" class="admin-input-control" style="resize: vertical;" placeholder="Domain Gratis&#10;Hosting SSD&#10;Support 24/7"></textarea>
       </div>
       <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
         <input type="checkbox" id="pkg-active" checked style="width: 18px; height: 18px;">

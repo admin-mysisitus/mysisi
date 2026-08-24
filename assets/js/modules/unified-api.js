@@ -1351,41 +1351,45 @@ export class APIClient {
       };
     }
   }
-  static async getPackages() {
-    try {
-      const {
-        db
-      } = await getFirebase();
-      if (!db) throw new Error('Firebase DB not available');
-      const snap = await db.ref('packages').once('value');
-      const data = snap.val();
-      if (data) return {
-        success: true,
-        data: Object.values(data).filter(p => p.active !== false)
-      };
-      const {
-        DOMAIN_PACKAGES
-      } = await import('../config/api.config.js');
-      return {
-        success: true,
-        data: Object.values(DOMAIN_PACKAGES)
-      };
-    } catch (e) {
-      try {
-        const {
-          DOMAIN_PACKAGES
-        } = await import('../config/api.config.js');
-        return {
-          success: true,
-          data: Object.values(DOMAIN_PACKAGES)
-        };
-      } catch (err) {
-        return {
-          success: false,
-          message: e.message
-        };
-      }
+  static pricingCache = null;
+
+  static async fetchPricingConfig(forceRefresh = false) {
+    if (this.pricingCache && !forceRefresh) {
+      return { success: true, data: this.pricingCache };
     }
+    try {
+      const { db } = await getFirebase();
+      if (!db) throw new Error('Firebase DB not available');
+      
+      const [snapPackages, snapDomains, snapAddons, snapPromos] = await Promise.all([
+        db.ref('packages').once('value'),
+        db.ref('domains_pricing').once('value'),
+        db.ref('addons').once('value'),
+        db.ref('promos').once('value')
+      ]);
+      
+      this.pricingCache = {
+        packages: snapPackages.val() || {},
+        domains: snapDomains.val() || {},
+        addons: snapAddons.val() || {},
+        promos: snapPromos.val() || {}
+      };
+      
+      return { success: true, data: this.pricingCache };
+    } catch (e) {
+      return { success: false, message: e.message };
+    }
+  }
+
+  static async getPackages() {
+    const res = await this.fetchPricingConfig();
+    if (res.success && res.data && res.data.packages) {
+      return { 
+        success: true, 
+        data: Object.values(res.data.packages).filter(p => p.active !== false) 
+      };
+    }
+    return { success: false, message: res.message || 'Failed to get packages' };
   }
   static async getAdminPackages(adminId) {
     try {
@@ -1446,6 +1450,149 @@ export class APIClient {
       return {
         success: true,
         message: 'Paket berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
+
+  // --- ADMIN DOMAINS API ---
+  static async getAdminDomains(adminId) {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      const snap = await db.ref('domains_pricing').once('value');
+      const data = snap.val() || {};
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
+
+  static async saveAdminDomain(adminId, domainData) {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      
+      const key = domainData.ext.replace('.', '').replace(/\./g, '_');
+      await db.ref(`domains_pricing/${key}`).set(domainData);
+      return {
+        success: true,
+        message: 'Domain berhasil disimpan',
+        data: domainData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
+
+  static async deleteAdminDomain(adminId, ext) {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      const key = ext.replace('.', '').replace(/\./g, '_');
+      await db.ref(`domains_pricing/${key}`).remove();
+      return {
+        success: true,
+        message: 'Domain berhasil dihapus'
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
+
+  // --- ADMIN ADDONS API ---
+  static async getAdminAddons(adminId) {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      const snap = await db.ref('addons').once('value');
+      const data = snap.val() || {};
+      return {
+        success: true,
+        data: Object.values(data)
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
+
+  static async saveAdminAddon(adminId, addonData) {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      const id = addonData.id || ('ADDON-' + Date.now());
+      addonData.id = id;
+      await db.ref(`addons/${id}`).set(addonData);
+      return {
+        success: true,
+        message: 'Addon berhasil disimpan',
+        data: addonData
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message
+      };
+    }
+  }
+
+  static async deleteAdminAddon(adminId, id) {
+    try {
+      const {
+        db
+      } = await getFirebase();
+      if (!db) return {
+        success: false,
+        message: 'Firebase DB not available'
+      };
+      await db.ref(`addons/${id}`).remove();
+      return {
+        success: true,
+        message: 'Addon berhasil dihapus'
       };
     } catch (e) {
       return {

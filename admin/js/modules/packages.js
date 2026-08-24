@@ -38,14 +38,12 @@ function setupEventListeners() {
         id: document.getElementById('pkg-id').value.trim(),
         name: document.getElementById('pkg-name').value.trim(),
         price: parseInt(document.getElementById('pkg-price').value),
-        cycle: document.getElementById('pkg-cycle').value,
-        desc: document.getElementById('pkg-desc').value.trim(),
-        storage: document.getElementById('pkg-storage').value.trim(),
-        emailAcc: document.getElementById('pkg-email').value.trim(),
-        ssl: document.getElementById('pkg-ssl').value.trim(),
-        backup: document.getElementById('pkg-backup').value.trim(),
-        support: document.getElementById('pkg-support').value.trim(),
-        active: document.getElementById('pkg-active').checked
+        periodValue: parseInt(document.getElementById('pkg-periodValue').value),
+        period: document.getElementById('pkg-periodValue').value + ' Tahun',
+        description: document.getElementById('pkg-description').value.trim(),
+        features: document.getElementById('pkg-features').value.trim().split('\n').filter(f => f.trim() !== ''),
+        active: document.getElementById('pkg-active').checked,
+        order: parseInt(document.getElementById('pkg-order').value) || 99
       };
       try {
         const adminId = AuthManager.getUserId();
@@ -86,13 +84,17 @@ function setupEventListeners() {
     document.getElementById('pkg-id').readOnly = true; // prevent changing ID
     document.getElementById('pkg-name').value = pkg.name;
     document.getElementById('pkg-price').value = pkg.price;
-    document.getElementById('pkg-cycle').value = pkg.cycle;
-    document.getElementById('pkg-desc').value = pkg.desc || '';
-    document.getElementById('pkg-storage').value = pkg.storage || 'N/A';
-    document.getElementById('pkg-email').value = pkg.emailAcc || 'Limited';
-    document.getElementById('pkg-ssl').value = pkg.ssl || 'Free';
-    document.getElementById('pkg-backup').value = pkg.backup || 'Manual';
-    document.getElementById('pkg-support').value = pkg.support || 'Standard';
+    document.getElementById('pkg-periodValue').value = pkg.periodValue || (pkg.cycle ? parseInt(pkg.cycle) : 1);
+    document.getElementById('pkg-description').value = pkg.description || pkg.desc || '';
+    document.getElementById('pkg-order').value = typeof pkg.order === 'number' ? pkg.order : 99;
+    
+    let featuresText = '';
+    if (Array.isArray(pkg.features)) {
+      featuresText = pkg.features.join('\n');
+    } else if (typeof pkg.features === 'string') {
+      featuresText = pkg.features;
+    }
+    document.getElementById('pkg-features').value = featuresText;
     document.getElementById('pkg-active').checked = pkg.active;
     document.getElementById('package-modal').style.display = 'flex';
   };
@@ -136,7 +138,11 @@ async function loadPackages() {
     const adminId = AuthManager.getUserId();
     const response = await APIClient.getAdminPackages(adminId);
     if (response.success) {
-      const packages = response.data || [];
+      const packages = (response.data || []).sort((a, b) => {
+        const orderA = typeof a.order === 'number' ? a.order : 999;
+        const orderB = typeof b.order === 'number' ? b.order : 999;
+        return orderA - orderB;
+      });
       if (packages.length === 0) {
         container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px;">Belum ada paket.</div>';
       } else {
@@ -183,7 +189,7 @@ function renderPackages(packages, container) {
       </li>
     `).join('');
     const displayPrice = pkg.price != null ? Number(pkg.price).toLocaleString('id-ID') : '0';
-    const displayCycle = pkg.cycle || '1';
+    const displayCycle = pkg.periodValue || pkg.cycle || '1';
     const pkgId = pkg.id || '';
     const pkgName = pkg.name || 'Paket Tanpa Nama';
     card.innerHTML = `

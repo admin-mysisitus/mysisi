@@ -74,20 +74,29 @@ export async function render(currentUser) {
     }
     // Render dynamic domain pricing
     try {
-      const response = await fetch('/assets/data/domain_pricing.json');
-      const pricingData = await response.json();
-      if (pricingData) {
+      const configRes = await APIClient.fetchPricingConfig();
+      if (configRes.success && configRes.data && configRes.data.domains) {
+        // Map RTDB Object back to Array for rendering
+        const pricingData = Object.values(configRes.data.domains).map(d => ({
+          ...d,
+          ext: `.${d.ext}`
+        })).sort((a, b) => {
+          const orderA = typeof a.order === 'number' ? a.order : 999;
+          const orderB = typeof b.order === 'number' ? b.order : 999;
+          return orderA - orderB;
+        });
+        
         const pricingContainer = document.getElementById('dynamic-domain-pricing');
         if (pricingContainer) {
           pricingContainer.innerHTML = pricingData.map(domain => {
-            const hasDiscount = domain.oldPrice && domain.oldPrice > domain.newPrice;
+            const hasDiscount = domain.oldPrice && domain.oldPrice > domain.registration;
             const formatNumber = (num) => num.toLocaleString('id-ID');
             return `
               <div class="search-pill">
-                <span class="ext" style="color: ${domain.color};">${domain.ext}</span>
+                <span class="ext" style="color: ${domain.color || '#ea4335'};">${domain.ext}</span>
                 <div class="pricing-info">
                   ${hasDiscount ? `<span class="original-price">${formatNumber(domain.oldPrice)}</span>` : ''}
-                  <span class="current-price">${formatNumber(domain.newPrice)}</span>
+                  <span class="current-price">${formatNumber(domain.registration)}</span>
                 </div>
               </div>
             `;

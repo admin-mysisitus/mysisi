@@ -8,7 +8,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbxJrGaRYoF4nlF4STLg3oeEQQ7A84FF3bgdNP2V75FKaKt4AFWfyLIA0w8lsaTkcwUT/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbzIA8tlpcJ1x8kdY_1QNRq00QCp54ZXxrwGQ1IamsFkv_EB_uyE8sAwk0Dxzb4SyjEE/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 60000,
   // Actions/endpoints yang dipanggil
@@ -65,129 +65,5 @@ export const MIDTRANS_CONFIG = {
     CANCELLED: 'cancel',
     FAILED: 'failure',
     DENIED: 'deny'
-  }
-};
-// ========== DOMAIN PACKAGES CONFIGURATION ==========
-// ✅ SYNCHRONIZED dengan package validation di GAS
-// PENTING: Update keduanya jika ada perubahan paket
-export const DOMAIN_PACKAGES = {
-  // Starter Package
-  starter: {
-    id: 'starter',
-    name: 'Paket Starter',
-    price: 599000,
-    period: '1 Tahun',
-    periodValue: 1,
-    description: 'Sempurna untuk Bisnis Kecil & UMKM',
-    features: ['5–7 Hari Pengerjaan', 'Hingga 5 Halaman Custom Design', 'Optimasi Core Web Vitals', 'Domain & Hosting 1 Tahun', 'WhatsApp Integrasi Otomatis']
-  },
-  // Grower Package
-  grower: {
-    id: 'grower',
-    name: 'Paket Grower',
-    price: 1299000,
-    period: '3 Tahun',
-    periodValue: 3,
-    description: 'Untuk Bisnis Menengah & Perusahaan Profesional',
-    features: ['7–10 Hari Pengerjaan', 'Hingga 8 Halaman Custom Design', 'SEO On-Page Lengkap + SEO Lokal', 'Optimasi Core Web Vitals Advanced', 'Domain & Hosting 3 Tahun', 'SSL, Backup Bulanan & Anti-Malware', '3x Revisi Desain', '1 Bulan Maintenance Gratis']
-  },
-  // Pioneer Package
-  pioneer: {
-    id: 'pioneer',
-    name: 'Paket Pioneer',
-    price: 2399000,
-    period: '1 Tahun',
-    periodValue: 1,
-    description: 'Untuk Bisnis E-Commerce & Penjual Produk',
-    features: ['14–21 Hari Pengerjaan', '12 Halaman + Toko Online Lengkap', 'Manajemen Produk (Unlimited)', 'Integrasi Ongkir & Payment Gateway', 'Domain & Hosting Cloud Bisnis 1 Tahun', 'Dashboard Admin Lengkap', 'Maintenance Ringan Gratis']
-  },
-  // Opsi Tanpa Paket (Hanya Domain)
-  none: {
-    id: 'none',
-    name: 'Tanpa Paket (Hanya Domain)',
-    price: 0,
-    period: 'Sesuai Domain',
-    periodValue: 0,
-    description: 'Beli domain saja tanpa layanan pembuatan website (Paket Bundling Bebas Pilih)',
-    features: ['Hanya Domain & Akses Kontrol Penuh', 'Akses DNS Management']
-  }
-};
-// ========== PACKAGE VALIDATION ==========
-export const VALID_PACKAGE_IDS = ['starter', 'grower', 'pioneer', 'none'];
-/**
- * Validate package ID exists
- */
-export function isValidPackage(packageId) {
-  return VALID_PACKAGE_IDS.includes(packageId) && DOMAIN_PACKAGES[packageId];
-}
-// ========== HELPER FUNCTIONS ==========
-/**
- * Get package details by ID
- * @param {string} packageId - Package ID
- * @returns {object|null} Package object atau null jika tidak ada
- */
-export function getPackageById(packageId) {
-  return DOMAIN_PACKAGES[packageId] || null;
-}
-/**
- * Get semua packages as array
- * @returns {array} Array of package objects
- */
-export function getAllPackages() {
-  return Object.values(DOMAIN_PACKAGES);
-}
-// ========== ADDON PACKAGES ==========
-/**
- * Available addons for domains and services
- * Each addon can be added to cart independently
- */
-export const ADDON_PACKAGES = {
-  dns_management: {
-    id: 'dns_management',
-    name: 'DNS Management',
-    description: 'Pengelolaan DNS record dan nameserver',
-    price: 0, // Free with domain
-    duration: 1,
-    recommended: true
-  },
-  privacy_protection: {
-    id: 'privacy_protection',
-    name: 'Privacy Protection',
-    description: 'Sembunyikan informasi pribadi Anda dari WHOIS',
-    price: 6625,
-    duration: 1,
-    recommended: false
-  },
-  email_2gb: {
-    id: 'email_2gb',
-    name: 'Email 2GB',
-    description: 'Akun email dengan kapasitas 2 GB per tahun',
-    price: 5000,
-    duration: 1,
-    recommended: false
-  },
-  email_10gb: {
-    id: 'email_10gb',
-    name: 'Email 10GB',
-    description: 'Akun email dengan kapasitas 10 GB per tahun',
-    price: 15000,
-    duration: 1,
-    recommended: false
-  },
-  ssl_certificate: {
-    id: 'ssl_certificate',
-    name: 'SSL Certificate',
-    description: 'Sertifikat SSL untuk keamanan website',
-    price: 99000,
-    duration: 1,
-    recommended: false
-  },
-  domain_forwarding: {
-    id: 'domain_forwarding',
-    name: 'Domain Forwarding',
-    description: 'Arahkan domain ke URL lain',
-    price: 0,
-    duration: 1,
-    recommended: false
   }
 };

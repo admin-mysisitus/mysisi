@@ -1,0 +1,74 @@
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-page-title">Harga Domain</h1>
+    <p class="admin-page-desc">Kelola harga ekstensi domain, status promo, dan highlight.</p>
+  </div>
+  <div>
+    <button class="admin-btn" id="btn-add-domain">
+      <i class="fas fa-plus"></i> Tambah Ekstensi </button>
+  </div>
+</div>
+<div class="admin-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;" id="domains-grid">
+  <!-- Injected via JS -->
+</div>
+<!-- Modal Form Domain -->
+<div id="domain-modal" class="admin-modal">
+  <div class="admin-card admin-modal-content">
+    <h3 id="domain-modal-title" class="admin-section-title">Tambah Ekstensi Domain</h3>
+    <form id="domain-form">
+      <div class="admin-form-grid-2">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Ekstensi Domain (contoh: .com)</label>
+          <input type="text" id="domain-ext" required class="admin-input-control">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Highlight Status</label>
+          <select id="domain-highlight" class="admin-input-control">
+            <option value="none">Normal (Tidak ada)</option>
+            <option value="best">Best (Terpopuler)</option>
+            <option value="business">Business (Bisnis)</option>
+            <option value="cheap">Cheap (Super Hemat)</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin-form-grid-2">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Urutan Tampil (0 = Paling Awal)</label>
+          <input type="number" id="domain-order" min="0" value="99" class="admin-input-control">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Harga Normal / Coret (Rp)</label>
+          <input type="number" id="domain-oldprice" min="0" class="admin-input-control">
+        </div>
+      </div>
+      <div class="admin-form-grid-2">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Harga Pendaftaran (Rp)</label>
+          <input type="number" id="domain-registration" required min="0" class="admin-input-control">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Harga Perpanjangan (Rp)</label>
+          <input type="number" id="domain-renewal" required min="0" class="admin-input-control">
+        </div>
+      </div>
+      <div class="admin-form-group">
+        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Keterangan Singkat (contoh: Ideal untuk bisnis global)</label>
+        <input type="text" id="domain-info" required class="admin-input-control">
+      </div>
+      <div class="admin-form-grid-2">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Label HTML (Badge opsional)</label>
+          <input type="text" id="domain-label" class="admin-input-control" placeholder='&lt;i class="fas fa-star"&gt;&lt;/i&gt; Terpopuler'>
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Warna Utama (Hex)</label>
+          <input type="color" id="domain-color" value="#2563eb" style="width: 100%; height: 42px; padding: 4px; border-radius: 8px; border: 1px solid var(--admin-border);">
+        </div>
+      </div>
+      <div class="admin-actions" style="justify-content: flex-end; margin-top: 24px;">
+        <button type="button" id="btn-close-domain" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
+        <button type="submit" id="btn-save-domain" class="admin-btn"><i class="fas fa-save"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -24,10 +24,19 @@
   } = await import('../modules/domain-utils.js');
   let allExtensions = [];
   try {
-    const res = await fetch('/assets/data/domain_pricing.json');
-    allExtensions = await res.json();
+    const configRes = await APIClient.fetchPricingConfig();
+    if (configRes.success && configRes.data && configRes.data.domains) {
+      allExtensions = Object.values(configRes.data.domains).map(d => ({
+        ...d,
+        ext: `.${d.ext}`
+      })).sort((a, b) => {
+        const orderA = typeof a.order === 'number' ? a.order : 999;
+        const orderB = typeof b.order === 'number' ? b.order : 999;
+        return orderA - orderB;
+      });
+    }
   } catch (err) {
-    console.error('Failed to load domain pricing:', err);
+    console.error('Failed to load domain pricing from APIClient:', err);
   }
   // ============================================
   // UTILITY FUNCTIONS
@@ -141,16 +150,14 @@
     if (!cekDomainPopularExtensions) return;
     cekDomainPopularExtensions.innerHTML = '';
     const sortedExts = [...allExtensions].sort((a, b) => {
-      const order = {
-        best: 3,
-        cheap: 2,
-        business: 1,
-        none: 0
-      };
+      const orderA = typeof a.order === 'number' ? a.order : 999;
+      const orderB = typeof b.order === 'number' ? b.order : 999;
+      if (orderA !== orderB) return orderA - orderB;
+      const order = { best: 3, cheap: 2, business: 1, none: 0 };
       return order[b.highlight] - order[a.highlight];
     }).slice(0, 8);
     sortedExts.forEach((ext, idx) => {
-      const discount = calculateSavings(ext.oldPrice, ext.newPrice);
+      const discount = calculateSavings(ext.oldPrice, ext.registration);
       const item = document.createElement('div');
       item.className = 'cek-domain-ext-item-simple';
       item.style.animationDelay = `${idx * 0.05}s`;
@@ -178,7 +185,7 @@
             </div>
             <div class="cek-domain-ext-prices-simple">
               ${ext.oldPrice ? `<span class="cek-domain-ext-old">${formatCurrency(ext.oldPrice)}</span>` : ''}
-              <span class="cek-domain-ext-new">${formatCurrency(ext.newPrice)}</span>
+              <span class="cek-domain-ext-new">${formatCurrency(ext.registration)}</span>
             </div>
           </div>
         </div>
@@ -257,10 +264,10 @@
         <img src="/assets/img/tld/${extFilename}" alt="${ext}" class="tld-logo-suggestion" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         ${fallbackIconHtml}
       </div>`;
-      const priceHTML = extData && extData.newPrice ? `
+      const priceHTML = extData && extData.registration ? `
         <div class="cek-domain-suggestion-price" id="price-${index}" style="display: none;">
           ${extData.oldPrice ? `<span class="cek-domain-suggestion-price-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
-          <span class="cek-domain-suggestion-price-new">${formatCurrency(extData.newPrice)}</span>
+          <span class="cek-domain-suggestion-price-new">${formatCurrency(extData.registration)}</span>
         </div>
         <div class="cek-domain-suggestion-status" id="status-${index}" style="font-size: 0.85rem; color: #6b7280;">
           <span class="css-spinner" style="border-color: rgba(0,0,0,0.1); border-top-color: var(--color-primary);"></span> Mengecek...
@@ -444,7 +451,7 @@
 
   function createResultCard(fullDomain, extData, result, isRecommended = false) {
     const card = document.createElement('li');
-    const discount = calculateSavings(extData.oldPrice, extData.newPrice);
+    const discount = calculateSavings(extData.oldPrice, extData.registration);
     if (result.error) {
       // STATE 3: ERROR
       card.className = 'cek-domain-result-card error';
@@ -501,13 +508,13 @@
           </div>
           <div class="cek-domain-result-prices">
             ${extData.oldPrice ? `<span class="cek-domain-result-old">${formatCurrency(extData.oldPrice)}</span>` : ''}
-            <span class="cek-domain-result-new"><strong>${formatCurrency(extData.newPrice)}</strong> <small>/tahun</small></span>
+            <span class="cek-domain-result-new"><strong>${formatCurrency(extData.registration)}</strong> <small>/tahun perdana</small></span>
           </div>
           <div class="cek-domain-actions">
-            <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
-              Amankan
+            <button class="cek-domain-action-btn cek-domain-buy-btn" data-domain="${encodeURIComponent(fullDomain)}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.registration}" ${result.isOrdered ? 'style="background: #e67e22; border-color: #d35400;"' : ''}>
+              ${result.isOrdered ? '<i class="fas fa-shopping-cart"></i> Ke Keranjang' : '<i class="fas fa-cart-plus"></i> Pesan'}
             </button>
-            <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.newPrice}" title="Tambah ke Wishlist">
+            <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.registration}" title="Tambah ke Wishlist">
               <i class="far fa-heart"></i>
             </button>
           </div>
@@ -765,19 +772,22 @@
       const tld = btn.dataset.tld;
       const price = parseInt(btn.dataset.price) || 0;
       try {
-        const {
-          DOMAIN_PACKAGES
-        } = await import('../config/api.config.js');
+        const configRes = await APIClient.fetchPricingConfig();
+        let starterPrice = 599000;
+        if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
+          starterPrice = configRes.data.packages.starter.price;
+        }
+        
         // Add domain to cart for both guest and authenticated users
         CartManager.add(domain, tld, {
           package: 'starter',
           duration: 1,
           domainPrice: price,
-          packagePrice: DOMAIN_PACKAGES.starter.price,
+          packagePrice: starterPrice,
           // Legacy properties for backwards compatibility
-          price: DOMAIN_PACKAGES.starter.price,
-          renewalPrice: DOMAIN_PACKAGES.starter.price,
-          basePrice: DOMAIN_PACKAGES.starter.price
+          price: starterPrice,
+          renewalPrice: starterPrice,
+          basePrice: starterPrice
         });
         // ALL users (guest or authenticated) → Cart page directly
         window.location.href = '/cart/';

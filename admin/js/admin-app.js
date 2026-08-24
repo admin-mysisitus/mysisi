@@ -64,8 +64,18 @@ class AdminApp {
       },
       '/admin/packages': {
         page: 'packages',
-        title: 'Paket & Domain',
+        title: 'Paket Website',
         loadModule: () => import('./modules/packages.js')
+      },
+      '/admin/domains': {
+        page: 'domains',
+        title: 'Harga Domain',
+        loadModule: () => import('./modules/domains.js')
+      },
+      '/admin/addons': {
+        page: 'addons',
+        title: 'Layanan Ekstra',
+        loadModule: () => import('./modules/addons.js')
       },
       '/admin/dns': {
         page: 'dns',

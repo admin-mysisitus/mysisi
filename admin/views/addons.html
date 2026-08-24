@@ -1,0 +1,57 @@
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-page-title">Layanan Ekstra (Addons)</h1>
+    <p class="admin-page-desc">Kelola layanan tambahan yang bisa dibeli bersama paket.</p>
+  </div>
+  <div>
+    <button class="admin-btn" id="btn-add-addon">
+      <i class="fas fa-plus"></i> Tambah Addon </button>
+  </div>
+</div>
+<div class="admin-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;" id="addons-grid">
+  <!-- Injected via JS -->
+</div>
+<!-- Modal Form Addon -->
+<div id="addon-modal" class="admin-modal">
+  <div class="admin-card admin-modal-content">
+    <h3 id="addon-modal-title" class="admin-section-title">Tambah Addon Baru</h3>
+    <form id="addon-form">
+      <div class="admin-form-grid-2">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Addon ID (Tanpa spasi)</label>
+          <input type="text" id="addon-id" required class="admin-input-control">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Nama Layanan</label>
+          <input type="text" id="addon-name" required class="admin-input-control">
+        </div>
+      </div>
+      <div class="admin-form-group">
+        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Deskripsi Singkat</label>
+        <textarea id="addon-description" rows="3" required class="admin-input-control" style="resize: vertical;"></textarea>
+      </div>
+      <div class="admin-form-grid-2">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Harga (Rp)</label>
+          <input type="number" id="addon-price" required min="0" class="admin-input-control">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Durasi (Tahun)</label>
+          <input type="number" id="addon-duration" required min="1" value="1" class="admin-input-control">
+        </div>
+      </div>
+      <div class="admin-form-group" style="margin-top: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Urutan (Order)</label>
+        <input type="number" id="addon-order" required min="0" value="99" class="admin-input-control">
+      </div>
+      <div style="margin-top: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="addon-recommended" style="width: 18px; height: 18px;">
+        <label for="addon-recommended" style="font-size: 0.9rem;">Rekomendasikan (Highlight)</label>
+      </div>
+      <div class="admin-actions" style="justify-content: flex-end;">
+        <button type="button" id="btn-close-addon" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
+        <button type="submit" id="btn-save-addon" class="admin-btn"><i class="fas fa-save"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>

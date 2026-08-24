@@ -785,15 +785,14 @@
 
 .cart-item-addons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
 }
 
 .cart-item-addon-option {
   display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0.6rem 0.75rem;
+  flex-direction: column;
+  padding: 0.75rem;
   background: var(--bg-light);
   border: 1px solid var(--border-light);
   border-radius: 6px;
@@ -812,6 +811,13 @@
   background-color: rgba(37, 99, 235, 0.04);
 }
 
+.cart-item-addon-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
 .cart-item-addon-checkbox {
   margin-top: 0.15rem;
 }
@@ -823,7 +829,7 @@
 }
 
 .cart-item-addon-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   word-break: break-word;
@@ -836,6 +842,79 @@
   font-weight: 700;
   color: var(--primary-blue);
   font-family: 'Courier New', monospace;
+}
+
+.cart-item-addon-details {
+  margin-left: 1.6rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cart-item-addon-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.cart-item-addon-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cart-item-addon-features li {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+/* === Free Addon Klaim Button UI === */
+.cart-item-addon-option.is-free {
+  border: 1px dashed var(--primary-blue);
+  background: rgba(37, 99, 235, 0.02);
+}
+
+.cart-item-addon-option.is-free:hover {
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.cart-item-addon-option.is-free.selected {
+  border: 1px solid var(--primary-blue);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.cart-item-addon-price.free-badge {
+  color: #10b981;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.cart-item-addon-claim-btn {
+  background: var(--primary-blue);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.cart-item-addon-claim-btn.claimed {
+  background: #10b981;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.cart-item-addon-option:hover .cart-item-addon-claim-btn:not(.claimed) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
 }
 
 /* Override padding when embedded in dashboard content area to prevent double padding */

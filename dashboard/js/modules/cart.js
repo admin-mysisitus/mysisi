@@ -34,10 +34,7 @@ import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 import SharedAuthForm from '/assets/js/modules/shared-auth-form.js';
-import {
-  DOMAIN_PACKAGES,
-  ADDON_PACKAGES
-} from '/assets/js/config/api.config.js';
+
 // ============================================================================
 // CART STATE MANAGEMENT
 // ============================================================================
@@ -54,7 +51,8 @@ let cartState = {
   promoValidated: false,
   isValidatingPromo: false,
   // UI state
-  isProcessingCheckout: false
+  isProcessingCheckout: false,
+  pricing: { packages: {}, addons: {} }
 };
 // Helper for operations that might trigger full re-renders and browser scroll jumps
 async function withScrollPreservation(action) {
@@ -89,8 +87,8 @@ window.changeItemPackage = (domain, packageId) => {
     const cart = CartManager.getCart();
     const item = cart.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
     if (!item) return;
-    const pkg = DOMAIN_PACKAGES[packageId];
-    if (!pkg) return;
+    const pkg = cartState.pricing.packages[packageId];
+    if (!pkg || pkg.active === false) return;
     const newPrice = pkg.price;
     CartManager.update(domain, {
       package: packageId,
@@ -113,7 +111,7 @@ window.changeItemPackage = (domain, packageId) => {
 };
 window.toggleCartAddon = async (addonId, isChecked) => {
   try {
-    const addon = ADDON_PACKAGES[addonId];
+    const addon = cartState.pricing.addons[addonId];
     if (!addon) return;
     if (isChecked) {
       CartManager.addAddons([{
@@ -147,6 +145,12 @@ export async function render(currentUser) {
     if (!cartState.container) {
       console.error('[Cart] #cart-container not found');
       return;
+    }
+    
+    // Fetch pricing configuration
+    const pricingRes = await APIClient.fetchPricingConfig();
+    if (pricingRes.success && pricingRes.data) {
+      cartState.pricing = pricingRes.data;
     }
     // CRITICAL: Refresh user data from storage in case they just verified email
     if (!currentUser) {
@@ -247,12 +251,12 @@ function renderGuestCheckout() {
     const items = (cartData && cartData.domains) || [];
     const addons = (cartData && cartData.addons) || [];
     const summary = CartManager.getSummary();
-    const domainSubtotal = summary.subtotal;
+    const cartSubtotal = summary.subtotal;
     const addonsTotal = addons.reduce((sum, a) => sum + a.price, 0);
-    const subtotalCombined = domainSubtotal + addonsTotal;
-    const ppn = Math.round(subtotalCombined * 0.11);
+    const domainOnlySubtotal = cartSubtotal - addonsTotal;
+    const ppn = Math.round(cartSubtotal * 0.11);
     const promoDiscount = cartState.promoDiscount || 0;
-    const finalTotal = subtotalCombined + ppn - promoDiscount;
+    const finalTotal = cartSubtotal + ppn - promoDiscount;
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
     // FAST PATH: Only update the breakdown and total if the DOM is already rendered.
@@ -263,7 +267,7 @@ function renderGuestCheckout() {
       existingBreakdown.innerHTML = `
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
           <span>Domain (${items.length}):</span>
-          <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(domainSubtotal)}</span>
+          <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(domainOnlySubtotal)}</span>
         </div>
         ${addonsTotal > 0 ? `
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
@@ -273,7 +277,7 @@ function renderGuestCheckout() {
         ` : ''}
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem; font-weight: 600;">
           <span>Subtotal:</span>
-          <span style="font-family: 'Courier New', monospace; color: var(--text-primary);">${formatPrice(subtotalCombined)}</span>
+          <span style="font-family: 'Courier New', monospace; color: var(--text-primary);">${formatPrice(cartSubtotal)}</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
           <span>PPN (11%):</span>
@@ -595,10 +599,9 @@ function renderAuthenticatedCart() {
   } = CartManager.getSummary();
   const cartData = CartManager.getCart();
   const addons = (cartData && cartData.addons) || [];
-  const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
   const promoTotal = cartState.promoDiscount || 0;
-  const ppn = Math.round((subtotal + addonsTotal) * 0.11);
-  const finalTotal = subtotal + addonsTotal + ppn - promoTotal;
+  const ppn = Math.round(subtotal * 0.11);
+  const finalTotal = subtotal + ppn - promoTotal;
   let itemsHTML = items.map(item => renderCartItem(item)).join('');
   cartState.container.innerHTML = `
     <div class="page-container">
@@ -630,7 +633,7 @@ function renderAuthenticatedCart() {
                 </div>
                 ${item.package && item.package !== 'none' ? `
                 <div class="price-row" style="margin-bottom: 4px; padding-left: 10px; font-size: 13px;">
-                  <span class="price-row-label">+ ${DOMAIN_PACKAGES[item.package]?.name || item.package}</span>
+                  <span class="price-row-label">+ ${cartState.pricing.packages[item.package]?.name || item.package}</span>
                   <span class="price-value">${formatPrice(item.packagePrice || 0)}</span>
                 </div>
                 <div class="price-row" style="margin-bottom: 8px; padding-left: 10px; font-size: 13px; color: #10b981;">
@@ -656,7 +659,7 @@ function renderAuthenticatedCart() {
 
               <div class="price-row subtotal">
                 <span class="price-row-label">Subtotal:</span>
-                <span class="price-value">${formatPrice(subtotal + addonsTotal)}</span>
+                <span class="price-value">${formatPrice(subtotal)}</span>
               </div>
 
               <div class="price-row ppn">
@@ -721,7 +724,14 @@ function renderCartItemSelectors(item) {
   const cartData = CartManager.getCart();
   const selectedAddonIds = (cartData && cartData.addons || []).map(a => a.id.toLowerCase());
   // Generate Packages Selection HTML
-  const packagesHTML = Object.values(DOMAIN_PACKAGES).map(pkg => {
+  const packagesHTML = Object.values(cartState.pricing.packages)
+    .filter(pkg => pkg.active !== false)
+    .sort((a, b) => {
+      const orderA = typeof a.order === 'number' ? a.order : 999;
+      const orderB = typeof b.order === 'number' ? b.order : 999;
+      return orderA - orderB;
+    })
+    .map(pkg => {
     const isSelected = currentPackage === pkg.id;
     const priceDisplay = pkg.price;
     return `
@@ -740,18 +750,52 @@ function renderCartItemSelectors(item) {
     `;
   }).join('');
   // Generate Addons Checklist HTML
-  const addonsHTML = Object.values(ADDON_PACKAGES).map(addon => {
+  const addonsHTML = Object.values(cartState.pricing.addons)
+    .sort((a, b) => {
+      const orderA = typeof a.order === 'number' ? a.order : 999;
+      const orderB = typeof b.order === 'number' ? b.order : 999;
+      return orderA - orderB;
+    })
+    .map(addon => {
     const isSelected = selectedAddonIds.includes(addon.id.toLowerCase());
+    const featuresList = (addon.features && addon.features.length > 0) 
+      ? `<ul class="cart-item-addon-features">
+           ${addon.features.map(f => `<li><i class="fas fa-check" style="color: var(--primary-blue); font-size: 10px; margin-right: 4px;"></i> ${f}</li>`).join('')}
+         </ul>` 
+      : '';
+    const descHtml = addon.description 
+      ? `<div class="cart-item-addon-desc">${addon.description}</div>` 
+      : '';
+
+    const isFree = addon.price === 0;
+
     return `
-      <label class="cart-item-addon-option ${isSelected ? 'selected' : ''}">
-        <input type="checkbox" 
-               class="cart-item-addon-checkbox" 
-               ${isSelected ? 'checked' : ''} 
-               onchange="window.toggleCartAddon('${addon.id}', this.checked)">
-        <div class="cart-item-addon-info">
-          <span class="cart-item-addon-name">${addon.name}</span>
-          <span class="cart-item-addon-price">${addon.price === 0 ? 'Gratis' : `+${formatPrice(addon.price)}`}</span>
+      <label class="cart-item-addon-option ${isSelected ? 'selected' : ''} ${isFree ? 'is-free' : ''}">
+        <div class="cart-item-addon-header" style="justify-content: space-between; align-items: center;">
+          <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+            <input type="checkbox" 
+                   class="cart-item-addon-checkbox" 
+                   ${isFree ? 'style="display:none;"' : ''}
+                   ${isSelected ? 'checked' : ''} 
+                   onchange="window.toggleCartAddon('${addon.id}', this.checked)">
+            <div class="cart-item-addon-info">
+              <span class="cart-item-addon-name">${addon.name}</span>
+              <span class="cart-item-addon-price ${isFree ? 'free-badge' : ''}">${isFree ? 'GRATIS' : `+${formatPrice(addon.price)}`}</span>
+            </div>
+          </div>
+          
+          ${isFree ? `
+            <div class="cart-item-addon-claim-btn ${isSelected ? 'claimed' : ''}">
+              ${isSelected ? '<i class="fas fa-check"></i> Diklaim' : 'Klaim'}
+            </div>
+          ` : ''}
         </div>
+        ${(descHtml || featuresList) ? `
+        <div class="cart-item-addon-details" style="${isFree ? 'margin-left: 0;' : ''}">
+          ${descHtml}
+          ${featuresList}
+        </div>
+        ` : ''}
       </label>
     `;
   }).join('');
@@ -840,8 +884,8 @@ function saveSavedPromo(promoData) {
     if (cartState.promoCode && promoData) {
       localStorage.setItem('saved_promo_code', cartState.promoCode);
       localStorage.setItem('saved_promo_description', promoData.description || '');
-      localStorage.setItem('saved_promo_discount_value', promoData.discount || 0);
-      localStorage.setItem('saved_promo_discount_type', promoData.discountType || 'fixed');
+      localStorage.setItem('saved_promo_discount_value', promoData.value || 0);
+      localStorage.setItem('saved_promo_discount_type', promoData.type || 'fixed');
     } else if (!cartState.promoCode) {
       localStorage.removeItem('saved_promo_code');
       localStorage.removeItem('saved_promo_description');
@@ -978,7 +1022,7 @@ async function proceedToCheckout() {
       console.warn("[Cart] DNS check error, proceeding anyway:", e);
     }
     // Calculate final total with promo + ppn
-    const subtotal = summary.subtotal + (CartManager.getCart().addons || []).reduce((sum, a) => sum + a.price, 0);
+    const subtotal = summary.subtotal;
     const ppn = Math.round(subtotal * 0.11);
     const finalTotal = subtotal + ppn - (cartState.promoDiscount || 0);
     // Generate unique orderId on frontend so GAS can use it for Midtrans

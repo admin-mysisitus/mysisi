@@ -665,11 +665,3 @@ export const Utilities = {
   showLoadingOverlay,
   hideLoadingOverlay
 };
-// ========== DOMAIN PACKAGES EXPORT ==========
-// Re-export from api.config for consolidation
-import {
-  DOMAIN_PACKAGES
-} from '../config/api.config.js';
-export {
-  DOMAIN_PACKAGES
-};

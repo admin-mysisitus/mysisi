@@ -17,8 +17,8 @@ import {
   showError
 } from './unified-utils.js';
 import {
-  DOMAIN_PACKAGES
-} from '../config/api.config.js';
+  APIClient
+} from './unified-api.js';
 // ============================================================================
 // CART MANAGER
 // ============================================================================
@@ -366,12 +366,20 @@ export class WishlistManager {
   /**
    * Move wishlist item to cart
    */
-  static moveToCart(domain) {
+  static async moveToCart(domain) {
     const wishlist = this.getWishlist();
     const item = wishlist.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
     if (!item) {
       throw new Error('Item tidak ditemukan di wishlist');
     }
+    
+    // Fetch latest pricing
+    const configRes = await APIClient.fetchPricingConfig();
+    let starterPrice = 599000;
+    if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
+      starterPrice = configRes.data.packages.starter.price;
+    }
+
     // Add to cart
     const tld = item.tld || domain.split('.').pop();
     CartManager.add(domain, tld, {
@@ -381,7 +389,7 @@ export class WishlistManager {
       renewalPrice: item.renewalPrice || item.price || 0,
       basePrice: item.basePrice || item.price || 0,
       package: 'starter',
-      packagePrice: DOMAIN_PACKAGES.starter.price
+      packagePrice: starterPrice
     });
     // Remove from wishlist
     this.remove(domain);

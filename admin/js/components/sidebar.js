@@ -26,7 +26,13 @@ export class AdminSidebar {
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Manajemen Produk</div>
         
         <a href="#!/admin/packages" class="admin-nav-item" data-route="/admin/packages">
-          <i class="fas fa-box-open"></i> Paket & Domain
+          <i class="fas fa-box-open"></i> Paket Website
+        </a>
+        <a href="#!/admin/domains" class="admin-nav-item" data-route="/admin/domains">
+          <i class="fas fa-globe"></i> Harga Domain
+        </a>
+        <a href="#!/admin/addons" class="admin-nav-item" data-route="/admin/addons">
+          <i class="fas fa-puzzle-piece"></i> Layanan Ekstra
         </a>
         <a href="#!/admin/dns" class="admin-nav-item" data-route="/admin/dns">
           <i class="fas fa-network-wired"></i> DNS Records
