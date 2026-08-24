@@ -146,9 +146,11 @@ function renderInvoice() {
   
   // Set viewport for mobile to allow full zoomed-out view and pinch-to-zoom
   if (window.innerWidth <= 768 || screen.width <= 768) {
+    document.body.classList.add('mobile-viewport');
     const meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
-       meta.setAttribute('content', 'width=750, initial-scale=0.1, maximum-scale=5.0, user-scalable=yes');
+       // Just set width=800, the browser will automatically calculate initial-scale to fit!
+       meta.setAttribute('content', 'width=800, user-scalable=yes');
     }
   }
 
@@ -774,29 +776,33 @@ function renderInvoice() {
         }
 
 
-        @media screen and (max-width: 768px) {
-          .invoice-wrapper {
-            padding-bottom: 10px;
-          }
-          
-          .invoice-page {
-            /* Paksa ukuran minimum agar proporsi desktop terjaga */
-            min-width: 720px; 
-            margin-bottom: 15px;
-          }
+        /* ================= MOBILE VIEWPORT SCALING ================= */
+        /* Karena viewport diset 800px di mobile, media query 768px tidak akan jalan.
+           Kita gunakan class .mobile-viewport yang diinject via JS */
+        
+        .mobile-viewport .invoice-page {
+          min-width: 760px;
+          margin-bottom: 25px;
+        }
 
-          /* Buttons stack for easier tapping and stay in view */
-          .invoice-actions {
-            flex-direction: column;
-            padding: 0 10px 20px 10px;
-            gap: 10px;
-          }
-          
-          .inv-btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-          }
+        .mobile-viewport .invoice-actions {
+          flex-direction: column;
+          padding: 0 10px 40px 10px;
+          gap: 20px;
+        }
+        
+        /* Besarkan tombol secara drastis karena layarnya akan di zoom-out 
+           (Scale sekitar 0.45x sampai 0.5x) */
+        .mobile-viewport .inv-btn {
+          width: 100%;
+          padding: 24px;
+          font-size: 28px;
+          border-radius: 12px;
+          gap: 16px;
+        }
+        
+        .mobile-viewport .inv-btn i {
+          font-size: 32px;
         }
       </style>
     </div>
