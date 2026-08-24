@@ -780,9 +780,19 @@ function renderInvoice() {
         /* Karena viewport diset 800px di mobile, media query 768px tidak akan jalan.
            Kita gunakan class .mobile-viewport yang diinject via JS */
         
+        /* Hapus ruang abu-abu kosong di bagian atas layar HP */
+        body.mobile-viewport .page-container {
+          padding-top: 0 !important;
+        }
+        
+        .mobile-viewport .invoice-wrapper {
+          margin-top: 0 !important;
+        }
+
         .mobile-viewport .invoice-page {
           min-width: 760px;
           margin-bottom: 25px;
+          margin-top: 10px; /* Sedikit ruang agar tidak terlalu mepet atas layar */
         }
 
         .mobile-viewport .invoice-actions {
