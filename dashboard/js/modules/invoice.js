@@ -766,130 +766,32 @@ function renderInvoice() {
 
 
         @media screen and (max-width: 768px) {
-          .invoice-page {
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-          }
-          .inv-watermark-stamp {
-            font-size: 40px;
-            padding: 5px 15px;
-          }
-          /* Keep header side-by-side on mobile to save vertical space */
-          .inv-header {
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            align-items: flex-start;
-          }
-          .inv-logo-title {
-            font-size: 13px;
-          }
-          .inv-logo-subtitle {
-            font-size: 9px;
-          }
-          .inv-logo img {
-            height: 22px !important;
-          }
-          .inv-title-section {
-            text-align: right;
-          }
-          .inv-title {
-            font-size: 18px;
-            margin-bottom: 2px;
-          }
-          .inv-meta {
-            font-size: 10px;
-          }
-          .inv-due-date {
-            margin-bottom: 15px;
-            padding: 4px 12px;
-            font-size: 11px;
-          }
-          .inv-details-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-            font-size: 10px;
-            word-break: break-word; /* Prevents long emails from breaking the grid */
-          }
-          .inv-paid-status {
-            font-size: 12px;
-          }
-          .inv-item-title {
-            font-size: 11px;
-          }
-          .inv-sig-text {
-            margin-bottom: 15px;
-            font-size: 10px;
-          }
-          .inv-sig-name {
-            font-size: 11px;
-          }
-          /* 'Pay via' takes full width on mobile, 'From' and 'Bill to' sit side-by-side */
-          .inv-pay-via {
-            grid-column: span 2;
-            padding: 10px;
-          }
-          .inv-total-section {
-            padding: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-          .inv-total-text {
-            font-size: 13px;
-            margin: 0;
-          }
-          .inv-order-id {
-            font-size: 10px;
-          }
-          .inv-table {
-            display: block;
-            width: 100%;
+          .invoice-wrapper {
             overflow-x: auto;
-            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+          }
+          
+          .invoice-page {
+            /* Paksa ukuran seperti desktop agar tidak ada elemen yang hancur/berdesakan */
+            min-width: 720px; 
             margin-bottom: 15px;
           }
-          .inv-table th, .inv-table td {
-            min-width: 60px;
-            padding: 6px 4px;
-            font-size: 10px;
-          }
-          .inv-table th:first-child, .inv-table td:first-child {
-            min-width: 160px;
-          }
-          .inv-summary-container {
-            margin-bottom: 15px;
-          }
-          .inv-summary {
-            width: 100%;
-            font-size: 11px;
-          }
-          .inv-terms-block {
-            margin-bottom: 15px;
-          }
-          .inv-terms-title {
-            font-size: 11px;
-            margin-bottom: 6px;
-          }
-          .inv-terms-title i {
-            font-size: 12px;
-          }
-          .inv-terms-content {
-            font-size: 10px;
-          }
+
+          /* Buttons stack for easier tapping and stay in view */
           .invoice-actions {
             flex-direction: column;
             padding: 0 10px 20px 10px;
             gap: 10px;
+            position: sticky;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
           }
+          
           .inv-btn {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             font-size: 13px;
           }
         }
