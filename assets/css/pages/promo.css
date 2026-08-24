@@ -1023,6 +1023,7 @@ main {
 
 .coupon-code-value {
   flex: 1;
+  min-width: 0; /* Ensures the input can shrink below its default size */
   font-family: 'Courier New', monospace;
   font-weight: 700;
   font-size: 1.1rem;
