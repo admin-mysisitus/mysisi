@@ -143,6 +143,15 @@ function renderInvoice() {
   const createdDate = new Date(invoiceData.createdAt);
   const dueDate = new Date(createdDate.getTime() + (24 * 60 * 60 * 1000));
   const paymentMethodText = invoiceData.paymentMethod ? capitalize(invoiceData.paymentMethod.replace(/_/g, ' ')) : 'Midtrans Payment Gateway';
+  
+  // Set viewport for mobile to allow full zoomed-out view and pinch-to-zoom
+  if (window.innerWidth <= 768 || screen.width <= 768) {
+    const meta = document.querySelector('meta[name="viewport"]');
+    if (meta) {
+       meta.setAttribute('content', 'width=750, initial-scale=0.1, maximum-scale=5.0, user-scalable=yes');
+    }
+  }
+
   const headerHTML = `
     <div class="inv-header">
       <div class="inv-logo">
@@ -767,13 +776,11 @@ function renderInvoice() {
 
         @media screen and (max-width: 768px) {
           .invoice-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             padding-bottom: 10px;
           }
           
           .invoice-page {
-            /* Paksa ukuran seperti desktop agar tidak ada elemen yang hancur/berdesakan */
+            /* Paksa ukuran minimum agar proporsi desktop terjaga */
             min-width: 720px; 
             margin-bottom: 15px;
           }
@@ -783,16 +790,12 @@ function renderInvoice() {
             flex-direction: column;
             padding: 0 10px 20px 10px;
             gap: 10px;
-            position: sticky;
-            left: 0;
-            width: 100%;
-            box-sizing: border-box;
           }
           
           .inv-btn {
             width: 100%;
             padding: 12px;
-            font-size: 13px;
+            font-size: 16px;
           }
         }
       </style>
