@@ -715,7 +715,8 @@ export class APIClient {
         },
         totalSpent: 0,
         averageOrderValue: 0,
-        lastOrderDate: null
+        lastOrderDate: null,
+        activeDomains: 0
       };
       orders.forEach(o => {
         if (o.orderStatus && stats.ordersByStatus[o.orderStatus] !== undefined) {
@@ -723,6 +724,9 @@ export class APIClient {
         }
         if (o.paymentStatus && stats.paymentStatus[o.paymentStatus] !== undefined) {
           stats.paymentStatus[o.paymentStatus]++;
+          if (o.paymentStatus === 'paid') {
+            stats.activeDomains++;
+          }
         }
         stats.totalSpent += (Number(o.total) || 0);
         if (!stats.lastOrderDate || new Date(o.createdAt) > new Date(stats.lastOrderDate)) {

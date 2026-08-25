@@ -81,7 +81,8 @@ async function withScrollPreservation(action) {
     }, 60);
   }
 }
-// Expose package & addon update handlers globally
+// Expose global handlers
+window.removeCartItem = removeCartItem;
 window.changeItemPackage = (domain, packageId) => {
   try {
     const cart = CartManager.getCart();
@@ -259,47 +260,7 @@ function renderGuestCheckout() {
     const finalTotal = cartSubtotal + ppn - promoDiscount;
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
-    // FAST PATH: Only update the breakdown and total if the DOM is already rendered.
-    // This prevents destroying the active checkbox and completely eliminates browser focus scroll jumps.
-    const existingBreakdown = previewContainer.querySelector('.preview-breakdown');
-    const existingTotal = previewContainer.querySelector('.preview-total');
-    if (existingBreakdown && existingTotal) {
-      existingBreakdown.innerHTML = `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-          <span>Domain (${items.length}):</span>
-          <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(domainOnlySubtotal)}</span>
-        </div>
-        ${addonsTotal > 0 ? `
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-            <span>Layanan Tambahan:</span>
-            <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(addonsTotal)}</span>
-          </div>
-        ` : ''}
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem; font-weight: 600;">
-          <span>Subtotal:</span>
-          <span style="font-family: 'Courier New', monospace; color: var(--text-primary);">${formatPrice(cartSubtotal)}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
-          <span>PPN (11%):</span>
-          <span style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">${formatPrice(ppn)}</span>
-        </div>
-        ${promoDiscount > 0 ? `
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.3rem; color: #27ae60;">
-            <div style="display: flex; flex-direction: column; text-align: left;">
-              <span>Diskon Promo:</span>
-              ${cartState.promoDescription ? `<span style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px;">(${cartState.promoDescription})</span>` : ''}
-            </div>
-            <span style="font-family: 'Courier New', monospace; font-weight: 600;">-${formatPrice(promoDiscount)}</span>
-          </div>
-        ` : ''}
-      `;
-      existingTotal.innerHTML = `
-        <span>Total Pembayaran:</span>
-        <span style="font-family: 'Courier New', monospace;">${formatPrice(finalTotal)}</span>
-      `;
-      return;
-    }
-    // FULL RENDER PATH (initial render or items changed)
+
     previewContainer.innerHTML = `
       <div class="cart-preview">
         <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
@@ -308,34 +269,7 @@ function renderGuestCheckout() {
         <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(0.75rem, 2vw, 1.25rem);">
           ${items.length > 0 ? `
             <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
-              ${items.map(item => {
-      return `
-                  <div class="preview-item-container" style="border-bottom: 1px dashed var(--border-light); padding: 0.75rem 0;">
-                    <div class="preview-item" style="align-items: center; display: flex; justify-content: space-between; gap: 0.5rem; padding-bottom: 0.5rem;">
-                      <div style="flex: 1; user-select: none;">
-                        <div class="preview-item-name" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); font-size: 14px;">
-                          ${item.domain}
-                        </div>
-                        <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-                          <span style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.package ? item.package.toUpperCase() : 'STARTER'}</span>
-                          <span class="preview-item-meta" style="color: var(--text-light); font-size: 11px;">${item.duration || 1} tahun</span>
-                        </div>
-                      </div>
-                      <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                        <div class="preview-item-price" style="font-weight: 700; color: var(--primary-blue); font-family: 'Courier New', monospace;">${formatPrice(item.price * (item.duration || 1))}</div>
-                        <button onclick="window.removeGuestCartItem('${item.domain}')" style="background: none; border: none; color: #ef4444; font-size: 11px; cursor: pointer; padding: 2px 0; display: flex; align-items: center; gap: 4px;">
-                          <i class="fas fa-trash-alt"></i> Hapus
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Config Section (Packages & Addons) -->
-                    <div class="cart-item-config">
-                      ${renderCartItemSelectors(item)}
-                    </div>
-                  </div>
-                `;
-    }).join('')}
+              ${items.map(item => renderCartItem(item)).join('')}
             </div>
 
             <!-- Detailed Price Breakdown -->
@@ -395,39 +329,8 @@ function renderGuestCheckout() {
     onRegisterSuccess: handleAuthSuccess
   });
   authForm.render();
-  // Add GiveNamespace handlers
+  // Expose google login handler
   window.handleGoogleSignIn = handleGoogleSignIn;
-  // Expose guest cart item remover that updates DOM dynamically without losing form inputs
-  window.removeGuestCartItem = (domain) => {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
-        title: 'Hapus Domain?',
-        text: `Apakah Anda yakin ingin menghapus ${domain} dari keranjang?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          CartManager.remove(domain);
-          updateCartPreview();
-          Swal.fire({
-            title: 'Dihapus!',
-            text: `${domain} telah dihapus dari keranjang.`,
-            icon: 'success',
-            timer: 1500,
-            showConfirmButton: false
-          });
-        }
-      });
-    } else {
-      CartManager.remove(domain);
-      updateCartPreview();
-    }
-  };
 }
 /**
  * Handle successful authentication
