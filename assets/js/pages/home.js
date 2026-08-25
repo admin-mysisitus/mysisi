@@ -1,6 +1,35 @@
 /* ========== HOME PAGE INTERACTIONS ========== */
-document.addEventListener('DOMContentLoaded', function() {
+import APIClient from '../modules/unified-api.js';
+
+document.addEventListener('DOMContentLoaded', async function() {
   // ========== SPECIFIC HOME PAGE LOGIC ==========
+  // Banner Promo Dynamic Update
+  const homeBanner = document.getElementById('home-promo-banner');
+  const homeBadge = document.getElementById('home-promo-badge');
+  if (homeBanner && homeBadge) {
+    try {
+      const promoRes = await APIClient.getPublicPromos();
+      if (promoRes.success && promoRes.data && promoRes.data.length > 0) {
+        const percentPromos = promoRes.data.filter(p => p.type === 'percentage');
+        let bestPercent = 0;
+        if (percentPromos.length > 0) {
+          bestPercent = Math.max(...percentPromos.map(p => Number(p.value) || 0));
+        }
+        if (bestPercent > 0) {
+          homeBadge.textContent = `DISKON HINGGA ${bestPercent}%`;
+        } else {
+          homeBadge.textContent = `LIHAT PROMO TERBARU`;
+        }
+        homeBanner.style.display = 'block';
+      } else {
+        homeBanner.style.display = 'none';
+      }
+    } catch (e) {
+      console.warn('Error fetching home banner promo:', e);
+      homeBanner.style.display = 'none';
+    }
+  }
+
   // ========== SOLUTIONS TABS ==========
   const solutionTabs = document.querySelectorAll('.solution-tab-btn');
   const solutionPanes = document.querySelectorAll('.solution-pane');

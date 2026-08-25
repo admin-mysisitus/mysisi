@@ -178,13 +178,25 @@ document.addEventListener('DOMContentLoaded', function() {
             month: 'long',
             year: 'numeric'
           }) : 'Tanpa batas waktu';
+          
+          let usageDisplay = '';
+          const limit = Number(promo.limit) || 0;
+          const usage = Number(promo.usage) || 0;
+          if (limit > 0) {
+            const remaining = Math.max(0, limit - usage);
+            let color = remaining <= 10 ? '#dc2626' : '#d97706'; // Red if low, orange otherwise
+            usageDisplay = `<div class="coupon-usage" style="font-size: 12px; color: ${color}; margin-top: 6px; text-align: center; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px;"><i class="fas fa-fire"></i> Sisa kuota: ${remaining} lagi</div>`;
+          } else {
+            usageDisplay = `<div class="coupon-usage" style="font-size: 12px; color: #10b981; margin-top: 6px; text-align: center; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 4px;"><i class="fas fa-infinity"></i> Kuota tanpa batas</div>`;
+          }
+
           card.innerHTML = `
             <div>
               <div class="coupon-header">
                 <span class="coupon-discount">${discountDisplay} OFF</span>
                 <span class="coupon-type-badge">${typeBadge}</span>
               </div>
-              <p class="coupon-desc">${promo.description || 'Diskon spesial untuk pembelian Anda.'}</p>
+              <p class="coupon-desc">${promo.desc || promo.description || 'Diskon spesial untuk pembelian Anda.'}</p>
             </div>
             <div>
               <div class="coupon-code-wrapper">
@@ -192,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button class="btn-copy-coupon" onclick="copyCouponCode(this, '${promo.code}')">Salin</button>
               </div>
               <div class="coupon-expiry">Berlaku s/d ${expiryFormatted}</div>
+              ${usageDisplay}
             </div>
           `;
           couponsList.appendChild(card);

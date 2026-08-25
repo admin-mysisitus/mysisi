@@ -977,39 +977,7 @@ export class APIClient {
       };
     }
   }
-  static async getActivePromoCodes() {
-    try {
-      const {
-        db
-      } = await getFirebase();
-      if (!db) return {
-        success: false,
-        message: 'Firebase DB not available'
-      };
-      const snap = await db.ref('promos').orderByChild('isActive').equalTo(true).once('value');
-      if (!snap.exists()) return {
-        success: true,
-        data: []
-      };
-      const promos = Object.values(snap.val());
-      const now = new Date();
-      const activePromos = promos.filter(p => {
-        if (p.validFrom && new Date(p.validFrom) > now) return false;
-        if (p.validUntil && new Date(p.validUntil) < now) return false;
-        if (p.maxUses > 0 && p.currentUses >= p.maxUses) return false;
-        return true;
-      });
-      return {
-        success: true,
-        data: activePromos
-      };
-    } catch (e) {
-      return {
-        success: false,
-        message: e.message
-      };
-    }
-  }
+
   static async getAdminStats(adminId) {
     try {
       const {
@@ -1294,7 +1262,20 @@ export class APIClient {
       };
       const snap = await db.ref('promos').once('value');
       const data = snap.val() || {};
-      const promos = Object.values(data).filter(p => p.active);
+      const now = new Date();
+      
+      const promos = Object.values(data).filter(p => {
+        if (!p.active) return false;
+        if (p.start && new Date(p.start) > now) return false;
+        if (p.end && new Date(p.end) < now) return false;
+        
+        const limit = Number(p.limit) || 0;
+        const usage = Number(p.usage) || 0;
+        if (limit > 0 && usage >= limit) return false;
+        
+        return true;
+      });
+      
       return {
         success: true,
         data: promos

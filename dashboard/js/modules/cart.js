@@ -342,7 +342,7 @@ function renderGuestCheckout() {
             <div class="preview-breakdown" style="font-size: 13px; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
               <div class="price-row" style="margin-bottom: 4px;">
                 <span class="price-row-label">Domain (${items.length}):</span>
-                <span class="price-value">${formatPrice(domainSubtotal)}</span>
+                <span class="price-value">${formatPrice(domainOnlySubtotal)}</span>
               </div>
               ${addonsTotal > 0 ? `
                 <div class="price-row" style="margin-bottom: 4px;">
@@ -353,7 +353,7 @@ function renderGuestCheckout() {
               
               <div class="price-row subtotal" style="padding-top: 0.5rem; margin-top: 0.5rem;">
                 <span class="price-row-label">Subtotal:</span>
-                <span class="price-value">${formatPrice(subtotalCombined)}</span>
+                <span class="price-value">${formatPrice(cartSubtotal)}</span>
               </div>
               
               <div class="price-row ppn" style="margin-bottom: 4px;">
@@ -372,7 +372,7 @@ function renderGuestCheckout() {
               ` : ''}
             </div>
 
-            <div class="price-row total" style="padding-top: 0.5rem;">
+            <div class="price-row total preview-total" style="padding-top: 0.5rem;">
               <span>Total Pembayaran:</span>
               <span class="price-value">${formatPrice(finalTotal)}</span>
             </div>

@@ -185,9 +185,32 @@ function renderPromos(promos, tbody) {
   promos.forEach(p => {
     let valStr = p.type === 'percentage' ? `${p.value}%` : `Rp ${p.value.toLocaleString('id-ID')}`;
     let usageStr = p.limit === -1 || p.limit === undefined || p.limit === null || p.limit === '' ? `${p.usage || 0} / ∞` : `${p.usage || 0} / ${p.limit}`;
-    let statusBg = p.active ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
-    let statusColor = p.active ? 'var(--admin-success)' : 'var(--admin-danger)';
-    let statusText = p.active ? 'Aktif' : 'Nonaktif';
+    const now = new Date();
+    const isExpired = p.end && new Date(p.end) < now;
+    const limit = Number(p.limit) || 0;
+    const usage = Number(p.usage) || 0;
+    const isExhausted = limit > 0 && usage >= limit;
+    
+    let statusBg = 'rgba(239, 68, 68, 0.1)';
+    let statusColor = 'var(--admin-danger)';
+    let statusText = 'Nonaktif';
+    
+    if (p.active) {
+      if (isExhausted) {
+        statusBg = 'rgba(239, 68, 68, 0.1)';
+        statusColor = 'var(--admin-danger)'; // Red
+        statusText = 'Habis Kuota';
+      } else if (isExpired) {
+        statusBg = 'rgba(245, 158, 11, 0.1)';
+        statusColor = '#d97706'; // Amber/Orange
+        statusText = 'Kadaluwarsa';
+      } else {
+        statusBg = 'rgba(16, 185, 129, 0.1)';
+        statusColor = 'var(--admin-success)';
+        statusText = 'Aktif';
+      }
+    }
+    
     let endDate = p.end ? new Date(p.end).toLocaleDateString('id-ID', {
       month: 'short',
       year: 'numeric',

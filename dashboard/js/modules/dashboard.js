@@ -106,6 +106,42 @@ export async function render(currentUser) {
     } catch (pricingError) {
       console.warn('Error fetching domain pricing:', pricingError);
     }
+    
+    // Render dynamic promo block
+    try {
+      const promoPanel = document.getElementById('dashboard-promo-panel');
+      const promoTitle = document.getElementById('dashboard-promo-title');
+      const promoDesc = document.getElementById('dashboard-promo-desc');
+      
+      if (promoPanel && promoTitle && promoDesc) {
+        const promoRes = await APIClient.getPublicPromos();
+        if (promoRes.success && promoRes.data && promoRes.data.length > 0) {
+          // Find the best percentage discount
+          const percentPromos = promoRes.data.filter(p => p.type === 'percentage');
+          let bestPercent = 0;
+          if (percentPromos.length > 0) {
+            bestPercent = Math.max(...percentPromos.map(p => Number(p.value) || 0));
+          }
+          
+          if (bestPercent > 0) {
+            promoTitle.textContent = `Diskon Hingga ${bestPercent}%`;
+            promoDesc.textContent = `Klaim berbagai kode voucher aktif kami sekarang juga!`;
+          } else {
+            // Fallback if there are only fixed discounts
+            promoTitle.textContent = `Voucher Spesial Tersedia`;
+            promoDesc.textContent = `Dapatkan potongan harga eksklusif untuk layanan kami.`;
+          }
+        } else {
+          // Hide panel if no promos available
+          promoPanel.style.display = 'none';
+        }
+      }
+    } catch (promoError) {
+      console.warn('Error fetching promos for dashboard:', promoError);
+      const promoPanel = document.getElementById('dashboard-promo-panel');
+      if (promoPanel) promoPanel.style.display = 'none';
+    }
+
     // Setup event listeners
     setupEventListeners();
   } catch (error) {

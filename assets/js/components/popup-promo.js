@@ -1,4 +1,6 @@
 // ========== POPUP PROMO COMPONENT ==========
+import APIClient from '../modules/unified-api.js';
+
 // Storage Reset: Diatur untuk reset setiap 3 jam (10800000 ms)
 class PopupPromo {
   constructor(options = {}) {
@@ -17,13 +19,22 @@ class PopupPromo {
     this.escKeyListener = null;
   }
   // Initialize popup
-  init() {
+  async init() {
     // Check if popup already shown (dan belum lebih dari 3 jam)
     if (this.isAlreadyShown()) {
       return;
     }
-    // Start delay timer sebelum menampilkan popup
-    this.schedulePopup();
+
+    try {
+      // Ambil data promo aktif dari API
+      const promoRes = await APIClient.getPublicPromos();
+      if (promoRes.success && promoRes.data && promoRes.data.length > 0) {
+        // Start delay timer sebelum menampilkan popup
+        this.schedulePopup();
+      }
+    } catch (e) {
+      console.warn('Error fetching promos for popup:', e);
+    }
   }
   // Check if popup already shown dan belum melampaui reset interval (3 jam)
   isAlreadyShown() {
@@ -207,7 +218,7 @@ class PopupPromo {
   }
 }
 // Auto-initialize on page load
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
   // Prevent duplicate initialization and check current path
   const currentPath = window.location.pathname;
   const isAuthOrDashboard = currentPath.includes('/auth') || currentPath.includes('/dashboard');
@@ -221,7 +232,7 @@ window.addEventListener('load', () => {
       onShow: () => {},
       onClose: () => {}
     });
-    popupPromo.init();
+    await popupPromo.init();
     // Store instance untuk debugging/testing
     window.popupPromoInstance = popupPromo;
   }
