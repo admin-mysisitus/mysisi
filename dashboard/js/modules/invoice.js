@@ -157,7 +157,7 @@ function renderInvoice() {
   const headerHTML = `
     <div class="inv-header">
       <div class="inv-logo">
-        <img src="/assets/img/logo/logo-with-text-light.webp" alt="sisitus.com" onerror="this.outerHTML='<h2 style=\\'margin:0;color:#ffffff;\\'>sisitus.com</h2>'" style="height: 38px; margin-bottom: 4px; display: block;">
+        <img src="/assets/img/logo/logo-with-text-light.svg" alt="sisitus.com" onerror="this.outerHTML='<h2 style=\\'margin:0;color:#ffffff;\\'>sisitus.com</h2>'" style="height: 38px; margin-bottom: 4px; display: block;">
         <div class="inv-logo-subtitle">PT. SINTARA DIGITAL NUSANTARA</div>
       </div>
       <div class="inv-title-section">
