@@ -538,14 +538,18 @@ body.dashboard-page-body {
   }
 
   .btn-website {
-    padding: 0 !important;
-    width: 40px;
-    height: 40px;
-    border-radius: 50% !important;
-    margin-right: 8px !important;
+    padding: 4px !important;
+    width: auto !important;
+    height: auto !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin-right: 10px !important;
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    color: var(--text-primary) !important;
   }
 
   .btn-website .btn-text {
@@ -704,37 +708,22 @@ body.dashboard-page-body {
   justify-content: center;
   gap: 6px;
   padding: 0.6rem 1.1rem;
-  border-radius: 999px;
+  border-radius: 8px;
   border: none;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
   white-space: nowrap;
   text-align: center;
   position: relative;
-  overflow: hidden;
-}
-
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0) 100%);
-  transform: translateX(-120%);
-  transition: transform 0.45s ease;
-}
-
-.btn:hover::after {
-  transform: translateX(120%);
 }
 
 .btn:hover {
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+  transform: translateY(-1px);
 }
 
 .btn:active {
@@ -742,47 +731,42 @@ body.dashboard-page-body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: #2563eb;
   color: white;
 }
 
 .btn-primary:hover {
-  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.26);
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  background: #64748b;
   color: white;
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  background: #475569;
 }
 
 .btn-success {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #10b981;
   color: white;
-  font-weight: 700;
-  letter-spacing: 0.3px;
 }
 
 .btn-success:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.32);
-  transform: translateY(-3px);
+  background: #059669;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: #ef4444;
   color: white;
-  font-weight: 700;
-  letter-spacing: 0.3px;
 }
 
 .btn-danger:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.32);
-  transform: translateY(-3px);
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 .btn-outline {
@@ -839,19 +823,18 @@ body.dashboard-page-body {
 .card {
   background: var(--dashboard-surface);
   border: 1px solid var(--dashboard-border-soft);
-  border-radius: 16px;
-  padding: 1.5rem;
+  border-radius: 12px;
+  padding: 1rem;
   box-shadow: var(--dashboard-shadow-soft);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   word-wrap: break-word;
   overflow: hidden;
 }
 
 .card:hover {
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
-  border-color: rgba(37, 99, 235, 0.15);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
 }
 
 .card-header {
