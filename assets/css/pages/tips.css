@@ -1,4 +1,4 @@
-/* ========== TIPS PAGE ========== */
+﻿/* ========== TIPS PAGE ========== */
 /* Import dari blog.css karena struktur HTML yang mirip */
 @import url('blog.css');
 
@@ -44,8 +44,7 @@
 
 /* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .tips-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--primary-blue);
+    border-color: var(--primary-blue);
   box-shadow: var(--shadow-lg);
 }
 
@@ -191,8 +190,7 @@
   }
 
   .tips-card:hover {
-    transform: translateY(-4px);
-  }
+      }
 }
 
 @media (max-width: 480px) {

@@ -1,4 +1,4 @@
-/* ========== PROMO PAGE STYLING ========== */
+﻿/* ========== PROMO PAGE STYLING ========== */
 /* Promo-specific styling utama untuk override shared styles */
 html,
 body {
@@ -45,8 +45,7 @@ main {
 }
 
 .promo-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 35px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.15);
   border-color: var(--accent-cyan);
 }
 
@@ -139,8 +138,7 @@ main {
 }
 
 .vp-item:hover {
-  transform: translateY(-8px);
-  border-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
   box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
 }
 
@@ -169,7 +167,7 @@ main {
 .vp-highlight-card {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   color: var(--white);
   padding: 1.5rem;
   border-radius: var(--radius-besar);
@@ -266,8 +264,7 @@ main {
 }
 
 .requirement-item:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-elegan);
+    box-shadow: var(--shadow-elegan);
 }
 
 .requirement-item h3 {
@@ -315,8 +312,7 @@ main {
 }
 
 .why-item:hover {
-  transform: translateY(-6px);
-  border-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
   box-shadow: var(--shadow-elegan);
   background: linear-gradient(135deg, #F0FDF4 0%, var(--white) 100%);
 }
@@ -404,7 +400,7 @@ main {
 }
 
 .testimonial-swiper .swiper-slide-active .testimonial-card {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   /* Theme matched */
   border-color: transparent;
   box-shadow: 0 20px 40px rgba(37, 99, 235, 0.25);
@@ -847,8 +843,7 @@ main {
 }
 
 .coupon-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-md);
   border-color: var(--accent-cyan);
 }
 

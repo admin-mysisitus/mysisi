@@ -1,7 +1,7 @@
-/* ========== 404 PAGE STYLES ========== */
+﻿/* ========== 404 PAGE STYLES ========== */
 /* Error Section */
 .error-section {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   color: var(--bg-white);
   padding: clamp(3rem, 6vw, 5rem) 20px;
   min-height: calc(100vh - 200px);
@@ -48,8 +48,7 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px);
-  }
+      }
 }
 
 .error-code {
@@ -127,8 +126,7 @@
 }
 
 .quick-link-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .quick-link-item i {

@@ -1,4 +1,4 @@
-/* ========== PERUSAHAAN PAGE STYLING ========== */
+﻿/* ========== PERUSAHAAN PAGE STYLING ========== */
 /* Styling khusus halaman PERUSAHAAN dengan fokus pada company profile, values, dan highlight cards */
 /* Hero styling moved to components/hero.css */
 /* ========== COMPANY INTRO SECTION ========== */
@@ -96,8 +96,7 @@
 
 /* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .highlight-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
   box-shadow: var(--shadow-elegan);
 }
 
@@ -368,8 +367,7 @@
 }
 
 .diff-item-icon:hover .diff-icon-wrapper {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-elegan);
+    box-shadow: var(--shadow-elegan);
 }
 
 .diff-item-icon h3 {
@@ -498,8 +496,7 @@
 }
 
 .service-simple:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
@@ -564,7 +561,7 @@
 /* ========== COMPANY STATS SECTION ========== */
 .company-stats-section {
   padding: 1rem 0;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   color: var(--white);
 }
 
@@ -602,8 +599,7 @@
 
 .stat-box:hover {
   background: transparent;
-  transform: translateY(-4px);
-  border-color: transparent;
+    border-color: transparent;
 }
 
 .stat-box h3 {
@@ -656,8 +652,7 @@
 }
 
 .navigate-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
@@ -832,8 +827,7 @@
 }
 
 .team-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .team-image {
@@ -960,7 +954,7 @@
 .team-cta {
   text-align: left;
   padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   border-radius: var(--radius-besar);
   color: white;
   display: flex;

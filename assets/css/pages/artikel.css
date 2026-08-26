@@ -1,4 +1,4 @@
-/* ========== ARTIKEL PAGE ========== */
+﻿/* ========== ARTIKEL PAGE ========== */
 /* Import dari blog.css karena struktur HTML yang mirip */
 @import url('blog.css');
 
@@ -59,8 +59,7 @@
 
 /* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .artikel-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--primary-blue);
+    border-color: var(--primary-blue);
   box-shadow: var(--shadow-lg);
 }
 
@@ -208,8 +207,7 @@
   }
 
   .artikel-card:hover {
-    transform: translateY(-4px);
-  }
+      }
 }
 
 @media (max-width: 480px) {

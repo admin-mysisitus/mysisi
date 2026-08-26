@@ -1,4 +1,4 @@
-/* ========== DOMAIN & HOSTING PAGE STYLING ========== */
+﻿/* ========== DOMAIN & HOSTING PAGE STYLING ========== */
 /* Page-specific styling untuk halaman domain & hosting layanan */
 /* ========== IMPORT BASE STYLES ========== */
 /* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
@@ -260,8 +260,7 @@
 }
 
 .hosting-packages-grid .package-card:hover {
-  transform: translateY(-6px);
-  border-color: #cbd5e1;
+    border-color: #cbd5e1;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
 }
 
@@ -269,8 +268,7 @@
   border: 2px solid var(--primary-blue);
   border-top: 4px solid var(--accent-cyan);
   box-shadow: 0 10px 30px rgba(37, 99, 235, 0.12);
-  transform: translateY(-8px);
-  z-index: 2;
+    z-index: 2;
 }
 
 .hosting-packages-grid .package-card.featured:hover {
@@ -403,8 +401,7 @@
 
 .feature-card-item:hover {
   border-color: #cbd5e1;
-  transform: translateY(-3px);
-  background: #ffffff;
+    background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -433,7 +430,7 @@
 /* ========== MIGRATION SECTION (OPTION A: HORIZONTAL STEPPER) ========== */
 .detail-migration-section {
   padding: 4rem 0;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   color: var(--bg-white);
   position: relative;
   overflow: hidden;
@@ -501,8 +498,7 @@
 
 .migration-step-card:hover {
   background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-4px);
-}
+  }
 
 .migration-step-card .step-number {
   font-family: 'Outfit', sans-serif;
@@ -578,7 +574,7 @@
 /* ========== HOSTING PLAN SELECTION STATE ========== */
 .hosting-packages-grid .package-card.selected {
   border: 2px solid var(--accent-cyan);
-  box-shadow: 0 12px 40px rgba(6, 182, 212, 0.2);
+  box-shadow: var(--shadow-lg);
   transform: scale(1.02);
 }
 
@@ -600,8 +596,7 @@
 
 .feature-card-item:hover {
   border-color: #cbd5e1;
-  transform: translateY(-3px);
-  background: #ffffff;
+    background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -676,8 +671,7 @@
   background: #ffffff;
   border-color: #cbd5e1;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  transform: translateY(-4px);
-}
+  }
 
 .migration-step-card .step-number {
   font-family: 'Outfit', sans-serif;
@@ -753,7 +747,7 @@
 /* ========== HOSTING PLAN SELECTION STATE ========== */
 .hosting-packages-grid .package-card.selected {
   border: 2px solid var(--accent-cyan);
-  box-shadow: 0 12px 40px rgba(6, 182, 212, 0.2);
+  box-shadow: var(--shadow-lg);
   transform: scale(1.02);
 }
 
@@ -916,7 +910,7 @@
 .team-cta {
   text-align: left;
   padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   border-radius: 16px;
   color: white;
   display: flex;

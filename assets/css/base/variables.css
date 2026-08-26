@@ -2,14 +2,14 @@
    /* ========================================================
      WARNA - COMMITTED PALETTE (OKLCH)
      ======================================================== */
-   /* Brand Core - Vibrant Blue (oklch 55% L, 0.22 C, 260 H) */
-   --brand-base: oklch(55% 0.22 260);
-   --brand-light: oklch(65% 0.22 260);
-   --brand-dark: oklch(40% 0.20 260);
-   --brand-surface: oklch(95% 0.05 260);
+   /* Brand Core - Soft Blue (oklch 58% L, 0.18 C, 260 H) */
+   --brand-base: oklch(58% 0.18 260);
+   --brand-light: oklch(67% 0.17 260);
+   --brand-dark: oklch(42% 0.17 260);
+   --brand-surface: oklch(96% 0.04 260);
    /* Accents */
-   --accent-cyan: oklch(70% 0.15 200);
-   --accent-orange: oklch(65% 0.20 45);
+   --accent-cyan: oklch(72% 0.12 200);
+   --accent-orange: oklch(67% 0.18 45);
    /* Neutrals - Tinted towards brand hue */
    --bg-white: oklch(99.2% 0.005 260);
    /* Putih elegan (off-white), tidak menyilaukan */
@@ -66,11 +66,11 @@
    --radius-large: 16px;
    --radius-besar: 24px;
    /* OKLCH Shadows for better integration */
-   --shadow-sm: 0 2px 4px oklch(20% 0.03 260 / 4%);
-   --shadow-md: 0 4px 12px oklch(20% 0.03 260 / 8%);
-   --shadow-lg: 0 12px 24px oklch(20% 0.03 260 / 12%);
-   --shadow-lembut: 0 8px 32px oklch(20% 0.03 260 / 6%);
-   --shadow-elegan: 0 16px 40px oklch(55% 0.22 260 / 15%);
+   --shadow-sm: 0 1px 3px oklch(20% 0.02 260 / 3%);
+   --shadow-md: 0 3px 10px oklch(20% 0.02 260 / 6%);
+   --shadow-lg: 0 10px 20px oklch(20% 0.02 260 / 9%);
+   --shadow-lembut: 0 6px 24px oklch(20% 0.02 260 / 5%);
+   --shadow-elegan: 0 12px 32px oklch(58% 0.18 260 / 8%);
    /* ========================================================
      MOTION & ANIMATION
      ======================================================== */

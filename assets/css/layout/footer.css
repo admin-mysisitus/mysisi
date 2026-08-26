@@ -1,26 +1,26 @@
 /* ========== FOOTER - MOBILE FIRST ========== */
 footer {
-  background: linear-gradient(135deg, var(--secondary-slate) 0%, #0F172A 100%);
+  background: linear-gradient(135deg, var(--secondary-slate) 0%, #131B2E 100%);
   color: var(--bg-white);
-  padding: clamp(1.5rem, 3vw, 2.5rem) 0 1.5rem;
+  padding: clamp(1.2rem, 2.5vw, 2rem) 0 1.2rem;
   font-family: var(--font-utama);
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(2rem, 5vw, 3rem);
-  margin: 0 auto 2.5rem;
+  gap: clamp(1.5rem, 3.5vw, 2rem);
+  margin: 0 auto 2rem;
   padding: 0;
   width: 90%;
   max-width: 1200px;
 }
 
 .footer-deskripsi {
-  font-size: var(--teks-standar);
-  line-height: var(--line-height-relaxed);
-  color: rgba(255, 255, 255, 0.8);
-  margin: 1rem 0 1.5rem;
+  font-size: var(--teks-kecil);
+  line-height: var(--line-height-normal);
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0.8rem 0 1.2rem;
   text-align: justify;
 }
 

@@ -1,4 +1,4 @@
-/* ========== LAYANAN PAGE STYLING ========== */
+﻿/* ========== LAYANAN PAGE STYLING ========== */
 /* Styling khusus halaman LAYANAN dengan fokus pada layanan cards dan process flow */
 /* Hero styling moved to components/hero.css */
 /* ========== LAYANAN INTRO SECTION ========== */
@@ -381,7 +381,7 @@
 .team-cta {
   text-align: left;
   padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   border-radius: 16px;
   color: white;
   display: flex;

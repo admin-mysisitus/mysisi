@@ -17,7 +17,7 @@ p,
 .text-body {
   font-size: clamp(0.938rem, 1.2vw, 1.063rem);
   max-width: 65ch;
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-normal);
 }
 
 /* Small label texts */

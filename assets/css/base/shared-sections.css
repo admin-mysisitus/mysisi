@@ -19,7 +19,7 @@
 /* Garis bawah judul telah dihapus sesuai permintaan */
 /* ========== STANDARD SECTION PADDING ========== */
 .standard-section {
-  padding: clamp(3.5rem, 5vw, 5rem) 0;
+  padding: clamp(2.5rem, 4vw, 3.5rem) 0;
   position: relative;
 }
 
@@ -28,18 +28,7 @@
   position: relative;
 }
 
-/* Tambahkan efek ambient glow untuk section light */
-.standard-section-light::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 500px;
-  background: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* ambient glow removed — no decorative pseudo-elements */
 
 .standard-section-white {
   background-color: var(--bg-white);
@@ -54,15 +43,15 @@
 /* ========== SECTION PADDING VARIANTS ========== */
 /* Responsive padding untuk berbagai section types */
 .section-large-padding {
-  padding: clamp(2.5rem, 5vw, 4rem) 0;
+  padding: clamp(2rem, 4vw, 3rem) 0;
 }
 
 .section-medium-padding {
-  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  padding: clamp(1.2rem, 2.5vw, 2rem) 0;
 }
 
 .section-small-padding {
-  padding: clamp(2rem, 4vw, 3rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
 }
 
 .section-top-padding {
@@ -104,21 +93,21 @@
 .grid-auto-fit {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(2rem, 3vw, 2.5rem);
+  gap: clamp(1.5rem, 2.5vw, 2rem);
 }
 
 /* 300px cards grid */
 .grid-three-cols {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: clamp(2rem, 3vw, 2.5rem);
+  gap: clamp(1.5rem, 2.5vw, 2rem);
 }
 
 /* 400px cards grid (wider cards) */
 .grid-two-cols {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: clamp(2rem, 4vw, 3rem);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 /* Explicit column grids */
@@ -178,12 +167,12 @@
 .section-subtitle {
   text-align: center;
   color: var(--text-secondary);
-  font-size: clamp(1.05rem, 1.5vw, 1.15rem);
-  margin-bottom: clamp(2rem, 3vw, 3rem);
-  max-width: 650px;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+  max-width: 620px;
   margin-left: auto;
   margin-right: auto;
-  line-height: var(--line-height-relaxed);
+  line-height: var(--line-height-normal);
   font-weight: 500;
 }
 
@@ -539,7 +528,7 @@
 .included-section,
 .service-category-section,
 .value-section {
-  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
 }
 
 /* ========== GLOBAL ANIMATIONS - CONSOLIDATED ========== */

@@ -1,4 +1,4 @@
-/* ========== HOME PAGE STYLING ========== */
+﻿/* ========== HOME PAGE STYLING ========== */
 /* Unique home page styles - shared section styles di base/shared-sections.css */
 /* Hero styling moved to components/hero.css */
 /* ========== PROMO SECTION ========== */
@@ -35,8 +35,7 @@
 }
 
 .promo-link-card:hover .promo-card-wrapper {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.14), 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
 .promo-image-container {
@@ -57,7 +56,7 @@
 }
 
 .promo-link-card:hover .promo-image {
-  transform: scale(1.03);
+  /* no image zoom — impeccable ban */
 }
 
 .promo-overlay {
@@ -311,9 +310,8 @@
 }
 
 .service-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08), 0 6px 8px -5px rgba(0, 0, 0, 0.03);
+  border-color: rgba(37, 99, 235, 0.15);
 }
 
 /* Featured Card (Grower) */
@@ -327,8 +325,7 @@
 }
 
 .service-card--featured:hover {
-  transform: scale(1.02) translateY(-4px);
-  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
 }
 
 /* Badge Featured (Modern pill style) */
@@ -336,15 +333,14 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: linear-gradient(135deg, var(--primary-blue), var(--accent-cyan));
+  background: var(--brand-base);
   color: white;
   padding: 0.35rem 0.85rem;
   border-radius: 99px;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
 }
 
 @media (min-width: 768px) {
@@ -719,9 +715,8 @@
 }
 
 .why-us-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border-color: rgba(37, 99, 235, 0.2);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06), 0 4px 8px -4px rgba(0, 0, 0, 0.03);
+  border-color: rgba(37, 99, 235, 0.12);
 }
 
 /* Large Featured Block */
@@ -1005,7 +1000,7 @@
 }
 
 .solution-tab-btn.active {
-  background: linear-gradient(135deg, var(--primary-blue), var(--accent-cyan));
+  background: var(--brand-base);
   color: white;
   border-color: transparent;
   box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
@@ -1267,7 +1262,7 @@
 
 .badge {
   display: inline-block;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   color: var(--bg-white);
   padding: 0.6rem 1.2rem;
   border-radius: var(--radius-medium);
@@ -1325,7 +1320,7 @@
   color: #ffffff;
   font-size: 1.5rem;
   box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
 }
 
 /* Background Colors diseragamkan dengan tema utama */
@@ -1335,7 +1330,7 @@
 .feature-icon-custom.bg-green,
 .feature-icon-custom.bg-blue,
 .feature-icon-custom.bg-cyan {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
 }
 
 /* Stats section icons */

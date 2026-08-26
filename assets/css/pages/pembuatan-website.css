@@ -1,4 +1,4 @@
-/* ========== DETAIL PAGE STYLING (LAYANAN SUB-PAGES) ========== */
+﻿/* ========== DETAIL PAGE STYLING (LAYANAN SUB-PAGES) ========== */
 /* Page-specific styles - shared hero section styles sudah di base/shared-sections.css */
 /* ========== DETAIL INTRO SECTION ========== */
 .detail-intro-section,
@@ -60,8 +60,7 @@
 }
 
 .feat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-elegan);
+    box-shadow: var(--shadow-elegan);
   border-color: var(--accent-cyan);
 }
 
@@ -164,8 +163,7 @@
 }
 
 .package-overview:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-elegan);
+    box-shadow: var(--shadow-elegan);
   border-color: var(--primary-blue);
 }
 
@@ -410,8 +408,7 @@
 
 .timeline .timeline-content:hover {
   box-shadow: var(--shadow-elegan);
-  transform: translateY(-4px);
-}
+  }
 
 .timeline .timeline-content h3 {
   color: var(--text-primary);
@@ -470,8 +467,7 @@
 }
 
 .artikel-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
   box-shadow: var(--shadow-elegan);
 }
 
@@ -597,8 +593,7 @@
 }
 
 .process-row:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-elegan);
+    box-shadow: var(--shadow-elegan);
   border-color: var(--accent-cyan);
 }
 
@@ -813,8 +808,7 @@
 }
 
 .bento-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 50px rgba(37, 99, 235, 0.08);
+    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.08);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
@@ -1319,8 +1313,7 @@
 }
 
 .material-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .material-card.featured-material {
@@ -1382,7 +1375,7 @@
 .team-cta {
   text-align: left;
   padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+  background: var(--brand-base);
   border-radius: 16px;
   color: white;
   display: flex;
