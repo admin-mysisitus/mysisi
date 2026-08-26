@@ -58,6 +58,7 @@ export class CartManager {
         price: options.price || 0,
         basePrice: options.basePrice || options.price || 0,
         renewalPrice: options.renewalPrice || 0,
+        isRenewal: options.isRenewal || false,
         registrar: options.registrar || 'auto',
         status: 'pending',
         addedAt: Date.now(),
@@ -277,7 +278,9 @@ export class CartManager {
         // Jika paket dipilih, gunakan packagePrice (domain gratis).
         // Fallback ke legacy `domain.price` jika data lama
         let itemPrice = domain.price || 0;
-        if (domain.package === 'none') {
+        if (domain.isRenewal) {
+          itemPrice = domain.renewalPrice || itemPrice;
+        } else if (domain.package === 'none') {
           itemPrice = domain.domainPrice || itemPrice;
         } else if (domain.package && domain.packagePrice > 0) {
           itemPrice = domain.packagePrice;

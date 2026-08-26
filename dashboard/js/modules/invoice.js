@@ -194,7 +194,7 @@ function renderInvoice() {
   const baseLayananPrice = subtotal - addonsTotal;
 
   // Calculate Dates and Periods
-  const orderDuration = invoiceData.duration || 1;
+  const orderDuration = invoiceData.domainDuration || invoiceData.duration || 1;
   const expiryDate = new Date(createdDate);
   expiryDate.setFullYear(expiryDate.getFullYear() + orderDuration);
   const bundlePeriod = `${orderDuration} Tahun (${formatDate(createdDate)} - ${formatDate(expiryDate)})`;
@@ -205,6 +205,14 @@ function renderInvoice() {
   }
   
   const packageName = formatPackageName(invoiceData.packageId || invoiceData.package);
+  
+  const isRenewal = invoiceData.isRenewal === true;
+  let itemTitle = 'Bundle Domain & Hosting';
+  if (isRenewal) {
+    itemTitle = 'Perpanjangan Domain';
+  } else if (packageName.toLowerCase() === 'none') {
+    itemTitle = 'Registrasi Domain';
+  }
 
   // Refined Watermark
   const watermarkHTML = isPaid ? `
@@ -265,10 +273,10 @@ function renderInvoice() {
           <tbody>
             <tr>
               <td>
-                <strong class="inv-item-title">Bundle Domain & Hosting</strong>
+                <strong class="inv-item-title">${itemTitle}</strong>
                 <div class="inv-item-desc">
                   Domain: ${invoiceData.domain || '-'}<br>
-                  Paket: ${packageName} ${freeAddonsText}<br>
+                  ${isRenewal || packageName.toLowerCase() === 'none' ? '' : `Paket: ${packageName} ${freeAddonsText}<br>`}
                   Masa Aktif: ${bundlePeriod}
                 </div>
               </td>

@@ -240,6 +240,21 @@ export class AuthManager {
   static getUserId() {
     return this.state.user?.userId || null;
   }
+  
+  /**
+   * Get Firebase ID Token
+   */
+  static async getIdToken() {
+    try {
+      const { auth } = await getFirebase();
+      if (auth && auth.currentUser) {
+        return await auth.currentUser.getIdToken(true);
+      }
+    } catch (e) {
+      console.warn('[AuthManager] Failed to get idToken:', e);
+    }
+    return null;
+  }
   /**
    * Check if user is admin
    */

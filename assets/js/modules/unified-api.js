@@ -1653,73 +1653,34 @@ export class APIClient {
       };
     }
   }
-  static async getAdminDNS(adminId) {
-    try {
-      const {
-        db
-      } = await getFirebase();
-      if (!db) return {
-        success: false,
-        message: 'Firebase DB not available'
-      };
-      const snap = await db.ref('dns').once('value');
-      const data = snap.val() || {};
-      return {
-        success: true,
-        data: Object.values(data)
-      };
-    } catch (e) {
-      return {
-        success: false,
-        message: e.message
-      };
-    }
+
+  // ==========================================
+  // DNS MANAGEMENT (GAS BACKEND INTEGRATION)
+  // ==========================================
+  
+  static async setupCloudflareZone(domain) {
+    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
+    return this.call('setupCloudflareZone', { domain });
   }
-  static async saveAdminDNS(adminId, dnsData) {
-    try {
-      const {
-        db
-      } = await getFirebase();
-      if (!db) return {
-        success: false,
-        message: 'Firebase DB not available'
-      };
-      const domainKey = (dnsData.domain || '').replace(/\./g, '_');
-      if (!domainKey) throw new Error("Domain invalid");
-      await db.ref(`dns/${domainKey}`).update(dnsData);
-      return {
-        success: true,
-        message: 'DNS berhasil disimpan',
-        data: dnsData
-      };
-    } catch (e) {
-      return {
-        success: false,
-        message: e.message
-      };
-    }
+
+  static async getDnsRecords(domain) {
+    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
+    return this.call('getDnsRecords', { domain });
   }
-  static async deleteAdminDNS(adminId, domain) {
-    try {
-      const {
-        db
-      } = await getFirebase();
-      if (!db) return {
-        success: false,
-        message: 'Firebase DB not available'
-      };
-      const domainKey = (domain || '').replace(/\./g, '_');
-      await db.ref(`dns/${domainKey}`).remove();
-      return {
-        success: true,
-        message: 'DNS berhasil dihapus'
-      };
-    } catch (e) {
-      return {
-        success: false,
-        message: e.message
-      };
-    }
+  
+  static async addDnsRecord(domain, recordData) {
+    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
+    return this.call('addDnsRecord', { domain, recordData });
+  }
+  
+  static async editDnsRecord(domain, recordId, recordData) {
+    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
+    return this.call('editDnsRecord', { domain, recordId, recordData });
+  }
+
+  static async deleteDnsRecord(domain, recordId) {
+    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
+    return this.call('deleteDnsRecord', { domain, recordId });
   }
 }
 // Export for use

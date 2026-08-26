@@ -735,7 +735,7 @@ function renderCartItem(item) {
             ${item.domain}
           </h4>
           <div class="cart-item-details" style="display: flex; gap: 8px; align-items: center; margin-top: 6px; border: none; padding: 0; flex-wrap: wrap;">
-            <span class="cart-item-badge" style="background: #e3f2fd; color: var(--primary-blue); padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${(!item.package || item.package === 'none') ? 'HANYA DOMAIN' : item.package.toUpperCase()}</span>
+            <span class="cart-item-badge" style="background: ${item.isRenewal ? '#fef3c7' : '#e3f2fd'}; color: ${item.isRenewal ? '#d97706' : 'var(--primary-blue)'}; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.isRenewal ? 'PERPANJANGAN' : (!item.package || item.package === 'none' ? 'HANYA DOMAIN' : item.package.toUpperCase())}</span>
             <span class="cart-item-duration" style="color: var(--text-light); font-size: 11px;"><i class="fas fa-calendar"></i> ${item.duration || 1} tahun</span>
           </div>
           ${renewalInfo}
@@ -748,10 +748,12 @@ function renderCartItem(item) {
         </div>
       </div>
 
+      ${item.isRenewal ? '' : `
       <!-- Config Section (Packages & Addons) -->
       <div class="cart-item-config">
         ${renderCartItemSelectors(item)}
       </div>
+      `}
     </div>
   `;
 }
@@ -967,7 +969,9 @@ async function proceedToCheckout() {
       name: cartState.currentUser?.displayName || cartState.currentUser?.name || cartState.currentUser?.email?.split('@')[0] || 'Customer',
       phone: cartState.currentUser?.whatsapp || cartState.currentUser?.phone || '',
       domain: firstDomain,
-      packageId: summary.items[0]?.package || 'starter',
+      domainDuration: summary.items[0]?.duration || 1,
+      isRenewal: summary.items[0]?.isRenewal || false,
+      packageId: summary.items[0]?.package || 'none',
       addons: CartManager.getCart().addons || [],
       promoCode: cartState.promoCode || null,
       subtotal: subtotal,
