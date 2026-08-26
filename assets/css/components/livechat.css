@@ -511,7 +511,7 @@
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   background: transparent;
   scroll-behavior: smooth;
 }
@@ -555,13 +555,13 @@
 }
 
 .livechat-widget .message .msg-content {
-  padding: 6px 10px;
+  padding: 5px 10px;
   max-width: 100%;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.35;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   position: relative;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
@@ -596,7 +596,7 @@
 
 .livechat-widget .time {
   font-size: 11px;
-  margin-top: 2px;
+  margin-top: 1px;
   padding: 0 4px;
   color: #94a3b8;
   align-self: flex-end;
@@ -605,7 +605,7 @@
 .livechat-widget .agent-label {
   font-size: 11.5px;
   font-weight: 600;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
   padding: 0 4px;
   letter-spacing: 0.3px;
   color: #3b82f6;
@@ -849,4 +849,14 @@
 
 .livechat-widget .message.user .msg-content a:hover {
   opacity: 0.8;
+}
+
+/* CONSECUTIVE MESSAGE GROUPING */
+.livechat-widget .message.agent + .message.agent,
+.livechat-widget .message.user + .message.user {
+  margin-top: -3px;
+}
+.livechat-widget .message.agent + .message.agent .agent-label,
+.livechat-widget .message.user + .message.user .agent-label {
+  display: none;
 }

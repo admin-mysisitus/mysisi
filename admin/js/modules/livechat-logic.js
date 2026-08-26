@@ -286,7 +286,7 @@ async function sendReply(attachmentUrl = null) {
     return;
   }
   isSending = true;
-  const originalBtnText = sendBtn.innerText;
+  const originalBtnHTML = sendBtn.innerHTML;
   sendBtn.disabled = true;
   sendBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
   try {
@@ -317,7 +317,7 @@ async function sendReply(attachmentUrl = null) {
   } finally {
     isSending = false;
     sendBtn.disabled = false;
-    sendBtn.innerHTML = originalBtnText;
+    sendBtn.innerHTML = originalBtnHTML;
   }
 }
 

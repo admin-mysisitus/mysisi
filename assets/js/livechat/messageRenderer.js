@@ -69,6 +69,7 @@ class MessageRenderer {
     // Append all new messages at once (FIX #4: Incremental, not bulk)
     if (fragment.children.length > 0) {
       this.container.appendChild(fragment);
+      this._applyGrouping();
     }
     // Conditional scroll (FIX #7: Only if needed)
     if (shouldScroll) {
@@ -142,6 +143,7 @@ class MessageRenderer {
     // Append all at once
     if (fragment.children.length > 0) {
       this.container.appendChild(fragment);
+      this._applyGrouping();
     }
     // Conditional auto-scroll (FIX #7)
     if (shouldScroll && addedCount > 0) {
@@ -207,6 +209,7 @@ class MessageRenderer {
     this.container.appendChild(msgEl);
     this.elementCache.set(messageId, msgEl);
     this.renderedIds.add(messageId);
+    this._applyGrouping();
     this.scrollToBottom();
     return msgEl;
   }
@@ -252,6 +255,26 @@ class MessageRenderer {
     this.elementCache.clear();
     this.renderedIds.clear();
   }
+
+  /**
+   * Apply grouping classes to consecutive messages from the same sender
+   */
+  _applyGrouping() {
+    if (!this.container) return;
+    const messages = Array.from(this.container.children).filter(el => 
+      el.classList.contains('message') && !el.classList.contains('system-message') && !el.classList.contains('typing-indicator')
+    );
+    let prevKey = null;
+    messages.forEach(msg => {
+      const key = msg.getAttribute('data-sender-key');
+      if (key && key === prevKey) {
+        msg.classList.add('consecutive');
+      } else {
+        msg.classList.remove('consecutive');
+      }
+      prevKey = key;
+    });
+  }
   // ========================================
   // INTERNAL DOM CREATION
   // ========================================
@@ -266,6 +289,10 @@ class MessageRenderer {
     msg.classList.add('message', message.sender === 'admin' ? 'agent' : 'user');
     msg.setAttribute('data-message-id', this._sanitize(message.id));
     msg.setAttribute('data-created-at', message.createdAt);
+    
+    // Add sender key for grouping logic
+    const senderKey = message.sender === 'admin' ? ('admin-' + (message.agent ? message.agent.trim() : 'Admin')) : 'user';
+    msg.setAttribute('data-sender-key', this._sanitize(senderKey));
     // Content container
     const msgContent = document.createElement('div');
     msgContent.classList.add('msg-content');

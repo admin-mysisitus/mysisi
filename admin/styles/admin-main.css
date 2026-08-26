@@ -2,22 +2,20 @@
    ADMIN DASHBOARD CORE STYLES (Premium Dark Theme & Glassmorphism)
    ========================================================================== */
 :root {
-  /* Admin Color Palette */
-  --admin-bg-dark: #0f111a;
-  --admin-surface: rgba(25, 27, 36, 0.7);
-  --admin-surface-hover: rgba(35, 38, 51, 0.8);
-  --admin-border: rgba(255, 255, 255, 0.08);
-  --admin-primary: #6366f1;
-  /* Indigo */
-  --admin-primary-glow: rgba(99, 102, 241, 0.4);
-  --admin-secondary: #ec4899;
-  /* Pink */
-  --admin-text-main: #f8fafc;
+  /* Admin Soft & Elegant Dark Palette */
+  --admin-bg-dark: #0f172a;
+  --admin-surface: #1e293b;
+  --admin-surface-hover: #334155;
+  --admin-border: rgba(255, 255, 255, 0.06);
+  --admin-primary: #818cf8;
+  --admin-primary-glow: rgba(129, 140, 248, 0.2);
+  --admin-secondary: #38bdf8;
+  --admin-text-main: #f1f5f9;
   --admin-text-muted: #94a3b8;
-  --admin-success: #10b981;
-  --admin-warning: #f59e0b;
-  --admin-danger: #ef4444;
-  --admin-info: #3b82f6;
+  --admin-success: #34d399;
+  --admin-warning: #fbbf24;
+  --admin-danger: #f87171;
+  --admin-info: #60a5fa;
   /* Fonts */
   --font-admin-heading: 'Outfit', sans-serif;
   --font-admin-body: 'Inter', sans-serif;
@@ -28,9 +26,6 @@ body.admin-body {
   margin: 0;
   padding: 0;
   background-color: var(--admin-bg-dark);
-  background-image:
-    radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
   background-attachment: fixed;
   color: var(--admin-text-main);
   font-family: var(--font-admin-body);
@@ -51,8 +46,6 @@ body.admin-body {
 /* Glassmorphism Utilities */
 .glass-panel {
   background: var(--admin-surface);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--admin-border);
 }
 
@@ -84,13 +77,9 @@ body.admin-body {
 
 .admin-logo-text {
   font-family: var(--font-admin-heading);
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: var(--admin-text-main);
   letter-spacing: -0.5px;
 }
 
@@ -128,10 +117,9 @@ body.admin-body {
 }
 
 .admin-nav-item.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.05));
+  background: rgba(255, 255, 255, 0.04);
   color: var(--admin-primary);
   border-left: 3px solid var(--admin-primary);
-  box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.05);
 }
 
 /* Main Wrapper */
@@ -297,12 +285,14 @@ body.admin-body {
 /* Common Admin Components */
 .admin-card {
   background: var(--admin-surface);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--admin-border);
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+}
+
+.admin-stat-card {
+  padding: 16px 24px;
 }
 
 .admin-page-header {
@@ -593,30 +583,30 @@ body.admin-body {
 .admin-metric-card {
   background: var(--admin-surface);
   border-radius: 12px;
-  border-left: 3px solid transparent;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--admin-border);
+  border-top: 3px solid transparent;
   display: flex;
   flex-direction: column;
 }
 
 .admin-metric-card--info {
-  border-left-color: var(--admin-info);
+  border-top-color: var(--admin-info);
 }
 
 .admin-metric-card--success {
-  border-left-color: var(--admin-success);
+  border-top-color: var(--admin-success);
 }
 
 .admin-metric-card--primary {
-  border-left-color: var(--admin-primary);
+  border-top-color: var(--admin-primary);
 }
 
 .admin-metric-card--warning {
-  border-left-color: var(--admin-warning);
+  border-top-color: var(--admin-warning);
 }
 
 .admin-metric-card__body {
-  padding: 16px;
+  padding: 14px 16px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -927,5 +917,39 @@ body.admin-body {
   .admin-layout-grid-3 {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .admin-page-title {
+    font-size: 1.4rem;
+  }
+
+  .admin-page-desc {
+    font-size: 0.85rem;
+  }
+
+  .admin-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .admin-btn {
+    padding: 8px 12px;
+    min-height: 38px;
+    font-size: 0.85rem;
+  }
+
+  .admin-card {
+    padding: 14px;
+  }
+
+  .admin-stat-card {
+    padding: 14px 16px;
   }
 }
