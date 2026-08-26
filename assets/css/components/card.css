@@ -10,7 +10,7 @@
   background: var(--bg-white);
   transition: var(--transisi);
   box-shadow: var(--shadow-sm);
-  padding: clamp(1rem, 1.5vw, 1.5rem);
+  padding: clamp(0.875rem, 1.5vw, 1.5rem);
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -123,7 +123,7 @@
 
 /* ========== CARD BODY ========== */
 .card-body {
-  padding: clamp(1rem, 1.5vw, 1.5rem);
+  padding: clamp(0.875rem, 1.5vw, 1.5rem);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -199,7 +199,7 @@
 
 /* ========== CARD FOOTER ========== */
 .card-footer {
-  padding: clamp(1rem, 1.5vw, 1.25rem) clamp(1.25rem, 2vw, 1.8rem);
+  padding: clamp(0.875rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.8rem);
   border-top: 1px solid var(--border-light);
   display: flex;
   gap: 1rem;

@@ -82,7 +82,7 @@ header.nav-hidden~main .legal-nav-section {
 
 /* ========== LEGAL CONTENT SECTION ========== */
 .legal-content-section {
-  padding: clamp(2rem, 5vw, 3rem) 0;
+  padding: clamp(1.5rem, 5vw, 3rem) 0;
   background-color: var(--bg-white);
 }
 

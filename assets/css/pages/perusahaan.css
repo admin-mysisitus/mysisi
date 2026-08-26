@@ -71,7 +71,7 @@
 
 /* ========== COMPANY HIGHLIGHT SECTION ========== */
 .company-highlight-section {
-  padding: clamp(2rem, 4vw, 3rem) 0;
+  padding: clamp(1.5rem, 4vw, 3rem) 0;
   background-color: var(--bg-light);
   position: relative;
   z-index: 20;
@@ -799,7 +799,7 @@
 
 /* ========== TEAM SECTION ========== */
 .company-team-section {
-  padding: clamp(2rem, 4vw, 3rem) 0;
+  padding: clamp(1.5rem, 4vw, 3rem) 0;
   background-color: var(--bg-light);
 }
 

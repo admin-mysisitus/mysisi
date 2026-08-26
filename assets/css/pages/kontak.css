@@ -1,4 +1,4 @@
-/* ========== KONTAK PAGE STYLES ========== */
+﻿/* ========== KONTAK PAGE STYLES ========== */
 /* Styling khusus halaman KONTAK dengan fokus pada form interaksi dan contact info */
 /* Animations moved to base/shared-animations.css for deduplication */
 /* ========== KONTAK HERO SECTION ========== */
@@ -108,7 +108,7 @@
 
 /* ========== KONTAK FORM SECTION ========== */
 .kontak-form-section {
-  padding: clamp(2rem, 3vw, 3rem) 0;
+  padding: clamp(1.5rem, 3vw, 3rem) 0;
   background: var(--bg-white);
 }
 

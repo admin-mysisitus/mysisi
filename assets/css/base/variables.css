@@ -47,11 +47,11 @@
    --font-display: 'Outfit', sans-serif;
    --font-utama: 'Inter', sans-serif;
    /* Scale Ratio: Major Third (1.250) */
-   --judul-besar: clamp(2.5rem, 6vw, 4.5rem);
+   --judul-besar: clamp(2rem, 5vw, 4.5rem);
    /* Hero limit max 4.5rem (~72px) */
-   --judul-sedang: clamp(1.8rem, 4vw, 2.5rem);
-   --judul-kecil: clamp(1.3rem, 2.5vw, 1.8rem);
-   --teks-standar: clamp(1rem, 1.5vw, 1.125rem);
+   --judul-sedang: clamp(1.5rem, 4vw, 2.5rem);
+   --judul-kecil: clamp(1.15rem, 2.5vw, 1.8rem);
+   --teks-standar: clamp(0.95rem, 1.5vw, 1.125rem);
    --teks-kecil: clamp(0.875rem, 1.2vw, 1rem);
    --teks-terkecil: clamp(0.75rem, 1vw, 0.875rem);
    --line-height-tight: 1.15;

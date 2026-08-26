@@ -167,7 +167,7 @@
 
 /* ========== SERVICES OVERVIEW SECTION ========== */
 .services-overview-section {
-  padding: clamp(2.5rem, 4vw, 3.5rem) 0;
+  padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -266,7 +266,7 @@
 .services-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(1.5rem, 3vw, 2rem);
+  gap: clamp(1rem, 3vw, 2rem);
   margin-top: clamp(2.5rem, 4vw, 3.5rem);
 }
 
@@ -569,7 +569,7 @@
 
 /* ========== TESTIMONIAL SECTION ========== */
 .testimonial-section {
-  padding: clamp(2.5rem, 4vw, 3.5rem) 0;
+  padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-lighter);
 }
 
@@ -655,7 +655,7 @@
 
 /* ========== WHY US SECTION ========== */
 .why-us-section {
-  padding: clamp(2.5rem, 4vw, 4rem) 0;
+  padding: clamp(1.5rem, 4vw, 4rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -802,7 +802,7 @@
 
 /* ========== STATS SECTION ========== */
 .stats-section {
-  padding: clamp(2rem, 3vw, 3rem) 0;
+  padding: clamp(1.5rem, 3vw, 3rem) 0;
   background: linear-gradient(135deg, var(--secondary-slate) 0%, #0F172A 100%);
   color: var(--bg-white);
   position: relative;
@@ -832,7 +832,7 @@
 .stats-layout-asymmetric {
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 4vw, 4rem);
+  gap: clamp(1rem, 4vw, 4rem);
   position: relative;
   z-index: 1;
 }
@@ -928,7 +928,7 @@
 
 /* ========== SOLUTIONS TABS SECTION ========== */
 .solutions-tabs-section {
-  padding: clamp(3rem, 5vw, 5rem) 0;
+  padding: clamp(1.5rem, 5vw, 5rem) 0;
   background-color: #f8fafc;
 }
 
@@ -1600,3 +1600,4 @@
     font-size: 12px;
   }
 }
+

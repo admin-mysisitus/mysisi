@@ -6,12 +6,12 @@
 /* Hero styling moved to components/hero.css */
 /* ========== ARTIKEL LIST SECTION ========== */
 .artikel-list-section {
-  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
 }
 
 .artikel-section {
-  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
 }
 
@@ -26,7 +26,7 @@
 .artikel-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(2rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 3vw, 2.5rem);
 }
 
 /* ========== ARTIKEL CARD ========== */
@@ -190,7 +190,7 @@
   }
 
   .artikel-list-section {
-    padding: clamp(2.5rem, 5vw, 4rem) 0;
+    padding: clamp(1.5rem, 5vw, 4rem) 0;
   }
 
   .artikel-grid {

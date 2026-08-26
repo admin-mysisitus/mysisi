@@ -106,7 +106,7 @@
 .services-checklist {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 3vw, 2.5rem);
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -195,7 +195,7 @@
 .included-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 3vw, 2.5rem);
 }
 
 .included-item {
