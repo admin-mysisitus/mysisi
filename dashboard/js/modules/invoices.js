@@ -27,44 +27,64 @@ export async function render(currentUser) {
       `;
     } else {
       container.innerHTML = `
-        <div class="table-shell">
-          <table class="table table--invoices">
-            <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>Order ID</th>
-                <th>Domain</th>
-                <th>Jumlah</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${invoices.map(inv => `
-                <tr>
-                  <td>${formatDateTime(inv.createdAt)}</td>
-                  <td><strong>${inv.orderId}</strong></td>
-                  <td>${inv.domain}</td>
-                  <td>${formatPrice(inv.total)}</td>
-                  <td class="invoice-actions">
-                    <a href="/invoice/?orderId=${inv.orderId}" class="btn btn-sm btn-primary">
-                      👁️ Lihat
-                    </a>
-                    <button class="btn btn-sm btn-outline btn-pdf" data-order-id="${inv.orderId}">
-                      📥 PDF
-                    </button>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+        <div class="invoices-container">
+          <!-- Desktop Table -->
+          <div class="invoices-desktop-view">
+            <div class="table-shell">
+              <table class="table table--invoices">
+                <thead>
+                  <tr>
+                    <th>Tanggal</th>
+                    <th>Order ID</th>
+                    <th>Domain</th>
+                    <th>Jumlah</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${invoices.map(inv => `
+                    <tr class="clickable-row" onclick="window.location.href='/invoice/?orderId=${inv.orderId}'" style="cursor: pointer;">
+                      <td>
+                        <span class="inv-date-primary">${formatDateTime(inv.createdAt).replace(' pukul ', ', ')}</span>
+                      </td>
+                      <td><strong>${inv.orderId}</strong></td>
+                      <td>${inv.domain}</td>
+                      <td><strong class="inv-price">${formatPrice(inv.total)}</strong></td>
+                      <td><span class="inv-card-status badge-success">Lunas</span></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- Mobile Card List -->
+          <div class="invoices-mobile-view">
+            ${invoices.map(inv => `
+              <div class="invoice-mobile-card clickable-card" onclick="window.location.href='/invoice/?orderId=${inv.orderId}'" style="cursor: pointer;">
+                <div class="inv-card-header">
+                  <div class="inv-card-id">${inv.orderId}</div>
+                  <div class="inv-card-status badge-success">Lunas</div>
+                </div>
+                <div class="inv-card-body">
+                  <div class="inv-card-row">
+                    <span class="inv-card-label">Domain</span>
+                    <span class="inv-card-value">${inv.domain}</span>
+                  </div>
+                  <div class="inv-card-row">
+                    <span class="inv-card-label">Tanggal</span>
+                    <span class="inv-card-value">${formatDateTime(inv.createdAt)}</span>
+                  </div>
+                  <div class="inv-card-row">
+                    <span class="inv-card-label">Total</span>
+                    <span class="inv-card-value inv-price-highlight">${formatPrice(inv.total)}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
         </div>
       `;
-      // Attach event listeners for PDF buttons
-      container.querySelectorAll('.btn-pdf').forEach(btn => {
-        btn.addEventListener('click', () => {
-          showInfo(`Fitur download PDF untuk invoice ${btn.dataset.orderId} sedang dikembangkan.`);
-        });
-      });
     }
   } catch (error) {
     console.error('Error rendering invoices:', error);

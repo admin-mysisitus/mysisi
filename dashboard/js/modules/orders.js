@@ -57,8 +57,41 @@ export async function render(user) {
             <td>${formatDateTime(order.createdAt)}</td>
           </tr>
         `).join('');
+
+        const mobileContainer = document.getElementById('orders-mobile-container');
+        if (mobileContainer) {
+          mobileContainer.innerHTML = orders.map(order => `
+            <div class="invoice-mobile-card order-row" data-order-id="${order.orderId}" style="cursor: pointer;">
+              <div class="inv-card-header">
+                <div class="inv-card-id">${order.orderId}</div>
+                <div class="inv-card-status" id="m-status-${order.orderId}">
+                  <span style="color: inherit; background: inherit; padding: 0;" class="badge-${getStatusClass(order.paymentStatus)}">${getStatusText(order.paymentStatus)}</span>
+                </div>
+              </div>
+              <div class="inv-card-body">
+                <div class="inv-card-row">
+                  <span class="inv-card-label">Domain</span>
+                  <span class="inv-card-value">${order.domain}</span>
+                </div>
+                <div class="inv-card-row">
+                  <span class="inv-card-label">Paket</span>
+                  <span class="inv-card-value">${order.packageId ? (order.packageId.charAt(0).toUpperCase() + order.packageId.slice(1)) : 'Starter'}</span>
+                </div>
+                <div class="inv-card-row">
+                  <span class="inv-card-label">Total</span>
+                  <span class="inv-card-value inv-price-highlight">${formatPrice(order.total)}</span>
+                </div>
+                <div class="inv-card-row">
+                  <span class="inv-card-label">Tanggal</span>
+                  <span class="inv-card-value">${formatDateTime(order.createdAt)}</span>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+
         // Attach click handlers to rows
-        document.querySelectorAll('#orders-table .order-row').forEach(row => {
+        document.querySelectorAll('.order-row').forEach(row => {
           row.addEventListener('click', (e) => {
             const orderId = row.dataset.orderId;
             showOrderDetail(orderId);
@@ -91,6 +124,11 @@ async function syncPendingOrders(pendingOrders) {
         if (statusTd) {
           // Update the badge with a subtle animation
           statusTd.innerHTML = `<span class="badge badge-${getStatusClass(newStatus)}" style="animation: fadeIn 0.5s;">${getStatusText(newStatus)}</span>`;
+        }
+        
+        const mStatusDiv = document.getElementById(`m-status-${order.orderId}`);
+        if (mStatusDiv) {
+          mStatusDiv.innerHTML = `<span style="color: inherit; background: inherit; padding: 0;" class="badge-${getStatusClass(newStatus)}" style="animation: fadeIn 0.5s;">${getStatusText(newStatus)}</span>`;
         }
       }
     } catch (error) {

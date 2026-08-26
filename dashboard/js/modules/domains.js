@@ -54,20 +54,30 @@ export async function render(currentUser) {
       container.innerHTML = `
         <div class="domain-grid">
           ${domains.map(dom => `
-            <article class="domain-card">
-              <div class="domain-card__head">
-                <div class="domain-card__title">${dom.name}</div>
-                <span class="domain-card__badge">${dom.status.text}</span>
+            <div class="invoice-mobile-card domain-list-card">
+              <div class="inv-card-header">
+                <div class="inv-card-id" style="text-transform: lowercase;">${dom.name}</div>
+                <div class="inv-card-status badge-${dom.status.class}">${dom.status.text}</div>
               </div>
-              <div class="domain-card__meta">
-                <p><strong>Terdaftar:</strong> ${formatDate(dom.registeredDate)}</p>
-                <p><strong>Kadaluarsa:</strong> ${formatDate(dom.expiryDate)}</p>
+              <div class="inv-card-body">
+                <div class="inv-card-row">
+                  <span class="inv-card-label">Terdaftar</span>
+                  <span class="inv-card-value">${formatDate(dom.registeredDate)}</span>
+                </div>
+                <div class="inv-card-row">
+                  <span class="inv-card-label">Kadaluarsa</span>
+                  <span class="inv-card-value">${formatDate(dom.expiryDate)}</span>
+                </div>
               </div>
-              <div class="domain-card__actions">
-                <button class="btn btn-sm btn-outline btn-dns" data-domain="${dom.name}">⚙️ DNS</button>
-                <button class="btn btn-sm btn-outline btn-renew" data-domain="${dom.name}">🔄 Renew</button>
+              <div class="inv-card-footer">
+                <button class="btn btn-sm btn-outline btn-dns btn-full" data-domain="${dom.name}">
+                  <i class="ph ph-gear"></i> Kelola DNS
+                </button>
+                <button class="btn btn-sm btn-primary btn-renew btn-full" data-domain="${dom.name}">
+                  <i class="ph ph-arrows-clockwise"></i> Perpanjang
+                </button>
               </div>
-            </article>
+            </div>
           `).join('')}
         </div>
       `;
