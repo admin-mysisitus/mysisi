@@ -21,6 +21,25 @@ class AdminApp {
     this.init();
   }
   async init() {
+    // STRICT SECURITY: Synchronous Check sebelum me-render UI apapun
+    const user = AuthManager.getCurrentUser();
+    
+    if (!user) {
+      window.location.href = '/admin/login.html';
+      return;
+    }
+    if (user.status === 'suspended') {
+      document.body.innerHTML = '';
+      window.location.href = '/login.html?error=suspended';
+      return;
+    }
+    if (user.role !== 'admin') {
+      document.body.innerHTML = '';
+      // Arahkan ke dasbor pelanggan karena dia masih punya hak akses sebagai customer
+      window.location.href = '/dashboard/';
+      return;
+    }
+    
     // Render sidebar and navbar
     this.sidebar = new AdminSidebar(this);
     this.sidebar.render();

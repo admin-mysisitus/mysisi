@@ -227,7 +227,16 @@ export class APIClient {
         createdAt: new Date().toISOString()
       };
       if (db) {
-        await db.ref(`users/${user.uid}`).set(profile);
+        // Jangan gunakan .set() agar tidak menghapus profil existing jika ada
+        const snapshot = await db.ref(`users/${user.uid}`).once('value');
+        const existingData = snapshot.val();
+        if (existingData) {
+          profile.whatsapp = existingData.whatsapp || profile.whatsapp;
+          profile.role = existingData.role || 'customer';
+          profile.status = existingData.status || 'active';
+          profile.createdAt = existingData.createdAt || profile.createdAt;
+        }
+        await db.ref(`users/${user.uid}`).update(profile);
       }
       return {
         success: true,
@@ -341,7 +350,16 @@ export class APIClient {
         createdAt: new Date().toISOString()
       };
       if (db) {
-        await db.ref(`users/${user.uid}`).set(profile);
+        // Gunakan update dan periksa existingData untuk menghindari terhapusnya status suspend atau role admin
+        const snapshot = await db.ref(`users/${user.uid}`).once('value');
+        const existingData = snapshot.val();
+        if (existingData) {
+          profile.whatsapp = existingData.whatsapp || profile.whatsapp;
+          profile.role = existingData.role || 'customer';
+          profile.status = existingData.status || 'active';
+          profile.createdAt = existingData.createdAt || profile.createdAt;
+        }
+        await db.ref(`users/${user.uid}`).update(profile);
       }
       return {
         success: true,
@@ -393,6 +411,7 @@ export class APIClient {
         if (existingData) {
           profile.whatsapp = existingData.whatsapp || '';
           profile.role = existingData.role || 'customer';
+          profile.status = existingData.status || 'active'; // Jaga status suspend
           profile.createdAt = existingData.createdAt || profile.createdAt;
         }
         await db.ref(`users/${user.uid}`).update(profile);

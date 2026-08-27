@@ -27,9 +27,12 @@ function setupEventListeners() {
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
+      const nameField = document.getElementById('usr-name').value.trim();
       const userData = {
         id: document.getElementById('usr-id').value.trim(),
-        name: document.getElementById('usr-name').value.trim(),
+        uid: document.getElementById('usr-id').value.trim(), // Pastikan uid dikirim untuk konsolidasi Firebase
+        name: nameField,
+        displayName: nameField, // Pastikan displayName juga di-update untuk mencegah nama undefined
         email: document.getElementById('usr-email').value.trim(),
         whatsapp: document.getElementById('usr-wa').value.trim(),
         role: document.getElementById('usr-role').value,
@@ -71,12 +74,15 @@ function setupEventListeners() {
     const user = currentUsers.find(u => u.id === id);
     if (!user) return;
     document.getElementById('user-modal-title').textContent = 'Edit User';
-    document.getElementById('usr-id').value = user.id;
-    document.getElementById('usr-name').value = user.name;
-    document.getElementById('usr-email').value = user.email;
+    document.getElementById('usr-id').value = user.id || user.uid || '';
+    document.getElementById('usr-name').value = user.displayName || user.name || 'Pelanggan';
+    document.getElementById('usr-email').value = user.email || '';
     document.getElementById('usr-wa').value = user.whatsapp || user.wa || ''; // depending on API response
     document.getElementById('usr-role').value = user.role || 'customer';
-    document.getElementById('usr-active').checked = user.status === 'active';
+    
+    // Fallback status aman: jika kosong, asumsikan aktif. Mencegah auto-suspend pada user lama.
+    const currentStatus = user.status || 'active';
+    document.getElementById('usr-active').checked = currentStatus === 'active';
     // Ideally we should have verified status from API, assume true for existing if not provided
     document.getElementById('usr-verified').checked = user.verified !== false;
     document.getElementById('user-modal').style.display = 'flex';

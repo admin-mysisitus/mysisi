@@ -55,12 +55,51 @@ export class AuthManager {
             let profile = null;
             if (db) {
               try {
-                const snap = await db.ref(`users/${firebaseUser.uid}`).once('value');
+                const userRef = db.ref(`users/${firebaseUser.uid}`);
+                const snap = await userRef.once('value');
                 profile = snap.val();
+                
+                // Pasang Realtime Listener untuk deteksi suspend dan demosi instan
+                userRef.on('value', (rtSnap) => {
+                  const rtProfile = rtSnap.val();
+                  if (rtProfile) {
+                    if (rtProfile.status === 'suspended') {
+                      void('[AuthManager] Realtime Account Suspended, forcing logout');
+                      auth.signOut();
+                      this.clearSession();
+                      if (window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
+                        window.location.href = '/login.html?error=suspended';
+                      }
+                      return;
+                    }
+                    
+                    // Deteksi penurunan role secara realtime saat sedang di dasbor admin
+                    if (rtProfile.role !== 'admin' && window.location.pathname.includes('/admin/')) {
+                      void('[AuthManager] Realtime Role Demoted, forcing exit from admin');
+                      // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
+                      window.location.href = '/dashboard/';
+                      return;
+                    }
+                    
+                    // Sinkronisasi data sesi lokal jika ada perubahan jabatan
+                    if (this.state.user && this.state.user.role !== rtProfile.role) {
+                      const updatedUser = { ...this.state.user, role: rtProfile.role };
+                      this.saveSession(updatedUser);
+                    }
+                  }
+                });
               } catch (e) {
                 void('[AuthManager] Failed to fetch user profile:', e);
               }
             }
+            // Mencegah login jika status suspended di database
+            if (profile && profile.status === 'suspended') {
+              void('[AuthManager] Account is suspended, forcing logout');
+              auth.signOut();
+              this.clearSession();
+              return;
+            }
+            
             const userObj = profile || {
               userId: firebaseUser.uid,
               email: firebaseUser.email,
@@ -138,6 +177,7 @@ export class AuthManager {
       whatsapp: user.whatsapp || '',
       authMethod: user.authMethod || 'email',
       role: user.role || 'customer',
+      status: user.status || 'active', // Pastikan status ikut tersimpan ke session storage
       verifiedAt: user.verifiedAt || Date.now(),
       hasPassword: user.hasPassword
     };
