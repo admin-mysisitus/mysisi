@@ -1179,10 +1179,10 @@ export class APIClient {
         success: false,
         message: 'Firebase DB not available'
       };
-      await db.ref(`users/${id}`).remove();
+      await db.ref(`users/${id}`).update({ status: 'suspended' });
       return {
         success: true,
-        message: 'User berhasil dihapus'
+        message: 'User berhasil disuspend'
       };
     } catch (e) {
       return {

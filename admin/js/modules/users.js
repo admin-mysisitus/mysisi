@@ -2,6 +2,7 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
+import { renderUserAvatarHtml } from '/assets/js/modules/unified-utils.js';
 let currentUsers = [];
 export async function render() {
   void('Admin Users Module Loaded');
@@ -10,18 +11,10 @@ export async function render() {
 }
 
 function setupEventListeners() {
-  const btnAdd = document.getElementById('btn-add-user');
   const btnClose = document.getElementById('btn-close-user');
   const modal = document.getElementById('user-modal');
   const form = document.getElementById('user-form');
-  if (btnAdd) {
-    btnAdd.addEventListener('click', () => {
-      form.reset();
-      document.getElementById('usr-id').value = '';
-      document.getElementById('user-modal-title').textContent = 'Tambah User Baru';
-      modal.style.display = 'flex';
-    });
-  }
+  
   if (btnClose) {
     btnClose.addEventListener('click', () => {
       modal.style.display = 'none';
@@ -40,8 +33,7 @@ function setupEventListeners() {
         email: document.getElementById('usr-email').value.trim(),
         whatsapp: document.getElementById('usr-wa').value.trim(),
         role: document.getElementById('usr-role').value,
-        password: document.getElementById('usr-password').value, // can be empty
-        active: document.getElementById('usr-active').checked,
+        status: document.getElementById('usr-active').checked ? 'active' : 'suspended',
         verified: document.getElementById('usr-verified').checked
       };
       try {
@@ -84,7 +76,6 @@ function setupEventListeners() {
     document.getElementById('usr-email').value = user.email;
     document.getElementById('usr-wa').value = user.whatsapp || user.wa || ''; // depending on API response
     document.getElementById('usr-role').value = user.role || 'customer';
-    document.getElementById('usr-password').value = '';
     document.getElementById('usr-active').checked = user.status === 'active';
     // Ideally we should have verified status from API, assume true for existing if not provided
     document.getElementById('usr-verified').checked = user.verified !== false;
@@ -197,9 +188,7 @@ function renderTable(users, tbody) {
     tr.innerHTML = `
       <td style="padding: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--admin-surface-hover); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--admin-primary);">
-            ${name.charAt(0).toUpperCase()}
-          </div>
+          ${renderUserAvatarHtml(user, 'w100', 'admin-avatar')}
           <div>
             <p style="margin: 0; font-weight: 600;">${name}</p>
             <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${email}</p>

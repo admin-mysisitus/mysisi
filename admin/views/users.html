@@ -1,11 +1,7 @@
 <div class="admin-page-header">
   <div>
     <h1 class="admin-page-title">Manajemen Users</h1>
-    <p class="admin-page-desc">Kelola akun pelanggan dan akses admin.</p>
-  </div>
-  <div>
-    <button class="admin-btn" id="btn-add-user">
-      <i class="fas fa-plus"></i> Tambah User </button>
+    <p class="admin-page-desc">Kelola profil akun pelanggan dan status hak akses.</p>
   </div>
 </div>
 <div class="admin-card">
@@ -45,7 +41,7 @@
 </div>
 <div id="user-modal" class="admin-modal">
   <div class="admin-card admin-modal-content">
-    <h3 id="user-modal-title" style="margin: 0 0 20px 0;">Tambah User Baru</h3>
+    <h3 id="user-modal-title" style="margin: 0 0 20px 0;">Edit Profil User</h3>
     <form id="user-form">
       <input type="hidden" id="usr-id">
       <div class="admin-form-group">
@@ -68,10 +64,6 @@
             <option value="admin">Admin</option>
           </select>
         </div>
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Password (Kosongkan jika tidak ingin diubah)</label>
-        <input type="password" id="usr-password" class="admin-input-control">
       </div>
       <div style="display: flex; gap: 20px; margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 10px;">
