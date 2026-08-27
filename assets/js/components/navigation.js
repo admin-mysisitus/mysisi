@@ -5,6 +5,7 @@ import {
   footerContactData,
   footerTrustBadgesData
 } from '../config.js';
+import { normalizeDriveImageUrl, withCacheBust } from '../modules/unified-utils.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),
@@ -33,13 +34,9 @@ function createProfileMenuItem(user) {
   link.href = user?.role === 'admin' ? '/admin/' : '/dashboard/';
   // Profile photo
   const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
-  let profileSrc = user?.photoURL || defaultAvatarSVG;
-  if (profileSrc.includes('drive.google.com/file/d/')) {
-    const match = profileSrc.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (match && match[1]) {
-      profileSrc = `https://lh3.googleusercontent.com/d/${match[1]}`;
-    }
-  }
+  const rawUrl = user?.photoURL || '';
+  let profileSrc = normalizeDriveImageUrl(rawUrl, 'w200', defaultAvatarSVG);
+  profileSrc = profileSrc !== defaultAvatarSVG ? withCacheBust(profileSrc) : profileSrc;
   const photoImg = document.createElement('img');
   photoImg.className = 'nav-profile-photo';
   photoImg.src = profileSrc;
@@ -209,13 +206,9 @@ const generateMobileMenu = () => {
     link.href = loggedInUser?.role === 'admin' ? '/admin/' : '/dashboard/';
     // Profile photo
     const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
-    let profileSrc = loggedInUser?.photoURL || defaultAvatarSVG;
-    if (profileSrc.includes('drive.google.com/file/d/')) {
-      const match = profileSrc.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        profileSrc = `https://lh3.googleusercontent.com/d/${match[1]}`;
-      }
-    }
+    const rawUrl = loggedInUser?.photoURL || '';
+    let profileSrc = normalizeDriveImageUrl(rawUrl, 'w200', defaultAvatarSVG);
+    profileSrc = profileSrc !== defaultAvatarSVG ? withCacheBust(profileSrc) : profileSrc;
     const photoImg = document.createElement('img');
     photoImg.className = 'nav-profile-photo';
     photoImg.src = profileSrc;
