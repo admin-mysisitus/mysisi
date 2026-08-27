@@ -491,16 +491,19 @@
 img[alt=".com"].tld-logo,
 img[alt=".net"].tld-logo {
   height: 14px;
+  width: auto;
 }
 
 img[alt=".xyz"].tld-logo,
 img[alt=".org"].tld-logo,
 img[alt=".top"].tld-logo {
   height: 28px;
+  width: auto;
 }
 
 img[alt=".it.com"].tld-logo {
   height: 38px;
+  width: auto;
 }
 
 /* Default Red ID family will use the base 24px */
@@ -876,16 +879,19 @@ img[alt=".it.com"].tld-logo {
 img[alt=".com"].tld-logo-result,
 img[alt=".net"].tld-logo-result {
   height: 14px;
+  width: auto;
 }
 
 img[alt=".xyz"].tld-logo-result,
 img[alt=".org"].tld-logo-result,
 img[alt=".top"].tld-logo-result {
   height: 28px;
+  width: auto;
 }
 
 img[alt=".it.com"].tld-logo-result {
   height: 38px;
+  width: auto;
 }
 
 .cek-domain-result-title i {
@@ -1458,6 +1464,7 @@ img[alt=".it.com"].tld-logo-result {
   img[alt=".com"].tld-logo,
   img[alt=".net"].tld-logo {
     height: 14px;
+    width: auto;
     /* Sweet spot for mobile and desktop */
   }
 
@@ -1465,11 +1472,13 @@ img[alt=".it.com"].tld-logo-result {
   img[alt=".org"].tld-logo,
   img[alt=".top"].tld-logo {
     height: 26px;
+    width: auto;
     /* Bumped up for mobile */
   }
 
   img[alt=".it.com"].tld-logo {
     height: 34px;
+    width: auto;
   }
 
   .cek-domain-fallback-text {
@@ -1554,16 +1563,19 @@ img[alt=".it.com"].tld-logo-result {
   img[alt=".com"].tld-logo-result,
   img[alt=".net"].tld-logo-result {
     height: 12px;
+    width: auto;
   }
 
   img[alt=".xyz"].tld-logo-result,
   img[alt=".org"].tld-logo-result,
   img[alt=".top"].tld-logo-result {
     height: 24px;
+    width: auto;
   }
 
   img[alt=".it.com"].tld-logo-result {
     height: 32px;
+    width: auto;
   }
 }
 

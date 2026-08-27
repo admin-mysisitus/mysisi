@@ -532,6 +532,7 @@ details[open] .accordion-icon {
 /* Logo sponsor */
 .sponsors-track img {
   height: 35px;
+  width: auto;
   object-fit: contain;
   flex-shrink: 0;
   transition: all 0.3s ease;
@@ -805,6 +806,7 @@ details[open] .accordion-icon {
 
   .sponsors-track img {
     height: 32px;
+    width: auto;
     margin: 0;
   }
 
