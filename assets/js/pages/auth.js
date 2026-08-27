@@ -43,7 +43,7 @@ import {
  */
 window.__gsi_deferred_callback = async function(response) {
   if (!response.credential) {
-    console.warn('[Auth Google] No credential in response');
+    void('[Auth Google] No credential in response');
     return;
   }
   try {

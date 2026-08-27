@@ -60,14 +60,14 @@ function injectIntoFile(filePath, startMarker, endMarker, contentToInject) {
   const startIndex = content.indexOf(startMarker);
   const endIndex = content.indexOf(endMarker, startIndex);
   if (startIndex === -1 || endIndex === -1) {
-    console.warn(`Markers not found in ${filePath}`);
+    void(`Markers not found in ${filePath}`);
     return;
   }
   const pre = content.substring(0, startIndex + startMarker.length);
   const post = content.substring(endIndex);
   const newContent = pre + '\n' + contentToInject + '\n' + ' '.repeat(10) + post;
   fs.writeFileSync(fullPath, newContent, 'utf8');
-  console.log(`Successfully injected into ${filePath}`);
+  void(`Successfully injected into ${filePath}`);
 }
 // 1. Process blog/index.html (Recent 3 of each)
 const artikelRecent = sortedData.filter(post => post.category === 'Artikel').slice(0, 3);
@@ -84,4 +84,4 @@ injectIntoFile('blog/artikel/index.html', '<!-- BLOG_INJECT_START: artikel_all -
 const tipsAll = sortedData.filter(post => post.category === 'Tips & Trik');
 const tipsAllHTML = tipsAll.map(createArtikelCardHTML).join('\n');
 injectIntoFile('blog/tips-website/index.html', '<!-- BLOG_INJECT_START: tips_all -->', '<!-- BLOG_INJECT_END -->', tipsAllHTML);
-console.log('Blog generation complete!');
+void('Blog generation complete!');

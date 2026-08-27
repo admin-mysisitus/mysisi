@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       }
     } catch (err) {
-      console.warn('Could not verify package active status:', err);
+      void('Could not verify package active status:', err);
     }
   }
 });

@@ -20,7 +20,7 @@ function getLoggedInUser() {
     // Support both unified-auth wrapper format and direct format
     return parsed.user ? parsed.user : parsed;
   } catch (e) {
-    console.error('Error parsing user session:', e);
+    void('Error parsing user session:', e);
     return null;
   }
 }
@@ -119,7 +119,7 @@ const generateDesktopMenu = () => {
   if (navElements.desktopNav) {
     navElements.desktopNav.appendChild(list);
   } else {
-    console.warn('[Navigation] .nav-desktop element not found - skipping desktop menu');
+    void('[Navigation] .nav-desktop element not found - skipping desktop menu');
   }
 };
 // Generate Menu Mobile
@@ -236,7 +236,7 @@ const generateMobileMenu = () => {
   if (navElements.menu) {
     navElements.menu.appendChild(list);
   } else {
-    console.warn('[Navigation] #nav-mobile element not found - skipping mobile menu');
+    void('[Navigation] #nav-mobile element not found - skipping mobile menu');
   }
 };
 // Setup Dropdown Mobile
@@ -428,7 +428,7 @@ export function refreshNavigation() {
     setActiveLinks();
     setupMobileDropdowns();
   } catch (error) {
-    console.error('Error refreshing navigation:', error);
+    void('Error refreshing navigation:', error);
   }
 }
 // Helper: Get cart item count from localStorage
@@ -548,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   // Skip navigation setup if on auth page (no nav-desktop or nav-mobile elements)
   if (!navElements.desktopNav && !navElements.menu) {
-    console.info('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
+    void('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
     return;
   }
   generateDesktopMenu();

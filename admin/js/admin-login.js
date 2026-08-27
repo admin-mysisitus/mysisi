@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showError(response.message || 'Login gagal.');
       }
     } catch (error) {
-      console.error('Login error:', error);
+      void('Login error:', error);
       showError(error.message || 'Terjadi kesalahan pada server.');
     } finally {
       submitBtn.innerHTML = 'Masuk ke Dashboard';

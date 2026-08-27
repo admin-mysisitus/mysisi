@@ -481,7 +481,7 @@ export function getStorage(key, defaultValue = null) {
     }
     return data.value;
   } catch (error) {
-    console.error(`[Storage] Error reading ${key}:`, error);
+    void(`[Storage] Error reading ${key}:`, error);
     return defaultValue;
   }
 }
@@ -496,7 +496,7 @@ export function setStorage(key, value, expirationMinutes = null) {
     };
     localStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
-    console.error(`[Storage] Error writing ${key}:`, error);
+    void(`[Storage] Error writing ${key}:`, error);
   }
 }
 /**
@@ -529,7 +529,7 @@ export function getErrorMessage(error) {
  */
 export function handleAPIError(error, showNotification = true) {
   const message = getErrorMessage(error);
-  console.error('[API Error]:', error);
+  void('[API Error]:', error);
   if (showNotification) {
     showError('Terjadi Kesalahan', message);
   }

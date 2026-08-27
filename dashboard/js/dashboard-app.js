@@ -204,7 +204,7 @@ class DashboardApp {
           fetchSuccess = true;
         } catch (fetchErr) {
           retries--;
-          console.warn(`[Router] Gagal memuat template ${routeConfig.page}.html, sisa percobaan: ${retries}`, fetchErr);
+          void(`[Router] Gagal memuat template ${routeConfig.page}.html, sisa percobaan: ${retries}`, fetchErr);
           if (retries === 0) {
             throw new Error(`Gagal memuat antarmuka halaman. Server hosting mungkin sedang sibuk. Silakan muat ulang (refresh) halaman ini.`);
           }
@@ -224,7 +224,7 @@ class DashboardApp {
       // Scroll to top
       contentArea.scrollTop = 0;
     } catch (error) {
-      console.error('Error loading route:', error);
+      void('Error loading route:', error);
       document.getElementById('content').innerHTML = `
         <div class="error-container">
           <h2>Error</h2>

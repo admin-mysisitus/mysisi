@@ -33,7 +33,7 @@ class AdminApp {
       } = await getFirebase();
       await db.ref('users').once('value'); // This will throw Permission Denied if not admin
     } catch (e) {
-      console.error('Admin verification failed!', e);
+      void('Admin verification failed!', e);
       AuthManager.clearSession();
       window.location.href = '/admin/login.html?error=unauthorized';
       return;
@@ -149,7 +149,7 @@ class AdminApp {
       }
       contentArea.scrollTop = 0;
     } catch (error) {
-      console.error('Routing Error:', error);
+      void('Routing Error:', error);
       document.getElementById('admin-content').innerHTML = `
         <div style="padding: 2rem; color: #ef4444; text-align: center;">
           <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>

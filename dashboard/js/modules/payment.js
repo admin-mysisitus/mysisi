@@ -88,7 +88,7 @@ export async function render(user) {
     // Setup buttons
     setupPaymentButtons();
   } catch (error) {
-    console.error('Error rendering payment page:', error);
+    void('Error rendering payment page:', error);
     const content = document.getElementById('content');
     content.innerHTML = `
       <div class="alert alert-error">
@@ -133,7 +133,7 @@ async function loadOrderData(orderId, currentUser) {
       }
     }
   } catch (error) {
-    console.error('Error loading order data:', error);
+    void('Error loading order data:', error);
     throw error;
   }
 }
@@ -157,7 +157,7 @@ async function generateMidtransToken(orderData) {
     };
     // Token already saved to RTDB by GAS createOrderWithAuth
   } catch (error) {
-    console.error('Error generating Midtrans token:', error);
+    void('Error generating Midtrans token:', error);
     // Show error but don't crash
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert alert-warning';
@@ -206,7 +206,7 @@ function openMidtransPayment() {
       onClose: handlePaymentClose
     });
   } catch (error) {
-    console.error('Error opening payment:', error);
+    void('Error opening payment:', error);
     showError('Error: ' + error.message);
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, false, 'Lanjut Pembayaran');
@@ -228,7 +228,7 @@ function handlePaymentLunas(orderId) {
       db.ref(`orders/${orderId}/paymentStatus`).off('value', paymentStatusListener);
       paymentStatusListener = null;
     }
-  }).catch(console.error);
+  }).catch(() => {});
   showSuccess('✓ Pembayaran Dikonfirmasi!', 'Mengarahkan ke Invoice...');
   const btn = document.getElementById('btn-payment');
   if (btn) setButtonLoading(btn, false, 'Selesai');
@@ -255,7 +255,7 @@ async function startPaymentPolling() {
       });
     }
   } catch (e) {
-    console.error('Firebase DB listener error', e);
+    void('Firebase DB listener error', e);
   }
   // 2. Polling API sebagai fallback
   if (paymentPollingInterval) clearInterval(paymentPollingInterval);
@@ -271,7 +271,7 @@ async function startPaymentPolling() {
         clearInterval(paymentPollingInterval);
       }
     } catch (e) {
-      console.error('Polling error:', e);
+      void('Polling error:', e);
     }
   }, 4000);
 }
@@ -279,7 +279,7 @@ async function startPaymentPolling() {
 function handlePaymentSuccess(result) {
   const orderId = currentOrder?.orderId;
   showSuccess('✓ Pembayaran Berhasil!', 'Mengarahkan ke Invoice...');
-  APIClient.syncOrderStatus(orderId).catch(console.error);
+  APIClient.syncOrderStatus(orderId).catch(() => {});
   setTimeout(() => {
     window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
   }, 500); // Instant redirect
@@ -329,7 +329,7 @@ function requestPaymentAfterPreview() {
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   } catch (error) {
-    console.error('Error with WhatsApp:', error);
+    void('Error with WhatsApp:', error);
     showError('Gagal membuka WhatsApp. Hubungi support secara manual.');
   }
 }

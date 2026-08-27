@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const response = await fetch('/assets/data/portfolio.json');
     portfolioData = await response.json();
   } catch (error) {
-    console.error('Failed to load portfolio data:', error);
+    void('Failed to load portfolio data:', error);
   }
   // ========== KONFIGURASI TAMPILAN ==========
   const INITIAL_ITEMS = 8; // Jumlah item yang ditampilkan awalnya

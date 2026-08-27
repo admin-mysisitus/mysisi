@@ -98,7 +98,7 @@ export async function getFirebase() {
           firebase: window.firebase
         };
       } catch (error) {
-        console.error('[Firebase Core] Initialization error:', error);
+        void('[Firebase Core] Initialization error:', error);
         firebaseInitPromise = null; // Reset so we can retry
         throw error;
       }

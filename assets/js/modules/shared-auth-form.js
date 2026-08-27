@@ -50,7 +50,7 @@ export class SharedAuthForm {
   render() {
     this.container = document.getElementById(this.options.containerId);
     if (!this.container) {
-      console.error(`[SharedAuthForm] Container #${this.options.containerId} not found`);
+      void(`[SharedAuthForm] Container #${this.options.containerId} not found`);
       return;
     }
     this.renderFormHTML();
@@ -94,7 +94,7 @@ export class SharedAuthForm {
             }, 1500);
           }
         } catch (error) {
-          console.error('[SharedAuthForm] Google sign in error:', error);
+          void('[SharedAuthForm] Google sign in error:', error);
           const errorDiv = this.container.querySelector('#auth-error');
           if (errorDiv) {
             errorDiv.innerHTML = error.message;
@@ -557,7 +557,7 @@ export class SharedAuthForm {
       this.showSuccess('✓ Email Terkirim!', 'Silakan cek inbox/spam email Anda.');
       form.reset();
     } catch (error) {
-      console.error('Forgot password error:', error);
+      void('Forgot password error:', error);
       this.showError(error.message || 'Terjadi kesalahan');
     } finally {
       this.state.isSubmitting = false;
@@ -631,7 +631,7 @@ export class SharedAuthForm {
         }
       }, 1500);
     } catch (error) {
-      console.error('Register error:', error);
+      void('Register error:', error);
       this.showError(error.message || 'Terjadi kesalahan saat registrasi');
     } finally {
       this.state.isSubmitting = false;
@@ -685,7 +685,7 @@ export class SharedAuthForm {
         }
       }, 1500);
     } catch (error) {
-      console.error('Login error:', error);
+      void('Login error:', error);
       this.showError(error.message || 'Terjadi kesalahan saat login');
     } finally {
       this.state.isSubmitting = false;

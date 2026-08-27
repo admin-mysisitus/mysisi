@@ -76,7 +76,7 @@ window.addEventListener("load", async () => {
   try {
     await getFirebase();
   } catch (error) {
-    console.error('[LiveChat] Gagal memuat Firebase:', error);
+    void('[LiveChat] Gagal memuat Firebase:', error);
     return;
   }
   // 4. Load sisa JavaScript (berurutan)

@@ -4,7 +4,7 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 let currentPromos = [];
 export async function render() {
-  console.log('Admin Promos Module Loaded');
+  void('Admin Promos Module Loaded');
   setupEventListeners();
   await loadPromos();
 }
@@ -61,7 +61,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        console.error(error);
+        void(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -171,7 +171,7 @@ async function loadPromos() {
       throw new Error(response.message);
     }
   } catch (error) {
-    console.error('Failed to load promos:', error);
+    void('Failed to load promos:', error);
     tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</td></tr>`;
   }
 }

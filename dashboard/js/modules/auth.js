@@ -48,7 +48,7 @@ export class DashboardAuth {
       sessionStorage.removeItem('checkoutState');
       window.location.href = '/auth/';
     } catch (error) {
-      console.error('[DashboardAuth] Logout error:', error);
+      void('[DashboardAuth] Logout error:', error);
       window.location.href = '/auth/';
     }
   }

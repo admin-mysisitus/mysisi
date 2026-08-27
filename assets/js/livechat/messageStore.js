@@ -53,7 +53,7 @@ class MessageStore {
         try {
           cb(data);
         } catch (e) {
-          console.error(`Error in subscriber for ${event}:`, e);
+          void(`Error in subscriber for ${event}:`, e);
         }
       });
     }
@@ -75,12 +75,12 @@ class MessageStore {
    */
   upsertMessage(message) {
     if (!message) {
-      console.error("Cannot upsert null message");
+      void("Cannot upsert null message");
       return null;
     }
     // Must have at least one ID
     if (!message.id && !message.clientId) {
-      console.error("Button upsert: no id or clientId");
+      void("Button upsert: no id or clientId");
       return null;
     }
     const serverId = message.id;

@@ -32,7 +32,7 @@ export async function render(currentUser) {
           user.whatsapp = parsed.whatsapp;
         }
       } catch (e) {
-        console.warn('Failed to parse corrupt user displayName JSON:', e);
+        void('Failed to parse corrupt user displayName JSON:', e);
       }
     }
     // Setup form with current data
@@ -169,7 +169,7 @@ export async function render(currentUser) {
       }
     }
   } catch (error) {
-    console.error('Error rendering profile:', error);
+    void('Error rendering profile:', error);
     document.getElementById('content').innerHTML = `
       <div class="alert alert-error">
         ${error.message}

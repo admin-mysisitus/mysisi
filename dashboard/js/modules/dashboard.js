@@ -36,7 +36,7 @@ export async function render(currentUser) {
         updateStatisticsDisplay(stats);
       }
     } catch (error) {
-      console.warn('Statistics not available:', error);
+      void('Statistics not available:', error);
     }
     // Render cart reminder card at the top if cart is not empty
     try {
@@ -71,7 +71,7 @@ export async function render(currentUser) {
         }
       }
     } catch (cartError) {
-      console.warn('Error rendering cart reminder card:', cartError);
+      void('Error rendering cart reminder card:', cartError);
     }
     // Render dynamic domain pricing
     try {
@@ -103,7 +103,7 @@ export async function render(currentUser) {
         }
       }
     } catch (pricingError) {
-      console.warn('Error fetching domain pricing:', pricingError);
+      void('Error fetching domain pricing:', pricingError);
     }
     // Render dynamic promo block
     try {
@@ -133,14 +133,14 @@ export async function render(currentUser) {
         }
       }
     } catch (promoError) {
-      console.warn('Error fetching promos for dashboard:', promoError);
+      void('Error fetching promos for dashboard:', promoError);
       const promoPanel = document.getElementById('dashboard-promo-panel');
       if (promoPanel) promoPanel.style.display = 'none';
     }
     // Setup event listeners
     setupEventListeners();
   } catch (error) {
-    console.error('Error rendering dashboard:', error);
+    void('Error rendering dashboard:', error);
     document.getElementById('content').innerHTML = `
       <div class="alert alert-error">
         ${error.message}

@@ -39,7 +39,7 @@ export async function render(user) {
     renderInvoice();
     setupEventListeners();
   } catch (error) {
-    console.error('Error rendering invoice:', error);
+    void('Error rendering invoice:', error);
     showError('Error', error.message);
     const container = document.getElementById('invoice-container');
     if (container) {
@@ -105,12 +105,12 @@ async function loadOrderData(orderId) {
     }
     // Verify payment was successful
     if (invoiceData.paymentStatus !== 'paid' && invoiceData.orderStatus !== 'completed') {
-      console.warn('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
+      void('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
       // Proactively sync order status to catch late webhook or slow Midtrans updates
       try {
         const syncResult = await APIClient.syncOrderStatus(orderId);
         if (syncResult.success && syncResult.data && syncResult.data.paymentStatus === 'paid') {
-          console.log('[Invoice] Late payment status updated to paid via sync!');
+          void('[Invoice] Late payment status updated to paid via sync!');
           // Sync returned paid! Re-fetch order data
           const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
           if (newResult.success && (newResult.data || newResult.order)) {
@@ -118,11 +118,11 @@ async function loadOrderData(orderId) {
           }
         }
       } catch (e) {
-        console.warn('Failed to sync', e);
+        void('Failed to sync', e);
       }
     }
   } catch (error) {
-    console.error('Error loading order data:', error);
+    void('Error loading order data:', error);
     throw error;
   }
 }
@@ -270,8 +270,8 @@ function renderInvoice() {
                 </div>
               </td>
               <td style="text-align: center;">1</td>
-              <td style="text-align: right;">${formatPrice(baseLayananPrice).replace('Rp ', '')}</td>
-              <td style="text-align: right; font-weight: 600; color: #0f172a;">${formatPrice(baseLayananPrice).replace('Rp ', '')}</td>
+              <td style="text-align: right;">${formatPrice(baseLayananPrice)}</td>
+              <td style="text-align: right; font-weight: 600; color: #0f172a;">${formatPrice(baseLayananPrice)}</td>
             </tr>
             ${renderInvoiceAddons(paidAddons, createdDate)}
           </tbody>
@@ -285,21 +285,21 @@ function renderInvoice() {
           <div class="inv-summary">
             <div class="inv-summary-row">
               <span class="inv-summary-label">Subtotal</span>
-              <span class="inv-summary-value">${formatPrice(subtotal).replace('Rp ', '')}</span>
+              <span class="inv-summary-value">${formatPrice(subtotal)}</span>
             </div>
             <div class="inv-summary-row">
               <span class="inv-summary-label">PPN (11%)</span>
-              <span class="inv-summary-value">${formatPrice(ppn).replace('Rp ', '')}</span>
+              <span class="inv-summary-value">${formatPrice(ppn)}</span>
             </div>
             ${discount > 0 ? `
             <div class="inv-summary-row" style="color: #16a34a;">
               <span class="inv-summary-label">Diskon (${invoiceData.promoCode || 'Promo'})</span>
-              <span class="inv-summary-value">-${formatPrice(discount).replace('Rp ', '')}</span>
+              <span class="inv-summary-value">-${formatPrice(discount)}</span>
             </div>
             ` : ''}
             <div class="inv-summary-row inv-summary-total">
               <span>Total Due</span>
-              <span style="${isPaid ? 'color:#16a34a;' : ''}">${isPaid ? '0' : formatPrice(invoiceData.total || 0).replace('Rp ', '')}</span>
+              <span style="${isPaid ? 'color:#16a34a;' : ''}">${isPaid ? '0' : formatPrice(invoiceData.total || 0)}</span>
             </div>
           </div>
         </div>
@@ -882,8 +882,8 @@ function renderInvoiceAddons(paidAddons, createdDate) {
           </div>
         </td>
         <td style="text-align: center;">1</td>
-        <td style="text-align: right;">${formatPrice(addon.price).replace('Rp ', '')}</td>
-        <td style="text-align: right; font-weight:600; color:#0f172a;">${formatPrice(addon.price).replace('Rp ', '')}</td>
+        <td style="text-align: right;">${formatPrice(addon.price)}</td>
+        <td style="text-align: right; font-weight:600; color:#0f172a;">${formatPrice(addon.price)}</td>
       </tr>
     `;
   }

@@ -7,7 +7,7 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 let currentDomains = [];
 export async function render() {
-  console.log('Admin Domains Module Loaded');
+  void('Admin Domains Module Loaded');
   setupEventListeners();
   await loadDomains();
 }
@@ -69,7 +69,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        console.error(error);
+        void(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -159,7 +159,7 @@ async function loadDomains() {
       throw new Error(response.message);
     }
   } catch (error) {
-    console.error('Failed to load domains:', error);
+    void('Failed to load domains:', error);
     container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</div>`;
   }
 }

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         homeBanner.style.display = 'none';
       }
     } catch (e) {
-      console.warn('Error fetching home banner promo:', e);
+      void('Error fetching home banner promo:', e);
       homeBanner.style.display = 'none';
     }
   }
@@ -188,5 +188,5 @@ document.addEventListener('DOMContentLoaded', async function() {
       wrapper.addEventListener("contextmenu", e => e.preventDefault());
       wrapper.addEventListener("dragstart", e => e.preventDefault());
     }
-  }).catch(err => console.error("Error loading Instagram data:", err));
+  }).catch(err => void("Error loading Instagram data:", err));
 });

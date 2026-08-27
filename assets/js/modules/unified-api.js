@@ -42,13 +42,13 @@ export class APIClient {
         // Jika ada success field, gunakan sebagai response valid
         if ('success' in response) {
           if (typeof response.success !== 'boolean') {
-            console.warn('[API] Warning: success field bukan boolean, treating as:', !!response.success);
+            void('[API] Warning: success field bukan boolean, treating as:', !!response.success);
             response.success = !!response.success; // Convert to boolean
           }
           result = response;
         } else if ('data' in response) {
           // Fallback: jika ada data field tapi tidak ada success, anggap success = true
-          console.warn('[API] No success field, default to true (data present)');
+          void('[API] No success field, default to true (data present)');
           result = {
             success: true,
             data: response.data,
@@ -57,7 +57,7 @@ export class APIClient {
           };
         } else {
           // Response adalah object tapi tidak ada expected field
-          console.warn('[API] Unexpected response format, trying to detect success state:', response);
+          void('[API] Unexpected response format, trying to detect success state:', response);
           result = {
             success: true, // Assume success jika response sudah dikirim
             data: response,
@@ -67,18 +67,18 @@ export class APIClient {
         }
       } else {
         // Response bukan object (string, boolean, etc) - unexpected
-        console.error('[API] Response bukan object:', typeof response);
+        void('[API] Response bukan object:', typeof response);
         throw new Error('Server response format tidak valid');
       }
       // Final validation
       if (result.success === false && (result.errorCode === 'UNAUTHORIZED' || result.errorCode === 'SESSION_EXPIRED')) {
-        console.error('[API] Auth error - clearing session');
+        void('[API] Auth error - clearing session');
         AuthManager.clearSession();
         throw new Error('Session expired. Please login again.');
       }
       return result;
     } catch (error) {
-      console.error(`[API] ${action} failed:`, error.message);
+      void(`[API] ${action} failed:`, error.message);
       throw error; // Let caller handle error
     }
   }
@@ -106,7 +106,7 @@ export class APIClient {
         try {
           idToken = await auth.currentUser.getIdToken(false);
         } catch (e) {
-          console.warn('[API] Failed to get ID token', e);
+          void('[API] Failed to get ID token', e);
         }
       }
       // Build URLSearchParams for application/x-www-form-urlencoded format
@@ -172,7 +172,7 @@ export class APIClient {
           return JSON.parse(responseText);
         } catch (parseError) {
           // Jika bukan valid JSON, return sebagai response object dengan raw text
-          console.warn('[API] Response bukan JSON, return as-is:', responseText.substring(0, 100));
+          void('[API] Response bukan JSON, return as-is:', responseText.substring(0, 100));
           return {
             success: true, // Assume success jika GAS respond
             data: responseText,
@@ -235,7 +235,7 @@ export class APIClient {
         message: 'Pendaftaran berhasil. Silakan cek email Anda untuk verifikasi.'
       };
     } catch (e) {
-      console.error('[Auth] Register error:', e);
+      void('[Auth] Register error:', e);
       let errorMsg = 'Pendaftaran gagal';
       if (e.code === 'auth/email-already-in-use') {
         errorMsg = 'Email sudah terdaftar. Silakan gunakan email lain atau login.';
@@ -284,7 +284,7 @@ export class APIClient {
         message: 'Login berhasil'
       };
     } catch (e) {
-      console.error('[Auth] Login error:', e);
+      void('[Auth] Login error:', e);
       let errorMsg = 'Login gagal';
       if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
         errorMsg = 'Email atau password yang Anda masukkan salah.';
@@ -349,7 +349,7 @@ export class APIClient {
         message: 'Google sign-in berhasil'
       };
     } catch (e) {
-      console.error('Google sign in error', e);
+      void('Google sign in error', e);
       return {
         success: false,
         message: e.message || 'Gagal login dengan Google'
@@ -403,7 +403,7 @@ export class APIClient {
         message: 'Google sign-in berhasil'
       };
     } catch (e) {
-      console.error('Google popup sign in error', e);
+      void('Google popup sign in error', e);
       return {
         success: false,
         message: e.message
@@ -429,7 +429,7 @@ export class APIClient {
         message: 'Link reset password telah dikirim ke email Anda.'
       };
     } catch (error) {
-      console.error('[Auth] Reset password error:', error);
+      void('[Auth] Reset password error:', error);
       let errorMsg = 'Gagal mengirim email reset password';
       if (error.code === 'auth/user-not-found') {
         errorMsg = 'Email tidak terdaftar di sistem kami.';
@@ -603,7 +603,7 @@ export class APIClient {
       const ts = Date.now();
       const rnd = Math.random().toString(36).substring(2, 8).toUpperCase();
       data.orderId = `INV-${ts}-${rnd}`;
-      console.warn('[API] orderId was missing, auto-generated:', data.orderId);
+      void('[API] orderId was missing, auto-generated:', data.orderId);
     }
     try {
       // 1. Call GAS to Create Order AND Generate Token simultaneously
@@ -622,7 +622,7 @@ export class APIClient {
         throw new Error(response.message || 'Gagal membuat pesanan');
       }
     } catch (e) {
-      console.error('[API] Error in createOrderWithAuth:', e);
+      void('[API] Error in createOrderWithAuth:', e);
       return {
         success: false,
         message: e.message || 'Terjadi kesalahan sistem'
@@ -662,7 +662,7 @@ export class APIClient {
             db.ref().update(updates).catch(() => {});
           }
         } catch (fallbackErr) {
-          console.info('[API] orders query fallback failed (permission):', fallbackErr.message);
+          void('[API] orders query fallback failed (permission):', fallbackErr.message);
         }
       }
       ordersArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -675,7 +675,7 @@ export class APIClient {
         message: 'Pesanan berhasil diambil'
       };
     } catch (e) {
-      console.error('[API] RTDB getUserOrders failed:', e);
+      void('[API] RTDB getUserOrders failed:', e);
       return {
         success: false,
         message: e.message
@@ -703,7 +703,7 @@ export class APIClient {
         message: 'Order tidak ditemukan'
       };
     } catch (e) {
-      console.error('[API] RTDB getOrderDetail failed:', e);
+      void('[API] RTDB getOrderDetail failed:', e);
       return {
         success: false,
         message: e.message
@@ -765,7 +765,7 @@ export class APIClient {
         data: stats
       };
     } catch (e) {
-      console.error('[API] RTDB getUserOrderStats failed:', e);
+      void('[API] RTDB getUserOrderStats failed:', e);
       return {
         success: false,
         message: e.message
@@ -850,7 +850,7 @@ export class APIClient {
         message: 'Domain tersedia'
       };
     } catch (e) {
-      console.error('[API] checkDomain failed:', e);
+      void('[API] checkDomain failed:', e);
       return {
         success: true,
         data: {

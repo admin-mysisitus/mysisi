@@ -58,7 +58,7 @@ export class AuthManager {
                 const snap = await db.ref(`users/${firebaseUser.uid}`).once('value');
                 profile = snap.val();
               } catch (e) {
-                console.warn('[AuthManager] Failed to fetch user profile:', e);
+                void('[AuthManager] Failed to fetch user profile:', e);
               }
             }
             const userObj = profile || {
@@ -79,7 +79,7 @@ export class AuthManager {
         });
       }
     } catch (error) {
-      console.error('[AuthManager] Error initializing Firebase Auth:', error);
+      void('[AuthManager] Error initializing Firebase Auth:', error);
     }
     this.setupStorageListener();
   }
@@ -101,7 +101,7 @@ export class AuthManager {
       const data = JSON.parse(stored);
       // Validate version
       if (data.version !== this.SESSION_VERSION) {
-        console.warn('[AuthManager] Session version mismatch, clearing');
+        void('[AuthManager] Session version mismatch, clearing');
         this.clearSession();
         return;
       }
@@ -113,7 +113,7 @@ export class AuthManager {
         };
       }
     } catch (error) {
-      console.error('[AuthManager] Error loading session:', error);
+      void('[AuthManager] Error loading session:', error);
       this.clearSession();
     }
   }
@@ -125,7 +125,7 @@ export class AuthManager {
     const required = ['userId', 'email', 'displayName'];
     for (const field of required) {
       if (!user[field]) {
-        console.warn(`[AuthManager] Missing required field: ${field}`);
+        void(`[AuthManager] Missing required field: ${field}`);
         return null;
       }
     }
@@ -166,7 +166,7 @@ export class AuthManager {
       };
       this.emit('authChanged', validatedUser);
     } catch (error) {
-      console.error('[AuthManager] Error saving session:', error);
+      void('[AuthManager] Error saving session:', error);
       this.emit('authError', error);
     }
   }
@@ -182,7 +182,7 @@ export class AuthManager {
       auth
     }) => {
       if (auth) auth.signOut();
-    }).catch(e => console.error('[AuthManager] Firebase signout error:', e));
+    }).catch(e => void('[AuthManager] Firebase signout error:', e));
     // Clear all cookies for the current domain
     try {
       document.cookie.split(";").forEach(function(c) {
@@ -218,10 +218,10 @@ export class AuthManager {
    * to ensure you have the latest user data
    */
   static refreshUserData() {
-    console.log('[AuthManager] Refreshing user data from storage...');
+    void('[AuthManager] Refreshing user data from storage...');
     this.loadSession();
     if (this.state.user && this.state.user.emailVerified) {
-      console.log('✅ User verification status updated:', this.state.user);
+      void('✅ User verification status updated:', this.state.user);
       this.emit('authChanged', {
         user: this.state.user,
         isLoggedIn: true
@@ -253,7 +253,7 @@ export class AuthManager {
         return await auth.currentUser.getIdToken(true);
       }
     } catch (e) {
-      console.warn('[AuthManager] Failed to get idToken:', e);
+      void('[AuthManager] Failed to get idToken:', e);
     }
     return null;
   }
@@ -310,7 +310,7 @@ export class AuthManager {
         try {
           handler(data);
         } catch (error) {
-          console.error(`[AuthManager] Error in ${eventName} handler:`, error);
+          void(`[AuthManager] Error in ${eventName} handler:`, error);
         }
       });
     }

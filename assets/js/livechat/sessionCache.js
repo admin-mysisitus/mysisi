@@ -60,7 +60,7 @@ class SessionCache {
       localStorage.setItem(cacheKey, JSON.stringify(cacheData));
       return true;
     } catch (error) {
-      console.error('[CACHE-SAVE-ERROR]', {
+      void('[CACHE-SAVE-ERROR]', {
         error: error.message,
         conversationId
       });
@@ -116,7 +116,7 @@ class SessionCache {
       // All validations passed
       return cacheData;
     } catch (error) {
-      console.error('[CACHE-RESTORE-ERROR]', {
+      void('[CACHE-RESTORE-ERROR]', {
         error: error.message,
         conversationId
       });
@@ -140,7 +140,7 @@ class SessionCache {
       localStorage.removeItem(cacheKey);
       return true;
     } catch (error) {
-      console.error('[CACHE-CLEAR-ERROR]', {
+      void('[CACHE-CLEAR-ERROR]', {
         error: error.message,
         conversationId
       });
@@ -162,7 +162,7 @@ class SessionCache {
       });
       return true;
     } catch (error) {
-      console.error('[CACHE-CLEAR-ALL-ERROR]', {
+      void('[CACHE-CLEAR-ALL-ERROR]', {
         error: error.message
       });
       return false;

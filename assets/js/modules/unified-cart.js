@@ -113,7 +113,7 @@ export class CartManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      console.error('[Cart] Parse error:', err);
+      void('[Cart] Parse error:', err);
       return {
         domains: [],
         addons: [],
@@ -135,7 +135,7 @@ export class CartManager {
         detail: calculated
       }));
     } catch (err) {
-      console.error('[Cart] Save error:', err);
+      void('[Cart] Save error:', err);
     }
   }
   /**
@@ -191,7 +191,7 @@ export class CartManager {
         cart
       };
     } catch (error) {
-      console.error('[Cart] Error validating coupon:', error);
+      void('[Cart] Error validating coupon:', error);
       return {
         success: false,
         message: error.message
@@ -412,7 +412,7 @@ export class WishlistManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      console.error('[Wishlist] Parse error:', err);
+      void('[Wishlist] Parse error:', err);
       return {
         domains: []
       };
@@ -428,7 +428,7 @@ export class WishlistManager {
         detail: wishlist
       }));
     } catch (err) {
-      console.error('[Wishlist] Save error:', err);
+      void('[Wishlist] Save error:', err);
     }
   }
   /**
