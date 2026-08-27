@@ -5,7 +5,7 @@ import {
   footerContactData,
   footerTrustBadgesData
 } from '../config.js';
-import { normalizeDriveImageUrl, withCacheBust } from '../modules/unified-utils.js';
+import { normalizeDriveImageUrl, withCacheBust, renderUserAvatarHtml, getDefaultAvatarSVG } from '../modules/unified-utils.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),
@@ -32,20 +32,7 @@ function createProfileMenuItem(user) {
   const link = document.createElement('a');
   link.className = 'nav-desktop-link profile-link';
   link.href = user?.role === 'admin' ? '/admin/' : '/dashboard/';
-  // Profile photo
-  const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
-  const rawUrl = user?.photoURL || '';
-  let profileSrc = normalizeDriveImageUrl(rawUrl, 'w200', defaultAvatarSVG);
-  profileSrc = profileSrc !== defaultAvatarSVG ? withCacheBust(profileSrc) : profileSrc;
-  const photoImg = document.createElement('img');
-  photoImg.className = 'nav-profile-photo';
-  photoImg.src = profileSrc;
-  photoImg.alt = user?.displayName || 'Profile';
-  photoImg.onerror = function() {
-    this.src = defaultAvatarSVG;
-  };
-  link.appendChild(photoImg);
-  // Profile name
+  link.innerHTML = renderUserAvatarHtml(user, 'w200', 'nav-profile-photo');
   const span = document.createElement('span');
   span.className = 'nav-profile-name';
   span.textContent = user?.displayName || 'User';
@@ -204,24 +191,7 @@ const generateMobileMenu = () => {
     const link = document.createElement('a');
     link.className = 'nav-mobile-link profile-link';
     link.href = loggedInUser?.role === 'admin' ? '/admin/' : '/dashboard/';
-    // Profile photo
-    const defaultAvatarSVG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
-    const rawUrl = loggedInUser?.photoURL || '';
-    let profileSrc = normalizeDriveImageUrl(rawUrl, 'w200', defaultAvatarSVG);
-    profileSrc = profileSrc !== defaultAvatarSVG ? withCacheBust(profileSrc) : profileSrc;
-    const photoImg = document.createElement('img');
-    photoImg.className = 'nav-profile-photo';
-    photoImg.src = profileSrc;
-    photoImg.alt = loggedInUser?.displayName || 'Profile';
-    photoImg.onerror = function() {
-      this.src = defaultAvatarSVG;
-    };
-    link.appendChild(photoImg);
-    // Profile name
-    const span = document.createElement('span');
-    span.className = 'nav-profile-name';
-    span.textContent = loggedInUser?.displayName || 'User';
-    link.appendChild(span);
+    link.innerHTML = renderUserAvatarHtml(loggedInUser, 'w200', 'nav-profile-photo') + `<span class="nav-profile-name">${loggedInUser?.displayName || 'User'}</span>`;
     profileLi.appendChild(link);
     list.appendChild(profileLi);
   }

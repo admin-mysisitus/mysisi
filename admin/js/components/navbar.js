@@ -2,8 +2,7 @@ import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 import {
-  normalizeDriveImageUrl,
-  withCacheBust
+  renderUserAvatarHtml
 } from '/assets/js/modules/unified-utils.js';
 export class AdminNavbar {
   constructor() {
@@ -15,20 +14,11 @@ export class AdminNavbar {
     // Get real user data from AuthManager
     const userData = AuthManager.getCurrentUser();
     let displayName = 'Administrator';
-    let avatarHtml = '<div class="admin-avatar">A</div>';
-    if (userData) {
-      if (userData.displayName) {
-        displayName = userData.displayName;
-      }
-      if (userData.photoURL) {
-        const finalUrl = normalizeDriveImageUrl(userData.photoURL, 'w200', '');
-        const finalUrlWithBust = withCacheBust(finalUrl);
-        avatarHtml = `<img src="${finalUrlWithBust}" alt="${displayName}" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--admin-primary);" onerror="this.src='/assets/img/avatar-default.svg'">`;
-      } else {
-        const initials = displayName.charAt(0).toUpperCase();
-        avatarHtml = `<div class="admin-avatar">${initials}</div>`;
-      }
+    let avatarHtml = renderUserAvatarHtml(userData, 'w150', 'admin-avatar');
+    if (userData && userData.displayName) {
+      displayName = userData.displayName;
     }
+    
     this.container.innerHTML = `
       <div class="admin-navbar-left">
         <button id="admin-menu-toggle" class="admin-menu-toggle">

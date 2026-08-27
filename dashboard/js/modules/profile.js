@@ -199,6 +199,13 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       DashboardAuth.updateSession(user);
+      
+      // Render ulang navbar agar foto profil (jika berubah) langsung tampil baru
+      if (window.app && window.app.navbar) {
+        window.app.navbar.user = user;
+        window.app.navbar.render();
+      }
+      
       const photoStatus = document.getElementById('photo-upload-status');
       setInlineStatus(photoStatus, '', false);
       showSuccess('Profil berhasil diperbarui');

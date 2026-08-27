@@ -6,8 +6,7 @@ import {
 } from '../modules/auth.js';
 import {
   showConfirm,
-  normalizeDriveImageUrl,
-  withCacheBust
+  renderUserAvatarHtml
 } from '/assets/js/modules/unified-utils.js';
 export class DashboardNavbar {
   constructor() {
@@ -19,8 +18,6 @@ export class DashboardNavbar {
   }
   render() {
     const container = document.getElementById('navbar');
-    const photoURL = normalizeDriveImageUrl(this.user?.photoURL, 'w200', '/assets/img/avatar-default.svg');
-    const photoURLWithBust = withCacheBust(photoURL);
     container.innerHTML = `
       <div class="navbar-container">
         <!-- Mobile hamburger menu button -->
@@ -53,7 +50,7 @@ export class DashboardNavbar {
           <!-- User Profile Dropdown -->
           <div class="user-dropdown-container">
             <div class="user-profile-trigger" id="user-profile-trigger">
-              <img src="${photoURLWithBust}" alt="${this.user?.displayName || 'User'}" class="user-avatar" onerror="this.src='/assets/img/avatar-default.svg'">
+              ${renderUserAvatarHtml(this.user, 'w150', 'user-avatar')}
               <span class="user-name">${this.user?.displayName || 'Pelanggan'}</span>
               <i class="fas fa-chevron-down dropdown-arrow"></i>
             </div>

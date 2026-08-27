@@ -142,16 +142,13 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       AuthManager.updateUser(user);
-      Swal.fire('Sukses', 'Profil berhasil diperbarui', 'success');
-      // Update Navbar immediately
-      const initials = displayName.charAt(0).toUpperCase();
-      const profileBtn = document.getElementById('admin-profile-trigger');
-      if (profileBtn) {
-        const avatarEl = profileBtn.querySelector('.admin-avatar');
-        if (avatarEl) avatarEl.textContent = initials;
-        const nameEl = profileBtn.querySelector('span');
-        if (nameEl) nameEl.textContent = displayName;
+
+      // Update Navbar immediately via SSOT
+      if (window.adminApp && window.adminApp.navbar) {
+        window.adminApp.navbar.render();
       }
+
+      Swal.fire('Sukses', 'Profil berhasil diperbarui', 'success');
     } else {
       throw new Error(result.message || 'Gagal memperbarui profil');
     }

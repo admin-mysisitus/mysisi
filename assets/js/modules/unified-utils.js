@@ -353,6 +353,25 @@ export function withCacheBust(url) {
   return `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
 }
 /**
+ * Return Default Avatar SVG String
+ */
+export function getDefaultAvatarSVG() {
+  return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
+}
+
+/**
+ * Render User Avatar HTML tag completely (SSOT logic)
+ */
+export function renderUserAvatarHtml(user, size = 'w200', extraClass = '') {
+  const defaultSvg = getDefaultAvatarSVG();
+  const rawUrl = user?.photoURL || '';
+  let profileSrc = normalizeDriveImageUrl(rawUrl, size, defaultSvg);
+  profileSrc = profileSrc !== defaultSvg ? withCacheBust(profileSrc) : profileSrc;
+  const displayName = user?.displayName || 'User';
+  return `<img src="${profileSrc}" alt="${displayName}" class="user-avatar ${extraClass}" onerror="this.src='${defaultSvg}'">`;
+}
+
+/**
  * Compute password strength metadata for shared strength meters.
  */
 export function getPasswordStrengthInfo(password) {
