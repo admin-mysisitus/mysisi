@@ -17,7 +17,9 @@ import {
   showInfo,
   formatPrice,
   formatDateTime,
-  setButtonLoading
+  setButtonLoading,
+  formatPhoneNumber,
+  sanitizeHTML
 } from '/assets/js/modules/unified-utils.js';
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
@@ -545,22 +547,4 @@ function getStatusInfo(status) {
   };
   return statusMap[status] || statusMap['pending'];
 }
-
-function formatPhoneNumber(phone) {
-  if (!phone) return '';
-  // Convert 08x to +628x
-  if (phone.startsWith('0')) {
-    return '+62' + phone.substring(1);
-  }
-  if (!phone.startsWith('+')) {
-    return '+62' + phone;
-  }
-  return phone;
-}
-
-function sanitizeHTML(text) {
-  if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
+

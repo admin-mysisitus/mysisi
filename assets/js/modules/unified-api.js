@@ -498,23 +498,47 @@ export class APIClient {
   static async updateUserProfile(userId, displayName, whatsapp, photoBase64) {
     try {
       const {
+        auth,
         db
       } = await getFirebase();
-      if (db) {
-        const updates = {
-          displayName,
-          whatsapp
-        };
-        if (photoBase64) updates.photoURL = photoBase64;
-        await db.ref(`users/${userId}`).update(updates);
+      if (!db) {
         return {
-          success: true,
-          message: 'Profil berhasil diupdate'
+          success: false,
+          message: 'Firebase DB tidak tersedia'
         };
       }
+      
+      let photoURL = null;
+      if (photoBase64) {
+        let idToken = '';
+        if (auth && auth.currentUser) {
+          idToken = await auth.currentUser.getIdToken();
+        }
+        const uploadRes = await this.call(GAS_CONFIG.ACTIONS.UPLOAD_PROFILE_PHOTO, { userId: userId, photoBase64: photoBase64 });
+        if (!uploadRes.success) {
+          return {
+            success: false,
+            message: 'Gagal mengunggah foto: ' + (uploadRes.message || 'Error')
+          };
+        }
+        if (uploadRes.data && uploadRes.data.photoURL) {
+          photoURL = uploadRes.data.photoURL;
+        }
+      }
+
+      const updates = {
+        displayName,
+        whatsapp
+      };
+      if (photoURL) {
+        updates.photoURL = photoURL;
+      }
+      await db.ref(`users/${userId}`).update(updates);
+      
       return {
-        success: false,
-        message: 'Firebase DB tidak tersedia'
+        success: true,
+        message: 'Profil berhasil diupdate',
+        data: photoURL ? { photoURL: photoURL } : null
       };
     } catch (e) {
       return {

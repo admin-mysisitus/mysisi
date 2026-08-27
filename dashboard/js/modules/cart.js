@@ -1,4 +1,4 @@
-﻿/**
+/**
  * CART PAGE MODULE - ENHANCED VERSION
  * ===================================
  * Complete cart management for checkout flow
@@ -14,8 +14,8 @@
  * 1. Guest views cart + inline login (SharedAuthForm)
  * 2. User registers/logins + verifies email
  * 3. User applies promo code (optional)
- * 4. User clicks "Lanjut Bayar" â†’ creates order â†’ midtrans payment
- * 5. Payment success â†’ redirected to /invoice/{order_id}
+ * 4. User clicks "Lanjut Bayar" → creates order → midtrans payment
+ * 5. Payment success → redirected to /invoice/{order_id}
  */
 import {
   CartManager,
@@ -106,7 +106,7 @@ window.changeItemPackage = (domain, packageId) => {
         window.updateCartPreview();
       }
     });
-    showSuccess('âœ“ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
+    showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
     console.error('Error changing package:', error);
     showError('Gagal', error.message);
@@ -174,6 +174,7 @@ export async function render(currentUser) {
       const checkVerificationStatus = () => {
         const user = AuthManager.getCurrentUser();
         if (user && user.emailVerified && (!cartState.currentUser || !cartState.currentUser.emailVerified)) {
+          console.log('[Cart] Auto-detecting email verification success in background!');
           cartState.currentUser = user;
           cartState.userId = user.userId;
           cartState.userEmail = user.email;
@@ -214,7 +215,7 @@ export async function render(currentUser) {
     showError('Error', error.message);
     cartState.container.innerHTML = `
       <div style="text-align: center; padding: 60px 20px;">
-        <h2>âŒ Error</h2>
+        <h2>❌ Error</h2>
         <p>${error.message}</p>
         <a href="#!/dashboard/checkout" class="btn" style="display: inline-block; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px;">
           Kembali ke Beranda
@@ -337,6 +338,7 @@ function renderGuestCheckout() {
  */
 async function handleAuthSuccess(userData) {
   try {
+    console.log('[Cart] Auth success, userData:', userData);
     // Save to auth manager
     AuthManager.saveSession(userData);
     // Update cart state
@@ -346,13 +348,13 @@ async function handleAuthSuccess(userData) {
     cartState.emailVerified = userData?.emailVerified || false;
     // IMPORTANT: Redirect to verification page if email is not verified
     if (!cartState.emailVerified) {
-      showSuccess('âœ“ Akun Dibuat!', 'Mengarahkan ke halaman verifikasi...');
+      showSuccess('✓ Akun Dibuat!', 'Mengarahkan ke halaman verifikasi...');
       setTimeout(() => {
         window.location.href = '/auth/verify-email.html';
       }, 1500);
       return;
     }
-    showSuccess('âœ“ Login Berhasil!', 'Halaman sedang diperbarui...');
+    showSuccess('✓ Login Berhasil!', 'Halaman sedang diperbarui...');
     // Re-render based on verification status
     setTimeout(() => {
       render(userData);
@@ -381,7 +383,7 @@ async function handleGoogleSignIn(response) {
     }
     // Save session
     AuthManager.saveSession(result.data);
-    showSuccess('âœ“ Google Login Sukses!', 'Halaman sedang diperbarui...');
+    showSuccess('✓ Google Login Sukses!', 'Halaman sedang diperbarui...');
     // Re-render
     setTimeout(() => {
       render(result.data);
@@ -433,6 +435,7 @@ function renderEmailVerificationPrompt() {
   `;
   // Start polling to check if user has verified their email in the database
   if (!cartState.verificationPollInterval) {
+    console.log('[Cart] Starting email verification status polling...');
     cartState.verificationPollInterval = setInterval(async () => {
       try {
         if (!cartState.currentUser || cartState.currentUser.emailVerified) {
@@ -442,6 +445,7 @@ function renderEmailVerificationPrompt() {
         }
         const result = await APIClient.getUserProfile(cartState.currentUser.userId);
         if (result.success && result.data && result.data.emailVerified) {
+          console.log('[Cart] User verified email (detected via polling)!');
           clearInterval(cartState.verificationPollInterval);
           cartState.verificationPollInterval = null;
           // Save updated session
@@ -453,7 +457,7 @@ function renderEmailVerificationPrompt() {
           // Update state and show success message
           cartState.currentUser = updatedUser;
           cartState.emailVerified = true;
-          showSuccess('âœ“ Email Terverifikasi', 'Halaman diperbarui, mengarahkan ke keranjang...');
+          showSuccess('✓ Email Terverifikasi', 'Halaman diperbarui, mengarahkan ke keranjang...');
           // Re-render full cart
           setTimeout(() => {
             render(updatedUser);
@@ -635,7 +639,7 @@ function renderCartItemSelectors(item) {
            onclick="window.changeItemPackage('${item.domain}', '${pkg.id}')">
         <div>
           <div class="cart-item-package-name">
-            ${isSelected ? 'âœ“ ' : ''}${pkg.name}
+            ${isSelected ? '✓ ' : ''}${pkg.name}
           </div>
           <div class="cart-item-package-price">
             ${formatPrice(priceDisplay)}
@@ -824,10 +828,10 @@ async function applyPromoCode() {
       cartState.promoDescription = result.data.description;
       cartState.promoValidated = true;
       if (promoMsg) {
-        promoMsg.textContent = `âœ“ ${result.message || 'Kode promo berhasil diterapkan'}`;
+        promoMsg.textContent = `✓ ${result.message || 'Kode promo berhasil diterapkan'}`;
         promoMsg.style.color = '#27ae60';
       }
-      showSuccess('âœ“ Berhasil', 'Kode promo diterapkan');
+      showSuccess('✓ Berhasil', 'Kode promo diterapkan');
       saveSavedPromo(result.data);
       render(cartState.currentUser);
     } else {
@@ -866,12 +870,12 @@ async function proceedToCheckout() {
     setButtonLoading(checkoutBtn, true, 'Membuat Order...');
     const summary = CartManager.getSummary();
     if (summary.itemCount === 0) {
-      showError('âš ï¸ Keranjang Kosong', 'Tambahkan domain ke keranjang terlebih dahulu');
+      showError('⚠️ Keranjang Kosong', 'Tambahkan domain ke keranjang terlebih dahulu');
       return;
     }
     // Check email verification - Bypassed to allow checkout
     // if (!cartState.currentUser?.emailVerified) {
-    //   showError('âš ï¸ Email Tidak Terverifikasi', 'Silakan verifikasi email Anda terlebih dahulu');
+    //   showError('⚠️ Email Tidak Terverifikasi', 'Silakan verifikasi email Anda terlebih dahulu');
     //   return;
     // }
     cartState.isProcessingCheckout = true;
@@ -884,6 +888,7 @@ async function proceedToCheckout() {
     const parts = firstDomain.split('.');
     const tld = parts[parts.length - 1];
     // VALIDASI: Re-check domain availability via DNS (Siapa Cepat Dia Dapat)
+    console.log('[Cart] Checking global DNS availability for:', firstDomain);
     try {
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(firstDomain)}&type=A`, {
         headers: {
@@ -963,6 +968,7 @@ async function proceedToCheckout() {
       discount: cartState.promoDiscount || 0,
       total: finalTotal
     };
+    console.log('[Cart] Creating order:', orderData);
     // CREATE ORDER DI DATABASE
     const createOrderResult = await APIClient.createOrder(orderData);
     if (!createOrderResult.success) {
@@ -970,6 +976,7 @@ async function proceedToCheckout() {
     }
     // orderId already declared above, verify GAS returned same/valid id
     const confirmedOrderId = createOrderResult.data?.orderId || orderId;
+    console.log('[Cart] Order created:', confirmedOrderId);
     // Clear cart and promo so previous checkout items/promos are not carried over to the next order
     CartManager.clear();
     cartState.promoCode = null;
@@ -977,14 +984,14 @@ async function proceedToCheckout() {
     cartState.promoDescription = null;
     cartState.promoValidated = false;
     saveSavedPromo(null);
-    showSuccess('âœ“ Order Dibuat', 'Mengarahkan ke pembayaran...');
+    showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
       window.location.href = `/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
     }, 1500);
   } catch (error) {
     console.error('[Cart] Checkout error:', error);
-    showError('âŒ Error Checkout', error.message);
+    showError('❌ Error Checkout', error.message);
   } finally {
     cartState.isProcessingCheckout = false;
     const checkoutBtn = document.getElementById('btn-proceed-checkout');

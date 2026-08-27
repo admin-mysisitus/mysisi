@@ -3,7 +3,8 @@
  */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
-  formatPrice
+  formatPrice,
+  formatNumber
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   if (currentUser && currentUser.role === 'admin') {
@@ -89,7 +90,6 @@ export async function render(currentUser) {
         if (pricingContainer) {
           pricingContainer.innerHTML = pricingData.map(domain => {
             const hasDiscount = domain.oldPrice && domain.oldPrice > domain.registration;
-            const formatNumber = (num) => num.toLocaleString('id-ID');
             return `
               <div class="search-pill">
                 <span class="ext" style="color: ${domain.color || '#ea4335'};">${domain.ext}</span>

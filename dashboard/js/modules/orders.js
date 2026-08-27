@@ -7,7 +7,9 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import {
   showError,
   formatPrice,
-  formatDateTime
+  formatDateTime,
+  formatPhoneNumber,
+  sanitizeHTML
 } from '/assets/js/modules/unified-utils.js';
 let currentUser = null;
 export async function render(user) {
@@ -324,15 +326,4 @@ function getStatusText(status) {
   };
   return statusMap[status] || status;
 }
-
-function formatPhoneNumber(phone) {
-  if (!phone) return '-';
-  // Format: 0812-3456-7890 or similar
-  return phone.replace(/(\d{4})(\d{4})(\d)/, '$1-$2-$3');
-}
-
-function sanitizeHTML(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
+

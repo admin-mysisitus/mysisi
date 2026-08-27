@@ -17,7 +17,8 @@ import {
 import {
   showInfo,
   showSuccess,
-  showError
+  showError,
+  formatDate
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
@@ -228,14 +229,4 @@ async function handleDomainRenewal(domainName, expiryDate) {
 }
 async function handleDNSManagement(domainName) {
   openDnsManagement(domainName, null);
-}
-
-function formatDate(dateString) {
-  if (!dateString) return '-';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('id-ID', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
 }

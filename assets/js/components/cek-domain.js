@@ -12,7 +12,8 @@
     showSuccess,
     showError,
     showInfo,
-    formatCurrency
+    formatCurrency,
+    sanitizeHTML
   } = await import('../modules/unified-utils.js');
   const APIClient = (await import('../modules/unified-api.js')).default;
   // Get the section container
@@ -84,11 +85,7 @@
     return Math.round((1 - newP / oldP) * 100);
   }
 
-  function sanitizeHTML(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
+
   // ============================================
   // DOM ELEMENTS CACHE - Query once, use everywhere
   // ============================================

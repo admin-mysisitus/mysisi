@@ -8,7 +8,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbxWKFJdqvk2Ntt1ZRfC_-f0jgueHpkptQgDSa3bzJEtkMUI3WbP-6GJUAR5gdoXBOKH/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbzGTbiEoTIufWfpZBfBD25h62yp3b5lwM5kk_CoYPnB5ZGxp4Qdcw-A0Vg1v5VAv7c/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 60000,
   // Actions/endpoints yang dipanggil
@@ -36,6 +36,7 @@ export const GAS_CONFIG = {
     // User profile
     GET_USER_PROFILE: 'getUserProfile',
     UPDATE_USER_PROFILE: 'updateUserProfile',
+    UPLOAD_PROFILE_PHOTO: 'uploadprofilephoto',
     // Admin Settings CMS
     GET_SETTINGS: 'getsettings',
     SAVE_SETTINGS: 'savesettings',

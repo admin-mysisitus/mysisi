@@ -1,4 +1,4 @@
-﻿import APIClient from '/assets/js/modules/unified-api.js';
+import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
@@ -7,6 +7,7 @@ import {
 } from '/assets/js/modules/dns-ui.js';
 let registeredDomains = [];
 export async function render() {
+  console.log('Admin DNS Module Loaded');
   setupEventListeners();
   await loadDNS();
 }

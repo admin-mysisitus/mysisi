@@ -1,9 +1,13 @@
-﻿import APIClient from '/assets/js/modules/unified-api.js';
+import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
+import {
+  formatNumber
+} from '/assets/js/modules/unified-utils.js';
 let currentDomains = [];
 export async function render() {
+  console.log('Admin Domains Module Loaded');
   setupEventListeners();
   await loadDomains();
 }
@@ -197,7 +201,6 @@ function renderDomains(domains, container) {
       card.style.border = '1px solid var(--admin-primary)';
       card.style.background = 'linear-gradient(145deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0.2))';
     }
-    const formatNumber = (num) => Number(num).toLocaleString('id-ID');
     let badges = '';
     if (domain.label) {
       badges += `<span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem;">${domain.label}</span>`;

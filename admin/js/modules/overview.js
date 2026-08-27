@@ -1,8 +1,9 @@
-﻿import APIClient from '/assets/js/modules/unified-api.js';
+import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 export async function render() {
+  console.log('Admin Overview Module Loaded');
   const refreshBtn = document.getElementById('refresh-stats');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', async () => {

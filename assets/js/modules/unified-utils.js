@@ -624,6 +624,32 @@ export function initPasswordToggle(container = document) {
     });
   });
 }
+/**
+ * Format phone number
+ */
+export function formatPhoneNumber(phone) {
+  if (!phone) return '-';
+  // Format: 0812-3456-7890 or similar
+  return phone.replace(/(\d{4})(\d{4})(\d)/, '$1-$2-$3');
+}
+
+/**
+ * Format raw number using local string IDR style
+ */
+export function formatNumber(num) {
+  return Number(num).toLocaleString('id-ID');
+}
+
+/**
+ * Sanitize HTML to prevent XSS
+ */
+export function sanitizeHTML(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 // ========== EXPORT ALL ==========
 export const Utilities = {
   // Notifications
@@ -640,12 +666,16 @@ export const Utilities = {
   isValidPassword,
   isValidPhoneNumber,
   isValidDomain,
+  // Formatting
+  formatPhoneNumber,
+  formatNumber,
   // String utilities
   formatCurrency,
   formatDate,
   formatTimeAgo,
   capitalize,
   truncate,
+  sanitizeHTML,
   // DOM utilities
   setButtonLoading,
   setInlineStatus,

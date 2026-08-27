@@ -1,9 +1,13 @@
-﻿import APIClient from '/assets/js/modules/unified-api.js';
+import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
+import {
+  formatNumber
+} from '/assets/js/modules/unified-utils.js';
 let currentAddons = [];
 export async function render() {
+  console.log('Admin Addons Module Loaded');
   setupEventListeners();
   await loadAddons();
 }
@@ -167,7 +171,6 @@ function renderAddons(addons, container) {
       card.style.border = '1px solid var(--admin-primary)';
       card.style.background = 'linear-gradient(145deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0.2))';
     }
-    const formatNumber = (num) => Number(num).toLocaleString('id-ID');
     const displayPrice = addon.price > 0 ? `Rp ${formatNumber(addon.price)}` : 'Gratis';
     let badges = '';
     if (addon.recommended) {

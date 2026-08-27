@@ -1,4 +1,4 @@
-﻿import {
+import {
   APIClient
 } from '/assets/js/modules/unified-api.js';
 import {
@@ -11,6 +11,7 @@ let currentSettings = {};
 let currentTemplates = [];
 let selectedTemplateId = null;
 export async function render() {
+  console.log('Admin Settings Module Loaded');
   // 1. Setup Tab Switching
   setupTabs();
   // 2. Fetch Data

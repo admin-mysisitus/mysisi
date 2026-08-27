@@ -25,7 +25,7 @@ desktop.ini
 firebase-rules.json
 
 # Google App Script
-gas.gs
+gas.js
 spreadsheet.tsv
 
 # Build outputs
