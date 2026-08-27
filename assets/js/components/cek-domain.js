@@ -185,7 +185,7 @@
           ${badgeGroup}
           <div class="cek-domain-ext-main-simple">
             <div class="cek-domain-ext-logo-wrap">
-              <img src="/assets/img/tld/${extFilename}" alt="${ext.ext}" class="tld-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+              <img src="/assets/img/tld/${extFilename}" alt="${ext.ext}" class="tld-logo" width="60" height="24" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
               ${fallbackIconHtml}
             </div>
             <div class="cek-domain-ext-prices-simple">
@@ -266,7 +266,7 @@
       const extFilename = `tld-${ext.replace(/\./g, '')}.svg`;
       const fallbackIconHtml = `<div class="cek-domain-suggestion-icon" style="background: ${extColor}; display: none;">${extLabel}</div>`;
       const iconHtml = `<div class="cek-domain-suggestion-icon-wrapper" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-        <img src="/assets/img/tld/${extFilename}" alt="${ext}" class="tld-logo-suggestion" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <img src="/assets/img/tld/${extFilename}" alt="${ext}" class="tld-logo-suggestion" width="60" height="24" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         ${fallbackIconHtml}
       </div>`;
       const priceHTML = extData && extData.registration ? `
@@ -495,7 +495,7 @@
       const coloredDomain = sanitizeHTML(fullDomain).replace(extData.ext, `<span style="color: ${fallbackColor};">${extData.ext}</span>`);
       const extLabel = extData.ext.replace('.', '').toUpperCase();
       const watermarkTag = `
-        <img src="/assets/img/tld/${extFilename}" alt="${extData.ext}" class="tld-logo-result" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+        <img src="/assets/img/tld/${extFilename}" alt="${extData.ext}" class="tld-logo-result" width="60" height="24" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
         <span class="cek-domain-fallback-text" style="color: ${extColor}; display: none;">${extLabel}</span>
       `;
       card.innerHTML = `
