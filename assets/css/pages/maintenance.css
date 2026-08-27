@@ -1,10 +1,5 @@
-/* ========== MAINTENANCE PAGE STYLING ========== */
-/* Page-specific styling untuk halaman maintenance layanan */
-/* ========== IMPORT BASE STYLES ========== */
-/* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
 @import url('pembuatan-website.css');
 
-/* ========== DETAIL PROBLEMS SECTION ========== */
 .detail-problems-section {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-light);
@@ -40,14 +35,12 @@
   position: relative;
 }
 
-/* Animation delays handled automatically by shared-sections.css [class*="item"] selector */
 .problem-item:hover {
   border-color: rgba(0, 0, 0, 0.15);
   border-left-color: var(--primary-blue, #2563eb);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Override total styling warna kaku dari custom-icons.css agar ikon tampil bersih & monokrom profesional seperti di halaman Perusahaan */
 .problem-item>i,
 .problem-item:nth-child(n)>i,
 .problem-item:hover>i,
@@ -90,7 +83,6 @@
   margin: 0;
 }
 
-/* ========== DETAIL SERVICES SECTION ========== */
 .detail-services-section {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-white);
@@ -179,7 +171,6 @@
   font-weight: 700;
 }
 
-/* ========== DETAIL WHAT INCLUDED SECTION ========== */
 .detail-what-included-section {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-light);
@@ -238,7 +229,6 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* Icon styles handled by custom-icons.css squircle styling */
 .included-item h3 {
   color: var(--text-primary);
   font-size: var(--teks-standar);
@@ -252,7 +242,6 @@
   line-height: 1.6;
 }
 
-/* ========== DETAIL COMPARISON SECTION ========== */
 .detail-comparison-section {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-white);
@@ -324,9 +313,6 @@
   color: var(--primary-blue);
 }
 
-/* ========== ANIMATIONS ========== */
-/* slideInUp keyframe sudah di-handle oleh hero.js */
-/* ========== PACKAGES GRID ========== */
 .packages-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -420,7 +406,6 @@
   border-bottom: none;
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
 
   .detail-problems-section,
@@ -428,10 +413,8 @@
   .faq-section {
     padding: 3rem 0;
     overflow: hidden;
-    /* Mencegah overflow horizontal pada body */
   }
 
-  /* Animasi Scroll Horizontal (Serupa Halaman Perusahaan) untuk Mobile */
   .problems-grid,
   .packages-grid {
     display: flex !important;
@@ -560,7 +543,6 @@
     padding: 1.5rem;
   }
 
-  /* Icon styles handled by custom-icons.css */
   .comparison-table {
     display: block;
     overflow-x: auto;
@@ -597,11 +579,8 @@
     padding: 0 1.2rem 1.2rem 1.2rem;
     font-size: var(--teks-kecil);
   }
-
-  /* Note: .detail-cta-section responsive styling di hero.css */
 }
 
-/* ========== PACKAGE CARD BUTTON STYLING ========== */
 .packages-grid .package-card .btn {
   margin: 0;
   padding: 0.95rem 2rem;
@@ -626,7 +605,6 @@
   border-color: var(--accent-cyan);
 }
 
-/* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;
 }

@@ -1,10 +1,5 @@
-/* ========== TIPS PAGE ========== */
-/* Import dari blog.css karena struktur HTML yang mirip */
 @import url('blog.css');
 
-/* ========== TIPS PAGE SPECIFIC STYLING ========== */
-/* Hero styling moved to components/hero.css */
-/* ========== TIPS LIST SECTION ========== */
 .tips-list-section {
   padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
@@ -22,14 +17,12 @@
   margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
 }
 
-/* ========== TIPS GRID ========== */
 .tips-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(1rem, 2vw, 2rem);
 }
 
-/* ========== TIPS CARD ========== */
 .tips-card {
   background: var(--bg-white);
   padding: clamp(1.25rem, 2vw, 1.5rem);
@@ -42,7 +35,6 @@
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .tips-card:hover {
   border-color: var(--primary-blue);
   box-shadow: var(--shadow-lg);
@@ -95,7 +87,6 @@
   margin: 0;
 }
 
-/* ========== TIPS HIGHLIGHTS ========== */
 .tips-highlights {
   background-color: #F8FAFC;
   padding: 0.75rem 1rem;
@@ -134,7 +125,6 @@
   font-size: 0.9rem;
 }
 
-/* ========== EXPAND/COLLAPSE BUTTON ========== */
 .btn-copy-code {
   position: absolute;
   top: 10px;
@@ -155,10 +145,6 @@
   position: relative;
 }
 
-/* ========== TIPS CTA SECTION ========== */
-/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
-/* Lihat .tips-cta-section di hero.css untuk styling dan responsive rules */
-/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
   .tips-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -211,7 +197,6 @@
   }
 }
 
-/* ========== TIPS CTA DARK (UNIQUE STYLE) ========== */
 .tips-cta-dark {
   padding: 1.5rem 0 2rem 0;
 }

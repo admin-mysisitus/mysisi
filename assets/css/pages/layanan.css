@@ -1,7 +1,3 @@
-/* ========== LAYANAN PAGE STYLING ========== */
-/* Styling khusus halaman LAYANAN dengan fokus pada layanan cards dan process flow */
-/* Hero styling moved to components/hero.css */
-/* ========== LAYANAN INTRO SECTION ========== */
 .layanan-intro-section {
   padding: 2.5rem 0;
   background-color: var(--bg-light);
@@ -16,7 +12,6 @@
   line-height: var(--line-height-relaxed);
 }
 
-/* ========== LAYANAN GRID SECTION ========== */
 .layanan-grid-section {
   padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
@@ -29,7 +24,6 @@
   margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
 }
 
-/* ========== TABS SECTION ========== */
 .layanan-tabs-container {
   display: flex;
   flex-direction: column;
@@ -143,7 +137,6 @@
   font-weight: 700;
 }
 
-/* ========== STEPPER SECTION ========== */
 .layanan-process-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -282,7 +275,6 @@
   line-height: 1.6;
 }
 
-/* ========== ACCORDION SECTION ========== */
 .layanan-why-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -373,7 +365,6 @@
   }
 }
 
-/* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;
 }
@@ -436,8 +427,6 @@
 }
 
 @media (max-width: 768px) {
-
-  /* 0. Hero Section (Responsiveness Fix) */
   .hero.hero-home {
     padding: 2.25rem 0 !important;
   }
@@ -451,7 +440,6 @@
 
   .hero-content p {
     font-size: 0.938rem !important;
-    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.5rem !important;
   }
@@ -467,7 +455,6 @@
     width: 100% !important;
   }
 
-  /* 1. Layanan Grid Section (Compact Tabs & Stacked Cards) */
   .layanan-grid-section {
     padding: 2.25rem 0 !important;
   }
@@ -489,13 +476,10 @@
   .layanan-tab-btn {
     padding: 0.5rem 0.25rem !important;
     font-size: 0.65rem !important;
-    /* Diperkecil agar muat di layar 320px */
     line-height: 1.25 !important;
     text-align: center !important;
     white-space: normal !important;
-    /* Izinkan teks wrap */
     word-break: break-word !important;
-    /* Paksa break jika kepanjangan */
     border: 1px solid transparent !important;
     border-radius: var(--radius-medium) !important;
     border-bottom: none !important;
@@ -533,7 +517,6 @@
 
   .layanan-content-area>p {
     font-size: 0.813rem !important;
-    /* 13px */
     line-height: 1.45 !important;
     margin-bottom: 1rem !important;
   }
@@ -550,7 +533,6 @@
 
   .layanan-features li {
     font-size: 0.813rem !important;
-    /* 13px */
     line-height: 1.4 !important;
     padding-left: 1.35rem !important;
   }
@@ -561,7 +543,6 @@
     font-size: 0.875rem !important;
   }
 
-  /* 2. Process Section (2x3 Compact Stepper Grid & Dense Typography) */
   .layanan-process-section {
     padding: 2.25rem 0 !important;
   }
@@ -596,7 +577,6 @@
 
   .step-btn::after {
     display: none !important;
-    /* Hilangkan garis penghubung horisontal di mobile grid */
   }
 
   .step-num {
@@ -626,13 +606,11 @@
 
   .step-pane p {
     font-size: 0.813rem !important;
-    /* 13px */
     line-height: 1.45 !important;
     text-align: center !important;
     margin: 0 !important;
   }
 
-  /* 3. Why Section (Compact Mobile Accordion) */
   .layanan-why-section {
     padding: 2.25rem 0 !important;
   }
@@ -650,7 +628,6 @@
   .accordion-header {
     padding: 0.65rem 0.75rem !important;
     font-size: 0.813rem !important;
-    /* 13px */
     line-height: 1.35 !important;
     gap: 0.65rem !important;
   }
@@ -666,12 +643,10 @@
 
   .accordion-body p {
     font-size: 0.78rem !important;
-    /* ~12.5px */
     line-height: 1.4 !important;
     margin: 0 !important;
   }
 
-  /* 4. Bottom CTA Section */
   .bottom-cta-section {
     padding: 1rem 0 2rem 0 !important;
   }
@@ -715,6 +690,3 @@
     display: inline-flex !important;
   }
 }
-
-/* ========== ANIMATIONS ========== */
-/* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */

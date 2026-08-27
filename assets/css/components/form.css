@@ -1,4 +1,3 @@
-/* ========== FORMS ========== */
 .form-group {
   margin-bottom: 20px;
   display: flex;
@@ -47,7 +46,6 @@
 
 .form-error-msg {
   color: #B91C1C;
-  /* Dark red, per AGENTS.md */
   font-size: 0.813rem;
   margin-top: 6px;
   display: none;

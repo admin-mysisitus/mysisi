@@ -1,10 +1,5 @@
-/* ========== ARTIKEL PAGE ========== */
-/* Import dari blog.css karena struktur HTML yang mirip */
 @import url('blog.css');
 
-/* ========== ARTIKEL PAGE SPECIFIC STYLING ========== */
-/* Hero styling moved to components/hero.css */
-/* ========== ARTIKEL LIST SECTION ========== */
 .artikel-list-section {
   padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
@@ -22,14 +17,12 @@
   margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
 }
 
-/* ========== ARTIKEL GRID ========== */
 .artikel-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(1rem, 3vw, 2.5rem);
 }
 
-/* ========== ARTIKEL CARD ========== */
 .artikel-card {
   background: var(--bg-white);
   padding: 0;
@@ -57,7 +50,6 @@
   flex-grow: 1;
 }
 
-/* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .artikel-card:hover {
   border-color: var(--primary-blue);
   box-shadow: var(--shadow-lg);
@@ -107,7 +99,6 @@
   flex-grow: 1;
 }
 
-/* ========== ARTIKEL TAGS ========== */
 .artikel-tags {
   display: flex;
   gap: 0.8rem;
@@ -132,7 +123,6 @@
   transform: translateY(-2px);
 }
 
-/* ========== ARTIKEL PAGINATION ========== */
 .artikel-pagination-section {
   padding: 3rem 0;
   text-align: center;
@@ -176,7 +166,6 @@
   font-weight: 600;
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
   .artikel-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -241,7 +230,6 @@
   }
 }
 
-/* ========== ARTIKEL CTA ACCENT (UNIQUE STYLE) ========== */
 .artikel-cta-accent {
   padding: 1.5rem 0 2rem 0;
 }
@@ -380,7 +368,6 @@
   }
 }
 
-/* ========== SEARCH BAR ========== */
 .search-input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;

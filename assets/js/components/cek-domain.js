@@ -84,8 +84,6 @@
     if (!oldP) return 0;
     return Math.round((1 - newP / oldP) * 100);
   }
-
-
   // ============================================
   // DOM ELEMENTS CACHE - Query once, use everywhere
   // ============================================

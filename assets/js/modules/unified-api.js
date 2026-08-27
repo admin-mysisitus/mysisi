@@ -507,14 +507,16 @@ export class APIClient {
           message: 'Firebase DB tidak tersedia'
         };
       }
-      
       let photoURL = null;
       if (photoBase64) {
         let idToken = '';
         if (auth && auth.currentUser) {
           idToken = await auth.currentUser.getIdToken();
         }
-        const uploadRes = await this.call(GAS_CONFIG.ACTIONS.UPLOAD_PROFILE_PHOTO, { userId: userId, photoBase64: photoBase64 });
+        const uploadRes = await this.call(GAS_CONFIG.ACTIONS.UPLOAD_PROFILE_PHOTO, {
+          userId: userId,
+          photoBase64: photoBase64
+        });
         if (!uploadRes.success) {
           return {
             success: false,
@@ -525,7 +527,6 @@ export class APIClient {
           photoURL = uploadRes.data.photoURL;
         }
       }
-
       const updates = {
         displayName,
         whatsapp
@@ -534,11 +535,12 @@ export class APIClient {
         updates.photoURL = photoURL;
       }
       await db.ref(`users/${userId}`).update(updates);
-      
       return {
         success: true,
         message: 'Profil berhasil diupdate',
-        data: photoURL ? { photoURL: photoURL } : null
+        data: photoURL ? {
+          photoURL: photoURL
+        } : null
       };
     } catch (e) {
       return {

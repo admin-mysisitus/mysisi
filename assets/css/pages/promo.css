@@ -1,5 +1,3 @@
-/* ========== PROMO PAGE STYLING ========== */
-/* Promo-specific styling utama untuk override shared styles */
 html,
 body {
   overflow-x: hidden;
@@ -16,8 +14,6 @@ main {
   position: relative;
 }
 
-/* Title decorations consolidated */
-/* ========== PROMOS GRID ========== */
 .promos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -31,7 +27,6 @@ main {
   }
 }
 
-/* ========== PROMO CARD STYLING ========== */
 .promo-card {
   background: var(--white);
   border-radius: var(--radius-besar);
@@ -49,13 +44,11 @@ main {
   border-color: var(--accent-cyan);
 }
 
-/* ========== BUTTON STYLING (BLOCK) ========== */
 .btn-block {
   width: 100%;
   text-align: center;
 }
 
-/* ========== PROMO VALUE PROPOSITION SECTION ========== */
 .promo-value-proposition-section {
   padding: 5rem 0;
   background: linear-gradient(180deg, #FAFBFF 0%, var(--bg-white) 100%);
@@ -163,7 +156,6 @@ main {
   margin: 0;
 }
 
-/* ========== HIGHLIGHT CARD STYLING ========== */
 .vp-highlight-card {
   display: flex;
   flex-direction: column;
@@ -226,7 +218,6 @@ main {
   }
 }
 
-/* ========== PROMO REQUIREMENTS SECTION ========== */
 .promo-requirements-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -239,8 +230,6 @@ main {
   margin-bottom: 0.5rem;
 }
 
-/* Title decorations consolidated */
-/* ========== REQUIREMENTS GRID ========== */
 .requirements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -253,7 +242,6 @@ main {
   }
 }
 
-/* ========== REQUIREMENT ITEM ========== */
 .requirement-item {
   background-color: var(--white);
   padding: 2rem;
@@ -280,7 +268,6 @@ main {
   line-height: 1.6;
 }
 
-/* ========== PROMO WHY NOW SECTION ========== */
 .promo-why-now-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -293,15 +280,12 @@ main {
   margin-bottom: 0.5rem;
 }
 
-/* Title decorations consolidated */
-/* ========== WHY GRID ========== */
 .why-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
 }
 
-/* ========== WHY ITEM ========== */
 .why-item {
   text-align: center;
   padding: 2rem;
@@ -343,7 +327,6 @@ main {
   line-height: 1.6;
 }
 
-/* ========== PROMO TESTIMONIAL SECTION ========== */
 .promo-testimonial-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -356,18 +339,14 @@ main {
   margin-bottom: 0.5rem;
 }
 
-/* Title decorations consolidated */
-/* ========== SWIPER TESTIMONIAL CAROUSEL ========== */
 .testimonial-swiper {
   width: 100%;
   padding: 4rem 0 4rem;
-  /* Ditambah agar gambar pop-out tidak terpotong atasnya */
   overflow: hidden;
 }
 
 .testimonial-swiper .swiper-slide {
   width: 260px;
-  /* Ukuran diperbesar untuk mobile agar gambar tangkapan layar lebih jelas terbaca */
   height: auto;
   opacity: 0.5;
   transition: all 0.4s ease;
@@ -376,7 +355,6 @@ main {
 @media (min-width: 640px) {
   .testimonial-swiper .swiper-slide {
     width: 280px;
-    /* Ukuran proporsional menengah untuk desktop */
   }
 }
 
@@ -386,13 +364,10 @@ main {
 
 .testimonial-card {
   background: var(--bg-white);
-  /* Neutral clean background for inactive */
   border: 1px solid var(--border-light);
   border-radius: 20px;
   padding: 0 15px 15px;
-  /* Hapus padding atas agar gambar bisa pop-out */
   margin-top: 40px;
-  /* Ruang untuk pop-out */
   display: flex;
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -401,7 +376,6 @@ main {
 
 .testimonial-swiper .swiper-slide-active .testimonial-card {
   background: var(--brand-base);
-  /* Theme matched */
   border-color: transparent;
   box-shadow: 0 20px 40px rgba(37, 99, 235, 0.25);
 }
@@ -411,12 +385,9 @@ main {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  /* Shadow lebih kuat untuk efek 3D melayang */
   background-color: var(--white);
-  /* Proporsi HP persis 9:16 (1080x1920) agar tidak kepotong */
   aspect-ratio: 9/16;
   margin-top: -40px;
-  /* EFEK 3D POP-OUT */
   position: relative;
   z-index: 2;
   transition: all 0.4s ease;
@@ -433,7 +404,6 @@ main {
   padding: 1.2rem 0.5rem 0.5rem;
   text-align: center;
   font-size: 0.85rem;
-  /* Diperkecil agar lebih ringkas */
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
@@ -464,10 +434,6 @@ main {
   opacity: 0.8;
 }
 
-/* ========== PROMO CTA FINAL SECTION - STYLING MOVED TO components/hero.css ========== */
-/* Promo CTA section sekarang ditangani oleh .promo-cta-final-section di components/hero.css */
-/* Lihat hero.css untuk styling lengkap */
-/* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .promo-banner {
     padding: 2rem 1.5rem;
@@ -478,7 +444,6 @@ main {
     margin-bottom: 0.5rem;
   }
 
-  /* Horizontal Scroll for Grids on Mobile */
   .promos-grid,
   .value-proposition-grid,
   .requirements-grid,
@@ -492,12 +457,10 @@ main {
     padding-bottom: 2rem;
     gap: 1.5rem;
     -webkit-overflow-scrolling: touch;
-    /* Memberikan ilusi scroll melewati layar */
     margin-right: -2rem;
     padding-right: 2rem;
   }
 
-  /* Sembunyikan grid lama */
   .promos-grid {
     grid-template-columns: none;
   }
@@ -506,7 +469,6 @@ main {
     grid-template-columns: none;
   }
 
-  /* Styling Webkit Scrollbar */
   .promos-grid::-webkit-scrollbar,
   .value-proposition-grid::-webkit-scrollbar,
   .requirements-grid::-webkit-scrollbar,
@@ -562,7 +524,6 @@ main {
 
 @media (max-width: 480px) {
 
-  /* Kepadatan Padding Section (Lebih Compact) */
   .promo-banner-section,
   .promo-details-section,
   .promo-value-proposition-section,
@@ -570,10 +531,8 @@ main {
   .promo-why-now-section,
   .promo-testimonial-section {
     padding: 2rem 0;
-    /* Dikurangi dari 2.5rem - 5rem */
   }
 
-  /* Kepadatan Typografi */
   h2 {
     font-size: 1.4rem !important;
     line-height: 1.3 !important;
@@ -631,8 +590,6 @@ main {
   }
 }
 
-/* ========== ANIMATION SCROLL REVEAL ========== */
-/* slideInUp dan fadeIn keyframes di-consolidate ke base/shared-sections.css */
 @keyframes spinIcon {
   from {
     transform: scale(1.15) rotate(0deg);
@@ -735,8 +692,6 @@ main {
   animation-delay: 0.3s;
 }
 
-/* ========== COUNTDOWN TIMER COMPONENT ========== */
-/* Urgent state: less than 6 hours remaining */
 .countdown-timer.countdown-urgent {
   background: rgba(220, 53, 69, 0.25);
   animation: pulse 1.5s ease-in-out infinite;
@@ -754,7 +709,6 @@ main {
   }
 }
 
-/* Responsive countdown timer */
 @media (max-width: 768px) {
   .countdown-value {
     font-size: 2rem;
@@ -785,17 +739,12 @@ main {
   }
 }
 
-/* ========== FAQ SECTION ==========
- * FAQ styling is now centralized in components/faq.css to ensure consistency
- * across all pages.
- */
 @media (max-width: 768px) {
   .faq-section {
     padding: 3rem 0;
   }
 }
 
-/* ========== DYNAMIC ACTIVE COUPONS STYLING ========== */
 .active-coupons-section {
   border-bottom: 1px solid var(--border-light);
 }
@@ -823,7 +772,6 @@ main {
   width: 20px;
   height: 20px;
   background-color: #f8fafc;
-  /* match section background */
   border-radius: 50%;
   z-index: 2;
 }
@@ -884,7 +832,6 @@ main {
 .coupon-code-value {
   flex: 1;
   min-width: 0;
-  /* Ensures the input can shrink below its default size */
   font-family: 'Courier New', monospace;
   font-weight: 700;
   font-size: 1.1rem;

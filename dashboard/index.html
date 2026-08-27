@@ -5,12 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - SISITUS</title>
-  <!-- Content Security Policy to allow Midtrans and Google scripts -->
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; frame-src 'self' https: http:;">
-  <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
   <link rel="manifest" href="/assets/favicon/site.webmanifest">
-  <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,13 +18,9 @@
 
 <body class="dashboard-page-body">
   <div id="dashboard">
-    <!-- Sidebar Navigation -->
     <aside id="sidebar" class="dashboard-sidebar"></aside>
-    <!-- Main Wrapper (Navbar + Content) -->
     <div class="dashboard-main-wrapper">
-      <!-- Top Navigation Bar -->
       <nav id="navbar" class="dashboard-navbar"></nav>
-      <!-- Main Content Area -->
       <main id="content" class="dashboard-content">
         <div class="content-loading">
           <div class="spinner"></div>
@@ -36,20 +29,15 @@
       </main>
     </div>
   </div>
-  <!-- Loading Overlay -->
   <div id="loading-overlay" class="loading-overlay" style="display: none;">
     <div class="spinner"></div>
   </div>
-  <!-- SweetAlert2 for Elegant Notifications -->
   <link media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-  <noscript><link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet"></noscript>
+  <noscript>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  </noscript>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>
-  <!-- SweetAlert2 provides elegant, non-intrusive toast notifications with auto-dismiss -->
-  <!-- Midtrans Snap SDK for Payment Processing -->
   <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-5Pt2HLTUbjJd24VZ"></script>
-  <!-- Note: Midtrans Snap SDK is loaded for payment processing via snap.pay() -->
-  <!-- The actual token is generated server-side by GAS and passed to snap.pay() -->
-  <!-- Main App Script -->
   <script type="module" src="/dashboard/js/dashboard-app.js"></script>
 </body>
 

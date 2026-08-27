@@ -1,4 +1,3 @@
-/* ========== SIDEBAR ========== */
 .sidebar {
   width: 260px;
   height: 100vh;
@@ -9,7 +8,6 @@
   border-right: 1px solid var(--border-light);
   transition: width 0.3s var(--ease-out-quint);
   z-index: 45;
-  /* Under sticky header usually */
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;

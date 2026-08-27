@@ -1,22 +1,17 @@
-/* ========== GRID SYSTEM ========== */
-/* Mobile First Grid */
 .grid {
   display: grid;
   gap: 16px;
 }
 
-/* 1 Column (Mobile Default) */
 .grid-cols-1 {
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* 2 Columns */
 @media (min-width: 640px) {
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* Asymmetric / Staggered grids */
   .grid-asym-1-2 {
     grid-template-columns: 1fr 2fr;
   }
@@ -26,14 +21,12 @@
   }
 }
 
-/* 3 Columns */
 @media (min-width: 768px) {
   .grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-/* 4 Columns */
 @media (min-width: 1024px) {
   .grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -44,7 +37,6 @@
   }
 }
 
-/* Professional Card Grid (AGENTS.md) */
 .card-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -74,7 +66,6 @@
   }
 }
 
-/* Gap Utilities */
 .gap-2 {
   gap: 8px;
 }

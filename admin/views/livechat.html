@@ -13,7 +13,6 @@
 </div>
 <div id="livechat-spa-container" class="lc-admin-wrapper">
   <div id="notification" style="display: none;"><i class="fas fa-bell"></i> Ada pesan baru masuk!</div>
-  <!-- Left Column: Rooms List -->
   <div class="admin-card lc-rooms-panel">
     <div class="lc-rooms-header">
       <h4 class="lc-rooms-title">Daftar Chat</h4>
@@ -30,9 +29,7 @@
     </div>
     <div id="currentRoom" style="display: none;"></div>
   </div>
-  <!-- Right Column: Chat Box -->
   <div class="admin-card lc-chat-panel">
-    <!-- Empty State -->
     <div id="emptyStateContainer" class="lc-empty-state empty-dashboard-state">
       <div class="lc-empty-icon-wrap">
         <i class="fas fa-comment-dots lc-empty-icon"></i>
@@ -40,7 +37,6 @@
       <h3 class="lc-empty-title">Belum ada obrolan terpilih</h3>
       <p class="lc-empty-desc">Pilih salah satu obrolan dari daftar di sebelah kiri untuk mulai membalas pesan.</p>
     </div>
-    <!-- Active Chat -->
     <div id="activeChatContainer" class="lc-active-chat-wrapper" style="display: none;">
       <div class="lc-chat-header chat-header">
         <div class="lc-chat-header-avatar">
@@ -53,7 +49,6 @@
       </div>
       <div id="chatBox" class="lc-chat-box"></div>
       <div class="lc-input-area input-area">
-        <!-- Quick Reply Popup injected dynamically here -->
         <div id="quickReplyPopup" class="quick-reply-popup"></div>
         <input type="text" id="replyInput" class="lc-reply-input" placeholder="'/' untuk balas cepat..." aria-label="Pesan balasan">
         <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" aria-label="Pilih dokumen">
@@ -64,7 +59,6 @@
     </div>
   </div>
 </div>
-<!-- Attachment Modal -->
 <div id="attachmentModal" class="modal-backdrop" onclick="if(event.target === this) closeAttachmentModal()">
   <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto;">
     <button class="modal-close" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>

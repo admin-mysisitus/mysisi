@@ -547,4 +547,3 @@ function getStatusInfo(status) {
   };
   return statusMap[status] || statusMap['pending'];
 }
-

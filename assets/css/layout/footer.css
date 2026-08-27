@@ -1,4 +1,3 @@
-/* ========== FOOTER - MOBILE FIRST ========== */
 footer {
   background: linear-gradient(135deg, var(--secondary-slate) 0%, #131B2E 100%);
   color: var(--bg-white);
@@ -284,7 +283,6 @@ footer {
   padding-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0.55;
-  /* Lebih transparan */
   margin: 0 auto;
   width: 90%;
   max-width: 1200px;
@@ -294,7 +292,6 @@ footer {
   max-width: none;
   margin: 0 auto;
   font-size: 0.8rem;
-  /* Lebih besar sedikit */
   line-height: 1.5;
 }
 
@@ -321,7 +318,6 @@ footer {
   border: 0;
 }
 
-/* ========== FOOTER TRUST BADGES ========== */
 .footer-trust-badges {
   margin: 1.5rem 0;
   padding-top: 1.5rem;
@@ -408,7 +404,6 @@ footer {
 
   .footer-copyright p {
     font-size: 0.7rem;
-    /* Lebih besar sedikit di mobile */
     line-height: 1.5;
   }
 }

@@ -1,5 +1,3 @@
-/* ========== TENTANG PAGE STYLES ========== */
-/* --- Typography & Utilities --- */
 .eyebrow-text {
   display: inline-block;
   font-size: 0.85rem;
@@ -23,7 +21,6 @@
   }
 }
 
-/* --- Hero Section --- */
 .about-hero {
   padding: 8rem 0 4rem;
   background-color: var(--bg-light);
@@ -83,7 +80,6 @@
   }
 }
 
-/* --- Company Highlight Section (Metrics) --- */
 .company-highlight-section {
   padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-light, #f8fafd);
@@ -157,7 +153,6 @@
   margin: 0;
 }
 
-/* --- Technical Approach --- */
 .technical-approach-section {
   padding: 3.5rem 0;
   background-color: var(--gray-light, #f1f5f9);
@@ -185,7 +180,6 @@
   color: var(--text-secondary);
 }
 
-/* --- Accordion --- */
 .services-accordion {
   max-width: 800px;
   margin: 0 auto;
@@ -260,13 +254,11 @@ details[open] .accordion-icon {
   padding-left: 3.75rem;
 }
 
-/* --- Values Section --- */
 .about-values {
   padding: 3.5rem 0;
   background-color: var(--bg-light, #f8fafd);
 }
 
-/* --- Vision Mission Tabs --- */
 .vm-tabs-container {
   max-width: 800px;
   margin: 0 auto;
@@ -283,18 +275,15 @@ details[open] .accordion-icon {
   flex-wrap: nowrap;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Hide scrollbar Firefox */
 }
 
 .vm-tabs-header::-webkit-scrollbar {
   display: none;
-  /* Hide scrollbar Chrome/Safari */
 }
 
 @media (max-width: 768px) {
   .vm-tabs-header {
     justify-content: flex-start;
-    /* Prevent cut-off on left when overflowing */
     padding-bottom: 2px;
   }
 }
@@ -361,13 +350,11 @@ details[open] .accordion-icon {
   line-height: 1.6;
 }
 
-/* --- Team Section --- */
 .team-section {
   padding: 3.5rem 0;
   background-color: var(--gray-light, #f1f5f9);
 }
 
-/* --- Team Scroll Snap Slider --- */
 .team-slider-container {
   width: 100%;
   overflow-x: auto;
@@ -462,7 +449,6 @@ details[open] .accordion-icon {
   }
 }
 
-/* --- Partners Tight Marquee --- */
 .partners-section {
   padding: 1.5rem 0;
   border-top: 1px solid var(--border-light);
@@ -480,9 +466,6 @@ details[open] .accordion-icon {
   font-weight: 600;
 }
 
-/* ============================
-   SPONSORS SECTION
-============================ */
 .sponsors-section {
   text-align: center;
   position: relative;
@@ -510,7 +493,6 @@ details[open] .accordion-icon {
   margin-bottom: 1rem;
 }
 
-/* Container baris sponsor */
 .sponsors-container {
   overflow: hidden;
   width: 100%;
@@ -520,7 +502,6 @@ details[open] .accordion-icon {
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
-/* Jalur logo sponsor */
 .sponsors-track {
   display: flex;
   align-items: center;
@@ -529,7 +510,6 @@ details[open] .accordion-icon {
   gap: 3rem;
 }
 
-/* Logo sponsor */
 .sponsors-track img {
   height: 35px;
   width: auto;
@@ -542,7 +522,6 @@ details[open] .accordion-icon {
   transform: scale(1.05);
 }
 
-/* Animasi jalan */
 .scroll-left {
   animation: scroll-left 150s linear infinite;
 }
@@ -571,12 +550,10 @@ details[open] .accordion-icon {
   }
 }
 
-/* Pause saat hover */
 .sponsors-container:hover .sponsors-track {
   animation-play-state: paused;
 }
 
-/* ========== BOTTOM CTA SECTION (BASE/DESKTOP STYLES) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;
 }
@@ -621,12 +598,7 @@ details[open] .accordion-icon {
   flex-shrink: 0;
 }
 
-/* ==========================================================================
-   MOBILE TYPOGRAPHY & SPACING OPTIMIZATION (OPTION A - RECOMMENDED)
-   ========================================================================== */
 @media (max-width: 768px) {
-
-  /* 1. Hero Section (Compact & Punchy) */
   .hero.hero-home {
     padding: 2.25rem 0 !important;
   }
@@ -640,7 +612,6 @@ details[open] .accordion-icon {
 
   .hero-content p {
     font-size: 0.938rem !important;
-    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.25rem !important;
   }
@@ -650,7 +621,6 @@ details[open] .accordion-icon {
     font-size: 0.938rem !important;
   }
 
-  /* 2. Sorotan Angka / Metrics (Ultra-Compact 2-Column Grid) */
   .stats-compact-grid {
     gap: 1rem 0.75rem !important;
   }
@@ -661,24 +631,20 @@ details[open] .accordion-icon {
 
   .stat-compact-item .metric-number {
     font-size: 1.75rem !important;
-    /* 28px */
     line-height: 1.1 !important;
   }
 
   .stat-compact-text h4 {
     font-size: 0.938rem !important;
-    /* 15px */
     font-weight: 700 !important;
     margin-bottom: 2px !important;
   }
 
   .stat-compact-text p {
     font-size: 0.844rem !important;
-    /* 13.5px */
     line-height: 1.35 !important;
   }
 
-  /* 3. Fondasi Teknis (Compact Accordion & Full-Width Content) */
   .technical-approach-section {
     padding: 2rem 0 !important;
   }
@@ -689,14 +655,12 @@ details[open] .accordion-icon {
 
   .section-header-compact h2 {
     font-size: 1.5rem !important;
-    /* 24px */
     line-height: 1.25 !important;
     margin-bottom: 0.5rem !important;
   }
 
   .section-header-compact p {
     font-size: 0.875rem !important;
-    /* 14px */
     line-height: 1.45 !important;
   }
 
@@ -711,7 +675,6 @@ details[open] .accordion-icon {
 
   .service-summary-title h3 {
     font-size: 0.938rem !important;
-    /* 15px */
     font-weight: 600 !important;
     line-height: 1.4 !important;
     margin: 0 !important;
@@ -725,15 +688,12 @@ details[open] .accordion-icon {
     margin-top: 0.15rem !important;
   }
 
-  /* Hapus padding kiri 60px pada konten accordion agar memanfaatkan 100% lebar HP */
   .service-content {
     padding: 0 0.875rem 0.875rem 0.875rem !important;
     font-size: 0.844rem !important;
-    /* 13.5px */
     line-height: 1.45 !important;
   }
 
-  /* 4. Prinsip Kerja SISITUS (Sleek Tabs & Compact Vision Block) */
   .about-values {
     padding: 2rem 0 !important;
   }
@@ -745,25 +705,21 @@ details[open] .accordion-icon {
 
   .vm-tab-btn {
     font-size: 0.875rem !important;
-    /* 14px */
     font-weight: 600 !important;
     padding: 0.5rem 0.875rem !important;
   }
 
   .vision-block h2 {
     font-size: 1.375rem !important;
-    /* 22px */
     line-height: 1.25 !important;
     margin-bottom: 0.5rem !important;
   }
 
   .vision-block p {
     font-size: 0.9rem !important;
-    /* 14.5px */
     line-height: 1.45 !important;
   }
 
-  /* 5. Orang-Orang di Balik Layar / Tim Kami (Compact Slider Card & Sleek Avatar) */
   .team-section {
     padding: 2rem 0 !important;
   }
@@ -789,17 +745,14 @@ details[open] .accordion-icon {
 
   .team-slider-track h4 {
     font-size: 0.938rem !important;
-    /* 15px */
     font-weight: 700 !important;
     margin-bottom: 2px !important;
   }
 
   .team-slider-track .team-role {
     font-size: 0.813rem !important;
-    /* 13px */
   }
 
-  /* 6. Sponsors / Partners Marquee */
   .sponsors-track {
     gap: 1.75rem;
   }
@@ -810,7 +763,6 @@ details[open] .accordion-icon {
     margin: 0;
   }
 
-  /* 7. Bottom CTA Section (Impeccable Mobile Card & Overflow Protection) */
   .bottom-cta-section {
     padding: 1rem 0 1.5rem 0 !important;
   }
@@ -836,7 +788,6 @@ details[open] .accordion-icon {
   .team-cta h3,
   .team-cta h2 {
     font-size: 1.1rem !important;
-    /* 17.6px */
     line-height: 1.3 !important;
     margin-bottom: 0.5rem !important;
     color: white !important;
@@ -844,7 +795,6 @@ details[open] .accordion-icon {
 
   .team-cta p {
     font-size: 0.844rem !important;
-    /* 13.5px */
     line-height: 1.45 !important;
     color: white !important;
   }

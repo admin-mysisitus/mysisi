@@ -632,14 +632,12 @@ export function formatPhoneNumber(phone) {
   // Format: 0812-3456-7890 or similar
   return phone.replace(/(\d{4})(\d{4})(\d)/, '$1-$2-$3');
 }
-
 /**
  * Format raw number using local string IDR style
  */
 export function formatNumber(num) {
   return Number(num).toLocaleString('id-ID');
 }
-
 /**
  * Sanitize HTML to prevent XSS
  */
@@ -649,7 +647,6 @@ export function sanitizeHTML(text) {
   div.textContent = text;
   return div.innerHTML;
 }
-
 // ========== EXPORT ALL ==========
 export const Utilities = {
   // Notifications

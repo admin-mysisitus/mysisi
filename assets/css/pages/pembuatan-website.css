@@ -1,6 +1,3 @@
-/* ========== DETAIL PAGE STYLING (LAYANAN SUB-PAGES) ========== */
-/* Page-specific styles - shared hero section styles sudah di base/shared-sections.css */
-/* ========== DETAIL INTRO SECTION ========== */
 .detail-intro-section,
 .about-story-section,
 .artikel-list-section {
@@ -27,7 +24,6 @@
   font-weight: 700;
 }
 
-/* ========== DETAIL FEATURES SECTION ========== */
 .detail-features-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -40,7 +36,6 @@
   margin-bottom: 3rem;
 }
 
-/* ========== FEATURES GRID (OPTION A) ========== */
 .features-grid-3col {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -114,7 +109,6 @@
 
   .feat-card p {
     font-size: 0.813rem;
-    /* 13px */
     line-height: 1.45;
   }
 }
@@ -125,7 +119,6 @@
   }
 }
 
-/* ========== DETAIL PACKAGES SECTION ========== */
 .detail-packages-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -138,7 +131,6 @@
   margin-bottom: 3rem;
 }
 
-/* ========== PACKAGES OVERVIEW CAROUSEL TO GRID ========== */
 .packages-carousel {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -147,7 +139,6 @@
   margin: 0 auto 3rem auto;
 }
 
-/* Base Card Styling for Package Overview */
 .package-overview {
   background: var(--white);
   border: 1px solid var(--border-light);
@@ -308,7 +299,6 @@
   }
 }
 
-/* ========== TIMELINE SECTION ========== */
 .about-timeline-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -423,7 +413,6 @@
   line-height: 1.6;
 }
 
-/* ========== ARTIKEL CARD (ARTICLE LIST) ========== */
 .artikel-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -526,7 +515,6 @@
   font-weight: 600;
 }
 
-/* ========== DETAIL PROCESS SECTION ========== */
 .detail-process-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -539,7 +527,6 @@
   margin-bottom: 3rem;
 }
 
-/* ========== PROCESS GRID 3-COL (OPTION A) ========== */
 .premium-process-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -625,12 +612,10 @@
 
   .proc-body p {
     font-size: 0.813rem;
-    /* 13px */
     line-height: 1.45;
   }
 }
 
-/* ========== DETAIL PORTFOLIO SECTION ========== */
 .detail-portfolio-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -653,7 +638,6 @@
   margin-right: auto;
 }
 
-/* ========== PREMIUM PORTFOLIO GALLERY (OPTION A) ========== */
 .premium-portfolio-gallery {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -720,20 +704,17 @@
 @media (max-width: 768px) {
   .premium-portfolio-gallery {
     grid-template-columns: repeat(2, 1fr);
-    /* Mobile 2 Column to save vertical space */
     gap: 1rem;
   }
 
   .port-lux-item {
     height: 180px;
-    /* Sangat hemat ruang di mobile */
     border-radius: 12px;
   }
 
   .port-lux-caption {
     padding: 1.5rem 1rem 1rem 1rem;
     transform: translateY(0);
-    /* Always visible on mobile */
   }
 
   .port-lux-caption h3 {
@@ -745,7 +726,6 @@
   }
 }
 
-/* ========== DETAIL ADDITIONAL SERVICES SECTION ========== */
 .detail-additional-services-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -770,7 +750,6 @@
   font-weight: 500;
 }
 
-/* ========== PREMIUM BENTO GRID (OPTION A - 3 COLUMNS 2+1 and 1+2) ========== */
 .premium-bento-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -869,7 +848,6 @@
 @media (max-width: 768px) {
   .premium-bento-grid {
     grid-template-columns: repeat(2, 1fr);
-    /* 2 Column Compact Bento */
     grid-auto-rows: auto;
     gap: 0.75rem;
   }
@@ -878,7 +856,6 @@
   .bento-tall,
   .bento-box {
     grid-column: span 1 !important;
-    /* Force all to 1 column width of the 2-col grid */
     grid-row: span 1 !important;
   }
 
@@ -907,14 +884,6 @@
   }
 }
 
-/* ========== FAQ SECTION ==========
- * FAQ styling is now centralized in components/faq.css to ensure consistency
- * across all pages.
- */
-/* ========== DETAIL CTA SECTION - STYLING MOVED TO components/hero.css ========== */
-/* Detail CTA section sekarang ditangani oleh .detail-cta-section di components/hero.css */
-/* Lihat hero.css untuk styling lengkap */
-/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -925,7 +894,6 @@
   }
 }
 
-/* ========== FAQ DESKTOP GRID OVERRIDE (OPTION A) ========== */
 @media (min-width: 992px) {
   .faq-section .faq-grid {
     display: grid;
@@ -936,7 +904,6 @@
   }
 }
 
-/* Borderless FAQ Overrides (Premium look) */
 .faq-section .faq-item {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -978,7 +945,6 @@
   background: transparent;
   color: var(--accent-cyan);
   transform: rotate(45deg);
-  /* smooth rotate to X */
 }
 
 @media (max-width: 768px) {
@@ -1245,11 +1211,8 @@
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
-
-  /* Note: .detail-cta-section responsive styling sudah di hero.css */
 }
 
-/* ========== PACKAGE CARD BUTTON STYLING ========== */
 .packages-grid .package-card .btn {
   margin: 0;
   padding: 0.95rem 2rem;
@@ -1273,7 +1236,6 @@
   transform: translateY(-2px);
 }
 
-/* ========== MATERIAL READINESS SECTION ========== */
 .material-readiness-section {
   padding: 4rem 0 2rem;
   background-color: var(--bg-white);
@@ -1367,7 +1329,6 @@
   margin: 0;
 }
 
-/* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;
 }
@@ -1419,7 +1380,6 @@
     gap: 1.5rem;
   }
 
-  /* ========== HORIZONTAL AUTO-SCROLL SLIDERS ON MOBILE (LIKE PERUSAHAAN) ========== */
   .features-grid-3col,
   .packages-carousel,
   .premium-process-list,
@@ -1459,5 +1419,3 @@
     margin: 0 !important;
   }
 }
-
-/* Note: slideInUp keyframe sudah di-handle oleh hero.js */

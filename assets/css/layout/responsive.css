@@ -1,7 +1,4 @@
-/* ============= RESPONSIF DESKTOP - HEADER & FOOTER ========== */
 @media (min-width: 768px) {
-
-  /* Header */
   .nav-desktop {
     display: block;
     flex-grow: 1;
@@ -113,23 +110,19 @@
     font-size: clamp(0.835rem, 1.45vw, 0.94rem);
   }
 
-  /* Hapus underline pada button promo */
   .nav-desktop-link.promo-link::after {
     display: none;
   }
 
-  /* Styling state aktif untuk button promo */
   .nav-desktop-link.promo-link.active {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     transform: translateY(-1px);
   }
 
-  /* Override padding untuk auth-link (tombol login) */
   .nav-desktop-link.auth-link {
     padding: clamp(0.475rem, 1.25vw, 0.65rem) clamp(0.875rem, 1.8vw, 1.075rem) !important;
   }
 
-  /* Footer */
   .link-services-wrapper {
     gap: clamp(2rem, 3.5vw, 2.5rem);
     padding: 0;
@@ -216,13 +209,10 @@
 }
 
 @media (min-width: 992px) {
-
-  /* Header */
   .nav-desktop-list {
     gap: clamp(1.2rem, 2.2vw, 1.8rem);
   }
 
-  /* Footer */
   .footer-grid {
     gap: 3rem;
     width: 90%;
@@ -255,13 +245,10 @@
 }
 
 @media (min-width: 1200px) {
-
-  /* Header */
   .nav-desktop-list {
     gap: 2rem;
   }
 
-  /* Footer */
   .footer-grid {
     gap: 3.5rem;
     width: 90%;
@@ -290,10 +277,7 @@
   }
 }
 
-/* ============= PENYESUAIAN KHUSUS MOBILE KECIL (<480px) ========== */
 @media (max-width: 480px) {
-
-  /* Footer */
   .link-services-wrapper {
     gap: clamp(0.8rem, 2.5vw, 1rem);
     padding: 0;

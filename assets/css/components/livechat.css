@@ -2,7 +2,6 @@
   box-sizing: border-box;
 }
 
-/* ATTACHMENT STYLES */
 .attach-btn {
   background: none;
   border: none;
@@ -37,7 +36,6 @@
   display: block;
 }
 
-/* Desktop Margins to negate padding */
 .livechat-widget .chat-image-preview.only-image {
   margin: -6px -10px;
   border-radius: 12px;
@@ -90,7 +88,6 @@
   gap: 5px;
 }
 
-/* NEW ATTACHMENT MODAL & BUTTON STYLES */
 .btn-view-attachment {
   display: inline-flex;
   align-items: center;
@@ -219,10 +216,6 @@
   }
 }
 
-/* 
-  LIVE CHAT WIDGET STYLES 
-  Scoped to .livechat-widget to avoid conflicts when embedded
-*/
 .livechat-widget {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -285,7 +278,6 @@
   }
 }
 
-/* --- CHAT BUTTON --- */
 .livechat-widget .chat-button {
   position: fixed;
   bottom: 24px;
@@ -351,7 +343,6 @@
   margin: 0 !important;
 }
 
-/* --- MODAL OVERLAY --- */
 .livechat-widget .modal-overlay {
   display: none;
   position: fixed;
@@ -365,7 +356,6 @@
   animation: livechat-fadeIn 0.3s ease;
 }
 
-/* --- CHAT MODAL --- */
 .livechat-widget .chat-modal {
   display: none;
   position: fixed;
@@ -376,7 +366,6 @@
   height: 70vh;
   max-height: 700px;
   min-height: 450px;
-  /* Glassmorphism */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -389,7 +378,6 @@
   animation: livechat-slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* --- HEADER --- */
 .livechat-widget .chat-header {
   background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
   color: #fff;
@@ -503,7 +491,6 @@
   opacity: 1;
 }
 
-/* --- MESSAGES AREA --- */
 .livechat-widget .chat-messages {
   flex: 1;
   padding: 12px;
@@ -533,7 +520,6 @@
   background: rgba(148, 163, 184, 0.8);
 }
 
-/* --- MESSAGE BUBBLES --- */
 .livechat-widget .message {
   display: flex;
   flex-direction: column;
@@ -612,7 +598,6 @@
   align-self: flex-start;
 }
 
-/* --- CHAT INPUT --- */
 .livechat-widget .chat-input {
   display: flex;
   padding: 10px 14px;
@@ -689,7 +674,6 @@
   transform: none !important;
 }
 
-/* --- SYSTEM MESSAGES --- */
 .livechat-widget .system-message {
   text-align: center;
   font-size: 12.5px;
@@ -716,7 +700,6 @@
   overflow: hidden;
 }
 
-/* --- RESPONSIVE --- */
 @media (max-height: 600px) {
   .livechat-widget .chat-modal {
     height: calc(100vh - 100px);
@@ -822,13 +805,11 @@
   }
 }
 
-/* FOCUS VISIBLE (A11Y) */
 .livechat-widget button:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
 }
 
-/* --- MESSAGE LINK STYLES --- */
 .livechat-widget .message.agent .msg-content a {
   color: #2563eb;
   text-decoration: underline;
@@ -851,7 +832,6 @@
   opacity: 0.8;
 }
 
-/* CONSECUTIVE MESSAGE GROUPING */
 .livechat-widget .message.agent+.message.agent,
 .livechat-widget .message.user+.message.user {
   margin-top: -3px;

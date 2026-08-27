@@ -1,25 +1,16 @@
-/**
- * Dashboard Unified Styles
- * SPA layout with navbar, sidebar, and main content area
- * Uses main design system colors from assets/css/base/variables.css
- */
-/* ========== IMPORT MODULE STYLES ========== */
 @import url('checkout.css');
 @import url('payment.css');
 @import url('cart.css');
 
 :root {
-  /* Dashboard-specific variables only */
   --sidebar-width: 280px;
   --navbar-height: 70px;
-  /* Shared dashboard surfaces */
   --dashboard-surface: #ffffff;
   --dashboard-surface-muted: #f8fafc;
   --dashboard-surface-soft: #fcfdff;
   --dashboard-border-soft: rgba(15, 23, 42, 0.08);
   --dashboard-shadow-soft: 0 10px 24px rgba(15, 23, 42, 0.05);
   --dashboard-shadow-elevated: 0 16px 40px rgba(15, 23, 42, 0.08);
-  /* Color aliases map to main design system */
   --color-primary: var(--primary-blue);
   --color-primary-dark: #1e40af;
   --color-secondary: var(--text-light);
@@ -33,7 +24,6 @@
   --color-text-light: var(--text-light);
 }
 
-/* Mobile first - hide sidebar, use drawer pattern */
 @media (max-width: 767px) {
   :root {
     --sidebar-width: 0;
@@ -47,7 +37,6 @@ body.dashboard-page-body {
   height: 100vh;
 }
 
-/* ========== DASHBOARD LAYOUT ========== */
 #dashboard {
   display: flex;
   height: 100vh;
@@ -57,7 +46,6 @@ body.dashboard-page-body {
   color: var(--text-primary);
 }
 
-/* ========== SIDEBAR ========== */
 .dashboard-sidebar {
   position: fixed;
   left: 0;
@@ -201,7 +189,6 @@ body.dashboard-page-body {
   color: var(--text-secondary);
 }
 
-/* ========== TOP NAVBAR & MAIN WRAPPER ========== */
 .dashboard-main-wrapper {
   display: flex;
   flex-direction: column;
@@ -232,7 +219,6 @@ body.dashboard-page-body {
   height: 100%;
 }
 
-/* Mobile hamburger button */
 .sidebar-toggle {
   display: none;
   background: none;
@@ -341,7 +327,6 @@ body.dashboard-page-body {
   transform: translateY(-1px);
 }
 
-/* User Profile Dropdown container */
 .user-dropdown-container {
   position: relative;
 }
@@ -465,7 +450,6 @@ body.dashboard-page-body {
   background: #fef2f2;
 }
 
-/* ========== MAIN CONTENT CONTAINER ========== */
 .dashboard-container {
   display: flex;
   flex: 1;
@@ -590,7 +574,6 @@ body.dashboard-page-body {
   }
 }
 
-/* ========== LOADING OVERLAY ========== */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -606,7 +589,6 @@ body.dashboard-page-body {
   transition: all 0.3s ease;
 }
 
-/* Premium Double-Ring Spinner */
 .spinner {
   width: 44px;
   height: 44px;
@@ -638,7 +620,6 @@ body.dashboard-page-body {
   }
 }
 
-/* Professional Skeleton Layout for Main Content Area */
 .content-loading {
   display: flex;
   flex-direction: column;
@@ -652,7 +633,6 @@ body.dashboard-page-body {
   display: none !important;
 }
 
-/* Skeleton Title */
 .content-loading::before {
   content: "";
   height: 36px;
@@ -665,7 +645,6 @@ body.dashboard-page-body {
   margin-bottom: 12px;
 }
 
-/* Skeleton Main Card */
 .content-loading::after {
   content: "";
   height: 300px;
@@ -686,7 +665,6 @@ body.dashboard-page-body {
   }
 }
 
-/* ========== COMPONENTS - Mobile First ========== */
 .forgot-password-link {
   display: inline-block;
   margin-top: 6px;
@@ -819,7 +797,6 @@ body.dashboard-page-body {
   }
 }
 
-/* Card Component - SaaS Modern */
 .card {
   background: var(--dashboard-surface);
   border: 1px solid var(--dashboard-border-soft);
@@ -900,7 +877,6 @@ body.dashboard-page-body {
   }
 }
 
-/* Table - MOBILE FIRST */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -980,7 +956,6 @@ body.dashboard-page-body {
   }
 }
 
-/* Form - MOBILE FIRST */
 .form-group {
   margin-bottom: 0.95rem;
 }
@@ -1093,7 +1068,6 @@ textarea.form-control {
   }
 }
 
-/* Alert - MOBILE FIRST */
 .alert {
   padding: 0.8rem 1rem;
   border-radius: 8px;
@@ -1143,7 +1117,6 @@ textarea.form-control {
   }
 }
 
-/* Error Container */
 .error-container {
   text-align: center;
   padding: 60px 20px;
@@ -1151,7 +1124,6 @@ textarea.form-control {
   border-radius: 10px;
 }
 
-/* Section & Layout Helpers */
 .section {
   margin-bottom: clamp(1.25rem, 3vw, 2rem);
   padding: 0 !important;
@@ -1209,7 +1181,6 @@ textarea.form-control {
   color: #0c4a6e;
 }
 
-/* Mobile Responsive Helpers */
 @media (max-width: 768px) {
   .packages-grid {
     grid-template-columns: 1fr;
@@ -1231,7 +1202,6 @@ textarea.form-control {
   }
 }
 
-/* ========== PAGE HEADER BANNER ========== */
 .dashboard-page-header {
   color: white;
   padding: 30px;
@@ -1299,8 +1269,6 @@ textarea.form-control {
   }
 }
 
-/* ========== RESPONSIVE ========== */
-/* Add backdrop overlay when sidebar is open */
 #dashboard::after {
   content: '';
   position: fixed;
@@ -1371,7 +1339,6 @@ textarea.form-control {
   }
 }
 
-/* ========== DASHBOARD HOME ENHANCEMENTS ========== */
 .dashboard-hero {
   display: flex;
   align-items: center;
@@ -1901,7 +1868,6 @@ textarea.form-control {
   }
 }
 
-/* ========== DASHBOARD PAGE SHELLS ========== */
 .page-shell {
   display: flex;
   flex-direction: column;
@@ -2523,7 +2489,6 @@ textarea.form-control {
   }
 }
 
-/* ========== CART FLOATING REMINDER (PILL) ========== */
 .cart-floating-reminder {
   display: flex;
   align-items: center;
@@ -2645,9 +2610,6 @@ textarea.form-control {
   }
 }
 
-/* =========================================
-   GRID LAYOUT FIXES (Promo & Domain)
-   ========================================= */
 .dashboard-grid-sections {
   align-items: flex-start;
 }
@@ -2719,9 +2681,6 @@ textarea.form-control {
   }
 }
 
-/* =========================================
-   ORDERS MODAL STYLING (Restored & Fixed)
-   ========================================= */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -2829,7 +2788,6 @@ textarea.form-control {
   z-index: 10;
 }
 
-/* Section Styling */
 .modal-body .section {
   margin-bottom: 20px;
   padding-bottom: 16px !important;
@@ -2961,9 +2919,6 @@ textarea.form-control {
   }
 }
 
-/* =========================================
-   ORDERS & INVOICES MOBILE CARDS
-   ========================================= */
 .orders-mobile-view,
 .invoices-mobile-view {
   display: none;
@@ -3094,9 +3049,6 @@ textarea.form-control {
   font-size: 0.75rem;
 }
 
-/* =========================================
-   ORDERS SUMMARY
-   ========================================= */
 .orders-summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

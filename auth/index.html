@@ -6,19 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Login / Daftar - SISITUS">
   <title>Login & Daftar - SISITUS</title>
-  <!-- Favicons -->
   <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/favicon/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
-  <!-- CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components/auth.css">
-  <!-- SweetAlert2 for Elegant Notifications -->
   <link media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-  <noscript><link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet"></noscript>
+  <noscript>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  </noscript>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js" defer></script>
-  <!-- Google Sign-In -->
   <script>
     // Pre-define callback to prevent GSI initialization errors
       window.handleGoogleSignIn = function(response) {
@@ -34,7 +32,6 @@
 
 <body class="auth-page-body">
   <div class="auth-split-wrapper">
-    <!-- Left Visual Panel (Desktop only) -->
     <div class="auth-visual-panel">
       <a href="/" class="back-home-link-visual">Kembali ke Beranda </a>
       <div class="auth-visual-content">
@@ -58,17 +55,13 @@
       </div>
       <div class="auth-visual-footer"> &copy; 2026 SISITUS. All rights reserved. </div>
     </div>
-    <!-- Right Form Panel -->
     <div class="auth-form-panel">
-      <!-- Back to Home link on mobile/desktop form panel -->
       <a href="/" class="back-home-link-form">Kembali ke Beranda </a>
-      <!-- Mobile brand logo (visible on mobile only) -->
       <div class="auth-mobile-logo">
         <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS Logo">
         <span>SISITUS</span>
       </div>
       <div class="auth-panel-content">
-        <!-- Logged-In Profile Section (Hidden by default) -->
         <div id="auth-loggedin-section" class="auth-loggedin-section" style="display: none;">
           <div class="loggedin-profile">
             <div class="loggedin-header">
@@ -96,29 +89,23 @@
             </div>
           </div>
         </div>
-        <!-- Auth Forms Section (Shown when not logged in) -->
         <div id="auth-forms-section" class="auth-forms-section">
           <div class="auth-header">
             <h2>Selamat Datang</h2>
             <p>Silakan masuk atau daftarkan akun baru Anda.</p>
           </div>
-          <!-- Auth Tabs -->
           <div class="auth-tabs">
             <button class="tab-btn active" data-tab="register">Buat Akun Baru</button>
             <button class="tab-btn" data-tab="login">Sudah Punya Akun?</button>
           </div>
-          <!-- Google Sign-In Button -->
           <div style="margin-top: 20px; display: flex; justify-content: center; width: 100%;">
             <div id="g_id_onload" data-client_id="802713479795-v6eshpb9lkqrvf7tndhi6llv3fjg2qsi.apps.googleusercontent.com" data-callback="handleGoogleSignIn">
             </div>
             <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
           </div>
-          <!-- Divider -->
           <div class="auth-divider" style="margin-top: 20px; margin-bottom: 20px;">atau dengan email</div>
-          <!-- Error/Success Messages -->
           <div class="form-error" id="auth-error"></div>
           <div class="form-success" id="auth-success"></div>
-          <!-- Register Tab -->
           <form class="auth-form register-form active" id="register-form">
             <div class="form-group">
               <label>Email</label>
@@ -153,7 +140,6 @@
             <button type="submit" class="btn btn-primary btn-block">
               <i class="fas fa-user-plus"></i> Buat Akun </button>
           </form>
-          <!-- Login Tab -->
           <form class="auth-form login-form" id="login-form">
             <div class="form-group">
               <label>Email</label>
@@ -176,7 +162,6 @@
             <button type="submit" class="btn btn-primary btn-block">
               <i class="fas fa-sign-in-alt"></i> Login </button>
           </form>
-          <!-- Privacy Notice -->
           <div class="auth-privacy" style="margin-top: 20px;">
             <p> Dengan membuat akun, Anda setuju dengan <a href="/perusahaan/legal/" target="_blank">Ketentuan Layanan</a> dan <a href="/perusahaan/legal/" target="_blank">Kebijakan Privasi</a> kami. </p>
           </div>

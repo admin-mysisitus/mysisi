@@ -241,13 +241,11 @@ header.scroll {
   font-weight: 500;
   color: var(--text-primary);
   padding: clamp(0.8rem, 2.5vw, 1rem) 0.5rem;
-  /* Tambah padding horizontal */
   border-bottom: 1px solid var(--border-light);
   display: block;
   font-size: clamp(1rem, 2.5vw, 1.125rem);
   transition: var(--transisi-cepat);
   border-radius: 8px;
-  /* Outline fokus lebih bulat */
 }
 
 .nav-mobile-link:hover {
@@ -257,7 +255,6 @@ header.scroll {
   border-bottom-color: transparent;
 }
 
-/* Header dropdown mobile */
 .nav-mobile-dropdown-header {
   display: flex;
   justify-content: space-between;
@@ -275,13 +272,11 @@ header.scroll {
 
 .nav-mobile-dropdown-header .nav-mobile-link {
   padding: clamp(0.8rem, 2.5vw, 1rem) 0.5rem !important;
-  /* Area tekan diperlebar */
   border-bottom: none !important;
   flex: 1;
   display: flex;
   align-items: center;
   border-radius: 8px;
-  /* Outline fokus lebih melengkung */
 }
 
 .nav-mobile-dropdown-header .nav-mobile-link:hover {
@@ -297,7 +292,6 @@ header.scroll {
 
 .nav-mobile-toggle {
   padding: 0.8rem 1.2rem;
-  /* Area tekan (tap target) diperbesar */
   min-width: 44px;
   min-height: 44px;
   display: flex;
@@ -307,7 +301,6 @@ header.scroll {
   color: var(--text-secondary);
   transition: var(--transisi-cepat);
   border-radius: 8px;
-  /* Sudut melengkung untuk kotak fokus */
 }
 
 .nav-mobile-dropdown-menu {
@@ -340,7 +333,6 @@ header.scroll {
   padding-left: 0.4rem;
 }
 
-/* Icon styling untuk navigasi */
 .nav-icon {
   display: inline-flex;
   align-items: center;
@@ -419,7 +411,6 @@ header.scroll {
   text-align: center;
 }
 
-/* Auth (Login) Button Styling */
 .nav-desktop-auth {
   margin-left: clamp(0.4rem, 1vw, 0.8rem);
   padding-left: clamp(0.6rem, 1.5vw, 1rem);
@@ -473,7 +464,6 @@ header.scroll {
   text-align: center;
 }
 
-/* Dropdown icon styling */
 .dropdown-icon {
   display: inline-flex;
   align-items: center;
@@ -502,7 +492,6 @@ header.scroll {
   gap: 0.6rem;
 }
 
-/* Fokus aksesibilitas */
 .nav-desktop a:focus,
 .nav-mobile-btn:focus,
 .nav-mobile a:focus,
@@ -518,13 +507,11 @@ header.scroll {
   outline-offset: 4px;
 }
 
-/* Rotasi ikon dropdown */
 .rotate-180 {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }
 
-/* Gaya dropdown parent */
 .dropdown-parent {
   font-weight: 600;
   border-bottom: 1px solid var(--border-light);
@@ -532,12 +519,10 @@ header.scroll {
   padding-bottom: 0.5rem;
 }
 
-/* Gaya dropdown umum (desktop + mobile) */
 .dropdown-menu {
   border-top: 3px solid var(--primary-blue);
 }
 
-/* Navigation Profile Photo & Name */
 .nav-desktop-profile,
 .nav-mobile-profile {
   list-style: none;
@@ -554,12 +539,10 @@ header.scroll {
   transition: background-color 0.2s ease;
 }
 
-/* Sembunyikan garis underline global dari navigasi yang bocor ke profil */
 .profile-link::after {
   display: none !important;
 }
 
-/* Jarak ekstra di mobile agar terpisah dari menu atasnya */
 .nav-mobile-profile {
   margin-top: 10px;
   padding-top: 10px;
@@ -608,14 +591,12 @@ header.scroll {
   color: var(--primary-blue);
 }
 
-/* Desktop Profile Specifics */
 @media (min-width: 1024px) {
   .nav-desktop-profile {
     margin-left: 8px;
   }
 }
 
-/* Desktop header - reduced height */
 @media (min-width: 1024px) {
   header {
     padding: 0.5rem 0;

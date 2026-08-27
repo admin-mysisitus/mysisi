@@ -1,11 +1,7 @@
-/* ========== DETAIL ARTIKEL PAGE STYLES ========== */
-/* Artikel Container */
 .artikel-container {
   background: var(--bg-white);
 }
 
-/* Hero dan artikel-meta styling sudah di components/hero.css */
-/* Featured Image */
 .artikel-featured-image {
   padding: clamp(2.5rem, 5vw, 3rem) 20px;
   background: var(--bg-light);
@@ -23,7 +19,6 @@
   object-fit: contain !important;
 }
 
-/* ========== HEADER SPACING OVERRIDES ========== */
 .artikel-body h1 {
   margin-bottom: 0.5rem !important;
 }
@@ -41,7 +36,6 @@
   font-size: 0.95rem !important;
 }
 
-/* ========== SHARE BUTTONS - PROFESSIONAL DESIGN ========== */
 .share-buttons-container {
   margin: 15px auto 25px auto !important;
   padding: 20px 0 !important;
@@ -114,7 +108,6 @@
   z-index: 2;
 }
 
-/* Facebook - Brand Color */
 .share-btn-facebook {
   background: #1877f2;
   border-color: #1877f2;
@@ -131,7 +124,6 @@
   transform: scale(0.95);
 }
 
-/* WhatsApp - Brand Color */
 .share-btn-whatsapp {
   background: #25d366;
   border-color: #25d366;
@@ -148,7 +140,6 @@
   transform: scale(0.95);
 }
 
-/* Twitter/X - Brand Color */
 .share-btn-twitter {
   background: var(--secondary-slate);
   border-color: var(--secondary-slate);
@@ -165,7 +156,6 @@
   transform: scale(0.95);
 }
 
-/* Telegram - Brand Color */
 .share-btn-telegram {
   background: #0088cc;
   border-color: #0088cc;
@@ -182,7 +172,6 @@
   transform: scale(0.95);
 }
 
-/* LinkedIn - Brand Color */
 .share-btn-linkedin {
   background: #0a66c2;
   border-color: #0a66c2;
@@ -199,7 +188,6 @@
   transform: scale(0.95);
 }
 
-/* Email - Neutral Color */
 .share-btn-email {
   background: #ea4335;
   border-color: #ea4335;
@@ -216,7 +204,6 @@
   transform: scale(0.95);
 }
 
-/* Copy Link - Primary Color */
 .share-btn-copy {
   background: var(--primary-blue);
   border-color: var(--primary-blue);
@@ -233,7 +220,6 @@
   transform: scale(0.95);
 }
 
-/* Pinterest - Brand Color */
 .share-btn-pinterest {
   background: #e60023;
   border-color: #e60023;
@@ -250,7 +236,6 @@
   transform: scale(0.95);
 }
 
-/* LINE - Brand Color */
 .share-btn-line {
   background: #00c300;
   border-color: #00c300;
@@ -267,7 +252,6 @@
   transform: scale(0.95);
 }
 
-/* Facebook Messenger - Brand Color */
 .share-btn-messenger {
   background: #0084ff;
   border-color: #0084ff;
@@ -284,7 +268,6 @@
   transform: scale(0.95);
 }
 
-/* SMS - Purple Color */
 .share-btn-sms {
   background: #9c27b0;
   border-color: #9c27b0;
@@ -301,7 +284,6 @@
   transform: scale(0.95);
 }
 
-/* Print - Gray Color */
 .share-btn-print {
   background: #607d8b;
   border-color: #607d8b;
@@ -318,7 +300,6 @@
   transform: scale(0.95);
 }
 
-/* More Button */
 .share-btn-more {
   background: white;
   border-color: #d1d5db;
@@ -332,7 +313,6 @@
   color: #374151;
 }
 
-/* Share Modal Popup */
 .share-modal-overlay {
   position: fixed;
   top: 0;
@@ -409,7 +389,6 @@
   justify-content: center;
 }
 
-/* ========== LAYOUT & TYPOGRAPHY ENHANCEMENTS ========== */
 .artikel-container.new-layout {
   padding-top: 85px;
   padding-bottom: 50px;
@@ -468,7 +447,6 @@
   margin-bottom: 3rem;
 }
 
-/* Base styles for artikel content */
 .artikel-content {
   padding: clamp(3.5rem, 7vw, 5rem) 20px;
 }
@@ -548,7 +526,6 @@
   color: var(--accent-cyan);
 }
 
-/* Artikel Sidebar */
 .artikel-sidebar {
   display: flex;
   flex-direction: column;
@@ -614,7 +591,6 @@
   background: var(--accent-cyan);
 }
 
-/* Related Articles */
 .related-articles-section {
   padding: 60px 20px;
   background: #fff;
@@ -714,7 +690,6 @@
   line-height: 1.6;
 }
 
-/* Related Content - Styling untuk section konten terkait */
 .related-content {
   margin-top: 50px;
   padding-top: 40px;
@@ -736,7 +711,6 @@
 }
 
 .related-article {
-  /* No padding to allow image to flush */
   background: var(--bg-light);
   border-radius: 8px;
   border: 1px solid #eaeaea;
@@ -810,7 +784,6 @@
   overflow: hidden;
 }
 
-/* Artikel Navigation */
 .artikel-navigation {
   margin-top: 50px;
   padding-top: 30px;
@@ -826,7 +799,6 @@
   font-size: 0.9375rem;
 }
 
-/* ========== TABLE OF CONTENTS STYLING ========== */
 .toc-container {
   background: linear-gradient(135deg, #f0f7ff 0%, #f8fbff 100%);
   border: 1px solid #d4e5f7;
@@ -881,7 +853,6 @@
   padding-left: 8px;
 }
 
-/* Scroll styling untuk TOC */
 .toc-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -899,7 +870,6 @@
   background: var(--accent-cyan);
 }
 
-/* ========== READING PROGRESS BAR ========== */
 .reading-progress-bar {
   position: fixed;
   top: 0;
@@ -912,7 +882,6 @@
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
-/* ========== RELATED ARTICLES ANIMATIONS ========== */
 @keyframes fadeInUp {
   from {
     color: var(--text-primary);
@@ -925,9 +894,6 @@
   }
 }
 
-/* CTA Section - Styling sudah di components/hero.css */
-/* Menggunakan class .detail-cta-section untuk unifikasi */
-/* Responsive */
 @media (max-width: 768px) {
   .artikel-content .container {
     grid-template-columns: 1fr;
@@ -1146,10 +1112,8 @@
   }
 }
 
-/* ========== PRINT STYLES ========== */
 @media print {
 
-  /* Hide header dan footer */
   header,
   footer,
   .nav-mobile,
@@ -1160,12 +1124,10 @@
     display: none !important;
   }
 
-  /* Hide share buttons */
   .share-buttons {
     display: none !important;
   }
 
-  /* Hapus padding/margin excessive */
   body {
     padding: 0;
     margin: 0;
@@ -1198,7 +1160,6 @@
     padding: 0 20px;
   }
 
-  /* Artikel body styling untuk print */
   .artikel-body {
     font-size: 11pt;
     line-height: 1.6;
@@ -1224,30 +1185,25 @@
     page-break-inside: avoid;
   }
 
-  /* Featured image container styling */
   .artikel-featured-image {
     border: none;
     margin: 0;
   }
 
-  /* Hero section di print */
   .artikel-meta {
     font-size: 9pt;
     margin-top: 10px;
   }
 
-  /* Links styling di print */
   a {
     color: #000;
     text-decoration: underline;
   }
 
-  /* Remove section breaks untuk print yang lebih rapi */
   section {
     page-break-inside: avoid;
   }
 
-  /* Tabel styling untuk print */
   table,
   thead,
   tbody,
@@ -1258,14 +1214,12 @@
     border-collapse: collapse;
   }
 
-  /* Code block styling */
   pre,
   code {
     page-break-inside: avoid;
     white-space: pre-wrap;
   }
 
-  /* Blockquote styling */
   blockquote {
     page-break-inside: avoid;
     border-left: 2pt solid #ccc;
@@ -1273,13 +1227,11 @@
     margin: 15pt 0;
   }
 
-  /* Remove box shadows */
   * {
     box-shadow: none !important;
     text-shadow: none !important;
   }
 
-  /* Margin dan padding optimization */
   section.artikel-featured-image {
     margin: 0;
     padding: 0 0 20px 0;
@@ -1290,14 +1242,12 @@
   }
 }
 
-/* ========== INLINE CTA (Article Content) ========== */
 .inline-cta-box {
   background: linear-gradient(135deg, #f8fbff 0%, #f0f7ff 100%);
   border: 1px solid #d4e5f7;
   border-left: 4px solid var(--primary-blue);
   border-radius: 8px;
   padding: 20px 16px;
-  /* Optimized for mobile */
   margin: 40px 0 20px 0;
   display: flex;
   flex-direction: column;
@@ -1336,7 +1286,6 @@
   color: #fff !important;
   transition: all 0.3s ease;
   white-space: normal;
-  /* Allow text wrapping if needed */
   text-align: center;
   max-width: 100%;
   box-sizing: border-box;

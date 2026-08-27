@@ -1,8 +1,4 @@
-/* ==========================================================================
-   ADMIN DASHBOARD CORE STYLES (Premium Dark Theme & Glassmorphism)
-   ========================================================================== */
 :root {
-  /* Admin Soft & Elegant Dark Palette */
   --admin-bg-dark: #0f172a;
   --admin-surface: #1e293b;
   --admin-surface-hover: #334155;
@@ -16,12 +12,10 @@
   --admin-warning: #fbbf24;
   --admin-danger: #f87171;
   --admin-info: #60a5fa;
-  /* Fonts */
   --font-admin-heading: 'Outfit', sans-serif;
   --font-admin-body: 'Inter', sans-serif;
 }
 
-/* Base Resets for Admin */
 body.admin-body {
   margin: 0;
   padding: 0;
@@ -30,10 +24,8 @@ body.admin-body {
   color: var(--admin-text-main);
   font-family: var(--font-admin-body);
   overflow: hidden;
-  /* App takes full screen, content scrolls */
 }
 
-/* Override global headings for admin dark theme */
 .admin-body h1,
 .admin-body h2,
 .admin-body h3,
@@ -43,20 +35,17 @@ body.admin-body {
   color: var(--admin-text-main);
 }
 
-/* Glassmorphism Utilities */
 .glass-panel {
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
 }
 
-/* Layout */
 .admin-layout {
   display: flex;
   height: 100vh;
   width: 100vw;
 }
 
-/* Sidebar */
 .admin-sidebar {
   width: 240px;
   display: flex;
@@ -122,7 +111,6 @@ body.admin-body {
   border-left: 3px solid var(--admin-primary);
 }
 
-/* Main Wrapper */
 .admin-wrapper {
   flex: 1;
   display: flex;
@@ -130,7 +118,6 @@ body.admin-body {
   overflow: hidden;
 }
 
-/* Navbar */
 .admin-navbar {
   height: 64px;
   flex-shrink: 0;
@@ -183,7 +170,6 @@ body.admin-body {
   font-weight: bold;
 }
 
-/* Main Content Area */
 .admin-main-content {
   flex: 1;
   padding: 24px;
@@ -191,7 +177,6 @@ body.admin-body {
   position: relative;
 }
 
-/* Loaders */
 .admin-loading-state {
   display: flex;
   flex-direction: column;
@@ -282,7 +267,6 @@ body.admin-body {
   }
 }
 
-/* Common Admin Components */
 .admin-card {
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
@@ -348,9 +332,6 @@ body.admin-body {
   outline-offset: 2px;
 }
 
-/* ==========================================================================
-   MOBILE RESPONSIVENESS (DRAWER PATTERN)
-   ========================================================================== */
 @media (max-width: 768px) {
   .admin-sidebar {
     position: fixed;
@@ -409,7 +390,6 @@ body.admin-body {
   }
 }
 
-/* Sidebar Backdrop Overlay for Mobile */
 .admin-sidebar-overlay {
   position: fixed;
   top: 0;
@@ -419,7 +399,6 @@ body.admin-body {
   background: rgba(15, 17, 26, 0.6);
   backdrop-filter: blur(2px);
   z-index: 95;
-  /* Below sidebar (100) but above everything else */
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -430,7 +409,6 @@ body.admin-body {
   opacity: 1;
 }
 
-/* Mobile Hamburger Menu Button */
 .admin-menu-toggle {
   display: none;
   background: transparent;
@@ -455,9 +433,6 @@ body.admin-body {
   }
 }
 
-/* ==========================================================================
-   SUPPORT MODULE & SKELETON LAYOUT
-   ========================================================================== */
 .admin-support-grid {
   display: grid;
   grid-template-columns: 350px 1fr;
@@ -482,11 +457,9 @@ body.admin-body {
 
   .admin-support-grid>.admin-card {
     height: 500px;
-    /* Use fixed height for cards on mobile to avoid overflow */
   }
 }
 
-/* Skeleton Loading Animation */
 .admin-skeleton {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
   background-size: 200% 100%;
@@ -504,9 +477,6 @@ body.admin-body {
   }
 }
 
-/* ==========================================================================
-   SETTINGS MODULE LAYOUT
-   ========================================================================== */
 .admin-settings-grid {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -520,9 +490,6 @@ body.admin-body {
   }
 }
 
-/* ==========================================================================
-   GLOBAL UI COMPONENTS (MODALS, FORMS, ACTIONS)
-   ========================================================================== */
 .admin-modal {
   display: none;
   position: fixed;
@@ -556,9 +523,6 @@ body.admin-body {
   color: var(--admin-text-main);
 }
 
-/* ==========================================================================
-   GLOBAL RESPONSIVE UTILITY GRIDS & CONTROLS
-   ========================================================================== */
 .admin-form-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -724,7 +688,6 @@ body.admin-body {
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
-/* --- COMPACT TOOLBAR & TABLE --- */
 .admin-toolbar {
   display: flex;
   justify-content: space-between;

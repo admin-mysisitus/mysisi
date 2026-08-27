@@ -1,8 +1,3 @@
-/**
- * FAQ Component CSS - Standarisasi gaya untuk semua halaman
- * Digunakan sebagai pengganti CSS FAQ yang tersebar
- */
-/* ========== FAQ SECTION CONTAINER ========== */
 .faq-section {
   padding: clamp(2rem, 4vw, 3.5rem) 0;
   background: var(--bg-lighter);
@@ -15,21 +10,16 @@
   margin-bottom: 0.5rem;
 }
 
-/* Garis bawah pada judul FAQ telah dihapus sesuai permintaan */
-/* ========== FAQ GRID LAYOUT ========== */
 .faq-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
-  /* Lebih padat */
   margin-top: 2.5rem;
   max-width: 800px;
-  /* Lebar lebih wajar untuk bacaan vertikal */
   margin-left: auto;
   margin-right: auto;
 }
 
-/* ========== FAQ ITEM (Details Element) ========== */
 .faq-item {
   background: var(--bg-white);
   border-radius: var(--radius-medium);
@@ -41,7 +31,6 @@
   overflow: hidden;
 }
 
-/* Hilangkan hiasan blob generik AI */
 .faq-item::before {
   display: none;
 }
@@ -55,12 +44,10 @@
   box-shadow: 0 4px 15px rgba(37, 99, 235, 0.05);
 }
 
-/* ========== FAQ QUESTION (Summary/Header) ========== */
 .faq-question {
   background: none;
   border: none;
   padding: 1.25rem 1.5rem;
-  /* Padat namun lega untuk di-tap */
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
@@ -96,10 +83,8 @@
   color: var(--primary-blue);
   border-bottom: 1px solid var(--border-light);
   padding-bottom: 1rem;
-  /* Kurangi spasi bawah saat terbuka */
 }
 
-/* ========== FAQ ICON (Chevron) ========== */
 .faq-icon {
   display: flex;
   align-items: center;
@@ -121,7 +106,6 @@
   color: var(--primary-blue);
 }
 
-/* ========== FAQ ANSWER (Content) ========== */
 .faq-answer {
   color: var(--text-secondary);
   font-size: 0.95rem;
@@ -132,7 +116,6 @@
   animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Paragraph spacing in FAQ answers */
 .faq-answer p {
   margin: 0;
   margin-bottom: 0.75rem;
@@ -142,7 +125,6 @@
   margin-bottom: 0;
 }
 
-/* Lists styling */
 .faq-answer ul,
 .faq-answer ol {
   margin: 0.75rem 0;
@@ -153,7 +135,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* Smaller font for supplementary text */
 .faq-answer p.faq-subtext,
 .faq-answer p.faq-subtext-small {
   font-size: 0.85rem;
@@ -161,7 +142,6 @@
   margin-top: 1rem;
 }
 
-/* Italic/emphasized text styling */
 .faq-answer em,
 .faq-answer i {
   font-style: italic;
@@ -174,14 +154,12 @@
   color: inherit;
 }
 
-/* Strong text styling */
 .faq-answer strong,
 .faq-answer b {
   font-weight: 600;
   color: var(--text-primary);
 }
 
-/* ========== ANIMATIONS ========== */
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -206,7 +184,6 @@
   }
 }
 
-/* ========== FEATURED/SPECIAL STYLING ========== */
 .faq-item.faq-featured {
   border-color: rgba(37, 99, 235, 0.3);
   background: #f8fafc;
@@ -216,7 +193,6 @@
   color: var(--primary-blue);
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .faq-section {
     padding: 2rem 0 !important;

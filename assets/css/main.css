@@ -1,20 +1,15 @@
-/* ========== IMPORT FILE CSS ========== */
-/* Base */
 @import url('base/variables.css');
 @import url('base/reset.css');
 @import url('base/typography.css');
 @import url('base/shared-animations.css');
 @import url('base/shared-sections.css');
-/* Utilities */
 @import url('utilities/spacing.css');
 @import url('utilities/visibility.css');
-/* Layout */
 @import url('layout/grid.css');
 @import url('layout/header.css');
 @import url('layout/sidebar.css');
 @import url('layout/footer.css');
 @import url('layout/responsive.css');
-/* Components */
 @import url('components/card.css');
 @import url('components/modal.css');
 @import url('components/table.css');

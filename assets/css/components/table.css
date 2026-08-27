@@ -1,4 +1,3 @@
-/* ========== TABLE ========== */
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -42,7 +41,6 @@
   transition: background-color 0.2s ease;
 }
 
-/* Zebra stripe subtle */
 .data-table tbody tr:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.02);
 }
@@ -51,7 +49,6 @@
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-/* Mobile card-list view for tables is recommended, can be extended via JS or classes */
 @media (max-width: 767px) {
   .table-responsive-card {
     display: block;

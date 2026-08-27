@@ -1,10 +1,5 @@
-/* ========== DOMAIN & HOSTING PAGE STYLING ========== */
-/* Page-specific styling untuk halaman domain & hosting layanan */
-/* ========== IMPORT BASE STYLES ========== */
-/* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
 @import url('pembuatan-website.css');
 
-/* ========== DETAIL BENEFITS SECTION ========== */
 .detail-benefits-section {
   padding: clamp(1.5rem, 4vw, 3.5rem) 0;
   background-color: var(--bg-white);
@@ -32,13 +27,11 @@
   box-shadow: none;
   display: grid;
   grid-template-columns: max-content 1fr;
-  /* Fit any icon size automatically */
   grid-template-rows: auto 1fr;
   gap: 0.25rem 1.25rem;
   text-align: left;
 }
 
-/* Force remove any global hover effects */
 .benefit-item:hover {
   transform: none !important;
   box-shadow: none !important;
@@ -49,7 +42,6 @@
   grid-column: 1;
   grid-row: 1 / span 2;
   font-size: 2.8rem !important;
-  /* Larger icon */
   line-height: 1 !important;
   margin: 0 !important;
   display: inline-block !important;
@@ -58,38 +50,30 @@
   box-shadow: none !important;
   align-self: start;
   margin-top: 0.15rem !important;
-  /* Optical alignment with title */
 }
 
-/* Individual Solid Icon Colors */
 .benefit-item:nth-child(1) i {
   color: #ef4444 !important;
-  /* Red */
 }
 
 .benefit-item:nth-child(2) i {
   color: #2563eb !important;
-  /* Blue */
 }
 
 .benefit-item:nth-child(3) i {
   color: #059669 !important;
-  /* Emerald */
 }
 
 .benefit-item:nth-child(4) i {
   color: #7c3aed !important;
-  /* Purple */
 }
 
 .benefit-item:nth-child(5) i {
   color: #e11d48 !important;
-  /* Pink */
 }
 
 .benefit-item:nth-child(6) i {
   color: #0891b2 !important;
-  /* Cyan */
 }
 
 .benefit-item h3 {
@@ -100,7 +84,6 @@
   font-weight: 700;
   margin: 0;
   align-self: start;
-  /* Align to top instead of end */
   line-height: 1.3;
 }
 
@@ -113,8 +96,6 @@
   margin: 0;
 }
 
-/* Removed old media queries */
-/* ========== DOMAIN PACKAGES SECTION ========== */
 .detail-domain-packages-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -127,7 +108,6 @@
   margin-bottom: 3rem;
 }
 
-/* Base Mobile (Stacked sleek rows) */
 .simple-packages {
   display: flex;
   flex-direction: column;
@@ -159,7 +139,6 @@
   color: var(--text-primary);
 }
 
-/* Fallback for inline styles */
 .domain-badge {
   margin-bottom: 0 !important;
 }
@@ -187,7 +166,6 @@
   margin: 0.5rem 0 0 0;
 }
 
-/* Desktop (Elegant List View) */
 @media (min-width: 768px) {
   .simple-packages {
     gap: 0;
@@ -241,7 +219,6 @@
   }
 }
 
-/* ========== HOSTING PACKAGES SECTION ========== */
 .detail-hosting-packages-section {
   padding: 4rem 0;
   background-color: var(--white);
@@ -381,7 +358,6 @@
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 
-/* ========== FEATURES SECTION (OPTION A: 2x3 MONOCHROME GRID) ========== */
 .detail-features-section {
   padding: 4rem 0;
   background-color: var(--gray-light);
@@ -441,7 +417,6 @@
   margin: 0;
 }
 
-/* ========== MIGRATION SECTION (OPTION A: HORIZONTAL STEPPER) ========== */
 .detail-migration-section {
   padding: 4rem 0;
   background: var(--brand-base);
@@ -539,7 +514,6 @@
   margin: 0;
 }
 
-/* ========== FAQ SECTION (OPTION A: 2-COLUMN DESKTOP GRID) ========== */
 .faq-grid {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
@@ -557,8 +531,6 @@
   overflow: hidden !important;
 }
 
-/* ========== ANIMATIONS ========== */
-/* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */
 @keyframes iconRotate {
   0% {
     transform: scale(1) rotate(0deg);
@@ -585,7 +557,6 @@
   }
 }
 
-/* ========== HOSTING PLAN SELECTION STATE ========== */
 .hosting-packages-grid .package-card.selected {
   border: 2px solid var(--accent-cyan);
   box-shadow: var(--shadow-lg);
@@ -636,7 +607,6 @@
   margin: 0;
 }
 
-/* ========== MIGRATION SECTION (OPTION A: HORIZONTAL STEPPER) ========== */
 .detail-migration-section {
   padding: 3.5rem 0;
   background-color: #ffffff;
@@ -712,7 +682,6 @@
   margin: 0;
 }
 
-/* ========== FAQ SECTION (OPTION A: 2-COLUMN DESKTOP GRID) ========== */
 .faq-grid {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
@@ -730,8 +699,6 @@
   overflow: hidden !important;
 }
 
-/* ========== ANIMATIONS ========== */
-/* @keyframes slideInUp sudah di-consolidate ke base/shared-sections.css */
 @keyframes iconRotate {
   0% {
     transform: scale(1) rotate(0deg);
@@ -758,7 +725,6 @@
   }
 }
 
-/* ========== HOSTING PLAN SELECTION STATE ========== */
 .hosting-packages-grid .package-card.selected {
   border: 2px solid var(--accent-cyan);
   box-shadow: var(--shadow-lg);
@@ -774,7 +740,6 @@
   color: var(--white);
 }
 
-/* ========== RESPONSIVE & HORIZONTAL SCROLL ANIMATION (LIKE PERUSAHAAN) ========== */
 @media (max-width: 768px) {
 
   .detail-benefits-section,
@@ -786,7 +751,6 @@
     padding: 3rem 0;
   }
 
-  /* Animasi Scroll Horizontal (Serupa Halaman Perusahaan) untuk Mobile */
   .benefits-grid,
   .simple-packages,
   .hosting-packages-grid,
@@ -831,7 +795,6 @@
     max-width: calc(75% - 0.5rem) !important;
   }
 
-  /* Padat & Seimbang Typography untuk Mobile */
   .benefit-item h3,
   .package-simple h3,
   .hosting-packages-grid .package-header h3,
@@ -916,7 +879,6 @@
   }
 }
 
-/* ========== BOTTOM CTA SECTION (STYLE SAMA DENGAN PERUSAHAAN) ========== */
 .bottom-cta-section {
   padding: 1rem 0 1.5rem 0;
 }

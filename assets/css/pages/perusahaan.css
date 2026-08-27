@@ -1,8 +1,3 @@
-/* ========== PERUSAHAAN PAGE STYLING ========== */
-/* Styling khusus halaman PERUSAHAAN dengan fokus pada company profile, values, dan highlight cards */
-/* Hero styling moved to components/hero.css */
-/* ========== COMPANY INTRO SECTION ========== */
-/* Specific Hero Background Styling for Perusahaan Page */
 .hero.hero-home {
   background-image: url('/assets/img/banner/banner-perusahaan.webp');
   background-size: cover;
@@ -10,7 +5,6 @@
   background-repeat: no-repeat;
 }
 
-/* Hilangkan elemen bulatan dekorasi (circle) bawaan dari komponen hero umum yang menutupi/mengganggu foto */
 .hero.hero-home::before,
 .hero.hero-home::after {
   display: none !important;
@@ -18,16 +12,13 @@
 
 .hero.hero-home .hero-illustration {
   display: none !important;
-  /* Sembunyikan gambar inline karena kita menggunakan background */
 }
 
 @media (max-width: 768px) {
   .hero.hero-home {
     background-image: url('/assets/img/banner/banner-perusahaan.webp') !important;
     background-position: 0% 100%;
-    /* Mulai dari kiri bawah */
     background-size: cover;
-    /* Cover sudah cukup jika layarnya sempit dan tinggi */
     animation: panBackgroundMobile 25s ease-in-out infinite;
     position: relative;
   }
@@ -69,7 +60,6 @@
   text-align: center;
 }
 
-/* ========== COMPANY HIGHLIGHT SECTION ========== */
 .company-highlight-section {
   padding: clamp(1.5rem, 4vw, 3rem) 0;
   background-color: var(--bg-light);
@@ -94,7 +84,6 @@
   animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-/* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .highlight-card:hover {
   border-color: var(--accent-cyan);
   box-shadow: var(--shadow-elegan);
@@ -123,7 +112,6 @@
   line-height: 1.6;
 }
 
-/* ========== ABOUT TABS SECTION (Visi, Misi, Komitmen) ========== */
 .company-about-tabs-section {
   padding: 3rem 0;
   background-color: var(--white);
@@ -147,7 +135,6 @@
   border: 1px solid var(--border-light);
   padding: 0.75rem 1.5rem;
   border-radius: 50px;
-  /* Fully rounded/pill shape */
   font-size: var(--teks-standar);
   font-weight: 600;
   color: var(--text-secondary);
@@ -228,7 +215,6 @@
   }
 }
 
-/* ========== COMPANY VALUES SECTION ========== */
 .company-values-section {
   padding: 2rem 0;
   background-color: var(--gray-light);
@@ -247,7 +233,6 @@
   gap: 1rem;
 }
 
-/* ========== COMPANY DIFFERENTIATION SECTION ========== */
 .company-differentiation-section {
   padding: 2.5rem 0;
   background: linear-gradient(180deg, #F8F9FB 0%, var(--bg-white) 100%);
@@ -295,7 +280,6 @@
   z-index: 1;
 }
 
-/* Layout Icon Only (Custom Grid for icons) */
 .highlight-grid.layout-icon-only,
 .values-grid.layout-icon-only,
 .navigate-grid.layout-icon-only,
@@ -378,17 +362,14 @@
   margin: 0;
 }
 
-/* Tooltip implementation */
 .diff-tooltip {
   position: absolute;
   top: calc(100% + 15px);
-  /* Position below the title/icon */
   left: 50%;
   transform: translateX(-50%) translateY(-10px);
   background: var(--white);
   padding: 1.25rem;
   border-radius: var(--radius-besar);
-  /* Increased from standar to besar */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   width: 250px;
   opacity: 0;
@@ -434,7 +415,6 @@
   margin: 0;
 }
 
-/* ========== COMPANY SERVICES OVERVIEW SECTION ========== */
 .company-services-overview-section {
   padding: 1rem 0;
   background-color: var(--white);
@@ -558,7 +538,6 @@
   }
 }
 
-/* ========== COMPANY STATS SECTION ========== */
 .company-stats-section {
   padding: 1rem 0;
   background: var(--brand-base);
@@ -617,7 +596,6 @@
   letter-spacing: 0.5px;
 }
 
-/* ========== COMPANY NAVIGATE SECTION ========== */
 .company-navigate-section {
   padding: 3rem 0;
   background-color: var(--bg-light);
@@ -705,10 +683,6 @@
   transform: translateX(4px);
 }
 
-/* ========== COMPANY CTA SECTION ========== */
-/* Styling sudah di-move ke components/hero.css sebagai komponen reusable */
-/* Lihat .company-cta-section di hero.css untuk styling dan responsive rules */
-/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .highlight-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -743,9 +717,6 @@
   .navigate-grid:not(.layout-icon-only) {
     grid-template-columns: 1fr;
   }
-
-  /* .cta-buttons responsive styling sudah di hero.css */
-  /* .company-cta-section responsive styling sudah di hero.css */
 }
 
 @media (max-width: 480px) {
@@ -785,7 +756,6 @@
     grid-template-columns: 1fr;
   }
 
-  /* TEAM SECTION RESPONSIVE */
   .team-grid {
     grid-template-columns: 1fr;
   }
@@ -793,11 +763,8 @@
   .team-cta {
     padding: 2rem;
   }
-
-  /* .company-cta-section p responsive styling sudah di hero.css */
 }
 
-/* ========== TEAM SECTION ========== */
 .company-team-section {
   padding: clamp(1.5rem, 4vw, 3rem) 0;
   background-color: var(--bg-light);
@@ -845,9 +812,7 @@
   object-position: top center;
   transition: transform 0.5s ease;
   font-size: 0.875rem;
-  /* Ukuran font alt text lebih kecil */
   padding: 1rem;
-  /* Mencegah alt text mepet ke tepi */
   text-align: center;
 }
 
@@ -922,7 +887,6 @@
   color: var(--text-secondary);
   line-height: var(--line-height-relaxed);
   margin-bottom: 16px;
-  /* flex: 1 dihapus agar line-clamp tidak membocorkan teks di baris bawahnya */
 }
 
 .team-skills {
@@ -930,7 +894,6 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: auto;
-  /* Mendorong skills ke paling bawah kartu */
 }
 
 .skill-tag {
@@ -998,8 +961,6 @@
   }
 }
 
-/* ========== NEW ASYMMETRICAL LAYOUTS ========== */
-/* Metric Bento Grid */
 .metric-bento-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1013,9 +974,6 @@
   text-align: center;
 }
 
-/* Team section styling consolidated at lines 774-952 */
-/* ========== SPACE EFFICIENT LAYOUTS ========== */
-/* 1. Compact Metrics List (Highlight) */
 .compact-metrics-list {
   display: flex;
   flex-direction: row;
@@ -1023,7 +981,6 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Hide scrollbar Firefox */
   gap: 1.5rem;
   max-width: 1050px;
   margin: 0 auto;
@@ -1032,7 +989,6 @@
 
 .compact-metrics-list::-webkit-scrollbar {
   display: none;
-  /* Hide scrollbar Chrome/Safari */
 }
 
 .metric-list-item {
@@ -1077,7 +1033,6 @@
   margin: 0;
 }
 
-/* 2. Vision Mission Tabs */
 .vm-tabs-container {
   max-width: 800px;
   margin: 0 auto;
@@ -1143,14 +1098,12 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Hide scrollbar Firefox */
   gap: 1rem;
   padding-bottom: 0.5rem;
 }
 
 .mission-cards-grid::-webkit-scrollbar {
   display: none;
-  /* Hide scrollbar Chrome/Safari */
 }
 
 @media (min-width: 600px) {
@@ -1190,7 +1143,6 @@
   line-height: 1.5;
 }
 
-/* 3 & 6. Accordions (Values & Services) */
 .values-accordion,
 .services-accordion {
   max-width: 800px;
@@ -1314,7 +1266,6 @@ details[open] .accordion-icon {
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
 }
 
-/* 4 & 5. Scroll Snap Sliders (Diff & Team) */
 .diff-slider-container,
 .team-slider-container {
   width: 100%;
@@ -1388,7 +1339,6 @@ details[open] .accordion-icon {
   }
 }
 
-/* 7. Stats Inline Row */
 .stats-inline-row {
   display: flex;
   overflow-x: auto;
@@ -1432,7 +1382,6 @@ details[open] .accordion-icon {
   white-space: nowrap;
 }
 
-/* 8. Navigate Pill Menu */
 .navigate-pill-menu {
   display: flex;
   flex-wrap: wrap;
@@ -1466,12 +1415,7 @@ details[open] .accordion-icon {
   border-color: rgba(37, 99, 235, 0.2);
 }
 
-/* ==========================================================================
-   MOBILE TYPOGRAPHY & SPACE-EFFICIENT OPTIMIZATIONS (IMPECCABLE)
-   ========================================================================== */
 @media (max-width: 768px) {
-
-  /* --- 1. Hero Section (Compact & Punchy) --- */
   .hero-home {
     padding: 2.25rem 0 !important;
   }
@@ -1484,7 +1428,6 @@ details[open] .accordion-icon {
 
   .hero-home .hero-content p {
     font-size: 0.938rem !important;
-    /* 15px */
     line-height: 1.45 !important;
     margin-bottom: 1.25rem !important;
   }
@@ -1502,48 +1445,40 @@ details[open] .accordion-icon {
     font-size: 0.938rem !important;
   }
 
-  /* --- 2. Sorotan Angka / Metrics (Compact Horizontal Card) --- */
   .compact-metrics-list {
     gap: 0.75rem !important;
   }
 
   .metric-list-item {
     flex: 0 0 75% !important;
-    /* Kartu berikutnya mengintip 25% sebagai petunjuk scroll */
     gap: 0.75rem !important;
     align-items: flex-start;
   }
 
   .metric-list-item .metric-number {
     font-size: 1.75rem !important;
-    /* 28px - lebih hemat ruang namun tetap menonjol */
     width: auto !important;
     min-width: 55px;
   }
 
   .metric-list-item .metric-text h3 {
     font-size: 0.938rem !important;
-    /* 15px */
     margin-bottom: 0.2rem !important;
     font-weight: 700;
   }
 
   .metric-list-item .metric-text p {
     font-size: 0.844rem !important;
-    /* 13.5px */
     line-height: 1.4 !important;
     margin: 0 !important;
   }
 
-  /* --- 3. Visi Misi & Kenapa Memilih SISITUS (Compact Card Slider) --- */
   .company-differentiation-section .section-subtitle {
     margin-bottom: 1.25rem !important;
-    /* Mengurangi whitespace 40px menjadi 20px */
   }
 
   .vision-block h2 {
     font-size: 1.375rem !important;
-    /* 22px (~1.4rem) */
     line-height: 1.25 !important;
     margin-bottom: 0.75rem !important;
   }
@@ -1556,25 +1491,21 @@ details[open] .accordion-icon {
   .mission-card {
     flex: 0 0 78% !important;
     padding: 0.875rem !important;
-    /* 14px */
   }
 
   .mission-card h4 {
     font-size: 0.938rem !important;
-    /* 15px */
     margin-bottom: 0.35rem !important;
   }
 
   .mission-card p {
     font-size: 0.844rem !important;
-    /* 13.5px */
     line-height: 1.4 !important;
   }
 
   .diff-slider-track .feature-card {
     flex: 0 0 78% !important;
     padding: 0.875rem !important;
-    /* 14px */
   }
 
   .diff-slider-track .feature-card .feature-number {
@@ -1584,22 +1515,18 @@ details[open] .accordion-icon {
 
   .diff-slider-track .feature-card .feature-details h3 {
     font-size: 0.938rem !important;
-    /* 15px */
     margin-bottom: 0.35rem !important;
     font-weight: 700;
   }
 
   .diff-slider-track .feature-card .feature-details p {
     font-size: 0.844rem !important;
-    /* 13.5px */
     line-height: 1.4 !important;
   }
 
-  /* --- 4. Accordion Nilai-Nilai Kami & Layanan Kami (Full-Width Content) --- */
   .value-summary,
   .service-summary {
     padding: 0.75rem 0.875rem !important;
-    /* 12px 14px */
   }
 
   .value-num {
@@ -1609,7 +1536,6 @@ details[open] .accordion-icon {
   .value-summary h3,
   .service-summary-title h3 {
     font-size: 0.938rem !important;
-    /* 15px */
     font-weight: 600 !important;
   }
 
@@ -1628,7 +1554,6 @@ details[open] .accordion-icon {
     line-height: 1.45 !important;
   }
 
-  /* Hapus padding kiri 60px pada Layanan di mobile agar teks memanfaatkan lebar penuh HP */
   .service-content {
     padding: 0 0.875rem 0.875rem 0.875rem !important;
     font-size: 0.844rem !important;
@@ -1643,19 +1568,16 @@ details[open] .accordion-icon {
     margin-top: 0.6rem !important;
   }
 
-  /* --- 5. Kartu Tim Kami (Clean Compact Team Card & Line-Clamp) --- */
   .team-slider-track .team-card {
     flex: 0 0 78% !important;
   }
 
   .team-content {
     padding: 0.875rem !important;
-    /* 14px */
   }
 
   .team-content h3 {
     font-size: 0.85rem !important;
-    /* 15px -> ~13.6px agar pas 1 baris di mobile */
     margin-bottom: 2px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
@@ -1664,24 +1586,20 @@ details[open] .accordion-icon {
 
   .team-role {
     font-size: 0.813rem !important;
-    /* 13px */
     margin-bottom: 0.5rem !important;
   }
 
   .team-bio {
     font-size: 0.813rem !important;
-    /* 13px */
     line-height: 1.4 !important;
     margin-bottom: 0.75rem !important;
     display: block !important;
     max-height: calc(1.4 * 0.813rem * 4) !important;
-    /* Standar awal 4 baris */
     overflow: hidden !important;
     cursor: pointer;
     transition: color 0.2s ease;
   }
 
-  /* Saat teks ditekan/diklik (expanded) */
   .team-bio.expanded {
     max-height: 1000px !important;
     color: var(--text-primary) !important;
@@ -1728,7 +1646,6 @@ details[open] .accordion-icon {
     margin: 0 !important;
   }
 
-  /* --- 6. Bottom Navigation Pill Menu --- */
   .navigate-pill-menu {
     gap: 0.6rem !important;
     margin-top: 1.25rem !important;
