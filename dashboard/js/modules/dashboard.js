@@ -85,7 +85,6 @@ export async function render(currentUser) {
           const orderB = typeof b.order === 'number' ? b.order : 999;
           return orderA - orderB;
         });
-        
         const pricingContainer = document.getElementById('dynamic-domain-pricing');
         if (pricingContainer) {
           pricingContainer.innerHTML = pricingData.map(domain => {
@@ -106,13 +105,11 @@ export async function render(currentUser) {
     } catch (pricingError) {
       console.warn('Error fetching domain pricing:', pricingError);
     }
-    
     // Render dynamic promo block
     try {
       const promoPanel = document.getElementById('dashboard-promo-panel');
       const promoTitle = document.getElementById('dashboard-promo-title');
       const promoDesc = document.getElementById('dashboard-promo-desc');
-      
       if (promoPanel && promoTitle && promoDesc) {
         const promoRes = await APIClient.getPublicPromos();
         if (promoRes.success && promoRes.data && promoRes.data.length > 0) {
@@ -122,7 +119,6 @@ export async function render(currentUser) {
           if (percentPromos.length > 0) {
             bestPercent = Math.max(...percentPromos.map(p => Number(p.value) || 0));
           }
-          
           if (bestPercent > 0) {
             promoTitle.textContent = `Diskon Hingga ${bestPercent}%`;
             promoDesc.textContent = `Klaim berbagai kode voucher aktif kami sekarang juga!`;
@@ -141,7 +137,6 @@ export async function render(currentUser) {
       const promoPanel = document.getElementById('dashboard-promo-panel');
       if (promoPanel) promoPanel.style.display = 'none';
     }
-
     // Setup event listeners
     setupEventListeners();
   } catch (error) {

@@ -1,4 +1,4 @@
-﻿/* ========== PERUSAHAAN PAGE STYLING ========== */
+/* ========== PERUSAHAAN PAGE STYLING ========== */
 /* Styling khusus halaman PERUSAHAAN dengan fokus pada company profile, values, dan highlight cards */
 /* Hero styling moved to components/hero.css */
 /* ========== COMPANY INTRO SECTION ========== */
@@ -96,7 +96,7 @@
 
 /* Animation delays handled automatically by shared-sections.css [class*="card"] selector */
 .highlight-card:hover {
-    border-color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
   box-shadow: var(--shadow-elegan);
 }
 
@@ -367,7 +367,7 @@
 }
 
 .diff-item-icon:hover .diff-icon-wrapper {
-    box-shadow: var(--shadow-elegan);
+  box-shadow: var(--shadow-elegan);
 }
 
 .diff-item-icon h3 {
@@ -496,7 +496,7 @@
 }
 
 .service-simple:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
@@ -599,7 +599,7 @@
 
 .stat-box:hover {
   background: transparent;
-    border-color: transparent;
+  border-color: transparent;
 }
 
 .stat-box h3 {
@@ -652,7 +652,7 @@
 }
 
 .navigate-card:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   border-color: rgba(37, 99, 235, 0.2);
 }
 
@@ -827,7 +827,7 @@
 }
 
 .team-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .team-image {

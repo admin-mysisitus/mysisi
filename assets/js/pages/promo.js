@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', function() {
             month: 'long',
             year: 'numeric'
           }) : 'Tanpa batas waktu';
-          
           let usageDisplay = '';
           const limit = Number(promo.limit) || 0;
           const usage = Number(promo.usage) || 0;
@@ -189,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
             usageDisplay = `<div class="coupon-usage" style="font-size: 12px; color: #10b981; margin-top: 6px; text-align: center; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 4px;"><i class="fas fa-infinity"></i> Kuota tanpa batas</div>`;
           }
-
           card.innerHTML = `
             <div>
               <div class="coupon-header">

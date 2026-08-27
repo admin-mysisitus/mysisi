@@ -87,7 +87,6 @@ function setupEventListeners() {
     document.getElementById('pkg-periodValue').value = pkg.periodValue || (pkg.cycle ? parseInt(pkg.cycle) : 1);
     document.getElementById('pkg-description').value = pkg.description || pkg.desc || '';
     document.getElementById('pkg-order').value = typeof pkg.order === 'number' ? pkg.order : 99;
-    
     let featuresText = '';
     if (Array.isArray(pkg.features)) {
       featuresText = pkg.features.join('\n');

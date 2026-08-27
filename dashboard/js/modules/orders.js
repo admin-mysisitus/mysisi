@@ -57,7 +57,6 @@ export async function render(user) {
             <td>${formatDateTime(order.createdAt)}</td>
           </tr>
         `).join('');
-
         const mobileContainer = document.getElementById('orders-mobile-container');
         if (mobileContainer) {
           mobileContainer.innerHTML = orders.map(order => `
@@ -89,7 +88,6 @@ export async function render(user) {
             </div>
           `).join('');
         }
-
         // Attach click handlers to rows
         document.querySelectorAll('.order-row').forEach(row => {
           row.addEventListener('click', (e) => {
@@ -125,7 +123,6 @@ async function syncPendingOrders(pendingOrders) {
           // Update the badge with a subtle animation
           statusTd.innerHTML = `<span class="badge badge-${getStatusClass(newStatus)}" style="animation: fadeIn 0.5s;">${getStatusText(newStatus)}</span>`;
         }
-        
         const mStatusDiv = document.getElementById(`m-status-${order.orderId}`);
         if (mStatusDiv) {
           mStatusDiv.innerHTML = `<span style="color: inherit; background: inherit; padding: 0;" class="badge-${getStatusClass(newStatus)}" style="animation: fadeIn 0.5s;">${getStatusText(newStatus)}</span>`;

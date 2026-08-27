@@ -2158,7 +2158,6 @@ textarea.form-control {
   line-height: 1.6;
 }
 
-
 .table-shell {
   overflow-x: auto;
   border: 1px solid var(--dashboard-border-soft);
@@ -2522,8 +2521,6 @@ textarea.form-control {
   .profile-photo-actions {
     min-width: 100%;
   }
-
-
 }
 
 /* ========== CART FLOATING REMINDER (PILL) ========== */
@@ -2769,8 +2766,15 @@ textarea.form-control {
 }
 
 @keyframes slideInUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal-header {
@@ -2920,7 +2924,7 @@ textarea.form-control {
     align-items: flex-end;
     padding: 0;
   }
-  
+
   .modal-content {
     max-height: 85vh;
     border-radius: 24px 24px 0 0;
@@ -2945,7 +2949,7 @@ textarea.form-control {
     padding: 16px;
     flex-wrap: nowrap;
   }
-  
+
   .modal-footer .btn {
     flex: 1;
     justify-content: center;
@@ -2966,10 +2970,12 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+
   .orders-desktop-view,
   .invoices-desktop-view {
     display: none !important;
   }
+
   .orders-mobile-view,
   .invoices-mobile-view {
     display: flex;
@@ -2997,7 +3003,7 @@ textarea.form-control {
   justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   background: #fafaf8;
 }
 
@@ -3020,9 +3026,21 @@ textarea.form-control {
   flex-shrink: 0;
 }
 
-.inv-card-status.badge-success, .inv-card-status.badge-active { background: #dcfce7; color: #166534; }
-.inv-card-status.badge-warning { background: #fef9c3; color: #854d0e; }
-.inv-card-status.badge-danger { background: #fee2e2; color: #991b1b; }
+.inv-card-status.badge-success,
+.inv-card-status.badge-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.inv-card-status.badge-warning {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.inv-card-status.badge-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
 
 .inv-card-body {
   padding: 10px 12px;
@@ -3063,7 +3081,7 @@ textarea.form-control {
   display: flex;
   gap: 6px;
   padding: 10px 12px;
-  border-top: 1px solid rgba(0,0,0,0.04);
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
   background: var(--bg-white);
 }
 
@@ -3120,9 +3138,11 @@ textarea.form-control {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
+
   .orders-summary__item:first-child {
     grid-column: span 2;
   }
+
   .orders-summary__item {
     padding: 12px 14px;
     border-radius: 10px;

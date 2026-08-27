@@ -981,7 +981,6 @@ export class APIClient {
       };
     }
   }
-
   static async getAdminStats(adminId) {
     try {
       const {
@@ -1267,19 +1266,15 @@ export class APIClient {
       const snap = await db.ref('promos').once('value');
       const data = snap.val() || {};
       const now = new Date();
-      
       const promos = Object.values(data).filter(p => {
         if (!p.active) return false;
         if (p.start && new Date(p.start) > now) return false;
         if (p.end && new Date(p.end) < now) return false;
-        
         const limit = Number(p.limit) || 0;
         const usage = Number(p.usage) || 0;
         if (limit > 0 && usage >= limit) return false;
-        
         return true;
       });
-      
       return {
         success: true,
         data: promos
@@ -1337,44 +1332,53 @@ export class APIClient {
     }
   }
   static pricingCache = null;
-
   static async fetchPricingConfig(forceRefresh = false) {
     if (this.pricingCache && !forceRefresh) {
-      return { success: true, data: this.pricingCache };
+      return {
+        success: true,
+        data: this.pricingCache
+      };
     }
     try {
-      const { db } = await getFirebase();
+      const {
+        db
+      } = await getFirebase();
       if (!db) throw new Error('Firebase DB not available');
-      
       const [snapPackages, snapDomains, snapAddons, snapPromos] = await Promise.all([
         db.ref('packages').once('value'),
         db.ref('domains_pricing').once('value'),
         db.ref('addons').once('value'),
         db.ref('promos').once('value')
       ]);
-      
       this.pricingCache = {
         packages: snapPackages.val() || {},
         domains: snapDomains.val() || {},
         addons: snapAddons.val() || {},
         promos: snapPromos.val() || {}
       };
-      
-      return { success: true, data: this.pricingCache };
+      return {
+        success: true,
+        data: this.pricingCache
+      };
     } catch (e) {
-      return { success: false, message: e.message };
+      return {
+        success: false,
+        message: e.message
+      };
     }
   }
-
   static async getPackages() {
     const res = await this.fetchPricingConfig();
     if (res.success && res.data && res.data.packages) {
-      return { 
-        success: true, 
-        data: Object.values(res.data.packages).filter(p => p.active !== false) 
+      return {
+        success: true,
+        data: Object.values(res.data.packages).filter(p => p.active !== false)
       };
     }
-    return { success: false, message: res.message || 'Failed to get packages' };
+    return {
+      success: false,
+      message: res.message || 'Failed to get packages'
+    };
   }
   static async getAdminPackages(adminId) {
     try {
@@ -1443,7 +1447,6 @@ export class APIClient {
       };
     }
   }
-
   // --- ADMIN DOMAINS API ---
   static async getAdminDomains(adminId) {
     try {
@@ -1467,7 +1470,6 @@ export class APIClient {
       };
     }
   }
-
   static async saveAdminDomain(adminId, domainData) {
     try {
       const {
@@ -1477,7 +1479,6 @@ export class APIClient {
         success: false,
         message: 'Firebase DB not available'
       };
-      
       const key = domainData.ext.replace('.', '').replace(/\./g, '_');
       await db.ref(`domains_pricing/${key}`).set(domainData);
       return {
@@ -1492,7 +1493,6 @@ export class APIClient {
       };
     }
   }
-
   static async deleteAdminDomain(adminId, ext) {
     try {
       const {
@@ -1515,7 +1515,6 @@ export class APIClient {
       };
     }
   }
-
   // --- ADMIN ADDONS API ---
   static async getAdminAddons(adminId) {
     try {
@@ -1539,7 +1538,6 @@ export class APIClient {
       };
     }
   }
-
   static async saveAdminAddon(adminId, addonData) {
     try {
       const {
@@ -1564,7 +1562,6 @@ export class APIClient {
       };
     }
   }
-
   static async deleteAdminAddon(adminId, id) {
     try {
       const {
@@ -1653,34 +1650,57 @@ export class APIClient {
       };
     }
   }
-
   // ==========================================
   // DNS MANAGEMENT (GAS BACKEND INTEGRATION)
   // ==========================================
-  
   static async setupCloudflareZone(domain) {
-    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
-    return this.call('setupCloudflareZone', { domain });
+    if (!AuthManager.isLoggedIn()) return {
+      success: false,
+      message: 'Tidak ada sesi aktif'
+    };
+    return this.call('setupCloudflareZone', {
+      domain
+    });
   }
-
   static async getDnsRecords(domain) {
-    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
-    return this.call('getDnsRecords', { domain });
+    if (!AuthManager.isLoggedIn()) return {
+      success: false,
+      message: 'Tidak ada sesi aktif'
+    };
+    return this.call('getDnsRecords', {
+      domain
+    });
   }
-  
   static async addDnsRecord(domain, recordData) {
-    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
-    return this.call('addDnsRecord', { domain, recordData });
+    if (!AuthManager.isLoggedIn()) return {
+      success: false,
+      message: 'Tidak ada sesi aktif'
+    };
+    return this.call('addDnsRecord', {
+      domain,
+      recordData
+    });
   }
-  
   static async editDnsRecord(domain, recordId, recordData) {
-    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
-    return this.call('editDnsRecord', { domain, recordId, recordData });
+    if (!AuthManager.isLoggedIn()) return {
+      success: false,
+      message: 'Tidak ada sesi aktif'
+    };
+    return this.call('editDnsRecord', {
+      domain,
+      recordId,
+      recordData
+    });
   }
-
   static async deleteDnsRecord(domain, recordId) {
-    if (!AuthManager.isLoggedIn()) return { success: false, message: 'Tidak ada sesi aktif' };
-    return this.call('deleteDnsRecord', { domain, recordId });
+    if (!AuthManager.isLoggedIn()) return {
+      success: false,
+      message: 'Tidak ada sesi aktif'
+    };
+    return this.call('deleteDnsRecord', {
+      domain,
+      recordId
+    });
   }
 }
 // Export for use

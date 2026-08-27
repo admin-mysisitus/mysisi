@@ -120,7 +120,6 @@
 }
 
 /* no image zoom on hover — let border/shadow do the work */
-
 /* ========== CARD BODY ========== */
 .card-body {
   padding: clamp(0.875rem, 1.5vw, 1.5rem);

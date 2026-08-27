@@ -36,7 +36,6 @@ function setupEventListeners() {
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
-      
       const ext = document.getElementById('domain-ext').value.trim();
       let oldPrice = document.getElementById('domain-oldprice').value;
       const domainData = {
@@ -50,7 +49,6 @@ function setupEventListeners() {
         label: document.getElementById('domain-label').value.trim(),
         color: document.getElementById('domain-color').value
       };
-      
       try {
         const adminId = AuthManager.getUserId();
         const res = await APIClient.saveAdminDomain(adminId, domainData);
@@ -82,14 +80,12 @@ function setupEventListeners() {
       }
     });
   }
-  
   window.editDomain = (extKey) => {
     // Find the domain that matches the modified key or exact ext
     const d = currentDomains.find(item => {
       const key = item.ext.replace('.', '').replace(/\./g, '_');
       return key === extKey || item.ext === extKey;
     });
-    
     if (!d) return;
     document.getElementById('domain-modal-title').textContent = 'Edit Ekstensi Domain';
     document.getElementById('domain-ext').value = d.ext;
@@ -104,7 +100,6 @@ function setupEventListeners() {
     document.getElementById('domain-color').value = d.color || '#ea4335';
     document.getElementById('domain-modal').style.display = 'flex';
   };
-  
   window.deleteDomain = async (extKey) => {
     if (typeof Swal !== 'undefined') {
       const result = await Swal.fire({
@@ -124,7 +119,6 @@ function setupEventListeners() {
             return key === extKey || item.ext === extKey;
           });
           const extToDel = d ? d.ext : extKey;
-          
           const res = await APIClient.deleteAdminDomain(AuthManager.getUserId(), extToDel);
           if (res.success) {
             Swal.fire('Berhasil!', 'Ekstensi telah dihapus.', 'success');
@@ -139,7 +133,6 @@ function setupEventListeners() {
     }
   };
 }
-
 async function loadDomains() {
   const container = document.getElementById('domains-grid');
   if (!container) return;
@@ -171,27 +164,27 @@ async function loadDomains() {
 function renderDomains(domains, container) {
   container.innerHTML = '';
   currentDomains = domains;
-  
   // Sort domains by order first, then highlight
   const sortedDomains = domains.sort((a, b) => {
     const orderA = typeof a.order === 'number' ? a.order : 999;
     const orderB = typeof b.order === 'number' ? b.order : 999;
     if (orderA !== orderB) return orderA - orderB;
-    
     // Fallback sort
-    const hlOrder = { best: 3, cheap: 2, business: 1, none: 0 };
+    const hlOrder = {
+      best: 3,
+      cheap: 2,
+      business: 1,
+      none: 0
+    };
     return (hlOrder[b.highlight] || 0) - (hlOrder[a.highlight] || 0);
   });
-  
   sortedDomains.forEach(domain => {
     const extKey = domain.ext.replace('.', '').replace(/\./g, '_');
     const hasDiscount = domain.oldPrice && domain.oldPrice > domain.registration;
-    
     let discountPercent = 0;
     if (hasDiscount) {
       discountPercent = Math.round((1 - domain.registration / domain.oldPrice) * 100);
     }
-    
     const card = document.createElement('div');
     card.style.background = 'rgba(0, 0, 0, 0.2)';
     card.style.border = '1px solid var(--admin-border)';
@@ -200,15 +193,12 @@ function renderDomains(domains, container) {
     card.style.position = 'relative';
     card.style.display = 'flex';
     card.style.flexDirection = 'column';
-    
     // Highlight border for "best"
     if (domain.highlight === 'best') {
       card.style.border = '1px solid var(--admin-primary)';
       card.style.background = 'linear-gradient(145deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0.2))';
     }
-    
     const formatNumber = (num) => Number(num).toLocaleString('id-ID');
-    
     let badges = '';
     if (domain.label) {
       badges += `<span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem;">${domain.label}</span>`;
@@ -216,7 +206,6 @@ function renderDomains(domains, container) {
     if (discountPercent > 0) {
       badges += `<span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">-${discountPercent}%</span>`;
     }
-    
     card.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
         <h3 style="margin: 0; color: ${domain.color || 'var(--admin-text-main)'}; font-size: 1.5rem;">

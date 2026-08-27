@@ -1,4 +1,4 @@
-﻿/* ========== 404 PAGE STYLES ========== */
+/* ========== 404 PAGE STYLES ========== */
 /* Error Section */
 .error-section {
   background: var(--brand-base);
@@ -40,15 +40,17 @@
   color: rgba(255, 255, 255, 0.95);
   animation: float 4s ease-in-out infinite;
   display: block;
-  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.1));
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
-  50% {
-      }
+
+  50% {}
 }
 
 .error-code {
@@ -126,7 +128,7 @@
 }
 
 .quick-link-item:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .quick-link-item i {

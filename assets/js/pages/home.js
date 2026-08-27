@@ -1,6 +1,5 @@
 /* ========== HOME PAGE INTERACTIONS ========== */
 import APIClient from '../modules/unified-api.js';
-
 document.addEventListener('DOMContentLoaded', async function() {
   // ========== SPECIFIC HOME PAGE LOGIC ==========
   // Banner Promo Dynamic Update
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       homeBanner.style.display = 'none';
     }
   }
-
   // ========== SOLUTIONS TABS ==========
   const solutionTabs = document.querySelectorAll('.solution-tab-btn');
   const solutionPanes = document.querySelectorAll('.solution-pane');

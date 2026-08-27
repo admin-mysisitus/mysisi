@@ -375,14 +375,12 @@ export class WishlistManager {
     if (!item) {
       throw new Error('Item tidak ditemukan di wishlist');
     }
-    
     // Fetch latest pricing
     const configRes = await APIClient.fetchPricingConfig();
     let starterPrice = 599000;
     if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
       starterPrice = configRes.data.packages.starter.price;
     }
-
     // Add to cart
     const tld = item.tld || domain.split('.').pop();
     CartManager.add(domain, tld, {

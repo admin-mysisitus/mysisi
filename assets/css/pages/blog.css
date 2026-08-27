@@ -1,4 +1,4 @@
-﻿/* ========== BLOG PAGE STYLING ========== */
+/* ========== BLOG PAGE STYLING ========== */
 /* Styling khusus halaman BLOG dengan fokus pada featured posts dan article cards */
 /* Hero styling moved to components/hero.css */
 /* ========== BLOG CATEGORIES SECTION ========== */
@@ -79,7 +79,7 @@
 
 /* Animation delays handled automatically by shared-sections.css [class*="post"] selector */
 .featured-post:hover {
-    box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md);
   border-color: var(--accent-cyan);
 }
 
@@ -251,7 +251,7 @@
 
 /* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
 .article-card:hover {
-    border-color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
   box-shadow: var(--shadow-lg);
 }
 
@@ -444,7 +444,7 @@
 
 /* Animation delays di-handle otomatis oleh shared-sections.css [class*="card"] selector */
 .article-card:hover {
-    border-color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
   box-shadow: var(--shadow-lg);
 }
 

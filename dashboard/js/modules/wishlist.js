@@ -61,7 +61,6 @@ class DashboardWishlist {
       low: wishlist.domains.filter(d => d.priority === 'low')
     };
     let itemsHTML = '';
-    
     // High priority
     if (grouped.high.length > 0) {
       itemsHTML += `
@@ -75,7 +74,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-    
     // Medium priority
     if (grouped.medium.length > 0) {
       itemsHTML += `
@@ -89,7 +87,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-    
     // Low priority
     if (grouped.low.length > 0) {
       itemsHTML += `
@@ -103,7 +100,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-    
     this.container.innerHTML = `
       <div class="dashboard-page-header dashboard-page-header--wishlist">
         <div class="dashboard-page-header-content">
@@ -131,13 +127,11 @@ class DashboardWishlist {
         </div>
       </div>
     `;
-    
     // Expose functions to window
     window.moveWishlistToCart = (domain) => this.moveToCart(domain);
     window.removeWishlistItem = (domain) => this.removeItem(domain);
     window.updateWishlistPriority = (domain, priority) => this.updatePriority(domain, priority);
   }
-
   /**
    * Render single wishlist item
    */

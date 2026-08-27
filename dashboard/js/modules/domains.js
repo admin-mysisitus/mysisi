@@ -5,10 +5,20 @@
  * Future Enhancement: Add DNS management, renewal, domain settings
  */
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-import { openDnsManagement } from '/assets/js/modules/dns-ui.js';
-import { CartManager } from '/assets/js/modules/unified-cart.js';
-import { showInfo, showSuccess, showError } from '/assets/js/modules/unified-utils.js';
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
+import {
+  openDnsManagement
+} from '/assets/js/modules/dns-ui.js';
+import {
+  CartManager
+} from '/assets/js/modules/unified-cart.js';
+import {
+  showInfo,
+  showSuccess,
+  showError
+} from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
     // Load user orders to get registered domains
@@ -16,10 +26,8 @@ export async function render(currentUser) {
     const orders = result.data?.orders || result.orders || [];
     const paidOrders = orders.filter(o => o.paymentStatus === 'paid');
     const domainMap = {};
-    
     // Sort by date so registeredDate is the oldest order's date
     paidOrders.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-
     paidOrders.forEach(o => {
       const dur = parseInt(o.domainDuration) || 1;
       if (!domainMap[o.domain]) {
@@ -33,7 +41,6 @@ export async function render(currentUser) {
         domainMap[o.domain].totalDuration += dur;
       }
     });
-
     const domains = Object.values(domainMap).map(d => ({
       name: d.name,
       registeredDate: d.registeredDate,
@@ -130,44 +137,42 @@ function getDomainStatus(createdDate, years = 1) {
     };
   }
 }
-
 async function handleDomainRenewal(domainName, expiryDate) {
   try {
     showInfo('Memproses', 'Mengambil informasi harga perpanjangan...');
     const tld = domainName.split('.').slice(1).join('.');
-    
     // Fetch pricing
     const configRes = await APIClient.fetchPricingConfig();
     let renewalPrice = 150000; // Fallback price
-    
     if (configRes.success && configRes.data && configRes.data.domains) {
       const extData = Object.values(configRes.data.domains).find(d => d.ext === tld || d.ext === `.${tld}`);
       if (extData) {
         renewalPrice = extData.renewal || extData.registration || 150000;
       }
     }
-
     Swal.close(); // Tutup loading dialog
-    
     // Hitung sisa hari
     const expDate = expiryDate ? new Date(expiryDate) : new Date();
     const daysRemaining = Math.ceil((expDate - new Date()) / (1000 * 60 * 60 * 24));
     let badgeText = daysRemaining > 0 ? `Expiring in ${daysRemaining} days` : `Expired ${Math.abs(daysRemaining)} days ago`;
     let badgeColor = daysRemaining > 30 ? '#d1fae5' : '#fee2e2';
     let badgeTextColor = daysRemaining > 30 ? '#065f46' : '#991b1b';
-
     let optionsHtml = '';
     for (let i = 1; i <= 10; i++) {
-        const priceFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(renewalPrice * i);
-        optionsHtml += `<option value="${i}">${i} Year/s @ ${priceFmt}</option>`;
+      const priceFmt = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(renewalPrice * i);
+      optionsHtml += `<option value="${i}">${i} Year/s @ ${priceFmt}</option>`;
     }
-
     const formattedDate = formatDate(expDate);
     const yearsFromNow = (expDate.getFullYear() - new Date().getFullYear());
     const yearsText = yearsFromNow > 0 ? `(${yearsFromNow} year from now)` : (yearsFromNow < 0 ? `(${Math.abs(yearsFromNow)} year ago)` : '');
-
     if (typeof Swal !== 'undefined') {
-      const { value: selectedYears, isConfirmed } = await Swal.fire({
+      const {
+        value: selectedYears,
+        isConfirmed
+      } = await Swal.fire({
         title: 'Domain Renewal',
         html: `
           <div style="text-align: left; padding: 15px; border: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px;">
@@ -191,7 +196,6 @@ async function handleDomainRenewal(domainName, expiryDate) {
           return document.getElementById('renewal-duration').value;
         }
       });
-
       if (isConfirmed && selectedYears) {
         const duration = parseInt(selectedYears);
         CartManager.add(domainName, tld, {
@@ -204,18 +208,17 @@ async function handleDomainRenewal(domainName, expiryDate) {
           packagePrice: 0,
           addons: []
         });
-
         Swal.fire({
-            title: 'Berhasil!',
-            text: `${domainName} (Perpanjangan ${duration} Tahun) telah ditambahkan ke keranjang.`,
-            icon: 'success',
-            confirmButtonText: 'Ke Keranjang',
-            showCancelButton: true,
-            cancelButtonText: 'Tutup'
+          title: 'Berhasil!',
+          text: `${domainName} (Perpanjangan ${duration} Tahun) telah ditambahkan ke keranjang.`,
+          icon: 'success',
+          confirmButtonText: 'Ke Keranjang',
+          showCancelButton: true,
+          cancelButtonText: 'Tutup'
         }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.hash = '#!/dashboard/keranjang';
-            }
+          if (result.isConfirmed) {
+            window.location.hash = '#!/dashboard/keranjang';
+          }
         });
       }
     }
@@ -223,7 +226,6 @@ async function handleDomainRenewal(domainName, expiryDate) {
     showError('Gagal', 'Terjadi kesalahan saat memproses perpanjangan: ' + error.message);
   }
 }
-
 async function handleDNSManagement(domainName) {
   openDnsManagement(domainName, null);
 }

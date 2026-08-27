@@ -1,4 +1,4 @@
-﻿/* ========== DOMAIN & HOSTING PAGE STYLING ========== */
+/* ========== DOMAIN & HOSTING PAGE STYLING ========== */
 /* Page-specific styling untuk halaman domain & hosting layanan */
 /* ========== IMPORT BASE STYLES ========== */
 /* Menggunakan base dari pembuatan-website.css untuk hero, intro, packages, faq, cta */
@@ -31,7 +31,8 @@
   border: none !important;
   box-shadow: none;
   display: grid;
-  grid-template-columns: max-content 1fr; /* Fit any icon size automatically */
+  grid-template-columns: max-content 1fr;
+  /* Fit any icon size automatically */
   grid-template-rows: auto 1fr;
   gap: 0.25rem 1.25rem;
   text-align: left;
@@ -47,7 +48,8 @@
 .benefit-item i {
   grid-column: 1;
   grid-row: 1 / span 2;
-  font-size: 2.8rem !important; /* Larger icon */
+  font-size: 2.8rem !important;
+  /* Larger icon */
   line-height: 1 !important;
   margin: 0 !important;
   display: inline-block !important;
@@ -55,27 +57,39 @@
   padding: 0 !important;
   box-shadow: none !important;
   align-self: start;
-  margin-top: 0.15rem !important; /* Optical alignment with title */
+  margin-top: 0.15rem !important;
+  /* Optical alignment with title */
 }
 
 /* Individual Solid Icon Colors */
 .benefit-item:nth-child(1) i {
-  color: #ef4444 !important; /* Red */
+  color: #ef4444 !important;
+  /* Red */
 }
+
 .benefit-item:nth-child(2) i {
-  color: #2563eb !important; /* Blue */
+  color: #2563eb !important;
+  /* Blue */
 }
+
 .benefit-item:nth-child(3) i {
-  color: #059669 !important; /* Emerald */
+  color: #059669 !important;
+  /* Emerald */
 }
+
 .benefit-item:nth-child(4) i {
-  color: #7c3aed !important; /* Purple */
+  color: #7c3aed !important;
+  /* Purple */
 }
+
 .benefit-item:nth-child(5) i {
-  color: #e11d48 !important; /* Pink */
+  color: #e11d48 !important;
+  /* Pink */
 }
+
 .benefit-item:nth-child(6) i {
-  color: #0891b2 !important; /* Cyan */
+  color: #0891b2 !important;
+  /* Cyan */
 }
 
 .benefit-item h3 {
@@ -85,7 +99,8 @@
   font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  align-self: start; /* Align to top instead of end */
+  align-self: start;
+  /* Align to top instead of end */
   line-height: 1.3;
 }
 
@@ -99,7 +114,6 @@
 }
 
 /* Removed old media queries */
-
 /* ========== DOMAIN PACKAGES SECTION ========== */
 .detail-domain-packages-section {
   padding: 4rem 0;
@@ -125,13 +139,13 @@
 .package-simple {
   background: #ffffff;
   border-radius: 16px;
-  border: 1px solid rgba(0,0,0,0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   padding: 1.5rem;
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto auto;
   gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
   position: relative;
   text-align: left;
 }
@@ -178,15 +192,15 @@
   .simple-packages {
     gap: 0;
     border-radius: 20px;
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
     overflow: hidden;
   }
-  
+
   .package-simple {
     border-radius: 0;
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.04);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
     padding: 1.25rem 2.5rem;
     grid-template-columns: 180px 1fr auto;
     grid-template-rows: auto auto;
@@ -194,31 +208,31 @@
     box-shadow: none;
     transition: background 0.2s;
   }
-  
+
   .package-simple:last-child {
     border-bottom: none;
   }
-  
+
   .package-simple:hover {
     background: rgba(37, 99, 235, 0.02);
   }
-  
+
   .package-simple h3 {
     grid-column: 1;
     grid-row: 1;
   }
-  
+
   .package-simple .domain-badge {
     grid-column: 1;
     grid-row: 2;
     margin-top: 0.25rem !important;
   }
-  
+
   .package-simple .note {
     grid-column: 2;
     grid-row: 1 / span 2;
   }
-  
+
   .package-simple .price {
     grid-column: 3;
     grid-row: 1 / span 2;
@@ -260,7 +274,7 @@
 }
 
 .hosting-packages-grid .package-card:hover {
-    border-color: #cbd5e1;
+  border-color: #cbd5e1;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
 }
 
@@ -268,7 +282,7 @@
   border: 2px solid var(--primary-blue);
   border-top: 4px solid var(--accent-cyan);
   box-shadow: 0 10px 30px rgba(37, 99, 235, 0.12);
-    z-index: 2;
+  z-index: 2;
 }
 
 .hosting-packages-grid .package-card.featured:hover {
@@ -401,7 +415,7 @@
 
 .feature-card-item:hover {
   border-color: #cbd5e1;
-    background: #ffffff;
+  background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -498,7 +512,7 @@
 
 .migration-step-card:hover {
   background: rgba(255, 255, 255, 0.15);
-  }
+}
 
 .migration-step-card .step-number {
   font-family: 'Outfit', sans-serif;
@@ -596,7 +610,7 @@
 
 .feature-card-item:hover {
   border-color: #cbd5e1;
-    background: #ffffff;
+  background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -671,7 +685,7 @@
   background: #ffffff;
   border-color: #cbd5e1;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  }
+}
 
 .migration-step-card .step-number {
   font-family: 'Outfit', sans-serif;

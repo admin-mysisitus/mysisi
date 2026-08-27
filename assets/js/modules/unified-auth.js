@@ -44,9 +44,11 @@ export class AuthManager {
    */
   static async init() {
     this.loadSession();
-
     try {
-      const { auth, db } = await getFirebase();
+      const {
+        auth,
+        db
+      } = await getFirebase();
       if (auth) {
         auth.onAuthStateChanged(async (firebaseUser) => {
           if (firebaseUser) {
@@ -103,7 +105,6 @@ export class AuthManager {
         this.clearSession();
         return;
       }
-
       // Validate user data structure
       if (data.user && typeof data.user === 'object') {
         this.state = {
@@ -240,13 +241,14 @@ export class AuthManager {
   static getUserId() {
     return this.state.user?.userId || null;
   }
-  
   /**
    * Get Firebase ID Token
    */
   static async getIdToken() {
     try {
-      const { auth } = await getFirebase();
+      const {
+        auth
+      } = await getFirebase();
       if (auth && auth.currentUser) {
         return await auth.currentUser.getIdToken(true);
       }
@@ -274,7 +276,6 @@ export class AuthManager {
     };
     this.saveSession(updatedUser);
   }
-
   /**
    * Setup storage listener for multi-tab sync
    */

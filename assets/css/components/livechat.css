@@ -852,11 +852,12 @@
 }
 
 /* CONSECUTIVE MESSAGE GROUPING */
-.livechat-widget .message.agent + .message.agent,
-.livechat-widget .message.user + .message.user {
+.livechat-widget .message.agent+.message.agent,
+.livechat-widget .message.user+.message.user {
   margin-top: -3px;
 }
-.livechat-widget .message.agent + .message.agent .agent-label,
-.livechat-widget .message.user + .message.user .agent-label {
+
+.livechat-widget .message.agent+.message.agent .agent-label,
+.livechat-widget .message.user+.message.user .agent-label {
   display: none;
 }

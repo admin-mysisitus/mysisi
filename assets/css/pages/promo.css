@@ -1,4 +1,4 @@
-﻿/* ========== PROMO PAGE STYLING ========== */
+/* ========== PROMO PAGE STYLING ========== */
 /* Promo-specific styling utama untuk override shared styles */
 html,
 body {
@@ -45,7 +45,7 @@ main {
 }
 
 .promo-card:hover {
-    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 12px 35px rgba(37, 99, 235, 0.15);
   border-color: var(--accent-cyan);
 }
 
@@ -138,7 +138,7 @@ main {
 }
 
 .vp-item:hover {
-    border-color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
   box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
 }
 
@@ -264,7 +264,7 @@ main {
 }
 
 .requirement-item:hover {
-    box-shadow: var(--shadow-elegan);
+  box-shadow: var(--shadow-elegan);
 }
 
 .requirement-item h3 {
@@ -312,7 +312,7 @@ main {
 }
 
 .why-item:hover {
-    border-color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
   box-shadow: var(--shadow-elegan);
   background: linear-gradient(135deg, #F0FDF4 0%, var(--white) 100%);
 }
@@ -756,7 +756,6 @@ main {
 
 /* Responsive countdown timer */
 @media (max-width: 768px) {
-
   .countdown-value {
     font-size: 2rem;
     min-width: 60px;
@@ -768,7 +767,6 @@ main {
 }
 
 @media (max-width: 480px) {
-
   .countdown-value {
     font-size: 1.5rem;
     min-width: 50px;
@@ -843,7 +841,7 @@ main {
 }
 
 .coupon-card:hover {
-    box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md);
   border-color: var(--accent-cyan);
 }
 
@@ -885,7 +883,8 @@ main {
 
 .coupon-code-value {
   flex: 1;
-  min-width: 0; /* Ensures the input can shrink below its default size */
+  min-width: 0;
+  /* Ensures the input can shrink below its default size */
   font-family: 'Courier New', monospace;
   font-weight: 700;
   font-size: 1.1rem;

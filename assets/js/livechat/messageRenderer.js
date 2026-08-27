@@ -255,15 +255,12 @@ class MessageRenderer {
     this.elementCache.clear();
     this.renderedIds.clear();
   }
-
   /**
    * Apply grouping classes to consecutive messages from the same sender
    */
   _applyGrouping() {
     if (!this.container) return;
-    const messages = Array.from(this.container.children).filter(el => 
-      el.classList.contains('message') && !el.classList.contains('system-message') && !el.classList.contains('typing-indicator')
-    );
+    const messages = Array.from(this.container.children).filter(el => el.classList.contains('message') && !el.classList.contains('system-message') && !el.classList.contains('typing-indicator'));
     let prevKey = null;
     messages.forEach(msg => {
       const key = msg.getAttribute('data-sender-key');
@@ -289,7 +286,6 @@ class MessageRenderer {
     msg.classList.add('message', message.sender === 'admin' ? 'agent' : 'user');
     msg.setAttribute('data-message-id', this._sanitize(message.id));
     msg.setAttribute('data-created-at', message.createdAt);
-    
     // Add sender key for grouping logic
     const senderKey = message.sender === 'admin' ? ('admin-' + (message.agent ? message.agent.trim() : 'Admin')) : 'user';
     msg.setAttribute('data-sender-key', this._sanitize(senderKey));

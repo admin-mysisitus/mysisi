@@ -1,4 +1,4 @@
-﻿/* ========== TENTANG PAGE STYLES ========== */
+/* ========== TENTANG PAGE STYLES ========== */
 /* --- Typography & Utilities --- */
 .eyebrow-text {
   display: inline-block;
@@ -401,7 +401,7 @@ details[open] .accordion-icon {
 }
 
 .team-slider-track .team-card:hover {
-    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.08);
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.08);
   border-color: rgba(37, 99, 235, 0.25);
 }
 

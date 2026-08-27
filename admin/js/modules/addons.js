@@ -34,7 +34,6 @@ function setupEventListeners() {
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
-      
       const addonData = {
         id: document.getElementById('addon-id').value.trim(),
         name: document.getElementById('addon-name').value.trim(),
@@ -44,7 +43,6 @@ function setupEventListeners() {
         recommended: document.getElementById('addon-recommended').checked,
         order: parseInt(document.getElementById('addon-order').value) || 99
       };
-      
       try {
         const adminId = AuthManager.getUserId();
         const res = await APIClient.saveAdminAddon(adminId, addonData);
@@ -76,7 +74,6 @@ function setupEventListeners() {
       }
     });
   }
-  
   window.editAddon = (id) => {
     const addon = currentAddons.find(a => a.id === id);
     if (!addon) return;
@@ -91,7 +88,6 @@ function setupEventListeners() {
     document.getElementById('addon-order').value = typeof addon.order === 'number' ? addon.order : 99;
     document.getElementById('addon-modal').style.display = 'flex';
   };
-  
   window.deleteAddon = async (id) => {
     if (typeof Swal !== 'undefined') {
       const result = await Swal.fire({
@@ -119,7 +115,6 @@ function setupEventListeners() {
     }
   };
 }
-
 async function loadAddons() {
   const container = document.getElementById('addons-grid');
   if (!container) return;
@@ -155,12 +150,10 @@ async function loadAddons() {
 function renderAddons(addons, container) {
   container.innerHTML = '';
   currentAddons = addons;
-  
   // Sort: recommended first
   const sortedAddons = addons.sort((a, b) => {
     return (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0);
   });
-  
   sortedAddons.forEach(addon => {
     const card = document.createElement('div');
     card.style.background = 'rgba(0, 0, 0, 0.2)';
@@ -170,21 +163,17 @@ function renderAddons(addons, container) {
     card.style.position = 'relative';
     card.style.display = 'flex';
     card.style.flexDirection = 'column';
-    
     // Highlight if recommended
     if (addon.recommended) {
       card.style.border = '1px solid var(--admin-primary)';
       card.style.background = 'linear-gradient(145deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0.2))';
     }
-    
     const formatNumber = (num) => Number(num).toLocaleString('id-ID');
     const displayPrice = addon.price > 0 ? `Rp ${formatNumber(addon.price)}` : 'Gratis';
-    
     let badges = '';
     if (addon.recommended) {
       badges += `<span style="background: rgba(99, 102, 241, 0.2); color: var(--admin-primary); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;"><i class="fas fa-star" style="margin-right:4px;"></i> Recommended</span>`;
     }
-    
     card.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
         <h3 style="margin: 0; color: var(--admin-text-main); font-size: 1.25rem;">

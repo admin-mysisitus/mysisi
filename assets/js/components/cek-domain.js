@@ -153,7 +153,12 @@
       const orderA = typeof a.order === 'number' ? a.order : 999;
       const orderB = typeof b.order === 'number' ? b.order : 999;
       if (orderA !== orderB) return orderA - orderB;
-      const order = { best: 3, cheap: 2, business: 1, none: 0 };
+      const order = {
+        best: 3,
+        cheap: 2,
+        business: 1,
+        none: 0
+      };
       return order[b.highlight] - order[a.highlight];
     }).slice(0, 8);
     sortedExts.forEach((ext, idx) => {
@@ -777,7 +782,6 @@
         if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
           starterPrice = configRes.data.packages.starter.price;
         }
-        
         // Add domain to cart for both guest and authenticated users
         CartManager.add(domain, tld, {
           package: 'starter',

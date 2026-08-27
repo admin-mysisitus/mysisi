@@ -1,9 +1,11 @@
 import APIClient from '/assets/js/modules/unified-api.js';
-import { AuthManager } from '/assets/js/modules/unified-auth.js';
-import { openDnsManagement } from '/assets/js/modules/dns-ui.js';
-
+import {
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
+import {
+  openDnsManagement
+} from '/assets/js/modules/dns-ui.js';
 let registeredDomains = [];
-
 export async function render() {
   console.log('Admin DNS Module Loaded');
   setupEventListeners();
@@ -14,7 +16,6 @@ function setupEventListeners() {
   const btnAdd = document.getElementById('btn-add-dns');
   const btnClose = document.getElementById('btn-close-dns');
   const modal = document.getElementById('dns-modal');
-
   if (btnAdd) {
     // We repurpose "Tambah DNS" to a refresh or just hide it
     btnAdd.innerHTML = '<i class="fas fa-sync"></i> Refresh Data';
@@ -24,7 +25,6 @@ function setupEventListeners() {
       btnAdd.innerHTML = '<i class="fas fa-sync"></i> Refresh Data';
     });
   }
-
   // Make functions global for inline onclicks in the table
   window.setupCloudflare = async (domain) => {
     if (typeof Swal !== 'undefined') {
@@ -37,7 +37,6 @@ function setupEventListeners() {
         }
       });
     }
-
     try {
       const res = await APIClient.setupCloudflareZone(domain);
       if (res.success) {
@@ -59,12 +58,10 @@ function setupEventListeners() {
       Swal.fire('Gagal', err.message, 'error');
     }
   };
-
   window.manageDNS = async (domainName) => {
     openDnsManagement(domainName, window.setupCloudflare);
   };
 }
-
 async function loadDNS() {
   const tbody = document.getElementById('dns-table-body');
   if (!tbody) return;
@@ -76,11 +73,9 @@ async function loadDNS() {
       </td>
     </tr>
   `;
-  
   try {
     const adminId = AuthManager.getUserId();
     const response = await APIClient.getAllTransactions(adminId);
-    
     if (response.success) {
       const orders = response.data || [];
       // Extract unique domains from paid orders
@@ -95,9 +90,7 @@ async function loadDNS() {
           }
         }
       });
-      
       registeredDomains = Array.from(domainMap.values());
-      
       if (registeredDomains.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">Belum ada pesanan domain lunas.</td></tr>';
       } else {

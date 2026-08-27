@@ -1,4 +1,4 @@
-﻿/* ========== DETAIL ARTIKEL PAGE STYLES ========== */
+/* ========== DETAIL ARTIKEL PAGE STYLES ========== */
 /* Artikel Container */
 .artikel-container {
   background: var(--bg-white);
@@ -644,7 +644,7 @@
 }
 
 .article-card:hover {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 .article-image {

@@ -1,6 +1,5 @@
 // ========== POPUP PROMO COMPONENT ==========
 import APIClient from '../modules/unified-api.js';
-
 // Storage Reset: Diatur untuk reset setiap 3 jam (10800000 ms)
 class PopupPromo {
   constructor(options = {}) {
@@ -24,7 +23,6 @@ class PopupPromo {
     if (this.isAlreadyShown()) {
       return;
     }
-
     try {
       // Ambil data promo aktif dari API
       const promoRes = await APIClient.getPublicPromos();

@@ -134,26 +134,22 @@ function renderInvoice() {
   if (!container || !invoiceData) return;
   const invoiceNumber = generateInvoiceNumber(invoiceData.orderId);
   const isPaid = invoiceData.paymentStatus === 'paid';
-  
   // Set document title for clean PDF filename download
   const cleanDomain = (invoiceData.domain || 'Layanan').replace(/[^a-zA-Z0-9-.]/g, '');
   document.title = `Invoice_${invoiceNumber}_${cleanDomain}`;
-  
   // Calculate due date (24 hours from created)
   const createdDate = new Date(invoiceData.createdAt);
   const dueDate = new Date(createdDate.getTime() + (24 * 60 * 60 * 1000));
   const paymentMethodText = invoiceData.paymentMethod ? capitalize(invoiceData.paymentMethod.replace(/_/g, ' ')) : 'Midtrans Payment Gateway';
-  
   // Set viewport for mobile to allow full zoomed-out view and pinch-to-zoom
   if (window.innerWidth <= 768 || screen.width <= 768) {
     document.body.classList.add('mobile-viewport');
     const meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
-       // Just set width=800, the browser will automatically calculate initial-scale to fit!
-       meta.setAttribute('content', 'width=800, user-scalable=yes');
+      // Just set width=800, the browser will automatically calculate initial-scale to fit!
+      meta.setAttribute('content', 'width=800, user-scalable=yes');
     }
   }
-
   const headerHTML = `
     <div class="inv-header">
       <div class="inv-logo">
@@ -168,7 +164,6 @@ function renderInvoice() {
       </div>
     </div>
   `;
-
   // Backwards compatibility calculation for older orders
   const discount = invoiceData.discount || 0;
   let subtotal = invoiceData.subtotal;
@@ -192,20 +187,16 @@ function renderInvoice() {
     }
   }
   const baseLayananPrice = subtotal - addonsTotal;
-
   // Calculate Dates and Periods
   const orderDuration = invoiceData.domainDuration || invoiceData.duration || 1;
   const expiryDate = new Date(createdDate);
   expiryDate.setFullYear(expiryDate.getFullYear() + orderDuration);
   const bundlePeriod = `${orderDuration} Tahun (${formatDate(createdDate)} - ${formatDate(expiryDate)})`;
-
   let freeAddonsText = '';
   if (freeAddons.length > 0) {
-     freeAddonsText = ' + ' + freeAddons.map(a => a.name).join(' + ');
+    freeAddonsText = ' + ' + freeAddons.map(a => a.name).join(' + ');
   }
-  
   const packageName = formatPackageName(invoiceData.packageId || invoiceData.package);
-  
   const isRenewal = invoiceData.isRenewal === true;
   let itemTitle = 'Bundle Domain & Hosting';
   if (isRenewal) {
@@ -213,12 +204,10 @@ function renderInvoice() {
   } else if (packageName.toLowerCase() === 'none') {
     itemTitle = 'Registrasi Domain';
   }
-
   // Refined Watermark
   const watermarkHTML = isPaid ? `
     <div class="inv-watermark-stamp">PAID</div>
   ` : '';
-
   container.innerHTML = `
     <div class="invoice-wrapper">
       
@@ -883,7 +872,6 @@ function renderInvoiceAddons(paidAddons, createdDate) {
     const expiryDate = new Date(createdDate);
     expiryDate.setFullYear(expiryDate.getFullYear() + addonDuration);
     const addonPeriod = `${addonDuration} Tahun (${formatDate(createdDate)} - ${formatDate(expiryDate)})`;
-
     html += `
       <tr>
         <td>

@@ -34,7 +34,6 @@ import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 import SharedAuthForm from '/assets/js/modules/shared-auth-form.js';
-
 // ============================================================================
 // CART STATE MANAGEMENT
 // ============================================================================
@@ -52,7 +51,10 @@ let cartState = {
   isValidatingPromo: false,
   // UI state
   isProcessingCheckout: false,
-  pricing: { packages: {}, addons: {} }
+  pricing: {
+    packages: {},
+    addons: {}
+  }
 };
 // Helper for operations that might trigger full re-renders and browser scroll jumps
 async function withScrollPreservation(action) {
@@ -147,7 +149,6 @@ export async function render(currentUser) {
       console.error('[Cart] #cart-container not found');
       return;
     }
-    
     // Fetch pricing configuration
     const pricingRes = await APIClient.fetchPricingConfig();
     if (pricingRes.success && pricingRes.data) {
@@ -260,7 +261,6 @@ function renderGuestCheckout() {
     const finalTotal = cartSubtotal + ppn - promoDiscount;
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
-
     previewContainer.innerHTML = `
       <div class="cart-preview">
         <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
@@ -627,14 +627,11 @@ function renderCartItemSelectors(item) {
   const cartData = CartManager.getCart();
   const selectedAddonIds = (cartData && cartData.addons || []).map(a => a.id.toLowerCase());
   // Generate Packages Selection HTML
-  const packagesHTML = Object.values(cartState.pricing.packages)
-    .filter(pkg => pkg.active !== false)
-    .sort((a, b) => {
-      const orderA = typeof a.order === 'number' ? a.order : 999;
-      const orderB = typeof b.order === 'number' ? b.order : 999;
-      return orderA - orderB;
-    })
-    .map(pkg => {
+  const packagesHTML = Object.values(cartState.pricing.packages).filter(pkg => pkg.active !== false).sort((a, b) => {
+    const orderA = typeof a.order === 'number' ? a.order : 999;
+    const orderB = typeof b.order === 'number' ? b.order : 999;
+    return orderA - orderB;
+  }).map(pkg => {
     const isSelected = currentPackage === pkg.id;
     const priceDisplay = pkg.price;
     return `
@@ -653,25 +650,17 @@ function renderCartItemSelectors(item) {
     `;
   }).join('');
   // Generate Addons Checklist HTML
-  const addonsHTML = Object.values(cartState.pricing.addons)
-    .sort((a, b) => {
-      const orderA = typeof a.order === 'number' ? a.order : 999;
-      const orderB = typeof b.order === 'number' ? b.order : 999;
-      return orderA - orderB;
-    })
-    .map(addon => {
+  const addonsHTML = Object.values(cartState.pricing.addons).sort((a, b) => {
+    const orderA = typeof a.order === 'number' ? a.order : 999;
+    const orderB = typeof b.order === 'number' ? b.order : 999;
+    return orderA - orderB;
+  }).map(addon => {
     const isSelected = selectedAddonIds.includes(addon.id.toLowerCase());
-    const featuresList = (addon.features && addon.features.length > 0) 
-      ? `<ul class="cart-item-addon-features">
+    const featuresList = (addon.features && addon.features.length > 0) ? `<ul class="cart-item-addon-features">
            ${addon.features.map(f => `<li><i class="fas fa-check" style="color: var(--primary-blue); font-size: 10px; margin-right: 4px;"></i> ${f}</li>`).join('')}
-         </ul>` 
-      : '';
-    const descHtml = addon.description 
-      ? `<div class="cart-item-addon-desc">${addon.description}</div>` 
-      : '';
-
+         </ul>` : '';
+    const descHtml = addon.description ? `<div class="cart-item-addon-desc">${addon.description}</div>` : '';
     const isFree = addon.price === 0;
-
     return `
       <label class="cart-item-addon-option ${isSelected ? 'selected' : ''} ${isFree ? 'is-free' : ''}">
         <div class="cart-item-addon-header" style="justify-content: space-between; align-items: center;">

@@ -1,4 +1,4 @@
-﻿/* Scoped SPA Overrides for Live Chat */
+/* Scoped SPA Overrides for Live Chat */
 #livechat-spa-container .rooms-container {
   border-right: 1px solid var(--admin-border);
 }
@@ -362,6 +362,7 @@
 .message.consecutive {
   margin-top: -3px;
 }
+
 .message.consecutive .agent-label {
   display: none;
 }

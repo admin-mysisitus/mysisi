@@ -162,7 +162,6 @@ function setAgent() {
       userId = session.user.userId;
     }
   } catch (e) {}
-
   if (userId) {
     conversationId = 'room-' + userId;
     localStorage.setItem('conversationId', conversationId);

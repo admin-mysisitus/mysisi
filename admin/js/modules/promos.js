@@ -190,11 +190,9 @@ function renderPromos(promos, tbody) {
     const limit = Number(p.limit) || 0;
     const usage = Number(p.usage) || 0;
     const isExhausted = limit > 0 && usage >= limit;
-    
     let statusBg = 'rgba(239, 68, 68, 0.1)';
     let statusColor = 'var(--admin-danger)';
     let statusText = 'Nonaktif';
-    
     if (p.active) {
       if (isExhausted) {
         statusBg = 'rgba(239, 68, 68, 0.1)';
@@ -210,7 +208,6 @@ function renderPromos(promos, tbody) {
         statusText = 'Aktif';
       }
     }
-    
     let endDate = p.end ? new Date(p.end).toLocaleDateString('id-ID', {
       month: 'short',
       year: 'numeric',

@@ -7,7 +7,9 @@ import APIClient from '/assets/js/modules/unified-api.js?v=2';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
-import { getFirebase } from '/assets/js/modules/firebase-core.js';
+import {
+  getFirebase
+} from '/assets/js/modules/firebase-core.js';
 import {
   showError,
   showSuccess,
@@ -216,31 +218,30 @@ function handlePaymentLunas(orderId) {
     clearInterval(paymentPollingInterval);
     paymentPollingInterval = null;
   }
-  
   // Cleanup listener
-  getFirebase().then(({ db }) => {
+  getFirebase().then(({
+    db
+  }) => {
     if (db && paymentStatusListener) {
       db.ref(`orders/${orderId}/paymentStatus`).off('value', paymentStatusListener);
       paymentStatusListener = null;
     }
   }).catch(console.error);
-
   showSuccess('✓ Pembayaran Dikonfirmasi!', 'Mengarahkan ke Invoice...');
   const btn = document.getElementById('btn-payment');
   if (btn) setButtonLoading(btn, false, 'Selesai');
-  
   setTimeout(() => {
     window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
   }, 300); // 300ms so they can read the toast slightly
 }
-
 async function startPaymentPolling() {
   const orderId = currentOrder?.orderId;
   if (!orderId) return;
-  
   // 1. Listener RTDB untuk respon Instan (Real-time)
   try {
-    const { db } = await getFirebase();
+    const {
+      db
+    } = await getFirebase();
     if (db) {
       if (paymentStatusListener) {
         db.ref(`orders/${orderId}/paymentStatus`).off('value', paymentStatusListener);
@@ -251,10 +252,9 @@ async function startPaymentPolling() {
         }
       });
     }
-  } catch(e) {
+  } catch (e) {
     console.error('Firebase DB listener error', e);
   }
-
   // 2. Polling API sebagai fallback
   if (paymentPollingInterval) clearInterval(paymentPollingInterval);
   let pollCount = 0;
@@ -265,7 +265,6 @@ async function startPaymentPolling() {
       if (res && res.data && (res.data.paymentStatus === 'paid' || res.data.status === 'paid' || res.data.orderStatus === 'completed')) {
         handlePaymentLunas(orderId);
       }
-      
       if (pollCount >= 36) { // Stop after 3 minutes
         clearInterval(paymentPollingInterval);
       }

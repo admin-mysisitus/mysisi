@@ -1,14 +1,11 @@
 import APIClient from './unified-api.js';
-
 export async function openDnsManagement(domainName, onSetupCloudflare = null) {
   if (typeof Swal === 'undefined') {
     alert('SweetAlert is required');
     return;
   }
-
   let records = [];
   let isEditing = null;
-
   const loadRecords = async () => {
     Swal.fire({
       title: 'Memuat DNS...',
@@ -16,7 +13,6 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading()
     });
-
     try {
       const res = await APIClient.getDnsRecords(domainName);
       if (!res.success) {
@@ -41,13 +37,10 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
       Swal.fire('Error', err.message, 'error');
     }
   };
-
   const renderModal = () => {
-    const rowsHtml = records.length === 0
-      ? `<tr><td colspan="6" style="text-align:center; padding: 40px 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada record DNS yang ditambahkan.</td></tr>`
-      : records.map(r => {
-        if (isEditing === r.id) {
-          return `
+    const rowsHtml = records.length === 0 ? `<tr><td colspan="6" style="text-align:center; padding: 40px 20px; color: #94a3b8; font-size: 0.9rem;">Belum ada record DNS yang ditambahkan.</td></tr>` : records.map(r => {
+      if (isEditing === r.id) {
+        return `
               <tr class="editing-row">
                 <td data-label="Type" style="padding:8px;">
                   <select id="edit-type-${r.id}" class="dns-input dns-input-sm">
@@ -76,8 +69,8 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
                 </td>
               </tr>
             `;
-        }
-        return `
+      }
+      return `
             <tr>
               <td data-label="Type" class="record-type">${r.type}</td>
               <td data-label="Name">${r.name}</td>
@@ -94,8 +87,7 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
               </td>
             </tr>
           `;
-      }).join('');
-
+    }).join('');
     const html = `
       <style>
         .dns-container { font-family: 'Inter', system-ui, -apple-system, sans-serif; text-align: left; }
@@ -195,7 +187,6 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
         </div>
       </div>
     `;
-
     Swal.fire({
       html: html,
       width: '900px',
@@ -203,9 +194,7 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
       showCloseButton: true,
       didRender: () => {
         const popup = Swal.getPopup();
-
         popup.querySelector('#btn-refresh-dns').onclick = loadRecords;
-
         popup.querySelector('#btn-add-record').onclick = async (e) => {
           const btn = e.target;
           const type = popup.querySelector('#new-type').value;
@@ -213,14 +202,18 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
           const content = popup.querySelector('#new-content').value.trim();
           const ttl = parseInt(popup.querySelector('#new-ttl').value);
           const proxied = popup.querySelector('#new-proxied').checked;
-
           if (!content) return Swal.showValidationMessage('Content wajib diisi');
           Swal.resetValidationMessage();
-
           btn.disabled = true;
           btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
           try {
-            const res = await APIClient.addDnsRecord(domainName, { type, name, content, ttl, proxied });
+            const res = await APIClient.addDnsRecord(domainName, {
+              type,
+              name,
+              content,
+              ttl,
+              proxied
+            });
             if (!res.success) throw new Error(res.message);
             await loadRecords();
           } catch (err) {
@@ -229,7 +222,6 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
             btn.innerHTML = 'Tambah';
           }
         };
-
         popup.addEventListener('click', async (e) => {
           const btnDel = e.target.closest('.btn-delete-record');
           if (btnDel) {
@@ -246,19 +238,16 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
               btnDel.innerHTML = '<i class="fas fa-trash"></i>';
             }
           }
-
           const btnEdit = e.target.closest('.btn-edit-record');
           if (btnEdit) {
             isEditing = btnEdit.dataset.id;
             renderModal();
           }
-
           const btnCancel = e.target.closest('.btn-cancel-edit');
           if (btnCancel) {
             isEditing = null;
             renderModal();
           }
-
           const btnSave = e.target.closest('.btn-save-record');
           if (btnSave) {
             const id = btnSave.dataset.id;
@@ -267,10 +256,15 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
             const content = popup.querySelector(`#edit-content-${id}`).value.trim();
             const ttl = parseInt(popup.querySelector(`#edit-ttl-${id}`).value);
             const proxied = popup.querySelector(`#edit-proxied-${id}`).checked;
-
             btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
-              const res = await APIClient.editDnsRecord(domainName, id, { type, name, content, ttl, proxied });
+              const res = await APIClient.editDnsRecord(domainName, id, {
+                type,
+                name,
+                content,
+                ttl,
+                proxied
+              });
               if (!res.success) throw new Error(res.message);
               isEditing = null;
               await loadRecords();
@@ -283,6 +277,5 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
       }
     });
   };
-
   await loadRecords();
 }

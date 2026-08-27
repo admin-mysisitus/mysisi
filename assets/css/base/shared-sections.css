@@ -29,7 +29,6 @@
 }
 
 /* ambient glow removed — no decorative pseudo-elements */
-
 .standard-section-white {
   background-color: var(--bg-white);
   position: relative;

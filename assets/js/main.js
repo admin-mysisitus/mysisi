@@ -12,7 +12,6 @@ import './components/live-chat.js';
 // Layout
 // wm
 import './wm.js';
-
 // ========== DYNAMIC PRICING HIDER ==========
 // Dynamically hide inactive packages across all static HTML pages
 document.addEventListener('DOMContentLoaded', async () => {
