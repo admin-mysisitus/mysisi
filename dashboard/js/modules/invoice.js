@@ -1,4 +1,4 @@
-/**
+﻿/**
  * INVOICE PAGE MODULE
  * ===================================
  * Display invoice after successful payment
@@ -110,7 +110,6 @@ async function loadOrderData(orderId) {
       try {
         const syncResult = await APIClient.syncOrderStatus(orderId);
         if (syncResult.success && syncResult.data && syncResult.data.paymentStatus === 'paid') {
-          console.log('[Invoice] Late payment status updated to paid via sync!');
           // Sync returned paid! Re-fetch order data
           const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
           if (newResult.success && (newResult.data || newResult.order)) {
@@ -652,7 +651,7 @@ function renderInvoice() {
         }
         
         .inv-terms-content ul li::before {
-          content: '•';
+          content: 'â€¢';
           position: absolute;
           left: 0;
           color: #2563EB;

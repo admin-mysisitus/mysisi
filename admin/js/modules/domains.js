@@ -1,10 +1,9 @@
-import APIClient from '/assets/js/modules/unified-api.js';
+﻿import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 let currentDomains = [];
 export async function render() {
-  console.log('Admin Domains Module Loaded');
   setupEventListeners();
   await loadDomains();
 }

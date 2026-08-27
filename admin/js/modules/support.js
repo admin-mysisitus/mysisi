@@ -1,10 +1,9 @@
-import APIClient from '/assets/js/modules/unified-api.js';
+﻿import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 let currentTickets = [];
 export async function render() {
-  console.log('Admin Support Tickets Module Loaded');
   setupEventListeners();
   await loadTickets();
 }

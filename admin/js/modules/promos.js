@@ -1,10 +1,9 @@
-import APIClient from '/assets/js/modules/unified-api.js';
+﻿import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 let currentPromos = [];
 export async function render() {
-  console.log('Admin Promos Module Loaded');
   setupEventListeners();
   await loadPromos();
 }
@@ -184,7 +183,7 @@ function renderPromos(promos, tbody) {
   }
   promos.forEach(p => {
     let valStr = p.type === 'percentage' ? `${p.value}%` : `Rp ${p.value.toLocaleString('id-ID')}`;
-    let usageStr = p.limit === -1 || p.limit === undefined || p.limit === null || p.limit === '' ? `${p.usage || 0} / ∞` : `${p.usage || 0} / ${p.limit}`;
+    let usageStr = p.limit === -1 || p.limit === undefined || p.limit === null || p.limit === '' ? `${p.usage || 0} / âˆž` : `${p.usage || 0} / ${p.limit}`;
     const now = new Date();
     const isExpired = p.end && new Date(p.end) < now;
     const limit = Number(p.limit) || 0;
