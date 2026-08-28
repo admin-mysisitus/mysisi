@@ -197,8 +197,8 @@
         const base = parsed.base || '';
         cekDomainInput.value = base + ext.ext;
         cekDomainInput.focus();
-        // Place cursor at start if empty, or at end if they typed a brand
-        const cursorPosition = base.length > 0 ? cekDomainInput.value.length : 0;
+        // Place cursor exactly after the base domain (before the extension)
+        const cursorPosition = base.length;
         setTimeout(() => {
           cekDomainInput.setSelectionRange(cursorPosition, cursorPosition);
           cekDomainInput.dispatchEvent(new Event('input')); // trigger suggestions

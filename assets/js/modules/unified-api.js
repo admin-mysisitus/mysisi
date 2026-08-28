@@ -711,7 +711,7 @@ export class APIClient {
         success: false,
         message: 'Firebase DB not available'
       };
-      // Primary: baca dari userOrders/{userId} â€” node yang bisa diakses user sendiri
+      // Primary: baca dari userOrders/{userId} - node yang bisa diakses user sendiri
       const userOrdersSnap = await db.ref(`userOrders/${userId}`).once('value');
       let ordersArray = [];
       if (userOrdersSnap.exists()) {
@@ -887,7 +887,7 @@ export class APIClient {
           domain,
           available: true
         },
-        message: 'Tidak dapat memverifikasi â€“ anggap tersedia'
+        message: 'Tidak dapat memverifikasi - anggap tersedia'
       };
       const domainLower = domain.toLowerCase();
       const domainKey = domainLower.replace(/\./g, '_');
