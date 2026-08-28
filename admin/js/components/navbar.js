@@ -59,7 +59,7 @@ export class AdminNavbar {
     }
     if (!this.authListenerBound) {
       this.authListenerBound = true;
-      window.addEventListener('authStateChanged', (e) => {
+      document.addEventListener('auth:authChanged', (e) => {
         if (e.detail) {
           this.render();
         }

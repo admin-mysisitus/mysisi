@@ -44,7 +44,7 @@ class DashboardWishlist {
           Belum ada domain di wishlist Anda. <br>
           Tambahkan domain impian Anda ke wishlist untuk disimpan!
         </p>
-        <a href="#!/dashboard/checkout" class="btn btn-primary" style="display: inline-block; padding: 12px 30px; background-color: #2563EB; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        <a href="/#cek-domain" class="btn btn-primary" style="display: inline-block; padding: 12px 30px; background-color: #2563EB; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
           <i class="fas fa-search"></i> Cari Domain
         </a>
       </div>

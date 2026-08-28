@@ -595,6 +595,68 @@ export class APIClient {
       message: 'User tidak terautentikasi'
     };
   }
+
+  // ========== CART & WISHLIST SYNC ==========
+  /**
+   * Sync Cart to Firebase Realtime Database
+   */
+  static async syncUserCart(userId, cartData) {
+    try {
+      const { db } = await getFirebase();
+      if (!db) return { success: false, message: 'Firebase DB tidak tersedia' };
+      await db.ref(`users/${userId}/cart`).set(cartData);
+      return { success: true };
+    } catch (e) {
+      void('[APIClient] Error syncing cart:', e);
+      return { success: false, message: e.message };
+    }
+  }
+
+  /**
+   * Fetch Cart from Firebase Realtime Database
+   */
+  static async fetchUserCart(userId) {
+    try {
+      const { db } = await getFirebase();
+      if (!db) return { success: false, data: null };
+      const snapshot = await db.ref(`users/${userId}/cart`).once('value');
+      return { success: true, data: snapshot.val() };
+    } catch (e) {
+      void('[APIClient] Error fetching cart:', e);
+      return { success: false, data: null };
+    }
+  }
+
+  /**
+   * Sync Wishlist to Firebase Realtime Database
+   */
+  static async syncUserWishlist(userId, wishlistData) {
+    try {
+      const { db } = await getFirebase();
+      if (!db) return { success: false, message: 'Firebase DB tidak tersedia' };
+      await db.ref(`users/${userId}/wishlist`).set(wishlistData);
+      return { success: true };
+    } catch (e) {
+      void('[APIClient] Error syncing wishlist:', e);
+      return { success: false, message: e.message };
+    }
+  }
+
+  /**
+   * Fetch Wishlist from Firebase Realtime Database
+   */
+  static async fetchUserWishlist(userId) {
+    try {
+      const { db } = await getFirebase();
+      if (!db) return { success: false, data: null };
+      const snapshot = await db.ref(`users/${userId}/wishlist`).once('value');
+      return { success: true, data: snapshot.val() };
+    } catch (e) {
+      void('[APIClient] Error fetching wishlist:', e);
+      return { success: false, data: null };
+    }
+  }
+
   // ========== ORDER ENDPOINTS ==========
   /**
    * Create order (authenticated)

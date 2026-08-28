@@ -129,7 +129,7 @@ export class DashboardNavbar {
     // Listen for auth changes
     if (!this.authListenerBound) {
       this.authListenerBound = true;
-      window.addEventListener('authStateChanged', (e) => {
+      document.addEventListener('auth:authChanged', (e) => {
         if (e.detail) {
           this.user = e.detail.user || e.detail;
           this.render();

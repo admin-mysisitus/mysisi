@@ -30,7 +30,8 @@ export class DashboardSidebar {
       id: 'wishlist',
       icon: 'fas fa-heart',
       label: 'Wishlist Saya',
-      route: '/dashboard/wishlist'
+      route: '/dashboard/wishlist',
+      badge: 'wishlist-badge'
     }, {
       id: 'orders',
       icon: 'fas fa-shopping-bag',
@@ -57,6 +58,8 @@ export class DashboardSidebar {
       let badge = '';
       if (item.badge === 'cart-badge') {
         badge = '<span class="menu-badge cart-badge-count" style="display: none;">0</span>';
+      } else if (item.badge === 'wishlist-badge') {
+        badge = '<span class="menu-badge wishlist-badge-count" style="display: none; background-color: #ef4444;">0</span>';
       } else if (item.badge) {
         badge = '<span class="menu-badge">' + item.badge + '</span>';
       }
@@ -104,6 +107,10 @@ export class DashboardSidebar {
     // Update cart badge on cart changes
     this.updateCartBadge();
     window.addEventListener('cart:updated', () => this.updateCartBadge());
+    
+    // Update wishlist badge
+    this.updateWishlistBadge();
+    window.addEventListener('wishlist:updated', () => this.updateWishlistBadge());
   }
   /**
    * Update cart item count badge
@@ -125,6 +132,29 @@ export class DashboardSidebar {
       }
     } catch (err) {
       // CartManager not available, skip silently
+    }
+  }
+  
+  /**
+   * Update wishlist item count badge
+   */
+  async updateWishlistBadge() {
+    try {
+      const {
+        WishlistManager
+      } = await import('/assets/js/modules/unified-cart.js');
+      const count = WishlistManager.getWishlist().length;
+      const badge = document.querySelector('.wishlist-badge-count');
+      if (badge) {
+        if (count > 0) {
+          badge.textContent = count;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    } catch (err) {
+      // Skip silently
     }
   }
   /**

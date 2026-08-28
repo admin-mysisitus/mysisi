@@ -43,7 +43,7 @@ class DashboardApp {
     // Listen for hash changes
     window.addEventListener('hashchange', () => this.handleRouteChange());
     // Handle auth state changes
-    window.addEventListener('authStateChanged', (e) => {
+    document.addEventListener('auth:authChanged', (e) => {
       if (!e.detail) {
         // User logged out
         window.location.href = '../auth/index.html';
@@ -122,12 +122,7 @@ class DashboardApp {
         requiresAuth: true,
         loadModule: () => import('./modules/settings.js?v=' + Date.now())
       },
-      '/dashboard/checkout': {
-        page: 'checkout',
-        title: 'Selesaikan Pesanan',
-        requiresAuth: true,
-        loadModule: () => import('./modules/cart.js?v=' + Date.now())
-      },
+
       '/dashboard/cart': {
         page: 'cart',
         title: 'Keranjang Belanja',

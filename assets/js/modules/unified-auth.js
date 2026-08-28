@@ -18,6 +18,8 @@
 import {
   getFirebase
 } from './firebase-core.js';
+import APIClient from './unified-api.js';
+import { CartManager, WishlistManager } from './unified-cart.js';
 export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;
@@ -109,6 +111,16 @@ export class AuthManager {
             // Ensure state updates without causing infinite loop
             if (JSON.stringify(this.state.user) !== JSON.stringify(userObj)) {
               this.saveSession(userObj);
+              
+              // Sync Cart & Wishlist on login
+              const cartRes = await APIClient.fetchUserCart(userObj.userId);
+              if (cartRes.success && cartRes.data) {
+                CartManager.mergeCart(cartRes.data);
+              }
+              const wishRes = await APIClient.fetchUserWishlist(userObj.userId);
+              if (wishRes.success && wishRes.data) {
+                WishlistManager.mergeWishlist(wishRes.data);
+              }
             }
           } else {
             if (this.state.isLoggedIn) {
@@ -121,6 +133,23 @@ export class AuthManager {
       void('[AuthManager] Error initializing Firebase Auth:', error);
     }
     this.setupStorageListener();
+
+    // Setup sync listeners
+    if (!this._syncListenersAdded) {
+      this._syncListenersAdded = true;
+      window.addEventListener('cart:updated', async (e) => {
+        if (this.isLoggedIn()) {
+          const user = this.getCurrentUser();
+          await APIClient.syncUserCart(user.userId, e.detail);
+        }
+      });
+      window.addEventListener('wishlist:updated', async (e) => {
+        if (this.isLoggedIn()) {
+          const user = this.getCurrentUser();
+          await APIClient.syncUserWishlist(user.userId, e.detail);
+        }
+      });
+    }
   }
   /**
    * Load session from storage
@@ -341,12 +370,6 @@ export class AuthManager {
       detail: data
     });
     document.dispatchEvent(event);
-    // Dispatch legacy authStateChanged event on window for compatibility with dashboard-app and components
-    if (eventName === 'authChanged') {
-      window.dispatchEvent(new CustomEvent('authStateChanged', {
-        detail: data
-      }));
-    }
   }
   /**
    * Expose state as read-only object

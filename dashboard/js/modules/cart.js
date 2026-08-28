@@ -51,6 +51,7 @@ let cartState = {
   isValidatingPromo: false,
   // UI state
   isProcessingCheckout: false,
+  selectedDomain: null,
   pricing: {
     packages: {},
     addons: {}
@@ -184,13 +185,13 @@ export async function render(currentUser) {
       };
       window.addEventListener('focus', checkVerificationStatus);
       window.addEventListener('storage', (e) => {
-        if (e.key === 'sisitus_user') {
+        if (e.key === AuthManager.SESSION_KEY) {
           checkVerificationStatus();
         }
       });
     }
     // Initialize auth if not already done
-    if (!AuthManager.isLoggedIn && !cartState.currentUser) {
+    if (!AuthManager.isLoggedIn() && !cartState.currentUser) {
       AuthManager.init();
     }
     // Load saved promo if exists
@@ -224,6 +225,82 @@ export async function render(currentUser) {
     `;
   }
 }
+
+// ============================================================================
+// HELPER FOR SELECTED DOMAIN
+// ============================================================================
+window.selectCartDomain = (domain) => {
+  cartState.selectedDomain = domain;
+  withScrollPreservation(async () => {
+    if (cartState.currentUser) {
+      await render(cartState.currentUser);
+    } else if (window.updateCartPreview) {
+      window.updateCartPreview();
+    }
+  });
+};
+
+function getSelectedCartSummary() {
+  const cartData = CartManager.getCart();
+  const items = (cartData && cartData.domains) || [];
+  
+  if (items.length > 0 && (!cartState.selectedDomain || !items.find(i => i.domain === cartState.selectedDomain))) {
+    cartState.selectedDomain = items[0].domain;
+  }
+  
+  const selectedItem = items.find(i => i.domain === cartState.selectedDomain);
+  
+  let domainSubtotal = 0;
+  if (selectedItem) {
+    domainSubtotal = (selectedItem.price || 0) * (selectedItem.duration || 1);
+  }
+  
+  const addons = (cartData && cartData.addons) || [];
+  const addonsTotal = addons.reduce((sum, a) => sum + ((a.price || 0) * (a.quantity || 1)), 0);
+  
+  let subtotal = domainSubtotal + addonsTotal;
+  
+  let discount = 0;
+  if (cartData && cartData.coupon) {
+    const type = cartData.coupon.discountType;
+    const value = cartData.coupon.discountValue;
+    if (type === 'percent') {
+      discount = subtotal * (value / 100);
+    } else if (type === 'fixed') {
+      discount = value;
+    }
+  }
+  
+  // Also update cartState if promo exists
+  cartState.promoDiscount = Math.round(discount);
+  
+  let subtotalAfterDiscount = subtotal - cartState.promoDiscount;
+  let ppn = Math.round(subtotalAfterDiscount * 0.11);
+  let finalTotal = Math.round(subtotalAfterDiscount + ppn);
+  
+  return {
+    items,
+    selectedItem,
+    addons,
+    domainSubtotal,
+    addonsTotal,
+    subtotal: Math.round(subtotal),
+    discount: cartState.promoDiscount,
+    ppn,
+    finalTotal
+  };
+}
+
+// ============================================================================
+// GUEST CART PREVIEW
+// ============================================================================
+export function updateCartPreview() {
+  const container = document.getElementById('cart-preview-container');
+  if (!container && !document.querySelector('.cart-preview')) return;
+  if (document.activeElement && document.activeElement.tagName !== 'BODY') {
+    document.activeElement.blur();
+  }
+}
 // ============================================================================
 // GUEST CHECKOUT - INLINE AUTH + CART PREVIEW
 // ============================================================================
@@ -249,45 +326,70 @@ function renderGuestCheckout() {
     if (document.activeElement && document.activeElement.tagName !== 'BODY') {
       document.activeElement.blur();
     }
-    const cartData = CartManager.getCart();
-    const items = (cartData && cartData.domains) || [];
-    const addons = (cartData && cartData.addons) || [];
-    const summary = CartManager.getSummary();
-    const cartSubtotal = summary.subtotal;
-    const addonsTotal = addons.reduce((sum, a) => sum + a.price, 0);
-    const domainOnlySubtotal = cartSubtotal - addonsTotal;
-    const ppn = Math.round(cartSubtotal * 0.11);
-    const promoDiscount = cartState.promoDiscount || 0;
-    const finalTotal = cartSubtotal + ppn - promoDiscount;
+    
+    const {
+      items,
+      selectedItem,
+      addons,
+      domainSubtotal,
+      addonsTotal,
+      subtotal,
+      discount,
+      ppn,
+      finalTotal
+    } = getSelectedCartSummary();
+    
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
-    previewContainer.innerHTML = `
-      <div class="cart-preview">
-        <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
-          <i class="fas fa-shopping-cart"></i> Preview Keranjang
-        </h3>
-        <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(0.75rem, 2vw, 1.25rem);">
-          ${items.length > 0 ? `
+    let previewContent = '<div class="preview-empty">Keranjang kosong</div>';
+    
+    if (items.length > 0) {
+      let addonsHtml = '';
+      if (addonsTotal > 0) {
+        addonsHtml = `
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label">Layanan Tambahan:</span>
+                  <span class="price-value">${formatPrice(addonsTotal)}</span>
+                </div>
+        `;
+      }
+      
+      let promoHtml = '';
+      if (discount > 0) {
+        let promoDescHtml = '';
+        if (cartState.promoDescription) {
+          promoDescHtml = `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>`;
+        }
+        promoHtml = `
+                <div class="price-row discount" style="align-items: flex-start; padding: 4px 0;">
+                  <div style="display: flex; flex-direction: column; text-align: left;">
+                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                    ${promoDescHtml}
+                  </div>
+                  <span class="price-value">-${formatPrice(discount)}</span>
+                </div>
+        `;
+      }
+      
+      const itemsHtml = items.map(item => renderCartItem(item)).join('');
+      
+      previewContent = `
             <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
-              ${items.map(item => renderCartItem(item)).join('')}
+              ${itemsHtml}
             </div>
 
             <!-- Detailed Price Breakdown -->
             <div class="preview-breakdown" style="font-size: 13px; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
               <div class="price-row" style="margin-bottom: 4px;">
-                <span class="price-row-label">Domain (${items.length}):</span>
-                <span class="price-value">${formatPrice(domainOnlySubtotal)}</span>
+                <span class="price-row-label">Domain (1 dari ${items.length}):</span>
+                <span class="price-value">${formatPrice(domainSubtotal)}</span>
               </div>
-              ${addonsTotal > 0 ? `
-                <div class="price-row" style="margin-bottom: 4px;">
-                  <span class="price-row-label">Layanan Tambahan:</span>
-                  <span class="price-value">${formatPrice(addonsTotal)}</span>
-                </div>
-              ` : ''}
+              
+              ${addonsHtml}
               
               <div class="price-row subtotal" style="padding-top: 0.5rem; margin-top: 0.5rem;">
                 <span class="price-row-label">Subtotal:</span>
-                <span class="price-value">${formatPrice(cartSubtotal)}</span>
+                <span class="price-value">${formatPrice(subtotal)}</span>
               </div>
               
               <div class="price-row ppn" style="margin-bottom: 4px;">
@@ -295,22 +397,23 @@ function renderGuestCheckout() {
                 <span class="price-value">${formatPrice(ppn)}</span>
               </div>
 
-              ${promoDiscount > 0 ? `
-                <div class="price-row discount" style="align-items: flex-start; padding: 4px 0;">
-                  <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
-                    ${cartState.promoDescription ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>` : ''}
-                  </div>
-                  <span class="price-value">-${formatPrice(promoDiscount)}</span>
-                </div>
-              ` : ''}
+              ${promoHtml}
             </div>
 
             <div class="price-row total preview-total" style="padding-top: 0.5rem;">
               <span>Total Pembayaran:</span>
               <span class="price-value">${formatPrice(finalTotal)}</span>
             </div>
-          ` : '<div class="preview-empty">Keranjang kosong</div>'}
+      `;
+    }
+    
+    previewContainer.innerHTML = `
+      <div class="cart-preview">
+        <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
+          <i class="fas fa-shopping-cart"></i> Preview Keranjang
+        </h3>
+        <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(0.75rem, 2vw, 1.25rem);">
+          ${previewContent}
         </div>
       </div>
     `;
@@ -483,7 +586,7 @@ function renderEmptyCart() {
         <p class="empty-text">
           Belum ada domain di keranjang Anda. Mulai cari domain impian Anda!
         </p>
-        <a href="#!/dashboard/checkout" class="btn btn-primary">
+        <a href="/#cek-domain" class="btn btn-primary">
           <i class="fas fa-search"></i> Cari Domain
         </a>
       </div>
@@ -496,16 +599,77 @@ function renderEmptyCart() {
 function renderAuthenticatedCart() {
   const {
     items,
+    selectedItem,
+    addons,
+    domainSubtotal,
+    addonsTotal,
     subtotal,
     discount,
-    total
-  } = CartManager.getSummary();
-  const cartData = CartManager.getCart();
-  const addons = (cartData && cartData.addons) || [];
-  const promoTotal = cartState.promoDiscount || 0;
-  const ppn = Math.round(subtotal * 0.11);
-  const finalTotal = subtotal + ppn - promoTotal;
+    ppn,
+    finalTotal
+  } = getSelectedCartSummary();
+  const promoTotal = discount;
   let itemsHTML = items.map(item => renderCartItem(item)).join('');
+  
+  // Flatten HTML generation to avoid IDE syntax highlighter bugs with nested templates
+  let selectedItemHTML = '';
+  if (selectedItem) {
+    let packageInfoHTML = '';
+    if (selectedItem.package && selectedItem.package !== 'none') {
+      packageInfoHTML = `
+                <div class="price-row" style="margin-bottom: 4px; padding-left: 10px; font-size: 13px;">
+                  <span class="price-row-label">+ ${cartState.pricing.packages[selectedItem.package]?.name || selectedItem.package}</span>
+                  <span class="price-value">${formatPrice(selectedItem.packagePrice || 0)}</span>
+                </div>
+                <div class="price-row" style="margin-bottom: 8px; padding-left: 10px; font-size: 13px; color: #10b981;">
+                  <span class="price-row-label"><i class="fas fa-gift"></i> Diskon Bundle Domain</span>
+                  <span class="price-value">-${formatPrice(selectedItem.domainPrice || 0)}</span>
+                </div>
+      `;
+    }
+    selectedItemHTML = `
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label">Domain (${selectedItem.domain}):</span>
+                  <span class="price-value">${formatPrice(selectedItem.domainPrice || 0)}</span>
+                </div>
+                ${packageInfoHTML}
+    `;
+  }
+
+  let addonsHTML = '';
+  if (addons.length > 0) {
+    const addonsList = addons.map(addon => `
+                  <div class="price-row" style="padding-left: 10px; font-size: 13px;">
+                    <span class="price-row-label">- ${addon.name}</span>
+                    <span class="price-value">${formatPrice(addon.price)}</span>
+                  </div>
+    `).join('');
+    addonsHTML = `
+                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label" style="font-weight: 700; color: var(--text-primary);">Layanan Tambahan (Addon):</span>
+                </div>
+                ${addonsList}
+                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
+    `;
+  }
+
+  let promoHTML = '';
+  if (promoTotal > 0) {
+    const promoDescHTML = cartState.promoDescription 
+      ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>`
+      : '';
+    promoHTML = `
+                <div class="price-row discount" style="align-items: flex-start; height: auto; padding: 8px 0;">
+                  <div style="display: flex; flex-direction: column; text-align: left;">
+                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                    ${promoDescHTML}
+                  </div>
+                  <span class="price-value">-${formatPrice(promoTotal)}</span>
+                </div>
+    `;
+  }
+
   cartState.container.innerHTML = `
     <div class="page-container">
       <div class="cart-page">
@@ -529,36 +693,9 @@ function renderAuthenticatedCart() {
             <div class="cart-summary">
               <h3 class="summary-title">Ringkasan Pesanan</h3>
               
-              ${items.map(item => `
-                <div class="price-row" style="margin-bottom: 4px;">
-                  <span class="price-row-label">Domain (${item.domain}):</span>
-                  <span class="price-value">${formatPrice(item.domainPrice || 0)}</span>
-                </div>
-                ${item.package && item.package !== 'none' ? `
-                <div class="price-row" style="margin-bottom: 4px; padding-left: 10px; font-size: 13px;">
-                  <span class="price-row-label">+ ${cartState.pricing.packages[item.package]?.name || item.package}</span>
-                  <span class="price-value">${formatPrice(item.packagePrice || 0)}</span>
-                </div>
-                <div class="price-row" style="margin-bottom: 8px; padding-left: 10px; font-size: 13px; color: #10b981;">
-                  <span class="price-row-label"><i class="fas fa-gift"></i> Diskon Bundle Domain</span>
-                  <span class="price-value">-${formatPrice(item.domainPrice || 0)}</span>
-                </div>
-                ` : ''}
-              `).join('')}
+              ${selectedItemHTML}
 
-              ${addons.length > 0 ? `
-                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
-                <div class="price-row" style="margin-bottom: 4px;">
-                  <span class="price-row-label" style="font-weight: 700; color: var(--text-primary);">Layanan Tambahan (Addon):</span>
-                </div>
-                ${addons.map(addon => `
-                  <div class="price-row" style="padding-left: 10px; font-size: 13px;">
-                    <span class="price-row-label">- ${addon.name}</span>
-                    <span class="price-value">${formatPrice(addon.price)}</span>
-                  </div>
-                `).join('')}
-                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
-              ` : ''}
+              ${addonsHTML}
 
               <div class="price-row subtotal">
                 <span class="price-row-label">Subtotal:</span>
@@ -570,15 +707,7 @@ function renderAuthenticatedCart() {
                 <span class="price-value">${formatPrice(ppn)}</span>
               </div>
 
-              ${promoTotal > 0 ? `
-                <div class="price-row discount" style="align-items: flex-start; height: auto; padding: 8px 0;">
-                  <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
-                    ${cartState.promoDescription ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>` : ''}
-                  </div>
-                  <span class="price-value">-${formatPrice(promoTotal)}</span>
-                </div>
-              ` : ''}
+              ${promoHTML}
 
               <div class="price-row total">
                 <span>Total:</span>
@@ -601,11 +730,11 @@ function renderAuthenticatedCart() {
 
               <!-- Action Buttons -->
               <div class="action-section">
-                <button id="btn-proceed-checkout" onclick="window.proceedToCheckout()" class="btn btn-primary">
+                <button id="btn-proceed-checkout" onclick="window.proceedToCheckout()" class="btn btn-primary" ${!selectedItem ? 'disabled="disabled"' : ''}>
                   <i class="fas fa-lock"></i> Lanjut ke Pembayaran
                 </button>
 
-                <a href="#!/dashboard/checkout" class="btn btn-secondary">
+                <a href="/#cek-domain" class="btn btn-secondary">
                   <i class="fas fa-search"></i> Cari Domain Lain
                 </a>
               </div>
@@ -633,7 +762,7 @@ function renderCartItemSelectors(item) {
     return orderA - orderB;
   }).map(pkg => {
     const isSelected = currentPackage === pkg.id;
-    const priceDisplay = pkg.price;
+    const priceDisplay = formatPrice(pkg.price);
     return `
       <div class="cart-item-package-card ${isSelected ? 'selected' : ''}" 
            onclick="window.changeItemPackage('${item.domain}', '${pkg.id}')">
@@ -642,7 +771,7 @@ function renderCartItemSelectors(item) {
             ${isSelected ? '✓ ' : ''}${pkg.name}
           </div>
           <div class="cart-item-package-price">
-            ${formatPrice(priceDisplay)}
+            ${priceDisplay}
           </div>
         </div>
         <div class="cart-item-package-desc">${pkg.description}</div>
@@ -656,11 +785,32 @@ function renderCartItemSelectors(item) {
     return orderA - orderB;
   }).map(addon => {
     const isSelected = selectedAddonIds.includes(addon.id.toLowerCase());
-    const featuresList = (addon.features && addon.features.length > 0) ? `<ul class="cart-item-addon-features">
-           ${addon.features.map(f => `<li><i class="fas fa-check" style="color: var(--primary-blue); font-size: 10px; margin-right: 4px;"></i> ${f}</li>`).join('')}
-         </ul>` : '';
+    let featuresList = '';
+    if (addon.features && addon.features.length > 0) {
+      const itemsHtml = addon.features.map(f => `<li><i class="fas fa-check" style="color: var(--primary-blue); font-size: 10px; margin-right: 4px;"></i> ${f}</li>`).join('');
+      featuresList = `<ul class="cart-item-addon-features">${itemsHtml}</ul>`;
+    }
     const descHtml = addon.description ? `<div class="cart-item-addon-desc">${addon.description}</div>` : '';
     const isFree = addon.price === 0;
+    let claimBtnHtml = '';
+    if (isFree) {
+      claimBtnHtml = `
+            <div class="cart-item-addon-claim-btn ${isSelected ? 'claimed' : ''}">
+              ${isSelected ? '<i class="fas fa-check"></i> Diklaim' : 'Klaim'}
+            </div>
+      `;
+    }
+    
+    let detailsHtml = '';
+    if (descHtml || featuresList) {
+      detailsHtml = `
+        <div class="cart-item-addon-details" style="${isFree ? 'margin-left: 0;' : ''}">
+          ${descHtml}
+          ${featuresList}
+        </div>
+      `;
+    }
+
     return `
       <label class="cart-item-addon-option ${isSelected ? 'selected' : ''} ${isFree ? 'is-free' : ''}">
         <div class="cart-item-addon-header" style="justify-content: space-between; align-items: center;">
@@ -668,26 +818,17 @@ function renderCartItemSelectors(item) {
             <input type="checkbox" 
                    class="cart-item-addon-checkbox" 
                    ${isFree ? 'style="display:none;"' : ''}
-                   ${isSelected ? 'checked' : ''} 
+                   ${isSelected ? 'checked="checked"' : ''} 
                    onchange="window.toggleCartAddon('${addon.id}', this.checked)">
             <div class="cart-item-addon-info">
               <span class="cart-item-addon-name">${addon.name}</span>
-              <span class="cart-item-addon-price ${isFree ? 'free-badge' : ''}">${isFree ? 'GRATIS' : `+${formatPrice(addon.price)}`}</span>
+              <span class="cart-item-addon-price ${isFree ? 'free-badge' : ''}">${isFree ? 'GRATIS' : '+' + formatPrice(addon.price)}</span>
             </div>
           </div>
           
-          ${isFree ? `
-            <div class="cart-item-addon-claim-btn ${isSelected ? 'claimed' : ''}">
-              ${isSelected ? '<i class="fas fa-check"></i> Diklaim' : 'Klaim'}
-            </div>
-          ` : ''}
+          ${claimBtnHtml}
         </div>
-        ${(descHtml || featuresList) ? `
-        <div class="cart-item-addon-details" style="${isFree ? 'margin-left: 0;' : ''}">
-          ${descHtml}
-          ${featuresList}
-        </div>
-        ` : ''}
+        ${detailsHtml}
       </label>
     `;
   }).join('');
@@ -716,9 +857,23 @@ function renderCartItemSelectors(item) {
 // ============================================================================
 function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="fas fa-sync"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
+  
+  let configSection = '';
+  if (!item.isRenewal) {
+    configSection = `
+      <!-- Config Section (Packages & Addons) -->
+      <div class="cart-item-config">
+        ${renderCartItemSelectors(item)}
+      </div>
+    `;
+  }
+  
   return `
-    <div class="cart-item" style="display: block; margin-bottom: 1.5rem;">
+    <div class="cart-item ${item.domain === cartState.selectedDomain ? 'selected-domain-card' : ''}" style="display: block; margin-bottom: 1.5rem; ${item.domain === cartState.selectedDomain ? 'border: 2px solid var(--primary-blue); background: #f0f7ff; border-radius: 8px;' : ''}">
       <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: 0.75rem;">
+        <div style="padding-right: 12px; padding-top: 4px;">
+          <input type="radio" name="selected_domain" ${item.domain === cartState.selectedDomain ? 'checked="checked"' : ''} onchange="window.selectCartDomain('${item.domain}')" style="width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary-blue);">
+        </div>
         <div style="flex: 1; min-width: 0; user-select: none;">
           <h4 class="cart-item-domain" style="font-family: 'Courier New', monospace; font-weight: 700; color: var(--text-primary); margin: 0; font-size: 16px; word-break: break-word;">
             ${item.domain}
@@ -736,13 +891,7 @@ function renderCartItem(item) {
           </button>
         </div>
       </div>
-
-      ${item.isRenewal ? '' : `
-      <!-- Config Section (Packages & Addons) -->
-      <div class="cart-item-config">
-        ${renderCartItemSelectors(item)}
-      </div>
-      `}
+      ${configSection}
     </div>
   `;
 }
@@ -880,7 +1029,8 @@ async function proceedToCheckout() {
     // }
     cartState.isProcessingCheckout = true;
     // Get first domain for order
-    const firstDomain = summary.items[0]?.domain || '';
+    const { selectedItem } = getSelectedCartSummary();
+    const firstDomain = selectedItem?.domain || '';
     if (!firstDomain) {
       throw new Error('Domain tidak ditemukan');
     }
@@ -958,9 +1108,9 @@ async function proceedToCheckout() {
       name: cartState.currentUser?.displayName || cartState.currentUser?.name || cartState.currentUser?.email?.split('@')[0] || 'Customer',
       phone: cartState.currentUser?.whatsapp || cartState.currentUser?.phone || '',
       domain: firstDomain,
-      domainDuration: summary.items[0]?.duration || 1,
-      isRenewal: summary.items[0]?.isRenewal || false,
-      packageId: summary.items[0]?.package || 'none',
+      domainDuration: selectedItem?.duration || 1,
+      isRenewal: selectedItem?.isRenewal || false,
+      packageId: selectedItem?.package || 'none',
       addons: CartManager.getCart().addons || [],
       promoCode: cartState.promoCode || null,
       subtotal: subtotal,
@@ -977,13 +1127,17 @@ async function proceedToCheckout() {
     // orderId already declared above, verify GAS returned same/valid id
     const confirmedOrderId = createOrderResult.data?.orderId || orderId;
     void('[Cart] Order created:', confirmedOrderId);
-    // Clear cart and promo so previous checkout items/promos are not carried over to the next order
-    CartManager.clear();
-    cartState.promoCode = null;
-    cartState.promoDiscount = 0;
-    cartState.promoDescription = null;
-    cartState.promoValidated = false;
-    saveSavedPromo(null);
+    // Hanya hapus domain yang di-checkout dari cart
+    CartManager.remove(firstDomain);
+    
+    // Check if cart is now empty, if so, clear promos
+    if (CartManager.isEmpty()) {
+      cartState.promoCode = null;
+      cartState.promoDiscount = 0;
+      cartState.promoDescription = null;
+      cartState.promoValidated = false;
+      saveSavedPromo(null);
+    }
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
@@ -1003,7 +1157,7 @@ function removeCartItem(domain) {
   if (typeof Swal !== 'undefined') {
     Swal.fire({
       title: 'Hapus Domain?',
-      text: `Apakah Anda yakin ingin menghapus ${domain} dari keranjang?`,
+      text: 'Apakah Anda yakin ingin menghapus ' + domain + ' dari keranjang?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#ef4444',
@@ -1017,18 +1171,17 @@ function removeCartItem(domain) {
         render(cartState.currentUser);
         Swal.fire({
           title: 'Dihapus!',
-          text: `${domain} telah dihapus dari keranjang.`,
+          text: domain + ' telah dihapus dari keranjang.',
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
         });
       }
     });
-  } else {
-    if (confirm(`Hapus ${domain} dari keranjang?`)) {
-      CartManager.remove(domain);
-      render(cartState.currentUser);
-    }
+  } else if (confirm('Hapus ' + domain + ' dari keranjang?')) {
+    CartManager.remove(domain);
+    render(cartState.currentUser);
   }
 }
+
 export default render;

@@ -515,7 +515,7 @@
               ${result.isOrdered ? '<i class="fas fa-shopping-cart"></i> Ke Keranjang' : '<i class="fas fa-cart-plus"></i> Pesan'}
             </button>
             <button class="cek-domain-wishlist-btn" data-domain="${fullDomain}" data-tld="${extData.ext.replace('.', '')}" data-price="${extData.registration}" title="Tambah ke Wishlist">
-              <i class="far fa-heart"></i>
+              <i class="${WishlistManager && WishlistManager.isInWishlist(fullDomain) ? 'fas fa-heart' : 'far fa-heart'}" ${WishlistManager && WishlistManager.isInWishlist(fullDomain) ? 'style="color: #ef4444;"' : ''}></i>
             </button>
           </div>
         </div>

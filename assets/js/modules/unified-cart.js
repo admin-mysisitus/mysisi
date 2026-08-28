@@ -138,6 +138,40 @@ export class CartManager {
       void('[Cart] Save error:', err);
     }
   }
+
+  /**
+   * Merge remote cart data with local cart
+   */
+  static mergeCart(remoteCart) {
+    if (!remoteCart) return;
+    const localCart = this.getCart();
+    let updated = false;
+
+    // Merge domains
+    if (remoteCart.domains && remoteCart.domains.length > 0) {
+      remoteCart.domains.forEach(remoteItem => {
+        if (!localCart.domains.some(localItem => localItem.domain === remoteItem.domain)) {
+          localCart.domains.push(remoteItem);
+          updated = true;
+        }
+      });
+    }
+
+    // Merge addons
+    if (remoteCart.addons && remoteCart.addons.length > 0) {
+      remoteCart.addons.forEach(remoteAddon => {
+        if (!localCart.addons.some(localAddon => localAddon.id === remoteAddon.id)) {
+          localCart.addons.push(remoteAddon);
+          updated = true;
+        }
+      });
+    }
+
+    if (updated || localCart.domains.length === 0) {
+      this.saveCart(localCart);
+    }
+  }
+
   /**
    * Clear cart
    */
@@ -431,6 +465,29 @@ export class WishlistManager {
       void('[Wishlist] Save error:', err);
     }
   }
+
+  /**
+   * Merge remote wishlist with local wishlist
+   */
+  static mergeWishlist(remoteWishlist) {
+    if (!remoteWishlist) return;
+    const localWishlist = this.getWishlist();
+    let updated = false;
+
+    if (remoteWishlist.domains && remoteWishlist.domains.length > 0) {
+      remoteWishlist.domains.forEach(remoteItem => {
+        if (!localWishlist.domains.some(localItem => localItem.domain === remoteItem.domain)) {
+          localWishlist.domains.push(remoteItem);
+          updated = true;
+        }
+      });
+    }
+
+    if (updated || localWishlist.domains.length === 0) {
+      this.saveWishlist(localWishlist);
+    }
+  }
+
   /**
    * Check if domain is in wishlist
    */
