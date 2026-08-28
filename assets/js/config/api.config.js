@@ -8,37 +8,27 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbwdKZatKK0bkAtj1godzmaqs1auzhc5HbsYiO2jQmdZHHyeDtFcMlCNUnGdfQZyxYbD/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbwks8kAcikaNdbTs2pT8QZzR4KxF8XUbalXXC3UVHqk5ryINQcRfWe69JjrcO8RtBVu/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 60000,
-  // Actions/endpoints yang dipanggil
   ACTIONS: {
-    // Auth related
-    REGISTER_USER: 'registerUser',
-    LOGIN_USER: 'loginUser',
-    VALIDATE_USER: 'validateUser',
-    CHANGE_PASSWORD: 'changePassword',
-    REQUEST_PASSWORD_RESET: 'requestPasswordReset',
-    RESET_PASSWORD: 'resetPassword',
-    VERIFY_EMAIL: 'verifyEmail',
+    // Auth & Security related
     CHECK_LOGIN_RATE_LIMIT: 'checkloginratelimit',
     HANDLE_FAILED_LOGIN: 'handlefailedlogin',
-    // Promo & Domain related
-    VALIDATE_PROMO: 'validatePromoCode',
-    CHECK_DOMAIN: 'checkDomain',
-    // Order related
-    CREATE_ORDER: 'createOrderWithAuth',
-    GET_ORDERS: 'getUserOrders',
-    GET_ORDER_DETAIL: 'getOrderDetail',
-    GET_USER_ORDER_STATS: 'getUserOrderStats',
-    // Payment related
-    GET_SNAP_TOKEN: 'getSnapToken',
-    VERIFY_PAYMENT: 'verifyPaymentStatus',
-    HANDLE_MIDTRANS_WEBHOOK: 'handleMidtransWebhook',
-    // User profile
-    GET_USER_PROFILE: 'getUserProfile',
-    UPDATE_USER_PROFILE: 'updateUserProfile',
     UPLOAD_PROFILE_PHOTO: 'uploadprofilephoto',
+
+    // Order & Payment related
+    CREATE_ORDER: 'createOrderWithAuth',
+    CHECK_PAYMENT_STATUS: 'checkPaymentStatus',
+    GENERATE_MIDTRANS_TOKEN: 'generateMidtransToken',
+
+    // DNS & Cloudflare related
+    SETUP_CLOUDFLARE_ZONE: 'setupCloudflareZone',
+    GET_DNS_RECORDS: 'getDnsRecords',
+    ADD_DNS_RECORD: 'addDnsRecord',
+    EDIT_DNS_RECORD: 'editDnsRecord',
+    DELETE_DNS_RECORD: 'deleteDnsRecord',
+
     // Admin Settings CMS
     GET_SETTINGS: 'getsettings',
     SAVE_SETTINGS: 'savesettings',

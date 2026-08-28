@@ -367,17 +367,7 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Verify email token (auto-login after registration)
-   * Using GET request to avoid CORS preflight issues
-   */
-  static verifyEmailToken(token) {
-    return this.call('verifyEmailToken', {
-      token
-    }, {
-      method: 'GET'
-    });
-  }
+  
   /**
    * Verify Google OAuth token (Legacy GIS fallback)
    * Using POST request because Google tokens are extremely long and can trigger URL limits or CORS failures on GET
@@ -528,17 +518,7 @@ export class APIClient {
       message: 'Verifikasi diproses oleh Firebase.'
     };
   }
-  /**
-   * Reset password with token
-   */
-  static resetPassword(token, password) {
-    return this.call('resetPassword', {
-      token,
-      password
-    }, {
-      method: 'POST'
-    });
-  }
+  
   // ========== USER PROFILE ENDPOINTS ==========
   /**
    * Get user profile
@@ -685,7 +665,7 @@ export class APIClient {
     }
     try {
       // 1. Call GAS to Create Order AND Generate Token simultaneously
-      const response = await this.call('createOrderWithAuth', data, {
+      const response = await this.call(GAS_CONFIG.ACTIONS.CREATE_ORDER, data, {
         method: 'POST'
       });
       if (response.success && response.data) {
@@ -852,7 +832,7 @@ export class APIClient {
   }
   static async syncOrderStatus(orderId) {
     try {
-      const response = await this.call('checkPaymentStatus', {
+      const response = await this.call(GAS_CONFIG.ACTIONS.CHECK_PAYMENT_STATUS, {
         orderId
       }, {
         method: 'POST'
@@ -868,7 +848,7 @@ export class APIClient {
     }
   }
   static generateMidtransToken(orderId, email, phone, name, domain, packageId, total) {
-    return this.call('generateMidtransToken', {
+    return this.call(GAS_CONFIG.ACTIONS.GENERATE_MIDTRANS_TOKEN, {
       orderId,
       email,
       phone,
@@ -1760,7 +1740,7 @@ export class APIClient {
       success: false,
       message: 'Tidak ada sesi aktif'
     };
-    return this.call('setupCloudflareZone', {
+    return this.call(GAS_CONFIG.ACTIONS.SETUP_CLOUDFLARE_ZONE, {
       domain
     });
   }
@@ -1769,7 +1749,7 @@ export class APIClient {
       success: false,
       message: 'Tidak ada sesi aktif'
     };
-    return this.call('getDnsRecords', {
+    return this.call(GAS_CONFIG.ACTIONS.GET_DNS_RECORDS, {
       domain
     });
   }
@@ -1778,7 +1758,7 @@ export class APIClient {
       success: false,
       message: 'Tidak ada sesi aktif'
     };
-    return this.call('addDnsRecord', {
+    return this.call(GAS_CONFIG.ACTIONS.ADD_DNS_RECORD, {
       domain,
       recordData
     });
@@ -1788,7 +1768,7 @@ export class APIClient {
       success: false,
       message: 'Tidak ada sesi aktif'
     };
-    return this.call('editDnsRecord', {
+    return this.call(GAS_CONFIG.ACTIONS.EDIT_DNS_RECORD, {
       domain,
       recordId,
       recordData
@@ -1799,7 +1779,7 @@ export class APIClient {
       success: false,
       message: 'Tidak ada sesi aktif'
     };
-    return this.call('deleteDnsRecord', {
+    return this.call(GAS_CONFIG.ACTIONS.DELETE_DNS_RECORD, {
       domain,
       recordId
     });

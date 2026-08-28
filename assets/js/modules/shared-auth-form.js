@@ -670,11 +670,6 @@ export class SharedAuthForm {
       if (!result.data) {
         throw new Error('Data pengguna tidak ditemukan');
       }
-      // CHECK: Email verification status - Bypassed to allow direct login
-      // if (!result.data.emailVerified) {
-      //   this.showError('Email Anda belum terverifikasi. Silakan cek email untuk link verifikasi.');
-      //   return;
-      // }
       // Save session
       AuthManager.saveSession(result.data);
       this.showSuccess('✓ Login Berhasil!', `Selamat datang, ${result.data.displayName}!`);
