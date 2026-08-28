@@ -10,25 +10,14 @@ import {
   withCacheBust,
   renderUserAvatarHtml
 } from '../modules/unified-utils.js';
+import { AuthManager } from '../modules/unified-auth.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),
   header: document.querySelector('header'),
   desktopNav: document.querySelector('.nav-desktop')
 };
-// Helper: Get logged-in user from localStorage/sessionStorage
-function getLoggedInUser() {
-  try {
-    const userStr = localStorage.getItem('sisitus_user') || sessionStorage.getItem('sisitus_user');
-    if (!userStr) return null;
-    const parsed = JSON.parse(userStr);
-    // Support both unified-auth wrapper format and direct format
-    return parsed.user ? parsed.user : parsed;
-  } catch (e) {
-    void('Error parsing user session:', e);
-    return null;
-  }
-}
+
 // Helper: Create profile menu item
 function createProfileMenuItem(user) {
   const li = document.createElement('li');
@@ -48,7 +37,7 @@ function createProfileMenuItem(user) {
 const generateDesktopMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-desktop-list';
-  const loggedInUser = getLoggedInUser();
+  const loggedInUser = AuthManager.getCurrentUser();
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
@@ -114,7 +103,7 @@ const generateDesktopMenu = () => {
 const generateMobileMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-mobile-list';
-  const loggedInUser = getLoggedInUser();
+  const loggedInUser = AuthManager.getCurrentUser();
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
