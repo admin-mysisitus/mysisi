@@ -707,7 +707,10 @@
   cekDomainInput.addEventListener('input', (e) => {
     let value = e.target.value;
     if (value !== value.toLowerCase()) {
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
       e.target.value = value.toLowerCase();
+      e.target.setSelectionRange(start, end);
       value = value.toLowerCase();
     }
     if (/[^a-z0-9.-]/i.test(value)) {
