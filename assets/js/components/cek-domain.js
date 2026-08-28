@@ -230,17 +230,21 @@
     const inputVal = cekDomainInput.value;
     const {
       base,
+      ext,
       isFullDomain,
       isInvalid
     } = parseDomain(inputVal, allExtensions);
     const {
       valid
     } = validateDomain(inputVal, allExtensions);
-    if (!valid || !base || base.length < 2 || isFullDomain) {
+    if (!valid || !base || base.length < 2) {
       cekDomainSuggestions.style.display = 'none';
       return;
     }
-    const topExts = allExtensions.map(e => e.ext);
+    let topExts = allExtensions.map(e => e.ext);
+    if (isFullDomain && ext) {
+      topExts = [ext, ...topExts.filter(e => e !== ext)];
+    }
     cekDomainSuggestions.innerHTML = '';
     // Abort previous check if still running
     if (suggestionCheckAborter) {
