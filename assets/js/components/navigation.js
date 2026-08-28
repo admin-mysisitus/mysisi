@@ -8,8 +8,7 @@ import {
 import {
   normalizeDriveImageUrl,
   withCacheBust,
-  renderUserAvatarHtml,
-  getDefaultAvatarSVG
+  renderUserAvatarHtml
 } from '../modules/unified-utils.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),

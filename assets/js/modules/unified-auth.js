@@ -213,27 +213,25 @@ export class AuthManager {
   static clearSession() {
     // Clear localStorage session key
     window[this.STORAGE_TYPE].removeItem(this.SESSION_KEY);
-    // Clear all sessionStorage keys
-    try {
-      sessionStorage.clear();
-    } catch (e) {}
+    // Jika ada session storage yang dipakai khusus auth di masa depan, hapus item per item
+    // contoh: sessionStorage.removeItem('auth_token_tmp');
+
     // Completely invalidate the Firebase Auth session to prevent ghost sessions
     getFirebase().then(({
       auth
     }) => {
       if (auth) auth.signOut();
     }).catch(e => void('[AuthManager] Firebase signout error:', e));
-    // Clear all cookies for the current domain
-    try {
-      document.cookie.split(";").forEach(function(c) {
-        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
-      });
-    } catch (e) {}
-    this.state = {
-      user: null,
-      isLoggedIn: false
-    };
-    this.emit('authChanged', null);
+
+    if (this.state.isLoggedIn || this.state.user) {
+      this.state = {
+        user: null,
+        isLoggedIn: false,
+        lastActivity: Date.now(),
+        expiresAt: null
+      };
+      this.emit('authChanged', null);
+    }
   }
   /**
    * Get current logged-in user

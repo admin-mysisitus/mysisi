@@ -356,7 +356,7 @@ export function withCacheBust(url) {
  * Return Default Avatar SVG String
  */
 export function getDefaultAvatarSVG() {
-  return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232563EB"%3E%3Ccircle cx="12" cy="8" r="4"/%3E%3Cpath d="M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z"/%3E%3C/svg%3E';
+  return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%232563EB%22%3E%3Ccircle cx=%2212%22 cy=%228%22 r=%224%22/%3E%3Cpath d=%22M 12 14 C 7.6 14 4 16.2 4 19 L 4 22 L 20 22 L 20 19 C 20 16.2 16.4 14 12 14 Z%22/%3E%3C/svg%3E';
 }
 /**
  * Render User Avatar HTML tag completely (SSOT logic)

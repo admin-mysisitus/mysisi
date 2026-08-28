@@ -428,61 +428,7 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Native Firebase Google Sign In with Popup
-   * Bypasses COOP header issues associated with Google Identity Services
-   */
-  static async signInWithGooglePopup() {
-    try {
-      const {
-        auth,
-        db,
-        firebase
-      } = await getFirebase();
-      if (!auth) return {
-        success: false,
-        message: 'Firebase Auth tidak tersedia'
-      };
-      const provider = new firebase.auth.GoogleAuthProvider();
-      // Optional: Add custom parameters if needed
-      // provider.setCustomParameters({ prompt: 'select_account' });
-      const userCredential = await auth.signInWithPopup(provider);
-      const user = userCredential.user;
-      const profile = {
-        userId: user.uid,
-        email: user.email,
-        displayName: user.displayName || user.email.split('@')[0],
-        photoURL: user.photoURL || '',
-        whatsapp: '',
-        authMethod: 'google',
-        emailVerified: user.emailVerified || true,
-        createdAt: new Date().toISOString()
-      };
-      if (db) {
-        // Retrieve existing user data to avoid overwriting properties
-        const snapshot = await db.ref(`users/${user.uid}`).once('value');
-        const existingData = snapshot.val();
-        if (existingData) {
-          profile.whatsapp = existingData.whatsapp || '';
-          profile.role = existingData.role || 'customer';
-          profile.status = existingData.status || 'active'; // Jaga status suspend
-          profile.createdAt = existingData.createdAt || profile.createdAt;
-        }
-        await db.ref(`users/${user.uid}`).update(profile);
-      }
-      return {
-        success: true,
-        data: profile,
-        message: 'Google sign-in berhasil'
-      };
-    } catch (e) {
-      void('Google popup sign in error', e);
-      return {
-        success: false,
-        message: e.message
-      };
-    }
-  }
+
   static async requestPasswordReset(email) {
     try {
       const {
