@@ -1,4 +1,4 @@
-﻿/**
+/**
  * REFACTORED PUBLIC AUTHENTICATION PAGE
  * ===================================
  * Uses SharedAuthForm to eliminate duplicate UI/logic.
@@ -16,6 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initAuthPage() {
+  // Handle error query params
+  const urlParams = new URLSearchParams(window.location.search);
+  const errorParam = urlParams.get('error');
+  if (errorParam) {
+    if (errorParam === 'unauthorized') {
+      showError('Akses Ditolak', 'Anda tidak memiliki hak akses ke halaman tersebut. Silakan login kembali.');
+    } else if (errorParam === 'suspended') {
+      showError('Akun Ditangguhkan', 'Akun Anda sedang ditangguhkan. Silakan hubungi tim dukungan kami.');
+    } else {
+      showError('Autentikasi Gagal', 'Silakan login kembali untuk melanjutkan.');
+    }
+    // Clean up URL without reloading
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
   if (AuthManager.isLoggedIn()) {
     showLoggedInState();
   } else {

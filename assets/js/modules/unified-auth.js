@@ -68,7 +68,7 @@ export class AuthManager {
                       auth.signOut();
                       this.clearSession();
                       if (window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
-                        window.location.href = '/login.html?error=suspended';
+                        window.location.href = '/auth/?error=suspended';
                       }
                       return;
                     }
