@@ -3,8 +3,8 @@
  * Handles routing, session management, and page rendering
  */
 import {
-  DashboardAuth
-} from './modules/auth.js';
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 import {
   DashboardNavbar
 } from './components/navbar.js';
@@ -24,7 +24,7 @@ window.showWarning = showWarning;
 window.showInfo = showInfo;
 class DashboardApp {
   constructor() {
-    this.currentUser = DashboardAuth.getCurrentUser();
+    this.currentUser = AuthManager.getCurrentUser();
     this.currentRoute = null;
     this.navbar = null;
     this.sidebar = null;

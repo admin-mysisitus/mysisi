@@ -14,8 +14,8 @@ import {
   getPasswordStrengthInfo
 } from '/assets/js/modules/unified-utils.js';
 import {
-  DashboardAuth
-} from './auth.js';
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 export async function render(currentUser) {
   try {
     // Load user profile data
@@ -40,7 +40,7 @@ export async function render(currentUser) {
     if (formEditProfile) {
       // Sinkronkan session lokal dengan data API terbaru (agar Navbar langsung update jika berbeda)
       if (user.displayName !== currentUser.displayName || user.photoURL !== currentUser.photoURL) {
-        DashboardAuth.updateSession(user);
+        AuthManager.saveSession(user);
       }
       const inputName = document.getElementById('input-name');
       inputName.value = user.displayName || '';
@@ -192,13 +192,13 @@ async function handleProfileUpdate(userId) {
     const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
     if (result.success) {
       // Update session
-      const user = DashboardAuth.getCurrentUser();
+      const user = AuthManager.getCurrentUser();
       user.displayName = displayName;
       user.whatsapp = whatsapp;
       if (result.data && result.data.photoURL) {
         user.photoURL = result.data.photoURL;
       }
-      DashboardAuth.updateSession(user);
+      AuthManager.saveSession(user);
       
       // Render ulang navbar agar foto profil (jika berubah) langsung tampil baru
       if (window.app && window.app.navbar) {
@@ -250,10 +250,10 @@ async function handlePasswordChange(userId, isSetPassword = false) {
       showSuccess(isSetPassword ? 'Password berhasil diatur' : 'Password berhasil diubah');
       document.getElementById('form-change-password').reset();
       // Update session local state to mark that password is now set
-      const user = DashboardAuth.getCurrentUser();
+      const user = AuthManager.getCurrentUser();
       if (user && user.hasPassword === false) {
         user.hasPassword = true;
-        DashboardAuth.updateSession(user);
+        AuthManager.saveSession(user);
         setTimeout(() => {
           window.location.reload();
         }, 1500); // Reload to reset the UI forms

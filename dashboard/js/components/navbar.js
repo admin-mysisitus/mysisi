@@ -2,15 +2,15 @@
  * Dashboard Top Navigation Bar Component
  */
 import {
-  DashboardAuth
-} from '../modules/auth.js';
+  AuthManager
+} from '/assets/js/modules/unified-auth.js';
 import {
   showConfirm,
   renderUserAvatarHtml
 } from '/assets/js/modules/unified-utils.js';
 export class DashboardNavbar {
   constructor() {
-    this.user = DashboardAuth.getCurrentUser();
+    this.user = AuthManager.getCurrentUser();
     this.authListenerBound = false;
     this.breadcrumbListenerBound = false;
     this.dropdownOutsideClickHandler = null;
@@ -120,7 +120,10 @@ export class DashboardNavbar {
     const btnLogout = document.getElementById('btn-logout-dropdown');
     if (btnLogout) {
       btnLogout.addEventListener('click', () => {
-        showConfirm('Yakin ingin logout?', () => DashboardAuth.logout());
+        showConfirm('Yakin ingin logout?', () => {
+          AuthManager.clearSession();
+          window.location.href = '/auth/';
+        });
       });
     }
     // Listen for auth changes
