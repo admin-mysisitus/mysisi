@@ -335,7 +335,7 @@ export class CartManager {
     if (cart.coupon) {
       const type = cart.coupon.discountType;
       const value = cart.coupon.discountValue;
-      if (type === 'percent') {
+      if (type === 'percent' || type === 'percentage') {
         discount = subtotal * (value / 100);
       } else if (type === 'fixed') {
         discount = value;

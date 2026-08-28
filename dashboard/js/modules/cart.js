@@ -264,9 +264,17 @@ function getSelectedCartSummary() {
   if (cartData && cartData.coupon) {
     const type = cartData.coupon.discountType;
     const value = cartData.coupon.discountValue;
-    if (type === 'percent') {
+    if (type === 'percent' || type === 'percentage') {
       discount = subtotal * (value / 100);
     } else if (type === 'fixed') {
+      discount = value;
+    }
+  } else if (cartState.promoCode && cartState.promoValidated) {
+    const type = localStorage.getItem('saved_promo_discount_type') || 'fixed';
+    const value = parseFloat(localStorage.getItem('saved_promo_discount_value')) || 0;
+    if (type === 'percent' || type === 'percentage') {
+      discount = subtotal * (value / 100);
+    } else {
       discount = value;
     }
   }
@@ -976,6 +984,17 @@ async function applyPromoCode() {
       cartState.promoDiscount = discount;
       cartState.promoDescription = result.data.description;
       cartState.promoValidated = true;
+      
+      // Save to CartManager
+      const cartData = CartManager.getCart();
+      cartData.coupon = {
+        code: code,
+        discountType: pType,
+        discountValue: pValue,
+        description: result.data.description
+      };
+      CartManager.saveCart(cartData);
+
       if (promoMsg) {
         promoMsg.textContent = `✓ ${result.message || 'Kode promo berhasil diterapkan'}`;
         promoMsg.style.color = '#27ae60';
@@ -988,6 +1007,12 @@ async function applyPromoCode() {
       cartState.promoDiscount = 0;
       cartState.promoDescription = null;
       cartState.promoValidated = false;
+      
+      // Remove from CartManager
+      const cartData = CartManager.getCart();
+      cartData.coupon = null;
+      CartManager.saveCart(cartData);
+      
       if (promoMsg) {
         promoMsg.textContent = result.message || 'Kode promo tidak valid';
         promoMsg.style.color = '#dc2626';
