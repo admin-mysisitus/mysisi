@@ -742,20 +742,16 @@ export class SharedAuthForm {
       submitBtn.textContent = submitBtn.dataset.originalText || 'Submit';
     }
   }
-
   /**
    * Mulai hitung mundur (karena rate limit backend)
    */
   startCountdown(btn, seconds) {
     if (!btn) return;
     if (!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
-    
     let remaining = seconds;
     if (btn.countdownInterval) clearInterval(btn.countdownInterval);
-    
     btn.disabled = true;
     btn.innerHTML = `<i class="fas fa-lock"></i> Terkunci (${remaining}s)`;
-    
     btn.countdownInterval = setInterval(() => {
       remaining--;
       if (remaining <= 0) {
@@ -768,7 +764,6 @@ export class SharedAuthForm {
       }
     }, 1000);
   }
-
   /**
    * Initialize password strength indicators
    */

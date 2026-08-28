@@ -915,4 +915,9 @@ body.admin-body {
   .admin-stat-card {
     padding: 14px 16px;
   }
-}img.admin-avatar { object-fit: cover; border: 2px solid var(--admin-primary); }
+}
+
+img.admin-avatar {
+  object-fit: cover;
+  border: 2px solid var(--admin-primary);
+}

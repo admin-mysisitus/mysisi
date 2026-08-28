@@ -23,7 +23,6 @@ class AdminApp {
   async init() {
     // STRICT SECURITY: Synchronous Check sebelum me-render UI apapun
     const user = AuthManager.getCurrentUser();
-    
     if (!user) {
       window.location.href = '/auth/';
       return;
@@ -39,7 +38,6 @@ class AdminApp {
       window.location.href = '/dashboard/';
       return;
     }
-    
     // Render sidebar and navbar
     this.sidebar = new AdminSidebar(this);
     this.sidebar.render();

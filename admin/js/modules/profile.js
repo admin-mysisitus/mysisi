@@ -142,12 +142,10 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       AuthManager.updateUser(user);
-
       // Update Navbar immediately via SSOT
       if (window.adminApp && window.adminApp.navbar) {
         window.adminApp.navbar.render();
       }
-
       Swal.fire('Sukses', 'Profil berhasil diperbarui', 'success');
     } else {
       throw new Error(result.message || 'Gagal memperbarui profil');

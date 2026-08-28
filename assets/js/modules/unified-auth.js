@@ -58,7 +58,6 @@ export class AuthManager {
                 const userRef = db.ref(`users/${firebaseUser.uid}`);
                 const snap = await userRef.once('value');
                 profile = snap.val();
-                
                 // Pasang Realtime Listener untuk deteksi suspend dan demosi instan
                 userRef.on('value', (rtSnap) => {
                   const rtProfile = rtSnap.val();
@@ -72,7 +71,6 @@ export class AuthManager {
                       }
                       return;
                     }
-                    
                     // Deteksi penurunan role secara realtime saat sedang di dasbor admin
                     if (rtProfile.role !== 'admin' && window.location.pathname.includes('/admin/')) {
                       void('[AuthManager] Realtime Role Demoted, forcing exit from admin');
@@ -80,10 +78,12 @@ export class AuthManager {
                       window.location.href = '/dashboard/';
                       return;
                     }
-                    
                     // Sinkronisasi data sesi lokal jika ada perubahan jabatan
                     if (this.state.user && this.state.user.role !== rtProfile.role) {
-                      const updatedUser = { ...this.state.user, role: rtProfile.role };
+                      const updatedUser = {
+                        ...this.state.user,
+                        role: rtProfile.role
+                      };
                       this.saveSession(updatedUser);
                     }
                   }
@@ -99,7 +99,6 @@ export class AuthManager {
               this.clearSession();
               return;
             }
-            
             const userObj = {
               userId: firebaseUser.uid,
               email: firebaseUser.email,

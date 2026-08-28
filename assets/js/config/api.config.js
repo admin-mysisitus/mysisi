@@ -8,7 +8,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbwks8kAcikaNdbTs2pT8QZzR4KxF8XUbalXXC3UVHqk5ryINQcRfWe69JjrcO8RtBVu/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbyh6mlsPFiSyci9d5KIK0d8B-zgiXqR00FRZKiAlHDBOpGK3-7TgN-57_Adlt6Y3n4S/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 60000,
   ACTIONS: {
@@ -16,19 +16,16 @@ export const GAS_CONFIG = {
     CHECK_LOGIN_RATE_LIMIT: 'checkloginratelimit',
     HANDLE_FAILED_LOGIN: 'handlefailedlogin',
     UPLOAD_PROFILE_PHOTO: 'uploadprofilephoto',
-
     // Order & Payment related
     CREATE_ORDER: 'createOrderWithAuth',
     CHECK_PAYMENT_STATUS: 'checkPaymentStatus',
     GENERATE_MIDTRANS_TOKEN: 'generateMidtransToken',
-
     // DNS & Cloudflare related
     SETUP_CLOUDFLARE_ZONE: 'setupCloudflareZone',
     GET_DNS_RECORDS: 'getDnsRecords',
     ADD_DNS_RECORD: 'addDnsRecord',
     EDIT_DNS_RECORD: 'editDnsRecord',
     DELETE_DNS_RECORD: 'deleteDnsRecord',
-
     // Admin Settings CMS
     GET_SETTINGS: 'getsettings',
     SAVE_SETTINGS: 'savesettings',

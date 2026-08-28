@@ -4,10 +4,16 @@
  * Uses SharedAuthForm to eliminate duplicate UI/logic.
  * Clean, minimal, and fully centralized.
  */
-import { AuthManager } from '../modules/unified-auth.js';
-import { SharedAuthForm } from '../modules/shared-auth-form.js';
-import { showSuccess, showError } from '../modules/unified-utils.js';
-
+import {
+  AuthManager
+} from '../modules/unified-auth.js';
+import {
+  SharedAuthForm
+} from '../modules/shared-auth-form.js';
+import {
+  showSuccess,
+  showError
+} from '../modules/unified-utils.js';
 // ============================================================================
 // INITIALIZATION
 // ============================================================================
@@ -30,13 +36,11 @@ function initAuthPage() {
     // Clean up URL without reloading
     window.history.replaceState({}, document.title, window.location.pathname);
   }
-
   if (AuthManager.isLoggedIn()) {
     showLoggedInState();
   } else {
     showAuthForms();
   }
-
   // Listen for auth state changes
   document.addEventListener('auth:authChanged', (e) => {
     const user = e.detail;
@@ -47,29 +51,26 @@ function initAuthPage() {
     }
   });
 }
-
 // ============================================================================
 // LOGGED IN STATE
 // ============================================================================
 function showLoggedInState() {
   const formsSection = document.getElementById('auth-form-container');
   const loggedInSection = document.getElementById('auth-loggedin-section');
-  
   if (formsSection) formsSection.style.display = 'none';
   if (loggedInSection) loggedInSection.style.display = 'block';
-
   const user = AuthManager.getCurrentUser();
   if (user) {
     document.getElementById('loggedin-name').textContent = user.displayName || 'Pengguna';
     document.getElementById('loggedin-email').textContent = user.email || '';
-    
     const photoEl = document.getElementById('loggedin-photo');
     if (photoEl) {
       photoEl.src = user.photoURL || AuthManager.getDefaultAvatar();
-      photoEl.onerror = () => { photoEl.src = AuthManager.getDefaultAvatar(); };
+      photoEl.onerror = () => {
+        photoEl.src = AuthManager.getDefaultAvatar();
+      };
     }
   }
-
   // Setup logout button
   const logoutBtn = document.getElementById('loggedin-logout-btn');
   if (logoutBtn && !logoutBtn.hasListener) {
@@ -80,18 +81,15 @@ function showLoggedInState() {
     logoutBtn.hasListener = true;
   }
 }
-
 // ============================================================================
 // AUTH FORMS (LOGIN/REGISTER)
 // ============================================================================
 function showAuthForms() {
   const formsSection = document.getElementById('auth-form-container');
   const loggedInSection = document.getElementById('auth-loggedin-section');
-  
   if (loggedInSection) loggedInSection.style.display = 'none';
   if (formsSection) {
     formsSection.style.display = 'block';
-    
     // Instantiate SharedAuthForm only if it hasn't been instantiated yet
     if (!formsSection.hasChildNodes()) {
       const authForm = new SharedAuthForm({

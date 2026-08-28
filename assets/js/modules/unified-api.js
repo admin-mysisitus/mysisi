@@ -238,10 +238,10 @@ export class APIClient {
         }
         await db.ref(`users/${user.uid}`).update(profile);
       }
-
       // Update native Firebase Auth profile
-      await user.updateProfile({ displayName: profile.displayName });
-
+      await user.updateProfile({
+        displayName: profile.displayName
+      });
       return {
         success: true,
         data: profile,
@@ -280,9 +280,10 @@ export class APIClient {
           message: 'Firebase Auth tidak tersedia'
         };
       }
-      
       // 1. Check Rate Limit dari Backend
-      const rateLimitRes = await this.call(GAS_CONFIG.ACTIONS.CHECK_LOGIN_RATE_LIMIT, { email });
+      const rateLimitRes = await this.call(GAS_CONFIG.ACTIONS.CHECK_LOGIN_RATE_LIMIT, {
+        email
+      });
       if (rateLimitRes.success && rateLimitRes.data && !rateLimitRes.data.allowed) {
         let blockMsg = 'Akses ditolak.';
         const data = rateLimitRes.data;
@@ -291,9 +292,12 @@ export class APIClient {
         } else if (data.remainingSec) {
           blockMsg = `Terlalu banyak percobaan salah. Coba lagi dalam ${data.remainingSec} detik.`;
         }
-        return { success: false, message: blockMsg, rateLimit: data };
+        return {
+          success: false,
+          message: blockMsg,
+          rateLimit: data
+        };
       }
-
       // 2. Lakukan Firebase Auth
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -310,10 +314,11 @@ export class APIClient {
           };
         }
       }
-      
       // 3. Clear failed attempts di backend karena login sukses
-      this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, { email, isSuccess: true }).catch(() => {});
-
+      this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, {
+        email,
+        isSuccess: true
+      }).catch(() => {});
       return {
         success: true,
         data: profile || {
@@ -327,7 +332,6 @@ export class APIClient {
       void('[Auth] Login error:', e);
       let errorMsg = 'Login gagal';
       let isPasswordError = false;
-      
       if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
         errorMsg = 'Email atau password yang Anda masukkan salah.';
         isPasswordError = true;
@@ -338,12 +342,13 @@ export class APIClient {
       } else if (e.message) {
         errorMsg = e.message;
       }
-      
       let rateLimitData = null;
       // Jika salah password, catat ke backend (GAS)
       if (isPasswordError) {
         try {
-          const failRes = await this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, { email });
+          const failRes = await this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, {
+            email
+          });
           if (failRes.success && failRes.data) {
             const data = failRes.data;
             rateLimitData = data;
@@ -359,11 +364,10 @@ export class APIClient {
               if (remaining > 0) errorMsg += ` (Sisa percobaan sebelum penangguhan: ${remaining})`;
             }
           }
-        } catch(failErr) {
+        } catch (failErr) {
           void('[Auth] Gagal mencatat percobaan salah ke backend', failErr);
         }
       }
-      
       return {
         success: false,
         message: errorMsg,
@@ -371,7 +375,6 @@ export class APIClient {
       };
     }
   }
-  
   /**
    * Verify Google OAuth token (Legacy GIS fallback)
    * Using POST request because Google tokens are extremely long and can trigger URL limits or CORS failures on GET
@@ -522,7 +525,6 @@ export class APIClient {
       message: 'Verifikasi diproses oleh Firebase.'
     };
   }
-  
   // ========== USER PROFILE ENDPOINTS ==========
   /**
    * Get user profile
@@ -595,14 +597,14 @@ export class APIClient {
         updates.photoURL = photoURL;
       }
       await db.ref(`users/${userId}`).update(updates);
-      
       // Juga update native Firebase Auth profile
       if (auth && auth.currentUser) {
-        const profileUpdates = { displayName };
+        const profileUpdates = {
+          displayName
+        };
         if (photoURL) profileUpdates.photoURL = photoURL;
         await auth.currentUser.updateProfile(profileUpdates);
       }
-      
       return {
         success: true,
         message: 'Profil berhasil diupdate',
@@ -1247,7 +1249,9 @@ export class APIClient {
         success: false,
         message: 'Firebase DB not available'
       };
-      await db.ref(`users/${id}`).update({ status: 'suspended' });
+      await db.ref(`users/${id}`).update({
+        status: 'suspended'
+      });
       return {
         success: true,
         message: 'User berhasil disuspend'

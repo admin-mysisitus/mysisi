@@ -2,7 +2,9 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
-import { renderUserAvatarHtml } from '/assets/js/modules/unified-utils.js';
+import {
+  renderUserAvatarHtml
+} from '/assets/js/modules/unified-utils.js';
 let currentUsers = [];
 export async function render() {
   void('Admin Users Module Loaded');
@@ -14,7 +16,6 @@ function setupEventListeners() {
   const btnClose = document.getElementById('btn-close-user');
   const modal = document.getElementById('user-modal');
   const form = document.getElementById('user-form');
-  
   if (btnClose) {
     btnClose.addEventListener('click', () => {
       modal.style.display = 'none';
@@ -79,7 +80,6 @@ function setupEventListeners() {
     document.getElementById('usr-email').value = user.email || '';
     document.getElementById('usr-wa').value = user.whatsapp || user.wa || ''; // depending on API response
     document.getElementById('usr-role').value = user.role || 'customer';
-    
     // Fallback status aman: jika kosong, asumsikan aktif. Mencegah auto-suspend pada user lama.
     const currentStatus = user.status || 'active';
     document.getElementById('usr-active').checked = currentStatus === 'active';

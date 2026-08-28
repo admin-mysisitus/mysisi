@@ -5,7 +5,12 @@ import {
   footerContactData,
   footerTrustBadgesData
 } from '../config.js';
-import { normalizeDriveImageUrl, withCacheBust, renderUserAvatarHtml, getDefaultAvatarSVG } from '../modules/unified-utils.js';
+import {
+  normalizeDriveImageUrl,
+  withCacheBust,
+  renderUserAvatarHtml,
+  getDefaultAvatarSVG
+} from '../modules/unified-utils.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),

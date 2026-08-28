@@ -18,7 +18,6 @@ export class AdminNavbar {
     if (userData && userData.displayName) {
       displayName = userData.displayName;
     }
-    
     this.container.innerHTML = `
       <div class="admin-navbar-left">
         <button id="admin-menu-toggle" class="admin-menu-toggle">
