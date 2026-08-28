@@ -17,10 +17,6 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
-  showSuccess,
-  showError,
-  showLoading,
-  hideLoading,
   isValidEmail,
   isValidPassword,
   isValidPhoneNumber,

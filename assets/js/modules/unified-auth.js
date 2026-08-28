@@ -173,7 +173,7 @@ export class AuthManager {
       email: user.email,
       displayName: user.displayName,
       emailVerified: user.emailVerified || false,
-      photoURL: user.photoURL || this.getDefaultAvatar(),
+      photoURL: user.photoURL || '',
       whatsapp: user.whatsapp || '',
       authMethod: user.authMethod || 'email',
       role: user.role || 'customer',
@@ -239,17 +239,6 @@ export class AuthManager {
    * Get current logged-in user
    */
   static getCurrentUser() {
-    if (this.state.user && this.state.user.displayName && typeof this.state.user.displayName === 'string' && this.state.user.displayName.trim().startsWith('{')) {
-      try {
-        const parsed = JSON.parse(this.state.user.displayName);
-        if (parsed.displayName) {
-          this.state.user.displayName = parsed.displayName;
-        }
-        if (parsed.whatsapp) {
-          this.state.user.whatsapp = parsed.whatsapp;
-        }
-      } catch (e) {}
-    }
     return this.state.user;
   }
   /**
@@ -326,12 +315,7 @@ export class AuthManager {
       }
     });
   }
-  /**
-   * Get default avatar
-   */
-  static getDefaultAvatar() {
-    return '/assets/img/avatar-default.svg';
-  }
+
   /**
    * Event system
    */

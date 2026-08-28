@@ -46,6 +46,14 @@ export async function getFirebase() {
     firebaseInitPromise = (async () => {
       try {
         if (!window.firebase) {
+          // Tambahkan preconnect untuk optimasi loading speed dari gstatic
+          if (!document.querySelector('link[href="https://www.gstatic.com"]')) {
+            const preconnect = document.createElement('link');
+            preconnect.rel = 'preconnect';
+            preconnect.href = 'https://www.gstatic.com';
+            preconnect.crossOrigin = 'anonymous'; // Important for CORS preconnect
+            document.head.appendChild(preconnect);
+          }
           // Load app compat first
           await loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js");
           // Load services in parallel
