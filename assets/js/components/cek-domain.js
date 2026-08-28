@@ -94,6 +94,7 @@
   const cekDomainResultsList = section.querySelector('#cek-domain-results-list');
   const cekDomainResults = section.querySelector('#cek-domain-results');
   const cekDomainForm = section.querySelector('#cek-domain-form-main');
+  const cekDomainClearBtn = section.querySelector('#cek-domain-clear-btn');
   const cekDomainPopularExtensions = section.querySelector('#cek-domain-popular-extensions');
   const cekDomainPricingPreview = section.querySelector('.cek-domain-pricing-preview');
   // Validate essential elements exist
@@ -560,7 +561,21 @@
     cekDomainBtn.disabled = true;
     const originalBtnHTML = cekDomainBtn.innerHTML;
     cekDomainBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari...';
-    cekDomainResultsList.innerHTML = '';
+    
+    // Tampilkan Skeleton Loading
+    cekDomainResultsList.innerHTML = Array(3).fill(`
+      <li class="cek-domain-skeleton-card">
+        <div class="cek-domain-result-main">
+          <div class="skeleton-title skeleton-text"></div>
+          <div class="skeleton-subtitle skeleton-text"></div>
+        </div>
+        <div class="cek-domain-result-side" style="display:flex; flex-direction:column; align-items:flex-end;">
+          <div class="skeleton-price skeleton-text"></div>
+          <div class="skeleton-btn skeleton-text"></div>
+        </div>
+      </li>
+    `).join('');
+    
     cekDomainResults.removeAttribute('hidden');
     cekDomainResults.classList.add('show');
     cekDomainResults.scrollIntoView({
@@ -708,6 +723,16 @@
   // Initialize immediately
   renderPricingPreview();
   initiatePlaceholderAnimation();
+  
+  if (cekDomainClearBtn) {
+    cekDomainClearBtn.addEventListener('click', () => {
+      cekDomainInput.value = '';
+      cekDomainClearBtn.style.display = 'none';
+      if (cekDomainSuggestions) cekDomainSuggestions.style.display = 'none';
+      cekDomainInput.focus();
+    });
+  }
+
   cekDomainInput.addEventListener('input', (e) => {
     let value = e.target.value;
     if (value !== value.toLowerCase()) {
@@ -717,6 +742,12 @@
       e.target.setSelectionRange(start, end);
       value = value.toLowerCase();
     }
+    
+    if (cekDomainClearBtn) {
+      cekDomainClearBtn.style.display = value ? 'flex' : 'none';
+    }
+    currentFocus = -1;
+
     if (/[^a-z0-9.-]/i.test(value)) {
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Hanya huruf, angka, titik, dan strip yang diperbolehkan';
       cekDomainError.style.display = 'block';
@@ -761,12 +792,40 @@
       cekDomainError.style.display = 'block';
     }
   });
+  let currentFocus = -1;
   cekDomainInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
+    const items = cekDomainSuggestions && cekDomainSuggestions.style.display !== 'none' 
+      ? cekDomainSuggestions.querySelectorAll('.cek-domain-suggestion-item') 
+      : [];
+    
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
-      cekDomainBtn.click();
+      currentFocus++;
+      if (currentFocus >= items.length) currentFocus = 0;
+      updateKeyboardFocus(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      currentFocus--;
+      if (currentFocus < 0) currentFocus = items.length - 1;
+      updateKeyboardFocus(items);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (currentFocus > -1 && items.length > 0 && cekDomainSuggestions.style.display !== 'none') {
+        items[currentFocus].click();
+      } else {
+        cekDomainBtn.click();
+      }
     }
   });
+
+  function updateKeyboardFocus(items) {
+    if (!items || items.length === 0) return;
+    items.forEach(item => item.classList.remove('keyboard-focus'));
+    if (currentFocus > -1) {
+      items[currentFocus].classList.add('keyboard-focus');
+      items[currentFocus].scrollIntoView({ block: 'nearest' });
+    }
+  }
   // ============================================
   // DOMAIN PURCHASE & WISHLIST HANDLERS
   // ============================================

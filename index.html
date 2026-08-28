@@ -355,8 +355,13 @@
           </div>
           <div class="cek-domain-form-wrapper">
             <form class="cek-domain-form" id="cek-domain-form-main" role="search">
-              <input type="text" id="cek-domain-input" placeholder="Cek domain Anda..." autocomplete="off"
-                aria-label="Masukkan nama domain" spellcheck="false" required>
+              <div class="cek-domain-input-group">
+                <input type="text" id="cek-domain-input" placeholder="Cek domain Anda..." autocomplete="off"
+                  aria-label="Masukkan nama domain" spellcheck="false" required>
+                <button type="button" id="cek-domain-clear-btn" class="cek-domain-clear-btn" aria-label="Hapus teks" style="display: none;">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
               <button type="submit" id="cek-domain-btn" aria-label="Cek ketersediaan domain">
                 <i class="fas fa-search"></i> <span>Cek Domain</span>
               </button>
