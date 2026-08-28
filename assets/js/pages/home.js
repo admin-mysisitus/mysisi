@@ -110,8 +110,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             const numMatch = text.match(/(\d+)/);
             if (!numMatch) return;
             const finalValue = numMatch[1];
-            const isPercentage = text.includes('%');
-            const hasPlus = text.includes('+');
             const finalNum = parseInt(finalValue);
             let currentNum = 0;
             const increment = Math.ceil(finalNum / 30);
@@ -123,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 currentNum = finalNum;
                 clearInterval(counter);
               }
-              const display = isPercentage ? currentNum + '%' : (hasPlus ? currentNum + '+' : currentNum);
+              const display = text.replace(finalValue, currentNum);
               h3.textContent = display;
             }, stepTime);
           });

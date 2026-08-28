@@ -1,4 +1,4 @@
-(function() {
+(function () {
   // Cari elemen footer utama
   const footer = document.querySelector("footer[aria-label='Informasi Footer']");
   if (!footer) return;
@@ -15,7 +15,7 @@
   const copyrightPara = document.createElement("p");
   const currentYear = new Date().getFullYear();
   copyrightPara.innerHTML = `&copy; <span>${currentYear}</span> — sisitus.com<br>
-                             All Rights Reserved | Developed by: <a href="https://www.instagram.com/sisitusdotcom" class="copyright-link" aria-label="Instagram SINTARA TECH">SINTARA TECH</a><br>
+                             All Rights Reserved | Operated by: <a href="https://www.instagram.com/sisitusdotcom" class="copyright-link" aria-label="Instagram SINTARA TECH">SINTARA Tech.</a><br>
                              Powered by`;
   // Buat watermark
   const wm = document.createElement("a");

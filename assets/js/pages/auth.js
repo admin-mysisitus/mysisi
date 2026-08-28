@@ -12,7 +12,8 @@ import {
 } from '../modules/shared-auth-form.js';
 import {
   showSuccess,
-  showError
+  showError,
+  renderUserAvatarHtml
 } from '../modules/unified-utils.js';
 // ============================================================================
 // INITIALIZATION
@@ -63,12 +64,9 @@ function showLoggedInState() {
   if (user) {
     document.getElementById('loggedin-name').textContent = user.displayName || 'Pengguna';
     document.getElementById('loggedin-email').textContent = user.email || '';
-    const photoEl = document.getElementById('loggedin-photo');
-    if (photoEl) {
-      photoEl.src = user.photoURL || AuthManager.getDefaultAvatar();
-      photoEl.onerror = () => {
-        photoEl.src = AuthManager.getDefaultAvatar();
-      };
+    const photoWrapper = document.querySelector('.profile-photo-wrapper');
+    if (photoWrapper) {
+      photoWrapper.innerHTML = renderUserAvatarHtml(user, 'w200', 'profile-photo');
     }
   }
   // Setup logout button
