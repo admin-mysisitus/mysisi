@@ -662,6 +662,9 @@ export class SharedAuthForm {
       // Call login API
       const result = await APIClient.loginUser(email, password);
       if (!result.success) {
+        if (result.rateLimit && result.rateLimit.remainingSec > 0) {
+          this.startCountdown(form.querySelector('button[type="submit"]'), result.rateLimit.remainingSec);
+        }
         throw new Error(result.message || 'Login gagal');
       }
       if (!result.data) {
@@ -744,6 +747,33 @@ export class SharedAuthForm {
       submitBtn.textContent = submitBtn.dataset.originalText || 'Submit';
     }
   }
+
+  /**
+   * Mulai hitung mundur (karena rate limit backend)
+   */
+  startCountdown(btn, seconds) {
+    if (!btn) return;
+    if (!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
+    
+    let remaining = seconds;
+    if (btn.countdownInterval) clearInterval(btn.countdownInterval);
+    
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fas fa-lock"></i> Terkunci (${remaining}s)`;
+    
+    btn.countdownInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(btn.countdownInterval);
+        btn.disabled = false;
+        btn.innerHTML = btn.dataset.originalHtml;
+        this.clearMessages();
+      } else {
+        btn.innerHTML = `<i class="fas fa-lock"></i> Terkunci (${remaining}s)`;
+      }
+    }, 1000);
+  }
+
   /**
    * Initialize password strength indicators
    */

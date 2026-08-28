@@ -25,7 +25,7 @@ class AdminApp {
     const user = AuthManager.getCurrentUser();
     
     if (!user) {
-      window.location.href = '/admin/login.html';
+      window.location.href = '/login.html';
       return;
     }
     if (user.status === 'suspended') {
@@ -54,7 +54,7 @@ class AdminApp {
     } catch (e) {
       void('Admin verification failed!', e);
       AuthManager.clearSession();
-      window.location.href = '/admin/login.html?error=unauthorized';
+      window.location.href = '/login.html?error=unauthorized';
       return;
     }
     // Setup routes
@@ -137,7 +137,7 @@ class AdminApp {
   async navigate(route) {
     // PROTECT ROUTES
     if (route !== '/admin/login' && !AuthManager.isAdmin()) {
-      window.location.href = '/admin/login.html';
+      window.location.href = '/login.html';
       return;
     }
     if (!this.routes[route]) {

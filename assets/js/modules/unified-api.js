@@ -276,13 +276,40 @@ export class APIClient {
           message: 'Firebase Auth tidak tersedia'
         };
       }
+      
+      // 1. Check Rate Limit dari Backend
+      const rateLimitRes = await this.call(GAS_CONFIG.ACTIONS.CHECK_LOGIN_RATE_LIMIT, { email });
+      if (rateLimitRes.success && rateLimitRes.data && !rateLimitRes.data.allowed) {
+        let blockMsg = 'Akses ditolak.';
+        const data = rateLimitRes.data;
+        if (data.suspended) {
+          blockMsg = 'Akun Anda telah ditangguhkan oleh Admin karena terlalu banyak percobaan gagal.';
+        } else if (data.remainingSec) {
+          blockMsg = `Terlalu banyak percobaan salah. Coba lagi dalam ${data.remainingSec} detik.`;
+        }
+        return { success: false, message: blockMsg, rateLimit: data };
+      }
+
+      // 2. Lakukan Firebase Auth
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
       let profile = null;
       if (db) {
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
         profile = snapshot.val();
+        // Cek suspend permanen dari RTDB Single Source of Truth
+        if (profile && profile.status === 'suspended') {
+          await auth.signOut();
+          return {
+            success: false,
+            message: 'Akun Anda telah ditangguhkan oleh Admin.'
+          };
+        }
       }
+      
+      // 3. Clear failed attempts di backend karena login sukses
+      this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, { email, isSuccess: true }).catch(() => {});
+
       return {
         success: true,
         data: profile || {
@@ -295,8 +322,11 @@ export class APIClient {
     } catch (e) {
       void('[Auth] Login error:', e);
       let errorMsg = 'Login gagal';
+      let isPasswordError = false;
+      
       if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') {
         errorMsg = 'Email atau password yang Anda masukkan salah.';
+        isPasswordError = true;
       } else if (e.code === 'auth/too-many-requests') {
         errorMsg = 'Terlalu banyak percobaan login. Silakan coba lagi beberapa saat lagi.';
       } else if (e.code === 'auth/invalid-email') {
@@ -304,9 +334,36 @@ export class APIClient {
       } else if (e.message) {
         errorMsg = e.message;
       }
+      
+      let rateLimitData = null;
+      // Jika salah password, catat ke backend (GAS)
+      if (isPasswordError) {
+        try {
+          const failRes = await this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, { email });
+          if (failRes.success && failRes.data) {
+            const data = failRes.data;
+            rateLimitData = data;
+            if (data.suspended) {
+              errorMsg = 'Akun Anda telah ditangguhkan otomatis karena terlalu banyak percobaan gagal (5 kali).';
+            } else if (data.cooldownUntil) {
+              const cooldownMins = data.count === 3 ? 1 : 5;
+              const remainingSec = Math.ceil((data.cooldownUntil - Date.now()) / 1000);
+              errorMsg = `Password salah. Akses ditangguhkan selama ${cooldownMins} menit demi keamanan.`;
+              rateLimitData.remainingSec = remainingSec > 0 ? remainingSec : 0;
+            } else {
+              const remaining = 3 - data.count;
+              if (remaining > 0) errorMsg += ` (Sisa percobaan sebelum penangguhan: ${remaining})`;
+            }
+          }
+        } catch(failErr) {
+          void('[Auth] Gagal mencatat percobaan salah ke backend', failErr);
+        }
+      }
+      
       return {
         success: false,
-        message: errorMsg
+        message: errorMsg,
+        rateLimit: rateLimitData
       };
     }
   }

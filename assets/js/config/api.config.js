@@ -8,7 +8,7 @@
 // ========== GOOGLE APPS SCRIPT CONFIGURATION ==========
 export const GAS_CONFIG = {
   // Main API endpoint untuk semua backend calls
-  URL: 'https://script.google.com/macros/s/AKfycbyAT2KD1qZ2VOtc6-qxuzruoHUVSPto8Xs-AYgxShUVDc_qUoRYzUMkIguSKfg9VMsM/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbwdKZatKK0bkAtj1godzmaqs1auzhc5HbsYiO2jQmdZHHyeDtFcMlCNUnGdfQZyxYbD/exec',
   // Timeout untuk fetch calls (dalam milliseconds)
   TIMEOUT: 60000,
   // Actions/endpoints yang dipanggil
@@ -21,6 +21,8 @@ export const GAS_CONFIG = {
     REQUEST_PASSWORD_RESET: 'requestPasswordReset',
     RESET_PASSWORD: 'resetPassword',
     VERIFY_EMAIL: 'verifyEmail',
+    CHECK_LOGIN_RATE_LIMIT: 'checkloginratelimit',
+    HANDLE_FAILED_LOGIN: 'handlefailedlogin',
     // Promo & Domain related
     VALIDATE_PROMO: 'validatePromoCode',
     CHECK_DOMAIN: 'checkDomain',
