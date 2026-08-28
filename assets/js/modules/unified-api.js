@@ -238,6 +238,10 @@ export class APIClient {
         }
         await db.ref(`users/${user.uid}`).update(profile);
       }
+
+      // Update native Firebase Auth profile
+      await user.updateProfile({ displayName: profile.displayName });
+
       return {
         success: true,
         data: profile,
@@ -591,6 +595,14 @@ export class APIClient {
         updates.photoURL = photoURL;
       }
       await db.ref(`users/${userId}`).update(updates);
+      
+      // Juga update native Firebase Auth profile
+      if (auth && auth.currentUser) {
+        const profileUpdates = { displayName };
+        if (photoURL) profileUpdates.photoURL = photoURL;
+        await auth.currentUser.updateProfile(profileUpdates);
+      }
+      
       return {
         success: true,
         message: 'Profil berhasil diupdate',

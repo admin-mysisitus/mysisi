@@ -100,11 +100,12 @@ export class AuthManager {
               return;
             }
             
-            const userObj = profile || {
+            const userObj = {
               userId: firebaseUser.uid,
               email: firebaseUser.email,
               displayName: firebaseUser.displayName || firebaseUser.email.split('@')[0],
-              emailVerified: firebaseUser.emailVerified
+              emailVerified: firebaseUser.emailVerified,
+              ...(profile || {})
             };
             // Ensure state updates without causing infinite loop
             if (JSON.stringify(this.state.user) !== JSON.stringify(userObj)) {
