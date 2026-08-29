@@ -1,5 +1,5 @@
 .hero.hero-home {
-  background-image: url('/assets/img/banner/banner-perusahaan.webp');
+  background-image: url('/assets/img/banner/banner-perusahaan.webp?v=1.0.0');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -16,7 +16,7 @@
 
 @media (max-width: 768px) {
   .hero.hero-home {
-    background-image: url('/assets/img/banner/banner-perusahaan.webp') !important;
+    background-image: url('/assets/img/banner/banner-perusahaan.webp?v=1.0.0') !important;
     background-position: 0% 100%;
     background-size: cover;
     animation: panBackgroundMobile 25s ease-in-out infinite;

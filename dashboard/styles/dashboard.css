@@ -1,6 +1,6 @@
-@import url('checkout.css');
-@import url('payment.css');
-@import url('cart.css');
+@import url('checkout.css?v=1.0.0');
+@import url('payment.css?v=1.0.0');
+@import url('cart.css?v=1.0.0');
 
 :root {
   --sidebar-width: 280px;

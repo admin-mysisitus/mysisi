@@ -1,4 +1,4 @@
-@import url('pembuatan-website.css');
+@import url('pembuatan-website.css?v=1.0.0');
 
 .detail-problems-section {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;

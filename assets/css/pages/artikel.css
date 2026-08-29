@@ -1,4 +1,4 @@
-@import url('blog.css');
+@import url('blog.css?v=1.0.0');
 
 .artikel-list-section {
   padding: clamp(1.5rem, 4vw, 3.5rem) 0;

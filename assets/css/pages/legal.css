@@ -1,4 +1,4 @@
-@import url('pembuatan-website.css');
+@import url('pembuatan-website.css?v=1.0.0');
 @media (min-width: 769px) {
   .hero-home .cta-buttons {
     flex-direction: row !important;
