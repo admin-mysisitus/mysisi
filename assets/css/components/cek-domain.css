@@ -401,7 +401,8 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 15px;
+  column-gap: 15px;
+  row-gap: 4px;
   text-align: center;
   width: 100%;
   margin: 0 auto;
@@ -1586,46 +1587,47 @@ img[alt=".it.com"].tld-logo-result {
 
 @media (max-width: 480px) {
   #cek-domain-popular-extensions {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
   }
 
-  .cek-domain-ext-item {
-    padding: 10px 8px;
+  .cek-domain-ext-item-simple {
+    padding: 6px;
   }
 
-  .cek-domain-ext-label,
-  .cek-domain-ext-discount {
-    padding: 2px 6px;
-    font-size: 0.7rem;
+  .cek-domain-badge-group-simple {
+    flex-wrap: nowrap;
+    gap: 2px;
   }
 
-  .cek-domain-ext-name {
-    font-size: 0.9rem;
-    margin: 8px 0;
-    height: 28px;
-    justify-content: center;
+  .cek-domain-badge {
+    padding: 2px 4px;
+    font-size: 0.6rem;
+    white-space: nowrap;
+  }
+
+  .cek-domain-ext-main-simple {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
   }
 
   .tld-logo {
-    height: 24px;
+    height: 18px;
+    max-width: 60px;
+    object-fit: contain;
   }
 
-  .cek-domain-ext-prices {
-    gap: 4px;
-    margin: 8px 0;
+  .cek-domain-ext-prices-simple {
+    gap: 0;
   }
 
   .cek-domain-ext-old {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
   .cek-domain-ext-new {
-    font-size: 0.9rem;
-  }
-
-  .cek-domain-ext-info {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 
   #cek-domain-results-list {
