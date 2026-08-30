@@ -1,61 +1,41 @@
-// =========================
-// DATA NAVIGASI HEADER
-// =========================
+// menu navbar — single source of truth untuk navigasi utama
 export const menuData = [{
-  href: "/",
-  text: "Home",
-  icon: "fas fa-home"
-}, {
-  text: "Perusahaan",
-  href: "/perusahaan/",
-  icon: "fas fa-building",
-  dropdown: [{
-    href: "/perusahaan/",
-    text: "Profil Perusahaan",
-    icon: "fas fa-briefcase",
-    isParent: true
-  }, {
-    href: "/perusahaan/tentang/",
-    text: "Tentang Kami",
-    icon: "fas fa-users"
-  }, {
-    href: "/perusahaan/portofolio/",
-    text: "Portofolio",
-    icon: "fas fa-images"
-  }, {
-    href: "/perusahaan/legal/",
-    text: "Legal",
-    icon: "fas fa-file-contract"
-  }]
+  href: "/website/",
+  text: "Website",
+  icon: "fas fa-laptop-code"
 }, {
   text: "Layanan",
   href: "/layanan/",
-  icon: "fas fa-cogs",
+  icon: "fas fa-concierge-bell",
   dropdown: [{
     href: "/layanan/",
-    text: "Layanan Kami",
-    icon: "fas fa-th",
+    text: "Semua Layanan",
+    icon: "fas fa-concierge-bell",
     isParent: true
   }, {
-    href: "/layanan/pembuatan-website/",
-    text: "Pembuatan Website",
-    icon: "fas fa-code"
+    href: "/domain/",
+    text: "Domain",
+    icon: "fas fa-globe"
   }, {
-    href: "/layanan/maintenance/",
-    text: "Maintenance Website",
-    icon: "fas fa-wrench"
-  }, {
-    href: "/layanan/domain-hosting/",
-    text: "Domain & Hosting",
+    href: "/hosting/",
+    text: "Hosting",
     icon: "fas fa-server"
+  }, {
+    href: "/maintenance/",
+    text: "Maintenance",
+    icon: "fas fa-wrench"
   }]
+}, {
+  href: "/perusahaan/portofolio/",
+  text: "Portofolio",
+  icon: "fas fa-images"
 }, {
   text: "Blog",
   href: "/blog/",
   icon: "fas fa-newspaper",
   dropdown: [{
     href: "/blog/",
-    text: "Blog",
+    text: "Artikel & Tips",
     icon: "fas fa-blog",
     isParent: true
   }, {
@@ -64,42 +44,66 @@ export const menuData = [{
     icon: "fas fa-pen-fancy"
   }, {
     href: "/blog/tips-website/",
-    text: "Tips Website",
+    text: "Tips website",
     icon: "fas fa-lightbulb"
   }]
 }, {
   href: "/kontak/",
-  text: "Kontak",
-  icon: "fas fa-envelope"
-}, {
-  text: "Promo",
-  href: "/promo/",
-  icon: "fas fa-gift",
-  isPromo: true
+  text: "Bantuan",
+  icon: "fas fa-life-ring"
 }, {
   text: "Login",
-  href: "/auth/",
+  href: "https://my.sisitus.com/auth/",
   icon: "fas fa-sign-in-alt",
   isAuth: true
 }];
-// =========================
-// DATA LAYANAN UTAMA FOOTER
-// =========================
+
+// footer kolom layanan utama
 export const mainServicesData = [{
-  href: "/layanan/",
-  text: "Layanan"
-}, {
-  href: "/layanan/pembuatan-website/",
+  href: "/website/",
   text: "Pembuatan Website"
 }, {
-  href: "/layanan/domain-hosting/",
-  text: "Domain & Hosting"
+  href: "/domain/",
+  text: "Pendaftaran Domain"
 }, {
-  href: "/layanan/maintenance/",
+  href: "/hosting/",
+  text: "Hosting"
+}, {
+  href: "/maintenance/",
   text: "Maintenance Website"
 }, {
   href: "/promo/",
   text: "Promo & Penawaran"
+}];
+
+// footer kolom link cepat — info perusahaan & pendukung
+export const footerQuickLinksData = [{
+  href: "/perusahaan/tentang/",
+  text: "Tentang kami"
+}, {
+  href: "/perusahaan/portofolio/",
+  text: "Portofolio klien"
+}, {
+  href: "/perusahaan/karir/",
+  text: "Karir"
+}, {
+  href: "/blog/",
+  text: "Blog"
+}, {
+  href: "/kontak/",
+  text: "Kontak"
+}];
+
+// footer baris legal — link kebijakan hukum
+export const footerLegalData = [{
+  href: "/perusahaan/legal/",
+  text: "Syarat & Ketentuan"
+}, {
+  href: "/perusahaan/legal/",
+  text: "Kebijakan Privasi"
+}, {
+  href: "/perusahaan/legal/",
+  text: "Kebijakan Refund"
 }];
 // =========================
 // DATA SOSIAL MEDIA FOOTER

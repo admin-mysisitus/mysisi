@@ -100,7 +100,7 @@ function showAuthForms() {
           showLoggedInState();
           // Let default redirect behavior happen
           setTimeout(() => {
-            window.location.href = user.role === 'admin' ? '/admin/' : '/dashboard/';
+            window.location.href = user.role === 'admin' ? '/admin/' : 'https://my.sisitus.com/dashboard/';
           }, 1500);
         }
       });

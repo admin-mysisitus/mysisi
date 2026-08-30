@@ -93,7 +93,7 @@ footer {
 
 .link-services-wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: clamp(1.5rem, 4vw, 2rem);
   width: 100%;
   padding: 0;
@@ -278,14 +278,42 @@ footer {
   text-overflow: ellipsis;
 }
 
-.footer-copyright {
-  text-align: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0.55;
+.footer-legal {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin: 0 auto;
+  padding: 1.2rem 0 0;
   width: 90%;
   max-width: 1200px;
+}
+
+.footer-legal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  justify-content: center;
+}
+
+.footer-legal-list a {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.15s ease;
+}
+
+.footer-legal-list a:hover {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  text-align: center;
+  opacity: 0.45;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .footer-copyright p {

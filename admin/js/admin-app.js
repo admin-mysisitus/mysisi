@@ -24,18 +24,18 @@ class AdminApp {
     // STRICT SECURITY: Synchronous Check sebelum me-render UI apapun
     const user = AuthManager.getCurrentUser();
     if (!user) {
-      window.location.href = '/auth/';
+      window.location.href = 'https://my.sisitus.com/auth/';
       return;
     }
     if (user.status === 'suspended') {
       document.body.innerHTML = '';
-      window.location.href = '/auth/?error=suspended';
+      window.location.href = 'https://my.sisitus.com/auth/?error=suspended';
       return;
     }
     if (user.role !== 'admin') {
       document.body.innerHTML = '';
       // Arahkan ke dasbor pelanggan karena dia masih punya hak akses sebagai customer
-      window.location.href = '/dashboard/';
+      window.location.href = 'https://my.sisitus.com/dashboard/';
       return;
     }
     // Render sidebar and navbar
@@ -52,7 +52,7 @@ class AdminApp {
     } catch (e) {
       void('Admin verification failed!', e);
       AuthManager.clearSession();
-      window.location.href = '/auth/?error=unauthorized';
+      window.location.href = 'https://my.sisitus.com/auth/?error=unauthorized';
       return;
     }
     // Setup routes
@@ -135,7 +135,7 @@ class AdminApp {
   async navigate(route) {
     // PROTECT ROUTES
     if (route !== '/admin/login' && !AuthManager.isAdmin()) {
-      window.location.href = '/auth/';
+      window.location.href = 'https://my.sisitus.com/auth/';
       return;
     }
     if (!this.routes[route]) {

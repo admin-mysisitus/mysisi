@@ -1,6 +1,8 @@
 import {
   menuData,
   mainServicesData,
+  footerQuickLinksData,
+  footerLegalData,
   footerSocialData,
   footerContactData,
   footerTrustBadgesData
@@ -24,7 +26,7 @@ function createProfileMenuItem(user) {
   li.className = 'nav-desktop-item nav-desktop-profile';
   const link = document.createElement('a');
   link.className = 'nav-desktop-link profile-link';
-  link.href = user?.role === 'admin' ? '/admin/' : '/dashboard/';
+  link.href = user?.role === 'admin' ? '/admin/' : 'https://my.sisitus.com/dashboard/';
   link.innerHTML = renderUserAvatarHtml(user, 'w200', 'nav-profile-photo');
   const span = document.createElement('span');
   span.className = 'nav-profile-name';
@@ -96,7 +98,7 @@ const generateDesktopMenu = () => {
   if (navElements.desktopNav) {
     navElements.desktopNav.appendChild(list);
   } else {
-    void('[Navigation] .nav-desktop element not found - skipping desktop menu');
+    void ('[Navigation] .nav-desktop element not found - skipping desktop menu');
   }
 };
 // Generate Menu Mobile
@@ -183,7 +185,7 @@ const generateMobileMenu = () => {
     profileLi.className = 'nav-mobile-item nav-mobile-profile';
     const link = document.createElement('a');
     link.className = 'nav-mobile-link profile-link';
-    link.href = loggedInUser?.role === 'admin' ? '/admin/' : '/dashboard/';
+    link.href = loggedInUser?.role === 'admin' ? '/admin/' : 'https://my.sisitus.com/dashboard/';
     link.innerHTML = renderUserAvatarHtml(loggedInUser, 'w200', 'nav-profile-photo') + `<span class="nav-profile-name">${loggedInUser?.displayName || 'User'}</span>`;
     profileLi.appendChild(link);
     list.appendChild(profileLi);
@@ -192,7 +194,7 @@ const generateMobileMenu = () => {
   if (navElements.menu) {
     navElements.menu.appendChild(list);
   } else {
-    void('[Navigation] #nav-mobile element not found - skipping mobile menu');
+    void ('[Navigation] #nav-mobile element not found - skipping mobile menu');
   }
 };
 // Setup Dropdown Mobile
@@ -256,12 +258,24 @@ const setActiveLinks = () => {
     }
   });
 };
-// Generate Footer Link Cepat
+// footer kolom link cepat — dibaca dari data terpisah, bukan dari menuData
 const generateFooterLinks = () => {
   const container = document.getElementById('footer-quick-links');
   if (!container) return;
-  // Sembunyikan Promo dan Layanan (Layanan sudah dipindah ke kolom Layanan Utama)
-  menuData.filter(item => !item.isPromo && item.text !== 'Layanan').forEach(item => {
+  footerQuickLinksData.forEach(item => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = item.href;
+    a.textContent = item.text;
+    li.appendChild(a);
+    container.appendChild(li);
+  });
+};
+// footer baris legal — syarat ketentuan, privasi, refund
+const generateFooterLegal = () => {
+  const container = document.getElementById('footer-legal-links');
+  if (!container) return;
+  footerLegalData.forEach(item => {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = item.href;
@@ -384,7 +398,7 @@ export function refreshNavigation() {
     setActiveLinks();
     setupMobileDropdowns();
   } catch (error) {
-    void('Error refreshing navigation:', error);
+    void ('Error refreshing navigation:', error);
   }
 }
 // Helper: Get cart item count from localStorage
@@ -504,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   // Skip navigation setup if on auth page (no nav-desktop or nav-mobile elements)
   if (!navElements.desktopNav && !navElements.menu) {
-    void('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
+    void ('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
     return;
   }
   generateDesktopMenu();
@@ -537,4 +551,5 @@ document.addEventListener('DOMContentLoaded', () => {
   generateFooterSocial();
   generateFooterContact();
   generateFooterTrustBadges();
+  generateFooterLegal();
 });

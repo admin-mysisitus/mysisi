@@ -10,7 +10,7 @@
   <link rel="manifest" href="/assets/favicon/site.webmanifest?v=1.0.0">
   <link rel="stylesheet" href="/assets/css/main.css?v=1.0.0">
   <link rel="stylesheet" href="/assets/css/components/auth.css?v=1.0.0">
-  <link rel="stylesheet" href="/dashboard/styles/cart.css?v=1.0.0">
+  <link rel="stylesheet" href="/assets/css/pages/cart.css?v=1.0.0">
   <link media="print" onload="this.media='all'" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -40,17 +40,17 @@
   </header>
   <div id="cart-container" class="page-container" style="padding: 0 16px; padding-top: 40px; overflow-x: hidden;"></div>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module" src="/assets/js/components/navigation.js?v=1.0.0"></script>
+  <script type="module" src="/assets/js/components/navigation.js?v=1.0.1"></script>
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
-    import { render } from '/dashboard/js/modules/cart.js?v=20260823_1550';
+    import { render } from '/assets/js/modules/cart.js?v=20260823_1550';
     
       // Initialize cart page (standalone, not SPA)
     const currentUser = AuthManager.getCurrentUser();
     
     if (currentUser) {
           // Authenticated users should use the dashboard cart
-      window.location.replace('/dashboard/#!/dashboard/keranjang');
+      window.location.replace('/my/dashboard/#!/dashboard/keranjang');
     } else {
           // Call render function with null for guest checkout
       render(null);

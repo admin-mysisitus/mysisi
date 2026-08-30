@@ -69,7 +69,7 @@ export class AuthManager {
                       auth.signOut();
                       this.clearSession();
                       if (window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
-                        window.location.href = '/auth/?error=suspended';
+                        window.location.href = 'https://my.sisitus.com/auth/?error=suspended';
                       }
                       return;
                     }
@@ -77,7 +77,7 @@ export class AuthManager {
                     if (rtProfile.role !== 'admin' && window.location.pathname.includes('/admin/')) {
                       void('[AuthManager] Realtime Role Demoted, forcing exit from admin');
                       // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
-                      window.location.href = '/dashboard/';
+                      window.location.href = 'https://my.sisitus.com/dashboard/';
                       return;
                     }
                     // Sinkronisasi data sesi lokal jika ada perubahan jabatan
