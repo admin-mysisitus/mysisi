@@ -1,6 +1,6 @@
 # Strategi Deployment Cloudflare Pages untuk Monorepo
 
-Berdasarkan analisa struktur *workspace* dan kebutuhan *routing* Anda, berikut adalah konfigurasi *deployment* yang paling aman dan efisien untuk **1 Repositori GitHub Ã¢â€ â€™ 3 Proyek Cloudflare Pages**. 
+Berdasarkan analisa struktur *workspace* dan kebutuhan *routing* Anda, berikut adalah konfigurasi *deployment* yang paling aman dan efisien untuk **1 Repositori GitHub ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ 3 Proyek Cloudflare Pages**. 
 
 Strategi ini **menghindari rewrite yang bertabrakan**, **mempertahankan struktur aset**, dan memastikan bahwa semua tautan *absolute* seperti /assets/... dan /auth/... berfungsi secara *native* tanpa perlu diubah.
 
@@ -11,7 +11,7 @@ Karena ini adalah *website* utama, kita akan melakukan *deploy* dari *root* dire
 
 - **Framework Preset**: None
 - **Build Command**: 
-m -rf my admin
+rm -rf my admin
 - **Build Output Directory**: / (Biarkan kosong / default)
 
 **Penjelasan Output**: 
@@ -49,12 +49,12 @@ Sistem akan mengekstrak isi folder /admin/ ke *root* dari domain ini, dan menyal
 
 ---
 
-## Ã¢Å“â€¦ Kesimpulan Manfaat Strategi Ini
+## ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Kesimpulan Manfaat Strategi Ini
 1. **Nol Duplikasi Repo**: Tetap 100% monorepo.
 2. **Nol Perubahan Kode Core**: Tidak perlu mengubah konfigurasi *CORS* atau merombak tautan pemanggilan src="/assets/..." di dalam HTML/JS. Semuanya akan bekerja secara *magic*.
 3. **Isolasi Sempurna**: sisitus.com tidak bisa mengakses rute admin secara tidak sengaja, dan backstage.sisitus.com tidak terbebani oleh file-file marketing.
 
-## Ã°Å¸â€œÂ Catatan Lanjutan Sebelum Eksekusi Cleanup
+## ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â Catatan Lanjutan Sebelum Eksekusi Cleanup
 Jika Anda menyetujui konfigurasi ini, kita dapat memvalidasi **satu-satunya hal yang tersisa yang perlu diubah secara manual di dalam kode**: 
 - Tautan "Kembali ke Beranda" di dalam Customer Portal yang memiliki href="/". Tautan ini akan saya ubah secara massal (melalui script) menjadi href="https://sisitus.com/" agar mengarah kembali ke Public Site.
 
