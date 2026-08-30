@@ -69,7 +69,7 @@ export class AuthManager {
                       auth.signOut();
                       this.clearSession();
                       if (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
-                        window.location.href = 'https://my.sisitus.com/auth/?error=suspended';
+                        window.location.href = '/auth/?error=suspended';
                       }
                       return;
                     }
@@ -277,7 +277,7 @@ export class AuthManager {
     void('[AuthManager] Refreshing user data from storage...');
     this.loadSession();
     if (this.state.user && this.state.user.emailVerified) {
-      void('✅ User verification status updated:', this.state.user);
+      void('âœ… User verification status updated:', this.state.user);
       this.emit('authChanged', {
         user: this.state.user,
         isLoggedIn: true

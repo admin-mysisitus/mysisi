@@ -24,12 +24,12 @@ class AdminApp {
     // STRICT SECURITY: Synchronous Check sebelum me-render UI apapun
     const user = AuthManager.getCurrentUser();
     if (!user) {
-      window.location.href = 'https://my.sisitus.com/auth/';
+      window.location.href = '/auth/';
       return;
     }
     if (user.status === 'suspended') {
       document.body.innerHTML = '';
-      window.location.href = 'https://my.sisitus.com/auth/?error=suspended';
+      window.location.href = '/auth/?error=suspended';
       return;
     }
     if (user.role !== 'admin') {
@@ -52,7 +52,7 @@ class AdminApp {
     } catch (e) {
       void('Admin verification failed!', e);
       AuthManager.clearSession();
-      window.location.href = 'https://my.sisitus.com/auth/?error=unauthorized';
+      window.location.href = '/auth/?error=unauthorized';
       return;
     }
     // Setup routes
@@ -135,7 +135,7 @@ class AdminApp {
   async navigate(route) {
     // PROTECT ROUTES
     if (route !== '/login' && !AuthManager.isAdmin()) {
-      window.location.href = 'https://my.sisitus.com/auth/';
+      window.location.href = '/auth/';
       return;
     }
     if (!this.routes[route]) {
