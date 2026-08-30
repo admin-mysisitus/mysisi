@@ -8,7 +8,7 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   if (currentUser && currentUser.role === 'admin') {
-    window.location.replace('/admin/');
+    window.location.replace('https://backstage.sisitus.com/');
     return;
   }
   try {

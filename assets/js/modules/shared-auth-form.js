@@ -675,7 +675,7 @@ export class SharedAuthForm {
           this.options.onLoginSuccess(result.data);
         } else {
           // Default: redirect to dashboard or admin
-          window.location.href = result.data.role === 'admin' ? '/admin/' : 'https://my.sisitus.com/dashboard/';
+          window.location.href = result.data.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
         }
       }, 1500);
     } catch (error) {

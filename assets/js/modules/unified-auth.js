@@ -68,13 +68,13 @@ export class AuthManager {
                       void('[AuthManager] Realtime Account Suspended, forcing logout');
                       auth.signOut();
                       this.clearSession();
-                      if (window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
+                      if (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
                         window.location.href = 'https://my.sisitus.com/auth/?error=suspended';
                       }
                       return;
                     }
                     // Deteksi penurunan role secara realtime saat sedang di dasbor admin
-                    if (rtProfile.role !== 'admin' && window.location.pathname.includes('/admin/')) {
+                    if (rtProfile.role !== 'admin' && (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/'))) {
                       void('[AuthManager] Realtime Role Demoted, forcing exit from admin');
                       // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
                       window.location.href = 'https://my.sisitus.com/dashboard/';

@@ -64,62 +64,62 @@ class AdminApp {
   }
   setupRoutes() {
     this.routes = {
-      '/admin/': {
+      '/': {
         page: 'overview',
         title: 'Overview',
         loadModule: () => import('./modules/overview.js')
       },
-      '/admin/users': {
+      '/users': {
         page: 'users',
         title: 'Kelola Users',
         loadModule: () => import('./modules/users.js')
       },
-      '/admin/transactions': {
+      '/transactions': {
         page: 'transactions',
         title: 'Transaksi',
         loadModule: () => import('./modules/transactions.js')
       },
-      '/admin/packages': {
+      '/packages': {
         page: 'packages',
         title: 'Paket Website',
         loadModule: () => import('./modules/packages.js')
       },
-      '/admin/domains': {
+      '/domains': {
         page: 'domains',
         title: 'Harga Domain',
         loadModule: () => import('./modules/domains.js')
       },
-      '/admin/addons': {
+      '/addons': {
         page: 'addons',
         title: 'Layanan Ekstra',
         loadModule: () => import('./modules/addons.js')
       },
-      '/admin/dns': {
+      '/dns': {
         page: 'dns',
         title: 'DNS Records',
         loadModule: () => import('./modules/dns.js')
       },
-      '/admin/promos': {
+      '/promos': {
         page: 'promos',
         title: 'Kode Promo',
         loadModule: () => import('./modules/promos.js')
       },
-      '/admin/livechat': {
+      '/livechat': {
         page: 'livechat',
         title: 'Live Chat',
         loadModule: () => import('./modules/livechat.js')
       },
-      '/admin/support': {
+      '/support': {
         page: 'support',
         title: 'Support Tickets',
         loadModule: () => import('./modules/support.js')
       },
-      '/admin/settings': {
+      '/settings': {
         page: 'settings',
         title: 'Pengaturan Sistem',
         loadModule: () => import('./modules/settings.js')
       },
-      '/admin/profile': {
+      '/profile': {
         page: 'profile',
         title: 'Profil Admin',
         loadModule: () => import('./modules/profile.js')
@@ -128,18 +128,18 @@ class AdminApp {
   }
   handleRouteChange() {
     const hash = window.location.hash;
-    const routePart = hash.replace('#!', '').split('?')[0] || '/admin/';
-    const baseRoute = routePart.startsWith('/admin/') ? routePart : `/admin/${routePart}`;
+    const routePart = hash.replace('#!', '').split('?')[0] || '/';
+    const baseRoute = routePart.startsWith('/') ? routePart : `/${routePart}`;
     this.navigate(baseRoute);
   }
   async navigate(route) {
     // PROTECT ROUTES
-    if (route !== '/admin/login' && !AuthManager.isAdmin()) {
+    if (route !== '/login' && !AuthManager.isAdmin()) {
       window.location.href = 'https://my.sisitus.com/auth/';
       return;
     }
     if (!this.routes[route]) {
-      route = '/admin/';
+      route = '/';
       window.location.hash = '#!' + route;
       return;
     }
@@ -155,7 +155,7 @@ class AdminApp {
       // Load JS module
       const module = await routeConfig.loadModule();
       // Load HTML view
-      const response = await fetch(`/admin/views/${routeConfig.page}.html`);
+      const response = await fetch(`/views/${routeConfig.page}.html`);
       if (!response.ok) throw new Error(`View not found: ${routeConfig.page}`);
       const html = await response.text();
       const contentArea = document.getElementById('admin-content');

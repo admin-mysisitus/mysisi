@@ -13,47 +13,47 @@ export class AdminSidebar {
       <nav class="admin-nav-menu">
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 10px;">Main Menu</div>
         
-        <a href="#!/admin/" class="admin-nav-item" data-route="/admin/">
+        <a href="#!/" class="admin-nav-item" data-route="/">
           <i class="fas fa-chart-pie"></i> Overview
         </a>
-        <a href="#!/admin/users" class="admin-nav-item" data-route="/admin/users">
+        <a href="#!/users" class="admin-nav-item" data-route="/users">
           <i class="fas fa-users"></i> Users
         </a>
-        <a href="#!/admin/transactions" class="admin-nav-item" data-route="/admin/transactions">
+        <a href="#!/transactions" class="admin-nav-item" data-route="/transactions">
           <i class="fas fa-file-invoice-dollar"></i> Transaksi
         </a>
         
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Manajemen Produk</div>
         
-        <a href="#!/admin/packages" class="admin-nav-item" data-route="/admin/packages">
+        <a href="#!/packages" class="admin-nav-item" data-route="/packages">
           <i class="fas fa-box-open"></i> Paket Website
         </a>
-        <a href="#!/admin/domains" class="admin-nav-item" data-route="/admin/domains">
+        <a href="#!/domains" class="admin-nav-item" data-route="/domains">
           <i class="fas fa-globe"></i> Harga Domain
         </a>
-        <a href="#!/admin/addons" class="admin-nav-item" data-route="/admin/addons">
+        <a href="#!/addons" class="admin-nav-item" data-route="/addons">
           <i class="fas fa-puzzle-piece"></i> Layanan Ekstra
         </a>
-        <a href="#!/admin/dns" class="admin-nav-item" data-route="/admin/dns">
+        <a href="#!/dns" class="admin-nav-item" data-route="/dns">
           <i class="fas fa-network-wired"></i> DNS Records
         </a>
-        <a href="#!/admin/promos" class="admin-nav-item" data-route="/admin/promos">
+        <a href="#!/promos" class="admin-nav-item" data-route="/promos">
           <i class="fas fa-ticket"></i> Promo Codes
         </a>
 
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Sistem</div>
         
-        <a href="#!/admin/livechat" class="admin-nav-item" data-route="/admin/livechat">
+        <a href="#!/livechat" class="admin-nav-item" data-route="/livechat">
           <i class="fas fa-comments"></i> Live Chat
         </a>
-        <a href="#!/admin/support" class="admin-nav-item" data-route="/admin/support">
+        <a href="#!/support" class="admin-nav-item" data-route="/support">
           <i class="fas fa-headset"></i> Support Tickets
         </a>
-        <a href="#!/admin/settings" class="admin-nav-item" data-route="/admin/settings">
+        <a href="#!/settings" class="admin-nav-item" data-route="/settings">
           <i class="fas fa-sliders"></i> Pengaturan
         </a>
         
-        <a href="#!/admin/profile" class="admin-nav-item" data-route="/admin/profile">
+        <a href="#!/profile" class="admin-nav-item" data-route="/profile">
           <i class="fas fa-user-circle"></i> Profil Admin
         </a>
         

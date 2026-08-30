@@ -1,6 +1,6 @@
 # Strategi Deployment Cloudflare Pages untuk Monorepo
 
-Berdasarkan analisa struktur *workspace* dan kebutuhan *routing* Anda, berikut adalah konfigurasi *deployment* yang paling aman dan efisien untuk **1 Repositori GitHub → 3 Proyek Cloudflare Pages**. 
+Berdasarkan analisa struktur *workspace* dan kebutuhan *routing* Anda, berikut adalah konfigurasi *deployment* yang paling aman dan efisien untuk **1 Repositori GitHub â†’ 3 Proyek Cloudflare Pages**. 
 
 Strategi ini **menghindari rewrite yang bertabrakan**, **mempertahankan struktur aset**, dan memastikan bahwa semua tautan *absolute* seperti /assets/... dan /auth/... berfungsi secara *native* tanpa perlu diubah.
 
@@ -35,7 +35,7 @@ Hasil akhirnya, struktur di server akan terlihat seperti ini:
 
 ---
 
-## 3. Konfigurasi Admin (\admin.sisitus.com\)
+## 3. Konfigurasi Admin (\backstage.sisitus.com\)
 Sama persis dengan strategi Customer Portal, hanya target sumbu utamanya yang diganti.
 
 - **Framework Preset**: None
@@ -44,17 +44,17 @@ Sama persis dengan strategi Customer Portal, hanya target sumbu utamanya yang di
 
 **Penjelasan Output**: 
 Sistem akan mengekstrak isi folder /admin/ ke *root* dari domain ini, dan menyalin folder /assets/ untuk menemaninya. 
-- https://admin.sisitus.com/ (Otomatis memuat admin/index.html)
-- https://admin.sisitus.com/assets/... (Valid)
+- https://backstage.sisitus.com/ (Otomatis memuat admin/index.html)
+- https://backstage.sisitus.com/assets/... (Valid)
 
 ---
 
-## ✅ Kesimpulan Manfaat Strategi Ini
+## âœ… Kesimpulan Manfaat Strategi Ini
 1. **Nol Duplikasi Repo**: Tetap 100% monorepo.
 2. **Nol Perubahan Kode Core**: Tidak perlu mengubah konfigurasi *CORS* atau merombak tautan pemanggilan src="/assets/..." di dalam HTML/JS. Semuanya akan bekerja secara *magic*.
-3. **Isolasi Sempurna**: sisitus.com tidak bisa mengakses rute admin secara tidak sengaja, dan admin.sisitus.com tidak terbebani oleh file-file marketing.
+3. **Isolasi Sempurna**: sisitus.com tidak bisa mengakses rute admin secara tidak sengaja, dan backstage.sisitus.com tidak terbebani oleh file-file marketing.
 
-## 📝 Catatan Lanjutan Sebelum Eksekusi Cleanup
+## ðŸ“ Catatan Lanjutan Sebelum Eksekusi Cleanup
 Jika Anda menyetujui konfigurasi ini, kita dapat memvalidasi **satu-satunya hal yang tersisa yang perlu diubah secara manual di dalam kode**: 
 - Tautan "Kembali ke Beranda" di dalam Customer Portal yang memiliki href="/". Tautan ini akan saya ubah secara massal (melalui script) menjadi href="https://sisitus.com/" agar mengarah kembali ke Public Site.
 

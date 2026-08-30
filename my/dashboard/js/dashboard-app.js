@@ -168,7 +168,7 @@ class DashboardApp {
     }
     // Block admin from user dashboard
     if (this.currentUser && this.currentUser.role === 'admin') {
-      window.location.href = '/admin/';
+      window.location.href = 'https://backstage.sisitus.com/';
       return;
     }
     this.currentRoute = route;

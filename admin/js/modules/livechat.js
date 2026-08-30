@@ -7,7 +7,7 @@ export async function render() {
     const css = document.createElement('link');
     css.id = 'livechat-admin-css';
     css.rel = 'stylesheet';
-    css.href = '/admin/styles/livechat.css';
+    css.href = '/styles/livechat.css';
     document.head.appendChild(css);
   }
   // Load global modal CSS for attachment modal
@@ -48,7 +48,7 @@ export async function render() {
   if (existingAdminScript) {
     existingAdminScript.remove(); // Remove old one
   }
-  await loadScript("/admin/js/modules/livechat-logic.js", "livechat-admin-logic");
+  await loadScript("/js/modules/livechat-logic.js", "livechat-admin-logic");
 }
 
 function loadScript(src, id = null) {

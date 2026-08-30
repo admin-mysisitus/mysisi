@@ -40,7 +40,7 @@ export class AdminNavbar {
     const profileBtn = document.getElementById('admin-profile-trigger');
     if (profileBtn) {
       profileBtn.addEventListener('click', () => {
-        window.location.hash = '#!/admin/profile';
+        window.location.hash = '#!/profile';
       });
     }
     // Setup Sidebar Toggle Logic for Mobile

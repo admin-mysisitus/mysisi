@@ -26,7 +26,7 @@ function createProfileMenuItem(user) {
   li.className = 'nav-desktop-item nav-desktop-profile';
   const link = document.createElement('a');
   link.className = 'nav-desktop-link profile-link';
-  link.href = user?.role === 'admin' ? '/admin/' : 'https://my.sisitus.com/dashboard/';
+  link.href = user?.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
   link.innerHTML = renderUserAvatarHtml(user, 'w200', 'nav-profile-photo');
   const span = document.createElement('span');
   span.className = 'nav-profile-name';
@@ -185,7 +185,7 @@ const generateMobileMenu = () => {
     profileLi.className = 'nav-mobile-item nav-mobile-profile';
     const link = document.createElement('a');
     link.className = 'nav-mobile-link profile-link';
-    link.href = loggedInUser?.role === 'admin' ? '/admin/' : 'https://my.sisitus.com/dashboard/';
+    link.href = loggedInUser?.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
     link.innerHTML = renderUserAvatarHtml(loggedInUser, 'w200', 'nav-profile-photo') + `<span class="nav-profile-name">${loggedInUser?.displayName || 'User'}</span>`;
     profileLi.appendChild(link);
     list.appendChild(profileLi);
