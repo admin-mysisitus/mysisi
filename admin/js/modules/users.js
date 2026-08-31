@@ -87,22 +87,25 @@ function setupEventListeners() {
     document.getElementById('usr-verified').checked = user.verified !== false;
     document.getElementById('user-modal').style.display = 'flex';
   };
-  window.deleteUser = async (id) => {
+  window.toggleStatus = async (id, targetStatus) => {
     if (typeof Swal !== 'undefined') {
+      const isSuspend = targetStatus === 'suspended';
       const result = await Swal.fire({
-        title: 'Suspend User?',
-        text: `User dengan ID ${id} akan di-suspend.`,
+        title: isSuspend ? 'Suspend User?' : 'Aktifkan User?',
+        text: isSuspend ? `User dengan ID ${id} akan di-suspend.` : `User dengan ID ${id} akan diaktifkan kembali.`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#ef4444',
+        confirmButtonColor: isSuspend ? '#ef4444' : '#10b981',
         cancelButtonColor: '#4b5563',
-        confirmButtonText: 'Ya, Suspend'
+        confirmButtonText: isSuspend ? 'Ya, Suspend' : 'Ya, Aktifkan'
       });
       if (result.isConfirmed) {
         try {
-          const res = await APIClient.deleteAdminUser(AuthManager.getUserId(), id);
+          const adminId = AuthManager.getUserId();
+          // APIClient._adminCrud action 'save' handles partial updates because we just changed it to use .update()
+          const res = await APIClient.saveAdminUser(adminId, { id, status: targetStatus });
           if (res.success) {
-            Swal.fire('Berhasil!', 'User telah di-suspend.', 'success');
+            Swal.fire('Berhasil!', isSuspend ? 'User telah di-suspend.' : 'User telah diaktifkan.', 'success');
             await loadUsers();
           } else {
             throw new Error(res.message);
@@ -219,9 +222,15 @@ function renderTable(users, tbody) {
           <button class="admin-btn" onclick="window.editUser('${uid}')" style="background: rgba(59, 130, 246, 0.1); color: var(--admin-info); padding: 8px; border-radius: 6px;" title="Edit">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="admin-btn" onclick="window.deleteUser('${uid}')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Suspend">
-            <i class="fas fa-ban"></i>
-          </button>
+          ${status === 'active' ? `
+            <button class="admin-btn" onclick="window.toggleStatus('${uid}', 'suspended')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Suspend">
+              <i class="fas fa-ban"></i>
+            </button>
+          ` : `
+            <button class="admin-btn" onclick="window.toggleStatus('${uid}', 'active')" style="background: rgba(16, 185, 129, 0.1); color: var(--admin-success); padding: 8px; border-radius: 6px;" title="Aktifkan">
+              <i class="fas fa-check-circle"></i>
+            </button>
+          `}
         </div>
       </td>
     `;

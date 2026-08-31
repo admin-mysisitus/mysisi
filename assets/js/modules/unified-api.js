@@ -1196,8 +1196,7 @@ export class APIClient {
         const id = data.id || data.uid || data.orderId || data.code || (`${node.toUpperCase()}-${Date.now()}`);
         // pastikan id tersimpan di objek
         if (!data.id && !data.uid && !data.orderId && !data.code) data.id = id;
-        const method = node === 'tickets' ? 'update' : 'set';
-        await db.ref(`${node}/${id}`)[method](data);
+        await db.ref(`${node}/${id}`).update(data);
         return { success: true, message: 'Data berhasil disimpan', data };
       }
       if (action === 'delete') {
