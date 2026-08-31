@@ -103,11 +103,7 @@ window.changeItemPackage = (domain, packageId) => {
       renewalPrice: packageId === 'none' ? (item.domainPrice || 0) : newPrice
     });
     withScrollPreservation(async () => {
-      if (cartState.currentUser) {
-        await render(cartState.currentUser);
-      } else if (window.updateCartPreview) {
-        window.updateCartPreview();
-      }
+      await render(cartState.currentUser);
     });
     showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
@@ -130,11 +126,7 @@ window.toggleCartAddon = async (addonId, isChecked) => {
       CartManager.removeAddon(addonId);
     }
     await withScrollPreservation(async () => {
-      if (cartState.currentUser) {
-        await render(cartState.currentUser);
-      } else if (window.updateCartPreview) {
-        window.updateCartPreview();
-      }
+      await render(cartState.currentUser);
     });
   } catch (error) {
     console.log('Error toggling addon:', error);
@@ -241,11 +233,7 @@ export async function render(currentUser) {
 window.selectCartDomain = (domain) => {
   cartState.selectedDomain = domain;
   withScrollPreservation(async () => {
-    if (cartState.currentUser) {
-      await render(cartState.currentUser);
-    } else if (window.updateCartPreview) {
-      window.updateCartPreview();
-    }
+    await render(cartState.currentUser);
   });
 };
 
@@ -315,47 +303,145 @@ export function updateCartPreview() {
 // ============================================================================
 function renderGuestCheckout() {
   cartState.isProcessingCheckout = false;
-  const summary = getSelectedCartSummary();
-  const itemsHtml = summary.items.map(item => `<div class="cart-item">${item.domain} - ${formatPrice(item.price)}</div>`).join('');
+  const {
+    items,
+    selectedItem,
+    addons,
+    domainSubtotal,
+    addonsTotal,
+    subtotal,
+    discount,
+    ppn,
+    finalTotal
+  } = getSelectedCartSummary();
+  const promoTotal = discount;
+  let itemsHTML = items.map(item => renderCartItem(item)).join('');
   
+  let selectedItemHTML = '';
+  if (selectedItem) {
+    let packageInfoHTML = '';
+    if (selectedItem.package && selectedItem.package !== 'none') {
+      packageInfoHTML = `
+                <div class="price-row" style="margin-bottom: 4px; padding-left: 10px; font-size: 13px;">
+                  <span class="price-row-label">+ ${cartState.pricing.packages[selectedItem.package]?.name || selectedItem.package}</span>
+                  <span class="price-value">${formatPrice(selectedItem.packagePrice || 0)}</span>
+                </div>
+                <div class="price-row" style="margin-bottom: 8px; padding-left: 10px; font-size: 13px; color: #10b981;">
+                  <span class="price-row-label"><i class="fas fa-gift"></i> Diskon Bundle Domain</span>
+                  <span class="price-value">-${formatPrice(selectedItem.domainPrice || 0)}</span>
+                </div>
+      `;
+    }
+    selectedItemHTML = `
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label">Domain (${selectedItem.domain}):</span>
+                  <span class="price-value">${formatPrice(selectedItem.domainPrice || 0)}</span>
+                </div>
+                ${packageInfoHTML}
+    `;
+  }
+
+  let addonsHTML = '';
+  if (addons.length > 0) {
+    const addonsList = addons.map(addon => `
+                  <div class="price-row" style="padding-left: 10px; font-size: 13px;">
+                    <span class="price-row-label">- ${addon.name}</span>
+                    <span class="price-value">${formatPrice(addon.price)}</span>
+                  </div>
+    `).join('');
+    addonsHTML = `
+                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
+                <div class="price-row" style="margin-bottom: 4px;">
+                  <span class="price-row-label" style="font-weight: 700; color: var(--text-primary);">Layanan Tambahan (Addon):</span>
+                </div>
+                ${addonsList}
+                <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
+    `;
+  }
+
+  let promoHTML = '';
+  if (promoTotal > 0) {
+    const promoDescHTML = cartState.promoDescription 
+      ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>`
+      : '';
+    promoHTML = `
+                <div class="price-row discount" style="align-items: flex-start; height: auto; padding: 8px 0;">
+                  <div style="display: flex; flex-direction: column; text-align: left;">
+                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                    ${promoDescHTML}
+                  </div>
+                  <span class="price-value">-${formatPrice(promoTotal)}</span>
+                </div>
+    `;
+  }
+
   cartState.container.innerHTML = `
-    <div class="cart-layout" style="display: grid; grid-template-columns: 1fr 400px; gap: 32px; align-items: start;">
-      <div class="cart-items-column">
-        <h2 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
-          <i class="fas fa-shopping-cart" style="color: #2563eb;"></i> Keranjang Belanja
-        </h2>
-        <div class="cart-items-list" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          ${itemsHtml}
-        </div>
-      </div>
-      
-      <div class="cart-summary-column">
-        <div class="summary-card" style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-          <h3 style="font-size: 1.25rem; color: #1e293b; margin-bottom: 20px; font-weight: 600;">Ringkasan Pesanan</h3>
+    <div class="page-container">
+      <div class="cart-page">
+        <div class="cart-grid">
           
-          <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 12px; color: #64748b;">
-            <span>Subtotal (${summary.itemCount} item)</span>
-            <span>Rp ${summary.subtotal.toLocaleString('id-ID')}</span>
-          </div>
-          <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 16px; color: #64748b;">
-            <span>PPN (11%)</span>
-            <span>Rp ${Math.round(summary.subtotal * 0.11).toLocaleString('id-ID')}</span>
-          </div>
-          
-          <div class="summary-total" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #cbd5e1;">
-            <span style="font-weight: 600; color: #1e293b;">Total Tagihan</span>
-            <span style="font-size: 1.25rem; font-weight: 700; color: #2563eb;">Rp ${Math.round(summary.subtotal * 1.11).toLocaleString('id-ID')}</span>
+          <!-- Cart Items -->
+          <div>
+            <div class="cart-items-section">
+              <h3 class="cart-items-title">Domain yang Dipesan</h3>
+              <div class="cart-items-list">
+                ${itemsHTML}
+              </div>
+            </div>
           </div>
 
-          <div style="margin-top: 24px;">
-            <button id="btn-login-checkout" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 600; font-size: 1rem; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; background: #2563eb; color: white; border: none; cursor: pointer; transition: all 0.2s;">
-              Lanjut Login untuk Checkout
-              <i class="fas fa-arrow-right"></i>
-            </button>
-            <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-top: 16px; line-height: 1.5;">
-              Anda akan diarahkan ke Portal Pelanggan yang aman untuk menyelesaikan pesanan.
-            </p>
+          <!-- Cart Summary & Checkout -->
+          <div>
+            <div class="cart-summary">
+              <h3 class="summary-title">Ringkasan Pesanan</h3>
+              
+              ${selectedItemHTML}
+
+              ${addonsHTML}
+
+              <div class="price-row subtotal">
+                <span class="price-row-label">Subtotal:</span>
+                <span class="price-value">${formatPrice(subtotal)}</span>
+              </div>
+
+              <div class="price-row ppn">
+                <span class="price-row-label">PPN (11%):</span>
+                <span class="price-value">${formatPrice(ppn)}</span>
+              </div>
+
+              ${promoHTML}
+
+              <div class="price-row total">
+                <span>Total Tagihan:</span>
+                <span class="price-value">${formatPrice(finalTotal)}</span>
+              </div>
+
+              <!-- Promo Code Section -->
+              <div class="promo-section">
+                <label class="promo-label">
+                  <i class="fas fa-tag"></i> Punya Kode Promo?
+                </label>
+                <div class="promo-input-group">
+                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
+                  <button id="btn-apply-promo" onclick="window.applyPromoCode()" class="btn-apply-promo">
+                    Gunakan
+                  </button>
+                </div>
+                <div id="promo-message" class="promo-message"></div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <button id="btn-login-checkout" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 600; font-size: 1rem; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; background: #2563eb; color: white; border: none; cursor: pointer; transition: all 0.2s;" ${!selectedItem ? 'disabled="disabled"' : ''}>
+                  Lanjut Login untuk Checkout
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+                <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-top: 16px; line-height: 1.5;">
+                  Anda akan diarahkan ke Portal Pelanggan yang aman untuk menyelesaikan pesanan.
+                </p>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
