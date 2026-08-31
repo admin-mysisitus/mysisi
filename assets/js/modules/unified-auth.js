@@ -137,7 +137,16 @@ export class AuthManager {
             }
           } else {
             if (this.state.isLoggedIn) {
-              this.clearSession();
+              // Jika kita berada di domain publik, token Firebase tidak terbaca, 
+              // jadi jangan biarkan Firebase menghapus sesi localStorage (SSO) secara sepihak!
+              const hostname = window.location.hostname;
+              const isMyDomain = hostname.startsWith('my.') || hostname.includes('localhost');
+              
+              if (isMyDomain) {
+                this.clearSession();
+              } else {
+                console.log('[AuthManager] Ignoring null firebaseUser on public domain to preserve SSO session.');
+              }
             }
           }
         });
