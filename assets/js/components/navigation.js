@@ -567,13 +567,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hostname === 'my.sisitus.com' || window.location.hostname === 'backstage.sisitus.com') return;
     if (document.getElementById('sisitus-sso-iframe')) return; // Mencegah multiple iframes
 
-    const ssoOrigin = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-      ? window.location.origin
-      : 'https://my.sisitus.com';
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const ssoOrigin = isLocal ? window.location.origin : 'https://my.sisitus.com';
+    const ssoPath = isLocal ? '/my/auth/sso.html' : '/auth/sso.html';
 
     const iframe = document.createElement('iframe');
     iframe.id = 'sisitus-sso-iframe';
-    iframe.src = `${ssoOrigin}/my/auth/sso.html`;
+    iframe.src = `${ssoOrigin}${ssoPath}`;
     iframe.style.display = 'none';
     iframe.setAttribute('aria-hidden', 'true');
 
