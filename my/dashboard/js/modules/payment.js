@@ -234,7 +234,17 @@ function handlePaymentLunas(orderId) {
   const btn = document.getElementById('btn-payment');
   if (btn) setButtonLoading(btn, false, 'Selesai');
   setTimeout(() => {
-    window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
+    try {
+      const handoffData = {
+        user: AuthManager ? AuthManager.getCurrentUser() : null,
+        intent: 'invoice-redirect',
+        timestamp: Date.now()
+      };
+      const encoded = btoa(JSON.stringify(handoffData));
+      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}#handoff=${encoded}`);
+    } catch(e) {
+      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
+    }
   }, 300); // 300ms so they can read the toast slightly
 }
 async function startPaymentPolling() {
@@ -282,7 +292,17 @@ function handlePaymentSuccess(result) {
   showSuccess('✓ Pembayaran Berhasil!', 'Mengarahkan ke Invoice...');
   APIClient.syncOrderStatus(orderId).catch(() => { });
   setTimeout(() => {
-    window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
+    try {
+      const handoffData = {
+        user: AuthManager ? AuthManager.getCurrentUser() : null,
+        intent: 'invoice-redirect',
+        timestamp: Date.now()
+      };
+      const encoded = btoa(JSON.stringify(handoffData));
+      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}#handoff=${encoded}`);
+    } catch(e) {
+      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
+    }
   }, 500); // Instant redirect
 }
 

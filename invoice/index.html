@@ -74,6 +74,18 @@
       render(user);
     };
 
+    // Check for Reverse Handoff
+    const hash = window.location.hash;
+    if (hash.startsWith('#handoff=')) {
+      try {
+        const payload = JSON.parse(atob(hash.replace('#handoff=', '')));
+        if (payload.user) {
+          AuthManager.saveSession(payload.user);
+        }
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      } catch (err) {}
+    }
+
     const currentUser = AuthManager.getCurrentUser();
     if (currentUser) {
       doRender(currentUser);
