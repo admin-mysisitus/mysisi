@@ -22,22 +22,6 @@ class AdminApp {
     this.init();
   }
   async init() {
-    // Check for Forward Handoff from My (Auth)
-    const hash = window.location.hash;
-    if (hash.startsWith('#handoff=')) {
-      try {
-        const encoded = hash.split('=')[1];
-        const { Base64Utils } = await import('/assets/js/modules/unified-utils.js');
-        const payload = JSON.parse(Base64Utils.decode(encoded));
-        if (payload && payload.intent === 'forward-sync' && payload.user) {
-          AuthManager.saveSession(payload.user);
-          history.replaceState(null, null, ' '); // Clean URL
-        }
-      } catch (err) {
-        console.error('Failed to parse forward handoff:', err);
-      }
-    }
-
     // STRICT SECURITY: Synchronous Check sebelum me-render UI apapun
     const user = AuthManager.getCurrentUser();
     if (!user) {
