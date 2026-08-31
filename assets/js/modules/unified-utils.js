@@ -10,6 +10,17 @@
 /**
  * Show success notification
  */
+export const Logger = {
+  isDebug: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
+  log: (...args) => { if (Logger.isDebug) console.log('[LOG]', ...args); },
+  info: (...args) => { if (Logger.isDebug) console.info('[INFO]', ...args); },
+  warn: (...args) => { if (Logger.isDebug) console.warn('[WARN]', ...args); },
+  error: (...args) => { if (Logger.isDebug) console.error('[ERROR]', ...args); }
+};
+
+/**
+ * Show success notification
+ */
 export function showSuccess(title = '', message = '') {
   // Jika parameter kedua kosong, asumsikan message dimasukkan ke title (toast style)
   const displayTitle = message ? title : '';
@@ -498,7 +509,7 @@ export function getStorage(key, defaultValue = null) {
     }
     return data.value;
   } catch (error) {
-    void(`[Storage] Error reading ${key}:`, error);
+    Logger.log(`[Storage] Error reading ${key}:`, error);
     return defaultValue;
   }
 }
@@ -513,7 +524,7 @@ export function setStorage(key, value, expirationMinutes = null) {
     };
     localStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
-    void(`[Storage] Error writing ${key}:`, error);
+    Logger.log(`[Storage] Error writing ${key}:`, error);
   }
 }
 /**
@@ -546,7 +557,7 @@ export function getErrorMessage(error) {
  */
 export function handleAPIError(error, showNotification = true) {
   const message = getErrorMessage(error);
-  void('[API Error]:', error);
+  Logger.log('[API Error]:', error);
   if (showNotification) {
     showError('Terjadi Kesalahan', message);
   }

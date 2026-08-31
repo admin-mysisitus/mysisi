@@ -11,6 +11,9 @@ import {
   getFirebase
 } from '/assets/js/modules/firebase-core.js';
 import {
+  MIDTRANS_CONFIG
+} from '/assets/js/config/api.config.js';
+import {
   showError,
   showSuccess,
   showWarning,
@@ -21,6 +24,22 @@ import {
   formatPhoneNumber,
   sanitizeHTML
 } from '/assets/js/modules/unified-utils.js';
+
+// lazy-load Snap.js hanya saat halaman pembayaran diakses
+let snapLoaded = false;
+function loadMidtransSnap() {
+  return new Promise((resolve, reject) => {
+    if (snapLoaded || window.snap) { resolve(); return; }
+    const env = MIDTRANS_CONFIG.ENVIRONMENT;
+    const src = MIDTRANS_CONFIG.SNAP_URL[env];
+    const script = document.createElement('script');
+    script.src = src;
+    script.dataset.clientKey = MIDTRANS_CONFIG.CLIENT_KEY;
+    script.onload = () => { snapLoaded = true; resolve(); };
+    script.onerror = () => reject(new Error('Gagal memuat Midtrans Snap'));
+    document.head.appendChild(script);
+  });
+}
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
 let currentOrder = null;
@@ -41,7 +60,7 @@ export async function render(user) {
         <div style="max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;">
           <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
             <h2 style="margin: 0 0 10px 0; color: #92400e;">
-              <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
+              <i class="ph-fill ph-envelope-open"></i> Verifikasi Email Diperlukan
             </h2>
             <p style="margin: 0 0 10px 0; color: #78350f;">
               Email Anda belum terverifikasi. Verifikasi email diperlukan untuk melanjutkan pembayaran.
@@ -54,7 +73,7 @@ export async function render(user) {
           <div style="margin-bottom: 20px;">
             <p style="color: #666;">Setelah memverifikasi email, refresh halaman ini untuk melanjutkan.</p>
             <button onclick="location.reload()" class="btn" style="padding: 12px 24px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-              <i class="fas fa-redo"></i> Refresh Halaman
+              <i class="ph-fill ph-arrows-clockwise"></i> Refresh Halaman
             </button>
           </div>
 
@@ -169,7 +188,7 @@ async function generateMidtransToken(orderData) {
     errorDiv.innerHTML = `
       <div style="line-height: 1.5;">Gagal memuat sistem pembayaran. Coba muat ulang halaman atau hubungi Support.</div>
       <a href="https://wa.me/${ADMIN_WHATSAPP}" target="_blank" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">
-        <i class="fab fa-whatsapp"></i> Chat Support
+        <i class="ph-fill ph-whatsapp-logo"></i> Chat Support
       </a>
     `;
     document.getElementById('payment-actions').appendChild(errorDiv);
@@ -187,18 +206,19 @@ function setupPaymentButtons() {
   }
 }
 
-function openMidtransPayment() {
+async function openMidtransPayment() {
   try {
     if (!currentTransaction) {
       showWarning('Sistem pembayaran belum siap. Coba refresh halaman.');
       return;
     }
-    if (!window.snap) {
-      throw new Error('Midtrans library tidak loaded');
-    }
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, true, 'Membuka pembayaran...');
-    // Open Midtrans Snap
+    // pastikan Snap.js sudah termuat sebelum memanggil snap.pay
+    await loadMidtransSnap();
+    if (!window.snap) {
+      throw new Error('Midtrans Snap gagal dimuat');
+    }
     window.snap.pay(currentTransaction.token, {
       onSuccess: handlePaymentSuccess,
       onPending: handlePaymentPending,
@@ -391,7 +411,7 @@ function displayOrderData(orderData) {
         <p class="dashboard-page-header-desc">Dibuat pada: ${formatDateTime(orderData.createdAt)}. ${orderData.paymentStatus === 'paid' ? 'Terima kasih, pembayaran untuk tagihan pesanan ini telah lunas.' : 'Silakan lakukan pembayaran tagihan pesanan Anda.'}</p>
       </div>
       <div class="dashboard-page-header-visual">
-        <i class="fas fa-credit-card"></i>
+        <i class="ph-fill ph-credit-card"></i>
       </div>
     </div>
 
@@ -501,14 +521,14 @@ function displayOrderData(orderData) {
           <div class="button-group">
             ${orderData.paymentStatus !== 'paid' && !isExpired ? `
               <button id="btn-payment" class="btn btn-primary btn-lg">
-                <i class="fas fa-credit-card"></i> Lanjut Pembayaran
+                <i class="ph-fill ph-credit-card"></i> Lanjut Pembayaran
               </button>
               <button id="btn-payment-preview" class="btn btn-secondary btn-lg">
-                <i class="fas fa-eye"></i> Minta Preview Dulu
+                <i class="ph-fill ph-eye"></i> Minta Preview Dulu
               </button>
             ` : ''}
             <button onclick="window.location.hash='#!orders'" class="btn btn-outline">
-              <i class="fas fa-arrow-left"></i> Kembali ke Pesanan
+              <i class="ph-fill ph-arrow-left"></i> Kembali ke Pesanan
             </button>
           </div>
         </div>

@@ -37,7 +37,7 @@
       });
     }
   } catch (err) {
-    void('Failed to load domain pricing from APIClient:', err);
+    console.log('Failed to load domain pricing from APIClient:', err);
   }
   // ============================================
   // UTILITY FUNCTIONS
@@ -391,7 +391,7 @@
       } catch (dnsError) {
         domainCheckCache.delete(domain); // Remove failed cache
         if (dnsError.name === 'AbortError') throw dnsError;
-        void('Hybrid DNS check failed:', dnsError);
+        console.log('Hybrid DNS check failed:', dnsError);
         isAvailableGlobally = false;
       }
       // 2. Early return if globally registered or backend skip requested
@@ -421,7 +421,7 @@
         }
         // If success=false → backend error, skip silently (don't block domain)
       } catch (backendError) {
-        void('[Domain Check] Backend API check failed:', backendError);
+        console.log('[Domain Check] Backend API check failed:', backendError);
       }
       // Cache the successful result
       const finalResult = {
@@ -708,7 +708,7 @@
         showInfo('Pengecekan Selesai', 'Pengecekan selesai. Silakan coba dengan nama domain lain.');
       }
     } catch (err) {
-      void('Display results error:', err);
+      console.log('Display results error:', err);
       cekDomainResultsList.innerHTML = '<li style="grid-column: 1/-1; text-align: center;"><i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan: ' + err.message + '</li>';
       showError('Gagal Mengecek Domain', 'Terjadi kesalahan: ' + err.message);
     } finally {

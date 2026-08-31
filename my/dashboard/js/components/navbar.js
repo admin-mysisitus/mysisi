@@ -22,7 +22,7 @@ export class DashboardNavbar {
       <div class="navbar-container">
         <!-- Mobile hamburger menu button -->
         <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
-          <i class="fas fa-bars"></i>
+          <i class="ph-fill ph-list"></i>
         </button>
 
         <div class="navbar-brand">
@@ -35,8 +35,8 @@ export class DashboardNavbar {
         <div class="navbar-content">
           <!-- Breadcrumb or Title -->
           <div class="navbar-breadcrumbs">
-            <a href="#!/dashboard/" class="breadcrumb-link"><i class="fas fa-home"></i> <span class="breadcrumb-text">Dashboard</span></a>
-            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+            <a href="#!/dashboard/" class="breadcrumb-link"><i class="ph-fill ph-house"></i> <span class="breadcrumb-text">Dashboard</span></a>
+            <span class="breadcrumb-separator"><i class="ph-bold ph-caret-right"></i></span>
             <span class="breadcrumb-item active" id="navbar-active-page">Overview</span>
           </div>
         </div>
@@ -44,7 +44,7 @@ export class DashboardNavbar {
         <div class="navbar-actions">
           <!-- Kunjungi Website button -->
           <a href="https://sisitus.com/" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
-            <i class="fas fa-external-link-alt"></i> <span class="btn-text">Kunjungi Website</span>
+            <i class="ph-fill ph-arrow-square-out"></i> <span class="btn-text">Kunjungi Website</span>
           </a>
 
           <!-- User Profile Dropdown -->
@@ -52,7 +52,7 @@ export class DashboardNavbar {
             <div class="user-profile-trigger" id="user-profile-trigger">
               ${renderUserAvatarHtml(this.user, 'w150', 'user-avatar')}
               <span class="user-name">${this.user?.displayName || 'Pelanggan'}</span>
-              <i class="fas fa-chevron-down dropdown-arrow"></i>
+              <i class="ph-bold ph-caret-down dropdown-arrow"></i>
             </div>
             <div class="user-dropdown-menu" id="user-dropdown-menu">
               <div class="dropdown-header">
@@ -60,11 +60,11 @@ export class DashboardNavbar {
                 <span class="dropdown-email">${this.user?.email || ''}</span>
               </div>
               <hr>
-              <a href="#!/dashboard/profile" class="dropdown-item"><i class="fas fa-user-cog"></i> Profil Saya</a>
-              <a href="#!/dashboard/orders" class="dropdown-item"><i class="fas fa-history"></i> Pesanan</a>
-              <a href="#!/dashboard/invoices" class="dropdown-item"><i class="fas fa-file-invoice-dollar"></i> Invoice</a>
+              <a href="#!/dashboard/profile" class="dropdown-item"><i class="ph-fill ph-user-gear"></i> Profil Saya</a>
+              <a href="#!/dashboard/orders" class="dropdown-item"><i class="ph-fill ph-clock-counter-clockwise"></i> Pesanan</a>
+              <a href="#!/dashboard/invoices" class="dropdown-item"><i class="ph-fill ph-receipt"></i> Invoice</a>
               <hr>
-              <button id="btn-logout-dropdown" class="dropdown-item logout-btn"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+              <button id="btn-logout-dropdown" class="dropdown-item logout-btn"><i class="ph-fill ph-sign-out"></i> Keluar</button>
             </div>
           </div>
         </div>
@@ -149,51 +149,51 @@ export class DashboardNavbar {
     const pageData = {
       'dashboard': {
         label: 'Overview',
-        icon: 'fas fa-th-large'
+        icon: 'ph-fill ph-squares-four'
       },
       'profile': {
         label: 'Profil Saya',
-        icon: 'fas fa-user-cog'
+        icon: 'ph-fill ph-user-gear'
       },
       'orders': {
         label: 'Pesanan Saya',
-        icon: 'fas fa-shopping-bag'
+        icon: 'ph-fill ph-tote'
       },
       'payment': {
         label: 'Pembayaran',
-        icon: 'fas fa-credit-card'
+        icon: 'ph-fill ph-credit-card'
       },
       'invoices': {
         label: 'Invoice',
-        icon: 'fas fa-file-invoice-dollar'
+        icon: 'ph-fill ph-receipt'
       },
       'domains': {
         label: 'Domain Saya',
-        icon: 'fas fa-globe'
+        icon: 'ph-fill ph-globe'
       },
       'wishlist': {
         label: 'Wishlist Saya',
-        icon: 'fas fa-heart'
+        icon: 'ph-fill ph-heart'
       },
       'support': {
         label: 'Support & Bantuan',
-        icon: 'fas fa-headset'
+        icon: 'ph-fill ph-headset'
       },
       'checkout': {
         label: 'Pesan Domain Baru',
-        icon: 'fas fa-shopping-cart'
+        icon: 'ph-fill ph-shopping-cart'
       },
       'cart': {
         label: 'Keranjang Belanja',
-        icon: 'fas fa-shopping-cart'
+        icon: 'ph-fill ph-shopping-cart'
       },
       'keranjang': {
         label: 'Keranjang Saya',
-        icon: 'fas fa-shopping-cart'
+        icon: 'ph-fill ph-shopping-cart'
       },
       'keranjang-saya': {
         label: 'Keranjang Saya',
-        icon: 'fas fa-shopping-cart'
+        icon: 'ph-fill ph-shopping-cart'
       }
     };
     const activeBreadcrumb = document.getElementById('navbar-active-page');

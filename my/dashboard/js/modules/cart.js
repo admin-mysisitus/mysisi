@@ -423,7 +423,7 @@ function renderGuestCheckout() {
         promoHtml = `
                 <div class="price-row discount" style="align-items: flex-start; padding: 4px 0;">
                   <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                    <span class="price-row-label"><i class="ph-fill ph-tag"></i> Diskon Promo:</span>
                     ${promoDescHtml}
                   </div>
                   <span class="price-value">-${formatPrice(discount)}</span>
@@ -470,7 +470,7 @@ function renderGuestCheckout() {
     previewContainer.innerHTML = `
       <div class="cart-preview">
         <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
-          <i class="fas fa-shopping-cart"></i> Preview Keranjang
+          <i class="ph-fill ph-shopping-cart"></i> Preview Keranjang
         </h3>
         <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(0.75rem, 2vw, 1.25rem);">
           ${previewContent}
@@ -565,7 +565,7 @@ function renderEmailVerificationPrompt() {
       <div class="verification-prompt" style="max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <div class="verification-alert" style="background-color: #fef3c7; border-left: 4px solid #d97706; padding: 20px; border-radius: 6px; margin-bottom: 25px;">
           <h2 style="color: #92400e; margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.3rem;">
-            <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
+            <i class="ph-fill ph-envelope-open"></i> Verifikasi Email Diperlukan
           </h2>
           <p style="color: #b45309; margin-bottom: 8px;">
             Email Anda belum terverifikasi. Silakan cek email untuk link verifikasi.
@@ -581,7 +581,7 @@ function renderEmailVerificationPrompt() {
           </div>
           <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Halaman ini akan otomatis diperbarui setelah Anda memverifikasi email Anda.</p>
           <button onclick="location.reload()" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
-            <i class="fas fa-redo"></i> Cek Manual / Refresh
+            <i class="ph-fill ph-arrows-clockwise"></i> Cek Manual / Refresh
           </button>
         </div>
 
@@ -640,14 +640,14 @@ function renderEmptyCart() {
     <div class="page-container">
       <div class="cart-empty">
         <div class="empty-icon">
-          <i class="fas fa-shopping-cart"></i>
+          <i class="ph-fill ph-shopping-cart"></i>
         </div>
         <h2 class="empty-title">Keranjang Kosong</h2>
         <p class="empty-text">
           Belum ada domain di keranjang Anda. Mulai cari domain impian Anda!
         </p>
         <a href="/#cek-domain" class="btn btn-primary">
-          <i class="fas fa-search"></i> Cari Domain
+          <i class="ph-fill ph-magnifying-glass"></i> Cari Domain
         </a>
       </div>
     </div>
@@ -682,7 +682,7 @@ function renderAuthenticatedCart() {
                   <span class="price-value">${formatPrice(selectedItem.packagePrice || 0)}</span>
                 </div>
                 <div class="price-row" style="margin-bottom: 8px; padding-left: 10px; font-size: 13px; color: #10b981;">
-                  <span class="price-row-label"><i class="fas fa-gift"></i> Diskon Bundle Domain</span>
+                  <span class="price-row-label"><i class="ph-fill ph-gift"></i> Diskon Bundle Domain</span>
                   <span class="price-value">-${formatPrice(selectedItem.domainPrice || 0)}</span>
                 </div>
       `;
@@ -722,7 +722,7 @@ function renderAuthenticatedCart() {
     promoHTML = `
                 <div class="price-row discount" style="align-items: flex-start; height: auto; padding: 8px 0;">
                   <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
+                    <span class="price-row-label"><i class="ph-fill ph-tag"></i> Diskon Promo:</span>
                     ${promoDescHTML}
                   </div>
                   <span class="price-value">-${formatPrice(promoTotal)}</span>
@@ -777,7 +777,7 @@ function renderAuthenticatedCart() {
               <!-- Promo Code Section -->
               <div class="promo-section">
                 <label class="promo-label">
-                  <i class="fas fa-tag"></i> Punya Kode Promo?
+                  <i class="ph-fill ph-tag"></i> Punya Kode Promo?
                 </label>
                 <div class="promo-input-group">
                   <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
@@ -791,11 +791,11 @@ function renderAuthenticatedCart() {
               <!-- Action Buttons -->
               <div class="action-section">
                 <button id="btn-proceed-checkout" onclick="window.proceedToCheckout()" class="btn btn-primary" ${!selectedItem ? 'disabled="disabled"' : ''}>
-                  <i class="fas fa-lock"></i> Lanjut ke Pembayaran
+                  <i class="ph-fill ph-lock-key"></i> Lanjut ke Pembayaran
                 </button>
 
                 <a href="/#cek-domain" class="btn btn-secondary">
-                  <i class="fas fa-search"></i> Cari Domain Lain
+                  <i class="ph-fill ph-magnifying-glass"></i> Cari Domain Lain
                 </a>
               </div>
             </div>
@@ -847,7 +847,7 @@ function renderCartItemSelectors(item) {
     const isSelected = selectedAddonIds.includes(addon.id.toLowerCase());
     let featuresList = '';
     if (addon.features && addon.features.length > 0) {
-      const itemsHtml = addon.features.map(f => `<li><i class="fas fa-check" style="color: var(--primary-blue); font-size: 10px; margin-right: 4px;"></i> ${f}</li>`).join('');
+      const itemsHtml = addon.features.map(f => `<li><i class="ph-fill ph-check" style="color: var(--primary-blue); font-size: 10px; margin-right: 4px;"></i> ${f}</li>`).join('');
       featuresList = `<ul class="cart-item-addon-features">${itemsHtml}</ul>`;
     }
     const descHtml = addon.description ? `<div class="cart-item-addon-desc">${addon.description}</div>` : '';
@@ -856,7 +856,7 @@ function renderCartItemSelectors(item) {
     if (isFree) {
       claimBtnHtml = `
             <div class="cart-item-addon-claim-btn ${isSelected ? 'claimed' : ''}">
-              ${isSelected ? '<i class="fas fa-check"></i> Diklaim' : 'Klaim'}
+              ${isSelected ? '<i class="ph-fill ph-check"></i> Diklaim' : 'Klaim'}
             </div>
       `;
     }
@@ -895,7 +895,7 @@ function renderCartItemSelectors(item) {
   return `
     <div class="cart-item-packages">
       <div class="cart-item-packages-title">
-        <i class="fas fa-cubes"></i> Pilih Paket Pembuatan Website
+        <i class="ph-fill ph-codesandbox-logo"></i> Pilih Paket Pembuatan Website
       </div>
       <div class="cart-item-packages-grid">
         ${packagesHTML}
@@ -904,7 +904,7 @@ function renderCartItemSelectors(item) {
 
     <div class="cart-item-addons">
       <div class="cart-item-addons-title">
-        <i class="fas fa-puzzle-piece"></i> Layanan Tambahan (Add-ons)
+        <i class="ph-fill ph-puzzle-piece"></i> Layanan Tambahan (Add-ons)
       </div>
       <div class="cart-item-addons-grid">
         ${addonsHTML}
@@ -916,7 +916,7 @@ function renderCartItemSelectors(item) {
 // CART ITEM RENDERING
 // ============================================================================
 function renderCartItem(item) {
-  const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="fas fa-sync"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
+  const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="ph-fill ph-arrows-clockwise"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
 
   let configSection = '';
   if (!item.isRenewal) {
@@ -940,14 +940,14 @@ function renderCartItem(item) {
           </h4>
           <div class="cart-item-details" style="display: flex; gap: 8px; align-items: center; margin-top: 6px; border: none; padding: 0; flex-wrap: wrap;">
             <span class="cart-item-badge" style="background: ${item.isRenewal ? '#fef3c7' : '#e3f2fd'}; color: ${item.isRenewal ? '#d97706' : 'var(--primary-blue)'}; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase;">${item.isRenewal ? 'PERPANJANGAN' : (!item.package || item.package === 'none' ? 'HANYA DOMAIN' : item.package.toUpperCase())}</span>
-            <span class="cart-item-duration" style="color: var(--text-light); font-size: 11px;"><i class="fas fa-calendar"></i> ${item.duration || 1} tahun</span>
+            <span class="cart-item-duration" style="color: var(--text-light); font-size: 11px;"><i class="ph-fill ph-calendar"></i> ${item.duration || 1} tahun</span>
           </div>
           ${renewalInfo}
         </div>
         <div class="cart-item-actions" style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding: 0; border: none;">
           <div class="cart-item-price" style="font-weight: 800; color: var(--primary-blue); font-family: 'Courier New', monospace; font-size: 16px;">${formatPrice(item.price * (item.duration || 1))}</div>
           <button onclick="window.removeCartItem('${item.domain}')" class="btn-remove" style="display: flex; align-items: center; gap: 4px; background: none; border: none; color: #ef4444; font-size: 12px; cursor: pointer; padding: 4px 0;">
-            <i class="fas fa-trash-alt"></i> Hapus
+            <i class="ph-fill ph-trash"></i> Hapus
           </button>
         </div>
       </div>

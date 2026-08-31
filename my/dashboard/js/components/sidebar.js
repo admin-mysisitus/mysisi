@@ -11,46 +11,46 @@ export class DashboardSidebar {
     const container = document.getElementById('sidebar');
     const menuItems = [{
       id: 'dashboard',
-      icon: 'fas fa-th-large',
+      icon: 'ph-fill ph-squares-four',
       label: 'Dashboard',
       route: '/dashboard/'
     }, {
       id: 'profile',
-      icon: 'fas fa-user-cog',
+      icon: 'ph-fill ph-user-gear',
       label: 'Profil Saya',
       route: '/dashboard/profile'
     }, {
       id: 'cart',
-      icon: 'fas fa-shopping-cart',
+      icon: 'ph-fill ph-shopping-cart',
       label: 'Keranjang Saya',
       route: 'https://sisitus.com/cart/',
       isExternal: true,
       badge: 'cart-badge'
     }, {
       id: 'wishlist',
-      icon: 'fas fa-heart',
+      icon: 'ph-fill ph-heart',
       label: 'Wishlist Saya',
       route: '/dashboard/wishlist',
       badge: 'wishlist-badge'
     }, {
       id: 'orders',
-      icon: 'fas fa-shopping-bag',
+      icon: 'ph-fill ph-tote',
       label: 'Pesanan',
       route: '/dashboard/orders'
     }, {
       id: 'invoices',
-      icon: 'fas fa-file-invoice-dollar',
+      icon: 'ph-fill ph-receipt',
       label: 'Invoice',
       route: '/dashboard/invoices',
       badge: ''
     }, {
       id: 'domains',
-      icon: 'fas fa-globe',
+      icon: 'ph-fill ph-globe',
       label: 'Domain Saya',
       route: '/dashboard/domains'
     }, {
       id: 'support',
-      icon: 'fas fa-headset',
+      icon: 'ph-fill ph-headset',
       label: 'Support',
       route: '/dashboard/support'
     }];
@@ -143,7 +143,7 @@ export class DashboardSidebar {
       const {
         WishlistManager
       } = await import('/assets/js/modules/unified-cart.js');
-      const count = WishlistManager.getWishlist().length;
+      const count = WishlistManager.getWishlist().domains.length;
       const badge = document.querySelector('.wishlist-badge-count');
       if (badge) {
         if (count > 0) {

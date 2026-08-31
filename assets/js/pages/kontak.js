@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear URL parameters after submission
         window.history.replaceState({}, document.title, window.location.pathname);
       } catch (error) {
-        void('Error:', error);
+        console.log('Error:', error);
         showError('Terjadi kesalahan. Silakan coba lagi.');
       } finally {
         // Re-enable submit button

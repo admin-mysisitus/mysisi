@@ -22,7 +22,7 @@ class HeroComponent {
   render(container = 'main') {
     const target = typeof container === 'string' ? document.querySelector(container) : container;
     if (!target) {
-      void('Hero: Target container not found');
+      console.log('Hero: Target container not found');
       return null;
     }
     // Tentukan class berdasarkan variant

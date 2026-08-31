@@ -8,8 +8,6 @@ import './components/date-time.js';
 import './components/hero.js';
 import './components/section-animation.js';
 import './components/popup-promo.js';
-import './components/live-chat.js';
-// Layout
 // wm
 import './wm.js';
 // ========== DYNAMIC PRICING HIDER ==========
@@ -30,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       }
     } catch (err) {
-      void('Could not verify package active status:', err);
+      console.log('Could not verify package active status:', err);
     }
   }
 });

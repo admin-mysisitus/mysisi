@@ -31,7 +31,7 @@ class PopupPromo {
         this.schedulePopup();
       }
     } catch (e) {
-      void('Error fetching promos for popup:', e);
+      console.log('Error fetching promos for popup:', e);
     }
   }
   // Check if popup already shown dan belum melampaui reset interval (3 jam)

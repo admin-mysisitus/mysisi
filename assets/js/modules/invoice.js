@@ -39,7 +39,7 @@ export async function render(user) {
     renderInvoice();
     setupEventListeners();
   } catch (error) {
-    void('Error rendering invoice:', error);
+    console.log('Error rendering invoice:', error);
     showError('Error', error.message);
     const container = document.getElementById('invoice-container');
     if (container) {
@@ -105,12 +105,12 @@ async function loadOrderData(orderId) {
     }
     // Verify payment was successful
     if (invoiceData.paymentStatus !== 'paid' && invoiceData.orderStatus !== 'completed') {
-      void('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
+      console.log('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
       // Proactively sync order status to catch late webhook or slow Midtrans updates
       try {
         const syncResult = await APIClient.syncOrderStatus(orderId);
         if (syncResult.success && syncResult.data && syncResult.data.paymentStatus === 'paid') {
-          void('[Invoice] Late payment status updated to paid via sync!');
+          console.log('[Invoice] Late payment status updated to paid via sync!');
           // Sync returned paid! Re-fetch order data
           const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
           if (newResult.success && (newResult.data || newResult.order)) {
@@ -118,11 +118,11 @@ async function loadOrderData(orderId) {
           }
         }
       } catch (e) {
-        void('Failed to sync', e);
+        console.log('Failed to sync', e);
       }
     }
   } catch (error) {
-    void('Error loading order data:', error);
+    console.log('Error loading order data:', error);
     throw error;
   }
 }

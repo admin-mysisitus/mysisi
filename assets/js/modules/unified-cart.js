@@ -120,7 +120,7 @@ export class CartManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      void('[Cart] Parse error:', err);
+      Logger.log('[Cart] Parse error:', err);
       return {
         domains: [],
         addons: [],
@@ -142,7 +142,7 @@ export class CartManager {
         detail: calculated
       }));
     } catch (err) {
-      void('[Cart] Save error:', err);
+      Logger.log('[Cart] Save error:', err);
     }
   }
 
@@ -212,11 +212,7 @@ export class CartManager {
   static async applyCoupon(code) {
     const cart = this.getCart();
     try {
-      // Validate coupon with GAS backend using APIClient
-      if (!window.APIClient) {
-        throw new Error('API Client not available. Import APIClient before applying coupon.');
-      }
-      const response = await window.APIClient.validatePromoCode(code);
+      const response = await APIClient.validatePromoCode(code);
       if (!response.success || !response.data) {
         throw new Error(response.message || 'Kode promo tidak valid atau sudah kadaluarsa');
       }
@@ -232,7 +228,7 @@ export class CartManager {
         cart
       };
     } catch (error) {
-      void('[Cart] Error validating coupon:', error);
+      Logger.log('[Cart] Error validating coupon:', error);
       return {
         success: false,
         message: error.message
@@ -461,7 +457,7 @@ export class WishlistManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      void('[Wishlist] Parse error:', err);
+      Logger.log('[Wishlist] Parse error:', err);
       return {
         domains: []
       };
@@ -477,7 +473,7 @@ export class WishlistManager {
         detail: wishlist
       }));
     } catch (err) {
-      void('[Wishlist] Save error:', err);
+      Logger.log('[Wishlist] Save error:', err);
     }
   }
 

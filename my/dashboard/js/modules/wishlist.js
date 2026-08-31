@@ -37,7 +37,7 @@ class DashboardWishlist {
     this.container.innerHTML = `
       <div class="wishlist-empty" style="text-align: center; padding: 60px 20px;">
         <div style="font-size: 80px; margin-bottom: 20px; opacity: 0.5;">
-          <i class="fas fa-heart-broken"></i>
+          <i class="ph-fill ph-heart-break"></i>
         </div>
         <h2 style="color: #333; margin-bottom: 10px;">Wishlist Kosong</h2>
         <p style="color: #666; margin-bottom: 30px; font-size: 16px;">
@@ -45,7 +45,7 @@ class DashboardWishlist {
           Tambahkan domain impian Anda ke wishlist untuk disimpan!
         </p>
         <a href="/#cek-domain" class="btn btn-primary" style="display: inline-block; padding: 12px 30px; background-color: #2563EB; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
-          <i class="fas fa-search"></i> Cari Domain
+          <i class="ph-fill ph-magnifying-glass"></i> Cari Domain
         </a>
       </div>
     `;

@@ -70,7 +70,7 @@ async function openAttachmentModal(rawUrl, isPdfHint) {
       throw new Error(data.message || 'Data tidak ditemukan');
     }
   } catch (err) {
-    void("Gagal memuat lampiran:", err);
+    console.log("Gagal memuat lampiran:", err);
     loader.style.display = 'none';
     errorEl.style.display = 'flex';
   }

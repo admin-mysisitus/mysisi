@@ -54,14 +54,14 @@ export async function render(currentUser) {
           <div class="cart-floating-reminder">
             <div class="cart-reminder-content">
               <h3>
-                <i class="fas fa-shopping-cart"></i> Pemesanan Anda Belum Selesai!
+                <i class="ph-fill ph-shopping-cart"></i> Pemesanan Anda Belum Selesai!
               </h3>
               <p>
                 Anda memiliki domain <strong>${domainName}</strong> (Paket ${packageName}) di keranjang belanja Anda.
               </p>
             </div>
             <a href="#!/dashboard/keranjang" class="cart-reminder-btn">
-              Selesaikan Pembayaran <i class="fas fa-arrow-right"></i>
+              Selesaikan Pembayaran <i class="ph-fill ph-arrow-right"></i>
             </a>
           </div>
         `;

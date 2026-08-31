@@ -368,7 +368,7 @@ async function sendMessage(attachmentUrl = null) {
       throw new Error('Failed to enqueue message');
     }
   } catch (error) {
-    void('Error sending message:', error);
+    console.log('Error sending message:', error);
     messageRenderer?.addSystemMessage(`❌ Gagal mengirim. Error: ${error.message}`);
   } finally {
     isWaiting = false;

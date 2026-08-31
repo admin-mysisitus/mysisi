@@ -15,7 +15,7 @@ class MessageRenderer {
   constructor(containerSelector) {
     this.container = document.querySelector(containerSelector);
     if (!this.container) {
-      void(`Container not found: ${containerSelector}`);
+      console.log(`Container not found: ${containerSelector}`);
       return;
     }
     // Cache message elements by ID for O(1) lookups

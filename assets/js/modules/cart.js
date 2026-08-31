@@ -109,7 +109,7 @@ window.changeItemPackage = (domain, packageId) => {
     });
     showSuccess('✓ Paket Diperbarui', `Paket diganti ke ${pkg.name}`);
   } catch (error) {
-    void('Error changing package:', error);
+    console.log('Error changing package:', error);
     showError('Gagal', error.message);
   }
 };
@@ -135,7 +135,7 @@ window.toggleCartAddon = async (addonId, isChecked) => {
       }
     });
   } catch (error) {
-    void('Error toggling addon:', error);
+    console.log('Error toggling addon:', error);
     showError('Gagal', error.message);
   }
 };
@@ -147,7 +147,7 @@ export async function render(currentUser) {
   try {
     cartState.container = document.getElementById('cart-container');
     if (!cartState.container) {
-      void('[Cart] #cart-container not found');
+      console.log('[Cart] #cart-container not found');
       return;
     }
     // Fetch pricing configuration
@@ -175,7 +175,7 @@ export async function render(currentUser) {
       const checkVerificationStatus = () => {
         const user = AuthManager.getCurrentUser();
         if (user && user.emailVerified && (!cartState.currentUser || !cartState.currentUser.emailVerified)) {
-          void('[Cart] Auto-detecting email verification success in background!');
+          console.log('[Cart] Auto-detecting email verification success in background!');
           cartState.currentUser = user;
           cartState.userId = user.userId;
           cartState.userEmail = user.email;
@@ -219,7 +219,7 @@ export async function render(currentUser) {
       renderAuthenticatedCart();
     }
   } catch (error) {
-    void('[Cart] Error rendering:', error);
+    console.log('[Cart] Error rendering:', error);
     showError('Error', error.message);
     cartState.container.innerHTML = `
       <div style="text-align: center; padding: 60px 20px;">
@@ -448,7 +448,7 @@ function renderGuestCheckout() {
  */
 async function handleAuthSuccess(userData) {
   try {
-    void('[Cart] Auth success, userData:', userData);
+    console.log('[Cart] Auth success, userData:', userData);
     // Save to auth manager
     AuthManager.saveSession(userData);
     // Update cart state
@@ -470,7 +470,7 @@ async function handleAuthSuccess(userData) {
       render(userData);
     }, 1500);
   } catch (error) {
-    void('[Cart] Auth success error:', error);
+    console.log('[Cart] Auth success error:', error);
     showError('Error', error.message);
   }
 }
@@ -499,7 +499,7 @@ async function handleGoogleSignIn(response) {
       render(result.data);
     }, 1500);
   } catch (error) {
-    void('[Cart] Google auth error:', error);
+    console.log('[Cart] Google auth error:', error);
     showError('Error', error.message);
   }
 }
@@ -545,7 +545,7 @@ function renderEmailVerificationPrompt() {
   `;
   // Start polling to check if user has verified their email in the database
   if (!cartState.verificationPollInterval) {
-    void('[Cart] Starting email verification status polling...');
+    console.log('[Cart] Starting email verification status polling...');
     cartState.verificationPollInterval = setInterval(async () => {
       try {
         if (!cartState.currentUser || cartState.currentUser.emailVerified) {
@@ -555,7 +555,7 @@ function renderEmailVerificationPrompt() {
         }
         const result = await APIClient.getUserProfile(cartState.currentUser.userId);
         if (result.success && result.data && result.data.emailVerified) {
-          void('[Cart] User verified email (detected via polling)!');
+          console.log('[Cart] User verified email (detected via polling)!');
           clearInterval(cartState.verificationPollInterval);
           cartState.verificationPollInterval = null;
           // Save updated session
@@ -574,7 +574,7 @@ function renderEmailVerificationPrompt() {
           }, 1500);
         }
       } catch (error) {
-        void('[Cart] Error polling verification status:', error);
+        console.log('[Cart] Error polling verification status:', error);
       }
     }, 3000);
   }
@@ -917,7 +917,7 @@ function loadSavedPromo() {
       cartState.promoDiscount = cartData.discount || 0;
     }
   } catch (e) {
-    void('[Cart] Could not load saved promo:', e);
+    console.log('[Cart] Could not load saved promo:', e);
   }
 }
 
@@ -993,7 +993,7 @@ async function applyPromoCode() {
       }
     }
   } catch (error) {
-    void('[Cart] Promo validation error:', error);
+    console.log('[Cart] Promo validation error:', error);
     if (promoMsg) {
       promoMsg.textContent = 'Gagal memvalidasi kode promo';
       promoMsg.style.color = '#dc2626';
@@ -1036,7 +1036,7 @@ async function proceedToCheckout() {
     const parts = firstDomain.split('.');
     const tld = parts[parts.length - 1];
     // VALIDASI: Re-check domain availability via DNS (Siapa Cepat Dia Dapat)
-    void('[Cart] Checking global DNS availability for:', firstDomain);
+    console.log('[Cart] Checking global DNS availability for:', firstDomain);
     try {
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(firstDomain)}&type=A`, {
         headers: {
@@ -1061,7 +1061,7 @@ async function proceedToCheckout() {
       if (e.message.includes('didaftarkan secara global') || e.message.includes('tidak tersedia')) {
         throw e;
       }
-      void("[Cart] DNS check error, proceeding anyway:", e);
+      console.log("[Cart] DNS check error, proceeding anyway:", e);
     }
     // Calculate final total with promo + ppn
     const subtotal = summary.subtotal;
@@ -1088,14 +1088,14 @@ async function proceedToCheckout() {
           });
         });
         if (!fbUser) {
-          void('[Cart] fbUser is null. Firebase Auth state is lost.');
+          console.log('[Cart] fbUser is null. Firebase Auth state is lost.');
           window.location.href = '/auth/';
           return;
         }
         idToken = await fbUser.getIdToken(true);
       }
     } catch (e) {
-      void('[Cart] Failed to get fresh ID token:', e);
+      console.log('[Cart] Failed to get fresh ID token:', e);
     }
     // Prepare order data
     const orderData = {
@@ -1116,7 +1116,7 @@ async function proceedToCheckout() {
       discount: cartState.promoDiscount || 0,
       total: finalTotal
     };
-    void('[Cart] Creating order:', orderData);
+    console.log('[Cart] Creating order:', orderData);
     // CREATE ORDER DI DATABASE
     const createOrderResult = await APIClient.createOrder(orderData);
     if (!createOrderResult.success) {
@@ -1124,7 +1124,7 @@ async function proceedToCheckout() {
     }
     // orderId already declared above, verify GAS returned same/valid id
     const confirmedOrderId = createOrderResult.data?.orderId || orderId;
-    void('[Cart] Order created:', confirmedOrderId);
+    console.log('[Cart] Order created:', confirmedOrderId);
     // Hanya hapus domain yang di-checkout dari cart
     CartManager.remove(firstDomain);
     
@@ -1141,7 +1141,7 @@ async function proceedToCheckout() {
       window.location.href = `https://my.sisitus.com/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
     }, 1500);
   } catch (error) {
-    void('[Cart] Checkout error:', error);
+    console.log('[Cart] Checkout error:', error);
     showError('❌ Error Checkout', error.message);
   } finally {
     cartState.isProcessingCheckout = false;

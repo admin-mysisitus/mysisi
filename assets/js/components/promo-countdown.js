@@ -76,7 +76,7 @@
   function init() {
     // Only initialize if countdown container exists
     if (!countdownContainer) {
-      void('Countdown container not found. Skipping initialization.');
+      console.log('Countdown container not found. Skipping initialization.');
       return;
     }
     // Initial update

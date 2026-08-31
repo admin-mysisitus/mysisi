@@ -71,7 +71,7 @@ class SendQueue {
       });
       if (this.onRender) this.onRender();
     } catch (error) {
-      void('[SEND-FAILED] Error sending to Firebase:', error);
+      console.log('[SEND-FAILED] Error sending to Firebase:', error);
       this.messageStore.updateMessage(msg.clientId, {
         status: "error"
       });

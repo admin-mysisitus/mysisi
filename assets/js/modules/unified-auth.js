@@ -65,7 +65,7 @@ export class AuthManager {
                   const rtProfile = rtSnap.val();
                   if (rtProfile) {
                     if (rtProfile.status === 'suspended') {
-                      void('[AuthManager] Realtime Account Suspended, forcing logout');
+                      Logger.log('[AuthManager] Realtime Account Suspended, forcing logout');
                       auth.signOut();
                       this.clearSession();
                       if (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
@@ -75,7 +75,7 @@ export class AuthManager {
                     }
                     // Deteksi penurunan role secara realtime saat sedang di dasbor admin
                     if (rtProfile.role !== 'admin' && (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/'))) {
-                      void('[AuthManager] Realtime Role Demoted, forcing exit from admin');
+                      Logger.log('[AuthManager] Realtime Role Demoted, forcing exit from admin');
                       // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
                       window.location.href = 'https://my.sisitus.com/dashboard/';
                       return;
@@ -91,12 +91,12 @@ export class AuthManager {
                   }
                 });
               } catch (e) {
-                void('[AuthManager] Failed to fetch user profile:', e);
+                Logger.log('[AuthManager] Failed to fetch user profile:', e);
               }
             }
             // Mencegah login jika status suspended di database
             if (profile && profile.status === 'suspended') {
-              void('[AuthManager] Account is suspended, forcing logout');
+              Logger.log('[AuthManager] Account is suspended, forcing logout');
               auth.signOut();
               this.clearSession();
               return;
@@ -130,7 +130,7 @@ export class AuthManager {
         });
       }
     } catch (error) {
-      void('[AuthManager] Error initializing Firebase Auth:', error);
+      Logger.log('[AuthManager] Error initializing Firebase Auth:', error);
     }
     this.setupStorageListener();
 
@@ -169,7 +169,7 @@ export class AuthManager {
       const data = JSON.parse(stored);
       // Validate version
       if (data.version !== this.SESSION_VERSION) {
-        void('[AuthManager] Session version mismatch, clearing');
+        Logger.log('[AuthManager] Session version mismatch, clearing');
         this.clearSession();
         return;
       }
@@ -181,7 +181,7 @@ export class AuthManager {
         };
       }
     } catch (error) {
-      void('[AuthManager] Error loading session:', error);
+      Logger.log('[AuthManager] Error loading session:', error);
       this.clearSession();
     }
   }
@@ -193,7 +193,7 @@ export class AuthManager {
     const required = ['userId', 'email', 'displayName'];
     for (const field of required) {
       if (!user[field]) {
-        void(`[AuthManager] Missing required field: ${field}`);
+        Logger.log(`[AuthManager] Missing required field: ${field}`);
         return null;
       }
     }
@@ -235,7 +235,7 @@ export class AuthManager {
       };
       this.emit('authChanged', validatedUser);
     } catch (error) {
-      void('[AuthManager] Error saving session:', error);
+      Logger.log('[AuthManager] Error saving session:', error);
       this.emit('authError', error);
     }
   }
@@ -250,7 +250,7 @@ export class AuthManager {
       auth
     }) => {
       if (auth) auth.signOut();
-    }).catch(e => void('[AuthManager] Firebase signout error:', e));
+    }).catch(e => Logger.log('[AuthManager] Firebase signout error:', e));
 
     if (this.state.isLoggedIn || this.state.user) {
       this.state = {
@@ -274,10 +274,10 @@ export class AuthManager {
    * to ensure you have the latest user data
    */
   static refreshUserData() {
-    void('[AuthManager] Refreshing user data from storage...');
+    Logger.log('[AuthManager] Refreshing user data from storage...');
     this.loadSession();
     if (this.state.user && this.state.user.emailVerified) {
-      void('âœ… User verification status updated:', this.state.user);
+      Logger.log('âœ… User verification status updated:', this.state.user);
       this.emit('authChanged', {
         user: this.state.user,
         isLoggedIn: true
@@ -309,7 +309,7 @@ export class AuthManager {
         return await auth.currentUser.getIdToken(true);
       }
     } catch (e) {
-      void('[AuthManager] Failed to get idToken:', e);
+      Logger.log('[AuthManager] Failed to get idToken:', e);
     }
     return null;
   }
@@ -361,7 +361,7 @@ export class AuthManager {
         try {
           handler(data);
         } catch (error) {
-          void(`[AuthManager] Error in ${eventName} handler:`, error);
+          Logger.log(`[AuthManager] Error in ${eventName} handler:`, error);
         }
       });
     }

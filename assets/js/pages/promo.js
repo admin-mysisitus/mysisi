@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
       }
     } catch (e) {
-      void('Error fetching active coupons:', e);
+      console.log('Error fetching active coupons:', e);
       couponsList.innerHTML = `
         <div style="text-align: center; color: #ef4444; padding: 2rem; grid-column: 1 / -1; width: 100%;">
           <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.style.backgroundColor = 'var(--primary-blue)';
       }, 2000);
     }).catch(err => {
-      void('Failed to copy text:', err);
+      console.log('Failed to copy text:', err);
     });
   };
   // ========== AUTO SNAP SLIDER UNTUK MOBILE ==========
