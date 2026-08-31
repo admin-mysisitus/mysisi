@@ -201,6 +201,13 @@ export async function render(currentUser) {
       clearInterval(cartState.verificationPollInterval);
       cartState.verificationPollInterval = null;
     }
+    
+    // Redirect guard: Jika user sudah login (SSO), lempar ke Customer Portal Cart
+    if (window.SSO_USER) {
+       window.location.href = 'https://my.sisitus.com/dashboard/#!/dashboard/cart';
+       return;
+    }
+
     if (!cartState.currentUser) {
       // Guest: show inline auth + cart preview
       renderGuestCheckout();
@@ -267,14 +274,6 @@ function getSelectedCartSummary() {
     if (type === 'percent' || type === 'percentage') {
       discount = subtotal * (value / 100);
     } else if (type === 'fixed') {
-      discount = value;
-    }
-  } else if (cartState.promoCode && cartState.promoValidated) {
-    const type = localStorage.getItem('saved_promo_discount_type') || 'fixed';
-    const value = parseFloat(localStorage.getItem('saved_promo_discount_value')) || 0;
-    if (type === 'percent' || type === 'percentage') {
-      discount = subtotal * (value / 100);
-    } else {
       discount = value;
     }
   }
@@ -908,45 +907,21 @@ function renderCartItem(item) {
 // ============================================================================
 function loadSavedPromo() {
   try {
-    const savedCode = localStorage.getItem('saved_promo_code');
-    const savedDesc = localStorage.getItem('saved_promo_description');
-    const savedVal = localStorage.getItem('saved_promo_discount_value');
-    const savedType = localStorage.getItem('saved_promo_discount_type');
-    if (savedCode) {
-      cartState.promoCode = savedCode;
-      cartState.promoDescription = savedDesc || '';
+    const cartData = CartManager.getCart();
+    if (cartData && cartData.coupon && cartData.coupon.code) {
+      cartState.promoCode = cartData.coupon.code;
+      // We don't have the original description here easily without validation, 
+      // but UI will show the discount automatically from the calculated prices
+      cartState.promoDescription = 'Kupon Diterapkan';
       cartState.promoValidated = true;
-      const summary = CartManager.getSummary();
-      const subtotal = summary.subtotal || 0;
-      const val = parseFloat(savedVal) || 0;
-      if (savedType === 'percentage') {
-        cartState.promoDiscount = Math.round(subtotal * (val / 100));
-      } else {
-        cartState.promoDiscount = val;
-      }
+      cartState.promoDiscount = cartData.discount || 0;
     }
   } catch (e) {
     void('[Cart] Could not load saved promo:', e);
   }
 }
 
-function saveSavedPromo(promoData) {
-  try {
-    if (cartState.promoCode && promoData) {
-      localStorage.setItem('saved_promo_code', cartState.promoCode);
-      localStorage.setItem('saved_promo_description', promoData.description || '');
-      localStorage.setItem('saved_promo_discount_value', promoData.value || 0);
-      localStorage.setItem('saved_promo_discount_type', promoData.type || 'fixed');
-    } else if (!cartState.promoCode) {
-      localStorage.removeItem('saved_promo_code');
-      localStorage.removeItem('saved_promo_description');
-      localStorage.removeItem('saved_promo_discount_value');
-      localStorage.removeItem('saved_promo_discount_type');
-    }
-  } catch (e) {
-    void('[Cart] Could not save promo:', e);
-  }
-}
+
 async function applyPromoCode() {
   const input = document.getElementById('promo-code-input');
   if (!input) return;
@@ -1000,7 +975,6 @@ async function applyPromoCode() {
         promoMsg.style.color = '#27ae60';
       }
       showSuccess('✓ Berhasil', 'Kode promo diterapkan');
-      saveSavedPromo(result.data);
       render(cartState.currentUser);
     } else {
       cartState.promoCode = null;
@@ -1017,7 +991,6 @@ async function applyPromoCode() {
         promoMsg.textContent = result.message || 'Kode promo tidak valid';
         promoMsg.style.color = '#dc2626';
       }
-      saveSavedPromo(null);
     }
   } catch (error) {
     void('[Cart] Promo validation error:', error);
@@ -1161,7 +1134,6 @@ async function proceedToCheckout() {
       cartState.promoDiscount = 0;
       cartState.promoDescription = null;
       cartState.promoValidated = false;
-      saveSavedPromo(null);
     }
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)

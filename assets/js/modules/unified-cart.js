@@ -75,6 +75,13 @@ export class CartManager {
   static remove(domain) {
     const cart = this.getCart();
     cart.domains = cart.domains.filter(d => d.domain.toLowerCase() !== domain.toLowerCase());
+    
+    // DRY Principle: If cart becomes empty, clear all modifiers automatically
+    if (cart.domains.length === 0) {
+       cart.coupon = null;
+       cart.addons = [];
+    }
+
     this.saveCart(cart);
     return cart;
   }
@@ -400,6 +407,14 @@ export class WishlistManager {
     this.saveWishlist(wishlist);
     return wishlist;
   }
+  /**
+   * Clear all items from wishlist
+   */
+  static clear() {
+    this.saveWishlist({ domains: [], updatedAt: Date.now() });
+    window.dispatchEvent(new CustomEvent('wishlist:cleared'));
+  }
+
   /**
    * Move wishlist item to cart
    */

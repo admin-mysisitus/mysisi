@@ -13,6 +13,7 @@ import {
   renderUserAvatarHtml
 } from '../modules/unified-utils.js';
 import { AuthManager } from '../modules/unified-auth.js';
+import { CartManager, WishlistManager } from '../modules/unified-cart.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),
@@ -407,9 +408,7 @@ function getCartItemCount() {
     return window.SSO_CART_COUNT;
   }
   try {
-    const stored = localStorage.getItem('cart');
-    if (!stored) return 0;
-    const cart = JSON.parse(stored);
+    const cart = CartManager.getCart();
     return (cart && cart.domains) ? cart.domains.length : 0;
   } catch (e) {
     return 0;
@@ -431,7 +430,8 @@ function updateFloatingCart() {
       el = document.createElement('a');
       el.id = 'floating-cart-btn';
       el.className = 'floating-cart-btn';
-      el.href = '/cart/';
+      // Route to Customer Portal if user is logged in via SSO
+      el.href = window.SSO_USER ? 'https://my.sisitus.com/dashboard/#!/dashboard/cart' : '/cart/';
       el.innerHTML = `
         <i class="fas fa-shopping-cart" aria-hidden="true"></i>
         <span class="floating-cart-badge">${count}</span>
@@ -503,6 +503,7 @@ function updateFloatingCart() {
     } else {
       const badge = el.querySelector('.floating-cart-badge');
       if (badge) badge.textContent = count;
+      el.href = window.SSO_USER ? 'https://my.sisitus.com/dashboard/#!/dashboard/cart' : '/cart/';
     }
   } else {
     if (el) el.remove();
@@ -596,6 +597,12 @@ document.addEventListener('DOMContentLoaded', () => {
           window.SSO_CART_COUNT = ssoData.cartCount;
         }
 
+        if (Array.isArray(ssoData.wishlistDomains)) {
+          window.SSO_WISHLIST_DOMAINS = ssoData.wishlistDomains;
+          // Notify components that SSO wishlist has updated
+          window.dispatchEvent(new CustomEvent('sso_wishlist:updated'));
+        }
+
         refreshNavigation();
         updateFloatingCart();
       }
@@ -604,8 +611,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (event.data && event.data.type === 'SISITUS_GUEST_HANDOFF_ACK') {
         // [HANDOFF] Data Guest sukses mendarat di Customer Portal!
         // Sekarang baru aman untuk menghapus Public storage.
-        localStorage.removeItem('cart');
-        localStorage.removeItem('wishlist');
+        CartManager.clear();
+        WishlistManager.clear();
 
         if (window._handoffResolve) {
           window._handoffResolve();
@@ -633,8 +640,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         window._handoffInProgress = true;
 
-        const cartData = JSON.parse(localStorage.getItem('cart') || 'null');
-        const wishlistData = JSON.parse(localStorage.getItem('wishlist') || 'null');
+        const cartData = CartManager.getCart();
+        const wishlistData = WishlistManager.getWishlist();
 
         // Jika tidak ada data yang perlu di-handoff, langsung navigasi
         if (!cartData && !wishlistData) {

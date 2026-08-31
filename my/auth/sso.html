@@ -7,6 +7,7 @@
 <body>
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
+    import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
 
     // Origin whitelist strict
     const allowedOrigins = ['https://sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
@@ -14,13 +15,18 @@
 
     const getCartCount = () => {
       try {
-        const stored = localStorage.getItem('cart');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          return (parsed && parsed.domains) ? parsed.domains.length : 0;
-        }
+        const cart = CartManager.getCart();
+        return (cart && cart.domains) ? cart.domains.length : 0;
       } catch(e) {}
       return 0;
+    };
+
+    const getWishlistDomains = () => {
+      try {
+        const wishlist = WishlistManager.getWishlist();
+        return wishlist.domains.map(d => d.domain.toLowerCase());
+      } catch(e) {}
+      return [];
     };
 
     const broadcastState = () => {
@@ -36,7 +42,8 @@
           photoURL: user.photoURL,
           role: user.role
         } : null,
-        cartCount: getCartCount()
+        cartCount: getCartCount(),
+        wishlistDomains: getWishlistDomains()
       };
 
       // Kirim hanya ke client yang sudah terverifikasi lewat handshake
@@ -62,12 +69,11 @@
           try {
             let saved = false;
             if (event.data.cart) {
-              localStorage.setItem('cart', JSON.stringify(event.data.cart));
-              window.dispatchEvent(new Event('storage'));
+              CartManager.saveCart(event.data.cart);
               saved = true;
             }
             if (event.data.wishlist) {
-              localStorage.setItem('wishlist', JSON.stringify(event.data.wishlist));
+              WishlistManager.saveWishlist(event.data.wishlist);
               saved = true;
             }
 
@@ -80,6 +86,20 @@
           }
         }
       }
+
+      // Handoff Protocol: Delegated Wishlist Action
+      if (event.data && event.data.type === 'SISITUS_DELEGATE_WISHLIST_TOGGLE') {
+        if (AuthManager.isLoggedIn() && event.data.domain) {
+          const domain = event.data.domain;
+          if (WishlistManager.isInWishlist(domain)) {
+            WishlistManager.remove(domain);
+          } else {
+            WishlistManager.add(domain, 'Domain impian dari public', 'medium', { delegated: true });
+          }
+          // The 'wishlist:updated' event will automatically be fired by WishlistManager,
+          // which is caught by our listener below to broadcast state.
+        }
+      }
     });
 
     // Dengarkan perubahan state autentikasi internal (dari Firebase via AuthManager)
@@ -87,9 +107,13 @@
       broadcastState();
     });
 
+    window.addEventListener('wishlist:updated', () => {
+      broadcastState();
+    });
+
     // Dengarkan perubahan storage murni (sinkronisasi cart lintas tab dashboard)
     window.addEventListener('storage', (e) => {
-      if (e.key === 'cart') {
+      if (e.key === 'cart' || e.key === 'wishlist') {
         broadcastState();
       }
     });

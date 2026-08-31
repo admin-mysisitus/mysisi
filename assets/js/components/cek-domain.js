@@ -875,23 +875,51 @@
       const price = parseInt(btn.dataset.price) || 0;
       const heartIcon = btn.querySelector('i');
       try {
-        if (WishlistManager.isInWishlist(domain)) {
-          // Remove from wishlist
-          WishlistManager.remove(domain);
-          heartIcon.className = 'far fa-heart';
-          btn.style.color = '#999';
-          showSuccess('❤️ Dihapus', `${domain} dihapus dari wishlist`);
+        // DELEGATED ACTION: Jika user login (SSO), kirim pesan ke iframe
+        if (window.SSO_USER) {
+          const iframe = document.getElementById('sisitus-sso-iframe');
+          if (iframe && iframe.contentWindow) {
+            // Optimistically update UI
+            const isCurrentlyInWishlist = window.SSO_WISHLIST_DOMAINS && window.SSO_WISHLIST_DOMAINS.includes(domain.toLowerCase());
+            
+            if (isCurrentlyInWishlist) {
+              heartIcon.className = 'far fa-heart';
+              btn.style.color = '#999';
+              showSuccess('❤️ Dihapus', `${domain} dihapus dari wishlist (Customer Portal)`);
+            } else {
+              heartIcon.className = 'fas fa-heart';
+              btn.style.color = '#e74c3c';
+              showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti (Customer Portal)`);
+            }
+
+            iframe.contentWindow.postMessage({
+              type: 'SISITUS_DELEGATE_WISHLIST_TOGGLE',
+              domain: domain
+            }, 'https://my.sisitus.com');
+          } else {
+            showError('❌ Error', 'SSO Iframe tidak ditemukan untuk delegasi aksi.');
+          }
         } else {
-          // Add to wishlist
-          WishlistManager.add(domain, 'Domain impian', 'medium', {
-            tld: tld,
-            price: price,
-            domainPrice: price,
-            renewalPrice: price,
-            basePrice: price
-          });
-          heartIcon.className = 'fas fa-heart';
-          btn.style.color = '#e74c3c';
+          // GUEST ACTION: Simpan di local storage
+          if (WishlistManager.isInWishlist(domain)) {
+            // Remove from wishlist
+            WishlistManager.remove(domain);
+            heartIcon.className = 'far fa-heart';
+            btn.style.color = '#999';
+            showSuccess('❤️ Dihapus', `${domain} dihapus dari wishlist`);
+          } else {
+            // Add to wishlist
+            WishlistManager.add(domain, 'Domain impian', 'medium', {
+              tld: tld,
+              price: price,
+              domainPrice: price,
+              renewalPrice: price,
+              basePrice: price
+            });
+            heartIcon.className = 'fas fa-heart';
+            btn.style.color = '#e74c3c';
+            showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti`);
+          }
         }
       } catch (error) {
         showError('❌ Error', error.message);
@@ -910,12 +938,24 @@
     updateWishlistIcons();
   });
 
+  window.addEventListener('sso_wishlist:updated', () => {
+    updateWishlistIcons();
+  });
+
   function updateWishlistIcons() {
     const wishlistBtns = section.querySelectorAll('.cek-domain-wishlist-btn');
     wishlistBtns.forEach(btn => {
       const domain = btn.dataset.domain;
       const heartIcon = btn.querySelector('i');
-      if (WishlistManager.isInWishlist(domain)) {
+      
+      let inWishlist = false;
+      if (window.SSO_USER && window.SSO_WISHLIST_DOMAINS) {
+         inWishlist = window.SSO_WISHLIST_DOMAINS.includes(domain.toLowerCase());
+      } else {
+         inWishlist = WishlistManager.isInWishlist(domain);
+      }
+
+      if (inWishlist) {
         heartIcon.className = 'fas fa-heart';
         btn.style.color = '#e74c3c';
       } else {
