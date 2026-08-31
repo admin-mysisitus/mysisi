@@ -89,52 +89,6 @@
         }
       }
 
-      // Handoff Protocol: Delegated Auth (Login/Register)
-      if (event.data && event.data.type === 'SISITUS_DELEGATE_AUTH') {
-        const { action, payload } = event.data;
-        const source = event.source;
-        const origin = event.origin;
-
-        (async () => {
-          try {
-            let result;
-            if (action === 'login') {
-              result = await APIClient.loginUser(payload.email, payload.password);
-            } else if (action === 'register') {
-              result = await APIClient.registerUser(payload.email, payload.password, payload.displayName, payload.whatsapp);
-            } else {
-              throw new Error('Unknown action: ' + action);
-            }
-
-            if (result.success && result.data) {
-              // Simpan sesi di domain ini (my.sisitus.com)
-              AuthManager.saveSession(result.data);
-              
-              if (source) {
-                source.postMessage({
-                  type: 'SISITUS_DELEGATE_SUCCESS',
-                  action: action,
-                  success: true,
-                  userData: result.data
-                }, origin);
-              }
-            } else {
-              throw new Error(result.message || 'Delegated auth failed', { cause: result.rateLimit });
-            }
-          } catch (error) {
-            if (source) {
-              source.postMessage({
-                type: 'SISITUS_DELEGATE_SUCCESS',
-                action: action,
-                success: false,
-                message: error.message,
-                rateLimit: error.cause || null
-              }, origin);
-            }
-          }
-        })();
-      }
-
       // Handoff Protocol: Delegated Wishlist Action
       if (event.data && event.data.type === 'SISITUS_DELEGATE_WISHLIST_TOGGLE') {
         if (event.data.domain) {
