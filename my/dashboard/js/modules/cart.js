@@ -177,11 +177,21 @@ export async function render(currentUser) {
 
           if (checkRes.success && checkRes.data && checkRes.data.available) {
              let starterPrice = 599000;
-             if (configRes.success && configRes.data?.packages?.starter) {
-                starterPrice = configRes.data.packages.starter.price;
+             let domainPrice = 150000;
+             
+             if (configRes.success && configRes.data) {
+                if (configRes.data.packages?.starter) {
+                   starterPrice = configRes.data.packages.starter.price;
+                }
+                if (configRes.data.domains) {
+                   const cleanTld = tld.startsWith('.') ? tld.substring(1) : tld;
+                   const extData = Object.values(configRes.data.domains).find(d => d.ext === cleanTld || d.ext === `.${cleanTld}`);
+                   if (extData && extData.registration) {
+                      domainPrice = extData.registration;
+                   }
+                }
              }
-             const domainPrice = checkRes.data.price || 0;
-
+             
              CartManager.add(addDomain, tld, {
                 package: 'starter',
                 duration: 1,
