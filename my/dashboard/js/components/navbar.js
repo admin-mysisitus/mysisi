@@ -43,7 +43,7 @@ export class DashboardNavbar {
 
         <div class="navbar-actions">
           <!-- Kunjungi Website button -->
-          <a href="../" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
+          <a href="https://sisitus.com/" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
             <i class="fas fa-external-link-alt"></i> <span class="btn-text">Kunjungi Website</span>
           </a>
 

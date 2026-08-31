@@ -59,7 +59,7 @@ export class AdminSidebar {
         
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px; border-top: 1px solid var(--admin-border); padding-top: 20px;">Lainnya</div>
 
-        <a href="/" class="admin-nav-item" style="color: var(--admin-text-muted);">
+        <a href="https://sisitus.com/" class="admin-nav-item" style="color: var(--admin-text-muted);">
           <i class="fas fa-arrow-left"></i> Halaman Utama
         </a>
         <button id="sidebar-logout-btn" class="admin-nav-item" style="color: var(--admin-danger); background: transparent; border: none; text-align: left; width: 100%; cursor: pointer;">
