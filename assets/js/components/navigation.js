@@ -563,134 +563,56 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshNavigation();
   });
 
-  // --- SSO Cross-Domain Initialization ---
-  const initSSO = () => {
-    // Hanya jalan di public site, bukan di dashboard/auth yang sudah punya auth lokal
-    if (window.location.hostname === 'my.sisitus.com' || window.location.hostname === 'backstage.sisitus.com') return;
-    if (document.getElementById('sisitus-sso-iframe')) return; // Mencegah multiple iframes
+  // Interceptor: Cegat navigasi ke Customer Portal untuk Handoff Guest Cart (Single Door Auth)
+  document.addEventListener('click', async (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
 
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const ssoOrigin = isLocal ? window.location.origin : 'https://my.sisitus.com';
-    const ssoPath = isLocal ? '/my/auth/sso.html' : '/auth/sso.html';
+    let href = link.getAttribute('href');
+    if (!href) return;
 
-    const iframe = document.createElement('iframe');
-    iframe.id = 'sisitus-sso-iframe';
-    iframe.src = `${ssoOrigin}${ssoPath}`;
-    iframe.style.display = 'none';
-    iframe.setAttribute('aria-hidden', 'true');
+    // Hanya cegat transisi ke auth atau dashboard Customer
+    if (href.includes('/auth/') || href.includes('my.sisitus.com/auth') || href.includes('my.sisitus.com/dashboard')) {
+      // Jika sudah login, biarkan langsung lewat
+      if (window.SSO_USER) return;
 
-    window.addEventListener('message', (event) => {
-      const allowedOrigins = ['https://my.sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
-      if (!allowedOrigins.includes(event.origin)) return;
-      if (event.source !== iframe.contentWindow) return; // Strict source validation
+      e.preventDefault();
 
-      if (event.data && event.data.type === 'SISITUS_SSO_STATE') {
-        const ssoData = event.data;
-        if (typeof ssoData.isLoggedIn !== 'boolean') return;
-
-        if (ssoData.isLoggedIn && ssoData.user && typeof ssoData.user.displayName === 'string') {
-          window.SSO_USER = ssoData.user;
+      const cartData = CartManager.getCart();
+      
+      let wishlistData = null;
+      try {
+        if (typeof WishlistManager !== 'undefined') {
+          wishlistData = WishlistManager.getWishlist();
         } else {
-          window.SSO_USER = null;
+          // Fallback read from localStorage if WishlistManager is not loaded
+          const raw = localStorage.getItem('wishlist');
+          if (raw) wishlistData = JSON.parse(raw);
         }
+      } catch (err) {}
 
-        if (typeof ssoData.cartCount === 'number' && ssoData.cartCount >= 0) {
-          window.SSO_CART_COUNT = ssoData.cartCount;
-        }
-
-        if (Array.isArray(ssoData.wishlistDomains)) {
-          window.SSO_WISHLIST_DOMAINS = ssoData.wishlistDomains;
-          // Notify components that SSO wishlist has updated
-          window.dispatchEvent(new CustomEvent('sso_wishlist:updated'));
-        }
-
-        refreshNavigation();
-        updateFloatingCart();
+      // Jika tidak ada data yang perlu di-handoff, langsung navigasi
+      if (!cartData && !wishlistData) {
+        window.location.href = link.href;
+        return;
       }
 
-      // Handoff Protocol: Tangkap ACK dari SSO Iframe
-      if (event.data && event.data.type === 'SISITUS_GUEST_HANDOFF_ACK') {
-        // [HANDOFF] Data Guest sukses mendarat di Customer Portal!
-        // Sekarang baru aman untuk menghapus Public storage.
-        CartManager.clear();
-        WishlistManager.clear();
-
-        if (window._handoffResolve) {
-          window._handoffResolve();
-          window._handoffResolve = null;
-        }
+      // Encode payload ke Base64
+      try {
+        const handoffPayload = { cart: cartData, wishlist: wishlistData };
+        const handoffBase64 = btoa(JSON.stringify(handoffPayload));
+        
+        // Ensure proper redirect structure
+        const urlObj = new URL(link.href, window.location.origin);
+        
+        // Append hash ke URL
+        urlObj.hash = `handoff=${handoffBase64}`;
+        
+        window.location.href = urlObj.toString();
+      } catch (err) {
+        console.log('Error creating handoff hash:', err);
+        window.location.href = link.href;
       }
-    });
-
-    // Interceptor: Cegat navigasi ke Customer Portal untuk Handoff Guest Cart
-    document.addEventListener('click', async (e) => {
-      const link = e.target.closest('a');
-      if (!link) return;
-
-      const href = link.getAttribute('href');
-      if (!href) return;
-
-      // Hanya cegat transisi ke auth atau dashboard Customer
-      if (href.includes('/auth/') || href.includes('my.sisitus.com/auth') || href.includes('my.sisitus.com/dashboard')) {
-        // Jika sudah login, tidak perlu handoff guest cart
-        if (window.SSO_USER) return;
-
-        // Mencegah multiple handoff jika timeout sedang berjalan
-        if (window._handoffInProgress) return;
-
-        e.preventDefault();
-        window._handoffInProgress = true;
-
-        const cartData = CartManager.getCart();
-        const wishlistData = WishlistManager.getWishlist();
-
-        // Jika tidak ada data yang perlu di-handoff, langsung navigasi
-        if (!cartData && !wishlistData) {
-          window.location.href = link.href;
-          return;
-        }
-
-        // Tampilkan loading state sederhana pada kursor
-        document.body.style.cursor = 'wait';
-
-        try {
-          await new Promise((resolve) => {
-            window._handoffResolve = resolve;
-
-            // Timeout 500ms sebagai fallback agar navigasi tidak nyangkut
-            setTimeout(() => {
-              if (window._handoffResolve) {
-                window._handoffResolve = null;
-                resolve();
-              }
-            }, 500);
-
-            if (iframe.contentWindow) {
-              iframe.contentWindow.postMessage({
-                type: 'SISITUS_GUEST_HANDOFF',
-                cart: cartData,
-                wishlist: wishlistData
-              }, ssoOrigin);
-            } else {
-              resolve();
-            }
-          });
-        } finally {
-          document.body.style.cursor = 'default';
-          window._handoffInProgress = false;
-          window.location.href = link.href;
-        }
-      }
-    });
-
-    iframe.onload = () => {
-      // Handshake: Minta state saat iframe sudah siap (mencegah race condition)
-      if (iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'SISITUS_SSO_REQUEST' }, ssoOrigin);
-      }
-    };
-
-    document.body.appendChild(iframe);
-  };
-  initSSO();
+    }
+  });
 });

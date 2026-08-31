@@ -36,7 +36,6 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
-import SharedAuthForm from '/assets/js/modules/shared-auth-form.js';
 // ============================================================================
 // CART STATE MANAGEMENT
 // ============================================================================
@@ -315,135 +314,82 @@ export function updateCartPreview() {
 // GUEST CHECKOUT - INLINE AUTH + CART PREVIEW
 // ============================================================================
 function renderGuestCheckout() {
+  cartState.isProcessingCheckout = false;
+  const summary = getSelectedCartSummary();
+  const itemsHtml = summary.items.map(item => `<div class="cart-item">${item.domain} - ${formatPrice(item.price)}</div>`).join('');
+  
   cartState.container.innerHTML = `
-    <div class="page-container">
-      <div class="cart-page guest-checkout-grid">
-        
-        <!-- Cart Preview Container -->
-        <div id="cart-preview-container"></div>
-
-        <!-- Auth Form Container -->
-        <div>
-          <div id="shared-auth-form-container"></div>
+    <div class="cart-layout" style="display: grid; grid-template-columns: 1fr 400px; gap: 32px; align-items: start;">
+      <div class="cart-items-column">
+        <h2 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+          <i class="fas fa-shopping-cart" style="color: #2563eb;"></i> Keranjang Belanja
+        </h2>
+        <div class="cart-items-list" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          ${itemsHtml}
         </div>
+      </div>
+      
+      <div class="cart-summary-column">
+        <div class="summary-card" style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+          <h3 style="font-size: 1.25rem; color: #1e293b; margin-bottom: 20px; font-weight: 600;">Ringkasan Pesanan</h3>
+          
+          <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 12px; color: #64748b;">
+            <span>Subtotal (${summary.itemCount} item)</span>
+            <span>Rp ${summary.subtotal.toLocaleString('id-ID')}</span>
+          </div>
+          <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 16px; color: #64748b;">
+            <span>PPN (11%)</span>
+            <span>Rp ${Math.round(summary.subtotal * 0.11).toLocaleString('id-ID')}</span>
+          </div>
+          
+          <div class="summary-total" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #cbd5e1;">
+            <span style="font-weight: 600; color: #1e293b;">Total Tagihan</span>
+            <span style="font-size: 1.25rem; font-weight: 700; color: #2563eb;">Rp ${Math.round(summary.subtotal * 1.11).toLocaleString('id-ID')}</span>
+          </div>
 
+          <div style="margin-top: 24px;">
+            <button id="btn-login-checkout" class="btn btn-primary" style="width: 100%; padding: 14px; font-weight: 600; font-size: 1rem; border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 10px; background: #2563eb; color: white; border: none; cursor: pointer; transition: all 0.2s;">
+              Lanjut Login untuk Checkout
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-top: 16px; line-height: 1.5;">
+              Anda akan diarahkan ke Portal Pelanggan yang aman untuk menyelesaikan pesanan.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   `;
-  // Function to render the cart preview card reactively
-  const updateCartPreview = () => {
-    // Blur active element to prevent browser's auto-scroll on focus loss
-    if (document.activeElement && document.activeElement.tagName !== 'BODY') {
-      document.activeElement.blur();
+
+  // Attach event listener to redirect button with Handoff payload
+  document.getElementById('btn-login-checkout').addEventListener('click', async () => {
+    try {
+      const btn = document.getElementById('btn-login-checkout');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mempersiapkan...';
+      btn.disabled = true;
+
+      // Prepare handoff payload
+      const cartData = CartManager.getCart();
+      
+      const { WishlistManager } = await import('/assets/js/modules/unified-cart.js');
+      const wishlistData = WishlistManager.getWishlist();
+
+      const handoffPayload = {
+        cart: cartData,
+        wishlist: wishlistData
+      };
+      
+      // Base64 encode the JSON payload
+      const handoffBase64 = btoa(JSON.stringify(handoffPayload));
+      
+      // Redirect to Auth domain with Handoff Hash and return path
+      const authUrl = EnvHelper.getDomainUrl('my', `/auth/?redirect=${encodeURIComponent('/dashboard/#!/dashboard/cart')}#handoff=${handoffBase64}`);
+      window.location.href = authUrl;
+    } catch (e) {
+      console.log('Error preparing handoff:', e);
+      window.location.href = EnvHelper.getDomainUrl('my', `/auth/?redirect=${encodeURIComponent('/dashboard/#!/dashboard/cart')}`);
     }
-    
-    const {
-      items,
-      selectedItem,
-      addons,
-      domainSubtotal,
-      addonsTotal,
-      subtotal,
-      discount,
-      ppn,
-      finalTotal
-    } = getSelectedCartSummary();
-    
-    const previewContainer = document.getElementById('cart-preview-container');
-    if (!previewContainer) return;
-    let previewContent = '<div class="preview-empty">Keranjang kosong</div>';
-    
-    if (items.length > 0) {
-      let addonsHtml = '';
-      if (addonsTotal > 0) {
-        addonsHtml = `
-                <div class="price-row" style="margin-bottom: 4px;">
-                  <span class="price-row-label">Layanan Tambahan:</span>
-                  <span class="price-value">${formatPrice(addonsTotal)}</span>
-                </div>
-        `;
-      }
-      
-      let promoHtml = '';
-      if (discount > 0) {
-        let promoDescHtml = '';
-        if (cartState.promoDescription) {
-          promoDescHtml = `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>`;
-        }
-        promoHtml = `
-                <div class="price-row discount" style="align-items: flex-start; padding: 4px 0;">
-                  <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span class="price-row-label"><i class="fas fa-tag"></i> Diskon Promo:</span>
-                    ${promoDescHtml}
-                  </div>
-                  <span class="price-value">-${formatPrice(discount)}</span>
-                </div>
-        `;
-      }
-      
-      const itemsHtml = items.map(item => renderCartItem(item)).join('');
-      
-      previewContent = `
-            <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
-              ${itemsHtml}
-            </div>
-
-            <!-- Detailed Price Breakdown -->
-            <div class="preview-breakdown" style="font-size: 13px; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
-              <div class="price-row" style="margin-bottom: 4px;">
-                <span class="price-row-label">Domain (1 dari ${items.length}):</span>
-                <span class="price-value">${formatPrice(domainSubtotal)}</span>
-              </div>
-              
-              ${addonsHtml}
-              
-              <div class="price-row subtotal" style="padding-top: 0.5rem; margin-top: 0.5rem;">
-                <span class="price-row-label">Subtotal:</span>
-                <span class="price-value">${formatPrice(subtotal)}</span>
-              </div>
-              
-              <div class="price-row ppn" style="margin-bottom: 4px;">
-                <span class="price-row-label">PPN (11%):</span>
-                <span class="price-value">${formatPrice(ppn)}</span>
-              </div>
-
-              ${promoHtml}
-            </div>
-
-            <div class="price-row total preview-total" style="padding-top: 0.5rem;">
-              <span>Total Pembayaran:</span>
-              <span class="price-value">${formatPrice(finalTotal)}</span>
-            </div>
-      `;
-    }
-    
-    previewContainer.innerHTML = `
-      <div class="cart-preview">
-        <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
-          <i class="fas fa-shopping-cart"></i> Preview Keranjang
-        </h3>
-        <div class="preview-body" style="background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: clamp(0.75rem, 2vw, 1.25rem);">
-          ${previewContent}
-        </div>
-      </div>
-    `;
-  };
-  // Register updateCartPreview globally
-  window.updateCartPreview = updateCartPreview;
-  // Initial render of preview
-  updateCartPreview();
-  // Initialize SharedAuthForm with callbacks
-  const authForm = new SharedAuthForm({
-    containerId: 'shared-auth-form-container',
-    inlineMode: true,
-    showGoogleSignIn: true,
-    showPrivacyNotice: true,
-    onLoginSuccess: handleAuthSuccess,
-    onRegisterSuccess: handleAuthSuccess
   });
-  authForm.render();
-  // Expose google login handler
-  window.handleGoogleSignIn = handleGoogleSignIn;
 }
 /**
  * Handle successful authentication

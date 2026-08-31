@@ -19,11 +19,33 @@ import {
 // ============================================================================
 // INITIALIZATION
 // ============================================================================
+import { CartManager, WishlistManager } from '../modules/unified-cart.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   initAuthPage();
 });
 
 function initAuthPage() {
+  // Handle Guest Handoff (Single Door Auth)
+  const hash = window.location.hash;
+  if (hash.startsWith('#handoff=')) {
+    try {
+      const base64Payload = hash.substring(9);
+      const jsonStr = atob(base64Payload);
+      const payload = JSON.parse(jsonStr);
+      
+      // Merge silently into unpartitioned localStorage
+      if (payload.cart) CartManager.mergeCart(payload.cart);
+      if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
+      
+      // Clean up the hash
+      window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+      console.log('[Auth] Guest Handoff successful');
+    } catch (e) {
+      console.log('[Auth] Failed to parse guest handoff:', e);
+    }
+  }
+
   // Handle error query params
   const urlParams = new URLSearchParams(window.location.search);
   const errorParam = urlParams.get('error');
@@ -61,7 +83,18 @@ function showLoggedInState() {
   const loggedInSection = document.getElementById('auth-loggedin-section');
   if (formsSection) formsSection.style.display = 'none';
   if (loggedInSection) loggedInSection.style.display = 'block';
+  
   const user = AuthManager.getCurrentUser();
+  
+  // Auto-redirect jika ada parameter redirect
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectPath = urlParams.get('redirect');
+  if (redirectPath) {
+    const safeRedirect = redirectPath.startsWith('/') ? redirectPath : '/';
+    window.location.href = user && user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', safeRedirect);
+    return;
+  }
+
   if (user) {
     document.getElementById('loggedin-name').textContent = user.displayName || 'Pengguna';
     document.getElementById('loggedin-email').textContent = user.email || '';
@@ -109,7 +142,14 @@ function showAuthForms() {
           showLoggedInState();
           // Let default redirect behavior happen
           setTimeout(() => {
-            window.location.href = user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectPath = urlParams.get('redirect');
+            if (redirectPath) {
+              const safeRedirect = redirectPath.startsWith('/') ? redirectPath : '/';
+              window.location.href = user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', safeRedirect);
+            } else {
+              window.location.href = user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
+            }
           }, 1500);
         }
       });
