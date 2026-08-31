@@ -599,7 +599,13 @@ export class SharedAuthForm {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Membuat akun...');
       // Call register API
-      const result = await APIClient.registerUser(email, password, displayName, whatsapp);
+      let result;
+      if (EnvHelper.getDomainType() === 'public') {
+        result = await this.delegateAuth('register', { email, password, displayName, whatsapp });
+      } else {
+        result = await APIClient.registerUser(email, password, displayName, whatsapp);
+      }
+      
       if (!result.success) {
         throw new Error(result.message || 'Registrasi gagal');
       }
@@ -657,7 +663,13 @@ export class SharedAuthForm {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Login...');
       // Call login API
-      const result = await APIClient.loginUser(email, password);
+      let result;
+      if (EnvHelper.getDomainType() === 'public') {
+        result = await this.delegateAuth('login', { email, password });
+      } else {
+        result = await APIClient.loginUser(email, password);
+      }
+      
       if (!result.success) {
         if (result.rateLimit && result.rateLimit.remainingSec > 0) {
           this.startCountdown(form.querySelector('button[type="submit"]'), result.rateLimit.remainingSec);
@@ -860,6 +872,48 @@ export class SharedAuthForm {
       textEl.style.color = '#ef4444'; // Red
       textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nomor terlalu pendek';
     }
+  }
+
+  /**
+   * Mendelegasikan autentikasi ke SSO Iframe (Cross-Domain)
+   */
+  delegateAuth(action, payload) {
+    return new Promise((resolve) => {
+      const iframe = document.getElementById('sisitus-sso-iframe');
+      if (!iframe || !iframe.contentWindow) {
+        resolve({ success: false, message: 'SSO iframe tidak ditemukan' });
+        return;
+      }
+
+      const handler = (event) => {
+        const allowedOrigins = ['https://my.sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+        if (!allowedOrigins.includes(event.origin)) return;
+        
+        if (event.data && event.data.type === 'SISITUS_DELEGATE_SUCCESS' && event.data.action === action) {
+          window.removeEventListener('message', handler);
+          if (event.data.success) {
+            resolve({ success: true, data: event.data.userData });
+          } else {
+            resolve({ success: false, message: event.data.message || 'Delegasi login gagal', rateLimit: event.data.rateLimit });
+          }
+        }
+      };
+      
+      window.addEventListener('message', handler);
+      
+      // Kirim perintah
+      iframe.contentWindow.postMessage({
+        type: 'SISITUS_DELEGATE_AUTH',
+        action: action,
+        payload: payload
+      }, '*');
+
+      // Timeout setelah 10 detik
+      setTimeout(() => {
+        window.removeEventListener('message', handler);
+        resolve({ success: false, message: 'Request timeout' });
+      }, 10000);
+    });
   }
 }
 export default SharedAuthForm;
