@@ -76,7 +76,7 @@ export class AdminSidebar {
             AuthManager
           } = await import('/assets/js/modules/unified-auth.js');
           AuthManager.clearSession();
-          window.location.href = 'https://my.sisitus.com/auth/';
+          window.location.href = '/my/auth/';
         }
       });
     }

@@ -77,7 +77,7 @@ export class AuthManager {
                     if (rtProfile.role !== 'admin' && (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/'))) {
                       void('[AuthManager] Realtime Role Demoted, forcing exit from admin');
                       // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
-                      window.location.href = 'https://my.sisitus.com/dashboard/';
+                      window.location.href = '/my/dashboard/';
                       return;
                     }
                     // Sinkronisasi data sesi lokal jika ada perubahan jabatan

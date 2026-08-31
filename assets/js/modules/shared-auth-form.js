@@ -2,7 +2,7 @@
  * SHARED AUTH FORM MODULE
  * ===================================
  * Reusable login/register form for:
- * - https://my.sisitus.com/auth/ (standalone page)
+ * - /my/auth/ (standalone page)
  * - /cart/ (inline checkout form)
  * 
  * Features:
@@ -28,7 +28,7 @@ export class SharedAuthForm {
       containerId: 'auth-form-container',
       showGoogleSignIn: true,
       showPrivacyNotice: true,
-      inlineMode: false, // true for cart, false for https://my.sisitus.com/auth/
+      inlineMode: false, // true for cart, false for /my/auth/
       onLoginSuccess: null,
       onRegisterSuccess: null,
       ...options
@@ -86,7 +86,7 @@ export class SharedAuthForm {
           } else {
             showSuccess('Berhasil', 'Login dengan Google berhasil');
             setTimeout(() => {
-              window.location.href = 'https://my.sisitus.com/dashboard/';
+              window.location.href = '/my/dashboard/';
             }, 1500);
           }
         } catch (error) {
@@ -622,7 +622,7 @@ export class SharedAuthForm {
             this.options.onRegisterSuccess(userData);
           } else {
             // Default: redirect to verify email page
-            window.location.href = 'https://my.sisitus.com/auth/verify-email.html?sent=true';
+            window.location.href = '/my/auth/verify-email.html?sent=true';
           }
         }
       }, 1500);
@@ -675,7 +675,7 @@ export class SharedAuthForm {
           this.options.onLoginSuccess(result.data);
         } else {
           // Default: redirect to dashboard or admin
-          window.location.href = result.data.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+          window.location.href = result.data.role === 'admin' ? '/admin/' : '/my/dashboard/';
         }
       }, 1500);
     } catch (error) {

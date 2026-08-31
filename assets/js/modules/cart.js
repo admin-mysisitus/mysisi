@@ -218,7 +218,7 @@ export async function render(currentUser) {
       <div style="text-align: center; padding: 60px 20px;">
         <h2>❌ Error</h2>
         <p>${error.message}</p>
-        <a href="https://my.sisitus.com/dashboard/#!/dashboard/checkout" class="btn" style="display: inline-block; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px;">
+        <a href="/my/dashboard/#!/dashboard/checkout" class="btn" style="display: inline-block; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px;">
           Kembali ke Beranda
         </a>
       </div>
@@ -1166,7 +1166,7 @@ async function proceedToCheckout() {
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
-      window.location.href = `https://my.sisitus.com/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
+      window.location.href = `/my/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
     }, 1500);
   } catch (error) {
     void('[Cart] Checkout error:', error);

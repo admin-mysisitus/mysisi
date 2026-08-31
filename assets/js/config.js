@@ -53,7 +53,7 @@ export const menuData = [{
   icon: "fas fa-life-ring"
 }, {
   text: "Login",
-  href: "https://my.sisitus.com/auth/",
+  href: "/my/auth/",
   icon: "fas fa-sign-in-alt",
   isAuth: true
 }];

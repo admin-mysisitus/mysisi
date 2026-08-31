@@ -35,7 +35,7 @@ class AdminApp {
     if (user.role !== 'admin') {
       document.body.innerHTML = '';
       // Arahkan ke dasbor pelanggan karena dia masih punya hak akses sebagai customer
-      window.location.href = 'https://my.sisitus.com/dashboard/';
+      window.location.href = '/my/dashboard/';
       return;
     }
     // Render sidebar and navbar

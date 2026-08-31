@@ -26,7 +26,7 @@ function createProfileMenuItem(user) {
   li.className = 'nav-desktop-item nav-desktop-profile';
   const link = document.createElement('a');
   link.className = 'nav-desktop-link profile-link';
-  link.href = user?.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+  link.href = user?.role === 'admin' ? '/admin/' : '/my/dashboard/';
   link.innerHTML = renderUserAvatarHtml(user, 'w200', 'nav-profile-photo');
   const span = document.createElement('span');
   span.className = 'nav-profile-name';
@@ -39,7 +39,7 @@ function createProfileMenuItem(user) {
 const generateDesktopMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-desktop-list';
-  const loggedInUser = window.SSO_USER || AuthManager.getCurrentUser();
+  const loggedInUser = AuthManager.getCurrentUser();
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
@@ -105,7 +105,7 @@ const generateDesktopMenu = () => {
 const generateMobileMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-mobile-list';
-  const loggedInUser = window.SSO_USER || AuthManager.getCurrentUser();
+  const loggedInUser = AuthManager.getCurrentUser();
   menuData.forEach(item => {
     // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
@@ -185,7 +185,7 @@ const generateMobileMenu = () => {
     profileLi.className = 'nav-mobile-item nav-mobile-profile';
     const link = document.createElement('a');
     link.className = 'nav-mobile-link profile-link';
-    link.href = loggedInUser?.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+    link.href = loggedInUser?.role === 'admin' ? '/admin/' : '/my/dashboard/';
     link.innerHTML = renderUserAvatarHtml(loggedInUser, 'w200', 'nav-profile-photo') + `<span class="nav-profile-name">${loggedInUser?.displayName || 'User'}</span>`;
     profileLi.appendChild(link);
     list.appendChild(profileLi);
@@ -403,9 +403,6 @@ export function refreshNavigation() {
 }
 // Helper: Get cart item count from localStorage
 function getCartItemCount() {
-  if (typeof window.SSO_CART_COUNT === 'number') {
-    return window.SSO_CART_COUNT;
-  }
   try {
     const stored = localStorage.getItem('cart');
     if (!stored) return 0;
@@ -560,55 +557,4 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('auth:authChanged', () => {
     refreshNavigation();
   });
-
-  // --- SSO Cross-Domain Initialization ---
-  const initSSO = () => {
-    // Hanya jalan di public site, bukan di dashboard/auth yang sudah punya auth lokal
-    if (window.location.hostname === 'my.sisitus.com' || window.location.hostname === 'backstage.sisitus.com') return;
-    if (document.getElementById('sisitus-sso-iframe')) return; // Mencegah multiple iframes
-
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const ssoOrigin = isLocal ? window.location.origin : 'https://my.sisitus.com';
-    const ssoPath = isLocal ? '/my/auth/sso.html' : '/auth/sso.html';
-
-    const iframe = document.createElement('iframe');
-    iframe.id = 'sisitus-sso-iframe';
-    iframe.src = `${ssoOrigin}${ssoPath}`;
-    iframe.style.display = 'none';
-    iframe.setAttribute('aria-hidden', 'true');
-
-    window.addEventListener('message', (event) => {
-      const allowedOrigins = ['https://my.sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
-      if (!allowedOrigins.includes(event.origin)) return;
-      if (event.source !== iframe.contentWindow) return; // Strict source validation
-
-      if (event.data && event.data.type === 'SISITUS_SSO_STATE') {
-        const ssoData = event.data;
-        if (typeof ssoData.isLoggedIn !== 'boolean') return;
-
-        if (ssoData.isLoggedIn && ssoData.user && typeof ssoData.user.displayName === 'string') {
-          window.SSO_USER = ssoData.user;
-        } else {
-          window.SSO_USER = null;
-        }
-
-        if (typeof ssoData.cartCount === 'number' && ssoData.cartCount >= 0) {
-          window.SSO_CART_COUNT = ssoData.cartCount;
-        }
-
-        refreshNavigation();
-        updateFloatingCart();
-      }
-    });
-
-    iframe.onload = () => {
-      // Handshake: Minta state saat iframe sudah siap (mencegah race condition)
-      if (iframe.contentWindow) {
-        iframe.contentWindow.postMessage({ type: 'SISITUS_SSO_REQUEST' }, ssoOrigin);
-      }
-    };
-
-    document.body.appendChild(iframe);
-  };
-  initSSO();
 });
