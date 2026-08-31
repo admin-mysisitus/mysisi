@@ -11,9 +11,6 @@ import {
   getFirebase
 } from '/assets/js/modules/firebase-core.js';
 import {
-  MIDTRANS_CONFIG
-} from '/assets/js/config/api.config.js';
-import {
   showError,
   showSuccess,
   showWarning,
@@ -24,22 +21,6 @@ import {
   formatPhoneNumber,
   sanitizeHTML
 } from '/assets/js/modules/unified-utils.js';
-
-// lazy-load Snap.js hanya saat halaman pembayaran diakses
-let snapLoaded = false;
-function loadMidtransSnap() {
-  return new Promise((resolve, reject) => {
-    if (snapLoaded || window.snap) { resolve(); return; }
-    const env = MIDTRANS_CONFIG.ENVIRONMENT;
-    const src = MIDTRANS_CONFIG.SNAP_URL[env];
-    const script = document.createElement('script');
-    script.src = src;
-    script.dataset.clientKey = MIDTRANS_CONFIG.CLIENT_KEY;
-    script.onload = () => { snapLoaded = true; resolve(); };
-    script.onerror = () => reject(new Error('Gagal memuat Midtrans Snap'));
-    document.head.appendChild(script);
-  });
-}
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
 let currentOrder = null;
@@ -60,7 +41,7 @@ export async function render(user) {
         <div style="max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;">
           <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
             <h2 style="margin: 0 0 10px 0; color: #92400e;">
-              <i class="ph-fill ph-envelope-open"></i> Verifikasi Email Diperlukan
+              <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
             </h2>
             <p style="margin: 0 0 10px 0; color: #78350f;">
               Email Anda belum terverifikasi. Verifikasi email diperlukan untuk melanjutkan pembayaran.
@@ -73,7 +54,7 @@ export async function render(user) {
           <div style="margin-bottom: 20px;">
             <p style="color: #666;">Setelah memverifikasi email, refresh halaman ini untuk melanjutkan.</p>
             <button onclick="location.reload()" class="btn" style="padding: 12px 24px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-              <i class="ph-fill ph-arrows-clockwise"></i> Refresh Halaman
+              <i class="fas fa-redo"></i> Refresh Halaman
             </button>
           </div>
 
@@ -107,7 +88,7 @@ export async function render(user) {
     // Setup buttons
     setupPaymentButtons();
   } catch (error) {
-    console.log('Error rendering payment page:', error);
+    void ('Error rendering payment page:', error);
     const content = document.getElementById('content');
     content.innerHTML = `
       <div class="alert alert-error">
@@ -152,7 +133,7 @@ async function loadOrderData(orderId, currentUser) {
       }
     }
   } catch (error) {
-    console.log('Error loading order data:', error);
+    void ('Error loading order data:', error);
     throw error;
   }
 }
@@ -176,7 +157,7 @@ async function generateMidtransToken(orderData) {
     };
     // Token already saved to RTDB by GAS createOrderWithAuth
   } catch (error) {
-    console.log('Error generating Midtrans token:', error);
+    void ('Error generating Midtrans token:', error);
     // Show error but don't crash
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert alert-warning';
@@ -188,7 +169,7 @@ async function generateMidtransToken(orderData) {
     errorDiv.innerHTML = `
       <div style="line-height: 1.5;">Gagal memuat sistem pembayaran. Coba muat ulang halaman atau hubungi Support.</div>
       <a href="https://wa.me/${ADMIN_WHATSAPP}" target="_blank" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">
-        <i class="ph-fill ph-whatsapp-logo"></i> Chat Support
+        <i class="fab fa-whatsapp"></i> Chat Support
       </a>
     `;
     document.getElementById('payment-actions').appendChild(errorDiv);
@@ -206,19 +187,18 @@ function setupPaymentButtons() {
   }
 }
 
-async function openMidtransPayment() {
+function openMidtransPayment() {
   try {
     if (!currentTransaction) {
       showWarning('Sistem pembayaran belum siap. Coba refresh halaman.');
       return;
     }
+    if (!window.snap) {
+      throw new Error('Midtrans library tidak loaded');
+    }
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, true, 'Membuka pembayaran...');
-    // pastikan Snap.js sudah termuat sebelum memanggil snap.pay
-    await loadMidtransSnap();
-    if (!window.snap) {
-      throw new Error('Midtrans Snap gagal dimuat');
-    }
+    // Open Midtrans Snap
     window.snap.pay(currentTransaction.token, {
       onSuccess: handlePaymentSuccess,
       onPending: handlePaymentPending,
@@ -226,7 +206,7 @@ async function openMidtransPayment() {
       onClose: handlePaymentClose
     });
   } catch (error) {
-    console.log('Error opening payment:', error);
+    void ('Error opening payment:', error);
     showError('Error: ' + error.message);
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, false, 'Lanjut Pembayaran');
@@ -248,7 +228,7 @@ function handlePaymentLunas(orderId) {
       db.ref(`orders/${orderId}/paymentStatus`).off('value', paymentStatusListener);
       paymentStatusListener = null;
     }
-  }).catch(() => {});
+  }).catch(() => { });
   showSuccess('✓ Pembayaran Dikonfirmasi!', 'Mengarahkan ke Invoice...');
   const btn = document.getElementById('btn-payment');
   if (btn) setButtonLoading(btn, false, 'Selesai');
@@ -275,7 +255,7 @@ async function startPaymentPolling() {
       });
     }
   } catch (e) {
-    console.log('Firebase DB listener error', e);
+    void ('Firebase DB listener error', e);
   }
   // 2. Polling API sebagai fallback
   if (paymentPollingInterval) clearInterval(paymentPollingInterval);
@@ -291,7 +271,7 @@ async function startPaymentPolling() {
         clearInterval(paymentPollingInterval);
       }
     } catch (e) {
-      console.log('Polling error:', e);
+      void ('Polling error:', e);
     }
   }, 4000);
 }
@@ -299,7 +279,7 @@ async function startPaymentPolling() {
 function handlePaymentSuccess(result) {
   const orderId = currentOrder?.orderId;
   showSuccess('✓ Pembayaran Berhasil!', 'Mengarahkan ke Invoice...');
-  APIClient.syncOrderStatus(orderId).catch(() => {});
+  APIClient.syncOrderStatus(orderId).catch(() => { });
   setTimeout(() => {
     window.location.href = `https://sisitus.com/invoice/?orderId=${encodeURIComponent(orderId)}`;
   }, 500); // Instant redirect
@@ -349,7 +329,7 @@ function requestPaymentAfterPreview() {
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   } catch (error) {
-    console.log('Error with WhatsApp:', error);
+    void ('Error with WhatsApp:', error);
     showError('Gagal membuka WhatsApp. Hubungi support secara manual.');
   }
 }
@@ -411,7 +391,7 @@ function displayOrderData(orderData) {
         <p class="dashboard-page-header-desc">Dibuat pada: ${formatDateTime(orderData.createdAt)}. ${orderData.paymentStatus === 'paid' ? 'Terima kasih, pembayaran untuk tagihan pesanan ini telah lunas.' : 'Silakan lakukan pembayaran tagihan pesanan Anda.'}</p>
       </div>
       <div class="dashboard-page-header-visual">
-        <i class="ph-fill ph-credit-card"></i>
+        <i class="fas fa-credit-card"></i>
       </div>
     </div>
 
@@ -521,14 +501,14 @@ function displayOrderData(orderData) {
           <div class="button-group">
             ${orderData.paymentStatus !== 'paid' && !isExpired ? `
               <button id="btn-payment" class="btn btn-primary btn-lg">
-                <i class="ph-fill ph-credit-card"></i> Lanjut Pembayaran
+                <i class="fas fa-credit-card"></i> Lanjut Pembayaran
               </button>
               <button id="btn-payment-preview" class="btn btn-secondary btn-lg">
-                <i class="ph-fill ph-eye"></i> Minta Preview Dulu
+                <i class="fas fa-eye"></i> Minta Preview Dulu
               </button>
             ` : ''}
             <button onclick="window.location.hash='#!orders'" class="btn btn-outline">
-              <i class="ph-fill ph-arrow-left"></i> Kembali ke Pesanan
+              <i class="fas fa-arrow-left"></i> Kembali ke Pesanan
             </button>
           </div>
         </div>

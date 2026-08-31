@@ -11,46 +11,46 @@ export class DashboardSidebar {
     const container = document.getElementById('sidebar');
     const menuItems = [{
       id: 'dashboard',
-      icon: 'ph-fill ph-squares-four',
+      icon: 'fas fa-th-large',
       label: 'Dashboard',
       route: '/dashboard/'
     }, {
       id: 'profile',
-      icon: 'ph-fill ph-user-gear',
+      icon: 'fas fa-user-cog',
       label: 'Profil Saya',
       route: '/dashboard/profile'
     }, {
       id: 'cart',
-      icon: 'ph-fill ph-shopping-cart',
+      icon: 'fas fa-shopping-cart',
       label: 'Keranjang Saya',
       route: 'https://sisitus.com/cart/',
       isExternal: true,
       badge: 'cart-badge'
     }, {
       id: 'wishlist',
-      icon: 'ph-fill ph-heart',
+      icon: 'fas fa-heart',
       label: 'Wishlist Saya',
       route: '/dashboard/wishlist',
       badge: 'wishlist-badge'
     }, {
       id: 'orders',
-      icon: 'ph-fill ph-tote',
+      icon: 'fas fa-shopping-bag',
       label: 'Pesanan',
       route: '/dashboard/orders'
     }, {
       id: 'invoices',
-      icon: 'ph-fill ph-receipt',
+      icon: 'fas fa-file-invoice-dollar',
       label: 'Invoice',
       route: '/dashboard/invoices',
       badge: ''
     }, {
       id: 'domains',
-      icon: 'ph-fill ph-globe',
+      icon: 'fas fa-globe',
       label: 'Domain Saya',
       route: '/dashboard/domains'
     }, {
       id: 'support',
-      icon: 'ph-fill ph-headset',
+      icon: 'fas fa-headset',
       label: 'Support',
       route: '/dashboard/support'
     }];
@@ -107,7 +107,7 @@ export class DashboardSidebar {
     // Update cart badge on cart changes
     this.updateCartBadge();
     window.addEventListener('cart:updated', () => this.updateCartBadge());
-    
+
     // Update wishlist badge
     this.updateWishlistBadge();
     window.addEventListener('wishlist:updated', () => this.updateWishlistBadge());
@@ -134,7 +134,7 @@ export class DashboardSidebar {
       // CartManager not available, skip silently
     }
   }
-  
+
   /**
    * Update wishlist item count badge
    */
@@ -143,7 +143,7 @@ export class DashboardSidebar {
       const {
         WishlistManager
       } = await import('/assets/js/modules/unified-cart.js');
-      const count = WishlistManager.getWishlist().domains.length;
+      const count = WishlistManager.getWishlist().length;
       const badge = document.querySelector('.wishlist-badge-count');
       if (badge) {
         if (count > 0) {

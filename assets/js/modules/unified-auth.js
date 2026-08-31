@@ -20,7 +20,6 @@ import {
 } from './firebase-core.js';
 import APIClient from './unified-api.js';
 import { CartManager, WishlistManager } from './unified-cart.js';
-import { Logger } from './unified-utils.js';
 export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;
@@ -112,7 +111,7 @@ export class AuthManager {
             // Ensure state updates without causing infinite loop
             if (JSON.stringify(this.state.user) !== JSON.stringify(userObj)) {
               this.saveSession(userObj);
-              
+
               // Sync Cart & Wishlist on login
               const cartRes = await APIClient.fetchUserCart(userObj.userId);
               if (cartRes.success && cartRes.data) {

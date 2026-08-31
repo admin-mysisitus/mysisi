@@ -14,8 +14,7 @@
  */
 import {
   showSuccess,
-  showError,
-  Logger
+  showError
 } from './unified-utils.js';
 import {
   APIClient
@@ -76,11 +75,11 @@ export class CartManager {
   static remove(domain) {
     const cart = this.getCart();
     cart.domains = cart.domains.filter(d => d.domain.toLowerCase() !== domain.toLowerCase());
-    
+
     // DRY Principle: If cart becomes empty, clear all modifiers automatically
     if (cart.domains.length === 0) {
-       cart.coupon = null;
-       cart.addons = [];
+      cart.coupon = null;
+      cart.addons = [];
     }
 
     this.saveCart(cart);
@@ -121,7 +120,7 @@ export class CartManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      Logger.log('[Cart] Parse error:', err);
+      void ('[Cart] Parse error:', err);
       return {
         domains: [],
         addons: [],
@@ -143,7 +142,7 @@ export class CartManager {
         detail: calculated
       }));
     } catch (err) {
-      Logger.log('[Cart] Save error:', err);
+      void ('[Cart] Save error:', err);
     }
   }
 
@@ -213,7 +212,11 @@ export class CartManager {
   static async applyCoupon(code) {
     const cart = this.getCart();
     try {
-      const response = await APIClient.validatePromoCode(code);
+      // Validate coupon with GAS backend using APIClient
+      if (!window.APIClient) {
+        throw new Error('API Client not available. Import APIClient before applying coupon.');
+      }
+      const response = await window.APIClient.validatePromoCode(code);
       if (!response.success || !response.data) {
         throw new Error(response.message || 'Kode promo tidak valid atau sudah kadaluarsa');
       }
@@ -229,7 +232,7 @@ export class CartManager {
         cart
       };
     } catch (error) {
-      Logger.log('[Cart] Error validating coupon:', error);
+      void ('[Cart] Error validating coupon:', error);
       return {
         success: false,
         message: error.message
@@ -458,7 +461,7 @@ export class WishlistManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      Logger.log('[Wishlist] Parse error:', err);
+      void ('[Wishlist] Parse error:', err);
       return {
         domains: []
       };
@@ -474,7 +477,7 @@ export class WishlistManager {
         detail: wishlist
       }));
     } catch (err) {
-      Logger.log('[Wishlist] Save error:', err);
+      void ('[Wishlist] Save error:', err);
     }
   }
 
@@ -553,7 +556,7 @@ export class CartAnalytics {
     let abandoned_carts = [];
     try {
       abandoned_carts = JSON.parse(localStorage.getItem('abandoned_carts')) || [];
-    } catch (err) {}
+    } catch (err) { }
     abandoned_carts.push(abandoned);
     localStorage.setItem('abandoned_carts', JSON.stringify(abandoned_carts));
   }
