@@ -161,9 +161,12 @@ export class CartManager {
       else if (typeof items === 'object') Object.values(items).forEach(callback);
     };
 
+    // Tolerate if remoteCart is directly an array OR an object with .domains
+    const remoteDomains = Array.isArray(remoteCart) ? remoteCart : (remoteCart.domains || []);
+
     // Merge domains
-    iterate(remoteCart.domains, remoteItem => {
-      if (remoteItem && !localCart.domains.some(localItem => localItem.domain === remoteItem.domain)) {
+    iterate(remoteDomains, remoteItem => {
+      if (remoteItem && remoteItem.domain && !localCart.domains.some(localItem => localItem.domain === remoteItem.domain)) {
         localCart.domains.push(remoteItem);
         updated = true;
       }
@@ -171,7 +174,7 @@ export class CartManager {
 
     // Merge addons
     iterate(remoteCart.addons, remoteAddon => {
-      if (remoteAddon && !localCart.addons.some(localAddon => localAddon.id === remoteAddon.id)) {
+      if (remoteAddon && remoteAddon.id && !localCart.addons.some(localAddon => localAddon.id === remoteAddon.id)) {
         localCart.addons.push(remoteAddon);
         updated = true;
       }
@@ -506,8 +509,11 @@ export class WishlistManager {
       else if (typeof items === 'object') Object.values(items).forEach(callback);
     };
 
-    iterate(remoteWishlist.domains, remoteItem => {
-      if (remoteItem && !localWishlist.domains.some(localItem => localItem.domain === remoteItem.domain)) {
+    // Tolerate if remoteWishlist is directly an array OR an object with .domains
+    const remoteDomains = Array.isArray(remoteWishlist) ? remoteWishlist : (remoteWishlist.domains || []);
+
+    iterate(remoteDomains, remoteItem => {
+      if (remoteItem && remoteItem.domain && !localWishlist.domains.some(localItem => localItem.domain === remoteItem.domain)) {
         localWishlist.domains.push(remoteItem);
         updated = true;
       }

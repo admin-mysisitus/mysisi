@@ -131,7 +131,7 @@ export class AuthManager {
                 // Force sync if local has items
                 const currentWishlist = WishlistManager.getWishlist();
                 if (currentWishlist && currentWishlist.domains && currentWishlist.domains.length > 0) {
-                  await APIClient.syncUserWishlist(userObj.userId, currentWishlist.domains);
+                  await APIClient.syncUserWishlist(userObj.userId, currentWishlist);
                 }
               }
             }
