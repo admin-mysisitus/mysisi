@@ -207,14 +207,14 @@ class DashboardWishlist {
 export async function render() {
   const container = document.getElementById('wishlist-container');
   if (!container) {
-    void('Wishlist container not found');
+    console.log('Wishlist container not found');
     return;
   }
   try {
     const wishlist = new DashboardWishlist();
     wishlist.render(container);
   } catch (error) {
-    void('Error rendering wishlist:', error);
+    console.log('Error rendering wishlist:', error);
     container.innerHTML = `
       <div class="alert alert-error">
         <p>${error.message}</p>

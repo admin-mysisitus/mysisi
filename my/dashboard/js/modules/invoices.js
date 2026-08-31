@@ -87,7 +87,7 @@ export async function render(currentUser) {
       `;
     }
   } catch (error) {
-    void('Error rendering invoices:', error);
+    console.log('Error rendering invoices:', error);
     const container = document.getElementById('invoices-list-container');
     if (container) {
       container.innerHTML = `

@@ -14,7 +14,8 @@
  */
 import {
   showSuccess,
-  showError
+  showError,
+  Logger
 } from './unified-utils.js';
 import {
   APIClient

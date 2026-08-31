@@ -105,7 +105,7 @@ export async function render(currentUser) {
       });
     }
   } catch (error) {
-    void('Error rendering domains:', error);
+    console.log('Error rendering domains:', error);
     document.getElementById('content').innerHTML = `
       <div class="alert alert-error">${error.message}</div>
     `;

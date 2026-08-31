@@ -107,7 +107,7 @@ export async function render(user) {
     // Setup buttons
     setupPaymentButtons();
   } catch (error) {
-    void('Error rendering payment page:', error);
+    console.log('Error rendering payment page:', error);
     const content = document.getElementById('content');
     content.innerHTML = `
       <div class="alert alert-error">
@@ -152,7 +152,7 @@ async function loadOrderData(orderId, currentUser) {
       }
     }
   } catch (error) {
-    void('Error loading order data:', error);
+    console.log('Error loading order data:', error);
     throw error;
   }
 }
@@ -176,7 +176,7 @@ async function generateMidtransToken(orderData) {
     };
     // Token already saved to RTDB by GAS createOrderWithAuth
   } catch (error) {
-    void('Error generating Midtrans token:', error);
+    console.log('Error generating Midtrans token:', error);
     // Show error but don't crash
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert alert-warning';
@@ -226,7 +226,7 @@ async function openMidtransPayment() {
       onClose: handlePaymentClose
     });
   } catch (error) {
-    void('Error opening payment:', error);
+    console.log('Error opening payment:', error);
     showError('Error: ' + error.message);
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, false, 'Lanjut Pembayaran');
@@ -275,7 +275,7 @@ async function startPaymentPolling() {
       });
     }
   } catch (e) {
-    void('Firebase DB listener error', e);
+    console.log('Firebase DB listener error', e);
   }
   // 2. Polling API sebagai fallback
   if (paymentPollingInterval) clearInterval(paymentPollingInterval);
@@ -291,7 +291,7 @@ async function startPaymentPolling() {
         clearInterval(paymentPollingInterval);
       }
     } catch (e) {
-      void('Polling error:', e);
+      console.log('Polling error:', e);
     }
   }, 4000);
 }
@@ -349,7 +349,7 @@ function requestPaymentAfterPreview() {
     const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   } catch (error) {
-    void('Error with WhatsApp:', error);
+    console.log('Error with WhatsApp:', error);
     showError('Gagal membuka WhatsApp. Hubungi support secara manual.');
   }
 }

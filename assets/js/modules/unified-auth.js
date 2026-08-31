@@ -20,6 +20,7 @@ import {
 } from './firebase-core.js';
 import APIClient from './unified-api.js';
 import { CartManager, WishlistManager } from './unified-cart.js';
+import { Logger } from './unified-utils.js';
 export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;

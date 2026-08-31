@@ -105,7 +105,7 @@ export async function render(user) {
       }
     }
   } catch (error) {
-    void('Error rendering orders:', error);
+    console.log('Error rendering orders:', error);
     document.getElementById('content').innerHTML = `
       <div class="alert alert-error">
         ${error.message}
@@ -131,7 +131,7 @@ async function syncPendingOrders(pendingOrders) {
         }
       }
     } catch (error) {
-      void(`Failed to sync order ${order.orderId}:`, error);
+      console.log(`Failed to sync order ${order.orderId}:`, error);
     }
   }
 }
@@ -298,7 +298,7 @@ async function showOrderDetail(orderId) {
       });
     }
   } catch (error) {
-    void('Error loading order detail:', error);
+    console.log('Error loading order detail:', error);
     showError('Gagal memuat detail pesanan: ' + error.message);
   }
 }

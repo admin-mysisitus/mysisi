@@ -13,9 +13,12 @@
  *   APIClient.call('loginUser', {email, password})
  *   APIClient.call('getUserProfile', {userId})
  */
+import { AuthManager } from './unified-auth.js';
 import {
-  AuthManager
-} from './unified-auth.js';
+  showSuccess,
+  showError,
+  Logger
+} from './unified-utils.js';
 import {
   GAS_CONFIG
 } from '../config/api.config.js';
