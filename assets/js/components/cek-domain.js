@@ -843,7 +843,13 @@
         if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
           starterPrice = configRes.data.packages.starter.price;
         }
-        // Add domain to cart for both guest and authenticated users
+        if (window.SSO_USER) {
+          // [HANDOFF] User sudah login, delegasikan penambahan ke Customer Portal
+          window.location.href = `https://my.sisitus.com/dashboard/#!/dashboard/cart?addDomain=${encodeURIComponent(domain)}&tld=${encodeURIComponent(tld)}`;
+          return;
+        }
+
+        // Add domain to cart for guest users
         CartManager.add(domain, tld, {
           package: 'starter',
           duration: 1,
@@ -854,7 +860,7 @@
           renewalPrice: starterPrice,
           basePrice: starterPrice
         });
-        // ALL users (guest or authenticated) → Cart page directly
+        // Guest → Cart page directly (yang mana tombol lanjut pembayarannya akan di-intercept)
         window.location.href = '/cart/';
       } catch (error) {
         showError('❌ Gagal', error.message);

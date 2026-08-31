@@ -599,6 +599,80 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshNavigation();
         updateFloatingCart();
       }
+
+      // Handoff Protocol: Tangkap ACK dari SSO Iframe
+      if (event.data && event.data.type === 'SISITUS_GUEST_HANDOFF_ACK') {
+        // [HANDOFF] Data Guest sukses mendarat di Customer Portal!
+        // Sekarang baru aman untuk menghapus Public storage.
+        localStorage.removeItem('cart');
+        localStorage.removeItem('wishlist');
+
+        if (window._handoffResolve) {
+          window._handoffResolve();
+          window._handoffResolve = null;
+        }
+      }
+    });
+
+    // Interceptor: Cegat navigasi ke Customer Portal untuk Handoff Guest Cart
+    document.addEventListener('click', async (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Hanya cegat transisi ke auth atau dashboard Customer
+      if (href.includes('/auth/') || href.includes('my.sisitus.com/auth') || href.includes('my.sisitus.com/dashboard')) {
+        // Jika sudah login, tidak perlu handoff guest cart
+        if (window.SSO_USER) return;
+
+        // Mencegah multiple handoff jika timeout sedang berjalan
+        if (window._handoffInProgress) return;
+
+        e.preventDefault();
+        window._handoffInProgress = true;
+
+        const cartData = JSON.parse(localStorage.getItem('cart') || 'null');
+        const wishlistData = JSON.parse(localStorage.getItem('wishlist') || 'null');
+
+        // Jika tidak ada data yang perlu di-handoff, langsung navigasi
+        if (!cartData && !wishlistData) {
+          window.location.href = link.href;
+          return;
+        }
+
+        // Tampilkan loading state sederhana pada kursor
+        document.body.style.cursor = 'wait';
+
+        try {
+          await new Promise((resolve) => {
+            window._handoffResolve = resolve;
+
+            // Timeout 500ms sebagai fallback agar navigasi tidak nyangkut
+            setTimeout(() => {
+              if (window._handoffResolve) {
+                window._handoffResolve = null;
+                resolve();
+              }
+            }, 500);
+
+            if (iframe.contentWindow) {
+              iframe.contentWindow.postMessage({
+                type: 'SISITUS_GUEST_HANDOFF',
+                cart: cartData,
+                wishlist: wishlistData
+              }, ssoOrigin);
+            } else {
+              resolve();
+            }
+          });
+        } finally {
+          document.body.style.cursor = 'default';
+          window._handoffInProgress = false;
+          window.location.href = link.href;
+        }
+      }
     });
 
     iframe.onload = () => {

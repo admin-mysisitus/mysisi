@@ -2,14 +2,14 @@
  * CART PAGE MODULE - ENHANCED VERSION
  * ===================================
  * Complete cart management for checkout flow
- * 
+ *
  * Features:
  * - Inline authentication (register + login)
  * - Promo code validation
  * - Email verification enforcement
  * - Order creation + midtrans payment
  * - Full checkout flow
- * 
+ *
  * Flow:
  * 1. Guest views cart + inline login (SharedAuthForm)
  * 2. User registers/logins + verifies email
@@ -150,6 +150,56 @@ export async function render(currentUser) {
       void('[Cart] #cart-container not found');
       return;
     }
+
+    // Delegated Action: Parse URL parameters for secure Add to Cart
+    // (Digunakan saat user login di Public mencoba menambah keranjang)
+    try {
+      // Because dashboard uses hash routing (#!/dashboard/cart?addDomain=...), we need to parse the hash
+      const hashSplit = window.location.hash.split('?');
+      if (hashSplit.length > 1) {
+        const queryParams = new URLSearchParams(hashSplit[1]);
+        const addDomain = queryParams.get('addDomain');
+        const addTld = queryParams.get('tld');
+        if (addDomain) {
+          const tld = addTld || addDomain.split('.').pop();
+          // Clean the URL immediately without reloading the page
+          const cleanUrl = window.location.pathname + hashSplit[0];
+          window.history.replaceState(null, '', cleanUrl);
+
+          // Process addition through secure existing CartManager mechanism
+          // VALIDASI SOURCE OF TRUTH: Ambil harga otentik dari API, BUKAN dari parameter
+          showInfo('Memproses', `Memeriksa ketersediaan ${addDomain}...`);
+
+          const [configRes, checkRes] = await Promise.all([
+             APIClient.fetchPricingConfig(),
+             APIClient.checkDomain(addDomain)
+          ]);
+
+          if (checkRes.success && checkRes.data && checkRes.data.available) {
+             let starterPrice = 599000;
+             if (configRes.success && configRes.data?.packages?.starter) {
+                starterPrice = configRes.data.packages.starter.price;
+             }
+             const domainPrice = checkRes.data.price || 0;
+
+             CartManager.add(addDomain, tld, {
+                package: 'starter',
+                duration: 1,
+                domainPrice: domainPrice,
+                packagePrice: starterPrice,
+                price: starterPrice, // legacy format
+                renewalPrice: starterPrice,
+                basePrice: starterPrice
+             });
+          } else {
+             showError('❌ Gagal', `Domain ${addDomain} tidak tersedia atau terjadi kesalahan jaringan.`);
+          }
+        }
+      }
+    } catch (e) {
+      void('[Cart] Error parsing URL parameters:', e);
+    }
+
     // Fetch pricing configuration
     const pricingRes = await APIClient.fetchPricingConfig();
     if (pricingRes.success && pricingRes.data) {
@@ -243,23 +293,23 @@ window.selectCartDomain = (domain) => {
 function getSelectedCartSummary() {
   const cartData = CartManager.getCart();
   const items = (cartData && cartData.domains) || [];
-  
+
   if (items.length > 0 && (!cartState.selectedDomain || !items.find(i => i.domain === cartState.selectedDomain))) {
     cartState.selectedDomain = items[0].domain;
   }
-  
+
   const selectedItem = items.find(i => i.domain === cartState.selectedDomain);
-  
+
   let domainSubtotal = 0;
   if (selectedItem) {
     domainSubtotal = (selectedItem.price || 0) * (selectedItem.duration || 1);
   }
-  
+
   const addons = (cartData && cartData.addons) || [];
   const addonsTotal = addons.reduce((sum, a) => sum + ((a.price || 0) * (a.quantity || 1)), 0);
-  
+
   let subtotal = domainSubtotal + addonsTotal;
-  
+
   let discount = 0;
   if (cartData && cartData.coupon) {
     const type = cartData.coupon.discountType;
@@ -278,14 +328,14 @@ function getSelectedCartSummary() {
       discount = value;
     }
   }
-  
+
   // Also update cartState if promo exists
   cartState.promoDiscount = Math.round(discount);
-  
+
   let subtotalAfterDiscount = subtotal - cartState.promoDiscount;
   let ppn = Math.round(subtotalAfterDiscount * 0.11);
   let finalTotal = Math.round(subtotalAfterDiscount + ppn);
-  
+
   return {
     items,
     selectedItem,
@@ -316,7 +366,7 @@ function renderGuestCheckout() {
   cartState.container.innerHTML = `
     <div class="page-container">
       <div class="cart-page guest-checkout-grid">
-        
+
         <!-- Cart Preview Container -->
         <div id="cart-preview-container"></div>
 
@@ -334,7 +384,7 @@ function renderGuestCheckout() {
     if (document.activeElement && document.activeElement.tagName !== 'BODY') {
       document.activeElement.blur();
     }
-    
+
     const {
       items,
       selectedItem,
@@ -346,11 +396,11 @@ function renderGuestCheckout() {
       ppn,
       finalTotal
     } = getSelectedCartSummary();
-    
+
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
     let previewContent = '<div class="preview-empty">Keranjang kosong</div>';
-    
+
     if (items.length > 0) {
       let addonsHtml = '';
       if (addonsTotal > 0) {
@@ -361,7 +411,7 @@ function renderGuestCheckout() {
                 </div>
         `;
       }
-      
+
       let promoHtml = '';
       if (discount > 0) {
         let promoDescHtml = '';
@@ -378,9 +428,9 @@ function renderGuestCheckout() {
                 </div>
         `;
       }
-      
+
       const itemsHtml = items.map(item => renderCartItem(item)).join('');
-      
+
       previewContent = `
             <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
               ${itemsHtml}
@@ -392,14 +442,14 @@ function renderGuestCheckout() {
                 <span class="price-row-label">Domain (1 dari ${items.length}):</span>
                 <span class="price-value">${formatPrice(domainSubtotal)}</span>
               </div>
-              
+
               ${addonsHtml}
-              
+
               <div class="price-row subtotal" style="padding-top: 0.5rem; margin-top: 0.5rem;">
                 <span class="price-row-label">Subtotal:</span>
                 <span class="price-value">${formatPrice(subtotal)}</span>
               </div>
-              
+
               <div class="price-row ppn" style="margin-bottom: 4px;">
                 <span class="price-row-label">PPN (11%):</span>
                 <span class="price-value">${formatPrice(ppn)}</span>
@@ -414,7 +464,7 @@ function renderGuestCheckout() {
             </div>
       `;
     }
-    
+
     previewContainer.innerHTML = `
       <div class="cart-preview">
         <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
@@ -618,7 +668,7 @@ function renderAuthenticatedCart() {
   } = getSelectedCartSummary();
   const promoTotal = discount;
   let itemsHTML = items.map(item => renderCartItem(item)).join('');
-  
+
   // Flatten HTML generation to avoid IDE syntax highlighter bugs with nested templates
   let selectedItemHTML = '';
   if (selectedItem) {
@@ -664,7 +714,7 @@ function renderAuthenticatedCart() {
 
   let promoHTML = '';
   if (promoTotal > 0) {
-    const promoDescHTML = cartState.promoDescription 
+    const promoDescHTML = cartState.promoDescription
       ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>`
       : '';
     promoHTML = `
@@ -684,7 +734,7 @@ function renderAuthenticatedCart() {
         <!-- Removed redundant Keranjang Saya title -->
 
         <div class="cart-grid">
-          
+
           <!-- Cart Items -->
           <div>
             <div class="cart-items-section">
@@ -700,7 +750,7 @@ function renderAuthenticatedCart() {
           <div>
             <div class="cart-summary">
               <h3 class="summary-title">Ringkasan Pesanan</h3>
-              
+
               ${selectedItemHTML}
 
               ${addonsHTML}
@@ -772,7 +822,7 @@ function renderCartItemSelectors(item) {
     const isSelected = currentPackage === pkg.id;
     const priceDisplay = formatPrice(pkg.price);
     return `
-      <div class="cart-item-package-card ${isSelected ? 'selected' : ''}" 
+      <div class="cart-item-package-card ${isSelected ? 'selected' : ''}"
            onclick="window.changeItemPackage('${item.domain}', '${pkg.id}')">
         <div>
           <div class="cart-item-package-name">
@@ -808,7 +858,7 @@ function renderCartItemSelectors(item) {
             </div>
       `;
     }
-    
+
     let detailsHtml = '';
     if (descHtml || featuresList) {
       detailsHtml = `
@@ -823,17 +873,17 @@ function renderCartItemSelectors(item) {
       <label class="cart-item-addon-option ${isSelected ? 'selected' : ''} ${isFree ? 'is-free' : ''}">
         <div class="cart-item-addon-header" style="justify-content: space-between; align-items: center;">
           <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
-            <input type="checkbox" 
-                   class="cart-item-addon-checkbox" 
+            <input type="checkbox"
+                   class="cart-item-addon-checkbox"
                    ${isFree ? 'style="display:none;"' : ''}
-                   ${isSelected ? 'checked="checked"' : ''} 
+                   ${isSelected ? 'checked="checked"' : ''}
                    onchange="window.toggleCartAddon('${addon.id}', this.checked)">
             <div class="cart-item-addon-info">
               <span class="cart-item-addon-name">${addon.name}</span>
               <span class="cart-item-addon-price ${isFree ? 'free-badge' : ''}">${isFree ? 'GRATIS' : '+' + formatPrice(addon.price)}</span>
             </div>
           </div>
-          
+
           ${claimBtnHtml}
         </div>
         ${detailsHtml}
@@ -865,7 +915,7 @@ function renderCartItemSelectors(item) {
 // ============================================================================
 function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="fas fa-sync"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
-  
+
   let configSection = '';
   if (!item.isRenewal) {
     configSection = `
@@ -875,7 +925,7 @@ function renderCartItem(item) {
       </div>
     `;
   }
-  
+
   return `
     <div class="cart-item ${item.domain === cartState.selectedDomain ? 'selected-domain-card' : ''}" style="display: block; margin-bottom: 1.5rem; ${item.domain === cartState.selectedDomain ? 'border: 2px solid var(--primary-blue); background: #f0f7ff; border-radius: 8px;' : ''}">
       <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: 0.75rem;">
@@ -984,7 +1034,7 @@ async function applyPromoCode() {
       cartState.promoDiscount = discount;
       cartState.promoDescription = result.data.description;
       cartState.promoValidated = true;
-      
+
       // Save to CartManager
       const cartData = CartManager.getCart();
       cartData.coupon = {
@@ -1007,12 +1057,12 @@ async function applyPromoCode() {
       cartState.promoDiscount = 0;
       cartState.promoDescription = null;
       cartState.promoValidated = false;
-      
+
       // Remove from CartManager
       const cartData = CartManager.getCart();
       cartData.coupon = null;
       CartManager.saveCart(cartData);
-      
+
       if (promoMsg) {
         promoMsg.textContent = result.message || 'Kode promo tidak valid';
         promoMsg.style.color = '#dc2626';
@@ -1154,7 +1204,7 @@ async function proceedToCheckout() {
     void('[Cart] Order created:', confirmedOrderId);
     // Hanya hapus domain yang di-checkout dari cart
     CartManager.remove(firstDomain);
-    
+
     // Check if cart is now empty, if so, clear promos
     if (CartManager.isEmpty()) {
       cartState.promoCode = null;

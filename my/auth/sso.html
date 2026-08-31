@@ -25,7 +25,7 @@
 
     const broadcastState = () => {
       const user = AuthManager.getCurrentUser();
-      
+
       // Filter payload agar hanya mengirim data visual minimal (tanpa token, credential, uid)
       const payload = {
         type: 'SISITUS_SSO_STATE',
@@ -38,7 +38,7 @@
         } : null,
         cartCount: getCartCount()
       };
-      
+
       // Kirim hanya ke client yang sudah terverifikasi lewat handshake
       trustedClients.forEach((origin, source) => {
         try {
@@ -50,10 +50,35 @@
     // Dengarkan request dari parent window (Handshake Protocol)
     window.addEventListener('message', (event) => {
       if (!allowedOrigins.includes(event.origin)) return;
-      
+
       if (event.data && event.data.type === 'SISITUS_SSO_REQUEST') {
         trustedClients.set(event.source, event.origin);
         broadcastState(); // Kirim state saat ini juga
+      }
+
+      // Handoff Protocol: Terima guest cart dan balas dengan ACK jika sukses
+      if (event.data && event.data.type === 'SISITUS_GUEST_HANDOFF') {
+        if (!AuthManager.isLoggedIn()) {
+          try {
+            let saved = false;
+            if (event.data.cart) {
+              localStorage.setItem('cart', JSON.stringify(event.data.cart));
+              window.dispatchEvent(new Event('storage'));
+              saved = true;
+            }
+            if (event.data.wishlist) {
+              localStorage.setItem('wishlist', JSON.stringify(event.data.wishlist));
+              saved = true;
+            }
+
+            // Hanya kirim ACK jika penyimpanan berhasil dan memang Guest
+            if (saved && event.source) {
+              event.source.postMessage({ type: 'SISITUS_GUEST_HANDOFF_ACK' }, event.origin);
+            }
+          } catch(e) {
+            void('[SSO] Gagal menyimpan Handoff:', e);
+          }
+        }
       }
     });
 
