@@ -7,7 +7,7 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 let currentUsers = [];
 export async function render() {
-  void('Admin Users Module Loaded');
+  console.error('Admin Users Module Loaded');
   setupEventListeners();
   await loadUsers();
 }
@@ -57,7 +57,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        void(error);
+        console.error(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -72,8 +72,11 @@ function setupEventListeners() {
     });
   }
   window.editUser = (id) => {
-    const user = currentUsers.find(u => u.id === id);
-    if (!user) return;
+    const user = currentUsers.find(u => (u.id || u.uid || u.userId) === id);
+    if (!user) {
+      console.error('User not found in currentUsers list for id:', id);
+      return;
+    }
     document.getElementById('user-modal-title').textContent = 'Edit User';
     document.getElementById('usr-id').value = user.id || user.uid || '';
     document.getElementById('usr-name').value = user.displayName || user.name || 'Pelanggan';
@@ -165,7 +168,7 @@ async function loadUsers() {
       throw new Error(response.message || 'Gagal memuat user');
     }
   } catch (error) {
-    void('Failed to load users:', error);
+    console.error('Failed to load users:', error);
     tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--admin-danger);">Error: ${error.message}</td></tr>`;
   }
 }

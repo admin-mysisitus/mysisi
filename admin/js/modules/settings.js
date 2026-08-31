@@ -11,7 +11,7 @@ let currentSettings = {};
 let currentTemplates = [];
 let selectedTemplateId = null;
 export async function render() {
-  void('Admin Settings Module Loaded');
+  console.error('Admin Settings Module Loaded');
   // 1. Setup Tab Switching
   setupTabs();
   // 2. Fetch Data
@@ -49,11 +49,11 @@ async function fetchSettings() {
       currentSettings = response.data;
       populateSettingsForm();
     } else {
-      void('API failed to get settings:', response);
+      console.error('API failed to get settings:', response);
       await loadLocalTsvSettings();
     }
   } catch (error) {
-    void('API /getsettings gagal (belum deploy). Mencoba memuat dari file spreadsheet.tsv lokal...', error);
+    console.error('API /getsettings gagal (belum deploy). Mencoba memuat dari file spreadsheet.tsv lokal...', error);
     await loadLocalTsvSettings();
   }
 }
@@ -79,7 +79,7 @@ async function loadLocalTsvSettings() {
     });
     populateSettingsForm();
   } catch (e) {
-    void('Gagal memuat local TSV:', e);
+    console.error('Gagal memuat local TSV:', e);
   }
 }
 
@@ -103,11 +103,11 @@ async function fetchTemplates() {
       currentTemplates = response.data;
       populateTemplateSelect();
     } else {
-      void('API failed to get email templates:', response);
+      console.error('API failed to get email templates:', response);
       await loadLocalTsvTemplates();
     }
   } catch (error) {
-    void('API /getemailtemplates gagal (belum deploy). Mencoba memuat dari file spreadsheet.tsv lokal...', error);
+    console.error('API /getemailtemplates gagal (belum deploy). Mencoba memuat dari file spreadsheet.tsv lokal...', error);
     await loadLocalTsvTemplates();
   }
 }
@@ -145,7 +145,7 @@ async function loadLocalTsvTemplates() {
     });
     populateTemplateSelect();
   } catch (e) {
-    void('Gagal memuat local TSV untuk templates:', e);
+    console.error('Gagal memuat local TSV untuk templates:', e);
   }
 }
 

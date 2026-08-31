@@ -1,7 +1,7 @@
 // Live Chat Admin Module
 // Lazy loads the Live Chat dependencies to prevent blocking other admin pages.
 export async function render() {
-  void('Admin Live Chat Module Loaded');
+  console.error('Admin Live Chat Module Loaded');
   // Load Admin Chat CSS if not exists
   if (!document.getElementById('livechat-admin-css')) {
     const css = document.createElement('link');

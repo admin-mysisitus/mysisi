@@ -7,7 +7,7 @@ import {
 } from '/assets/js/modules/dns-ui.js';
 let registeredDomains = [];
 export async function render() {
-  void('Admin DNS Module Loaded');
+  console.error('Admin DNS Module Loaded');
   setupEventListeners();
   await loadDNS();
 }
@@ -100,7 +100,7 @@ async function loadDNS() {
       throw new Error(response.message);
     }
   } catch (error) {
-    void('Failed to load DNS domains:', error);
+    console.error('Failed to load DNS domains:', error);
     tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</td></tr>`;
   }
 }

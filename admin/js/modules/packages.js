@@ -4,7 +4,7 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 let currentPackages = [];
 export async function render() {
-  void('Admin Packages Module Loaded');
+  console.error('Admin Packages Module Loaded');
   setupEventListeners();
   await loadPackages();
 }
@@ -62,7 +62,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        void(error);
+        console.error(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -151,7 +151,7 @@ async function loadPackages() {
       throw new Error(response.message);
     }
   } catch (error) {
-    void('Failed to load packages:', error);
+    console.error('Failed to load packages:', error);
     container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</div>`;
   }
 }

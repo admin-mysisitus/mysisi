@@ -3,7 +3,7 @@ import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
 export async function render() {
-  void('Admin Overview Module Loaded');
+  console.error('Admin Overview Module Loaded');
   const refreshBtn = document.getElementById('refresh-stats');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', async () => {
@@ -99,7 +99,7 @@ async function loadStats() {
       throw new Error(response.message || 'Gagal mengambil statistik');
     }
   } catch (error) {
-    void('Failed to load stats:', error);
+    console.error('Failed to load stats:', error);
     if (typeof Swal !== 'undefined') {
       Swal.fire({
         icon: 'error',

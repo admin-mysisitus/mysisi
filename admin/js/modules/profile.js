@@ -26,7 +26,7 @@ export async function render() {
           user.whatsapp = parsed.whatsapp;
         }
       } catch (e) {
-        void('Failed to parse corrupt user displayName JSON:', e);
+        console.error('Failed to parse corrupt user displayName JSON:', e);
       }
     }
     // Setup form with current data
@@ -115,7 +115,7 @@ export async function render() {
       }
     }
   } catch (error) {
-    void('Error rendering profile:', error);
+    console.error('Error rendering profile:', error);
     Swal.fire('Error', error.message, 'error');
   }
 }

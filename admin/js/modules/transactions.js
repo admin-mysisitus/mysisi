@@ -4,7 +4,7 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 let currentTx = [];
 export async function render() {
-  void('Admin Transactions Module Loaded');
+  console.error('Admin Transactions Module Loaded');
   setupEventListeners();
   await loadTransactions();
 }
@@ -60,7 +60,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        void(error);
+        console.error(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -196,7 +196,7 @@ async function loadTransactions() {
       throw new Error(response.message || 'Gagal memuat transaksi');
     }
   } catch (error) {
-    void('Failed to load transactions:', error);
+    console.error('Failed to load transactions:', error);
     tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--admin-danger);">Error: ${error.message}</td></tr>`;
   }
 }

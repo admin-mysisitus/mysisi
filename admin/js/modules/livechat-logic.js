@@ -114,7 +114,7 @@ var unsubscribeRooms = null;
 async function loadRooms() {
   if (unsubscribeRooms) return; // Already listening
   if (!window.firebaseHelpers) {
-    void("Firebase not loaded!");
+    console.error("Firebase not loaded!");
     roomsList.innerHTML = "<i class=\"empty-state error\">Firebase Error</i>";
     return;
   }
@@ -201,7 +201,7 @@ async function loadRooms() {
                 syncEngine?.stopSync();
               }
             } catch (err) {
-              void('Failed to delete room:', err);
+              console.error('Failed to delete room:', err);
               alert('Gagal menghapus room. Pastikan aturan keamanan Firebase mengizinkan Write.');
             }
           }
@@ -228,7 +228,7 @@ async function loadRooms() {
     }
     updateAdminUnreadBadge();
   }, (error) => {
-    void('Failed to listen to rooms:', error);
+    console.error('Failed to listen to rooms:', error);
     roomsList.innerHTML = '<i class="empty-state error">Gagal memuat room</i>';
     roomsList.classList.remove('rooms-loading');
   });
@@ -312,7 +312,7 @@ async function sendReply(attachmentUrl = null) {
     replyInput.value = '';
     replyInput.focus();
   } catch (error) {
-    void('Error sending message:', error);
+    console.error('Error sending message:', error);
     messageRenderer?.addSystemMessage(`❌ Gagal mengirim. Error: ${error.message}`);
   } finally {
     isSending = false;
@@ -409,7 +409,7 @@ var QUICK_REPLIES = [];
 // Fetch quick replies from external JSON configuration
 fetch('/assets/data/livechat/quick_replies.json').then(res => res.json()).then(data => {
   QUICK_REPLIES = data;
-}).catch(err => void("Gagal memuat template Quick Reply:", err));
+}).catch(err => console.error("Gagal memuat template Quick Reply:", err));
 var quickReplySelectedIndex = -1;
 var lastQuickReplyFilter = null;
 

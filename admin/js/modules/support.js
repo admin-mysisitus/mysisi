@@ -4,7 +4,7 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 let currentTickets = [];
 export async function render() {
-  void('Admin Support Tickets Module Loaded');
+  console.error('Admin Support Tickets Module Loaded');
   setupEventListeners();
   await loadTickets();
 }
@@ -58,7 +58,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        void(error);
+        console.error(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -137,7 +137,7 @@ async function loadTickets() {
       throw new Error(response.message);
     }
   } catch (error) {
-    void('Failed to load tickets:', error);
+    console.error('Failed to load tickets:', error);
     listContainer.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</div>`;
   }
 }

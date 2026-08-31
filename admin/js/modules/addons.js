@@ -7,7 +7,7 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 let currentAddons = [];
 export async function render() {
-  void('Admin Addons Module Loaded');
+  console.error('Admin Addons Module Loaded');
   setupEventListeners();
   await loadAddons();
 }
@@ -63,7 +63,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        void(error);
+        console.error(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -145,7 +145,7 @@ async function loadAddons() {
       throw new Error(response.message);
     }
   } catch (error) {
-    void('Failed to load addons:', error);
+    console.error('Failed to load addons:', error);
     container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</div>`;
   }
 }
