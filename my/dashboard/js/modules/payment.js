@@ -236,15 +236,9 @@ function handlePaymentLunas(orderId) {
   if (btn) setButtonLoading(btn, false, 'Selesai');
   setTimeout(() => {
     try {
-      const handoffData = {
-        user: AuthManager ? AuthManager.getCurrentUser() : null,
-        intent: 'invoice-redirect',
-        timestamp: Date.now()
-      };
-      const encoded = Base64Utils.encode(JSON.stringify(handoffData));
-      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}#handoff=${encoded}`);
+      window.location.href = EnvHelper.getDomainUrl('my', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
     } catch(e) {
-      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
+      window.location.href = EnvHelper.getDomainUrl('my', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
     }
   }, 300); // 300ms so they can read the toast slightly
 }
@@ -294,15 +288,9 @@ function handlePaymentSuccess(result) {
   APIClient.syncOrderStatus(orderId).catch(() => { });
   setTimeout(() => {
     try {
-      const handoffData = {
-        user: AuthManager ? AuthManager.getCurrentUser() : null,
-        intent: 'invoice-redirect',
-        timestamp: Date.now()
-      };
-      const encoded = Base64Utils.encode(JSON.stringify(handoffData));
-      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}#handoff=${encoded}`);
+      window.location.href = EnvHelper.getDomainUrl('my', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
     } catch(e) {
-      window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
+      window.location.href = EnvHelper.getDomainUrl('my', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
     }
   }, 500); // Instant redirect
 }

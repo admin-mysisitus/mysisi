@@ -566,15 +566,12 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Update UI if we got user data and we weren't aware of it locally
       const localUser = AuthManager.getCurrentUser();
+      // Perbaikan: Jangan hapus sesi lokal jika payload.user null karena iframe storage sering terpartisi (3rd party cookie block)
       if (payload.user && (!localUser || localUser.uid !== payload.user.uid)) {
          AuthManager.saveSession(payload.user);
          cartChanged = true;
          // Trigger auth event for navigation
          document.dispatchEvent(new CustomEvent('auth:authChanged', { detail: payload.user }));
-      } else if (!payload.user && localUser) {
-         AuthManager.clearSession();
-         cartChanged = true;
-         document.dispatchEvent(new CustomEvent('auth:authChanged', { detail: null }));
       }
 
       if (payload.cart) {

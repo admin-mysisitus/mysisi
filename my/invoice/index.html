@@ -77,18 +77,6 @@
       render(user);
     };
 
-    // Check for Reverse Handoff
-    const hash = window.location.hash;
-    if (hash.startsWith('#handoff=')) {
-      try {
-        const payload = JSON.parse(Base64Utils.decode(hash.replace('#handoff=', '')));
-        if (payload.user) {
-          AuthManager.saveSession(payload.user);
-        }
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      } catch (err) {}
-    }
-
     const currentUser = AuthManager.getCurrentUser();
     if (currentUser) {
       doRender(currentUser);
@@ -98,17 +86,12 @@
         if (user) doRender(user);
       });
       
-      // Listen for SSO Iframe sync
-      window.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'SSO_SYNC_RESPONSE') {
-          if (event.data.user) doRender(event.data.user);
-        }
-      });
-      
-      // Fallback timeout (2.5s) if user is truly a guest
+      // Prompt login jika setelah 2 detik tidak terdeteksi sesi
       setTimeout(() => {
-        doRender(AuthManager.getCurrentUser());
-      }, 2500);
+        if (!renderFired) {
+          window.location.href = '/auth/';
+        }
+      }, 2000);
     }
   </script>
 </body>
