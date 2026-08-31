@@ -138,6 +138,7 @@ export class DashboardNavbar {
           const handoffData = {
             cart: CartManager.getCart(),
             wishlist: WishlistManager.getWishlist(),
+            user: AuthManager.getCurrentUser(),
             intent: 'reverse-sync',
             timestamp: Date.now()
           };

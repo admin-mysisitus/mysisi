@@ -521,6 +521,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const payload = JSON.parse(atob(hash.replace('#handoff=', '')));
       if (payload.cart) CartManager.mergeCart(payload.cart);
       if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
+      
+      // Update User Session for visual UI sync
+      if (payload.user !== undefined) {
+        if (payload.user) {
+          AuthManager.saveSession(payload.user);
+        } else {
+          AuthManager.clearSession();
+        }
+        refreshNavigation();
+      }
+
       // Clean URL
       window.history.replaceState(null, '', window.location.pathname + window.location.search);
     } catch (err) {
