@@ -349,6 +349,8 @@ export class AuthManager {
    * Setup storage listener for multi-tab sync
    */
   static setupStorageListener() {
+    if (this._storageListenerAdded) return;
+    this._storageListenerAdded = true;
     window.addEventListener('storage', (event) => {
       if (event.key === this.SESSION_KEY) {
         this.loadSession();

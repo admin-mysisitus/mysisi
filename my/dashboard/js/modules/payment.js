@@ -568,3 +568,19 @@ function getStatusInfo(status) {
   };
   return statusMap[status] || statusMap['pending'];
 }
+
+export function destroy() {
+  if (paymentPollingInterval) {
+    clearInterval(paymentPollingInterval);
+    paymentPollingInterval = null;
+  }
+  
+  if (paymentStatusListener && currentOrder && currentOrder.orderId) {
+    getFirebase().then(({ db }) => {
+      if (db && paymentStatusListener) {
+        db.ref(`orders/${currentOrder.orderId}/paymentStatus`).off('value', paymentStatusListener);
+        paymentStatusListener = null;
+      }
+    }).catch(() => {});
+  }
+}

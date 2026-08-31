@@ -27,6 +27,7 @@ class DashboardApp {
   constructor() {
     this.currentUser = AuthManager.getCurrentUser();
     this.currentRoute = null;
+    this.currentModule = null;
     this.navbar = null;
     this.sidebar = null;
     // Note: Auth check moved to individual pages that require it
@@ -210,7 +211,21 @@ class DashboardApp {
       }
       // Render content
       const contentArea = document.getElementById('content');
+
+      // Cleanup previous module to prevent memory leaks
+      if (this.currentModule && typeof this.currentModule.destroy === 'function') {
+        try {
+          this.currentModule.destroy();
+        } catch (cleanupErr) {
+          console.warn('[Router] Error cleaning up previous module:', cleanupErr);
+        }
+      }
+
       contentArea.innerHTML = html;
+      
+      // Store current module reference
+      this.currentModule = module;
+
       // Initialize page module
       if (module.render) {
         await module.render(this.currentUser);
