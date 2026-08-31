@@ -44,7 +44,7 @@ export class DashboardNavbar {
 
         <div class="navbar-actions">
           <!-- Kunjungi Website button -->
-          <a href="${EnvHelper.getDomainUrl('public', '/')}" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
+          <a href="#" id="btn-kunjungi-website" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
             <i class="ph-fill ph-arrow-square-out"></i> <span class="btn-text">Kunjungi Website</span>
           </a>
 
@@ -127,6 +127,29 @@ export class DashboardNavbar {
         });
       });
     }
+    
+    // Kunjungi Website handler (Reverse Handoff)
+    const btnKunjungi = document.getElementById('btn-kunjungi-website');
+    if (btnKunjungi) {
+      btnKunjungi.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          const { CartManager, WishlistManager } = await import('/assets/js/modules/unified-cart.js');
+          const handoffData = {
+            cart: CartManager.getCart(),
+            wishlist: WishlistManager.getWishlist(),
+            intent: 'reverse-sync',
+            timestamp: Date.now()
+          };
+          const encoded = btoa(JSON.stringify(handoffData));
+          const targetUrl = EnvHelper.getDomainUrl('public', '/') + '#handoff=' + encoded;
+          window.open(targetUrl, '_blank');
+        } catch (err) {
+          window.open(EnvHelper.getDomainUrl('public', '/'), '_blank');
+        }
+      });
+    }
+
     // Listen for auth changes
     if (!this.authListenerBound) {
       this.authListenerBound = true;

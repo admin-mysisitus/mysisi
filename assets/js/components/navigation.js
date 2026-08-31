@@ -514,6 +514,20 @@ function updateFloatingCart() {
 window.refreshNavigation = refreshNavigation;
 // Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
+  // Check for Reverse Handoff from Dashboard
+  const hash = window.location.hash;
+  if (hash.startsWith('#handoff=')) {
+    try {
+      const payload = JSON.parse(atob(hash.replace('#handoff=', '')));
+      if (payload.cart) CartManager.mergeCart(payload.cart);
+      if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
+      // Clean URL
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch (err) {
+      console.log('[Navigation] Invalid handoff token:', err);
+    }
+  }
+
   // Always initialize floating cart
   updateFloatingCart();
   // Listen to cart updates

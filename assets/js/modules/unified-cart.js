@@ -45,7 +45,7 @@ export class CartManager {
         basePrice: options.basePrice || cart.domains[existingIndex].basePrice || options.price || cart.domains[existingIndex].price || 0,
         lastUpdated: Date.now()
       };
-      showSuccess('ðŸ”„ Item Diperbarui', `${domain} sudah di cart, detail diupdate`);
+      showSuccess('🔄 Item Diperbarui', `${domain} sudah di cart, detail diupdate`);
     } else {
       cart.domains.push({
         domain: domain.toLowerCase(),
