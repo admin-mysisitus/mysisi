@@ -66,9 +66,35 @@
     } from '/assets/js/modules/invoice.js';
         // Initialize
     AuthManager.init();
+    // Render logic with wait for auth sync
+    let renderFired = false;
+    const doRender = (user) => {
+      if (renderFired) return;
+      renderFired = true;
+      render(user);
+    };
+
     const currentUser = AuthManager.getCurrentUser();
-        // Render invoice
-    render(currentUser);
+    if (currentUser) {
+      doRender(currentUser);
+    } else {
+      // Listen for Firebase auth sync
+      AuthManager.on('authChanged', (user) => {
+        if (user) doRender(user);
+      });
+      
+      // Listen for SSO Iframe sync
+      window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'SSO_SYNC_RESPONSE') {
+          if (event.data.user) doRender(event.data.user);
+        }
+      });
+      
+      // Fallback timeout (2.5s) if user is truly a guest
+      setTimeout(() => {
+        doRender(AuthManager.getCurrentUser());
+      }, 2500);
+    }
   </script>
 </body>
 

@@ -88,6 +88,9 @@ async function withScrollPreservation(action) {
 }
 // Expose global handlers
 window.removeCartItem = removeCartItem;
+window.applyPromoCode = applyPromoCode;
+window.proceedToCheckout = proceedToCheckout;
+
 window.changeItemPackage = (domain, packageId) => {
   try {
     const cart = CartManager.getCart();
@@ -422,7 +425,7 @@ function renderGuestCheckout() {
                   <i class="fas fa-tag"></i> Punya Kode Promo?
                 </label>
                 <div class="promo-input-group">
-                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
+                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input" value="${cartState.promoCode || ''}">
                   <button id="btn-apply-promo" onclick="window.applyPromoCode()" class="btn-apply-promo">
                     Gunakan
                   </button>
@@ -762,7 +765,7 @@ function renderAuthenticatedCart() {
                   <i class="fas fa-tag"></i> Punya Kode Promo?
                 </label>
                 <div class="promo-input-group">
-                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
+                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input" value="${cartState.promoCode || ''}">
                   <button id="btn-apply-promo" onclick="window.applyPromoCode()" class="btn-apply-promo">
                     Gunakan
                   </button>
@@ -787,10 +790,7 @@ function renderAuthenticatedCart() {
       </div>
     </div>
   `;
-  // Expose functions to window
-  window.applyPromoCode = applyPromoCode;
-  window.proceedToCheckout = proceedToCheckout;
-  window.removeCartItem = removeCartItem;
+  // (Exports moved to module level)
 }
 
 function renderCartItemSelectors(item) {
