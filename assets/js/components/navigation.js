@@ -529,7 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           AuthManager.clearSession();
         }
-        refreshNavigation();
       }
 
       // Clean URL
