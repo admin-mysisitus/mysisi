@@ -8,7 +8,8 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import {
   formatPrice,
   formatDateTime,
-  showInfo
+  showInfo,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
@@ -43,7 +44,7 @@ export async function render(currentUser) {
                 </thead>
                 <tbody>
                   ${invoices.map(inv => `
-                    <tr class="clickable-row" onclick="window.location.href='https://sisitus.com/invoice/?orderId=${inv.orderId}'" style="cursor: pointer;">
+                    <tr class="clickable-row" onclick="window.location.href='${EnvHelper.getDomainUrl('public', '/invoice/?orderId=' + inv.orderId)}'" style="cursor: pointer;">
                       <td>
                         <span class="inv-date-primary">${formatDateTime(inv.createdAt).replace(' pukul ', ', ')}</span>
                       </td>
@@ -61,7 +62,7 @@ export async function render(currentUser) {
           <!-- Mobile Card List -->
           <div class="invoices-mobile-view">
             ${invoices.map(inv => `
-              <div class="invoice-mobile-card clickable-card" onclick="window.location.href='https://sisitus.com/invoice/?orderId=${inv.orderId}'" style="cursor: pointer;">
+              <div class="invoice-mobile-card clickable-card" onclick="window.location.href='${EnvHelper.getDomainUrl('public', '/invoice/?orderId=' + inv.orderId)}'" style="cursor: pointer;">
                 <div class="inv-card-header">
                   <div class="inv-card-id">${inv.orderId}</div>
                   <div class="inv-card-status badge-success">Lunas</div>

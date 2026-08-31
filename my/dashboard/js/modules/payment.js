@@ -19,7 +19,8 @@ import {
   formatDateTime,
   setButtonLoading,
   formatPhoneNumber,
-  sanitizeHTML
+  sanitizeHTML,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
@@ -233,7 +234,7 @@ function handlePaymentLunas(orderId) {
   const btn = document.getElementById('btn-payment');
   if (btn) setButtonLoading(btn, false, 'Selesai');
   setTimeout(() => {
-    window.location.href = `https://sisitus.com/invoice/?orderId=${encodeURIComponent(orderId)}`;
+    window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
   }, 300); // 300ms so they can read the toast slightly
 }
 async function startPaymentPolling() {
@@ -281,7 +282,7 @@ function handlePaymentSuccess(result) {
   showSuccess('✓ Pembayaran Berhasil!', 'Mengarahkan ke Invoice...');
   APIClient.syncOrderStatus(orderId).catch(() => { });
   setTimeout(() => {
-    window.location.href = `https://sisitus.com/invoice/?orderId=${encodeURIComponent(orderId)}`;
+    window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
   }, 500); // Instant redirect
 }
 

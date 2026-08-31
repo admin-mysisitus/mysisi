@@ -10,7 +10,8 @@ import {
 import {
   normalizeDriveImageUrl,
   withCacheBust,
-  renderUserAvatarHtml
+  renderUserAvatarHtml,
+  EnvHelper
 } from '../modules/unified-utils.js';
 import { AuthManager } from '../modules/unified-auth.js';
 import { CartManager, WishlistManager } from '../modules/unified-cart.js';
@@ -27,7 +28,7 @@ function createProfileMenuItem(user) {
   li.className = 'nav-desktop-item nav-desktop-profile';
   const link = document.createElement('a');
   link.className = 'nav-desktop-link profile-link';
-  link.href = user?.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+  link.href = user?.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
   link.innerHTML = renderUserAvatarHtml(user, 'w200', 'nav-profile-photo');
   const span = document.createElement('span');
   span.className = 'nav-profile-name';
@@ -186,7 +187,7 @@ const generateMobileMenu = () => {
     profileLi.className = 'nav-mobile-item nav-mobile-profile';
     const link = document.createElement('a');
     link.className = 'nav-mobile-link profile-link';
-    link.href = loggedInUser?.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+    link.href = loggedInUser?.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
     link.innerHTML = renderUserAvatarHtml(loggedInUser, 'w200', 'nav-profile-photo') + `<span class="nav-profile-name">${loggedInUser?.displayName || 'User'}</span>`;
     profileLi.appendChild(link);
     list.appendChild(profileLi);
@@ -431,7 +432,7 @@ function updateFloatingCart() {
       el.id = 'floating-cart-btn';
       el.className = 'floating-cart-btn';
       // Route to Customer Portal if user is logged in via SSO
-      el.href = window.SSO_USER ? 'https://my.sisitus.com/dashboard/#!/dashboard/cart' : '/cart/';
+      el.href = window.SSO_USER ? EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart') : '/cart/';
       el.innerHTML = `
         <i class="fas fa-shopping-cart" aria-hidden="true"></i>
         <span class="floating-cart-badge">${count}</span>
@@ -503,7 +504,7 @@ function updateFloatingCart() {
     } else {
       const badge = el.querySelector('.floating-cart-badge');
       if (badge) badge.textContent = count;
-      el.href = window.SSO_USER ? 'https://my.sisitus.com/dashboard/#!/dashboard/cart' : '/cart/';
+      el.href = window.SSO_USER ? EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart') : '/cart/';
     }
   } else {
     if (el) el.remove();

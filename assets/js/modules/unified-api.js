@@ -22,6 +22,7 @@ import {
 import {
   getFirebase
 } from './firebase-core.js';
+import { EnvHelper } from './unified-utils.js';
 export class APIClient {
   static DEFAULT_TIMEOUT = GAS_CONFIG.TIMEOUT || 30000; // Use configured timeout
   /**
@@ -213,7 +214,7 @@ export class APIClient {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
       const actionCodeSettings = {
-        url: 'https://my.sisitus.com/dashboard/', // Akan memunculkan tombol 'Continue' ke dashboard
+        url: EnvHelper.getDomainUrl('my', '/dashboard/'), // Akan memunculkan tombol 'Continue' ke dashboard
         handleCodeInApp: true
       };
       await user.sendEmailVerification(actionCodeSettings);
@@ -439,7 +440,7 @@ export class APIClient {
         message: 'Firebase Auth tidak tersedia'
       };
       const actionCodeSettings = {
-        url: 'https://my.sisitus.com/auth/',
+        url: EnvHelper.getDomainUrl('my', '/auth/'),
         handleCodeInApp: true
       };
       await auth.sendPasswordResetEmail(email, actionCodeSettings);

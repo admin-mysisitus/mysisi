@@ -6,7 +6,8 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 import {
   showConfirm,
-  renderUserAvatarHtml
+  renderUserAvatarHtml,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 export class DashboardNavbar {
   constructor() {
@@ -43,7 +44,7 @@ export class DashboardNavbar {
 
         <div class="navbar-actions">
           <!-- Kunjungi Website button -->
-          <a href="https://sisitus.com/" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
+          <a href="${EnvHelper.getDomainUrl('public', '/')}" target="_blank" class="btn btn-white btn-website" style="border: 1px solid #ddd; margin-right: 15px;">
             <i class="ph-fill ph-arrow-square-out"></i> <span class="btn-text">Kunjungi Website</span>
           </a>
 

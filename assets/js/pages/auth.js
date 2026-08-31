@@ -13,7 +13,8 @@ import {
 import {
   showSuccess,
   showError,
-  renderUserAvatarHtml
+  renderUserAvatarHtml,
+  EnvHelper
 } from '../modules/unified-utils.js';
 // ============================================================================
 // INITIALIZATION
@@ -108,7 +109,7 @@ function showAuthForms() {
           showLoggedInState();
           // Let default redirect behavior happen
           setTimeout(() => {
-            window.location.href = user.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+            window.location.href = user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
           }, 1500);
         }
       });

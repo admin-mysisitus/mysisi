@@ -4,11 +4,12 @@
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   formatPrice,
-  formatNumber
+  formatNumber,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   if (currentUser && currentUser.role === 'admin') {
-    window.location.replace('https://backstage.sisitus.com/');
+    window.location.replace(EnvHelper.getDomainUrl('backstage', '/'));
     return;
   }
   try {

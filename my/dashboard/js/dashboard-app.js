@@ -15,7 +15,8 @@ import {
   showSuccess,
   showError,
   showWarning,
-  showInfo
+  showInfo,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 // Expose utility functions globally for inline onclick handlers
 window.showSuccess = showSuccess;
@@ -168,7 +169,7 @@ class DashboardApp {
     }
     // Block admin from user dashboard
     if (this.currentUser && this.currentUser.role === 'admin') {
-      window.location.href = 'https://backstage.sisitus.com/';
+      window.location.href = EnvHelper.getDomainUrl('backstage', '/');
       return;
     }
     this.currentRoute = route;

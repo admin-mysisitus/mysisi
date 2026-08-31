@@ -43,18 +43,22 @@
   <script type="module" src="/assets/js/components/navigation.js?v=1.0.1"></script>
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
+    import { EnvHelper } from '/assets/js/modules/unified-utils.js';
     import { render } from '/assets/js/modules/cart.js?v=20260823_1550';
     
-      // Initialize cart page (standalone, not SPA)
-    const currentUser = AuthManager.getCurrentUser();
-    
-    if (currentUser) {
-          // Authenticated users should use the dashboard cart
-      window.location.replace('https://my.sisitus.com/dashboard/#!/dashboard/keranjang');
-    } else {
-          // Call render function with null for guest checkout
-      render(null);
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Force load session synchronously just in case
+      AuthManager.loadSession();
+      const currentUser = AuthManager.getCurrentUser();
+      
+      if (currentUser) {
+        // Authenticated users should use the dashboard cart
+        window.location.replace(EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/keranjang'));
+      } else {
+        // Call render function with null for guest checkout
+        render(null);
+      }
+    });
   </script>
 </body>
 

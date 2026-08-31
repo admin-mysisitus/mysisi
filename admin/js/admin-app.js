@@ -13,6 +13,7 @@ import {
 import {
   getFirebase
 } from '/assets/js/modules/firebase-core.js';
+import { EnvHelper } from '/assets/js/modules/unified-utils.js';
 class AdminApp {
   constructor() {
     this.currentRoute = null;
@@ -35,7 +36,7 @@ class AdminApp {
     if (user.role !== 'admin') {
       document.body.innerHTML = '';
       // Arahkan ke dasbor pelanggan karena dia masih punya hak akses sebagai customer
-      window.location.href = 'https://my.sisitus.com/dashboard/';
+      window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/');
       return;
     }
     // Render sidebar and navbar

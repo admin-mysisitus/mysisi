@@ -1189,7 +1189,7 @@ async function proceedToCheckout() {
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
-      window.location.href = `/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
+      window.location.hash = `#!/dashboard/payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
     }, 1500);
   } catch (error) {
     console.log('[Cart] Checkout error:', error);

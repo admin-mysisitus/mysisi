@@ -20,7 +20,8 @@ import {
   isValidEmail,
   isValidPassword,
   isValidPhoneNumber,
-  initPasswordToggle
+  initPasswordToggle,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 export class SharedAuthForm {
   constructor(options = {}) {
@@ -86,7 +87,7 @@ export class SharedAuthForm {
           } else {
             showSuccess('Berhasil', 'Login dengan Google berhasil');
             setTimeout(() => {
-              window.location.href = 'https://my.sisitus.com/dashboard/';
+              window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/');
             }, 1500);
           }
         } catch (error) {
@@ -622,7 +623,7 @@ export class SharedAuthForm {
             this.options.onRegisterSuccess(userData);
           } else {
             // Default: redirect to verify email page
-            window.location.href = 'https://my.sisitus.com/auth/verify-email.html?sent=true';
+            window.location.href = EnvHelper.getDomainUrl('my', '/auth/verify-email.html?sent=true');
           }
         }
       }, 1500);
@@ -675,7 +676,7 @@ export class SharedAuthForm {
           this.options.onLoginSuccess(result.data);
         } else {
           // Default: redirect to dashboard or admin
-          window.location.href = result.data.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
+          window.location.href = result.data.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
         }
       }, 1500);
     } catch (error) {

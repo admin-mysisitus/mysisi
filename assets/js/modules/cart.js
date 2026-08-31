@@ -27,7 +27,10 @@ import {
   showInfo,
   formatPrice,
   isValidEmail,
-  setButtonLoading
+  setButtonLoading,
+  formatDate,
+  formatNumber,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
@@ -204,7 +207,7 @@ export async function render(currentUser) {
     
     // Redirect guard: Jika user sudah login (SSO), lempar ke Customer Portal Cart
     if (window.SSO_USER) {
-       window.location.href = 'https://my.sisitus.com/dashboard/#!/dashboard/cart';
+       window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart');
        return;
     }
 
@@ -225,7 +228,7 @@ export async function render(currentUser) {
       <div style="text-align: center; padding: 60px 20px;">
         <h2>❌ Error</h2>
         <p>${error.message}</p>
-        <a href="https://my.sisitus.com/dashboard/#!/dashboard/checkout" class="btn" style="display: inline-block; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px;">
+        <a href="${EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/checkout')}" class="btn" style="display: inline-block; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px;">
           Kembali ke Beranda
         </a>
       </div>
@@ -1138,7 +1141,7 @@ async function proceedToCheckout() {
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
-      window.location.href = `https://my.sisitus.com/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`;
+      window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`);
     }, 1500);
   } catch (error) {
     console.log('[Cart] Checkout error:', error);

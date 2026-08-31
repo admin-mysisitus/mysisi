@@ -72,11 +72,10 @@ export class AdminSidebar {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', async () => {
         if (confirm('Apakah Anda yakin ingin keluar dari Admin Panel?')) {
-          const {
-            AuthManager
-          } = await import('/assets/js/modules/unified-auth.js');
+          const { AuthManager } = await import('/assets/js/modules/unified-auth.js');
+          const { EnvHelper } = await import('/assets/js/modules/unified-utils.js');
           AuthManager.clearSession();
-          window.location.href = 'https://my.sisitus.com/auth/';
+          window.location.href = EnvHelper.getDomainUrl('my', '/auth/');
         }
       });
     }

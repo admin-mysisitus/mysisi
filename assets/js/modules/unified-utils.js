@@ -664,6 +664,43 @@ export function sanitizeHTML(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+// ========== ENVIRONMENT HELPER ==========
+/**
+ * Environment-Aware Routing Helper
+ * Resolves absolute URLs for production (my.sisitus.com, backstage.sisitus.com)
+ * and correct relative paths for local development (localhost)
+ */
+export const EnvHelper = {
+  isLocal: () => {
+    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  },
+  
+  getDomainUrl: (subdomain, path = '') => {
+    const isLocal = EnvHelper.isLocal();
+    const cleanPath = path.startsWith('/') ? path : '/' + path;
+    
+    if (isLocal) {
+      if (subdomain === 'my') {
+        return window.location.origin + '/my' + (cleanPath === '/' ? '' : cleanPath);
+      } else if (subdomain === 'backstage') {
+        return window.location.origin + '/admin' + (cleanPath === '/' ? '' : cleanPath);
+      } else if (subdomain === 'public') {
+        return window.location.origin + cleanPath;
+      }
+    } else {
+      if (subdomain === 'my') {
+        return 'https://my.sisitus.com' + cleanPath;
+      } else if (subdomain === 'backstage') {
+        return 'https://backstage.sisitus.com' + cleanPath;
+      } else if (subdomain === 'public') {
+        return 'https://sisitus.com' + cleanPath;
+      }
+    }
+    
+    return cleanPath;
+  }
+};
+
 // ========== EXPORT ALL ==========
 export const Utilities = {
   // Notifications
@@ -707,5 +744,7 @@ export const Utilities = {
   handleAPIError,
   // Loading
   showLoadingOverlay,
-  hideLoadingOverlay
+  hideLoadingOverlay,
+  // Routing
+  EnvHelper
 };

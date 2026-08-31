@@ -18,6 +18,7 @@
 import {
   getFirebase
 } from './firebase-core.js';
+import { EnvHelper } from './unified-utils.js';
 import APIClient from './unified-api.js';
 import { CartManager, WishlistManager } from './unified-cart.js';
 export class AuthManager {
@@ -65,7 +66,7 @@ export class AuthManager {
                   const rtProfile = rtSnap.val();
                   if (rtProfile) {
                     if (rtProfile.status === 'suspended') {
-                      Logger.log('[AuthManager] Realtime Account Suspended, forcing logout');
+                      console.log('[AuthManager] Realtime Account Suspended, forcing logout');
                       auth.signOut();
                       this.clearSession();
                       if (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/') || window.location.pathname.includes('/dashboard/')) {
@@ -75,9 +76,9 @@ export class AuthManager {
                     }
                     // Deteksi penurunan role secara realtime saat sedang di dasbor admin
                     if (rtProfile.role !== 'admin' && (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/'))) {
-                      Logger.log('[AuthManager] Realtime Role Demoted, forcing exit from admin');
+                      console.log('[AuthManager] Realtime Role Demoted, forcing exit from admin');
                       // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
-                      window.location.href = 'https://my.sisitus.com/dashboard/';
+                      window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/');
                       return;
                     }
                     // Sinkronisasi data sesi lokal jika ada perubahan jabatan
@@ -91,12 +92,12 @@ export class AuthManager {
                   }
                 });
               } catch (e) {
-                Logger.log('[AuthManager] Failed to fetch user profile:', e);
+                console.log('[AuthManager] Failed to fetch user profile:', e);
               }
             }
             // Mencegah login jika status suspended di database
             if (profile && profile.status === 'suspended') {
-              Logger.log('[AuthManager] Account is suspended, forcing logout');
+              console.log('[AuthManager] Account is suspended, forcing logout');
               auth.signOut();
               this.clearSession();
               return;
@@ -130,7 +131,7 @@ export class AuthManager {
         });
       }
     } catch (error) {
-      Logger.log('[AuthManager] Error initializing Firebase Auth:', error);
+      console.log('[AuthManager] Error initializing Firebase Auth:', error);
     }
     this.setupStorageListener();
 
@@ -169,7 +170,7 @@ export class AuthManager {
       const data = JSON.parse(stored);
       // Validate version
       if (data.version !== this.SESSION_VERSION) {
-        Logger.log('[AuthManager] Session version mismatch, clearing');
+        console.log('[AuthManager] Session version mismatch, clearing');
         this.clearSession();
         return;
       }
@@ -181,7 +182,7 @@ export class AuthManager {
         };
       }
     } catch (error) {
-      Logger.log('[AuthManager] Error loading session:', error);
+      console.log('[AuthManager] Error loading session:', error);
       this.clearSession();
     }
   }
@@ -193,7 +194,7 @@ export class AuthManager {
     const required = ['userId', 'email', 'displayName'];
     for (const field of required) {
       if (!user[field]) {
-        Logger.log(`[AuthManager] Missing required field: ${field}`);
+        console.log(`[AuthManager] Missing required field: ${field}`);
         return null;
       }
     }
@@ -235,7 +236,7 @@ export class AuthManager {
       };
       this.emit('authChanged', validatedUser);
     } catch (error) {
-      Logger.log('[AuthManager] Error saving session:', error);
+      console.log('[AuthManager] Error saving session:', error);
       this.emit('authError', error);
     }
   }
@@ -250,7 +251,7 @@ export class AuthManager {
       auth
     }) => {
       if (auth) auth.signOut();
-    }).catch(e => Logger.log('[AuthManager] Firebase signout error:', e));
+    }).catch(e => console.log('[AuthManager] Firebase signout error:', e));
 
     if (this.state.isLoggedIn || this.state.user) {
       this.state = {
@@ -274,10 +275,10 @@ export class AuthManager {
    * to ensure you have the latest user data
    */
   static refreshUserData() {
-    Logger.log('[AuthManager] Refreshing user data from storage...');
+    console.log('[AuthManager] Refreshing user data from storage...');
     this.loadSession();
     if (this.state.user && this.state.user.emailVerified) {
-      Logger.log('âœ… User verification status updated:', this.state.user);
+      console.log('âœ… User verification status updated:', this.state.user);
       this.emit('authChanged', {
         user: this.state.user,
         isLoggedIn: true
@@ -309,7 +310,7 @@ export class AuthManager {
         return await auth.currentUser.getIdToken(true);
       }
     } catch (e) {
-      Logger.log('[AuthManager] Failed to get idToken:', e);
+      console.log('[AuthManager] Failed to get idToken:', e);
     }
     return null;
   }
@@ -361,7 +362,7 @@ export class AuthManager {
         try {
           handler(data);
         } catch (error) {
-          Logger.log(`[AuthManager] Error in ${eventName} handler:`, error);
+          console.log(`[AuthManager] Error in ${eventName} handler:`, error);
         }
       });
     }

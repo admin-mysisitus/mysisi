@@ -170,7 +170,7 @@
       const hasCartItems = cartSummary.domains && cartSummary.domains.length > 0;
     
       const primaryBtn = hasCartItems
-        ? '<a href="/dashboard/#!/dashboard/keranjang" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Lanjutkan Pembayaran</a>'
+        ? '<a href="../dashboard/#!/dashboard/keranjang" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Lanjutkan Pembayaran</a>'
         : '<a href="/dashboard/" class="btn btn-primary"><i class="fas fa-chart-line"></i> Buka Dashboard</a>';
     
       const redirectMsg = hasCartItems
@@ -234,7 +234,7 @@
         setTimeout(() => {
           const isAdminEnv = window.location.hostname.includes('backstage');
           if (hasCartItems && !isAdminEnv) {
-            window.location.href = '/dashboard/#!/dashboard/keranjang';
+            window.location.href = '../dashboard/#!/dashboard/keranjang';
           } else {
             window.location.href = isAdminEnv ? '/' : '/dashboard/';
           }

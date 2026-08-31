@@ -1,3 +1,4 @@
+import { EnvHelper } from './modules/unified-utils.js';
 // menu navbar — single source of truth untuk navigasi utama
 export const menuData = [{
   href: "/website/",
@@ -53,7 +54,7 @@ export const menuData = [{
   icon: "fas fa-life-ring"
 }, {
   text: "Login",
-  href: "https://my.sisitus.com/auth/",
+  href: EnvHelper.getDomainUrl('my', '/auth/'),
   icon: "fas fa-sign-in-alt",
   isAuth: true
 }];

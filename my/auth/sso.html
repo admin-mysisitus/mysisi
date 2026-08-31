@@ -89,15 +89,13 @@
 
       // Handoff Protocol: Delegated Wishlist Action
       if (event.data && event.data.type === 'SISITUS_DELEGATE_WISHLIST_TOGGLE') {
-        if (AuthManager.isLoggedIn() && event.data.domain) {
+        if (event.data.domain) {
           const domain = event.data.domain;
           if (WishlistManager.isInWishlist(domain)) {
             WishlistManager.remove(domain);
           } else {
             WishlistManager.add(domain, 'Domain impian dari public', 'medium', { delegated: true });
           }
-          // The 'wishlist:updated' event will automatically be fired by WishlistManager,
-          // which is caught by our listener below to broadcast state.
         }
       }
     });

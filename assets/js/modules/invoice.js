@@ -18,7 +18,8 @@ import {
   formatDateTime,
   formatDate,
   capitalize,
-  showError
+  showError,
+  EnvHelper
 } from '/assets/js/modules/unified-utils.js';
 let invoiceData = null;
 let currentUser = null;
@@ -49,7 +50,7 @@ export async function render(user) {
             <i class="fas fa-exclamation-circle"></i>
           </div>
           <h2>${error.message}</h2>
-          <a href="https://my.sisitus.com/dashboard/" class="btn" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px;">
+          <a href="${EnvHelper.getDomainUrl('my', '/dashboard/')}" class="btn" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: #2563EB; color: white; text-decoration: none; border-radius: 5px;">
             <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
           </a>
         </div>
@@ -347,7 +348,7 @@ function renderInvoice() {
         <button onclick="window.print()" class="inv-btn inv-btn-dark">
           <i class="fas fa-print"></i> Download / Print PDF
         </button>
-        <a href="https://my.sisitus.com/dashboard/" class="inv-btn inv-btn-primary">
+        <a href="${EnvHelper.getDomainUrl('my', '/dashboard/')}" class="inv-btn inv-btn-primary">
           <i class="fas fa-home"></i> Kembali Dashboard
         </a>
       </div>

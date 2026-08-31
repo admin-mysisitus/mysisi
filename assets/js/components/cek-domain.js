@@ -13,7 +13,8 @@
     showError,
     showInfo,
     formatCurrency,
-    sanitizeHTML
+    sanitizeHTML,
+    EnvHelper
   } = await import('../modules/unified-utils.js');
   const APIClient = (await import('../modules/unified-api.js')).default;
   // Get the section container
@@ -845,7 +846,7 @@
         }
         if (window.SSO_USER) {
           // [HANDOFF] User sudah login, delegasikan penambahan ke Customer Portal
-          window.location.href = `https://my.sisitus.com/dashboard/#!/dashboard/cart?addDomain=${encodeURIComponent(domain)}&tld=${encodeURIComponent(tld)}`;
+          window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?addDomain=${encodeURIComponent(domain)}&tld=${encodeURIComponent(tld)}`);
           return;
         }
 
@@ -895,7 +896,7 @@
             iframe.contentWindow.postMessage({
               type: 'SISITUS_DELEGATE_WISHLIST_TOGGLE',
               domain: domain
-            }, 'https://my.sisitus.com');
+            }, EnvHelper.getDomainUrl('my', ''));
           } else {
             showError('❌ Error', 'SSO Iframe tidak ditemukan untuk delegasi aksi.');
           }
