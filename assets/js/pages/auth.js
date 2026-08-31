@@ -145,11 +145,23 @@ function showAuthForms() {
           setTimeout(() => {
             const urlParams = new URLSearchParams(window.location.search);
             const redirectPath = urlParams.get('redirect');
-            if (redirectPath) {
-              const safeRedirect = redirectPath.startsWith('/') ? redirectPath : '/';
-              window.location.href = user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', safeRedirect);
+            
+            if (user.role === 'admin') {
+              // Forward handoff for Admin so they don't have to login again on backstage
+              const handoffData = {
+                user: user,
+                intent: 'forward-sync',
+                timestamp: Date.now()
+              };
+              const encoded = Base64Utils.encode(JSON.stringify(handoffData));
+              window.location.href = EnvHelper.getDomainUrl('backstage', '/') + '#handoff=' + encoded;
             } else {
-              window.location.href = user.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
+              if (redirectPath) {
+                const safeRedirect = redirectPath.startsWith('/') ? redirectPath : '/';
+                window.location.href = EnvHelper.getDomainUrl('my', safeRedirect);
+              } else {
+                window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/');
+              }
             }
           }, 1500);
         }
