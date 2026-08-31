@@ -117,10 +117,22 @@ export class AuthManager {
               const cartRes = await APIClient.fetchUserCart(userObj.userId);
               if (cartRes.success && cartRes.data) {
                 CartManager.mergeCart(cartRes.data);
+              } else {
+                // If backend is empty but local has items, force sync
+                if (!CartManager.isEmpty()) {
+                  await APIClient.syncUserCart(userObj.userId, CartManager.getCart());
+                }
               }
+
               const wishRes = await APIClient.fetchUserWishlist(userObj.userId);
               if (wishRes.success && wishRes.data) {
                 WishlistManager.mergeWishlist(wishRes.data);
+              } else {
+                // Force sync if local has items
+                const currentWishlist = WishlistManager.getWishlist();
+                if (currentWishlist && currentWishlist.domains && currentWishlist.domains.length > 0) {
+                  await APIClient.syncUserWishlist(userObj.userId, currentWishlist.domains);
+                }
               }
             }
           } else {

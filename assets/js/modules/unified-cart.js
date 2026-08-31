@@ -249,6 +249,54 @@ export class CartManager {
     return cart;
   }
   /**
+   * Merge external cart data (from server or handoff) into local cart
+   * Preserves local items if not present in external, updates existing.
+   */
+  static mergeCart(externalCart) {
+    if (!externalCart) return;
+    
+    try {
+      const localCart = this.getCart();
+      const newDomains = [];
+      
+      // Preserve local domains not in external, or override with external
+      const allDomains = [...(localCart.domains || []), ...(externalCart.domains || [])];
+      
+      const domainMap = new Map();
+      allDomains.forEach(d => {
+        // Use latest timestamp if duplicate
+        if (domainMap.has(d.domain)) {
+          const existing = domainMap.get(d.domain);
+          if ((d.lastUpdated || d.addedAt || 0) > (existing.lastUpdated || existing.addedAt || 0)) {
+            domainMap.set(d.domain, d);
+          }
+        } else {
+          domainMap.set(d.domain, d);
+        }
+      });
+      
+      localCart.domains = Array.from(domainMap.values());
+      
+      // Merge addons
+      if (externalCart.addons && externalCart.addons.length > 0) {
+        const addonMap = new Map();
+        [...(localCart.addons || []), ...externalCart.addons].forEach(a => {
+           addonMap.set(a.id, a);
+        });
+        localCart.addons = Array.from(addonMap.values());
+      }
+
+      // Merge coupon (external takes precedence)
+      if (externalCart.coupon) {
+        localCart.coupon = externalCart.coupon;
+      }
+      
+      this.saveCart(localCart);
+    } catch (e) {
+      console.log('[CartManager] Error merging cart:', e);
+    }
+  }
+  /**
    * Add addons to cart
    * @param {array} addons - Array of addon objects [{id, name, price, duration, quantity}]
    */
