@@ -46,7 +46,7 @@ class DashboardApp {
     document.addEventListener('auth:authChanged', (e) => {
       if (!e.detail) {
         // User logged out
-        window.location.href = '../auth/index.html';
+        window.location.href = '/auth/';
       } else {
         this.currentUser = e.detail.user || e.detail;
       }

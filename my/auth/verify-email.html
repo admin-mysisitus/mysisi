@@ -232,10 +232,11 @@
     
         // Auto-redirect after 2 seconds
         setTimeout(() => {
-          if (hasCartItems) {
+          const isAdminEnv = window.location.hostname.includes('backstage');
+          if (hasCartItems && !isAdminEnv) {
             window.location.href = '/dashboard/#!/dashboard/keranjang';
           } else {
-            window.location.href = '/dashboard/';
+            window.location.href = isAdminEnv ? '/' : '/dashboard/';
           }
         }, 2000);
       } catch (error) {

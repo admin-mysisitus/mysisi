@@ -72,6 +72,10 @@ function showLoggedInState() {
     if (dashboardBtn) {
       dashboardBtn.href = user.role === 'admin' ? window.location.origin + '/' : '/dashboard/';
     }
+    const profileBtn = document.querySelector('#auth-loggedin-section a[href="/dashboard/#!/dashboard/profile"]');
+    if (profileBtn) {
+      profileBtn.href = user.role === 'admin' ? window.location.origin + '/#!/profile' : '/dashboard/#!/dashboard/profile';
+    }
   }
   // Setup logout button
   const logoutBtn = document.getElementById('loggedin-logout-btn');

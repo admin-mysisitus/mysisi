@@ -5,10 +5,10 @@ export const menuData = [{
   icon: "fas fa-laptop-code"
 }, {
   text: "Layanan",
-  href: "/layanan/",
+  href: "#",
   icon: "fas fa-concierge-bell",
   dropdown: [{
-    href: "/layanan/",
+    href: "/website/",
     text: "Semua Layanan",
     icon: "fas fa-concierge-bell",
     isParent: true

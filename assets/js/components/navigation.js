@@ -552,4 +552,9 @@ document.addEventListener('DOMContentLoaded', () => {
   generateFooterContact();
   generateFooterTrustBadges();
   generateFooterLegal();
+
+  // Listen to auth state changes to dynamically update the navigation
+  document.addEventListener('auth:authChanged', () => {
+    refreshNavigation();
+  });
 });
