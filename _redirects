@@ -2,5 +2,5 @@
 /layanan/domain-hosting/*     /domain/:splat   301
 /layanan/maintenance/*        /maintenance/:splat  301
 /layanan/*                    /                301
-/auth/*                       /my/auth/:splat      301
-/dashboard/*                  /my/dashboard/:splat  301
+/auth/*                       https://my.sisitus.com/auth/:splat      301
+/dashboard/*                  https://my.sisitus.com/dashboard/:splat  301

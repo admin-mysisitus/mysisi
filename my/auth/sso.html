@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SSO Provider - SISITUS</title>
+</head>
+<body>
+  <script type="module">
+    import { AuthManager } from '/assets/js/modules/unified-auth.js';
+
+    // Origin whitelist strict
+    const allowedOrigins = ['https://sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+    const trustedClients = new Map(); // Menyimpan source -> origin untuk broadcast
+
+    const getCartCount = () => {
+      try {
+        const stored = localStorage.getItem('cart');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          return (parsed && parsed.domains) ? parsed.domains.length : 0;
+        }
+      } catch(e) {}
+      return 0;
+    };
+
+    const broadcastState = () => {
+      const user = AuthManager.getCurrentUser();
+      
+      // Filter payload agar hanya mengirim data visual minimal (tanpa token, credential, uid)
+      const payload = {
+        type: 'SISITUS_SSO_STATE',
+        isLoggedIn: !!user,
+        user: user ? {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          role: user.role
+        } : null,
+        cartCount: getCartCount()
+      };
+      
+      // Kirim hanya ke client yang sudah terverifikasi lewat handshake
+      trustedClients.forEach((origin, source) => {
+        try {
+          source.postMessage(payload, origin);
+        } catch(e) {}
+      });
+    };
+
+    // Dengarkan request dari parent window (Handshake Protocol)
+    window.addEventListener('message', (event) => {
+      if (!allowedOrigins.includes(event.origin)) return;
+      
+      if (event.data && event.data.type === 'SISITUS_SSO_REQUEST') {
+        trustedClients.set(event.source, event.origin);
+        broadcastState(); // Kirim state saat ini juga
+      }
+    });
+
+    // Dengarkan perubahan state autentikasi internal (dari Firebase via AuthManager)
+    document.addEventListener('auth:authChanged', () => {
+      broadcastState();
+    });
+
+    // Dengarkan perubahan storage murni (sinkronisasi cart lintas tab dashboard)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'cart') {
+        broadcastState();
+      }
+    });
+
+    // Inisialisasi AuthManager
+    AuthManager.init();
+  </script>
+</body>
+</html>

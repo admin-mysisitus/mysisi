@@ -43,17 +43,17 @@ Ini adalah penyebab utama dari error origin_mismatch.
 
 **Untuk Realtime Database (RTDB) dan Firestore, TIDAK ADA perubahan konfigurasi terkait domain.**
 
-Kenapa? Karena Firebase RTDB dan Firestore mengamankan data Anda menggunakan **Firebase Security Rules** (Aturan Keamanan) yang berbasis pada autentikasi *User ID* ( auth.uid), bukan berdasarkan nama domain (CORS). 
+Kenapa? Karena Firebase RTDB dan Firestore mengamankan data Anda menggunakan **Firebase Security Rules** (Aturan Keamanan) yang berbasis pada autentikasi *User ID* (uth.uid), bukan berdasarkan nama domain (CORS). 
 Selama proses login Google (OAuth) sudah berhasil dan pengguna mendapatkan *token* dari Firebase, aplikasi dari domain mana pun (yang diizinkan di langkah 1) dapat mengakses database dengan aman.
 
 **Pengecualian:**
-- Jika Anda menggunakan **Firebase App Check** (misalnya reCAPTCHA Enterprise), Anda perlu menambahkan sisitus.com ke daftar domain yang diizinkan di pengaturan App Check.
-- Jika Anda menggunakan sistem *CORS* khusus di **Cloud Functions** (jika ada), Anda harus memperbarui header Access-Control-Allow-Origin agar mencakup https://sisitus.com.
+- Jika Anda menggunakan **Firebase App Check** (misalnya reCAPTCHA Enterprise), Anda perlu menambahkan my.sisitus.com dan dmin.sisitus.com ke daftar domain yang diizinkan di pengaturan App Check.
+- Jika Anda menggunakan sistem *CORS* khusus di **Cloud Functions** (jika ada), Anda harus memperbarui header Access-Control-Allow-Origin agar mencakup https://my.sisitus.com.
 
 ---
 
 ## Ringkasan Tindakan
-1. Tambahkan sisitus.com ke **Firebase Auth > Settings > Authorized domains**.
-2. Tambahkan https://sisitus.com ke **Google Cloud > Credentials > Authorized JavaScript origins**.
-3. Tambahkan https://sisitus.com/__/auth/handler ke **Google Cloud > Credentials > Authorized redirect URIs**.
+1. Tambahkan my.sisitus.com ke **Firebase Auth > Settings > Authorized domains**.
+2. Tambahkan https://my.sisitus.com ke **Google Cloud > Credentials > Authorized JavaScript origins**.
+3. Tambahkan https://my.sisitus.com/__/auth/handler ke **Google Cloud > Credentials > Authorized redirect URIs**.
 4. Tunggu 5-10 menit, lalu coba login kembali.

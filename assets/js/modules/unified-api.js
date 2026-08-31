@@ -213,7 +213,7 @@ export class APIClient {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
       const actionCodeSettings = {
-        url: '/my/dashboard/', // Akan memunculkan tombol 'Continue' ke dashboard
+        url: 'https://my.sisitus.com/dashboard/', // Akan memunculkan tombol 'Continue' ke dashboard
         handleCodeInApp: true
       };
       await user.sendEmailVerification(actionCodeSettings);
@@ -439,7 +439,7 @@ export class APIClient {
         message: 'Firebase Auth tidak tersedia'
       };
       const actionCodeSettings = {
-        url: '/my/auth/',
+        url: 'https://my.sisitus.com/auth/',
         handleCodeInApp: true
       };
       await auth.sendPasswordResetEmail(email, actionCodeSettings);

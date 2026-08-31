@@ -108,7 +108,7 @@ function showAuthForms() {
           showLoggedInState();
           // Let default redirect behavior happen
           setTimeout(() => {
-            window.location.href = user.role === 'admin' ? '/admin/' : '/my/dashboard/';
+            window.location.href = user.role === 'admin' ? 'https://backstage.sisitus.com/' : 'https://my.sisitus.com/dashboard/';
           }, 1500);
         }
       });
