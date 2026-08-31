@@ -233,7 +233,7 @@ function handlePaymentLunas(orderId) {
   const btn = document.getElementById('btn-payment');
   if (btn) setButtonLoading(btn, false, 'Selesai');
   setTimeout(() => {
-    window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
+    window.location.href = `https://sisitus.com/invoice/?orderId=${encodeURIComponent(orderId)}`;
   }, 300); // 300ms so they can read the toast slightly
 }
 async function startPaymentPolling() {
@@ -281,7 +281,7 @@ function handlePaymentSuccess(result) {
   showSuccess('✓ Pembayaran Berhasil!', 'Mengarahkan ke Invoice...');
   APIClient.syncOrderStatus(orderId).catch(() => {});
   setTimeout(() => {
-    window.location.href = `/invoice/?orderId=${encodeURIComponent(orderId)}`;
+    window.location.href = `https://sisitus.com/invoice/?orderId=${encodeURIComponent(orderId)}`;
   }, 500); // Instant redirect
 }
 

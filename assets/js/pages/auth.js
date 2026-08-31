@@ -68,6 +68,10 @@ function showLoggedInState() {
     if (photoWrapper) {
       photoWrapper.innerHTML = renderUserAvatarHtml(user, 'w200', 'profile-photo');
     }
+    const dashboardBtn = document.querySelector('#auth-loggedin-section a[href="/dashboard/"]');
+    if (dashboardBtn) {
+      dashboardBtn.href = user.role === 'admin' ? window.location.origin + '/' : '/dashboard/';
+    }
   }
   // Setup logout button
   const logoutBtn = document.getElementById('loggedin-logout-btn');

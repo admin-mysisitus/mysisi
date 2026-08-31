@@ -23,8 +23,8 @@ export class DashboardSidebar {
       id: 'cart',
       icon: 'fas fa-shopping-cart',
       label: 'Keranjang Saya',
-      route: '/dashboard/keranjang',
-      isExternal: false,
+      route: 'https://sisitus.com/cart/',
+      isExternal: true,
       badge: 'cart-badge'
     }, {
       id: 'wishlist',
