@@ -35,6 +35,7 @@
 
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
+    import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
     import APIClient from '/assets/js/modules/unified-api.js';
 
     // Beri tahu opener bahwa popup siap menerima kredensial
@@ -48,11 +49,17 @@
       if (!allowedOrigins.includes(event.origin)) return;
 
       if (event.data && event.data.type === 'SISITUS_DELEGATE_AUTH') {
-        const { action, payload } = event.data;
+        const { action, payload, handoff } = event.data;
         const opener = window.opener;
 
         (async () => {
           try {
+            // TERIMA GUEST HANDOFF (sebelum login, agar langsung ke-sync setelah login sukses)
+            if (handoff) {
+              if (handoff.cart) CartManager.mergeCart(handoff.cart);
+              if (handoff.wishlist) WishlistManager.mergeWishlist(handoff.wishlist);
+            }
+
             let result;
             if (action === 'login') {
               result = await APIClient.loginUser(payload.email, payload.password);
@@ -66,6 +73,22 @@
               // Sesi sukses dibuat di my.sisitus.com (Top-Level karena popup)
               AuthManager.saveSession(result.data);
               
+              // Tunggu Firebase Auth memastikan persistensi selesai ke IndexedDB
+              const { getFirebase } = await import('/assets/js/modules/firebase-core.js');
+              const { auth } = await getFirebase();
+              if (auth) {
+                await new Promise(resolve => {
+                  const unsubscribe = auth.onAuthStateChanged(user => {
+                    if (user) {
+                      unsubscribe();
+                      resolve();
+                    }
+                  });
+                  // Safety timeout 3 detik
+                  setTimeout(() => { unsubscribe(); resolve(); }, 3000);
+                });
+              }
+
               if (opener) {
                 opener.postMessage({
                   type: 'SISITUS_DELEGATE_SUCCESS',
@@ -74,7 +97,8 @@
                   userData: result.data
                 }, event.origin);
               }
-              window.close();
+              // Beri jeda 300ms ekstra agar postMessage terkirim dan IndexedDB benar-benar aman
+              setTimeout(() => window.close(), 300);
             } else {
               throw new Error(result.message || 'Login gagal', { cause: result.rateLimit });
             }

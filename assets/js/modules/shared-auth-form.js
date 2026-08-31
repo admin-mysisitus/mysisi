@@ -23,6 +23,7 @@ import {
   initPasswordToggle,
   EnvHelper
 } from '/assets/js/modules/unified-utils.js';
+import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
 export class SharedAuthForm {
   constructor(options = {}) {
     this.options = {
@@ -908,7 +909,11 @@ export class SharedAuthForm {
           popup.postMessage({
             type: 'SISITUS_DELEGATE_AUTH',
             action: action,
-            payload: payload
+            payload: payload,
+            handoff: {
+              cart: CartManager.getCart(),
+              wishlist: WishlistManager.getWishlist()
+            }
           }, '*');
         }
         
