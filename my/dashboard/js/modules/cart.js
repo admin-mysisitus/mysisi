@@ -1232,4 +1232,13 @@ function removeCartItem(domain) {
   }
 }
 
+// Auto-refresh UI when cart data syncs from backend (e.g., after login)
+window.addEventListener('cart:updated', () => {
+  const container = document.getElementById('cart-container');
+  // Hanya render ulang jika user sedang berada di halaman cart dan tidak sedang memproses
+  if (container && cartState.currentUser && !cartState.isProcessingCheckout) {
+    render(cartState.currentUser);
+  }
+});
+
 export default render;

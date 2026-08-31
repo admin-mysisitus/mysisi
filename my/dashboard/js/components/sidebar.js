@@ -143,7 +143,7 @@ export class DashboardSidebar {
       const {
         WishlistManager
       } = await import('/assets/js/modules/unified-cart.js');
-      const count = WishlistManager.getWishlist().length;
+      const count = WishlistManager.getWishlist().domains?.length || 0;
       const badge = document.querySelector('.wishlist-badge-count');
       if (badge) {
         if (count > 0) {
