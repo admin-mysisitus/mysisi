@@ -20,7 +20,8 @@ import {
   setButtonLoading,
   formatPhoneNumber,
   sanitizeHTML,
-  EnvHelper
+  EnvHelper,
+  Base64Utils
 } from '/assets/js/modules/unified-utils.js';
 const ADMIN_WHATSAPP = '6281215289095';
 let currentUser = null;
@@ -240,7 +241,7 @@ function handlePaymentLunas(orderId) {
         intent: 'invoice-redirect',
         timestamp: Date.now()
       };
-      const encoded = btoa(JSON.stringify(handoffData));
+      const encoded = Base64Utils.encode(JSON.stringify(handoffData));
       window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}#handoff=${encoded}`);
     } catch(e) {
       window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
@@ -298,7 +299,7 @@ function handlePaymentSuccess(result) {
         intent: 'invoice-redirect',
         timestamp: Date.now()
       };
-      const encoded = btoa(JSON.stringify(handoffData));
+      const encoded = Base64Utils.encode(JSON.stringify(handoffData));
       window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}#handoff=${encoded}`);
     } catch(e) {
       window.location.href = EnvHelper.getDomainUrl('public', `/invoice/?orderId=${encodeURIComponent(orderId)}`);

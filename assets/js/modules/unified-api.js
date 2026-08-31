@@ -763,7 +763,7 @@ export class APIClient {
       };
     }
   }
-  static async getOrderDetail(orderId) {
+  static async getOrderDetail(orderId, userId = null) {
     try {
       const {
         db
@@ -785,6 +785,18 @@ export class APIClient {
       };
     } catch (e) {
       void ('[API] RTDB getOrderDetail failed:', e);
+      // Fallback ke GAS Backend jika Firebase menolak akses (Cross-Domain Public Site tanpa Firebase Auth)
+      if (e.message && e.message.toLowerCase().includes('permission denied')) {
+        console.log('[API] Fallback ke GAS Backend untuk getOrderDetail...');
+        try {
+          return await this.call('getOrderDetail', { orderId, userId });
+        } catch (gasError) {
+          return {
+            success: false,
+            message: gasError.message
+          };
+        }
+      }
       return {
         success: false,
         message: e.message

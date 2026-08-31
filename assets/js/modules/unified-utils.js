@@ -228,6 +228,22 @@ export function isValidDomain(domain) {
   const regex = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
   return regex.test(domain);
 }
+/**
+ * Base64 Utilities (Unicode Safe)
+ * Fixes DOMException when stringifying Emojis/Unicode
+ */
+export const Base64Utils = {
+  encode: (str) => {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+      return String.fromCharCode('0x' + p1);
+    }));
+  },
+  decode: (str) => {
+    return decodeURIComponent(atob(str).split('').map(c => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  }
+};
 // ========== STRING UTILITIES ==========
 /**
  * Format currency to Indonesian Rupiah

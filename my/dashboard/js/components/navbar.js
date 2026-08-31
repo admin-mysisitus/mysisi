@@ -7,7 +7,8 @@ import {
 import {
   showConfirm,
   renderUserAvatarHtml,
-  EnvHelper
+  EnvHelper,
+  Base64Utils
 } from '/assets/js/modules/unified-utils.js';
 export class DashboardNavbar {
   constructor() {
@@ -142,7 +143,7 @@ export class DashboardNavbar {
             intent: 'reverse-sync',
             timestamp: Date.now()
           };
-          const encoded = btoa(JSON.stringify(handoffData));
+          const encoded = Base64Utils.encode(JSON.stringify(handoffData));
           const targetUrl = EnvHelper.getDomainUrl('public', '/') + '#handoff=' + encoded;
           window.open(targetUrl, '_blank');
         } catch (err) {

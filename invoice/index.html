@@ -62,6 +62,9 @@
       AuthManager
     } from '/assets/js/modules/unified-auth.js';
     import {
+      Base64Utils
+    } from '/assets/js/modules/unified-utils.js';
+    import {
       render
     } from '/assets/js/modules/invoice.js';
         // Initialize
@@ -78,7 +81,7 @@
     const hash = window.location.hash;
     if (hash.startsWith('#handoff=')) {
       try {
-        const payload = JSON.parse(atob(hash.replace('#handoff=', '')));
+        const payload = JSON.parse(Base64Utils.decode(hash.replace('#handoff=', '')));
         if (payload.user) {
           AuthManager.saveSession(payload.user);
         }

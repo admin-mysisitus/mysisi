@@ -14,7 +14,8 @@ import {
   showSuccess,
   showError,
   renderUserAvatarHtml,
-  EnvHelper
+  EnvHelper,
+  Base64Utils
 } from '../modules/unified-utils.js';
 // ============================================================================
 // INITIALIZATION
@@ -31,7 +32,7 @@ function initAuthPage() {
   if (hash.startsWith('#handoff=')) {
     try {
       const base64Payload = hash.substring(9);
-      const jsonStr = atob(base64Payload);
+      const jsonStr = Base64Utils.decode(base64Payload);
       const payload = JSON.parse(jsonStr);
       
       // Merge silently into unpartitioned localStorage

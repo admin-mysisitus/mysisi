@@ -11,7 +11,8 @@ import {
   normalizeDriveImageUrl,
   withCacheBust,
   renderUserAvatarHtml,
-  EnvHelper
+  EnvHelper,
+  Base64Utils
 } from '../modules/unified-utils.js';
 import { AuthManager } from '../modules/unified-auth.js';
 import { CartManager, WishlistManager } from '../modules/unified-cart.js';
@@ -518,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash;
   if (hash.startsWith('#handoff=')) {
     try {
-      const payload = JSON.parse(atob(hash.replace('#handoff=', '')));
+      const payload = JSON.parse(Base64Utils.decode(hash.replace('#handoff=', '')));
       if (payload.cart) CartManager.mergeCart(payload.cart);
       if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
       
