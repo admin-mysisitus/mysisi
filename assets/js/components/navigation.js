@@ -538,6 +538,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ==========================================
+  // SSO HUB IFRAME SYNC (Background Sync)
+  // ==========================================
+  const iframe = document.createElement('iframe');
+  iframe.src = EnvHelper.getDomainUrl('my', '/auth/sso-hub.html');
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  window.addEventListener('message', (event) => {
+    // Pastikan dari my.sisitus.com atau environment aktif
+    if (!event.origin.includes('sisitus.com') && !event.origin.includes('localhost') && !event.origin.includes('127.0.0.1')) {
+      return;
+    }
+
+    if (event.data && event.data.type === 'SSO_HUB_READY') {
+      // Hub siap, kirim permintaan data (cart & user)
+      iframe.contentWindow.postMessage({ type: 'SSO_REQUEST_SYNC' }, '*');
+    }
+    
+    if (event.data && event.data.type === 'SSO_SYNC_RESPONSE') {
+      const payload = event.data.payload;
+      
+      let cartChanged = false;
+      let wishlistChanged = false;
+      
+      // Update UI if we got user data and we weren't aware of it locally
+      const localUser = AuthManager.getCurrentUser();
+      if (payload.user && (!localUser || localUser.uid !== payload.user.uid)) {
+         AuthManager.saveSession(payload.user);
+         cartChanged = true;
+         // Trigger auth event for navigation
+         document.dispatchEvent(new CustomEvent('auth:authChanged', { detail: payload.user }));
+      } else if (!payload.user && localUser) {
+         AuthManager.clearSession();
+         cartChanged = true;
+         document.dispatchEvent(new CustomEvent('auth:authChanged', { detail: null }));
+      }
+
+      if (payload.cart) {
+         CartManager.mergeCart(payload.cart);
+         cartChanged = true; // trigger badge update
+      }
+      if (payload.wishlist) {
+         WishlistManager.mergeWishlist(payload.wishlist);
+         wishlistChanged = true;
+      }
+      
+      if (cartChanged || wishlistChanged) {
+         updateFloatingCart();
+      }
+    }
+  });
+  // ==========================================
+
   // Always initialize floating cart
   updateFloatingCart();
   // Listen to cart updates
