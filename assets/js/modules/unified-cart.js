@@ -255,6 +255,8 @@ export class CartManager {
     cart.coupon = null;
     this.saveCart(cart);
     return cart;
+  }
+
   /**
    * Add addons to cart
 
