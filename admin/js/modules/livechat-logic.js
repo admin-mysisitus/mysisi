@@ -19,6 +19,7 @@ var roomUnreadCounts = JSON.parse(localStorage.getItem('roomUnreadCounts') || '{
 var adminUnreadCount = parseInt(localStorage.getItem('adminUnreadCount') || '0', 10);
 // Notification audio
 var audio = new Audio('/assets/audio/notification.mp3');
+var autoPilotRooms = JSON.parse(localStorage.getItem('autoPilotRooms') || '{}');
 // NEW: Module instances (initialized per room)
 var messageStore = null;
 var messageRenderer = null;
@@ -60,9 +61,46 @@ function initializeChatModules() {
 }
 
 function _setupStoreSubscriptions() {
-  messageStore?.subscribe('messageAdded', (msg) => {
-    if (msg.sender === 'user' && document.visibilityState !== 'visible') {
-      showNotif();
+  messageStore?.subscribe('messageAdded', async (msg) => {
+    if (msg.sender === 'user') {
+      if (document.visibilityState !== 'visible') {
+        showNotif();
+      }
+      // AI Auto-Pilot Logic
+      if (msg.roomId && autoPilotRooms[msg.roomId] && window.livechatAI) {
+        // Prevent concurrent AI replies in the same room by checking if already replying
+        if (!window.livechatAI_isReplying) window.livechatAI_isReplying = {};
+        if (window.livechatAI_isReplying[msg.roomId]) return;
+        
+        window.livechatAI_isReplying[msg.roomId] = true;
+        
+        // Let it feel natural
+        setTimeout(async () => {
+           try {
+             // We need to fetch messages. If it's active room, use messageStore. 
+             // If not, we might need a dedicated fetch, but for now we only reliably have messageStore for active room.
+             // Actually, syncEngine only syncs active room. So Auto-Pilot only works for active room anyway!
+             if (msg.roomId === activeRoom) {
+               handleTypingIndicator(true);
+               const history = messageStore.getSortedMessages().map(m => ({
+                   role: m.sender === 'user' ? 'user' : 'assistant',
+                   content: m.message || ''
+               })).filter(m => m.content);
+               
+               const reply = await window.livechatAI.generateReply(history, true);
+               if (reply) {
+                 replyInput.value = reply;
+                 await sendReply();
+               }
+             }
+           } catch(e) {
+             console.error('Auto-Pilot error:', e);
+           } finally {
+             handleTypingIndicator(false);
+             window.livechatAI_isReplying[msg.roomId] = false;
+           }
+        }, 1500);
+      }
     }
   });
   messageStore?.subscribe('messageUpdated', (data) => {
@@ -270,6 +308,12 @@ function selectRoom(roomId) {
     activeRoomElement.remove();
   }
   if (replyInput) replyInput.focus();
+  
+  // Set Auto-Pilot toggle state for this room
+  const apToggle = document.getElementById('aiAutoPilotToggle');
+  if (apToggle) {
+    apToggle.checked = !!autoPilotRooms[roomId];
+  }
 }
 // ============================================================================
 // MESSAGE SENDING
@@ -290,13 +334,15 @@ async function sendReply(attachmentUrl = null) {
   sendBtn.disabled = true;
   sendBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
   try {
-    // Extract agent name from existing messages in the room
+    // Extract agent name from existing messages in the room (LATEST first)
     let agentName = 'Admin';
     if (messageStore) {
       const messages = messageStore.getSortedMessages();
-      const msgWithAgent = messages.find(m => m.agent && m.agent !== 'Admin');
-      if (msgWithAgent) {
-        agentName = msgWithAgent.agent;
+      for (let i = messages.length - 1; i >= 0; i--) {
+        if (messages[i].agent && messages[i].agent !== 'Admin') {
+          agentName = messages[i].agent;
+          break;
+        }
       }
     }
     const optimisticMsg = sendQueue?.enqueue({
@@ -404,6 +450,55 @@ if (attachBtn && fileInput) {
     }
   });
 }
+
+// AI Copilot Handlers
+var aiSuggestBtn = document.getElementById('aiSuggestBtn');
+var aiAutoPilotToggle = document.getElementById('aiAutoPilotToggle');
+
+if (aiAutoPilotToggle) {
+  aiAutoPilotToggle.addEventListener('change', (e) => {
+    if (activeRoom) {
+      autoPilotRooms[activeRoom] = e.target.checked;
+      localStorage.setItem('autoPilotRooms', JSON.stringify(autoPilotRooms));
+      if (e.target.checked) {
+         messageRenderer?.addSystemMessage('<i class="fas fa-robot"></i> Auto-Pilot diaktifkan untuk obrolan ini.');
+      } else {
+         messageRenderer?.addSystemMessage('<i class="fas fa-user"></i> Auto-Pilot dimatikan. Anda dalam kendali manual.');
+      }
+    }
+  });
+}
+
+if (aiSuggestBtn) {
+  aiSuggestBtn.addEventListener('click', async () => {
+    if (!activeRoom || !window.livechatAI) return;
+    
+    aiSuggestBtn.disabled = true;
+    aiSuggestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    replyInput.placeholder = "AI sedang berpikir...";
+    
+    try {
+       const history = messageStore.getSortedMessages().map(m => ({
+           role: m.sender === 'user' ? 'user' : 'assistant',
+           content: m.message || ''
+       })).filter(m => m.content);
+       
+       const reply = await window.livechatAI.generateReply(history, false);
+       if (reply) {
+         replyInput.value = reply;
+         replyInput.focus();
+       }
+    } catch(e) {
+       console.error(e);
+       messageRenderer?.addSystemMessage('❌ AI Copilot gagal merespon.');
+    } finally {
+       aiSuggestBtn.disabled = false;
+       aiSuggestBtn.innerHTML = '<i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i>';
+       replyInput.placeholder = "'/' untuk balas cepat...";
+    }
+  });
+}
+
 var typingTimeout = null;
 var QUICK_REPLIES = [];
 // Fetch quick replies from external JSON configuration

@@ -46,12 +46,20 @@
           <span class="lc-chat-header-name">Customer Service</span>
           <span class="lc-chat-header-status">Online</span>
         </div>
+        <div class="lc-autopilot-toggle" style="margin-left: auto; display: flex; align-items: center; gap: 8px;" title="Biarkan AI membalas otomatis untuk obrolan ini">
+          <span style="font-size: 0.85rem; font-weight: 600; color: #4b5563;"><i class="fas fa-robot"></i> Auto-Pilot</span>
+          <label class="switch" style="transform: scale(0.8); margin: 0;">
+            <input type="checkbox" id="aiAutoPilotToggle">
+            <span class="slider round"></span>
+          </label>
+        </div>
       </div>
       <div id="chatBox" class="lc-chat-box"></div>
       <div class="lc-input-area input-area">
         <div id="quickReplyPopup" class="quick-reply-popup"></div>
         <input type="text" id="replyInput" class="lc-reply-input" placeholder="'/' untuk balas cepat..." aria-label="Pesan balasan">
         <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" aria-label="Pilih dokumen">
+        <button id="aiSuggestBtn" class="admin-btn lc-attach-btn" title="Buat Draf dengan AI Copilot" aria-label="Tanya AI"><i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i></button>
         <button id="attachBtn" class="admin-btn lc-attach-btn attach-btn" title="Kirim File" aria-label="Kirim Lampiran"><i class="fas fa-paperclip" style="font-size: 1.1rem;"></i></button>
         <button id="sendBtn" class="admin-btn lc-send-btn" aria-label="Kirim Pesan"><i class="fas fa-paper-plane"></i>
           <span class="btn-text">Kirim</span></button>

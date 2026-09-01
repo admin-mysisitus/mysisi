@@ -1028,6 +1028,7 @@ button:focus-visible,
   color: var(--admin-text-muted);
   width: 46px;
   height: 46px;
+  flex-shrink: 0;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1039,6 +1040,7 @@ button:focus-visible,
 .lc-send-btn {
   height: 46px;
   padding: 0 24px;
+  flex-shrink: 0;
   border-radius: 24px;
   display: flex;
   align-items: center;
@@ -1352,20 +1354,20 @@ button:focus-visible,
   color: var(--admin-text-main);
 }
 
-.lc-status-toggle .switch {
+.lc-status-toggle .switch, .lc-autopilot-toggle .switch {
   position: relative;
   display: inline-block;
   width: 46px;
   height: 24px;
 }
 
-.lc-status-toggle .switch input {
+.lc-status-toggle .switch input, .lc-autopilot-toggle .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.lc-status-toggle .slider {
+.lc-status-toggle .slider, .lc-autopilot-toggle .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -1376,7 +1378,7 @@ button:focus-visible,
   transition: .4s;
 }
 
-.lc-status-toggle .slider:before {
+.lc-status-toggle .slider:before, .lc-autopilot-toggle .slider:before {
   position: absolute;
   content: "";
   height: 18px;
@@ -1387,11 +1389,11 @@ button:focus-visible,
   transition: .4s;
 }
 
-.lc-status-toggle input:checked+.slider {
+.lc-status-toggle input:checked+.slider, .lc-autopilot-toggle input:checked+.slider {
   background-color: #10b981;
 }
 
-.lc-status-toggle input:checked+.slider:before {
+.lc-status-toggle input:checked+.slider:before, .lc-autopilot-toggle input:checked+.slider:before {
   transform: translateX(22px);
 }
 

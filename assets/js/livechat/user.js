@@ -276,10 +276,21 @@ function openModal() {
             setTimeout(() => {
               if (lastMsg.parentElement) lastMsg.remove();
               if (currentAgent && currentAgent.name) {
-                if (isFirstTimeUser) {
+                let treatAsFirstTime = isFirstTimeUser;
+                // Treat as new session if last message was > 6 hours ago
+                if (!treatAsFirstTime && messageStore) {
+                  const msgs = messageStore.getSortedMessages();
+                  if (msgs.length > 0) {
+                    const lastMsgTime = new Date(msgs[msgs.length - 1].createdAt).getTime();
+                    if (Date.now() - lastMsgTime > 6 * 60 * 60 * 1000) {
+                      treatAsFirstTime = true;
+                    }
+                  }
+                }
+
+                if (treatAsFirstTime) {
                   autoSendAdminMessage(`Halo Sisi's! Selamat ${getGreetingTime()}. Terima kasih telah menghubungi kami.`);
-                  setTimeout(() => autoSendAdminMessage(`Perkenalkan, saya ${currentAgent.name} dari divisi ${currentAgent.department}.`), 1500);
-                  setTimeout(() => autoSendAdminMessage(`Ada yang bisa saya bantu hari ini?`), 3000);
+                  setTimeout(() => autoSendAdminMessage(`Perkenalkan, saya ${currentAgent.name} (Customer Support). Ada yang bisa saya bantu hari ini?`), 1500);
                 } else {
                   autoSendAdminMessage(`Halo kembali! Ada yang bisa saya bantu lagi?`);
                 }

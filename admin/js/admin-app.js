@@ -156,7 +156,7 @@ class AdminApp {
       // Load JS module
       const module = await routeConfig.loadModule();
       // Load HTML view
-      const response = await fetch(`/views/${routeConfig.page}.html`);
+      const response = await fetch(`./views/${routeConfig.page}.html`);
       if (!response.ok) throw new Error(`View not found: ${routeConfig.page}`);
       const html = await response.text();
       const contentArea = document.getElementById('admin-content');

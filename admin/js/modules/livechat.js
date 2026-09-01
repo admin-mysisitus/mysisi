@@ -7,7 +7,7 @@ export async function render() {
     const css = document.createElement('link');
     css.id = 'livechat-admin-css';
     css.rel = 'stylesheet';
-    css.href = '/styles/livechat.css';
+    css.href = './styles/livechat.css';
     document.head.appendChild(css);
   }
   // Load global modal CSS for attachment modal
@@ -39,6 +39,8 @@ export async function render() {
     await loadScript("/assets/js/livechat/sendQueue.js");
     await loadScript("/assets/js/livechat/utils.js");
   }
+  await loadScript("./js/modules/livechat-ai.js");
+  await loadScript("./js/modules/livechat-logic.js");
   // Load admin logic
   // We append a timestamp to force fresh execution if needed, 
   // or just load it normally. Since it attaches to DOM on execution, 
@@ -48,7 +50,7 @@ export async function render() {
   if (existingAdminScript) {
     existingAdminScript.remove(); // Remove old one
   }
-  await loadScript("/js/modules/livechat-logic.js", "livechat-admin-logic");
+  await loadScript("./js/modules/livechat-logic.js", "livechat-admin-logic");
 }
 
 function loadScript(src, id = null) {
