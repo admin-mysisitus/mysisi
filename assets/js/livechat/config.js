@@ -1,5 +1,5 @@
 const CONFIG = {
-  GAS_URL: "https://script.google.com/macros/s/AKfycby2Houyv0o2GEQnNeDqWjGiH05Sy4a0m_8CGWQMZCd1dzu1fVw0IsvJZ7SLGPehCvIjnA/exec",
+  GAS_URL: "https://script.google.com/macros/s/AKfycbxMLKo3AxUi13Y4MDxFkCVs8KoCTqwSS010K5A4iq4IiEubCYd_n1KXHiAmqagF9S0lCw/exec",
   TIMINGS: {
     ANIMATIONS: {
       scroll: 300,

@@ -24,9 +24,16 @@ desktop.ini
 # Firebase
 firebase-rules.json
 
-# Google App Script
-gas.js
-spreadsheet.tsv
+# Backend & Configurations
+cf-worker-*.js
+gas-*.js
+spreadsheet-*.tsv
+
+# Backup
+mysisi-backup/
+
+# Internal Documentation
+docs-*.md
 
 # Build outputs
 dist/
@@ -41,4 +48,3 @@ yarn-debug.log*
 # Temporary files
 .tmp/
 temp/
-

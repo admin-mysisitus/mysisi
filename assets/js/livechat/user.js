@@ -378,6 +378,15 @@ async function sendMessage(attachmentUrl = null) {
     if (!optimisticMsg) {
       throw new Error('Failed to enqueue message');
     }
+    // Ping GAS to trigger AI Auto-Pilot (if enabled on the backend)
+    // Delayed to ensure Firebase write has been committed
+    setTimeout(() => {
+      fetch('https://livechat.sisitusdotcom.workers.dev/', {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `action=generateAIReply&roomId=${conversationId}`
+      }).catch(e => console.error("Auto-Pilot trigger failed:", e));
+    }, 1500);
   } catch (error) {
     console.log('Error sending message:', error);
     messageRenderer?.addSystemMessage(`❌ Gagal mengirim. Error: ${error.message}`);

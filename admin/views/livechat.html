@@ -14,11 +14,16 @@
 <div id="livechat-spa-container" class="lc-admin-wrapper">
   <div id="notification" style="display: none;"><i class="fas fa-bell"></i> Ada pesan baru masuk!</div>
   <div class="admin-card lc-rooms-panel">
-    <div class="lc-rooms-header">
-      <h4 class="lc-rooms-title">Daftar Chat</h4>
-      <div id="adminNotificationBell" class="lc-notification-bell">
-        <i class="fas fa-bell"></i>
-        <span id="adminUnreadBadge" class="lc-unread-badge" style="display: none;">0</span>
+    <div class="lc-rooms-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <h4 class="lc-rooms-title" style="margin: 0;">Daftar Chat</h4>
+      <div style="display: flex; gap: 8px;">
+        <button id="aiSettingsBtn" class="admin-btn" style="padding: 4px 8px; font-size: 0.85rem;" title="Pengaturan AI" aria-label="Pengaturan AI">
+          <i class="fas fa-cog"></i> AI
+        </button>
+        <div id="adminNotificationBell" class="lc-notification-bell">
+          <i class="fas fa-bell"></i>
+          <span id="adminUnreadBadge" class="lc-unread-badge" style="display: none;">0</span>
+        </div>
       </div>
     </div>
     <div id="roomsList" class="lc-rooms-list rooms-loading">
@@ -46,12 +51,17 @@
           <span class="lc-chat-header-name">Customer Service</span>
           <span class="lc-chat-header-status">Online</span>
         </div>
-        <div class="lc-autopilot-toggle" style="margin-left: auto; display: flex; align-items: center; gap: 8px;" title="Biarkan AI membalas otomatis untuk obrolan ini">
-          <span style="font-size: 0.85rem; font-weight: 600; color: #4b5563;"><i class="fas fa-robot"></i> Auto-Pilot</span>
-          <label class="switch" style="transform: scale(0.8); margin: 0;">
-            <input type="checkbox" id="aiAutoPilotToggle">
-            <span class="slider round"></span>
-          </label>
+        <div class="lc-autopilot-toggle" style="margin-left: auto; display: flex; align-items: center; gap: 12px;" title="Biarkan AI membalas otomatis untuk obrolan ini">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 0.85rem; font-weight: 600; color: #4b5563;"><i class="fas fa-robot"></i> Auto-Pilot</span>
+            <label class="switch" style="transform: scale(0.8); margin: 0;">
+              <input type="checkbox" id="aiAutoPilotToggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <button id="archiveChatBtn" class="admin-btn" style="background-color: #fee2e2; color: #b91c1c; border-color: #fca5a5; padding: 4px 10px; font-size: 0.85rem;" title="Selesaikan & Arsipkan Chat ke Sheets">
+            <i class="fas fa-archive"></i> Arsipkan
+          </button>
         </div>
       </div>
       <div id="chatBox" class="lc-chat-box"></div>
@@ -68,8 +78,8 @@
   </div>
 </div>
 <div id="attachmentModal" class="modal-backdrop" onclick="if(event.target === this) closeAttachmentModal()">
-  <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto;">
-    <button class="modal-close" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>
+  <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto; background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;">
+    <button class="modal-close" style="color: #94a3b8; background: rgba(255,255,255,0.1);" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>
     <div class="attachment-modal-header">
       <h3 id="attachmentModalTitle"><i class="fas fa-file-alt" aria-hidden="true"></i> Lampiran</h3>
     </div>
@@ -84,6 +94,49 @@
       </div>
       <img id="attachmentImg" style="display: none;" alt="Lampiran Gambar" />
       <iframe id="attachmentFrame" style="display: none;" title="Lampiran Dokumen"></iframe>
+    </div>
+  </div>
+</div>
+
+<div id="aiConfigModal" class="modal-backdrop" style="display: none;" onclick="if(event.target === this) { document.getElementById('aiConfigModal').classList.remove('active'); setTimeout(() => document.getElementById('aiConfigModal').style.display='none', 300); }">
+  <div class="modal-content" style="width: 100%; max-width: 800px; max-height: 90vh; margin: 0 auto; padding: 32px; background-color: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 16px;">
+    <button class="modal-close" style="color: #94a3b8; background: rgba(255,255,255,0.1); top: 24px; right: 24px;" onclick="document.getElementById('aiConfigModal').classList.remove('active'); setTimeout(() => document.getElementById('aiConfigModal').style.display='none', 300);" aria-label="Tutup Pengaturan"><i class="fas fa-times" aria-hidden="true"></i></button>
+    <div class="attachment-modal-header" style="margin-bottom: 20px;">
+      <h3><i class="fas fa-robot" aria-hidden="true"></i> Pengaturan AI Dasbor</h3>
+      <p style="font-size: 0.85rem; color: #6b7280; margin-top: 4px;">Perubahan di sini akan langsung tersimpan ke Google Sheets Anda.</p>
+    </div>
+    <div class="attachment-modal-body" style="display: flex; flex-direction: column; gap: 16px;">
+      <div id="aiConfigLoading" class="attachment-loading">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p>Memuat konfigurasi dari Sheets...</p>
+      </div>
+      <div id="aiConfigForm" style="display: none; flex-direction: column; gap: 12px;">
+        <div class="form-group">
+          <label for="cfgTargetEmail" style="font-weight: 600; font-size: 0.9rem;">Target Email Notifikasi</label>
+          <input type="email" id="cfgTargetEmail" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="admin@domain.com">
+        </div>
+        <div class="form-group">
+          <label for="cfgApiKeys" style="font-weight: 600; font-size: 0.9rem;">API Keys (Pisahkan dengan koma)</label>
+          <input type="text" id="cfgApiKeys" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="gsk_123, gsk_456">
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="cfgApiUrl" style="font-weight: 600; font-size: 0.9rem;">API URL</label>
+            <input type="text" id="cfgApiUrl" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="https://api.groq.com/...">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="cfgAiModel" style="font-weight: 600; font-size: 0.9rem;">Model AI</label>
+            <input type="text" id="cfgAiModel" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="llama3-8b-8192">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cfgPrompt" style="font-weight: 600; font-size: 0.9rem;">Instruksi Dasar (System Prompt)</label>
+          <textarea id="cfgPrompt" class="lc-reply-input" style="width: 100%; height: 250px; margin-top: 8px; resize: vertical;" placeholder="Tuliskan aturan untuk AI..."></textarea>
+        </div>
+        <button id="saveAiConfigBtn" class="admin-btn lc-send-btn" style="width: 100%; justify-content: center; margin-top: 16px; padding: 12px; font-size: 1rem; border-radius: 10px;">
+          <i class="fas fa-save"></i> Simpan ke Sheets
+        </button>
+      </div>
     </div>
   </div>
 </div>
