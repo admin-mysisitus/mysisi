@@ -113,20 +113,36 @@ window.changeItemPackage = (domain, packageId) => {
     showError('Gagal', error.message);
   }
 };
-window.toggleCartAddon = async (addonId, isChecked) => {
+window.toggleCartAddon = async (domain, addonId, isChecked) => {
   try {
-    const addon = cartState.pricing.addons[addonId];
-    if (!addon) return;
+    const addonDef = cartState.pricing.addons[addonId];
+    if (!addonDef) return;
+    
+    const cart = CartManager.getCart();
+    const item = cart.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
+    if (!item) return;
+
+    let itemAddons = item.addons || [];
+    
     if (isChecked) {
-      CartManager.addAddons([{
-        id: addonId,
-        name: addon.name,
-        price: addon.price,
-        duration: addon.duration
-      }]);
+      // Add addon to domain
+      const existing = itemAddons.find(a => a.id.toLowerCase() === addonId.toLowerCase());
+      if (!existing) {
+        itemAddons.push({
+          id: addonId,
+          name: addonDef.name,
+          price: addonDef.price,
+          duration: addonDef.duration
+        });
+      }
     } else {
-      CartManager.removeAddon(addonId);
+      // Remove addon from domain
+      itemAddons = itemAddons.filter(a => a.id.toLowerCase() !== addonId.toLowerCase());
     }
+    
+    // Save to CartManager
+    CartManager.update(domain, { addons: itemAddons });
+
     await withScrollPreservation(async () => {
       if (cartState.currentUser) {
         await render(cartState.currentUser);
@@ -315,7 +331,7 @@ function getSelectedCartSummary() {
     domainSubtotal = (selectedItem.price || 0) * (selectedItem.duration || 1);
   }
 
-  const addons = (cartData && cartData.addons) || [];
+  const addons = (selectedItem && selectedItem.addons) || [];
   const addonsTotal = addons.reduce((sum, a) => sum + ((a.price || 0) * (a.quantity || 1)), 0);
 
   let subtotal = domainSubtotal + addonsTotal;
@@ -777,15 +793,28 @@ function renderAuthenticatedCart() {
               <!-- Promo Code Section -->
               <div class="promo-section">
                 <label class="promo-label">
-                  <i class="ph-fill ph-tag"></i> Punya Kode Promo?
+                  <i class="ph-fill ph-tag"></i> ${cartState.promoValidated ? 'Kode Promo Aktif' : 'Punya Kode Promo?'}
                 </label>
-                <div class="promo-input-group">
-                  <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
-                  <button id="btn-apply-promo" onclick="window.applyPromoCode()" class="btn-apply-promo">
-                    Gunakan
-                  </button>
-                </div>
-                <div id="promo-message" class="promo-message"></div>
+                
+                ${cartState.promoValidated ? `
+                  <div class="promo-applied-box" style="display:flex; justify-content:space-between; align-items:center; background:#f0fdf4; border:1px solid #bbf7d0; padding:10px 14px; border-radius:8px; margin-bottom:12px;">
+                    <div>
+                      <span style="font-weight:700; color:#166534;">${cartState.promoCode}</span>
+                      <div style="font-size:12px; color:#15803d; margin-top:2px;">Berhasil diterapkan</div>
+                    </div>
+                    <button onclick="window.cancelPromoCode()" class="btn-cancel-promo" style="background:none; border:none; color:#dc2626; cursor:pointer; font-size:12px; font-weight:600; display:flex; align-items:center; gap:4px; padding:6px 8px; border-radius:4px; transition:all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='none'">
+                      <i class="ph-fill ph-x-circle"></i> Batalkan
+                    </button>
+                  </div>
+                ` : `
+                  <div class="promo-input-group">
+                    <input type="text" id="promo-code-input" placeholder="Masukkan kode promo" class="promo-input">
+                    <button id="btn-apply-promo" onclick="window.applyPromoCode()" class="btn-apply-promo">
+                      Gunakan
+                    </button>
+                  </div>
+                  <div id="promo-message" class="promo-message"></div>
+                `}
               </div>
 
               <!-- Action Buttons -->
@@ -813,8 +842,7 @@ function renderAuthenticatedCart() {
 
 function renderCartItemSelectors(item) {
   const currentPackage = item.package || 'starter';
-  const cartData = CartManager.getCart();
-  const selectedAddonIds = (cartData && cartData.addons || []).map(a => a.id.toLowerCase());
+  const selectedAddonIds = (item.addons || []).map(a => a.id.toLowerCase());
   // Generate Packages Selection HTML
   const packagesHTML = Object.values(cartState.pricing.packages).filter(pkg => pkg.active !== false).sort((a, b) => {
     const orderA = typeof a.order === 'number' ? a.order : 999;
@@ -879,7 +907,7 @@ function renderCartItemSelectors(item) {
                    class="cart-item-addon-checkbox"
                    ${isFree ? 'style="display:none;"' : ''}
                    ${isSelected ? 'checked="checked"' : ''}
-                   onchange="window.toggleCartAddon('${addon.id}', this.checked)">
+                   onchange="window.toggleCartAddon('${item.domain}', '${addon.id}', this.checked)">
             <div class="cart-item-addon-info">
               <span class="cart-item-addon-name">${addon.name}</span>
               <span class="cart-item-addon-price ${isFree ? 'free-badge' : ''}">${isFree ? 'GRATIS' : '+' + formatPrice(addon.price)}</span>
@@ -1056,6 +1084,26 @@ async function applyPromoCode() {
     setButtonLoading(promoBtn, false, 'Gunakan');
   }
 }
+
+window.cancelPromoCode = () => {
+  cartState.promoCode = null;
+  cartState.promoDiscount = 0;
+  cartState.promoDescription = null;
+  cartState.promoValidated = false;
+
+  localStorage.removeItem('saved_promo_code');
+  localStorage.removeItem('saved_promo_description');
+  localStorage.removeItem('saved_promo_discount_value');
+  localStorage.removeItem('saved_promo_discount_type');
+  
+  CartManager.removeCoupon();
+
+  showInfo('Promo Dibatalkan', 'Kode promo telah dilepas dari keranjang.');
+  if (cartState.currentUser) {
+    render(cartState.currentUser);
+  }
+};
+
 // ============================================================================
 // CHECKOUT FUNCTIONS
 // ============================================================================
@@ -1160,7 +1208,7 @@ async function proceedToCheckout() {
       domainDuration: selectedItem?.duration || 1,
       isRenewal: selectedItem?.isRenewal || false,
       packageId: selectedItem?.package || 'none',
-      addons: CartManager.getCart().addons || [],
+      addons: selectedItem?.addons || [],
       promoCode: cartState.promoCode || null,
       subtotal: subtotal,
       ppn: ppn,
@@ -1179,13 +1227,20 @@ async function proceedToCheckout() {
     // Hanya hapus domain yang di-checkout dari cart
     CartManager.remove(firstDomain);
 
-    // Check if cart is now empty, if so, clear promos
-    if (CartManager.isEmpty()) {
-      cartState.promoCode = null;
-      cartState.promoDiscount = 0;
-      cartState.promoDescription = null;
-      cartState.promoValidated = false;
-    }
+    // ALWAYS CLEAR PROMOS AFTER SUCCESSFUL CHECKOUT (Since promo is consumed for this order)
+    cartState.promoCode = null;
+    cartState.promoDiscount = 0;
+    cartState.promoDescription = null;
+    cartState.promoValidated = false;
+    localStorage.removeItem('saved_promo_code');
+    localStorage.removeItem('saved_promo_description');
+    localStorage.removeItem('saved_promo_discount_value');
+    localStorage.removeItem('saved_promo_discount_type');
+    CartManager.removeCoupon();
+    
+    // ALWAYS CLEAR ADDONS AFTER SUCCESSFUL CHECKOUT (So they don't stick to the next checkout)
+    CartManager.clearAddons();
+
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {

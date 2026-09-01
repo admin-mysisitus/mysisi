@@ -342,6 +342,13 @@ export class CartManager {
         // Simpan harga terhitung kembali ke price properti agar sinkron (legacy support)
         domain.price = itemPrice;
         subtotal += itemPrice * (domain.duration || 1);
+
+        // Calculate per-domain addon prices
+        if (domain.addons && Array.isArray(domain.addons)) {
+          domain.addons.forEach(addon => {
+            subtotal += (addon.price || 0) * (addon.quantity || 1);
+          });
+        }
       });
     }
     // Calculate addon prices
