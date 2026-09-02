@@ -385,7 +385,14 @@ async function sendMessage(attachmentUrl = null) {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: `action=generateAIReply&roomId=${conversationId}`
-      }).catch(e => console.error("Auto-Pilot trigger failed:", e));
+      })
+      .then(async res => {
+          if (!res.ok) {
+              const err = await res.text();
+              console.error("Auto-Pilot API Error:", res.status, err);
+          }
+      })
+      .catch(e => console.error("Auto-Pilot trigger network failed:", e));
     }, 1500);
   } catch (error) {
     console.log('Error sending message:', error);
