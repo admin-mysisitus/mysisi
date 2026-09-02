@@ -445,7 +445,7 @@ class MessageRenderer {
   _sanitize(text) {
     if (typeof DOMPurify !== 'undefined') {
       return DOMPurify.sanitize(text, {
-        ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'br', 'a'],
+        ALLOWED_TAGS: ['b', 'strong', 'i', 'em', 'br', 'a', 'ul', 'ol', 'li'],
         ALLOWED_ATTR: ['href', 'target']
       });
     }

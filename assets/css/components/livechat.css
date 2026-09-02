@@ -839,3 +839,21 @@
 .livechat-widget .message.consecutive .agent-label {
   display: none;
 }
+
+/* Fix for HTML Lists inside Chat Messages */
+.livechat-widget .msg-content ul,
+.livechat-widget .msg-content ol {
+  padding-left: 20px;
+  margin: 8px 0;
+  list-style-position: outside;
+}
+.livechat-widget .msg-content ul {
+  list-style-type: disc;
+}
+.livechat-widget .msg-content ol {
+  list-style-type: decimal;
+}
+.livechat-widget .msg-content li {
+  margin-bottom: 4px;
+  display: list-item;
+}
