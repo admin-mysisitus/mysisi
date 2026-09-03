@@ -25,44 +25,44 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://sisitus.com/kontak/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://sisitus.com/bantuan/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://sisitus.com/website/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://sisitus.com/layanan/</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sisitus.com/layanan/website/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://sisitus.com/domain/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://sisitus.com/layanan/domain/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sisitus.com/hosting/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://sisitus.com/layanan/hosting/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://sisitus.com/maintenance/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://sisitus.com/layanan/maintenance/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://sisitus.com/perusahaan/tentang/</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://sisitus.com/perusahaan/portofolio/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <loc>https://sisitus.com/portofolio/</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

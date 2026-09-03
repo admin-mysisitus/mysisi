@@ -274,15 +274,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 // ========== ANIMATION KEYFRAMES (injected via script) ==========
-const style = document.createElement('style');
-style.textContent = `
+const perusahaanStyle = document.createElement('style');
+perusahaanStyle.textContent = `
   @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.15);
-    }
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
   }
 
   @keyframes bounce {
@@ -300,4 +297,4 @@ style.textContent = `
     }
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(perusahaanStyle);

@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
   collaborationBtns.forEach((btn, index) => {
     btn.addEventListener('click', function(e) {
       // Only handle partnership button with WhatsApp redirect
-      if (index === 0 && (!this.getAttribute('href') || this.getAttribute('href') === '/kontak/')) {
+      if (index === 0 && (!this.getAttribute('href') || this.getAttribute('href') === '/bantuan/')) {
         e.preventDefault();
         const message = 'Saya tertarik untuk berkolaborasi dengan SISITUS';
         window.open('https://wa.me/6281215289095?text=' + encodeURIComponent(message), '_blank');
@@ -270,8 +270,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 // ========== ANIMATION KEYFRAMES (injected via script) ==========
-const style = document.createElement('style');
-style.textContent = `
+const tentangStyle = document.createElement('style');
+tentangStyle.textContent = `
   @keyframes spin {
     0%, 100% {
       transform: scale(1) rotate(0deg);
@@ -295,4 +295,4 @@ style.textContent = `
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(tentangStyle);

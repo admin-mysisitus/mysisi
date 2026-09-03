@@ -1,6 +1,11 @@
-/layanan/pembuatan-website/*  /website/:splat  301
-/layanan/domain-hosting/*     /domain/:splat   301
-/layanan/maintenance/*        /maintenance/:splat  301
-/layanan/*                    /                301
+/layanan/pembuatan-website/*  /layanan/website/:splat  301
+/website/*                    /layanan/website/:splat  301
+/layanan/domain-hosting/*     /layanan/domain/:splat   301
+/domain/*                     /layanan/domain/:splat   301
+/hosting/*                    /layanan/hosting/:splat  301
+/maintenance/*                /layanan/maintenance/:splat  301
+/perusahaan/portofolio/*      /portofolio/:splat       301
+/perusahaan/tentang/*         /perusahaan/:splat       301
+/kontak/*                     /bantuan/:splat          301
 /auth/*                       https://my.sisitus.com/auth/:splat      301
 /dashboard/*                  https://my.sisitus.com/dashboard/:splat  301

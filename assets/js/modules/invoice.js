@@ -320,7 +320,7 @@ function renderInvoice() {
               <ul>
                 <li>Invoice ini merupakan tagihan resmi <strong>sisitus.com</strong>. Pembayaran dianggap sah setelah dana diterima dan terverifikasi.</li>
                 <li>Jika terdapat kesalahan data (nama, layanan, nominal, dll), klien WAJIB mengajukan perubahan invoice melalui:<br>
-                <a href="https://sisitus.com/kontak/" style="color:#2563EB;text-decoration:none;font-weight:500;">https://sisitus.com/kontak/</a></li>
+                <a href="https://sisitus.com/bantuan/" style="color:#2563EB;text-decoration:none;font-weight:500;">https://sisitus.com/bantuan/</a></li>
                 <li>Dalam proses perubahan invoice, mohon <strong>TIDAK melakukan pembayaran</strong> sebelum menerima invoice terbaru. Segala kesalahan pembayaran menjadi tanggung jawab klien.</li>
                 <li>Layanan akan diproses secara otomatis segera setelah pembayaran dikonfirmasi oleh sistem atau tim sisitus.</li>
               </ul>

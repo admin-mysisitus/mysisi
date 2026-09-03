@@ -230,19 +230,21 @@ const toggleMobileMenu = () => {
   navElements.menu.setAttribute('aria-hidden', String(isOpen));
   document.body.style.overflow = isOpen ? 'auto' : 'hidden';
 };
-// Set Active Link
+// Set Active Link — cocokkan path secara presisi, bukan hanya segmen pertama
 const setActiveLinks = () => {
   const currentPath = location.pathname.replace(/\/$/, '') || '/';
   document.querySelectorAll('header nav a').forEach(link => {
     const rawHref = link.getAttribute('href');
-    if (!rawHref) return;
+    if (!rawHref || rawHref === '#') return;
     const linkPath = rawHref.replace(/\/$/, '') || '/';
-    const currentSegments = currentPath.split('/').filter(Boolean);
-    const linkSegments = linkPath.split('/').filter(Boolean);
-    const isActive = linkPath === '/' ? currentPath === '/' : currentSegments[0] === linkSegments[0] && (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
+    // cocokkan persis, atau currentPath berada di bawah path link ini
+    const isActive = linkPath === '/'
+      ? currentPath === '/'
+      : (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
     if (isActive) {
       link.classList.add('active');
       if (currentPath === linkPath && link.offsetParent !== null) link.setAttribute('aria-current', 'page');
+      // propagasi active ke parent dropdown toggle
       const parentDropdown = link.closest('.nav-desktop-dropdown, .nav-mobile-dropdown');
       if (parentDropdown) {
         const parentToggle = parentDropdown.querySelector('.nav-mobile-toggle') || parentDropdown.querySelector(':scope > a');

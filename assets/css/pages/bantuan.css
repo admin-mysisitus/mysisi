@@ -1,9 +1,9 @@
-.kontak-info-section {
+.bantuan-info-section {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   background-color: var(--bg-light);
 }
 
-.kontak-info-section h2 {
+.bantuan-info-section h2 {
   font-size: var(--judul-sedang);
   font-weight: 700;
   margin-bottom: 1rem;
@@ -99,12 +99,12 @@
   color: var(--brand-dark);
 }
 
-.kontak-form-section {
+.bantuan-form-section {
   padding: clamp(1.5rem, 3vw, 3rem) 0;
   background: var(--bg-white);
 }
 
-.kontak-form-section h2 {
+.bantuan-form-section h2 {
   font-size: var(--judul-sedang);
   font-weight: 700;
   margin-bottom: 1rem;
@@ -114,7 +114,7 @@
   opacity: 0;
 }
 
-.kontak-form-section>.section-subtitle {
+.bantuan-form-section>.section-subtitle {
   text-align: center;
   margin-bottom: 2.5rem;
 }
@@ -308,8 +308,8 @@
 
 @media (max-width: 768px) {
 
-  .kontak-info-section,
-  .kontak-form-section {
+  .bantuan-info-section,
+  .bantuan-form-section {
     padding: 2.5rem 0;
   }
 
@@ -387,8 +387,8 @@
 
 @media (max-width: 480px) {
 
-  .kontak-info-section,
-  .kontak-form-section {
+  .bantuan-info-section,
+  .bantuan-form-section {
     padding: 2rem 0;
   }
 

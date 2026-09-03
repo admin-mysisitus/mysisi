@@ -1,33 +1,33 @@
 import { EnvHelper } from './modules/unified-utils.js';
 // menu navbar — single source of truth untuk navigasi utama
 export const menuData = [{
-  href: "/website/",
-  text: "Website",
-  icon: "fas fa-laptop-code"
-}, {
   text: "Layanan",
-  href: "#",
+  href: "/layanan/",
   icon: "fas fa-concierge-bell",
   dropdown: [{
-    href: "/website/",
+    href: "/layanan/",
     text: "Semua Layanan",
     icon: "fas fa-concierge-bell",
     isParent: true
   }, {
-    href: "/domain/",
+    href: "/layanan/website/",
+    text: "Pembuatan Website",
+    icon: "fas fa-laptop-code"
+  }, {
+    href: "/layanan/domain/",
     text: "Domain",
     icon: "fas fa-globe"
   }, {
-    href: "/hosting/",
+    href: "/layanan/hosting/",
     text: "Hosting",
     icon: "fas fa-server"
   }, {
-    href: "/maintenance/",
+    href: "/layanan/maintenance/",
     text: "Maintenance",
     icon: "fas fa-wrench"
   }]
 }, {
-  href: "/perusahaan/portofolio/",
+  href: "/portofolio/",
   text: "Portofolio",
   icon: "fas fa-images"
 }, {
@@ -49,7 +49,7 @@ export const menuData = [{
     icon: "fas fa-lightbulb"
   }]
 }, {
-  href: "/kontak/",
+  href: "/bantuan/",
   text: "Bantuan",
   icon: "fas fa-life-ring"
 }, {
@@ -61,16 +61,16 @@ export const menuData = [{
 
 // footer kolom layanan utama
 export const mainServicesData = [{
-  href: "/website/",
+  href: "/layanan/website/",
   text: "Pembuatan Website"
 }, {
-  href: "/domain/",
+  href: "/layanan/domain/",
   text: "Pendaftaran Domain"
 }, {
-  href: "/hosting/",
+  href: "/layanan/hosting/",
   text: "Hosting"
 }, {
-  href: "/maintenance/",
+  href: "/layanan/maintenance/",
   text: "Maintenance Website"
 }, {
   href: "/promo/",
@@ -79,10 +79,10 @@ export const mainServicesData = [{
 
 // footer kolom link cepat — info perusahaan & pendukung
 export const footerQuickLinksData = [{
-  href: "/perusahaan/tentang/",
+  href: "/perusahaan/",
   text: "Tentang kami"
 }, {
-  href: "/perusahaan/portofolio/",
+  href: "/portofolio/",
   text: "Portofolio klien"
 }, {
   href: "/perusahaan/karir/",
@@ -91,8 +91,8 @@ export const footerQuickLinksData = [{
   href: "/blog/",
   text: "Blog"
 }, {
-  href: "/kontak/",
-  text: "Kontak"
+  href: "/bantuan/",
+  text: "Bantuan"
 }];
 
 // footer baris legal — link kebijakan hukum
