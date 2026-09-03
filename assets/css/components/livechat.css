@@ -610,18 +610,21 @@
 
 .livechat-widget .chat-input textarea {
   flex: 1;
-  padding: 8px 14px;
+  padding: 10px 14px;
   border-radius: 24px;
   border: 1px solid #e2e8f0;
   outline: none;
   font-size: 14px;
   min-width: 0;
   font-family: inherit;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   line-height: 1.4;
   resize: none;
   background: #f8fafc;
   color: #0f172a;
+  box-sizing: border-box;
+  height: 40px;
+  overflow-y: hidden;
 }
 
 .livechat-widget .chat-input textarea:focus {

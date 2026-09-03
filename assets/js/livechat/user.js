@@ -258,8 +258,8 @@ function openModal() {
   const savedDraft = localStorage.getItem('livechat_user_draft');
   input.value = savedDraft || '';
   setTimeout(() => {
-    input.style.height = '1px';
-    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+    input.style.height = '';
+    input.style.height = Math.min(input.scrollHeight + 2, 100) + 'px';
   }, 10);
   initializeChatModules();
   if (needsNewAgent) {
@@ -369,6 +369,7 @@ async function sendMessage(attachmentUrl = null) {
     return;
   }
   input.value = '';
+  input.style.height = '';
   input.disabled = true;
   sendBtn.disabled = true;
   isWaiting = true;
@@ -504,9 +505,9 @@ if (sendBtn) {
 }
 if (input) {
   input.addEventListener('input', function(e) {
-    // Auto-resize textarea (set to 1px first to force shrink calculation)
-    this.style.height = '1px';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    // Auto-resize textarea
+    this.style.height = '';
+    this.style.height = Math.min(this.scrollHeight + 2, 100) + 'px';
 
     // Simpan draft agar tidak hilang
     localStorage.setItem('livechat_user_draft', this.value);
