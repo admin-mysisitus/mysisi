@@ -2,50 +2,6 @@
 /* Import common interactions dan tambahkan logic spesifik perusahaan */
 document.addEventListener('DOMContentLoaded', function() {
   'use strict';
-  // ========== STAT COUNTER ANIMATION ==========
-  const statsSection = document.querySelector('.company-highlight-section');
-  const statBoxes = document.querySelectorAll('.metric-list-item');
-  let hasAnimated = false;
-  const animateStats = () => {
-    if (hasAnimated || !statsSection) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !hasAnimated) {
-          hasAnimated = true;
-          statBoxes.forEach(box => {
-            const span = box.querySelector('.metric-number');
-            if (!span) return;
-            const text = span.textContent.trim();
-            const numMatch = text.match(/(\d+)/);
-            if (!numMatch) return;
-            const finalValue = numMatch[1];
-            const isPercentage = text.includes('%');
-            const isPlus = text.includes('+');
-            const finalNum = parseInt(finalValue);
-            let currentNum = 0;
-            // If the number is small (e.g. 7), increment by 1. Otherwise split it up.
-            const increment = Math.max(1, Math.ceil(finalNum / 30));
-            const duration = 1500; // 1.5 seconds for animation
-            const stepTime = duration / (finalNum / increment);
-            const counter = setInterval(() => {
-              currentNum += increment;
-              if (currentNum >= finalNum) {
-                currentNum = finalNum;
-                clearInterval(counter);
-              }
-              const display = isPercentage ? currentNum + '%' : (isPlus ? currentNum + '+' : currentNum);
-              span.textContent = display;
-            }, stepTime);
-          });
-          observer.disconnect();
-        }
-      });
-    }, {
-      threshold: 0.5
-    });
-    observer.observe(statsSection);
-  };
-  animateStats();
   // ========== NAVIGATE CARDS INTERACTION ==========
   const navigateCards = document.querySelectorAll('.navigate-card');
   navigateCards.forEach(card => {
@@ -272,6 +228,178 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+
+  // --- MERGED FROM TENTANG.JS ---
+
+  
+  // ========== TIMELINE INTERACTIVE ==========
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  timelineItems.forEach((item, index) => {
+    const content = item.querySelector('.timeline-content');
+    item.addEventListener('click', function() {
+      const year = this.querySelector('.timeline-date')?.textContent || 'Unknown';
+      if (content) {
+        const isExpanded = this.classList.contains('expanded');
+        content.style.maxHeight = isExpanded ? '' : content.scrollHeight + 'px';
+        this.classList.toggle('expanded');
+      }
+    });
+    // Keyboard accessibility
+    item.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+    // Add animation
+    item.style.animation = `slideInUp 0.6s ease-out ${index * 0.1}s both`;
+  });
+  // ========== VALUES EXPANDED INTERACTION ==========
+  const valueExpandedCards = document.querySelectorAll('.value-expanded');
+  valueExpandedCards.forEach(card => {
+    const valueNumber = card.querySelector('.value-number');
+    card.addEventListener('mouseenter', function() {
+      if (valueNumber) {
+        valueNumber.style.transform = 'scale(1.2) rotate(-5deg)';
+      }
+    });
+    card.addEventListener('mouseleave', function() {
+      if (valueNumber) {
+        valueNumber.style.transform = 'scale(1) rotate(0deg)';
+      }
+    });
+  });
+  // ========== CTA BUTTONS INTERACTION ==========
+  // Auto-initialized by HeroComponent.initAll() - no manual setup needed
+  // CTA buttons akan mendapatkan hover effects, animations, dan ripple effect secara otomatis
+  // ========== TEAM MEMBER CARD INTERACTION ==========
+  const teamCards = document.querySelectorAll('.team-card');
+  teamCards.forEach(card => {
+    // Hover effect
+    if (!isTouch()) {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px)';
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    }
+  });
+  // ========== PARTNER COMPANY SHOWCASE ==========
+  // Hover effects untuk partner cards sudah ditangani oleh CSS
+  const partnerImages = document.querySelectorAll('.partner-image');
+  partnerImages.forEach(partner => {
+    partner.addEventListener('click', function() {
+      const overlay = this.querySelector('.partner-overlay');
+      if (overlay && isTouch()) {
+        overlay.style.opacity = overlay.style.opacity === '1' ? '0' : '1';
+      }
+    });
+  });
+  // ========== COLLABORATION & CTA BUTTONS ==========
+  const collaborationBtns = document.querySelectorAll('.collaboration-section .btn');
+  collaborationBtns.forEach((btn, index) => {
+    btn.addEventListener('click', function(e) {
+      // Only handle partnership button with WhatsApp redirect
+      if (index === 0 && (!this.getAttribute('href') || this.getAttribute('href') === '/bantuan/')) {
+        e.preventDefault();
+        const message = 'Saya tertarik untuk berkolaborasi dengan SISITUS';
+        window.open('https://wa.me/6281215289095?text=' + encodeURIComponent(message), '_blank');
+      }
+      // Career link navigates normally to /perusahaan/karir/
+    });
+  });
+  // ========== TIMELINE CONTENT MAX-HEIGHT ==========
+  // Set initial max-height for non-expanded timeline items
+  timelineItems.forEach(item => {
+    const content = item.querySelector('.timeline-content');
+    if (content && !item.classList.contains('expanded')) {
+      content.style.maxHeight = content.scrollHeight + 'px';
+    }
+  });
+  // ========== METRICS COUNT UP ANIMATION ==========
+  const metricNumbers = document.querySelectorAll('.metric-number');
+  const animateCountUp = (element) => {
+    const originalText = element.textContent;
+    // Extract numbers, decimal point, and surrounding text
+    const match = originalText.match(/^(.*?)([0-9.]+)(.*?)$/);
+    if (!match) return;
+    const prefix = match[1];
+    const numberText = match[2];
+    const suffix = match[3];
+    const isFloat = numberText.includes('.');
+    const endValue = parseFloat(numberText);
+    const duration = 2500; // Extend duration to 2.5s for better effect
+    let startTime = null;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+      const currentValue = easeProgress * endValue;
+      const displayValue = isFloat ? currentValue.toFixed(1) : Math.floor(currentValue);
+      element.textContent = `${prefix}${displayValue}${suffix}`;
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        element.textContent = originalText; // Ensure exact final text
+      }
+    };
+    element.setAttribute('data-animated', 'true');
+    element.textContent = `${prefix}0${suffix}`; // Start at 0 visually
+    window.requestAnimationFrame(step);
+  };
+  const countUpObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+        // Beri sedikit delay agar terlihat lebih natural
+        setTimeout(() => {
+          animateCountUp(entry.target);
+        }, 200);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.5,
+    rootMargin: "0px 0px -50px 0px"
+  });
+  metricNumbers.forEach(metric => {
+    countUpObserver.observe(metric);
+  });
+  // ========== UTILITY FUNCTIONS ==========
+  function isTouch() {
+    return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+  }
+  // ======================
+  // Sponsor Section (Partners)
+  // ======================
+  const template = document.getElementById("sponsors-template");
+  const row1 = document.getElementById("row1");
+  const row2 = document.getElementById("row2");
+  if (template && row1 && row2) {
+    const trackTemplate = template.content.querySelector(".sponsors-track");
+    if (trackTemplate) {
+      // Ambil semua logo dari template
+      const allLogos = Array.from(trackTemplate.querySelectorAll('img'));
+      // Bagi dua secara berurutan layaknya rantai
+      const halfIndex = Math.ceil(allLogos.length / 2);
+      const logos1 = allLogos.slice(0, halfIndex).map(img => img.outerHTML).join('');
+      const logos2 = allLogos.slice(halfIndex).map(img => img.outerHTML).join('');
+      // Buat track untuk baris 1
+      const track1 = document.createElement('div');
+      track1.className = 'sponsors-track scroll-left';
+      // Repeat genap (misal 6) agar translasi -50% menghasilkan loop mulus tanpa jeda
+      track1.innerHTML = logos1.repeat(6);
+      // Buat track untuk baris 2
+      const track2 = document.createElement('div');
+      track2.className = 'sponsors-track scroll-right';
+      track2.innerHTML = logos2.repeat(6);
+      // Masukkan ke DOM
+      row1.appendChild(track1);
+      row2.appendChild(track2);
+    }
+  }
+
 });
 // ========== ANIMATION KEYFRAMES (injected via script) ==========
 const perusahaanStyle = document.createElement('style');
@@ -298,3 +426,29 @@ perusahaanStyle.textContent = `
   }
 `;
 document.head.appendChild(perusahaanStyle);
+const tentangStyle = document.createElement('style');
+tentangStyle.textContent = `
+  @keyframes spin {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+    }
+    25% {
+      transform: scale(1.15) rotate(-15deg);
+    }
+    50% {
+      transform: scale(1.2) rotate(5deg);
+    }
+    75% {
+      transform: scale(1.15) rotate(-5deg);
+    }
+  }
+
+  /* slideInUp, slideInLeft, dan ripple keyframes sudah di-handle oleh HeroComponent */
+  /* @keyframes slideInUp digunakan untuk CTA buttons animation */
+  /* @keyframes ripple digunakan untuk CTA buttons ripple effect */
+
+  .value-expanded .value-number {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+`;
+document.head.appendChild(tentangStyle);
