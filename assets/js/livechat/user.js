@@ -267,7 +267,7 @@ function openModal() {
       messageRenderer?.clear();
     }
     initialSpinnerRemoved = false;
-    messageRenderer?.addSystemMessage('<i class="fas fa-circle-notch fa-spin"></i> Menghubungi tim kami...');
+    messageRenderer?.addSystemMessage('<i class="livechat-custom-spinner"></i> Menghubungi tim kami...');
     setTimeout(() => {
       syncEngine?.startSync(conversationId, 'user');
       assignedAgent = currentAgent.name;

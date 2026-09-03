@@ -951,3 +951,21 @@
   font-size: 22px;
 }
 
+/* Custom Round Spinner Animation */
+.livechat-widget .livechat-custom-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top-color: currentColor;
+  border-left-color: currentColor;
+  border-radius: 50%;
+  animation: livechat-custom-spin 0.75s linear infinite;
+  margin-right: 6px;
+  vertical-align: -2px;
+}
+
+@keyframes livechat-custom-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
