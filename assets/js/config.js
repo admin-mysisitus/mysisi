@@ -53,6 +53,11 @@ export const menuData = [{
   text: "Bantuan",
   icon: "fas fa-life-ring"
 }, {
+  href: "/promo/",
+  text: "Promo",
+  icon: "fas fa-gift",
+  isPromo: true
+}, {
   text: "Login",
   href: EnvHelper.getDomainUrl('my', '/auth/'),
   icon: "fas fa-sign-in-alt",
