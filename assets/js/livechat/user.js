@@ -222,6 +222,16 @@ function openModal() {
   }
   chatModal.style.display = 'flex';
   modalOverlay.style.display = 'block';
+  
+  // Kembalikan posisi scroll setelah modal terbuka (karena tidak bisa di-set saat display: none)
+  if (messages) {
+    const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
+    if (savedScrollPos !== null) {
+      messages.scrollTop = parseInt(savedScrollPos, 10);
+    } else {
+      messages.scrollTop = messages.scrollHeight;
+    }
+  }
   if (chatHeader) {
     chatHeader.classList.remove('loaded');
   }

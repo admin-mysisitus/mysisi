@@ -74,6 +74,9 @@ class MessageRenderer {
 
     // Event listener scroll pada kontainer chat
     this.container._lcScrollHandler = () => {
+      // Simpan posisi scroll ke localStorage agar tidak hilang saat pindah halaman
+      localStorage.setItem('livechat_scroll_pos', this.container.scrollTop);
+
       // Tombol hanya muncul jika ada scroll (scrollable) DAN tidak sedang di area bawah (300px)
       const scrollableHeight = this.container.scrollHeight - this.container.clientHeight;
       const isScrollable = scrollableHeight > 0;
@@ -142,9 +145,18 @@ class MessageRenderer {
     }
 
     // Conditional scroll (FIX #7: Only if needed)
-    if (shouldScroll) {
+    if (isInitialLoad) {
+      const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
+      if (savedScrollPos !== null) {
+        setTimeout(() => {
+          this.container.scrollTop = parseInt(savedScrollPos, 10);
+        }, 10);
+      } else {
+        this.scrollToBottom();
+      }
+    } else if (shouldScroll) {
       this.scrollToBottom();
-    } else if (this.scrollBtn && !isInitialLoad) {
+    } else if (this.scrollBtn) {
       // Highlight button if new messages arrive while scrolled up
       this.scrollBtn.style.display = 'flex';
       this.scrollBtn.style.color = '#ef4444'; // Red color
@@ -347,6 +359,7 @@ class MessageRenderer {
    */
   clear() {
     this.container.innerHTML = '';
+    localStorage.removeItem('livechat_scroll_pos');
     this.elementCache.clear();
     this.renderedIds.clear();
   }
