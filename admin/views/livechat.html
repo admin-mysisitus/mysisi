@@ -67,7 +67,7 @@
       <div id="chatBox" class="lc-chat-box"></div>
       <div class="lc-input-area input-area">
         <div id="quickReplyPopup" class="quick-reply-popup"></div>
-        <input type="text" id="replyInput" class="lc-reply-input" placeholder="'/' untuk balas cepat..." aria-label="Pesan balasan">
+        <textarea id="replyInput" class="lc-reply-input" rows="1" placeholder="'/' untuk balas cepat..." aria-label="Pesan balasan" style="resize: none; min-height: 38px; max-height: 120px; overflow-y: auto;"></textarea>
         <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" aria-label="Pilih dokumen">
         <button id="aiSuggestBtn" class="admin-btn lc-attach-btn" title="Buat Draf dengan AI Copilot" aria-label="Tanya AI"><i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i></button>
         <button id="attachBtn" class="admin-btn lc-attach-btn attach-btn" title="Kirim File" aria-label="Kirim Lampiran"><i class="fas fa-paperclip" style="font-size: 1.1rem;"></i></button>
@@ -116,18 +116,8 @@
           <input type="email" id="cfgTargetEmail" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="admin@domain.com">
         </div>
         <div class="form-group">
-          <label for="cfgApiKeys" style="font-weight: 600; font-size: 0.9rem;">API Keys (Pisahkan dengan koma)</label>
-          <input type="text" id="cfgApiKeys" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="gsk_123, gsk_456">
-        </div>
-        <div style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;">
-            <label for="cfgApiUrl" style="font-weight: 600; font-size: 0.9rem;">API URL</label>
-            <input type="text" id="cfgApiUrl" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="https://api.groq.com/...">
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="cfgAiModel" style="font-weight: 600; font-size: 0.9rem;">Model AI</label>
-            <input type="text" id="cfgAiModel" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="llama3-8b-8192">
-          </div>
+          <label for="cfgAiModel" style="font-weight: 600; font-size: 0.9rem;">Model AI</label>
+          <input type="text" id="cfgAiModel" class="lc-reply-input" style="width: 100%; margin-top: 4px;" placeholder="@cf/meta/llama-3.1-8b-instruct">
         </div>
         <div class="form-group">
           <label for="cfgPrompt" style="font-weight: 600; font-size: 0.9rem;">Instruksi Dasar (System Prompt)</label>

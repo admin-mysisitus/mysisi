@@ -37,6 +37,7 @@ var lastQuickReplyFilter = null;
 // ============================================================================
 function initializeChatModules() {
   messageRenderer = new MessageRenderer('#chatBox');
+  messageRenderer.roomId = activeRoom;
   messageStore = new MessageStore(messageRenderer);
   syncEngine = new SyncEngine(messageStore, messageRenderer, {
     sessionCache: sessionCache,
@@ -54,7 +55,7 @@ function initializeChatModules() {
       messageStore.upsertMessage(msg);
     });
     const sortedMessages = messageStore.getSortedMessages();
-    messageRenderer?.render(sortedMessages, {
+    messageRenderer?.renderMessages(sortedMessages, {
       type: userType
     });
   }
@@ -102,8 +103,14 @@ function handleTypingIndicator(isTyping) {
       indicator.className = 'message system-message typing-indicator';
       indicator.innerHTML = `<span class="typing-text">User is typing</span> <img src="/assets/img/livechat/dots-typing.gif" class="typing-gif" alt="...">`;
       chatBox.appendChild(indicator);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+      
+      // Jangan maksa scroll jika admin sedang di atas
+      const scrollableHeight = chatBox.scrollHeight - chatBox.clientHeight;
+      const distanceFromBottom = scrollableHeight - chatBox.scrollTop;
+      if (distanceFromBottom < 100) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    } // Penutup if (!indicator)
   } else {
     if (indicator) {
       indicator.remove();
@@ -275,7 +282,15 @@ function selectRoom(roomId) {
   if (activeRoomElement) {
     activeRoomElement.remove();
   }
-  if (replyInput) replyInput.focus();
+  if (replyInput) {
+    const savedDraft = localStorage.getItem(`livechat_admin_draft_${roomId}`);
+    replyInput.value = savedDraft || '';
+    setTimeout(() => {
+      replyInput.style.height = '1px';
+      replyInput.style.height = Math.min(replyInput.scrollHeight, 120) + 'px';
+    }, 10);
+    replyInput.focus();
+  }
   
   // Set Auto-Pilot toggle state for this room
   const apToggle = document.getElementById('aiAutoPilotToggle');
@@ -324,6 +339,10 @@ async function sendReply(attachmentUrl = null) {
       throw new Error('Failed to enqueue message');
     }
     replyInput.value = '';
+    replyInput.style.height = '38px';
+    if (activeRoom) {
+      localStorage.removeItem(`livechat_admin_draft_${activeRoom}`);
+    }
     replyInput.focus();
   } catch (error) {
     console.error('Error sending message:', error);
@@ -445,6 +464,9 @@ if (aiSuggestBtn) {
   aiSuggestBtn.addEventListener('click', async () => {
     if (!activeRoom) return;
     
+    // Prevent double clicking by checking if already drafting
+    if (aiSuggestBtn.disabled) return;
+    
     aiSuggestBtn.disabled = true;
     aiSuggestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     replyInput.placeholder = "AI sedang berpikir...";
@@ -453,7 +475,7 @@ if (aiSuggestBtn) {
        const res = await fetch('https://livechat.sisitusdotcom.workers.dev/', {
            method: "POST",
            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-           body: `action=generateAIReply&roomId=${activeRoom}&force=true`
+           body: `action=draftAIReply&roomId=${activeRoom}&force=true`
        });
        
        const resData = await res.json();
@@ -461,14 +483,18 @@ if (aiSuggestBtn) {
            console.error("AI Error:", resData);
            alert("Gagal memanggil AI: " + (resData.message || resData.details || "Kesalahan tidak diketahui"));
            messageRenderer?.addSystemMessage('❌ Gagal memanggil AI: ' + (resData.message || ''));
+       } else if (resData.draft) {
+           // Masukkan draft ke dalam kotak input text admin
+           replyInput.value = resData.draft;
+           // Fokuskan kursor ke input agar admin bisa langsung mengedit
+           replyInput.focus();
        }
-       // Jika sukses, respon akan masuk otomatis lewat Firebase listener (syncEngine)
     } catch(e) {
        console.error('AI Suggest error:', e);
        messageRenderer?.addSystemMessage('❌ Gagal memanggil AI.');
     } finally {
        aiSuggestBtn.disabled = false;
-       aiSuggestBtn.innerHTML = '<i class="fas fa-magic"></i>';
+       aiSuggestBtn.innerHTML = '<i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i>';
        replyInput.placeholder = "Ketik pesan di sini... (tekan Enter untuk mengirim)";
     }
   });
@@ -588,14 +614,10 @@ function initEventHandlers() {
       .then(res => {
         if (res.status === 'success') {
           const cfgTargetEmail = document.getElementById('cfgTargetEmail');
-          const cfgApiKeys = document.getElementById('cfgApiKeys');
-          const cfgApiUrl = document.getElementById('cfgApiUrl');
           const cfgAiModel = document.getElementById('cfgAiModel');
           const cfgPrompt = document.getElementById('cfgPrompt');
 
           if(cfgTargetEmail) cfgTargetEmail.value = res.data.config['Target Email'] || '';
-          if(cfgApiKeys) cfgApiKeys.value = res.data.config['API Keys'] || '';
-          if(cfgApiUrl) cfgApiUrl.value = res.data.config['API URL'] || '';
           if(cfgAiModel) cfgAiModel.value = res.data.config['AI Model'] || '';
           if(cfgPrompt) cfgPrompt.value = res.data.prompt || '';
         }
@@ -613,8 +635,6 @@ function initEventHandlers() {
       const payload = {
         config: {
           "Target Email": document.getElementById('cfgTargetEmail') ? document.getElementById('cfgTargetEmail').value : '',
-          "API Keys": document.getElementById('cfgApiKeys') ? document.getElementById('cfgApiKeys').value : '',
-          "API URL": document.getElementById('cfgApiUrl') ? document.getElementById('cfgApiUrl').value : '',
           "AI Model": document.getElementById('cfgAiModel') ? document.getElementById('cfgAiModel').value : ''
         },
         prompt: document.getElementById('cfgPrompt') ? document.getElementById('cfgPrompt').value : ''
@@ -685,7 +705,16 @@ function initEventHandlers() {
     }
   });
   if (replyInput) {
-    replyInput.addEventListener('input', () => {
+    replyInput.addEventListener('input', function(e) {
+      // Auto-resize textarea (set to 1px first to force shrink calculation)
+      this.style.height = '1px';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+
+      // Simpan draft per room
+      if (activeRoom) {
+        localStorage.setItem(`livechat_admin_draft_${activeRoom}`, this.value);
+      }
+
       // Quick Reply Logic
       const val = replyInput.value;
       const popup = document.getElementById('quickReplyPopup');
@@ -752,6 +781,21 @@ function initEventHandlers() {
         }
       }
       if (e.key === 'Enter') {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          // Di ponsel: Enter = Baris Baru (default textarea)
+          return;
+        }
+
+        // Di Desktop:
+        if (e.shiftKey) {
+          // Shift+Enter = Baris Baru
+          return;
+        }
+
+        // Enter saja = Kirim Pesan
+        e.preventDefault();
+        
         if (typingTimeout) clearTimeout(typingTimeout);
         if (window.firebaseHelpers) {
           const {
@@ -763,6 +807,7 @@ function initEventHandlers() {
           isTypingRefActive = false;
         }
         sendReply(null);
+        replyInput.style.height = 'auto'; // Reset height
       }
     });
   }

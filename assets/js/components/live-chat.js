@@ -32,7 +32,7 @@ window.addEventListener("load", async () => {
       </div>
       <div class="chat-messages" id="messages"></div>
       <div class="chat-input">
-        <input type="text" id="input" placeholder="Tulis pesan..." aria-label="Pesan Anda">
+        <textarea id="input" rows="1" placeholder="Tulis pesan..." aria-label="Pesan Anda" style="resize: none; min-height: 38px; max-height: 100px; overflow-y: auto;"></textarea>
         <input type="file" id="fileInput" style="display: none;" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
           aria-label="Pilih dokumen">
         <button id="attachBtn" class="attach-btn" title="Kirim File" aria-label="Kirim Lampiran Dokumen"><i

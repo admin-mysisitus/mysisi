@@ -52,6 +52,7 @@ function initializeChatModules() {
   if (messageStore) return;
   // Create renderer (idempotent DOM updates)
   messageRenderer = new MessageRenderer('#messages');
+  messageRenderer.roomId = conversationId;
   // Create message store (single source of truth) - pass renderer for ID tracking
   messageStore = new MessageStore(messageRenderer);
   // Create sync engine (polling & reconciliation)
@@ -77,7 +78,7 @@ function initializeChatModules() {
     });
     // Render cache immediately
     const sortedMessages = messageStore.getSortedMessages();
-    messageRenderer?.render(sortedMessages, {
+    messageRenderer?.renderMessages(sortedMessages, {
       type: userType
     });
     recalculateUnread();
@@ -253,7 +254,13 @@ function openModal() {
     input.disabled = true;
     sendBtn.disabled = true;
   }
-  input.value = '';
+  // Restore draft if any
+  const savedDraft = localStorage.getItem('livechat_user_draft');
+  input.value = savedDraft || '';
+  setTimeout(() => {
+    input.style.height = '1px';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  }, 10);
   initializeChatModules();
   if (needsNewAgent) {
     if (isFirstTimeUser) {
@@ -410,11 +417,18 @@ async function sendMessage(attachmentUrl = null) {
 // DOM EVENT HANDLERS
 // ============================================================================
 if (chatBtn) {
-  chatBtn.addEventListener('click', openModal);
+  chatBtn.addEventListener('click', () => {
+    // Toggle: Tutup jika sedang terbuka, buka jika sedang tertutup
+    if (chatModal && (chatModal.style.display === 'flex' || chatModal.style.display === 'block')) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  });
 }
 if (modalOverlay) {
   modalOverlay.addEventListener('click', () => {
-    // Don't close on click outside, just to be safe
+    closeModal(); // Tutup saat klik di luar kotak obrolan
   });
 }
 // File Upload Handlers
@@ -489,7 +503,15 @@ if (sendBtn) {
   });
 }
 if (input) {
-  input.addEventListener('input', () => {
+  input.addEventListener('input', function(e) {
+    // Auto-resize textarea (set to 1px first to force shrink calculation)
+    this.style.height = '1px';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+
+    // Simpan draft agar tidak hilang
+    localStorage.setItem('livechat_user_draft', this.value);
+
+    resetInactiveTimer();
     if (!conversationId) return;
     const {
       ref,
@@ -503,17 +525,36 @@ if (input) {
       set(typingRef, false);
     }, 2000);
   });
-  input.addEventListener('keypress', (e) => {
+  input.addEventListener('keydown', (e) => {
     resetInactiveTimer();
-    if (e.key === 'Enter' && !isWaiting) {
-      if (typingTimeout) clearTimeout(typingTimeout);
-      const {
-        ref,
-        set
-      } = window.firebaseHelpers;
-      const db = window.firebaseDB;
-      set(ref(db, `rooms/${conversationId}/typing/user`), false);
-      sendMessage(null);
+    const isMobile = window.innerWidth <= 768;
+
+    if (e.key === 'Enter') {
+      if (isMobile) {
+        // Di ponsel: Enter = Baris Baru (default textarea)
+        return;
+      }
+
+      // Di Desktop:
+      if (e.shiftKey) {
+        // Shift+Enter = Baris Baru
+        return;
+      }
+
+      // Enter saja = Kirim Pesan
+      e.preventDefault();
+      if (!isWaiting && input.value.trim().length > 0) {
+        if (typingTimeout) clearTimeout(typingTimeout);
+        const {
+          ref,
+          set
+        } = window.firebaseHelpers;
+        const db = window.firebaseDB;
+        set(ref(db, `rooms/${conversationId}/typing/user`), false);
+        sendMessage(null);
+        input.style.height = '38px'; // Reset height
+        localStorage.removeItem('livechat_user_draft'); // Hapus draft
+      }
     }
   });
 }
