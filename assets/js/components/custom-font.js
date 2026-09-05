@@ -1,4 +1,3 @@
-// Aplikasikan Style Khusus untuk Teks "sisitus.com"
 const applySisitusComFont = (root = document.body) => {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes = [];
@@ -35,9 +34,7 @@ const applySisitusComFont = (root = document.body) => {
     node.parentNode.replaceChild(frag, node);
   }
 };
-// Jalankan pertama kali untuk seluruh halaman
 applySisitusComFont(document.body);
-// Pasang observer untuk elemen baru yang dimuat secara dinamis
 const textObserver = new MutationObserver(mutations => {
   for (const mutation of mutations) {
     for (const node of mutation.addedNodes) {

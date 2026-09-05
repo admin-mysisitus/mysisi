@@ -1,16 +1,3 @@
-/**
- * ============================================================================
- * MessageRenderer.js - Idempotent DOM Rendering
- * ============================================================================
- * 
- * Renders message state to DOM with:
- * - Idempotent updates (safe to replay)
- * - Deduplication by message ID
- * - Minimal DOM operations
- * - Caching of message elements
- * 
- * NO STATE MANAGEMENT - read-only view of messageStore
- */
 class MessageRenderer {
   constructor(containerSelector) {
     this.container = document.querySelector(containerSelector);
@@ -18,25 +5,19 @@ class MessageRenderer {
       console.log(`Container not found: ${containerSelector}`);
       return;
     }
-    // Cache message elements by ID for O(1) lookups
     this.elementCache = new Map();
-    // Track rendered message IDs
     this.renderedIds = new Set();
-    // Hapus tombol lama jika komponen diinisialisasi ulang (mencegah duplikasi)
     const oldBtn = this.container.parentElement.querySelector('.lc-scroll-bottom-btn');
     if (oldBtn) {
       oldBtn.remove();
     }
-    // Hapus event listener lama di kontainer jika ada
     if (this.container._lcScrollHandler) {
       this.container.removeEventListener('scroll', this.container._lcScrollHandler);
     }
-    // Inisiasi Tombol Scroll to Bottom
     this.scrollBtn = document.createElement('button');
     this.scrollBtn.className = 'lc-scroll-bottom-btn';
     this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
     this.scrollBtn.title = 'Ke pesan terbaru';
-    // Gunakan inline styling agar praktis dan tidak bergantung CSS eksternal
     Object.assign(this.scrollBtn.style, {
       position: 'absolute',
       bottom: '90px', // Jarak aman di atas area input
@@ -60,15 +41,11 @@ class MessageRenderer {
       this.container.parentElement.style.position = 'relative';
     }
     this.container.parentElement.appendChild(this.scrollBtn);
-    // Event listener ketika tombol ditekan
     this.scrollBtn.addEventListener('click', () => {
       this.scrollToBottom(true);
     });
-    // Event listener scroll pada kontainer chat
     this.container._lcScrollHandler = () => {
-      // Simpan posisi scroll ke localStorage agar tidak hilang saat pindah halaman
       localStorage.setItem('livechat_scroll_pos', this.container.scrollTop);
-      // Tombol hanya muncul jika ada scroll (scrollable) DAN tidak sedang di area bawah (300px)
       const scrollableHeight = this.container.scrollHeight - this.container.clientHeight;
       const isScrollable = scrollableHeight > 0;
       const distanceFromBottom = scrollableHeight - this.container.scrollTop;
@@ -82,24 +59,12 @@ class MessageRenderer {
     };
     this.container.addEventListener('scroll', this.container._lcScrollHandler);
   }
-  // ========================================
-  // RENDERING OPERATIONS
-  // ========================================
-  /**
-   * Render messages from store (INITIAL LOAD ONLY)
-   * CRITICAL: This does a full initial render on page load
-   * Subsequent polling uses addMessages() for incremental rendering
-   * @param {Array} messages - Array of message objects (sorted by createdAt)
-   * @param {Object} currentUser - Current user info {id, type}
-   */
   renderMessages(messages, currentUser = {
     type: "user"
   }) {
     if (!messages || messages.length === 0) {
       return;
     }
-    // SAFETY: Detect and remove duplicate message IDs within the batch
-    // This can happen if messageIdOrder gets corrupted somehow
     const seenIds = new Set();
     const deduplicatedMessages = [];
     for (const msg of messages) {
@@ -108,15 +73,12 @@ class MessageRenderer {
         deduplicatedMessages.push(msg);
       } else {}
     }
-    // Only render messages not yet in DOM (incremental approach)
     const newMessages = deduplicatedMessages.filter(msg => !this.renderedIds.has(msg.id));
     if (newMessages.length === 0) {
       return; // Nothing new to render
     }
-    // Check if we should auto-scroll (FIX #6)
     const shouldScroll = this._shouldAutoScroll();
     const isInitialLoad = (this.renderedIds.size === 0);
-    // Build fragment with only new messages
     const fragment = document.createDocumentFragment();
     newMessages.forEach(message => {
       const msgEl = this._createMessageElement(message, currentUser);
@@ -126,12 +88,10 @@ class MessageRenderer {
         this.renderedIds.add(message.id);
       }
     });
-    // Append all new messages at once (FIX #4: Incremental, not bulk)
     if (fragment.children.length > 0) {
       this.container.appendChild(fragment);
       this._applyGrouping();
     }
-    // Conditional scroll (FIX #7: Only if needed)
     if (isInitialLoad) {
       const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
       if (savedScrollPos !== null) {
@@ -144,32 +104,24 @@ class MessageRenderer {
     } else if (shouldScroll) {
       this.scrollToBottom();
     } else if (this.scrollBtn) {
-      // Highlight button if new messages arrive while scrolled up
       this.scrollBtn.style.display = 'flex';
       this.scrollBtn.style.color = '#ef4444'; // Red color
       this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
     }
   }
-  /**
-   * Add single message (for buffered rendering)
-   * Called from syncEngine during polling with batched messages
-   */
   addMessage(message, currentUser = {
     type: "user"
   }) {
     if (!message || !message.id) {
       return null;
     }
-    // Skip if already rendered
     if (this.renderedIds.has(message.id)) {
-      // Already in DOM, just update
       const existing = this.elementCache.get(message.id);
       if (existing) {
         this._updateMessageElement(existing, message, currentUser);
       }
       return existing;
     }
-    // Create and append new element
     const msgEl = this._createMessageElement(message, currentUser);
     if (!msgEl) {
       return null;
@@ -179,30 +131,22 @@ class MessageRenderer {
     this.renderedIds.add(message.id);
     return msgEl;
   }
-  /**
-   * Add multiple messages (FIX #4 + #7: Incremental batch render)
-   * Only renders NEW messages, auto-scroll is conditional
-   */
   addMessages(messages, currentUser = {
     type: "user"
   }) {
     if (!messages || messages.length === 0) {
       return;
     }
-    // Check scroll position BEFORE adding messages
     const shouldScroll = this._shouldAutoScroll();
-    // Add each message with duplicate detection
     const fragment = document.createDocumentFragment();
     const processedIds = new Set();
     let addedCount = 0;
     messages.forEach(message => {
       if (!message || !message.id) return;
-      // Skip duplicates within this batch (safety check)
       if (processedIds.has(message.id)) {
         return;
       }
       processedIds.add(message.id);
-      // Skip already rendered
       if (this.renderedIds.has(message.id)) {
         return;
       }
@@ -214,50 +158,31 @@ class MessageRenderer {
         addedCount++;
       }
     });
-    // Append all at once
     if (fragment.children.length > 0) {
       this.container.appendChild(fragment);
       this._applyGrouping();
     }
-    // Conditional auto-scroll (FIX #7)
     if (addedCount > 0) {
       if (shouldScroll) {
         this.scrollToBottom();
       } else if (this.scrollBtn) {
-        // Highlight button if a new message arrives while scrolled up
         this.scrollBtn.style.display = 'flex';
         this.scrollBtn.style.color = '#ef4444'; // Red color
         this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
       }
     }
   }
-  /**
-   * Check if auto-scroll should happen (FIX #6)
-   * Only scroll if user is already near bottom
-   * @returns {boolean} True if should auto-scroll
-   */
   _shouldAutoScroll() {
     const scrollableHeight = this.container.scrollHeight - this.container.clientHeight;
     const currentScroll = this.container.scrollTop;
     const distanceFromBottom = scrollableHeight - currentScroll;
-    // Only auto-scroll if user is within 100px of bottom
     return distanceFromBottom < 100;
   }
-  /**
-   * Scroll to bottom (internal helper)
-   */
   _scrollToBottom() {
     try {
       this.container.scrollTop = this.container.scrollHeight;
-    } catch (e) {
-      // Scroll might fail if container is not visible
-    }
+    } catch (e) {}
   }
-  /**
-   * Add single message (incremental)
-   * @param {Object} message - Message object
-   * @param {Object} currentUser - Current user info
-   */
   addMessage(message, currentUser = {
     type: "user"
   }) {
@@ -265,48 +190,37 @@ class MessageRenderer {
       return null;
     }
     const messageId = message.id;
-    // STRICT RENDER CHECK 1: Already rendered?
     if (this.renderedIds.has(messageId)) {
       const cached = this.elementCache.get(messageId);
       if (cached && this.container.contains(cached)) {
-        // Element exists, just update status if needed
         this._updateMessageElement(cached, message, currentUser);
         return cached;
       }
     }
-    // STRICT RENDER CHECK 2: Check if in DOM by data attribute
     const existingEl = this.container.querySelector(`[data-message-id="${this._sanitize(messageId)}"]`);
     if (existingEl) {
       this.elementCache.set(messageId, existingEl);
       this.renderedIds.add(messageId);
       return existingEl;
     }
-    // Create and append new message element
     const msgEl = this._createMessageElement(message, currentUser);
     if (!msgEl) {
       return null;
     }
-    // Check scroll position BEFORE adding message
     const shouldScroll = this._shouldAutoScroll();
-    // Append and cache
     this.container.appendChild(msgEl);
     this.elementCache.set(messageId, msgEl);
     this.renderedIds.add(messageId);
     this._applyGrouping();
-    // Conditional auto-scroll
     if (shouldScroll) {
       this.scrollToBottom();
     } else if (this.scrollBtn) {
-      // Highlight button if a new message arrives while scrolled up
       this.scrollBtn.style.display = 'flex';
       this.scrollBtn.style.color = '#ef4444'; // Red color
       this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
     }
     return msgEl;
   }
-  /**
-   * Scroll to bottom of message container
-   */
   scrollToBottom(smooth = false) {
     if (!this.container) {
       return;
@@ -320,10 +234,6 @@ class MessageRenderer {
       this.container.scrollTop = this.container.scrollHeight;
     }
   }
-  /**
-   * Add system message
-   * @param {string} html - HTML content
-   */
   addSystemMessage(html) {
     if (!this.container) {
       return null;
@@ -338,18 +248,12 @@ class MessageRenderer {
     this.scrollToBottom();
     return sys;
   }
-  /**
-   * Clear all messages
-   */
   clear() {
     this.container.innerHTML = '';
     localStorage.removeItem('livechat_scroll_pos');
     this.elementCache.clear();
     this.renderedIds.clear();
   }
-  /**
-   * Apply grouping classes to consecutive messages from the same sender
-   */
   _applyGrouping() {
     if (!this.container) return;
     const messages = Array.from(this.container.children).filter(el => el.classList.contains('message') && !el.classList.contains('system-message') && !el.classList.contains('typing-indicator'));
@@ -364,12 +268,6 @@ class MessageRenderer {
       prevKey = key;
     });
   }
-  // ========================================
-  // INTERNAL DOM CREATION
-  // ========================================
-  /**
-   * Create message DOM element
-   */
   _createMessageElement(message, currentUser) {
     if (!message || !message.id) {
       return null;
@@ -378,13 +276,10 @@ class MessageRenderer {
     msg.classList.add('message', message.sender === 'admin' ? 'agent' : 'user');
     msg.setAttribute('data-message-id', this._sanitize(message.id));
     msg.setAttribute('data-created-at', message.createdAt);
-    // Add sender key for grouping logic
     const senderKey = message.sender === 'admin' ? ('admin-' + (message.agent ? message.agent.trim() : 'Admin')) : 'user';
     msg.setAttribute('data-sender-key', this._sanitize(senderKey));
-    // Content container
     const msgContent = document.createElement('div');
     msgContent.classList.add('msg-content');
-    // Agent name tag (NOW OUTSIDE BUBBLE)
     let nameTag = null;
     if (message.sender === 'admin') {
       nameTag = document.createElement('div');
@@ -392,7 +287,6 @@ class MessageRenderer {
       const agentDisplay = message.agent && message.agent.trim() ? message.agent : 'Admin';
       nameTag.textContent = this._sanitize(agentDisplay);
     }
-    // Message text (if any)
     if (message.message && message.message.trim().length > 0) {
       const textNode = document.createElement('div');
       textNode.classList.add('msg-text');
@@ -400,14 +294,12 @@ class MessageRenderer {
       textNode.innerHTML = this._sanitize(parsedText);
       msgContent.appendChild(textNode);
     }
-    // Attachment
     if (message.attachment) {
       const attachContainer = document.createElement('div');
       attachContainer.classList.add('chat-attachment');
       const rawUrl = message.attachment;
       const isPdf = typeof rawUrl === 'string' && rawUrl.toLowerCase().includes('.pdf');
       if (isPdf) {
-        // For PDF, just show the button
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'btn-view-attachment';
@@ -417,7 +309,6 @@ class MessageRenderer {
         };
         attachContainer.appendChild(btn);
       } else {
-        // For Image, show inline preview fetching base64 asynchronously
         const imgContainer = document.createElement('div');
         imgContainer.style.position = 'relative';
         imgContainer.style.minHeight = '120px';
@@ -443,15 +334,12 @@ class MessageRenderer {
         imgContainer.appendChild(spinner);
         imgContainer.appendChild(img);
         attachContainer.appendChild(imgContainer);
-        // Modal trigger on click
         imgContainer.onclick = () => {
           window.openAttachmentModal(rawUrl, false);
         };
-        // Extract fileId for caching
         let fileId = rawUrl;
         const match = rawUrl.match(/id=([a-zA-Z0-9_-]+)/);
         if (match) fileId = match[1];
-        // Check sessionStorage cache to avoid redundant GAS calls
         const cacheKey = 'img_cache_' + fileId;
         const cached = sessionStorage.getItem(cacheKey);
         if (cached) {
@@ -460,7 +348,6 @@ class MessageRenderer {
           spinner.style.display = 'none';
           imgContainer.style.background = 'transparent';
         } else {
-          // Fetch from GAS proxy
           const urlParams = new URLSearchParams({
             action: 'getFile',
             fileUrl: rawUrl
@@ -486,7 +373,6 @@ class MessageRenderer {
       }
       msgContent.appendChild(attachContainer);
     }
-    // Wrapper for grouping name, bubble, and time
     const msgWrapper = document.createElement('div');
     msgWrapper.classList.add('msg-wrapper');
     if (nameTag) {
@@ -500,22 +386,16 @@ class MessageRenderer {
     msg.appendChild(msgWrapper);
     return msg;
   }
-  /**
-   * Update existing message element
-   * CRITICAL: Only update status icons on messages sent by current user
-   */
   _updateMessageElement(msgEl, message, currentUser) {
     if (!msgEl) {
       return false;
     }
     let changed = false;
-    // Update created-at if different
     const currentCreatedAt = msgEl.getAttribute('data-created-at');
     if (currentCreatedAt !== message.createdAt) {
       msgEl.setAttribute('data-created-at', message.createdAt);
       changed = true;
     }
-    // Update text if different
     const textNode = msgEl.querySelector('.msg-text');
     if (textNode) {
       const parsedText = this._parseNotedTags(message.message);
@@ -526,18 +406,12 @@ class MessageRenderer {
     }
     return changed;
   }
-  /**
-   * Format current time
-   */
   _getCurrentTime() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
   }
-  /**
-   * Sanitize text for display
-   */
   _sanitize(text) {
     if (typeof DOMPurify !== 'undefined') {
       return DOMPurify.sanitize(text, {
@@ -545,25 +419,19 @@ class MessageRenderer {
         ALLOWED_ATTR: ['href', 'target', 'class']
       });
     }
-    // Fallback sangat mendasar jika DOMPurify tidak dimuat
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
-  /**
-   * Parse [Key: Value] into Noted UI
-   */
   _parseNotedTags(text) {
     if (!text || typeof text !== 'string') return text;
     let parsedText = text;
     let waHtml = '';
-    // Tangkap perintah WhatsApp
     if (parsedText.includes('[ACTION: WHATSAPP]')) {
       parsedText = parsedText.replace(/\[ACTION:\s*WHATSAPP\]/gi, '').trim();
       waHtml = `<div class="wa-action-container"><a href="https://wa.me/62882010067695" target="_blank" class="btn-whatsapp-payment"><i class="fab fa-whatsapp"></i> Konfirmasi Pesanan</a></div>`;
     }
     const notedRegex = /\[([^\]]+?):\s*([^\]]+?)\]/g;
-    // Check if there are any matches for Noted Kak
     if (!notedRegex.test(parsedText)) {
       let tempHtml = parsedText.trim();
       if (waHtml) {
@@ -571,7 +439,6 @@ class MessageRenderer {
       }
       return tempHtml.replace(/^(<br\s*\/?>)+/gi, '').trim();
     }
-    // Reset regex index
     notedRegex.lastIndex = 0;
     let hasNotes = false;
     let notesHtml = '<div class="noted-kak-container"><div class="noted-kak-header"><i class="fas fa-clipboard-check"></i> Pesanan Dicatat</div>';
@@ -588,38 +455,21 @@ class MessageRenderer {
     if (waHtml) {
       finalHtml += (finalHtml ? '<br><br>' : '') + waHtml;
     }
-    // Bersihkan sisa <br> di awal jika ada
     return finalHtml.replace(/^(<br\s*\/?>)+/gi, '').trim();
   }
-  // ========================================
-  // QUERY METHODS
-  // ========================================
-  /**
-   * Get rendered message element by ID
-   */
   getMessageElement(messageId) {
     return this.elementCache.get(messageId) || null;
   }
-  /**
-   * Get all rendered message elements
-   */
   getAllMessageElements() {
     return Array.from(this.elementCache.values());
   }
-  /**
-   * Get count of rendered messages
-   */
   getRenderedCount() {
     return this.renderedIds.size;
   }
-  /**
-   * Check if message is rendered
-   */
   isMessageRendered(messageId) {
     return this.renderedIds.has(messageId);
   }
 }
-// Export for use
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = MessageRenderer;
 }

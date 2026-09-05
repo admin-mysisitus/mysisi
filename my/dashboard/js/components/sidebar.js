@@ -1,6 +1,3 @@
-/**
- * Dashboard Sidebar Navigation Component
- */
 export class DashboardSidebar {
   constructor(router) {
     this.router = router;
@@ -75,9 +72,9 @@ export class DashboardSidebar {
           <span class="sidebar-logo-text">SISITUS</span>
         </a>
       </div>
-      
+
       <div class="sidebar-menu-header">MENU UTAMA</div>
-      
+
       <nav class="sidebar-menu">
         ${menuHtml}
       </nav>
@@ -88,14 +85,12 @@ export class DashboardSidebar {
         </div>
       </div>
     `;
-    // Add click handlers
     container.querySelectorAll('.menu-item').forEach(item => {
       item.addEventListener('click', (e) => {
         if (item.dataset.external === 'true') {
           return;
         }
         e.preventDefault();
-        // Auto-close sidebar on mobile
         const sidebar = document.getElementById('sidebar');
         if (sidebar && sidebar.classList.contains('open')) {
           sidebar.classList.remove('open');
@@ -104,16 +99,11 @@ export class DashboardSidebar {
         window.location.hash = '#!' + route;
       });
     });
-    // Update cart badge on cart changes
     this.updateCartBadge();
     window.addEventListener('cart:updated', () => this.updateCartBadge());
-    // Update wishlist badge
     this.updateWishlistBadge();
     window.addEventListener('wishlist:updated', () => this.updateWishlistBadge());
   }
-  /**
-   * Update cart item count badge
-   */
   async updateCartBadge() {
     try {
       const {
@@ -129,13 +119,8 @@ export class DashboardSidebar {
           badge.style.display = 'none';
         }
       }
-    } catch (err) {
-      // CartManager not available, skip silently
-    }
+    } catch (err) {}
   }
-  /**
-   * Update wishlist item count badge
-   */
   async updateWishlistBadge() {
     try {
       const {
@@ -151,13 +136,8 @@ export class DashboardSidebar {
           badge.style.display = 'none';
         }
       }
-    } catch (err) {
-      // Skip silently
-    }
+    } catch (err) {}
   }
-  /**
-   * Set active menu item
-   */
   setActive(route) {
     document.querySelectorAll('.menu-item').forEach(item => {
       item.classList.remove('active');

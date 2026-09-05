@@ -27,7 +27,7 @@ const navElements = {
   header: document.querySelector('header'),
   desktopNav: document.querySelector('.nav-desktop')
 };
-// Helper: Create profile menu item
+
 function createProfileMenuItem(user) {
   const li = document.createElement('li');
   li.className = 'nav-desktop-item nav-desktop-profile';
@@ -42,13 +42,11 @@ function createProfileMenuItem(user) {
   li.appendChild(link);
   return li;
 }
-// Generate Menu Desktop
 const generateDesktopMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-desktop-list';
   const loggedInUser = window.SSO_USER || AuthManager.getCurrentUser();
   menuData.forEach(item => {
-    // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
       return;
     }
@@ -57,7 +55,6 @@ const generateDesktopMenu = () => {
     const link = document.createElement('a');
     link.className = `nav-desktop-link ${item.isPromo ? 'promo-link' : ''} ${item.isAuth ? 'auth-link' : ''}`;
     link.href = item.href;
-    // Tamahkan icon jika ada
     if (item.icon) {
       const iconSpan = document.createElement('span');
       iconSpan.className = 'nav-icon';
@@ -78,7 +75,6 @@ const generateDesktopMenu = () => {
         const subLink = document.createElement('a');
         subLink.className = `dropdown-item ${sub.isParent ? 'dropdown-parent' : ''}`;
         subLink.href = sub.href;
-        // Tambahkan icon untuk dropdown item jika ada
         if (sub.icon) {
           const iconSpan = document.createElement('span');
           iconSpan.className = 'dropdown-icon';
@@ -96,25 +92,21 @@ const generateDesktopMenu = () => {
     }
     list.appendChild(li);
   });
-  // Add profile item if user is logged in
   if (loggedInUser) {
     const profileLi = createProfileMenuItem(loggedInUser);
     list.appendChild(profileLi);
   }
-  // Only append to desktop nav if element exists (not on auth page)
   if (navElements.desktopNav) {
     navElements.desktopNav.appendChild(list);
   } else {
     console.log('[Navigation] .nav-desktop element not found - skipping desktop menu');
   }
 };
-// Generate Menu Mobile
 const generateMobileMenu = () => {
   const list = document.createElement('ul');
   list.className = 'nav-mobile-list';
   const loggedInUser = window.SSO_USER || AuthManager.getCurrentUser();
   menuData.forEach(item => {
-    // Skip login item if user is logged in
     if (item.isAuth && loggedInUser) {
       return;
     }
@@ -126,7 +118,6 @@ const generateMobileMenu = () => {
       const mainLink = document.createElement('a');
       mainLink.className = 'nav-mobile-link';
       mainLink.href = item.dropdown.find(sub => sub.isParent).href;
-      // Tambahkan icon di mobile menu
       if (item.icon) {
         const iconSpan = document.createElement('span');
         iconSpan.className = 'nav-icon';
@@ -152,7 +143,6 @@ const generateMobileMenu = () => {
         const subLink = document.createElement('a');
         subLink.className = 'nav-mobile-dropdown-link';
         subLink.href = sub.href;
-        // Tambahkan icon untuk mobile dropdown item jika ada
         if (sub.icon) {
           const iconSpan = document.createElement('span');
           iconSpan.className = 'dropdown-icon';
@@ -171,7 +161,6 @@ const generateMobileMenu = () => {
       const link = document.createElement('a');
       link.className = `nav-mobile-link ${item.isPromo ? 'promo-link' : ''} ${item.isAuth ? 'auth-link' : ''}`;
       link.href = item.href;
-      // Tambahkan icon untuk menu tanpa dropdown
       if (item.icon) {
         const iconSpan = document.createElement('span');
         iconSpan.className = 'nav-icon';
@@ -186,7 +175,6 @@ const generateMobileMenu = () => {
     }
     list.appendChild(li);
   });
-  // Add profile item if user is logged in (mobile version)
   if (loggedInUser) {
     const profileLi = document.createElement('li');
     profileLi.className = 'nav-mobile-item nav-mobile-profile';
@@ -197,14 +185,12 @@ const generateMobileMenu = () => {
     profileLi.appendChild(link);
     list.appendChild(profileLi);
   }
-  // Only append to mobile nav if element exists (not on auth page)
   if (navElements.menu) {
     navElements.menu.appendChild(list);
   } else {
     console.log('[Navigation] #nav-mobile element not found - skipping mobile menu');
   }
 };
-// Setup Dropdown Mobile
 const setupMobileDropdowns = () => {
   document.querySelectorAll('.nav-mobile-dropdown .nav-mobile-toggle').forEach(toggle => {
     toggle.addEventListener('click', e => {
@@ -225,7 +211,6 @@ const setupMobileDropdowns = () => {
     });
   });
 };
-// Toggle Menu Mobile
 const toggleMobileMenu = () => {
   const isOpen = navElements.menu.classList.contains('active');
   navElements.menu.classList.toggle('active');
@@ -234,19 +219,16 @@ const toggleMobileMenu = () => {
   navElements.menu.setAttribute('aria-hidden', String(isOpen));
   document.body.style.overflow = isOpen ? 'auto' : 'hidden';
 };
-// Set Active Link — cocokkan path secara presisi, bukan hanya segmen pertama
 const setActiveLinks = () => {
   const currentPath = location.pathname.replace(/\/$/, '') || '/';
   document.querySelectorAll('header nav a').forEach(link => {
     const rawHref = link.getAttribute('href');
     if (!rawHref || rawHref === '#') return;
     const linkPath = rawHref.replace(/\/$/, '') || '/';
-    // cocokkan persis, atau currentPath berada di bawah path link ini
     const isActive = linkPath === '/' ? currentPath === '/' : (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
     if (isActive) {
       link.classList.add('active');
       if (currentPath === linkPath && link.offsetParent !== null) link.setAttribute('aria-current', 'page');
-      // propagasi active ke parent dropdown toggle
       const parentDropdown = link.closest('.nav-desktop-dropdown, .nav-mobile-dropdown');
       if (parentDropdown) {
         const parentToggle = parentDropdown.querySelector('.nav-mobile-toggle') || parentDropdown.querySelector(':scope > a');
@@ -265,7 +247,6 @@ const setActiveLinks = () => {
     }
   });
 };
-// footer kolom link cepat — dibaca dari data terpisah, bukan dari menuData
 const generateFooterLinks = () => {
   const container = document.getElementById('footer-quick-links');
   if (!container) return;
@@ -278,7 +259,6 @@ const generateFooterLinks = () => {
     container.appendChild(li);
   });
 };
-// footer baris legal — syarat ketentuan, privasi, refund
 const generateFooterLegal = () => {
   const container = document.getElementById('footer-legal-links');
   if (!container) return;
@@ -291,7 +271,6 @@ const generateFooterLegal = () => {
     container.appendChild(li);
   });
 };
-// Generate Footer Layanan Utama
 const generateFooterServices = () => {
   const container = document.getElementById('footer-main-services');
   if (!container) return;
@@ -304,7 +283,6 @@ const generateFooterServices = () => {
     container.appendChild(li);
   });
 };
-// Generate Footer Sosmed
 const generateFooterSocial = () => {
   const container = document.getElementById('footer-sosmed-container');
   if (!container) return;
@@ -320,7 +298,6 @@ const generateFooterSocial = () => {
     container.appendChild(a);
   });
 };
-// Generate Footer Trust Badges
 const generateFooterTrustBadges = () => {
   const container = document.getElementById('footer-trust-badges-container');
   if (!container) return;
@@ -343,7 +320,6 @@ const generateFooterTrustBadges = () => {
   });
   container.appendChild(logosDiv);
 };
-// Generate Footer Kontak
 const generateFooterContact = () => {
   const container = document.getElementById('footer-kontak-container');
   if (!container) return;
@@ -353,7 +329,6 @@ const generateFooterContact = () => {
     container.appendChild(li);
   });
 };
-// Auto-hide Header Handler
 let lastScrollTop = 0;
 let isHideActive = false;
 let scrollWithinThreshold = false;
@@ -361,7 +336,6 @@ const handleAutoHideHeader = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop;
   const scrollThreshold = 100; // Mulai hide setelah scroll 100px
   const triggerDistance = 50; // Distance untuk trigger show/hide
-  // Jika masih dalam threshold awal, tampilkan header
   if (scrollTop <= scrollThreshold) {
     navElements.header?.classList.remove('nav-hidden');
     isHideActive = false;
@@ -369,46 +343,37 @@ const handleAutoHideHeader = () => {
     return;
   }
   scrollWithinThreshold = false;
-  // Menentukan arah scroll
   const isScrollingDown = scrollTop > lastScrollTop;
-  // Hide header ketika scroll down
   if (isScrollingDown && scrollTop > lastScrollTop + triggerDistance && !isHideActive) {
     navElements.header?.classList.add('nav-hidden');
     isHideActive = true;
-  }
-  // Show header ketika scroll up
-  else if (!isScrollingDown && scrollTop < lastScrollTop - triggerDistance && isHideActive) {
+  } else if (!isScrollingDown && scrollTop < lastScrollTop - triggerDistance && isHideActive) {
     navElements.header?.classList.remove('nav-hidden');
     isHideActive = false;
   }
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 };
-// Refresh Navigation - Call this after user login/logout to update navbar
 export function refreshNavigation() {
   try {
-    // Clear existing desktop menu
     const desktopNav = navElements.desktopNav;
     if (desktopNav) {
       const existingList = desktopNav.querySelector('.nav-desktop-list');
       if (existingList) existingList.remove();
     }
-    // Clear existing mobile menu
     const menu = navElements.menu;
     if (menu) {
       const existingList = menu.querySelector('.nav-mobile-list');
       if (existingList) existingList.remove();
     }
-    // Re-generate menus with updated user session
     generateDesktopMenu();
     generateMobileMenu();
-    // Re-setup interactions
     setActiveLinks();
     setupMobileDropdowns();
   } catch (error) {
     console.log('Error refreshing navigation:', error);
   }
 }
-// Helper: Get cart item count from localStorage
+
 function getCartItemCount() {
   if (typeof window.SSO_CART_COUNT === 'number') {
     return window.SSO_CART_COUNT;
@@ -420,9 +385,8 @@ function getCartItemCount() {
     return 0;
   }
 }
-// Update floating cart display based on cart items count
+
 function updateFloatingCart() {
-  // Don't show floating cart button on the cart page itself
   const isCartPage = window.location.pathname.includes('/cart/') || window.location.pathname.endsWith('/cart');
   if (isCartPage) {
     const existing = document.getElementById('floating-cart-btn');
@@ -436,14 +400,12 @@ function updateFloatingCart() {
       el = document.createElement('a');
       el.id = 'floating-cart-btn';
       el.className = 'floating-cart-btn';
-      // Route to Customer Portal if user is logged in via SSO
       el.href = window.SSO_USER ? EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart') : '/cart/';
       el.innerHTML = `
         <i class="fas fa-shopping-cart" aria-hidden="true"></i>
         <span class="floating-cart-badge">${count}</span>
       `;
       document.body.appendChild(el);
-      // Inject floating cart styles if not already present
       if (!document.getElementById('floating-cart-styles')) {
         const styles = document.createElement('style');
         styles.id = 'floating-cart-styles';
@@ -515,18 +477,14 @@ function updateFloatingCart() {
     if (el) el.remove();
   }
 }
-// Expose refreshNavigation to window for easy access from other scripts
 window.refreshNavigation = refreshNavigation;
-// Inisialisasi Semua Fungsi
 document.addEventListener('DOMContentLoaded', () => {
-  // Check for Reverse Handoff from Dashboard
   const hash = window.location.hash;
   if (hash.startsWith('#handoff=')) {
     try {
       const payload = JSON.parse(Base64Utils.decode(hash.replace('#handoff=', '')));
       if (payload.cart) CartManager.mergeCart(payload.cart);
       if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
-      // Update User Session for visual UI sync
       if (payload.user !== undefined) {
         if (payload.user) {
           AuthManager.saveSession(payload.user);
@@ -534,26 +492,20 @@ document.addEventListener('DOMContentLoaded', () => {
           AuthManager.clearSession();
         }
       }
-      // Clean URL
       window.history.replaceState(null, '', window.location.pathname + window.location.search);
     } catch (err) {
       console.log('[Navigation] Invalid handoff token:', err);
     }
   }
-  // ==========================================
-  // SSO HUB IFRAME SYNC (Background Sync)
-  // ==========================================
   const iframe = document.createElement('iframe');
   iframe.src = EnvHelper.getDomainUrl('my', '/auth/sso-hub.html');
   iframe.style.display = 'none';
   document.body.appendChild(iframe);
   window.addEventListener('message', (event) => {
-    // Pastikan dari my.sisitus.com atau environment aktif
     if (!event.origin.includes('sisitus.com') && !event.origin.includes('localhost') && !event.origin.includes('127.0.0.1')) {
       return;
     }
     if (event.data && event.data.type === 'SSO_HUB_READY') {
-      // Hub siap, kirim permintaan data (cart & user)
       iframe.contentWindow.postMessage({
         type: 'SSO_REQUEST_SYNC'
       }, '*');
@@ -562,13 +514,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const payload = event.data.payload;
       let cartChanged = false;
       let wishlistChanged = false;
-      // Update UI if we got user data and we weren't aware of it locally
       const localUser = AuthManager.getCurrentUser();
-      // Perbaikan: Jangan hapus sesi lokal jika payload.user null karena iframe storage sering terpartisi (3rd party cookie block)
       if (payload.user && (!localUser || localUser.uid !== payload.user.uid)) {
         AuthManager.saveSession(payload.user);
         cartChanged = true;
-        // Trigger auth event for navigation
         document.dispatchEvent(new CustomEvent('auth:authChanged', {
           detail: payload.user
         }));
@@ -586,15 +535,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
-  // ==========================================
-  // Always initialize floating cart
   updateFloatingCart();
-  // Listen to cart updates
   window.addEventListener('cart:updated', updateFloatingCart);
   window.addEventListener('storage', (e) => {
     if (e.key === 'cart') updateFloatingCart();
   });
-  // Skip navigation setup if on auth page (no nav-desktop or nav-mobile elements)
   if (!navElements.desktopNav && !navElements.menu) {
     console.log('[Navigation] Navigation elements not found on this page - skipping initialization (likely auth page)');
     return;
@@ -618,7 +563,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const isScrolled = window.scrollY > 50;
     navElements.header?.classList.toggle('scroll', isScrolled);
     document.body.classList.toggle('header-scroll', isScrolled);
-    // Panggil auto-hide header handler
     handleAutoHideHeader();
   });
   window.addEventListener('resize', () => {
@@ -630,19 +574,15 @@ document.addEventListener('DOMContentLoaded', () => {
   generateFooterContact();
   generateFooterTrustBadges();
   generateFooterLegal();
-  // Listen to auth state changes to dynamically update the navigation
   document.addEventListener('auth:authChanged', () => {
     refreshNavigation();
   });
-  // Interceptor: Cegat navigasi ke Customer Portal untuk Handoff Guest Cart (Single Door Auth)
   document.addEventListener('click', async (e) => {
     const link = e.target.closest('a');
     if (!link) return;
     let href = link.getAttribute('href');
     if (!href) return;
-    // Hanya cegat transisi ke auth atau dashboard Customer
     if (href.includes('/auth/') || href.includes('my.sisitus.com/auth') || href.includes('my.sisitus.com/dashboard')) {
-      // Jika sudah login, biarkan langsung lewat
       if (window.SSO_USER) return;
       e.preventDefault();
       const cartData = CartManager.getCart();
@@ -651,26 +591,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof WishlistManager !== 'undefined') {
           wishlistData = WishlistManager.getWishlist();
         } else {
-          // Fallback read from localStorage if WishlistManager is not loaded
           const raw = localStorage.getItem('wishlist');
           if (raw) wishlistData = JSON.parse(raw);
         }
       } catch (err) {}
-      // Jika tidak ada data yang perlu di-handoff, langsung navigasi
       if (!cartData && !wishlistData) {
         window.location.href = link.href;
         return;
       }
-      // Encode payload ke Base64
       try {
         const handoffPayload = {
           cart: cartData,
           wishlist: wishlistData
         };
         const handoffBase64 = btoa(JSON.stringify(handoffPayload));
-        // Ensure proper redirect structure
         const urlObj = new URL(link.href, window.location.origin);
-        // Append hash ke URL
         urlObj.hash = `handoff=${handoffBase64}`;
         window.location.href = urlObj.toString();
       } catch (err) {

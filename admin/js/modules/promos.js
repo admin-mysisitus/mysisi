@@ -75,7 +75,6 @@ function setupEventListeners() {
       }
     });
   }
-  // Expose edit and delete to window so inline onclick can use it
   window.editPromo = (code) => {
     const promo = currentPromos.find(p => p.code === code);
     if (!promo) return;
@@ -86,7 +85,6 @@ function setupEventListeners() {
     document.getElementById('promo-value').value = promo.value;
     document.getElementById('promo-limit').value = promo.limit;
     document.getElementById('promo-desc').value = promo.description || promo.desc || '';
-    // Format dates for datetime-local (YYYY-MM-DDThh:mm)
     try {
       if (promo.start) document.getElementById('promo-start').value = new Date(promo.start).toISOString().slice(0, 16);
       if (promo.end) document.getElementById('promo-end').value = new Date(promo.end).toISOString().slice(0, 16);

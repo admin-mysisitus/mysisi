@@ -1,8 +1,5 @@
-/* ========== HOME PAGE INTERACTIONS ========== */
 import APIClient from '../modules/unified-api.js';
 document.addEventListener('DOMContentLoaded', async function() {
-  // ========== SPECIFIC HOME PAGE LOGIC ==========
-  // Banner Promo Dynamic Update
   const homeBanner = document.getElementById('home-promo-banner');
   const homeBadge = document.getElementById('home-promo-badge');
   if (homeBanner && homeBadge) {
@@ -28,18 +25,14 @@ document.addEventListener('DOMContentLoaded', async function() {
       homeBanner.style.display = 'none';
     }
   }
-  // ========== SOLUTIONS TABS ==========
   const solutionTabs = document.querySelectorAll('.solution-tab-btn');
   const solutionPanes = document.querySelectorAll('.solution-pane');
   if (solutionTabs.length > 0) {
     solutionTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        // Remove active class from all tabs and panes
         solutionTabs.forEach(t => t.classList.remove('active'));
         solutionPanes.forEach(p => p.classList.remove('active'));
-        // Add active class to clicked tab
         tab.classList.add('active');
-        // Show corresponding pane
         const targetId = tab.getAttribute('data-target');
         const targetPane = document.getElementById(targetId);
         if (targetPane) {
@@ -48,8 +41,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       });
     });
   }
-  // FAQ functionality is now handled by faq.js component
-  // ========== SERVICE CARD FEATURES TOGGLE (POPUP) ==========
   const toggleButtons = document.querySelectorAll('.toggle-features');
   if (toggleButtons.length > 0) {
     toggleButtons.forEach((button) => {
@@ -57,7 +48,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         const featuresList = this.nextElementSibling;
         const card = this.closest('.service-card');
         const packageName = card.querySelector('.card-header h3').innerText;
-        // Buat kloningan list fitur untuk ditampilkan di popup
         const cloneList = featuresList.cloneNode(true);
         cloneList.removeAttribute('hidden');
         cloneList.style.display = 'block';
@@ -65,11 +55,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         cloneList.style.fontSize = '0.9rem'; // Mengecilkan ukuran font
         cloneList.style.padding = '0';
         cloneList.style.margin = '0';
-        // Membungkus isi teks ke dalam span agar tidak pecah oleh flexbox
         Array.from(cloneList.children).forEach(li => {
           const icon = li.querySelector('i');
           if (icon) {
-            // Ambil semua node selain icon
             const contentNodes = Array.from(li.childNodes).filter(n => n !== icon);
             const span = document.createElement('span');
             contentNodes.forEach(n => span.appendChild(n));
@@ -93,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       });
     });
   }
-  // ========== STATS COUNTER ANIMATION ==========
   const statsSection = document.querySelector('.stats-section');
   const statItems = document.querySelectorAll('.stat-text-item');
   let hasAnimated = false;
@@ -134,8 +121,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     observer.observe(statsSection);
   };
   animateStats();
-  // ========== TESTIMONIAL CAROUSEL ==========
-  // Grid responsive untuk testimonials, dapat ditingkatkan dengan gesture di mobile
   const testimonialCards = document.querySelectorAll('.testimonial-card');
   if (testimonialCards.length > 0) {
     testimonialCards.forEach(card => {
@@ -144,7 +129,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       });
     });
   }
-  // ========== INSTAGRAM EMBED LOGIC ==========
   fetch('/assets/data/instagram.json').then(res => res.json()).then(igData => {
     const l = document.getElementById("tautan");
     if (l) {
@@ -180,7 +164,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         g.insertAdjacentHTML("beforeend", `<div class="ig-grid-item ${p.tipe}"><img src="${p.url}" alt="">${ic}<div class="save-guard"></div></div>`);
       });
     }
-    // Prevent context menu or drag on embed wrapper to mimic standard IG behavior
     const wrapper = document.querySelector(".ig-lightweight-wrapper");
     if (wrapper) {
       wrapper.addEventListener("contextmenu", e => e.preventDefault());

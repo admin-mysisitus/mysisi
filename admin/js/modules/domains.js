@@ -84,7 +84,6 @@ function setupEventListeners() {
     });
   }
   window.editDomain = (extKey) => {
-    // Find the domain that matches the modified key or exact ext
     const d = currentDomains.find(item => {
       const key = item.ext.replace('.', '').replace(/\./g, '_');
       return key === extKey || item.ext === extKey;
@@ -116,7 +115,6 @@ function setupEventListeners() {
       });
       if (result.isConfirmed) {
         try {
-          // fetch by exact ext matching the key
           const d = currentDomains.find(item => {
             const key = item.ext.replace('.', '').replace(/\./g, '_');
             return key === extKey || item.ext === extKey;
@@ -167,12 +165,10 @@ async function loadDomains() {
 function renderDomains(domains, container) {
   container.innerHTML = '';
   currentDomains = domains;
-  // Sort domains by order first, then highlight
   const sortedDomains = domains.sort((a, b) => {
     const orderA = typeof a.order === 'number' ? a.order : 999;
     const orderB = typeof b.order === 'number' ? b.order : 999;
     if (orderA !== orderB) return orderA - orderB;
-    // Fallback sort
     const hlOrder = {
       best: 3,
       cheap: 2,
@@ -196,7 +192,6 @@ function renderDomains(domains, container) {
     card.style.position = 'relative';
     card.style.display = 'flex';
     card.style.flexDirection = 'column';
-    // Highlight border for "best"
     if (domain.highlight === 'best') {
       card.style.border = '1px solid var(--admin-primary)';
       card.style.background = 'linear-gradient(145deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0.2))';
@@ -217,7 +212,7 @@ function renderDomains(domains, container) {
           ${badges}
         </div>
       </div>
-      
+
       <div style="margin-bottom: 8px;">
         ${hasDiscount ? `<span style="color: var(--admin-text-muted); text-decoration: line-through; font-size: 0.9rem; margin-right: 8px;">Rp ${formatNumber(domain.oldPrice)}</span>` : ''}
         <span style="font-size: 1.5rem; font-weight: 700; color: var(--admin-text-main);">Rp ${formatNumber(domain.registration)}</span>
@@ -225,11 +220,11 @@ function renderDomains(domains, container) {
       <div style="margin-bottom: 16px; color: var(--admin-text-muted); font-size: 0.85rem;">
         Perpanjangan: Rp ${formatNumber(domain.renewal || domain.registration)}
       </div>
-      
+
       <p style="color: var(--admin-text-muted); font-size: 0.9rem; margin: 0 0 24px 0; flex-grow: 1;">
         ${domain.info || '-'}
       </p>
-      
+
       <div style="display: flex; gap: 10px;">
         <button onclick="editDomain('${extKey}')" class="admin-btn" style="flex: 1; padding: 10px; background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); border: 1px solid rgba(99, 102, 241, 0.2);">
           <i class="fas fa-edit"></i> Edit

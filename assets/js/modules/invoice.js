@@ -1,14 +1,3 @@
-/**
- * INVOICE PAGE MODULE
- * ===================================
- * Display invoice after successful payment
- * - Show order details
- * - Display invoice number
- * - PDF download option (optional)
- * - Link to dashboard
- * 
- * Usage: /invoice/{order_id}
- */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
@@ -23,20 +12,14 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 let invoiceData = null;
 let currentUser = null;
-/**
- * Main render function
- */
 export async function render(user) {
   try {
     currentUser = user || AuthManager.getCurrentUser();
-    // Get order ID from URL
     const orderId = extractOrderIdFromUrl();
     if (!orderId) {
       throw new Error('Order ID tidak ditemukan di URL');
     }
-    // Load order data
     await loadOrderData(orderId);
-    // Render UI
     renderInvoice();
     setupEventListeners();
   } catch (error) {
@@ -58,21 +41,15 @@ export async function render(user) {
     }
   }
 }
-/**
- * Extract order ID from URL
- * Support both /invoice/ORDER-123 and URL with hash routing
- */
+
 function extractOrderIdFromUrl() {
-  // Try from pathname
   const pathParts = window.location.pathname.split('/');
   if (pathParts.length >= 3 && pathParts[1] === 'invoice' && pathParts[2]) {
     return pathParts[2];
   }
-  // Try from search params
   const params = new URLSearchParams(window.location.search);
   const orderId = params.get('orderId') || params.get('orderid');
   if (orderId) return orderId;
-  // Try from hash
   const hash = window.location.hash;
   if (hash.includes('?')) {
     const hashParams = new URLSearchParams(hash.split('?')[1]);
@@ -80,12 +57,8 @@ function extractOrderIdFromUrl() {
   }
   return null;
 }
-/**
- * Load order data from backend
- */
 async function loadOrderData(orderId) {
   try {
-    // Show loading
     const container = document.getElementById('invoice-container');
     if (container) {
       container.innerHTML = `
@@ -95,7 +68,6 @@ async function loadOrderData(orderId) {
         </div>
       `;
     }
-    // Fetch order data
     const result = await APIClient.getOrderDetail(orderId, currentUser?.userId);
     if (!result.success) {
       throw new Error(result.message || 'Gagal memuat order');
@@ -104,15 +76,12 @@ async function loadOrderData(orderId) {
     if (!invoiceData) {
       throw new Error('Data order tidak ditemukan');
     }
-    // Verify payment was successful
     if (invoiceData.paymentStatus !== 'paid' && invoiceData.orderStatus !== 'completed') {
       console.log('Order payment status:', invoiceData.paymentStatus, 'Order status:', invoiceData.orderStatus);
-      // Proactively sync order status to catch late webhook or slow Midtrans updates
       try {
         const syncResult = await APIClient.syncOrderStatus(orderId);
         if (syncResult.success && syncResult.data && syncResult.data.paymentStatus === 'paid') {
           console.log('[Invoice] Late payment status updated to paid via sync!');
-          // Sync returned paid! Re-fetch order data
           const newResult = await APIClient.getOrderDetail(orderId, currentUser?.userId);
           if (newResult.success && (newResult.data || newResult.order)) {
             invoiceData = newResult.data || newResult.order;
@@ -127,27 +96,21 @@ async function loadOrderData(orderId) {
     throw error;
   }
 }
-/**
- * Render invoice
- */
+
 function renderInvoice() {
   const container = document.getElementById('invoice-container');
   if (!container || !invoiceData) return;
   const invoiceNumber = generateInvoiceNumber(invoiceData.orderId);
   const isPaid = invoiceData.paymentStatus === 'paid';
-  // Set document title for clean PDF filename download
   const cleanDomain = (invoiceData.domain || 'Layanan').replace(/[^a-zA-Z0-9-.]/g, '');
   document.title = `Invoice_${invoiceNumber}_${cleanDomain}`;
-  // Calculate due date (24 hours from created)
   const createdDate = new Date(invoiceData.createdAt);
   const dueDate = new Date(createdDate.getTime() + (24 * 60 * 60 * 1000));
   const paymentMethodText = invoiceData.paymentMethod ? capitalize(invoiceData.paymentMethod.replace(/_/g, ' ')) : 'Midtrans Payment Gateway';
-  // Set viewport for mobile to allow full zoomed-out view and pinch-to-zoom
   if (window.innerWidth <= 768 || screen.width <= 768) {
     document.body.classList.add('mobile-viewport');
     const meta = document.querySelector('meta[name="viewport"]');
     if (meta) {
-      // Just set width=800, the browser will automatically calculate initial-scale to fit!
       meta.setAttribute('content', 'width=800, user-scalable=yes');
     }
   }
@@ -165,7 +128,6 @@ function renderInvoice() {
       </div>
     </div>
   `;
-  // Backwards compatibility calculation for older orders
   const discount = invoiceData.discount || 0;
   let subtotal = invoiceData.subtotal;
   let ppn = invoiceData.ppn;
@@ -173,7 +135,6 @@ function renderInvoice() {
     subtotal = Math.round((invoiceData.total + discount) / 1.11);
     ppn = invoiceData.total + discount - subtotal;
   }
-  // Prepare addons data
   const paidAddons = [];
   const freeAddons = [];
   let addonsTotal = 0;
@@ -188,7 +149,6 @@ function renderInvoice() {
     }
   }
   const baseLayananPrice = subtotal - addonsTotal;
-  // Calculate Dates and Periods
   const orderDuration = invoiceData.domainDuration || invoiceData.duration || 1;
   const expiryDate = new Date(createdDate);
   expiryDate.setFullYear(expiryDate.getFullYear() + orderDuration);
@@ -205,13 +165,12 @@ function renderInvoice() {
   } else if (packageName.toLowerCase() === 'none') {
     itemTitle = 'Registrasi Domain';
   }
-  // Refined Watermark
   const watermarkHTML = isPaid ? `
     <div class="inv-watermark-stamp">PAID</div>
   ` : '';
   container.innerHTML = `
     <div class="invoice-wrapper">
-      
+
       <!-- PAGE 1 -->
       <div class="invoice-page">
         ${watermarkHTML}
@@ -326,7 +285,7 @@ function renderInvoice() {
               </ul>
             </div>
           </div>
-          
+
           <div class="inv-terms-block">
             <div class="inv-terms-title"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
             <div class="inv-terms-content">
@@ -375,7 +334,6 @@ function renderInvoice() {
           overflow: hidden;
         }
 
-        /* Elevate all content above watermark */
         .inv-header, .inv-due-date, .inv-details-grid, .inv-total-section, .inv-table, .inv-summary-container, .inv-signature, .inv-terms-section {
           position: relative;
           z-index: 10;
@@ -463,7 +421,7 @@ function renderInvoice() {
           font-weight: 700;
           margin-bottom: 6px;
         }
-        
+
         .inv-address {
           color: #334155;
         }
@@ -529,7 +487,7 @@ function renderInvoice() {
           display: block;
           margin-bottom: 2px;
         }
-        
+
         .inv-item-desc {
           color: #64748b;
           font-size: 11px;
@@ -549,7 +507,7 @@ function renderInvoice() {
           gap: 12px;
           padding-bottom: 8px; /* Align slightly with total */
         }
-        
+
         .inv-qr-section img {
           width: 70px;
           height: 70px;
@@ -558,7 +516,7 @@ function renderInvoice() {
           border: 1px solid #e2e8f0;
           background: #fff;
         }
-        
+
         .inv-qr-text {
           font-size: 10px;
           color: #64748b;
@@ -625,7 +583,7 @@ function renderInvoice() {
           align-items: center;
           gap: 8px;
         }
-        
+
         .inv-terms-title i {
           color: #2563EB;
           font-size: 14px;
@@ -638,20 +596,19 @@ function renderInvoice() {
         .inv-terms-content p {
           margin: 0 0 8px 0;
         }
-        
-        /* Modern Unordered List */
+
         .inv-terms-content ul {
           list-style: none;
           padding: 0;
           margin: 0;
         }
-        
+
         .inv-terms-content ul li {
           position: relative;
           padding-left: 18px;
           margin-bottom: 8px;
         }
-        
+
         .inv-terms-content ul li::before {
           content: '•';
           position: absolute;
@@ -663,7 +620,6 @@ function renderInvoice() {
           top: 0px;
         }
 
-        /* Modern Ordered List */
         .inv-terms-content ol {
           margin: 0;
           padding-left: 20px;
@@ -674,13 +630,12 @@ function renderInvoice() {
           margin-bottom: 8px;
           padding-left: 4px;
         }
-        
+
         .inv-terms-content ol li::marker {
           color: #64748b;
           font-weight: 600;
         }
 
-        /* BUTTONS */
         .invoice-actions {
           display: flex;
           justify-content: center;
@@ -728,7 +683,6 @@ function renderInvoice() {
           transform: translateY(-1px);
         }
 
-        /* PRINT CONFIGURATION */
         @page {
           size: A4;
           margin: 15mm; 
@@ -742,7 +696,7 @@ function renderInvoice() {
             padding: 0 !important;
             margin: 0 !important;
           }
-          
+
           .page-container {
             padding: 0 !important;
             margin: 0 !important;
@@ -773,16 +727,10 @@ function renderInvoice() {
           }
         }
 
-
-        /* ================= MOBILE VIEWPORT SCALING ================= */
-        /* Karena viewport diset 800px di mobile, media query 768px tidak akan jalan.
-           Kita gunakan class .mobile-viewport yang diinject via JS */
-        
-        /* Hapus ruang abu-abu kosong di bagian atas layar HP */
         body.mobile-viewport .page-container {
           padding-top: 0 !important;
         }
-        
+
         .mobile-viewport .invoice-wrapper {
           margin-top: 0 !important;
         }
@@ -798,9 +746,7 @@ function renderInvoice() {
           padding: 0 10px 40px 10px;
           gap: 20px;
         }
-        
-        /* Besarkan tombol secara drastis karena layarnya akan di zoom-out 
-           (Scale sekitar 0.45x sampai 0.5x) */
+
         .mobile-viewport .inv-btn {
           width: 100%;
           padding: 24px;
@@ -808,7 +754,7 @@ function renderInvoice() {
           border-radius: 12px;
           gap: 16px;
         }
-        
+
         .mobile-viewport .inv-btn i {
           font-size: 32px;
         }
@@ -816,11 +762,8 @@ function renderInvoice() {
     </div>
   `;
 }
-/**
- * Generate formatted invoice number
- */
+
 function generateInvoiceNumber(orderId) {
-  // Format: INV-2026-03-28-00001
   const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -828,9 +771,7 @@ function generateInvoiceNumber(orderId) {
   const sequence = orderId.replace('ORDER-', '').slice(0, 5);
   return `INV-${year}-${month}-${day}-${sequence}`;
 }
-/**
- * Format package name nicely
- */
+
 function formatPackageName(packageId) {
   const names = {
     'starter': 'Starter',
@@ -840,18 +781,14 @@ function formatPackageName(packageId) {
   };
   return names[packageId?.toLowerCase()] || packageId || 'Standard';
 }
-/**
- * Setup event listeners
- */
+
 function setupEventListeners() {
-  // Print button
   const printBtn = document.querySelector('[onclick="window.print()"]');
   if (printBtn) {
     printBtn.addEventListener('click', () => {
       window.print();
     });
   }
-  // Keyboard shortcut for print
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
       e.preventDefault();
@@ -859,10 +796,7 @@ function setupEventListeners() {
     }
   });
 }
-/**
- * Render addons in invoice items table
- * Returns HTML rows for each addon
- */
+
 function renderInvoiceAddons(paidAddons, createdDate) {
   if (!paidAddons || !Array.isArray(paidAddons) || paidAddons.length === 0) {
     return '';

@@ -1,6 +1,3 @@
-/* ========== KARIR PAGE INTERACTIONS ========== */
-/* Halaman lowongan karir dengan job card interactions, process timeline, dan benefit animations */
-/* Sistem animasi yang smooth dan optimal tanpa konflik */
 class KarirPageManager {
   constructor() {
     this.config = {
@@ -17,7 +14,6 @@ class KarirPageManager {
     this.observer = null;
     this.init();
   }
-  // ========== INITIALIZATION ==========
   init() {
     this.injectOptimizedAnimationStyles();
     this.setupRevealAnimations();
@@ -27,18 +23,15 @@ class KarirPageManager {
     this.setupCultureItems();
     this.setupCtaButtons();
   }
-  // ========== TOUCH DETECTION ==========
   detectTouchDevice() {
     return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
   }
-  // ========== INTERSECTION OBSERVER FACTORY ==========
   createObserver(callback, options = {}) {
     return new IntersectionObserver(callback, {
       threshold: options.threshold || this.config.threshold,
       rootMargin: options.rootMargin || '0px'
     });
   }
-  // ========== REVEAL ANIMATIONS WITH STAGGERING ==========
   setupRevealAnimations() {
     const elementGroups = [{
       selector: '.benefit-item',
@@ -65,7 +58,6 @@ class KarirPageManager {
             this.state.elementsObserved.add(entry.target);
             const index = Array.from(elements).indexOf(entry.target);
             const staggerDelay = index * delay;
-            // Gunakan CSS class untuk animasi, bukan inline style
             entry.target.style.setProperty('--animation-delay', `${staggerDelay}s`);
             entry.target.classList.add('animate-in');
             observer.unobserve(entry.target);
@@ -75,7 +67,6 @@ class KarirPageManager {
       elements.forEach((el) => observer.observe(el));
     });
   }
-  // ========== BENEFIT ITEMS ==========
   setupBenefitItems() {
     const benefitItems = document.querySelectorAll('.benefit-item');
     if (benefitItems.length === 0) return;
@@ -86,18 +77,15 @@ class KarirPageManager {
       }
     });
   }
-  // ========== JOB CARDS ==========
   setupJobCards() {
     const jobCards = document.querySelectorAll('.job-card');
     if (jobCards.length === 0) return;
-    // Desktop hover
     if (!this.config.isTouch) {
       jobCards.forEach((card) => {
         card.addEventListener('mouseenter', () => card.classList.add('hover-active'));
         card.addEventListener('mouseleave', () => card.classList.remove('hover-active'));
       });
     }
-    // Mobile expand/collapse
     this.setupJobToggle();
     this.setupApplyButtons();
   }
@@ -131,19 +119,16 @@ class KarirPageManager {
         const jobCard = btn.closest('.job-card');
         const jobTitle = jobCard.querySelector('.job-title')?.textContent.trim();
         if (jobTitle) {
-          // Create URL with job position and auto-submit flag
           const params = new URLSearchParams({
             tipe: 'karir',
             posisi: jobTitle.toLowerCase().replace(/\s+/g, '-'),
             auto: 'true' // Flag untuk auto-submit (akan menampilkan form dengan auto-prefill)
           });
-          // Redirect ke halaman kontak dengan parameter
           window.location.href = `/kontak/?${params.toString()}`;
         }
       });
     });
   }
-  // ========== PROCESS STEPS ==========
   setupProcessSteps() {
     const processSteps = document.querySelectorAll('.process-step');
     if (processSteps.length === 0) return;
@@ -154,7 +139,6 @@ class KarirPageManager {
       });
     }
   }
-  // ========== CULTURE ITEMS ==========
   setupCultureItems() {
     const cultureItems = document.querySelectorAll('.culture-item');
     if (cultureItems.length === 0) return;
@@ -165,7 +149,6 @@ class KarirPageManager {
       });
     }
   }
-  // ========== CTA BUTTONS ==========
   setupCtaButtons() {
     const ctaButtons = document.querySelectorAll('.cta-buttons .btn');
     if (ctaButtons.length === 0) return;
@@ -177,7 +160,6 @@ class KarirPageManager {
       }
     });
   }
-  // ========== RIPPLE EFFECT ==========
   createRippleEffect(event, button) {
     const rect = button.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -201,13 +183,10 @@ class KarirPageManager {
     button.appendChild(ripple);
     setTimeout(() => ripple.remove(), 600);
   }
-  // ========== OPTIMIZED STYLE INJECTION ==========
   injectOptimizedAnimationStyles() {
     const style = document.createElement('style');
     style.textContent = `
-      /* ========== SMOOTH ANIMATION FRAMEWORK ========== */
-      
-      /* Keyframe Animations */
+
       @keyframes slideInUp {
         from {
           opacity: 0;
@@ -237,7 +216,6 @@ class KarirPageManager {
         }
       }
 
-      /* Initial State - Elements hidden until animation */
       .benefit-item,
       .job-card,
       .process-step,
@@ -246,7 +224,6 @@ class KarirPageManager {
         transform: translateY(20px);
       }
 
-      /* Reveal Animation Class */
       .benefit-item.animate-in,
       .job-card.animate-in,
       .process-step.animate-in,
@@ -254,12 +231,10 @@ class KarirPageManager {
         animation: slideInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--animation-delay, 0s) forwards;
       }
 
-      /* Section Divider Animation */
       .section-divider {
         animation: slideInHorizontal 0.6s ease-out 0.3s forwards;
       }
 
-      /* Smooth Hover States */
       .benefit-item {
         transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
@@ -276,7 +251,6 @@ class KarirPageManager {
         transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
-      /* Job Card Hover */
       .job-card {
         transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
@@ -285,7 +259,6 @@ class KarirPageManager {
         transform: translateY(-5px);
       }
 
-      /* Process Step Hover */
       .process-step {
         transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
@@ -298,7 +271,6 @@ class KarirPageManager {
         transform: scale(1.2);
       }
 
-      /* Culture Item Hover */
       .culture-item {
         transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
@@ -315,7 +287,6 @@ class KarirPageManager {
         transform: scale(1.18) rotate(-8deg);
       }
 
-      /* CTA Button Hover */
       .karir-cta-section .btn {
         transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
@@ -324,7 +295,6 @@ class KarirPageManager {
         transform: translateY(-4px) scale(1.05);
       }
 
-      /* Job Body Toggle */
       .job-body {
         transition: all 0.3s ease;
       }
@@ -341,7 +311,6 @@ class KarirPageManager {
     document.head.appendChild(style);
   }
 }
-// ========== INITIALIZATION ON DOM READY ==========
 document.addEventListener('DOMContentLoaded', () => {
   new KarirPageManager();
 });

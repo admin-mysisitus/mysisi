@@ -30,9 +30,6 @@ function isValidRoomId(roomId) {
 function isOnline() {
   return navigator.onLine;
 }
-// ==========================================
-// ATTACHMENT MODAL LOGIC (BASE64 PROXY)
-// ==========================================
 async function openAttachmentModal(rawUrl, isPdfHint) {
   const modal = document.getElementById('attachmentModal');
   const loader = document.getElementById('attachmentLoading');
@@ -40,7 +37,6 @@ async function openAttachmentModal(rawUrl, isPdfHint) {
   const imgFrame = document.getElementById('attachmentImg');
   const pdfFrame = document.getElementById('attachmentFrame');
   if (!modal) return;
-  // Reset and Show Modal
   modal.classList.add('active');
   loader.style.display = 'flex';
   errorEl.style.display = 'none';
@@ -86,7 +82,6 @@ function closeAttachmentModal() {
     if (pdfFrame) pdfFrame.src = '';
   }
 }
-// Escape key to close modal
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeAttachmentModal();

@@ -12,7 +12,7 @@ export class AdminSidebar {
       </div>
       <nav class="admin-nav-menu">
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 10px;">Main Menu</div>
-        
+
         <a href="#!/" class="admin-nav-item" data-route="/">
           <i class="fas fa-chart-pie"></i> Overview
         </a>
@@ -22,9 +22,9 @@ export class AdminSidebar {
         <a href="#!/transactions" class="admin-nav-item" data-route="/transactions">
           <i class="fas fa-file-invoice-dollar"></i> Transaksi
         </a>
-        
+
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Manajemen Produk</div>
-        
+
         <a href="#!/packages" class="admin-nav-item" data-route="/packages">
           <i class="fas fa-box-open"></i> Paket Website
         </a>
@@ -42,7 +42,7 @@ export class AdminSidebar {
         </a>
 
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Sistem</div>
-        
+
         <a href="#!/livechat" class="admin-nav-item" data-route="/livechat">
           <i class="fas fa-comments"></i> Live Chat
         </a>
@@ -52,11 +52,11 @@ export class AdminSidebar {
         <a href="#!/settings" class="admin-nav-item" data-route="/settings">
           <i class="fas fa-sliders"></i> Pengaturan
         </a>
-        
+
         <a href="#!/profile" class="admin-nav-item" data-route="/profile">
           <i class="fas fa-user-circle"></i> Profil Admin
         </a>
-        
+
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px; border-top: 1px solid var(--admin-border); padding-top: 20px;">Lainnya</div>
 
         <a href="https://sisitus.com/" class="admin-nav-item" style="color: var(--admin-text-muted);">
@@ -67,7 +67,6 @@ export class AdminSidebar {
         </button>
       </nav>
     `;
-    // Setup logout listener
     const logoutBtn = this.container.querySelector('#sidebar-logout-btn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', async () => {
@@ -83,7 +82,6 @@ export class AdminSidebar {
         }
       });
     }
-    // Auto-close sidebar on mobile when a link is clicked
     const navLinks = this.container.querySelectorAll('.admin-nav-item');
     navLinks.forEach(link => {
       link.addEventListener('click', () => {

@@ -593,7 +593,6 @@ img[alt=".it.com"].tld-logo {
   margin-left: 4px;
 }
 
-/* Elegant Colors for each item */
 .cycler-item.item-1 {
   color: #4b5563;
   animation-delay: 0s;
@@ -1912,7 +1911,6 @@ img[alt=".it.com"].tld-logo-result {
   }
 }
 
-/* Skeleton Loading */
 .cek-domain-skeleton-card {
   padding: 12px 16px;
   background: white;

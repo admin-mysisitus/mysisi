@@ -1,7 +1,3 @@
-/**
- * Dashboard SPA Main Application
- * Handles routing, session management, and page rendering
- */
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
@@ -18,7 +14,6 @@ import {
   showInfo,
   EnvHelper
 } from '/assets/js/modules/unified-utils.js';
-// Expose utility functions globally for inline onclick handlers
 window.showSuccess = showSuccess;
 window.showError = showError;
 window.showWarning = showWarning;
@@ -30,30 +25,22 @@ class DashboardApp {
     this.currentModule = null;
     this.navbar = null;
     this.sidebar = null;
-    // Note: Auth check moved to individual pages that require it
-    // Cart page allows inline login for guests
     this.init();
   }
   async init() {
-    // Render navbar and sidebar
     this.navbar = new DashboardNavbar();
     this.navbar.render();
     this.sidebar = new DashboardSidebar(this);
     this.sidebar.render();
-    // Setup route handlers
     this.setupRoutes();
-    // Listen for hash changes
     window.addEventListener('hashchange', () => this.handleRouteChange());
-    // Handle auth state changes
     document.addEventListener('auth:authChanged', (e) => {
       if (!e.detail) {
-        // User logged out
         window.location.href = '/auth/';
       } else {
         this.currentUser = e.detail.user || e.detail;
       }
     });
-    // Initial route
     this.handleRouteChange();
   }
   setupRoutes() {
@@ -146,43 +133,31 @@ class DashboardApp {
   }
   handleRouteChange() {
     const hash = window.location.hash;
-    // Extract route without query parameters
-    // From: #!checkout?domain=example.com
-    // To: /dashboard/checkout
     const routePart = hash.replace('#!', '').split('?')[0] || '/dashboard/';
     const baseRoute = routePart.startsWith('/dashboard/') ? routePart : `/dashboard/${routePart}`;
     this.navigate(baseRoute);
   }
   async navigate(route) {
-    // Default to home if invalid
     if (!this.routes[route]) {
       route = '/dashboard/';
       window.location.hash = '#!' + route;
       return;
     }
-    // Check if route requires authentication
     const routeConfig = this.routes[route];
     if (routeConfig.requiresAuth && !this.currentUser) {
-      // Redirect to auth page
       window.location.href = '/auth/';
       return;
     }
-    // Block admin from user dashboard
     if (this.currentUser && this.currentUser.role === 'admin') {
       window.location.href = EnvHelper.getDomainUrl('backstage', '/');
       return;
     }
     this.currentRoute = route;
-    // Update sidebar active state
     this.sidebar.setActive(route);
-    // Update page title
     document.title = `${routeConfig.title} - SISITUS Dashboard`;
-    // Load and render page
     try {
       this.showLoadingOverlay();
-      // Load module
       const module = await routeConfig.loadModule();
-      // Fetch HTML template dengan mekanisme retry
       let html = '';
       let fetchSuccess = false;
       let retries = 3;
@@ -193,7 +168,6 @@ class DashboardApp {
             throw new Error(`HTTP Error: ${response.status}`);
           }
           html = await response.text();
-          // Deteksi Soft 404 dari hosting (seperti drv.tw / Google Drive) yang me-return 200 OK
           if (html.includes('HTTP 404') || html.includes('drive.google.com') || html.includes('<title>Error</title>')) {
             throw new Error('Soft 404 dari Server Hosting');
           }
@@ -204,13 +178,10 @@ class DashboardApp {
           if (retries === 0) {
             throw new Error(`Gagal memuat antarmuka halaman. Server hosting mungkin sedang sibuk. Silakan muat ulang (refresh) halaman ini.`);
           }
-          // Tunggu sebentar sebelum mencoba lagi (500ms)
           await new Promise(res => setTimeout(res, 500));
         }
       }
-      // Render content
       const contentArea = document.getElementById('content');
-      // Cleanup previous module to prevent memory leaks
       if (this.currentModule && typeof this.currentModule.destroy === 'function') {
         try {
           this.currentModule.destroy();
@@ -219,15 +190,12 @@ class DashboardApp {
         }
       }
       contentArea.innerHTML = html;
-      // Store current module reference
       this.currentModule = module;
-      // Initialize page module
       if (module.render) {
         await module.render(this.currentUser);
       } else if (module.default && typeof module.default === 'function') {
         await module.default(this.currentUser);
       }
-      // Scroll to top
       contentArea.scrollTop = 0;
     } catch (error) {
       void('Error loading route:', error);
@@ -250,10 +218,6 @@ class DashboardApp {
     const overlay = document.getElementById('loading-overlay');
     if (overlay) overlay.style.display = 'none';
   }
-  /**
-   * Show notification
-   * Note: Uses SweetAlert2 for consistent and professional notifications.
-   */
   static showNotification(message, type = 'info') {
     if (typeof Swal !== 'undefined') {
       Swal.fire({
@@ -268,7 +232,6 @@ class DashboardApp {
     }
   }
 }
-// Initialize app when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     window.dashboardApp = new DashboardApp();

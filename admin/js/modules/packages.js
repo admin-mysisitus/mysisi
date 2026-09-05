@@ -160,7 +160,6 @@ function renderPackages(packages, container) {
   container.innerHTML = '';
   currentPackages = packages;
   packages.forEach((pkg, index) => {
-    // Determine if we should highlight this package
     const isPopular = index === 1; // Highlight the second package visually
     const isActive = pkg.active !== false; // default to active if undefined
     const inactiveStyle = isActive ? '' : 'opacity: 0.6; filter: grayscale(1);';
@@ -199,11 +198,11 @@ function renderPackages(packages, container) {
         <span style="font-size: 2rem; font-weight: 700; color: var(--admin-text-main);">Rp ${displayPrice}</span>
         <span style="color: var(--admin-text-muted);">/${displayCycle} Tahun</span>
       </div>
-      
+
       <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; flex-grow: 1;">
         ${featuresHtml || '<li style="color: var(--admin-text-muted); font-style: italic;">-</li>'}
       </ul>
-      
+
       <div style="display: flex; gap: 12px; margin-top: auto;">
         <button class="admin-btn" onclick="window.editPackage('${pkgId}')" style="flex: 1; background: var(--admin-primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600;">
           Edit Paket

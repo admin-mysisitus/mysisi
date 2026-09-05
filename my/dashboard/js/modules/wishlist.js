@@ -1,11 +1,3 @@
-/**
- * DASHBOARD WISHLIST VIEW MODULE
- * ===================================
- * Professional wishlist management for dashboard
- * - Display wishlist items with priorities
- * - Move to cart
- * - Remove items
- */
 import {
   CartManager,
   WishlistManager
@@ -19,9 +11,6 @@ class DashboardWishlist {
     this.wishlist = WishlistManager.getWishlist();
     this.container = null;
   }
-  /**
-   * Render wishlist view
-   */
   render(containerElement) {
     this.container = containerElement;
     if (WishlistManager.getWishlist().domains.length === 0) {
@@ -30,9 +19,6 @@ class DashboardWishlist {
     }
     this.renderWishlistContent();
   }
-  /**
-   * Render empty wishlist UI
-   */
   renderEmptyWishlist() {
     this.container.innerHTML = `
       <div class="wishlist-empty" style="text-align: center; padding: 60px 20px;">
@@ -50,9 +36,6 @@ class DashboardWishlist {
       </div>
     `;
   }
-  /**
-   * Render wishlist with items
-   */
   renderWishlistContent() {
     const wishlist = WishlistManager.getWishlist();
     const grouped = {
@@ -61,7 +44,6 @@ class DashboardWishlist {
       low: wishlist.domains.filter(d => d.priority === 'low')
     };
     let itemsHTML = '';
-    // High priority
     if (grouped.high.length > 0) {
       itemsHTML += `
         <div style="margin-bottom: 32px;">
@@ -74,7 +56,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-    // Medium priority
     if (grouped.medium.length > 0) {
       itemsHTML += `
         <div style="margin-bottom: 32px;">
@@ -87,7 +68,6 @@ class DashboardWishlist {
         </div>
       `;
     }
-    // Low priority
     if (grouped.low.length > 0) {
       itemsHTML += `
         <div style="margin-bottom: 32px;">
@@ -127,14 +107,10 @@ class DashboardWishlist {
         </div>
       </div>
     `;
-    // Expose functions to window
     window.moveWishlistToCart = (domain) => this.moveToCart(domain);
     window.removeWishlistItem = (domain) => this.removeItem(domain);
     window.updateWishlistPriority = (domain, priority) => this.updatePriority(domain, priority);
   }
-  /**
-   * Render single wishlist item
-   */
   renderWishlistItem(item) {
     const addedDate = new Date(item.addedAt).toLocaleDateString('id-ID');
     return `
@@ -165,9 +141,6 @@ class DashboardWishlist {
       </div>
     `;
   }
-  /**
-   * Move wishlist item to cart
-   */
   moveToCart(domain) {
     try {
       WishlistManager.moveToCart(domain);
@@ -177,9 +150,6 @@ class DashboardWishlist {
       showError('❌ Error', error.message);
     }
   }
-  /**
-   * Remove item from wishlist
-   */
   removeItem(domain) {
     WishlistManager.remove(domain);
     showSuccess('✓ Dihapus', `${domain} dihapus dari wishlist`);
@@ -189,9 +159,6 @@ class DashboardWishlist {
       this.render(this.container);
     }
   }
-  /**
-   * Update item priority
-   */
   updatePriority(domain, priority) {
     const wishlist = WishlistManager.getWishlist();
     const item = wishlist.domains.find(d => d.domain === domain);
@@ -203,7 +170,6 @@ class DashboardWishlist {
     }
   }
 }
-// Export render function for dashboard-app compatibility
 export async function render() {
   const container = document.getElementById('wishlist-container');
   if (!container) {
@@ -223,10 +189,8 @@ export async function render() {
     `;
   }
 }
-// Auto-refresh UI when wishlist data syncs from backend (e.g., after login)
 window.addEventListener('wishlist:updated', () => {
   const container = document.getElementById('wishlist-container');
-  // Hanya render ulang jika user sedang berada di halaman wishlist
   if (container) {
     render();
   }

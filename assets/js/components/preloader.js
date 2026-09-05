@@ -1,4 +1,3 @@
-// Logika Preloader yang Tetap Stabil
 const PRELOADER_START = performance.now();
 document.body.classList.add("preloading");
 window.addEventListener("load", () => {

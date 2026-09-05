@@ -1,22 +1,3 @@
-/**
- * CART PAGE MODULE - ENHANCED VERSION
- * ===================================
- * Complete cart management for checkout flow
- * 
- * Features:
- * - Inline authentication (register + login)
- * - Promo code validation
- * - Email verification enforcement
- * - Order creation + midtrans payment
- * - Full checkout flow
- * 
- * Flow:
- * 1. Guest views cart + inline login (SharedAuthForm)
- * 2. User registers/logins + verifies email
- * 3. User applies promo code (optional)
- * 4. User clicks "Lanjut Bayar" → creates order → midtrans payment
- * 5. Payment success → redirected to /invoice/{order_id}
- */
 import {
   CartManager,
   WishlistManager
@@ -36,22 +17,17 @@ import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
-// ============================================================================
-// CART STATE MANAGEMENT
-// ============================================================================
 let cartState = {
   container: null,
   currentUser: null,
   userId: null,
   userEmail: null,
   emailVerified: false,
-  // Promo state
   promoCode: null,
   promoDiscount: 0,
   promoDescription: null,
   promoValidated: false,
   isValidatingPromo: false,
-  // UI state
   isProcessingCheckout: false,
   selectedDomain: null,
   pricing: {
@@ -59,7 +35,6 @@ let cartState = {
     addons: {}
   }
 };
-// Helper for operations that might trigger full re-renders and browser scroll jumps
 async function withScrollPreservation(action) {
   const scrollContainer = document.getElementById('content');
   const scrollYContent = scrollContainer ? scrollContainer.scrollTop : 0;
@@ -86,7 +61,6 @@ async function withScrollPreservation(action) {
     }, 60);
   }
 }
-// Expose global handlers
 window.removeCartItem = removeCartItem;
 window.applyPromoCode = applyPromoCode;
 window.proceedToCheckout = proceedToCheckout;
@@ -101,7 +75,6 @@ window.changeItemPackage = (domain, packageId) => {
     CartManager.update(domain, {
       package: packageId,
       packagePrice: newPrice,
-      // Jika none, renewal price ikut harga domain. Jika ada paket, ikut paket.
       renewalPrice: packageId === 'none' ? (item.domainPrice || 0) : newPrice
     });
     withScrollPreservation(async () => {
@@ -122,7 +95,6 @@ window.toggleCartAddon = async (domain, addonId, isChecked) => {
     if (!item) return;
     let itemAddons = item.addons || [];
     if (isChecked) {
-      // Add addon to domain
       const existing = itemAddons.find(a => a.id.toLowerCase() === addonId.toLowerCase());
       if (!existing) {
         itemAddons.push({
@@ -133,10 +105,8 @@ window.toggleCartAddon = async (domain, addonId, isChecked) => {
         });
       }
     } else {
-      // Remove addon from domain
       itemAddons = itemAddons.filter(a => a.id.toLowerCase() !== addonId.toLowerCase());
     }
-    // Save to CartManager
     CartManager.update(domain, {
       addons: itemAddons
     });
@@ -148,10 +118,6 @@ window.toggleCartAddon = async (domain, addonId, isChecked) => {
     showError('Gagal', error.message);
   }
 };
-/**
- * MAIN RENDER FUNCTION
- * Entry point for cart page rendering
- */
 export async function render(currentUser) {
   try {
     cartState.container = document.getElementById('cart-container');
@@ -159,12 +125,10 @@ export async function render(currentUser) {
       console.log('[Cart] #cart-container not found');
       return;
     }
-    // Fetch pricing configuration
     const pricingRes = await APIClient.fetchPricingConfig();
     if (pricingRes.success && pricingRes.data) {
       cartState.pricing = pricingRes.data;
     }
-    // CRITICAL: Refresh user data from storage in case they just verified email
     if (!currentUser) {
       AuthManager.refreshUserData(); // NEW: Load latest user session
     }
@@ -178,7 +142,6 @@ export async function render(currentUser) {
       cartState.userEmail = null;
       cartState.emailVerified = false;
     }
-    // Register background verification check listeners once
     if (!window.cartListenersRegistered) {
       window.cartListenersRegistered = true;
       const checkVerificationStatus = () => {
@@ -199,30 +162,23 @@ export async function render(currentUser) {
         }
       });
     }
-    // Initialize auth if not already done
     if (!AuthManager.isLoggedIn() && !cartState.currentUser) {
       AuthManager.init();
     }
-    // Load saved promo if exists
     loadSavedPromo();
-    // Route based on auth state
     if (cartState.verificationPollInterval) {
       clearInterval(cartState.verificationPollInterval);
       cartState.verificationPollInterval = null;
     }
-    // Redirect guard: Jika user sudah login (SSO), lempar ke Customer Portal Cart
     if (window.SSO_USER) {
       window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart');
       return;
     }
     if (!cartState.currentUser) {
-      // Guest: show inline auth + cart preview
       renderGuestCheckout();
     } else if (CartManager.isEmpty()) {
-      // Empty cart
       renderEmptyCart();
     } else {
-      // Authenticated + verified: show full cart
       renderAuthenticatedCart();
     }
   } catch (error) {
@@ -239,9 +195,6 @@ export async function render(currentUser) {
     `;
   }
 }
-// ============================================================================
-// HELPER FOR SELECTED DOMAIN
-// ============================================================================
 window.selectCartDomain = (domain) => {
   cartState.selectedDomain = domain;
   withScrollPreservation(async () => {
@@ -273,7 +226,6 @@ function getSelectedCartSummary() {
       discount = value;
     }
   }
-  // Also update cartState if promo exists
   cartState.promoDiscount = Math.round(discount);
   let subtotalAfterDiscount = subtotal - cartState.promoDiscount;
   let ppn = Math.round(subtotalAfterDiscount * 0.11);
@@ -290,9 +242,6 @@ function getSelectedCartSummary() {
     finalTotal
   };
 }
-// ============================================================================
-// GUEST CART PREVIEW
-// ============================================================================
 export function updateCartPreview() {
   const container = document.getElementById('cart-preview-container');
   if (!container && !document.querySelector('.cart-preview')) return;
@@ -300,9 +249,7 @@ export function updateCartPreview() {
     document.activeElement.blur();
   }
 }
-// ============================================================================
-// GUEST CHECKOUT - INLINE AUTH + CART PREVIEW
-// ============================================================================
+
 function renderGuestCheckout() {
   cartState.isProcessingCheckout = false;
   const {
@@ -375,7 +322,7 @@ function renderGuestCheckout() {
     <div class="page-container">
       <div class="cart-page">
         <div class="cart-grid">
-          
+
           <!-- Cart Items -->
           <div>
             <div class="cart-items-section">
@@ -390,7 +337,7 @@ function renderGuestCheckout() {
           <div>
             <div class="cart-summary">
               <h3 class="summary-title">Ringkasan Pesanan</h3>
-              
+
               ${selectedItemHTML}
 
               ${addonsHTML}
@@ -442,13 +389,11 @@ function renderGuestCheckout() {
       </div>
     </div>
   `;
-  // Attach event listener to redirect button with Handoff payload
   document.getElementById('btn-login-checkout').addEventListener('click', async () => {
     try {
       const btn = document.getElementById('btn-login-checkout');
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mempersiapkan...';
       btn.disabled = true;
-      // Prepare handoff payload
       const cartData = CartManager.getCart();
       const {
         WishlistManager
@@ -458,9 +403,7 @@ function renderGuestCheckout() {
         cart: cartData,
         wishlist: wishlistData
       };
-      // Base64 encode the JSON payload
       const handoffBase64 = btoa(JSON.stringify(handoffPayload));
-      // Redirect to Auth domain with Handoff Hash and return path
       const authUrl = EnvHelper.getDomainUrl('my', `/auth/?redirect=${encodeURIComponent('/dashboard/#!/dashboard/cart')}#handoff=${handoffBase64}`);
       window.location.href = authUrl;
     } catch (e) {
@@ -469,21 +412,14 @@ function renderGuestCheckout() {
     }
   });
 }
-/**
- * Handle successful authentication
- * User logged in from inline form
- */
 async function handleAuthSuccess(userData) {
   try {
     console.log('[Cart] Auth success, userData:', userData);
-    // Save to auth manager
     AuthManager.saveSession(userData);
-    // Update cart state
     cartState.currentUser = userData;
     cartState.userId = userData?.userId;
     cartState.userEmail = userData?.email;
     cartState.emailVerified = userData?.emailVerified || false;
-    // IMPORTANT: Redirect to verification page if email is not verified
     if (!cartState.emailVerified) {
       showSuccess('✓ Akun Dibuat!', 'Mengarahkan ke halaman verifikasi...');
       setTimeout(() => {
@@ -492,7 +428,6 @@ async function handleAuthSuccess(userData) {
       return;
     }
     showSuccess('✓ Login Berhasil!', 'Halaman sedang diperbarui...');
-    // Re-render based on verification status
     setTimeout(() => {
       render(userData);
     }, 1500);
@@ -501,9 +436,6 @@ async function handleAuthSuccess(userData) {
     showError('Error', error.message);
   }
 }
-/**
- * Handle Google Sign-In
- */
 async function handleGoogleSignIn(response) {
   if (!response.credential) {
     showError('Error', 'Google Sign-In gagal');
@@ -518,10 +450,8 @@ async function handleGoogleSignIn(response) {
     if (!result.data) {
       throw new Error('Data pengguna tidak ditemukan');
     }
-    // Save session
     AuthManager.saveSession(result.data);
     showSuccess('✓ Google Login Sukses!', 'Halaman sedang diperbarui...');
-    // Re-render
     setTimeout(() => {
       render(result.data);
     }, 1500);
@@ -530,9 +460,7 @@ async function handleGoogleSignIn(response) {
     showError('Error', error.message);
   }
 }
-// ============================================================================
-// EMAIL VERIFICATION PROMPT
-// ============================================================================
+
 function renderEmailVerificationPrompt() {
   cartState.container.innerHTML = `
     <div class="page-container">
@@ -570,7 +498,6 @@ function renderEmailVerificationPrompt() {
       </div>
     </div>
   `;
-  // Start polling to check if user has verified their email in the database
   if (!cartState.verificationPollInterval) {
     console.log('[Cart] Starting email verification status polling...');
     cartState.verificationPollInterval = setInterval(async () => {
@@ -585,17 +512,14 @@ function renderEmailVerificationPrompt() {
           console.log('[Cart] User verified email (detected via polling)!');
           clearInterval(cartState.verificationPollInterval);
           cartState.verificationPollInterval = null;
-          // Save updated session
           const updatedUser = {
             ...cartState.currentUser,
             emailVerified: true
           };
           AuthManager.saveSession(updatedUser);
-          // Update state and show success message
           cartState.currentUser = updatedUser;
           cartState.emailVerified = true;
           showSuccess('✓ Email Terverifikasi', 'Halaman diperbarui, mengarahkan ke keranjang...');
-          // Re-render full cart
           setTimeout(() => {
             render(updatedUser);
           }, 1500);
@@ -606,9 +530,7 @@ function renderEmailVerificationPrompt() {
     }, 3000);
   }
 }
-// ============================================================================
-// EMPTY CART
-// ============================================================================
+
 function renderEmptyCart() {
   cartState.container.innerHTML = `
     <div class="page-container">
@@ -627,9 +549,7 @@ function renderEmptyCart() {
     </div>
   `;
 }
-// ============================================================================
-// AUTHENTICATED & VERIFIED CART
-// ============================================================================
+
 function renderAuthenticatedCart() {
   const {
     items,
@@ -644,7 +564,6 @@ function renderAuthenticatedCart() {
   } = getSelectedCartSummary();
   const promoTotal = discount;
   let itemsHTML = items.map(item => renderCartItem(item)).join('');
-  // Flatten HTML generation to avoid IDE syntax highlighter bugs with nested templates
   let selectedItemHTML = '';
   if (selectedItem) {
     let packageInfoHTML = '';
@@ -704,7 +623,7 @@ function renderAuthenticatedCart() {
         <!-- Removed redundant Keranjang Saya title -->
 
         <div class="cart-grid">
-          
+
           <!-- Cart Items -->
           <div>
             <div class="cart-items-section">
@@ -720,7 +639,7 @@ function renderAuthenticatedCart() {
           <div>
             <div class="cart-summary">
               <h3 class="summary-title">Ringkasan Pesanan</h3>
-              
+
               ${selectedItemHTML}
 
               ${addonsHTML}
@@ -747,7 +666,7 @@ function renderAuthenticatedCart() {
                 <label class="promo-label">
                   <i class="fas fa-tag"></i> ${cartState.promoValidated ? 'Kode Promo Aktif' : 'Punya Kode Promo?'}
                 </label>
-                
+
                 ${cartState.promoValidated ? `
                   <div class="promo-applied-box" style="display:flex; justify-content:space-between; align-items:center; background:#f0fdf4; border:1px solid #bbf7d0; padding:10px 14px; border-radius:8px; margin-bottom:12px;">
                     <div>
@@ -786,13 +705,11 @@ function renderAuthenticatedCart() {
       </div>
     </div>
   `;
-  // (Exports moved to module level)
 }
 
 function renderCartItemSelectors(item) {
   const currentPackage = item.package || 'starter';
   const selectedAddonIds = (item.addons || []).map(a => a.id.toLowerCase());
-  // Generate Packages Selection HTML
   const packagesHTML = Object.values(cartState.pricing.packages).filter(pkg => pkg.active !== false).sort((a, b) => {
     const orderA = typeof a.order === 'number' ? a.order : 999;
     const orderB = typeof b.order === 'number' ? b.order : 999;
@@ -815,7 +732,6 @@ function renderCartItemSelectors(item) {
       </div>
     `;
   }).join('');
-  // Generate Addons Checklist HTML
   const addonsHTML = Object.values(cartState.pricing.addons).sort((a, b) => {
     const orderA = typeof a.order === 'number' ? a.order : 999;
     const orderB = typeof b.order === 'number' ? b.order : 999;
@@ -860,7 +776,7 @@ function renderCartItemSelectors(item) {
               <span class="cart-item-addon-price ${isFree ? 'free-badge' : ''}">${isFree ? 'GRATIS' : '+' + formatPrice(addon.price)}</span>
             </div>
           </div>
-          
+
           ${claimBtnHtml}
         </div>
         ${detailsHtml}
@@ -887,9 +803,7 @@ function renderCartItemSelectors(item) {
     </div>
   `;
 }
-// ============================================================================
-// CART ITEM RENDERING
-// ============================================================================
+
 function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="fas fa-sync"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
   let configSection = '';
@@ -928,16 +842,12 @@ function renderCartItem(item) {
     </div>
   `;
 }
-// ============================================================================
-// PROMO CODE FUNCTIONS
-// ============================================================================
+
 function loadSavedPromo() {
   try {
     const cartData = CartManager.getCart();
     if (cartData && cartData.coupon && cartData.coupon.code) {
       cartState.promoCode = cartData.coupon.code;
-      // We don't have the original description here easily without validation, 
-      // but UI will show the discount automatically from the calculated prices
       cartState.promoDescription = 'Kupon Diterapkan';
       cartState.promoValidated = true;
       cartState.promoDiscount = cartData.discount || 0;
@@ -968,7 +878,6 @@ async function applyPromoCode() {
   try {
     const result = await APIClient.validatePromoCode(code);
     if (result.success && result.data) {
-      // Valid promo - calculate discount
       const summary = CartManager.getSummary();
       const subtotal = summary.subtotal || 0;
       let discount = 0;
@@ -983,7 +892,6 @@ async function applyPromoCode() {
       cartState.promoDiscount = discount;
       cartState.promoDescription = result.data.description;
       cartState.promoValidated = true;
-      // Save to CartManager
       const cartData = CartManager.getCart();
       cartData.coupon = {
         code: code,
@@ -1003,7 +911,6 @@ async function applyPromoCode() {
       cartState.promoDiscount = 0;
       cartState.promoDescription = null;
       cartState.promoValidated = false;
-      // Remove from CartManager
       const cartData = CartManager.getCart();
       cartData.coupon = null;
       CartManager.saveCart(cartData);
@@ -1038,9 +945,6 @@ window.cancelPromoCode = () => {
   showInfo('Promo Dibatalkan', 'Kode promo telah dilepas dari keranjang.');
   render();
 };
-// ============================================================================
-// CHECKOUT FUNCTIONS
-// ============================================================================
 async function proceedToCheckout() {
   try {
     if (cartState.isProcessingCheckout) {
@@ -1053,13 +957,7 @@ async function proceedToCheckout() {
       showError('⚠️ Keranjang Kosong', 'Tambahkan domain ke keranjang terlebih dahulu');
       return;
     }
-    // Check email verification - Bypassed to allow checkout
-    // if (!cartState.currentUser?.emailVerified) {
-    //   showError('⚠️ Email Tidak Terverifikasi', 'Silakan verifikasi email Anda terlebih dahulu');
-    //   return;
-    // }
     cartState.isProcessingCheckout = true;
-    // Get first domain for order
     const {
       selectedItem
     } = getSelectedCartSummary();
@@ -1067,10 +965,8 @@ async function proceedToCheckout() {
     if (!firstDomain) {
       throw new Error('Domain tidak ditemukan');
     }
-    // Parse domain
     const parts = firstDomain.split('.');
     const tld = parts[parts.length - 1];
-    // VALIDASI: Re-check domain availability via DNS (Siapa Cepat Dia Dapat)
     console.log('[Cart] Checking global DNS availability for:', firstDomain);
     try {
       const response = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(firstDomain)}&type=A`, {
@@ -1086,7 +982,6 @@ async function proceedToCheckout() {
           throw new Error(`Domain ${firstDomain} sudah didaftarkan secara global. Silakan pilih domain lain.`);
         }
       } else {
-        // Fallback to backend check if DNS check fails
         const availabilityCheck = await APIClient.checkDomain(firstDomain);
         if (!availabilityCheck.success || !availabilityCheck.data?.available) {
           throw new Error(`Domain ${firstDomain} tidak tersedia di sistem.`);
@@ -1098,17 +993,14 @@ async function proceedToCheckout() {
       }
       console.log("[Cart] DNS check error, proceeding anyway:", e);
     }
-    // Calculate final total with promo + ppn
     const subtotal = summary.subtotal;
     const ppn = Math.round(subtotal * 0.11);
     const finalTotal = subtotal + ppn - (cartState.promoDiscount || 0);
-    // Generate unique orderId on frontend so GAS can use it for Midtrans
     const timestamp = Date.now();
     const random6 = Math.random().toString(36).substring(2, 8).toUpperCase();
     const orderId = `INV-${timestamp}-${random6}`;
     let idToken = '';
     try {
-      // Get auth instance properly instead of relying on window.firebaseAuth
       const {
         getFirebase
       } = await import('/assets/js/modules/firebase-core.js');
@@ -1132,7 +1024,6 @@ async function proceedToCheckout() {
     } catch (e) {
       console.log('[Cart] Failed to get fresh ID token:', e);
     }
-    // Prepare order data
     const orderData = {
       orderId: orderId,
       idToken: idToken,
@@ -1152,17 +1043,13 @@ async function proceedToCheckout() {
       total: finalTotal
     };
     console.log('[Cart] Creating order:', orderData);
-    // CREATE ORDER DI DATABASE
     const createOrderResult = await APIClient.createOrder(orderData);
     if (!createOrderResult.success) {
       throw new Error(createOrderResult.message || 'Gagal membuat order');
     }
-    // orderId already declared above, verify GAS returned same/valid id
     const confirmedOrderId = createOrderResult.data?.orderId || orderId;
     console.log('[Cart] Order created:', confirmedOrderId);
-    // Hanya hapus domain yang di-checkout dari cart
     CartManager.remove(firstDomain);
-    // ALWAYS CLEAR PROMOS AFTER SUCCESSFUL CHECKOUT (Since promo is consumed for this order)
     cartState.promoCode = null;
     cartState.promoDiscount = 0;
     cartState.promoDescription = null;
@@ -1172,10 +1059,8 @@ async function proceedToCheckout() {
     localStorage.removeItem('saved_promo_discount_value');
     localStorage.removeItem('saved_promo_discount_type');
     CartManager.removeCoupon();
-    // ALWAYS CLEAR GLOBAL ADDONS AFTER SUCCESSFUL CHECKOUT (So they don't stick to the next checkout)
     CartManager.clearAddons();
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
-    // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
       window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!payment?orderId=${encodeURIComponent(confirmedOrderId)}`);
     }, 1500);

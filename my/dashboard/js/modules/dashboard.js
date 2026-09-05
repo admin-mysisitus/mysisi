@@ -1,6 +1,3 @@
-/**
- * Dashboard Home Page Module
- */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   formatPrice,
@@ -13,7 +10,6 @@ export async function render(currentUser) {
     return;
   }
   try {
-    // Update welcome name dynamically
     let displayName = currentUser.displayName || 'Pelanggan';
     if (displayName && typeof displayName === 'string' && displayName.trim().startsWith('{')) {
       try {
@@ -27,19 +23,16 @@ export async function render(currentUser) {
     if (welcomeName) {
       welcomeName.textContent = displayName;
     }
-    // Get order statistics from userOrderStats endpoint
     let stats = null;
     try {
       const result = await APIClient.getUserOrderStats(currentUser.userId);
       if (result.success) {
         stats = result.data || {};
-        // Update dashboard with statistics
         updateStatisticsDisplay(stats);
       }
     } catch (error) {
       console.log('Statistics not available:', error);
     }
-    // Render cart reminder card at the top if cart is not empty
     try {
       const {
         CartManager
@@ -74,11 +67,9 @@ export async function render(currentUser) {
     } catch (cartError) {
       console.log('Error rendering cart reminder card:', cartError);
     }
-    // Render dynamic domain pricing
     try {
       const configRes = await APIClient.fetchPricingConfig();
       if (configRes.success && configRes.data && configRes.data.domains) {
-        // Map RTDB Object back to Array for rendering
         const pricingData = Object.values(configRes.data.domains).map(d => ({
           ...d,
           ext: `.${d.ext}`
@@ -106,7 +97,6 @@ export async function render(currentUser) {
     } catch (pricingError) {
       console.log('Error fetching domain pricing:', pricingError);
     }
-    // Render dynamic promo block
     try {
       const promoPanel = document.getElementById('dashboard-promo-panel');
       const promoTitle = document.getElementById('dashboard-promo-title');
@@ -114,7 +104,6 @@ export async function render(currentUser) {
       if (promoPanel && promoTitle && promoDesc) {
         const promoRes = await APIClient.getPublicPromos();
         if (promoRes.success && promoRes.data && promoRes.data.length > 0) {
-          // Find the best percentage discount
           const percentPromos = promoRes.data.filter(p => p.type === 'percentage');
           let bestPercent = 0;
           if (percentPromos.length > 0) {
@@ -124,12 +113,10 @@ export async function render(currentUser) {
             promoTitle.textContent = `Diskon Hingga ${bestPercent}%`;
             promoDesc.textContent = `Klaim berbagai kode voucher aktif kami sekarang juga!`;
           } else {
-            // Fallback if there are only fixed discounts
             promoTitle.textContent = `Voucher Spesial Tersedia`;
             promoDesc.textContent = `Dapatkan potongan harga eksklusif untuk layanan kami.`;
           }
         } else {
-          // Hide panel if no promos available
           promoPanel.style.display = 'none';
         }
       }
@@ -138,7 +125,6 @@ export async function render(currentUser) {
       const promoPanel = document.getElementById('dashboard-promo-panel');
       if (promoPanel) promoPanel.style.display = 'none';
     }
-    // Setup event listeners
     setupEventListeners();
   } catch (error) {
     console.log('Error rendering dashboard:', error);
@@ -151,7 +137,6 @@ export async function render(currentUser) {
 }
 
 function updateStatisticsDisplay(stats) {
-  // Update dashboard statistics widgets
   const widgets = {
     'stat-total-orders': stats.totalOrders || 0,
     'stat-total-spent': stats.totalSpent ? formatPrice(stats.totalSpent) : 'Rp 0',
@@ -169,7 +154,6 @@ function updateStatisticsDisplay(stats) {
 }
 
 function setupEventListeners() {
-  // Quick action buttons
   const btnCheckout = document.getElementById('btn-quick-checkout');
   if (btnCheckout) {
     btnCheckout.addEventListener('click', () => {
@@ -194,7 +178,6 @@ function setupEventListeners() {
       window.location.hash = '#!/dashboard/support';
     });
   }
-  // Domain search form in dashboard
   const domainForm = document.getElementById('dashboard-domain-form');
   if (domainForm) {
     domainForm.addEventListener('submit', (event) => {

@@ -1,20 +1,3 @@
-/**
- * UNIFIED AUTH MANAGER
- * ===================================
- * Single source of truth untuk authentication state
- * - Centralized session management
- * - Event-driven updates
- * - Automatic multi-tab sync
- * - Session timeout support
- * - No duplication with dashboard module
- * 
- * Usage:
- *   AuthManager.login(email, password)
- *   AuthManager.logout()
- *   AuthManager.isLoggedIn()
- *   AuthManager.getCurrentUser()
- *   AuthManager.on('authChanged', handler)
- */
 import {
   getFirebase
 } from './firebase-core.js';
@@ -31,25 +14,17 @@ export class AuthManager {
   static SESSION_VERSION = 2;
   static SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
   static STORAGE_TYPE = 'localStorage'; // Use localStorage for cross-tab persistence
-  // State
   static state = {
     user: null,
     isLoggedIn: false,
     lastActivity: null,
     expiresAt: null
   };
-  // Event listeners
   static listeners = {
     authChanged: [],
     authError: [],
     sessionExpired: []
   };
-  /**
-   * Initialize auth manager
-   * - Check if user is logged in
-   * - Setup session timeout
-   * - Setup storage listener
-   */
   static async init() {
     this.loadSession();
     try {
@@ -66,7 +41,6 @@ export class AuthManager {
                 const userRef = db.ref(`users/${firebaseUser.uid}`);
                 const snap = await userRef.once('value');
                 profile = snap.val();
-                // Pasang Realtime Listener untuk deteksi suspend dan demosi instan
                 userRef.on('value', (rtSnap) => {
                   const rtProfile = rtSnap.val();
                   if (rtProfile) {
@@ -79,14 +53,11 @@ export class AuthManager {
                       }
                       return;
                     }
-                    // Deteksi penurunan role secara realtime saat sedang di dasbor admin
                     if (rtProfile.role !== 'admin' && (window.location.hostname === 'backstage.sisitus.com' || window.location.pathname.includes('/admin/'))) {
                       console.log('[AuthManager] Realtime Role Demoted, forcing exit from admin');
-                      // Bawa dia ke dasbor pelanggan, jangan ke login, karena statusnya adalah pelanggan aktif
                       window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/');
                       return;
                     }
-                    // Sinkronisasi data sesi lokal jika ada perubahan jabatan
                     if (this.state.user && this.state.user.role !== rtProfile.role) {
                       const updatedUser = {
                         ...this.state.user,
@@ -100,7 +71,6 @@ export class AuthManager {
                 console.log('[AuthManager] Failed to fetch user profile:', e);
               }
             }
-            // Mencegah login jika status suspended di database
             if (profile && profile.status === 'suspended') {
               console.log('[AuthManager] Account is suspended, forcing logout');
               auth.signOut();
@@ -114,15 +84,12 @@ export class AuthManager {
               emailVerified: firebaseUser.emailVerified,
               ...(profile || {})
             };
-            // Ensure state updates without causing infinite loop
             if (JSON.stringify(this.state.user) !== JSON.stringify(userObj)) {
               this.saveSession(userObj);
-              // Sync Cart & Wishlist on login
               const cartRes = await APIClient.fetchUserCart(userObj.userId);
               if (cartRes.success && cartRes.data) {
                 CartManager.mergeCart(cartRes.data);
               } else {
-                // If backend is empty but local has items, force sync
                 if (!CartManager.isEmpty()) {
                   await APIClient.syncUserCart(userObj.userId, CartManager.getCart());
                 }
@@ -131,7 +98,6 @@ export class AuthManager {
               if (wishRes.success && wishRes.data) {
                 WishlistManager.mergeWishlist(wishRes.data);
               } else {
-                // Force sync if local has items
                 const currentWishlist = WishlistManager.getWishlist();
                 if (currentWishlist && currentWishlist.domains && currentWishlist.domains.length > 0) {
                   await APIClient.syncUserWishlist(userObj.userId, currentWishlist);
@@ -140,8 +106,6 @@ export class AuthManager {
             }
           } else {
             if (this.state.isLoggedIn) {
-              // Jika kita berada di domain publik, token Firebase tidak terbaca, 
-              // jadi jangan biarkan Firebase menghapus sesi localStorage (SSO) secara sepihak!
               const hostname = window.location.hostname;
               const isMyDomain = hostname.startsWith('my.') || hostname.includes('localhost');
               if (isMyDomain) {
@@ -157,7 +121,6 @@ export class AuthManager {
       console.log('[AuthManager] Error initializing Firebase Auth:', error);
     }
     this.setupStorageListener();
-    // Setup sync listeners
     if (!this._syncListenersAdded) {
       this._syncListenersAdded = true;
       window.addEventListener('cart:updated', async (e) => {
@@ -174,9 +137,6 @@ export class AuthManager {
       });
     }
   }
-  /**
-   * Load session from storage
-   */
   static loadSession() {
     try {
       const stored = window[this.STORAGE_TYPE].getItem(this.SESSION_KEY);
@@ -190,13 +150,11 @@ export class AuthManager {
         return;
       }
       const data = JSON.parse(stored);
-      // Validate version
       if (data.version !== this.SESSION_VERSION) {
         console.log('[AuthManager] Session version mismatch, clearing');
         this.clearSession();
         return;
       }
-      // Validate user data structure
       if (data.user && typeof data.user === 'object') {
         this.state = {
           user: this.validateUserData(data.user),
@@ -208,10 +166,6 @@ export class AuthManager {
       this.clearSession();
     }
   }
-  /**
-   * Validate user data structure
-   * Ensure required fields exist
-   */
   static validateUserData(user) {
     const required = ['userId', 'email', 'displayName'];
     for (const field of required) {
@@ -234,9 +188,6 @@ export class AuthManager {
       hasPassword: user.hasPassword
     };
   }
-  /**
-   * Save session to storage
-   */
   static saveSession(user) {
     try {
       if (!user) {
@@ -263,11 +214,7 @@ export class AuthManager {
     }
   }
   static clearSession() {
-    // Clear localStorage session key
     window[this.STORAGE_TYPE].removeItem(this.SESSION_KEY);
-    // Jika ada session storage yang dipakai khusus auth di masa depan, hapus item per item
-    // contoh: sessionStorage.removeItem('auth_token_tmp');
-    // Completely invalidate the Firebase Auth session to prevent ghost sessions
     getFirebase().then(({
       auth
     }) => {
@@ -283,17 +230,9 @@ export class AuthManager {
       this.emit('authChanged', null);
     }
   }
-  /**
-   * Get current logged-in user
-   */
   static getCurrentUser() {
     return this.state.user;
   }
-  /**
-   * CRITICAL: Refresh user data from storage (NEW)
-   * Call this when returning from email verification or other auth operations
-   * to ensure you have the latest user data
-   */
   static refreshUserData() {
     console.log('[AuthManager] Refreshing user data from storage...');
     this.loadSession();
@@ -306,21 +245,12 @@ export class AuthManager {
     }
     return this.state.user;
   }
-  /**
-   * Check if user is logged in
-   */
   static isLoggedIn() {
     return this.state.isLoggedIn && this.state.user !== null;
   }
-  /**
-   * Get user ID
-   */
   static getUserId() {
     return this.state.user?.userId || null;
   }
-  /**
-   * Get Firebase ID Token
-   */
   static async getIdToken() {
     try {
       const {
@@ -334,15 +264,9 @@ export class AuthManager {
     }
     return null;
   }
-  /**
-   * Check if user is admin
-   */
   static isAdmin() {
     return this.isLoggedIn() && this.state.user?.role === 'admin';
   }
-  /**
-   * Update user data (after profile updates)
-   */
   static updateUser(updates) {
     if (!this.isLoggedIn()) {
       throw new Error('No user logged in');
@@ -353,9 +277,6 @@ export class AuthManager {
     };
     this.saveSession(updatedUser);
   }
-  /**
-   * Setup storage listener for multi-tab sync
-   */
   static setupStorageListener() {
     if (this._storageListenerAdded) return;
     this._storageListenerAdded = true;
@@ -365,14 +286,10 @@ export class AuthManager {
       }
     });
   }
-  /**
-   * Event system
-   */
   static on(eventName, handler) {
     if (this.listeners[eventName]) {
       this.listeners[eventName].push(handler);
     }
-    // Return unsubscribe function
     return () => {
       this.listeners[eventName] = this.listeners[eventName].filter(h => h !== handler);
     };
@@ -387,22 +304,17 @@ export class AuthManager {
         }
       });
     }
-    // Also dispatch custom event for global handling
     const event = new CustomEvent(`auth:${eventName}`, {
       detail: data
     });
     document.dispatchEvent(event);
   }
-  /**
-   * Expose state as read-only object
-   */
   static getState() {
     return {
       ...this.state
     };
   }
 }
-// Initialize on page load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => AuthManager.init());
 } else {

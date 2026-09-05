@@ -80,10 +80,8 @@ function setupEventListeners() {
     document.getElementById('usr-email').value = user.email || '';
     document.getElementById('usr-wa').value = user.whatsapp || user.wa || ''; // depending on API response
     document.getElementById('usr-role').value = user.role || 'customer';
-    // Fallback status aman: jika kosong, asumsikan aktif. Mencegah auto-suspend pada user lama.
     const currentStatus = user.status || 'active';
     document.getElementById('usr-active').checked = currentStatus === 'active';
-    // Ideally we should have verified status from API, assume true for existing if not provided
     document.getElementById('usr-verified').checked = user.verified !== false;
     document.getElementById('user-modal').style.display = 'flex';
   };
@@ -139,7 +137,6 @@ function applyFilters() {
 async function loadUsers() {
   const tbody = document.getElementById('users-table-body');
   if (!tbody) return;
-  // Show loading state in table
   tbody.innerHTML = `
     <tr>
       <td colspan="5" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">

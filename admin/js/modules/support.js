@@ -146,7 +146,6 @@ function renderTickets(tickets, listContainer) {
   listContainer.innerHTML = '';
   currentTickets = tickets;
   tickets.forEach((t, index) => {
-    // Only select the first item for demonstration
     let isActive = index === 0;
     let statusColor = (t.status === 'Open' || t.status === 'open') ? 'var(--admin-warning)' : ((t.status === 'Closed' || t.status === 'closed') ? 'var(--admin-text-muted)' : 'var(--admin-success)');
     let priorityBadge = (t.priority === 'High' || t.priority === 'high') ? '<i class="fas fa-fire" style="color: var(--admin-danger);"></i>' : '';

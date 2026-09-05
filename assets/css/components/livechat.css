@@ -637,7 +637,6 @@
   color: #94a3b8;
 }
 
-/* Custom Scrollbar untuk Textarea User */
 .livechat-widget .chat-input textarea::-webkit-scrollbar {
   width: 4px;
 }
@@ -865,7 +864,6 @@
   display: none;
 }
 
-/* Fix for HTML Lists inside Chat Messages */
 .livechat-widget .msg-content ul,
 .livechat-widget .msg-content ol {
   padding-left: 20px;
@@ -886,7 +884,6 @@
   display: list-item;
 }
 
-/* Noted Kak UI Styles */
 .livechat-widget .noted-kak-container {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -923,7 +920,6 @@
   font-size: 11px;
 }
 
-/* WhatsApp Action UI Styles */
 .livechat-widget .wa-action-container {
   margin-top: 12px;
   display: block;
@@ -961,7 +957,6 @@
   font-size: 22px;
 }
 
-/* Custom Round Spinner Animation */
 .livechat-widget .livechat-custom-spinner {
   display: inline-block;
   width: 14px;

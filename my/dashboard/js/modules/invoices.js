@@ -1,9 +1,3 @@
-/**
- * Invoices Page Module
- * Display invoices and payment history
- * MVP Status: ✅ COMPLETE - Shows invoices table with search/filter
- * Future Enhancement: Add invoice download (PDF generation)
- */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   formatPrice,
@@ -13,10 +7,8 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
-    // Load user orders (use as invoices for now)
     const result = await APIClient.getUserOrders(currentUser.userId);
     const orders = result.data?.orders || result.orders || [];
-    // Filter orders with payment status = paid
     const invoices = orders.filter(o => o.paymentStatus === 'paid');
     const container = document.getElementById('invoices-list-container');
     if (!container) return;
@@ -58,7 +50,7 @@ export async function render(currentUser) {
               </table>
             </div>
           </div>
-          
+
           <!-- Mobile Card List -->
           <div class="invoices-mobile-view">
             ${invoices.map(inv => `

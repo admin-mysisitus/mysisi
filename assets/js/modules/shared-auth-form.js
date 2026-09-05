@@ -1,17 +1,3 @@
-/**
- * SHARED AUTH FORM MODULE
- * ===================================
- * Reusable login/register form for:
- * - https://my.sisitus.com/auth/ (standalone page)
- * - /cart/ (inline checkout form)
- * 
- * Features:
- * - Register + Login tabs
- * - Email verification flow
- * - Password reset links
- * - Google Sign-In integration
- * - Inline or standalone usage
- */
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
@@ -45,9 +31,6 @@ export class SharedAuthForm {
       isValidatingEmail: false
     };
   }
-  /**
-   * Initialize and render form
-   */
   render() {
     this.container = document.getElementById(this.options.containerId);
     if (!this.container) {
@@ -58,9 +41,6 @@ export class SharedAuthForm {
     this.setupEventListeners();
     this.initGoogleSignIn();
   }
-  /**
-   * Explicitly initialize Google Sign-In for dynamic rendering
-   */
   initGoogleSignIn() {
     if (!this.options.showGoogleSignIn) return;
     const container = this.container.querySelector('#google-signin-btn-shared');
@@ -81,7 +61,6 @@ export class SharedAuthForm {
       client_id: '802713479795-v6eshpb9lkqrvf7tndhi6llv3fjg2qsi.apps.googleusercontent.com',
       callback: async (response) => {
         try {
-          // Native spinner on the container (although GSI button might hide it)
           const errorDiv = this.container.querySelector('#auth-error');
           if (errorDiv) errorDiv.style.display = 'none';
           const result = await APIClient.verifyGoogleToken(response.credential);
@@ -113,9 +92,6 @@ export class SharedAuthForm {
       logo_alignment: 'left'
     });
   }
-  /**
-   * Generate form HTML
-   */
   renderFormHTML() {
     const inlineClass = this.options.inlineMode ? 'inline' : '';
     this.container.innerHTML = `
@@ -154,7 +130,7 @@ export class SharedAuthForm {
             <input type="email" name="email" required placeholder="nama@example.com">
             <small>Kami akan mengirim link verifikasi ke email ini</small>
           </div>
-          
+
           <div class="form-group">
             <label>Password</label>
             <input type="password" name="password" id="register-password-shared" required placeholder="Minimal 8 karakter">
@@ -171,7 +147,7 @@ export class SharedAuthForm {
             <label>Konfirmasi Password</label>
             <input type="password" name="passwordConfirm" required placeholder="Ulangi password Anda">
           </div>
-          
+
           <div class="form-group">
             <label>Nama Lengkap</label>
             <input type="text" name="displayName" required placeholder="Contoh: John Doe">
@@ -203,7 +179,7 @@ export class SharedAuthForm {
             <label>Email</label>
             <input type="email" name="email" required placeholder="nama@example.com">
           </div>
-          
+
           <div class="form-group">
             <label>Password</label>
             <input type="password" name="password" id="login-password-shared" required placeholder="Masukkan password Anda">
@@ -244,15 +220,13 @@ export class SharedAuthForm {
           <button type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 14px; margin-bottom: 15px;">
             <i class="fas fa-paper-plane"></i> Kirim Link Reset
           </button>
-          
+
           <div style="text-align: center; margin-top: 15px; font-size: 14px;">
             <a href="#" class="back-to-login-link" style="text-decoration: none; color: #2563EB; font-size: 14px;">
               <i class="fas fa-arrow-left"></i> Kembali ke Login
             </a>
           </div>
         </form>
-
-
 
         <!-- Privacy Notice -->
         ${this.options.showPrivacyNotice ? `
@@ -444,18 +418,13 @@ export class SharedAuthForm {
       </div>
     `;
   }
-  /**
-   * Setup event listeners
-   */
   setupEventListeners() {
-    // Tab switching
     if (!this.options.inlineMode) {
       const tabBtns = this.container.querySelectorAll('.tab-btn');
       tabBtns.forEach(btn => {
         btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
       });
     }
-    // Toggle links for switching view inline (especially in inline mode)
     const toLoginBtns = this.container.querySelectorAll('.switch-to-login, .back-to-login-link');
     toLoginBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -477,22 +446,18 @@ export class SharedAuthForm {
         this.switchTab('forgot-password');
       });
     });
-    // Register form
     const registerForm = this.container.querySelector('#register-form');
     if (registerForm) {
       registerForm.addEventListener('submit', (e) => this.handleRegister(e));
     }
-    // Login form
     const loginForm = this.container.querySelector('#login-form');
     if (loginForm) {
       loginForm.addEventListener('submit', (e) => this.handleLogin(e));
     }
-    // Forgot password form
     const forgotForm = this.container.querySelector('#forgot-password-form');
     if (forgotForm) {
       forgotForm.addEventListener('submit', (e) => this.handleForgotPassword(e));
     }
-    // Show register form by default in inline mode
     if (this.options.inlineMode) {
       const registerForm = this.container.querySelector('.register-form');
       const loginForm = this.container.querySelector('.login-form');
@@ -501,23 +466,15 @@ export class SharedAuthForm {
       if (loginForm) loginForm.classList.remove('active');
       if (forgotForm) forgotForm.classList.remove('active');
     }
-    // Auto-show login tab if coming from forgot password
     if (window.location.hash === '#!login') {
       this.switchTab('login');
     }
-    // Initialize password toggles
     initPasswordToggle(this.container);
-    // Initialize password strength indicators
     this.initPasswordStrengthIndicators();
-    // Initialize WhatsApp validation
     this.initWhatsAppValidation();
   }
-  /**
-   * Switch between tabs
-   */
   switchTab(tabName) {
     this.state.currentTab = tabName;
-    // Update tab buttons
     const tabBtns = this.container.querySelectorAll('.tab-btn');
     tabBtns.forEach(btn => {
       btn.classList.remove('active');
@@ -525,7 +482,6 @@ export class SharedAuthForm {
         btn.classList.add('active');
       }
     });
-    // Update forms
     const forms = this.container.querySelectorAll('.auth-form');
     forms.forEach(form => {
       form.classList.remove('active');
@@ -533,12 +489,8 @@ export class SharedAuthForm {
         form.classList.add('active');
       }
     });
-    // Clear messages
     this.clearMessages();
   }
-  /**
-   * Handle forgot password form submission inline
-   */
   async handleForgotPassword(e) {
     e.preventDefault();
     if (this.state.isSubmitting) return;
@@ -565,9 +517,6 @@ export class SharedAuthForm {
       this.setSubmitButtonLoading(form, false);
     }
   }
-  /**
-   * Handle register form submission
-   */
   async handleRegister(e) {
     e.preventDefault();
     if (this.state.isSubmitting) return;
@@ -577,7 +526,6 @@ export class SharedAuthForm {
     const passwordConfirm = form.querySelector('input[name="passwordConfirm"]').value;
     const displayName = form.querySelector('input[name="displayName"]').value.trim();
     const whatsapp = form.querySelector('input[name="whatsapp"]')?.value.trim() || '';
-    // Validation
     if (!isValidEmail(email)) {
       this.showError('Email tidak valid');
       return;
@@ -602,7 +550,6 @@ export class SharedAuthForm {
     try {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Membuat akun...');
-      // Call register API
       let result;
       if (EnvHelper.getDomainType() === 'public') {
         result = await this.delegateAuth('register', {
@@ -618,9 +565,7 @@ export class SharedAuthForm {
         throw new Error(result.message || 'Registrasi gagal');
       }
       this.showSuccess('✓ Registrasi Berhasil!', 'Silakan buka email Anda untuk verifikasi akun');
-      // Auto-login after successful registration
       setTimeout(() => {
-        // Save session if API returns user data
         if (result.data) {
           const userData = {
             userId: result.data.userId,
@@ -632,11 +577,9 @@ export class SharedAuthForm {
             emailVerified: result.data.emailVerified || false
           };
           AuthManager.saveSession(userData);
-          // Call success callback
           if (this.options.onRegisterSuccess) {
             this.options.onRegisterSuccess(userData);
           } else {
-            // Default: redirect to verify email page
             window.location.href = EnvHelper.getDomainUrl('my', '/auth/verify-email.html?sent=true');
           }
         }
@@ -649,16 +592,12 @@ export class SharedAuthForm {
       this.setSubmitButtonLoading(form, false);
     }
   }
-  /**
-   * Handle login form submission
-   */
   async handleLogin(e) {
     e.preventDefault();
     if (this.state.isSubmitting) return;
     const form = e.target;
     const email = form.querySelector('input[name="email"]').value.trim();
     const password = form.querySelector('input[name="password"]').value;
-    // Validation
     if (!isValidEmail(email)) {
       this.showError('Email tidak valid');
       return;
@@ -670,7 +609,6 @@ export class SharedAuthForm {
     try {
       this.state.isSubmitting = true;
       this.setSubmitButtonLoading(form, true, 'Login...');
-      // Call login API
       let result;
       if (EnvHelper.getDomainType() === 'public') {
         result = await this.delegateAuth('login', {
@@ -689,15 +627,12 @@ export class SharedAuthForm {
       if (!result.data) {
         throw new Error('Data pengguna tidak ditemukan');
       }
-      // Save session
       AuthManager.saveSession(result.data);
       this.showSuccess('✓ Login Berhasil!', `Selamat datang, ${result.data.displayName}!`);
-      // Call success callback
       setTimeout(() => {
         if (this.options.onLoginSuccess) {
           this.options.onLoginSuccess(result.data);
         } else {
-          // Default: redirect to dashboard or admin
           window.location.href = result.data.role === 'admin' ? EnvHelper.getDomainUrl('backstage', '/') : EnvHelper.getDomainUrl('my', '/dashboard/');
         }
       }, 1500);
@@ -709,9 +644,6 @@ export class SharedAuthForm {
       this.setSubmitButtonLoading(form, false);
     }
   }
-  /**
-   * Show error message
-   */
   showError(message) {
     const errorDiv = this.container.querySelector('#auth-error');
     const successDiv = this.container.querySelector('#auth-success');
@@ -723,9 +655,6 @@ export class SharedAuthForm {
       successDiv.style.display = 'none';
     }
   }
-  /**
-   * Show success message
-   */
   showSuccess(title, message = '') {
     const successDiv = this.container.querySelector('#auth-success');
     const errorDiv = this.container.querySelector('#auth-error');
@@ -737,18 +666,12 @@ export class SharedAuthForm {
       errorDiv.style.display = 'none';
     }
   }
-  /**
-   * Clear messages
-   */
   clearMessages() {
     const errorDiv = this.container.querySelector('#auth-error');
     const successDiv = this.container.querySelector('#auth-success');
     if (errorDiv) errorDiv.style.display = 'none';
     if (successDiv) successDiv.style.display = 'none';
   }
-  /**
-   * Set submit button loading state
-   */
   setSubmitButtonLoading(form, isLoading, loadingText = 'Loading...') {
     const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
@@ -761,9 +684,6 @@ export class SharedAuthForm {
       submitBtn.textContent = submitBtn.dataset.originalText || 'Submit';
     }
   }
-  /**
-   * Mulai hitung mundur (karena rate limit backend)
-   */
   startCountdown(btn, seconds) {
     if (!btn) return;
     if (!btn.dataset.originalHtml) btn.dataset.originalHtml = btn.innerHTML;
@@ -783,9 +703,6 @@ export class SharedAuthForm {
       }
     }, 1000);
   }
-  /**
-   * Initialize password strength indicators
-   */
   initPasswordStrengthIndicators() {
     const registerPassword = this.container.querySelector('#register-password-shared');
     if (registerPassword) {
@@ -800,9 +717,6 @@ export class SharedAuthForm {
       });
     }
   }
-  /**
-   * Calculate and display password strength
-   */
   updatePasswordStrength(password, strengthDivId, strengthBarId, strengthTextId) {
     const strengthDiv = this.container.querySelector(`#${strengthDivId}`);
     const strengthBar = this.container.querySelector(`#${strengthBarId}`);
@@ -841,9 +755,6 @@ export class SharedAuthForm {
     strengthBar.style.width = (strength * 20) + '%';
     strengthText.textContent = text;
   }
-  /**
-   * Initialize WhatsApp number validation
-   */
   initWhatsAppValidation() {
     const whatsappInput = this.container.querySelector('#register-whatsapp-shared');
     if (whatsappInput) {
@@ -852,9 +763,6 @@ export class SharedAuthForm {
       });
     }
   }
-  /**
-   * Update WhatsApp validation display
-   */
   updateWhatsAppValidation(value, validationDivId, barId, textId) {
     const div = this.container.querySelector(`#${validationDivId}`);
     const barEl = this.container.querySelector(`#${barId}`);
@@ -883,14 +791,9 @@ export class SharedAuthForm {
       textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nomor terlalu pendek';
     }
   }
-  /**
-   * Mendelegasikan autentikasi secara aman menggunakan Popup (Cross-Domain anti Storage Partitioning)
-   */
   delegateAuth(action, payload) {
     return new Promise((resolve) => {
-      // Buka popup ke sso-popup.html
       const popupUrl = EnvHelper.getDomainUrl('my', '/auth/sso-popup.html');
-      // Hitung posisi tengah layar untuk popup
       const width = 450;
       const height = 550;
       const left = (window.screen.width / 2) - (width / 2);
@@ -906,7 +809,6 @@ export class SharedAuthForm {
       const handler = (event) => {
         const allowedOrigins = ['https://my.sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
         if (!allowedOrigins.includes(event.origin)) return;
-        // Popup sudah siap menerima data
         if (event.data && event.data.type === 'SISITUS_POPUP_READY') {
           popup.postMessage({
             type: 'SISITUS_DELEGATE_AUTH',
@@ -918,7 +820,6 @@ export class SharedAuthForm {
             }
           }, '*');
         }
-        // Popup selesai memproses dan mengembalikan hasil
         if (event.data && event.data.type === 'SISITUS_DELEGATE_SUCCESS' && event.data.action === action) {
           window.removeEventListener('message', handler);
           if (event.data.success) {
@@ -936,7 +837,6 @@ export class SharedAuthForm {
         }
       };
       window.addEventListener('message', handler);
-      // Cek secara berkala apakah pengguna menutup popup secara manual
       const checkClosed = setInterval(() => {
         if (popup.closed) {
           clearInterval(checkClosed);
@@ -947,7 +847,6 @@ export class SharedAuthForm {
           });
         }
       }, 500);
-      // Timeout absolut (30 detik untuk berjaga-jaga jika proses Firebase lambat)
       setTimeout(() => {
         clearInterval(checkClosed);
         window.removeEventListener('message', handler);

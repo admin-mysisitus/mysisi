@@ -1,16 +1,11 @@
-/* ========== PEMBUATAN WEBSITE PREMIUM INTERACTIONS ========== */
 document.addEventListener('DOMContentLoaded', function() {
-  // ========== 1. FEATURES VERTICAL TABS ==========
   const featBtns = document.querySelectorAll('.feat-btn');
   const featPanes = document.querySelectorAll('.feat-pane');
   featBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      // Remove active from all
       featBtns.forEach(b => b.classList.remove('active'));
       featPanes.forEach(p => p.classList.remove('active'));
-      // Add active to clicked
       this.classList.add('active');
-      // Scroll nav to bring button into view on mobile
       const featuresNav = document.querySelector('.features-nav-vertical');
       if (featuresNav && window.innerWidth <= 768) {
         const scrollLeft = this.offsetLeft - (featuresNav.clientWidth / 2) + (this.clientWidth / 2);
@@ -19,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
           behavior: 'smooth'
         });
       }
-      // Show pane
       const targetId = this.getAttribute('data-target');
       const targetPane = document.getElementById(targetId);
       if (targetPane) {
@@ -27,17 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== 2. PRICING TOGGLE ==========
   const priceBtns = document.querySelectorAll('.price-btn');
   const pricePanes = document.querySelectorAll('.price-pane');
   priceBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      // Remove active from all
       priceBtns.forEach(b => b.classList.remove('active'));
       pricePanes.forEach(p => p.classList.remove('active'));
-      // Add active to clicked
       this.classList.add('active');
-      // Scroll nav on mobile
       const pricingNav = document.querySelector('.pricing-toggle-nav');
       if (pricingNav && window.innerWidth <= 768) {
         const scrollLeft = this.offsetLeft - (pricingNav.clientWidth / 2) + (this.clientWidth / 2);
@@ -46,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
           behavior: 'smooth'
         });
       }
-      // Show pane
       const targetId = this.getAttribute('data-target');
       const targetPane = document.getElementById(targetId);
       if (targetPane) {
@@ -54,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== 3. AUTO SNAP SLIDER (RESPONSIVE HORIZONTAL CAROUSEL ON MOBILE) ==========
+
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -72,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
-      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
       if (clientWidth >= scrollWidth - 5) return;
       isAutoScrolling = true;
       if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);

@@ -153,7 +153,6 @@ async function loadAddons() {
 function renderAddons(addons, container) {
   container.innerHTML = '';
   currentAddons = addons;
-  // Sort: recommended first
   const sortedAddons = addons.sort((a, b) => {
     return (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0);
   });
@@ -166,7 +165,6 @@ function renderAddons(addons, container) {
     card.style.position = 'relative';
     card.style.display = 'flex';
     card.style.flexDirection = 'column';
-    // Highlight if recommended
     if (addon.recommended) {
       card.style.border = '1px solid var(--admin-primary)';
       card.style.background = 'linear-gradient(145deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0.2))';
@@ -185,16 +183,16 @@ function renderAddons(addons, container) {
           ${badges}
         </div>
       </div>
-      
+
       <div style="margin-bottom: 16px;">
         <span style="font-size: 1.5rem; font-weight: 700; color: var(--admin-text-main);">${displayPrice}</span>
         <span style="color: var(--admin-text-muted);">/${addon.duration} Tahun</span>
       </div>
-      
+
       <p style="color: var(--admin-text-muted); font-size: 0.9rem; margin: 0 0 24px 0; flex-grow: 1;">
         ${addon.description || addon.desc || '-'}
       </p>
-      
+
       <div style="display: flex; gap: 10px;">
         <button onclick="editAddon('${addon.id}')" class="admin-btn" style="flex: 1; padding: 10px; background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); border: 1px solid rgba(99, 102, 241, 0.2);">
           <i class="fas fa-edit"></i> Edit

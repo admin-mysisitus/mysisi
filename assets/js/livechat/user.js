@@ -1,9 +1,3 @@
-/**
- * ============================================================================
- * REFACTORED USER CHAT INTERFACE - NEW MODULAR ARCHITECTURE
- * ============================================================================
- */
-// DOM ELEMENTS
 const chatBtn = document.getElementById('chatBtn');
 const chatModal = document.getElementById('chatModal');
 const modalOverlay = document.getElementById('modalOverlay');
@@ -13,70 +7,42 @@ const sendBtn = document.getElementById('sendBtn');
 const headerName = document.getElementById('headerName');
 const headerAvatar = document.getElementById('headerAvatar');
 const chatHeader = document.getElementById('chatHeader');
-// SESSION & STATE
 let inactiveTimer;
 let inactivityWarningTimer;
 let currentAgent = {};
 let isConversationEnded = false;
-// =========================================
-// CONVERSATION vs AGENT (NEW ARCHITECTURE)
-// =========================================
-// conversationId: STABLE (never changes)
-// - User-unique identifier
-// - Persists across agent changes
-// - Based on user + timestamp
-//
-// assignedAgent: CHANGEABLE (independent)
-// - Which agent is handling this conversation
-// - Changes do NOT affect message history
-// - For UI display and routing only
-// =========================================
 let conversationId = localStorage.getItem('conversationId');
 let assignedAgent = null;
 let initialSpinnerRemoved = false;
-// Notifications
 let lastReadTimestamp = parseInt(localStorage.getItem('lastReadTimestamp') || '0', 10);
 let userUnreadCount = 0; // We'll recalculate this
 const notificationAudio = new Audio('/assets/audio/notification.mp3');
-// NEW: Module instances (initialized on chat open)
 let messageStore = null;
 let messageRenderer = null;
 let syncEngine = null;
 let sendQueue = null;
-// State tracking
 let isWaiting = false;
-// ============================================================================
-// MODULE INITIALIZATION
-// ============================================================================
+
 function initializeChatModules() {
   if (messageStore) return;
-  // Create renderer (idempotent DOM updates)
   messageRenderer = new MessageRenderer('#messages');
   messageRenderer.roomId = conversationId;
-  // Create message store (single source of truth) - pass renderer for ID tracking
   messageStore = new MessageStore(messageRenderer);
-  // Create sync engine (polling & reconciliation)
   syncEngine = new SyncEngine(messageStore, messageRenderer, {
     sessionCache: sessionCache,
     onTyping: handleTypingIndicator
   });
-  // Create send queue (outgoing messages with render callback)
   sendQueue = new SendQueue(messageStore, {
     onRender: () => syncEngine._scheduleRender() // UNIFIED RENDER PATH
   });
-  // Subscribe to store events
   _setupStoreSubscriptions();
-  // ===== RESTORE PROCESS =====
   const userType = 'user';
   const userId = conversationId;
-  // Try to restore from cache
   const cached = sessionCache.tryRestore(conversationId, userId, userType);
   if (cached && cached.messages && cached.messages.length > 0) {
-    // Restore messages to store
     cached.messages.forEach(msg => {
       messageStore.upsertMessage(msg);
     });
-    // Render cache immediately
     const sortedMessages = messageStore.getSortedMessages();
     messageRenderer?.renderMessages(sortedMessages, {
       type: userType
@@ -91,7 +57,6 @@ function _setupStoreSubscriptions() {
       old: oldMsg,
       new: newMsg
     } = data;
-    // Show system message if message fails to send
     if (newMsg && newMsg.status === 'error' && (!oldMsg || oldMsg.status !== 'error')) {
       if (messageRenderer) {
         messageRenderer.addSystemMessage('❌ Pesan gagal terkirim, silakan coba lagi.');
@@ -99,11 +64,9 @@ function _setupStoreSubscriptions() {
     }
   });
   messageStore?.subscribe('messageAdded', (msg) => {
-    // Only notify for messages sent by admin
     if (msg.sender === 'admin' && msg.status !== 'sending') {
       const oldCount = userUnreadCount;
       recalculateUnread();
-      // Only play sound if the unread count actually increased
       if (userUnreadCount > oldCount) {
         notificationAudio.play().catch(() => {});
       }
@@ -135,7 +98,7 @@ function updateUnreadBadge() {
     }
   }
 }
-// Typing Indicator handler
+
 function handleTypingIndicator(isTyping) {
   let indicator = document.getElementById('typingIndicator');
   if (isTyping) {
@@ -222,7 +185,6 @@ function openModal() {
   }
   chatModal.style.display = 'flex';
   modalOverlay.style.display = 'block';
-  // Kembalikan posisi scroll setelah modal terbuka (karena tidak bisa di-set saat display: none)
   if (messages) {
     const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
     if (savedScrollPos !== null) {
@@ -234,7 +196,6 @@ function openModal() {
   if (chatHeader) {
     chatHeader.classList.remove('loaded');
   }
-  // Reset unread notifications when chat is opened
   lastReadTimestamp = Date.now();
   localStorage.setItem('lastReadTimestamp', lastReadTimestamp);
   recalculateUnread();
@@ -263,7 +224,6 @@ function openModal() {
     input.disabled = true;
     sendBtn.disabled = true;
   }
-  // Restore draft if any
   const savedDraft = localStorage.getItem('livechat_user_draft');
   input.value = savedDraft || '';
   setTimeout(() => {
@@ -293,7 +253,6 @@ function openModal() {
               if (lastMsg.parentElement) lastMsg.remove();
               if (currentAgent && currentAgent.name) {
                 let treatAsFirstTime = isFirstTimeUser;
-                // Treat as new session if last message was > 6 hours ago
                 if (!treatAsFirstTime && messageStore) {
                   const msgs = messageStore.getSortedMessages();
                   if (msgs.length > 0) {
@@ -336,14 +295,10 @@ function closeModal() {
   if (!chatModal) return;
   chatModal.style.display = 'none';
   modalOverlay.style.display = 'none';
-  // We DO NOT stop sync engine here, so background polling continues!
-  // syncEngine?.stopSync();
   clearTimeout(inactiveTimer);
   clearTimeout(inactivityWarningTimer);
 }
-// ============================================================================
-// MESSAGE SENDING (NEW IMPLEMENTATION)
-// ============================================================================
+
 function getGreetingTime() {
   const hour = new Date().getHours();
   if (hour < 10) return 'pagi';
@@ -371,7 +326,6 @@ async function sendMessage(attachmentUrl = null) {
     messageRenderer?.addSystemMessage('⚠️ Tunggu sebentar, pesan sedang diproses...');
     return;
   }
-  // Remove old roomId check, use conversationId
   if (!conversationId) {
     messageRenderer?.addSystemMessage('❌ Session ID invalid');
     return;
@@ -383,7 +337,6 @@ async function sendMessage(attachmentUrl = null) {
   isWaiting = true;
   resetInactiveTimer();
   try {
-    // Use sendQueue to handle message, retries, and deduplication
     const optimisticMsg = sendQueue?.enqueue({
       roomId: conversationId,
       text,
@@ -394,8 +347,6 @@ async function sendMessage(attachmentUrl = null) {
     if (!optimisticMsg) {
       throw new Error('Failed to enqueue message');
     }
-    // Ping GAS to trigger AI Auto-Pilot (if enabled on the backend)
-    // Delayed to ensure Firebase write has been committed
     setTimeout(() => {
       fetch('https://livechat.sisitusdotcom.workers.dev/', {
         method: "POST",
@@ -422,12 +373,8 @@ async function sendMessage(attachmentUrl = null) {
     }, 2000);
   }
 }
-// ============================================================================
-// DOM EVENT HANDLERS
-// ============================================================================
 if (chatBtn) {
   chatBtn.addEventListener('click', () => {
-    // Toggle: Tutup jika sedang terbuka, buka jika sedang tertutup
     if (chatModal && (chatModal.style.display === 'flex' || chatModal.style.display === 'block')) {
       closeModal();
     } else {
@@ -440,7 +387,6 @@ if (modalOverlay) {
     closeModal(); // Tutup saat klik di luar kotak obrolan
   });
 }
-// File Upload Handlers
 const fileInput = document.getElementById('fileInput');
 const attachBtn = document.getElementById('attachBtn');
 if (attachBtn && fileInput) {
@@ -513,10 +459,8 @@ if (sendBtn) {
 }
 if (input) {
   input.addEventListener('input', function(e) {
-    // Auto-resize textarea
     this.style.height = '';
     this.style.height = Math.min(this.scrollHeight + 2, 100) + 'px';
-    // Simpan draft agar tidak hilang
     localStorage.setItem('livechat_user_draft', this.value);
     resetInactiveTimer();
     if (!conversationId) return;
@@ -537,15 +481,11 @@ if (input) {
     const isMobile = window.innerWidth <= 768;
     if (e.key === 'Enter') {
       if (isMobile) {
-        // Di ponsel: Enter = Baris Baru (default textarea)
         return;
       }
-      // Di Desktop:
       if (e.shiftKey) {
-        // Shift+Enter = Baris Baru
         return;
       }
-      // Enter saja = Kirim Pesan
       e.preventDefault();
       if (!isWaiting && input.value.trim().length > 0) {
         if (typingTimeout) clearTimeout(typingTimeout);
@@ -562,19 +502,12 @@ if (input) {
     }
   });
 }
-// Network events
 window.addEventListener('online', () => {
-  // Sync immediately
   syncEngine?.syncNow();
 });
 window.addEventListener('offline', () => {
   messageRenderer?.addSystemMessage('⚠️ Anda sedang offline.');
 });
-// All utility functions moved to utils.js
-// validateMessage(), isValidRoomId(), isOnline() are available globally
-// ============================================================================
-// A11Y & UX: CLEAR BADGE ON TAB RETURN
-// ============================================================================
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && chatModal && chatModal.style.display === 'flex') {
     lastReadTimestamp = Date.now();
@@ -582,14 +515,13 @@ document.addEventListener('visibilitychange', () => {
     recalculateUnread();
   }
 });
-// START BACKGROUND POLLING ON LOAD
+
 function initUser() {
   if (conversationId) {
     initializeChatModules();
     syncEngine?.startSync(conversationId, 'user');
     updateUnreadBadge(); // Display badge if there were unread messages on load
   }
-  // Listen to Global Online/Offline Status
   if (window.firebaseHelpers && window.firebaseDB) {
     const {
       ref,
@@ -602,7 +534,6 @@ function initUser() {
       if (widget) {
         if (isOnline === false) {
           widget.style.display = 'none';
-          // If modal is open, close it
           if (chatModal && chatModal.style.display === 'flex' && typeof closeModal === 'function') {
             closeModal();
           }

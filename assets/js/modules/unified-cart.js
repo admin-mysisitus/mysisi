@@ -1,17 +1,3 @@
-/**
- * UNIFIED CART & WISHLIST MANAGER
- * ===================================
- * Professional e-commerce grade cart system
- * - Cart persistence (localStorage)
- * - Wishlist management
- * - Price calculation
- * - Promo code support
- * 
- * Usage:
- *   CartManager.add(domain, package, duration)
- *   CartManager.getTotal()
- *   WishlistManager.add(domain, reason)
- */
 import {
   showSuccess,
   showError
@@ -19,22 +5,12 @@ import {
 import {
   APIClient
 } from './unified-api.js';
-// ============================================================================
-// CART MANAGER
-// ============================================================================
 export class CartManager {
-  /**
-   * Add domain to cart
-   * @param {string} domain - Domain name (e.g., "example.com")
-   * @param {string} tld - TLD (e.g., "com")
-   * @param {object} options - {package, duration, registrar, price, renewalPrice}
-   */
   static add(domain, tld, options = {}) {
     if (!domain || !tld) {
       throw new Error('Domain dan TLD diperlukan');
     }
     const cart = this.getCart();
-    // Check if already in cart
     const existingIndex = cart.domains.findIndex(d => d.domain.toLowerCase() === domain.toLowerCase());
     if (existingIndex >= 0) {
       cart.domains[existingIndex] = {
@@ -69,13 +45,9 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-  /**
-   * Remove domain from cart
-   */
   static remove(domain) {
     const cart = this.getCart();
     cart.domains = cart.domains.filter(d => d.domain.toLowerCase() !== domain.toLowerCase());
-    // DRY Principle: If cart becomes empty, clear all modifiers automatically
     if (cart.domains.length === 0) {
       cart.coupon = null;
       cart.addons = [];
@@ -83,9 +55,6 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-  /**
-   * Update domain details in cart
-   */
   static update(domain, updates) {
     const cart = this.getCart();
     const index = cart.domains.findIndex(d => d.domain.toLowerCase() === domain.toLowerCase());
@@ -100,9 +69,6 @@ export class CartManager {
     this.saveCart(cart);
     return cart.domains[index];
   }
-  /**
-   * Get all items in cart
-   */
   static getCart() {
     try {
       const stored = localStorage.getItem('cart');
@@ -129,9 +95,6 @@ export class CartManager {
       };
     }
   }
-  /**
-   * Save cart to localStorage
-   */
   static saveCart(cart) {
     try {
       const calculated = this._calculatePrices(cart);
@@ -143,29 +106,22 @@ export class CartManager {
       void('[Cart] Save error:', err);
     }
   }
-  /**
-   * Merge remote cart data with local cart
-   */
   static mergeCart(remoteCart) {
     if (!remoteCart) return;
     const localCart = this.getCart();
     let updated = false;
-    // Helper to safely iterate arrays or Firebase objects
     const iterate = (items, callback) => {
       if (!items) return;
       if (Array.isArray(items)) items.forEach(callback);
       else if (typeof items === 'object') Object.values(items).forEach(callback);
     };
-    // Tolerate if remoteCart is directly an array OR an object with .domains
     const remoteDomains = Array.isArray(remoteCart) ? remoteCart : (remoteCart.domains || []);
-    // Merge domains
     iterate(remoteDomains, remoteItem => {
       if (remoteItem && remoteItem.domain && !localCart.domains.some(localItem => localItem.domain === remoteItem.domain)) {
         localCart.domains.push(remoteItem);
         updated = true;
       }
     });
-    // Merge addons
     iterate(remoteCart.addons, remoteAddon => {
       if (remoteAddon && remoteAddon.id && !localCart.addons.some(localAddon => localAddon.id === remoteAddon.id)) {
         localCart.addons.push(remoteAddon);
@@ -180,22 +136,13 @@ export class CartManager {
       this.saveCart(localCart);
     }
   }
-  /**
-   * Clear cart
-   */
   static clear() {
     localStorage.removeItem('cart');
     window.dispatchEvent(new CustomEvent('cart:cleared'));
   }
-  /**
-   * Check if cart has items
-   */
   static isEmpty() {
     return this.getCart().domains.length === 0;
   }
-  /**
-   * Get cart summary (for display)
-   */
   static getSummary() {
     const cart = this.getCart();
     return {
@@ -207,13 +154,9 @@ export class CartManager {
       coupon: cart.coupon || null
     };
   }
-  /**
-   * Add coupon/promo code
-   */
   static async applyCoupon(code) {
     const cart = this.getCart();
     try {
-      // Validate coupon with GAS backend using APIClient
       if (!window.APIClient) {
         throw new Error('API Client not available. Import APIClient before applying coupon.');
       }
@@ -221,7 +164,6 @@ export class CartManager {
       if (!response.success || !response.data) {
         throw new Error(response.message || 'Kode promo tidak valid atau sudah kadaluarsa');
       }
-      // Simpan data diskon utuh ke cart
       cart.coupon = {
         code: code,
         discountType: response.data.discountType || 'percent',
@@ -240,41 +182,29 @@ export class CartManager {
       };
     }
   }
-  /**
-   * Remove coupon
-   */
   static removeCoupon() {
     const cart = this.getCart();
     cart.coupon = null;
     this.saveCart(cart);
     return cart;
   }
-  /**
-   * Add addons to cart
-
-   * @param {array} addons - Array of addon objects [{id, name, price, duration, quantity}]
-   */
   static addAddons(addons) {
     if (!Array.isArray(addons)) {
       throw new Error('Addon harus berupa array');
     }
     const cart = this.getCart();
-    // Initialize addons array if doesn't exist
     if (!cart.addons) {
       cart.addons = [];
     }
-    // Add each addon
     addons.forEach(addon => {
       const existingIndex = cart.addons.findIndex(a => a.id.toLowerCase() === addon.id.toLowerCase());
       if (existingIndex >= 0) {
-        // Update existing addon
         cart.addons[existingIndex] = {
           ...cart.addons[existingIndex],
           ...addon,
           quantity: addon.quantity || 1
         };
       } else {
-        // Add new addon
         cart.addons.push({
           id: addon.id,
           name: addon.name,
@@ -287,9 +217,6 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-  /**
-   * Remove addon from cart
-   */
   static removeAddon(addonId) {
     const cart = this.getCart();
     if (cart.addons) {
@@ -298,28 +225,16 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-  /**
-   * Clear all addons from cart
-   */
   static clearAddons() {
     const cart = this.getCart();
     cart.addons = [];
     this.saveCart(cart);
     return cart;
   }
-  /**
-   * Calculate prices (subtotal, discount, total)
-   * @private
-   */
   static _calculatePrices(cart) {
     let subtotal = 0;
-    // Calculate domain prices
     if (cart.domains && Array.isArray(cart.domains)) {
       cart.domains.forEach(domain => {
-        // Logika Harga Baru: 
-        // Jika paket 'none', gunakan domainPrice (harga domain).
-        // Jika paket dipilih, gunakan packagePrice (domain gratis).
-        // Fallback ke legacy `domain.price` jika data lama
         let itemPrice = domain.price || 0;
         if (domain.isRenewal) {
           itemPrice = domain.renewalPrice || itemPrice;
@@ -328,10 +243,8 @@ export class CartManager {
         } else if (domain.package && domain.packagePrice > 0) {
           itemPrice = domain.packagePrice;
         }
-        // Simpan harga terhitung kembali ke price properti agar sinkron (legacy support)
         domain.price = itemPrice;
         subtotal += itemPrice * (domain.duration || 1);
-        // Calculate per-domain addon prices
         if (domain.addons && Array.isArray(domain.addons)) {
           domain.addons.forEach(addon => {
             subtotal += (addon.price || 0) * (addon.quantity || 1);
@@ -339,14 +252,12 @@ export class CartManager {
         }
       });
     }
-    // Calculate addon prices
     if (cart.addons && Array.isArray(cart.addons)) {
       cart.addons.forEach(addon => {
         subtotal += (addon.price || 0) * (addon.quantity || 1);
       });
     }
     let discount = 0;
-    // Kalkulasi diskon berdasarkan tipe kupon (persen atau harga fix)
     if (cart.coupon) {
       const type = cart.coupon.discountType;
       const value = cart.coupon.discountValue;
@@ -366,30 +277,16 @@ export class CartManager {
       total: Math.round(subtotalAfterDiscount + ppn) // Total akhir yang dibayar ke Midtrans
     };
   }
-  /**
-   * Generate unique ID for cart item
-   * @private
-   */
   static _generateId() {
     return `cart_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
-// ============================================================================
-// WISHLIST MANAGER
-// ============================================================================
 export class WishlistManager {
-  /**
-   * Add domain to wishlist
-   * @param {string} domain - Domain name
-   * @param {string} reason - Why user wants this domain
-   * @param {string} priority - low, medium, high
-   */
   static add(domain, reason = '', priority = 'medium', options = {}) {
     if (!domain) {
       throw new Error('Domain diperlukan');
     }
     const wishlist = this.getWishlist();
-    // Check if already in wishlist
     if (wishlist.domains.some(d => d.domain.toLowerCase() === domain.toLowerCase())) {
       showError('Sudah di Wishlist', `${domain} sudah ada di wishlist`);
       return wishlist;
@@ -406,18 +303,12 @@ export class WishlistManager {
     showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti`);
     return wishlist;
   }
-  /**
-   * Remove domain from wishlist
-   */
   static remove(domain) {
     const wishlist = this.getWishlist();
     wishlist.domains = wishlist.domains.filter(d => d.domain.toLowerCase() !== domain.toLowerCase());
     this.saveWishlist(wishlist);
     return wishlist;
   }
-  /**
-   * Clear all items from wishlist
-   */
   static clear() {
     this.saveWishlist({
       domains: [],
@@ -425,22 +316,17 @@ export class WishlistManager {
     });
     window.dispatchEvent(new CustomEvent('wishlist:cleared'));
   }
-  /**
-   * Move wishlist item to cart
-   */
   static async moveToCart(domain) {
     const wishlist = this.getWishlist();
     const item = wishlist.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
     if (!item) {
       throw new Error('Item tidak ditemukan di wishlist');
     }
-    // Fetch latest pricing
     const configRes = await APIClient.fetchPricingConfig();
     let starterPrice = 599000;
     if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
       starterPrice = configRes.data.packages.starter.price;
     }
-    // Add to cart
     const tld = item.tld || domain.split('.').pop();
     CartManager.add(domain, tld, {
       priority: item.priority,
@@ -451,16 +337,12 @@ export class WishlistManager {
       package: 'starter',
       packagePrice: starterPrice
     });
-    // Remove from wishlist
     this.remove(domain);
     return {
       cart: CartManager.getCart(),
       wishlist: this.getWishlist()
     };
   }
-  /**
-   * Get all wishlist items
-   */
   static getWishlist() {
     try {
       const stored = localStorage.getItem('wishlist');
@@ -477,9 +359,6 @@ export class WishlistManager {
       };
     }
   }
-  /**
-   * Save wishlist to localStorage
-   */
   static saveWishlist(wishlist) {
     try {
       localStorage.setItem('wishlist', JSON.stringify(wishlist));
@@ -490,20 +369,15 @@ export class WishlistManager {
       void('[Wishlist] Save error:', err);
     }
   }
-  /**
-   * Merge remote wishlist with local wishlist
-   */
   static mergeWishlist(remoteWishlist) {
     if (!remoteWishlist) return;
     const localWishlist = this.getWishlist();
     let updated = false;
-    // Helper to safely iterate arrays or Firebase objects
     const iterate = (items, callback) => {
       if (!items) return;
       if (Array.isArray(items)) items.forEach(callback);
       else if (typeof items === 'object') Object.values(items).forEach(callback);
     };
-    // Tolerate if remoteWishlist is directly an array OR an object with .domains
     const remoteDomains = Array.isArray(remoteWishlist) ? remoteWishlist : (remoteWishlist.domains || []);
     iterate(remoteDomains, remoteItem => {
       if (remoteItem && remoteItem.domain && !localWishlist.domains.some(localItem => localItem.domain === remoteItem.domain)) {
@@ -515,15 +389,9 @@ export class WishlistManager {
       this.saveWishlist(localWishlist);
     }
   }
-  /**
-   * Check if domain is in wishlist
-   */
   static isInWishlist(domain) {
     return this.getWishlist().domains.some(d => d.domain.toLowerCase() === domain.toLowerCase());
   }
-  /**
-   * Get wishlist summary
-   */
   static getSummary() {
     const wishlist = this.getWishlist();
     return {
@@ -539,21 +407,11 @@ export class WishlistManager {
       })
     };
   }
-  /**
-   * Generate unique ID for wishlist item
-   * @private
-   */
   static _generateId() {
     return `wish_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
-// ============================================================================
-// CART ANALYTICS (Optional: for future tracking)
-// ============================================================================
 export class CartAnalytics {
-  /**
-   * Track abandoned carts (for later email reminder)
-   */
   static trackAbandonedCart() {
     if (CartManager.isEmpty()) return;
     const cart = CartManager.getCart();
@@ -564,7 +422,6 @@ export class CartAnalytics {
       abandonedAt: Date.now(),
       userEmail: null // Will be filled in if logged in
     };
-    // Store in localStorage for recovery
     let abandoned_carts = [];
     try {
       abandoned_carts = JSON.parse(localStorage.getItem('abandoned_carts')) || [];
@@ -572,9 +429,6 @@ export class CartAnalytics {
     abandoned_carts.push(abandoned);
     localStorage.setItem('abandoned_carts', JSON.stringify(abandoned_carts));
   }
-  /**
-   * Get abandoned carts
-   */
   static getAbandonedCarts() {
     try {
       return JSON.parse(localStorage.getItem('abandoned_carts')) || [];

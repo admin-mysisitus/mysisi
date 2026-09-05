@@ -1,10 +1,3 @@
-/**
- * FIREBASE CORE MODULE
- * ===================================
- * Ensures Firebase is loaded and initialized exactly once.
- * Prevents race conditions by returning a Promise that resolves 
- * to the Firebase instances (db, auth, storage).
- */
 const firebaseConfig = {
   apiKey: "AIzaSyBkzS96QoH4nTcFOGDLMSkIbiKrkCUcA58",
   authDomain: "sisitus-project.firebaseapp.com",
@@ -18,7 +11,6 @@ let firebaseInitPromise = null;
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
-    // If already exists in DOM, resolve
     if (document.querySelector(`script[src="${src}"]`)) {
       resolve();
       return;
@@ -32,7 +24,6 @@ function loadScript(src) {
   });
 }
 export async function getFirebase() {
-  // If already loaded and initialized, return immediately
   if (window.firebase && window.firebaseDB && window.firebaseAuth) {
     return {
       db: window.firebaseDB,
@@ -41,12 +32,10 @@ export async function getFirebase() {
       firebase: window.firebase
     };
   }
-  // If initialization is already in progress, wait for it
   if (!firebaseInitPromise) {
     firebaseInitPromise = (async () => {
       try {
         if (!window.firebase) {
-          // Tambahkan preconnect untuk optimasi loading speed dari gstatic
           if (!document.querySelector('link[href="https://www.gstatic.com"]')) {
             const preconnect = document.createElement('link');
             preconnect.rel = 'preconnect';
@@ -54,9 +43,7 @@ export async function getFirebase() {
             preconnect.crossOrigin = 'anonymous'; // Important for CORS preconnect
             document.head.appendChild(preconnect);
           }
-          // Load app compat first
           await loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js");
-          // Load services in parallel
           await Promise.all([
             loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"),
             loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"),
@@ -66,11 +53,9 @@ export async function getFirebase() {
         if (!window.firebase.apps.length) {
           window.firebase.initializeApp(firebaseConfig);
         }
-        // Expose globally for legacy components
         window.firebaseDB = window.firebase.database();
         window.firebaseStorage = window.firebase.storage();
         window.firebaseAuth = window.firebase.auth();
-        // Polyfill the v9 modular functions using v8 compat SDK so we don't have to rewrite everything
         if (!window.firebaseHelpers) {
           window.firebaseHelpers = {
             ref: (dbInstance, path) => path ? dbInstance.ref(path) : dbInstance.ref(),
@@ -97,7 +82,6 @@ export async function getFirebase() {
             getDownloadURL: (ref) => ref.getDownloadURL()
           };
         }
-        // Dispatch event for legacy scripts (like sendQueue.js)
         window.dispatchEvent(new Event('firebase-ready'));
         return {
           db: window.firebaseDB,

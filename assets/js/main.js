@@ -1,5 +1,3 @@
-/* ========== IMPORT SEMUA FILE JS ========== */
-// Components
 import './components/navigation.js';
 import './components/preloader.js';
 import './components/live-chat.js';
@@ -9,11 +7,7 @@ import './components/hero.js';
 import './components/section-animation.js';
 import './components/popup-promo.js';
 import './components/live-chat.js';
-// Layout
-// wm
 import './wm.js';
-// ========== DYNAMIC PRICING HIDER ==========
-// Dynamically hide inactive packages across all static HTML pages
 document.addEventListener('DOMContentLoaded', async () => {
   const packageElements = document.querySelectorAll('[data-package]');
   if (packageElements.length > 0) {

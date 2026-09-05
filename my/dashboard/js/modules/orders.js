@@ -1,8 +1,3 @@
-/**
- * Orders Page Module
- * Display user's orders with detail modal
- * Migrated and enhanced from assets/js/pages/orders.js
- */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   showError,
@@ -28,17 +23,14 @@ export async function render(user) {
         </tr>
       `;
     }
-    // Load orders
     const result = await APIClient.getUserOrders(user.userId);
     const orders = result.data?.orders || result.orders || [];
-    // Update stats
     const statTotal = document.getElementById('stat-total');
     const statProcessing = document.getElementById('stat-processing');
     const statCompleted = document.getElementById('stat-completed');
     if (statTotal) statTotal.innerText = orders.length;
     if (statProcessing) statProcessing.innerText = orders.filter(o => o.paymentStatus === 'pending' || o.paymentStatus === 'tertunda').length;
     if (statCompleted) statCompleted.innerText = orders.filter(o => o.paymentStatus === 'paid' || o.paymentStatus === 'settlement' || o.paymentStatus === 'selesai' || o.paymentStatus === 'success').length;
-    // Render orders table
     if (tableBody) {
       if (orders.length === 0) {
         tableBody.innerHTML = `
@@ -90,14 +82,12 @@ export async function render(user) {
             </div>
           `).join('');
         }
-        // Attach click handlers to rows
         document.querySelectorAll('.order-row').forEach(row => {
           row.addEventListener('click', (e) => {
             const orderId = row.dataset.orderId;
             showOrderDetail(orderId);
           });
         });
-        // Auto-sync pending orders in the background
         const pendingOrders = orders.filter(o => o.paymentStatus === 'pending');
         if (pendingOrders.length > 0) {
           syncPendingOrders(pendingOrders);
@@ -117,12 +107,10 @@ async function syncPendingOrders(pendingOrders) {
   for (const order of pendingOrders) {
     try {
       const syncResult = await APIClient.syncOrderStatus(order.orderId);
-      // If the status has changed, update the UI
       if (syncResult.success && syncResult.data && syncResult.data.newStatus) {
         const newStatus = syncResult.data.newStatus;
         const statusTd = document.getElementById(`status-${order.orderId}`);
         if (statusTd) {
-          // Update the badge with a subtle animation
           statusTd.innerHTML = `<span class="badge badge-${getStatusClass(newStatus)}" style="animation: fadeIn 0.5s;">${getStatusText(newStatus)}</span>`;
         }
         const mStatusDiv = document.getElementById(`m-status-${order.orderId}`);
@@ -149,14 +137,12 @@ async function showOrderDetail(orderId) {
       `;
       modal.style.display = 'flex';
     }
-    // Load order details
     const result = await APIClient.getOrderDetail(orderId, currentUser.userId);
     if (!result.success) {
       showError('Gagal memuat detail pesanan');
       return;
     }
     const order = result.data || result.order;
-    // Build addons section if present
     let addonsSection = '';
     if (order.addons && Array.isArray(order.addons) && order.addons.length > 0) {
       const addonsHTML = order.addons.map(addon => `
@@ -173,7 +159,6 @@ async function showOrderDetail(orderId) {
         ${addonsHTML}
       `;
     }
-    // Backwards compatibility calculation for older orders
     const discount = order.discount || 0;
     let subtotal = order.subtotal;
     let ppn = order.ppn;
@@ -198,7 +183,6 @@ async function showOrderDetail(orderId) {
         </div>
       ` : ''}
     `;
-    // Render modal content
     modal.innerHTML = `
       <div class="modal-content">
         <div class="modal-header">
@@ -288,7 +272,6 @@ async function showOrderDetail(orderId) {
         </div>
       </div>
     `;
-    // Close modal when clicking outside (bind once)
     if (!modal.dataset.outsideClickBound) {
       modal.dataset.outsideClickBound = 'true';
       modal.addEventListener('click', (e) => {

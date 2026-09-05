@@ -17,7 +17,6 @@ function setupEventListeners() {
   const btnClose = document.getElementById('btn-close-dns');
   const modal = document.getElementById('dns-modal');
   if (btnAdd) {
-    // We repurpose "Tambah DNS" to a refresh or just hide it
     btnAdd.innerHTML = '<i class="fas fa-sync"></i> Refresh Data';
     btnAdd.addEventListener('click', async () => {
       btnAdd.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
@@ -25,7 +24,6 @@ function setupEventListeners() {
       btnAdd.innerHTML = '<i class="fas fa-sync"></i> Refresh Data';
     });
   }
-  // Make functions global for inline onclicks in the table
   window.setupCloudflare = async (domain) => {
     if (typeof Swal !== 'undefined') {
       Swal.fire({
@@ -78,7 +76,6 @@ async function loadDNS() {
     const response = await APIClient.getAllTransactions(adminId);
     if (response.success) {
       const orders = response.data || [];
-      // Extract unique domains from paid orders
       const domainMap = new Map();
       orders.forEach(o => {
         if (o.paymentStatus === 'paid' && o.domain) {

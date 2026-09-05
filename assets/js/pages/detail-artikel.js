@@ -1,33 +1,20 @@
-/* ========== DETAIL ARTIKEL PAGE SCRIPT ========== */
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Create share buttons
   createShareButtons();
-  // 2. Calculate reading time
   calculateReadingTime();
-  // 3. Generate Table of Contents
   generateTableOfContents();
-  // 4. Smooth scroll for anchor links & related articles
   setupSmoothScroll();
-  // 5. Add hover animations to related articles
   animateRelatedArticles();
-  // 6. Setup reading progress tracking
   setupReadingProgress();
 });
-/**
- * Create share buttons dengan SVG icons
- */
+
 function createShareButtons() {
   const container = document.querySelector('.share-buttons-container');
   if (!container) return;
-  // Hapus inline style agar CSS eksternal (detail-artikel.css) bisa bekerja
   container.removeAttribute('style');
-  // Kosongkan isi jika sudah ada (mencegah duplikasi)
   container.innerHTML = '';
-  // Get metadata from meta tags untuk share yang lebih lengkap
   const getMetaContent = (property, attribute = 'property') => {
     return document.querySelector(`meta[${attribute}="${property}"]`)?.getAttribute('content') || null;
   };
-  // Collect article metadata
   const metadata = {
     url: getMetaContent('og:url') || window.location.href,
     title: getMetaContent('og:title') || document.querySelector('h1')?.textContent || document.title,
@@ -37,7 +24,6 @@ function createShareButtons() {
     publishDate: getMetaContent('article:published_time') || '',
     siteName: getMetaContent('og:site_name') || 'sisitus.com'
   };
-  // Share platforms configuration dengan metadata lengkap
   const shareButtons = [{
     name: 'facebook',
     title: 'Share di Facebook',
@@ -99,7 +85,6 @@ function createShareButtons() {
     url: null,
     icon: 'fa-solid fa-link'
   }];
-  // Create buttons container
   const buttonsDiv = document.createElement('div');
   buttonsDiv.className = 'share-buttons';
   const primaryKeys = ['facebook', 'whatsapp', 'twitter', 'telegram'];
@@ -111,7 +96,6 @@ function createShareButtons() {
     button.title = btn.title;
     button.target = '_blank';
     button.rel = 'noopener noreferrer';
-    // Add Font Awesome icon
     const icon = document.createElement('i');
     icon.className = btn.icon;
     button.appendChild(icon);
@@ -131,10 +115,8 @@ function createShareButtons() {
       button.href = '#';
       button.addEventListener('click', (e) => {
         e.preventDefault();
-        // Add print-active class to body untuk CSS media query
         document.body.classList.add('print-active');
         window.print();
-        // Remove class setelah print dialog ditutup
         setTimeout(() => {
           document.body.classList.remove('print-active');
         }, 500);
@@ -147,14 +129,12 @@ function createShareButtons() {
   primaryButtons.forEach((btn) => {
     buttonsDiv.appendChild(createBtnElement(btn));
   });
-  // Add "More" button
   const moreBtn = document.createElement('button');
   moreBtn.className = 'share-btn share-btn-more';
   moreBtn.title = 'Lainnya';
   moreBtn.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
   buttonsDiv.appendChild(moreBtn);
   container.appendChild(buttonsDiv);
-  // Create Modal Popup
   const modalOverlay = document.createElement('div');
   modalOverlay.className = 'share-modal-overlay';
   const modalContent = document.createElement('div');
@@ -174,7 +154,6 @@ function createShareButtons() {
   modalContent.appendChild(modalBody);
   modalOverlay.appendChild(modalContent);
   document.body.appendChild(modalOverlay);
-  // Modal logic
   const closeModal = () => modalOverlay.classList.remove('active');
   moreBtn.addEventListener('click', () => modalOverlay.classList.add('active'));
   modalHeader.querySelector('.share-modal-close').addEventListener('click', closeModal);
@@ -182,9 +161,7 @@ function createShareButtons() {
     if (e.target === modalOverlay) closeModal();
   });
 }
-/**
- * Calculate reading time based on word count
- */
+
 function calculateReadingTime() {
   const artikelBody = document.querySelector('.artikel-body');
   if (artikelBody) {
@@ -197,16 +174,13 @@ function calculateReadingTime() {
     }
   }
 }
-/**
- * Generate Table of Contents dari headings
- */
+
 function generateTableOfContents() {
   const artikelBody = document.querySelector('.artikel-body');
   const container = document.querySelector('.artikel-content .container');
   if (!artikelBody || !container) return;
   const headings = artikelBody.querySelectorAll('h2, h3');
   if (headings.length < 3) return;
-  // Buat elemen TOC
   const tocContainer = document.createElement('div');
   tocContainer.className = 'toc-container';
   tocContainer.innerHTML = '<h3 class="toc-title">Daftar Isi</h3>';
@@ -224,9 +198,8 @@ function generateTableOfContents() {
     tocList.appendChild(li);
   });
   tocContainer.appendChild(tocList);
-  // ── DESKTOP & MOBILE TOC Logic (Simplified & Jitter-Free) ──
+
   function updateTOC() {
-    // Mode Mobile
     if (window.innerWidth < 768) {
       tocContainer.style.cssText = '';
       const ph = document.getElementById('toc-placeholder');
@@ -239,7 +212,6 @@ function generateTableOfContents() {
       }
       return;
     }
-    // Mode Desktop
     if (!container.contains(tocContainer)) {
       container.insertBefore(tocContainer, container.firstChild);
     }
@@ -254,7 +226,6 @@ function generateTableOfContents() {
     const rect = container.getBoundingClientRect();
     const artikelBody = document.querySelector('.artikel-body');
     const bottomRect = artikelBody ? artikelBody.getBoundingClientRect().bottom : 9999;
-    // Aktifkan floating jika melewati header, dan matikan jika mencapai bawah artikel
     if (rect.top <= headerHeight && bottomRect > headerHeight + 100) {
       placeholder.style.display = 'block';
       tocContainer.style.cssText = `position: fixed; top: ${headerHeight + 10}px; right: ${window.innerWidth - rect.right}px; width: 280px; max-height: calc(100vh - 110px); z-index: 90; box-shadow: 0 4px 20px rgba(0,0,0,0.1);`;
@@ -263,7 +234,6 @@ function generateTableOfContents() {
       tocContainer.style.cssText = 'position: static; grid-column: 2; grid-row: 1 / -1; align-self: start;';
     }
   }
-  // Bind events
   if (window.__tocScrollHandler) {
     window.removeEventListener('scroll', window.__tocScrollHandler);
     window.removeEventListener('resize', window.__tocScrollHandler);
@@ -277,33 +247,26 @@ function generateTableOfContents() {
   });
   updateTOC();
 }
-/**
- * Setup smooth scroll untuk anchor links dan related articles
- */
+
 function setupSmoothScroll() {
-  // Function untuk menghitung offset dari header
   function getScrollOffset() {
     const header = document.querySelector('header');
     if (!header) return 0;
     const headerHeight = header.getBoundingClientRect().height;
-    // Tambahkan sedikit padding tambahan untuk spacing yang lebih baik (20px)
     return headerHeight + 20;
   }
-  // Anchor links dalam artikel
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const href = anchor.getAttribute('href');
       const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
-        // Custom scroll dengan offset untuk fixed header
         const offset = getScrollOffset();
         const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
         window.scrollTo({
           top: targetPosition,
           behavior: 'smooth'
         });
-        // Focus element setelah scroll selesai
         setTimeout(() => {
           target.focus({
             preventScroll: true
@@ -312,7 +275,6 @@ function setupSmoothScroll() {
       }
     });
   });
-  // Related articles links
   document.querySelectorAll('.related-article a').forEach(link => {
     link.addEventListener('click', (e) => {
       e.currentTarget.style.transition = 'opacity 0.3s ease';
@@ -320,13 +282,10 @@ function setupSmoothScroll() {
     });
   });
 }
-/**
- * Animate related articles on scroll into view
- */
+
 function animateRelatedArticles() {
   const relatedArticles = document.querySelectorAll('.related-article');
   if (!relatedArticles.length) return;
-  // Setup Intersection Observer untuk lazy animation
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -334,7 +293,6 @@ function animateRelatedArticles() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
-        // Add animation delay untuk staggered effect
         entry.target.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s forwards`;
         observer.unobserve(entry.target);
       }
@@ -344,22 +302,17 @@ function animateRelatedArticles() {
     observer.observe(article);
   });
 }
-/**
- * Setup reading progress tracking
- */
+
 function setupReadingProgress() {
   const artikelBody = document.querySelector('.artikel-body');
   if (!artikelBody) return;
-  // Create progress bar
   const progressBar = document.createElement('div');
   progressBar.className = 'reading-progress-bar';
   document.body.appendChild(progressBar);
-  // Update progress on scroll
   window.addEventListener('scroll', () => {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollPosition = window.scrollY;
-    // Calculate progress percentage
     const totalScroll = documentHeight - windowHeight;
     const progress = (scrollPosition / totalScroll) * 100;
     progressBar.style.width = `${Math.min(progress, 100)}%`;

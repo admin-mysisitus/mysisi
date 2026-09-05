@@ -1,7 +1,4 @@
-/* ========== DOMAIN & HOSTING PAGE INTERACTIONS ========== */
-/* Detail halaman layanan domain & hosting dengan pricing dan features */
 document.addEventListener('DOMContentLoaded', function() {
-  // ========== BENEFIT ITEMS HOVER ANIMATION ==========
   const benefitItems = document.querySelectorAll('.benefit-item');
   benefitItems.forEach(item => {
     const icon = item.querySelector('i');
@@ -14,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-  // ========== DOMAIN PACKAGES INTERACTION ==========
   const domainPackages = document.querySelectorAll('.package-simple');
   domainPackages.forEach(pkg => {
     pkg.addEventListener('click', function() {
@@ -23,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (domain && price) {
         sessionStorage.setItem('selectedDomain', domain);
         sessionStorage.setItem('domainPrice', price);
-        // Smooth highlight
         domainPackages.forEach(p => p.style.opacity = '0.6');
         this.style.opacity = '1';
         setTimeout(() => {
@@ -32,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== HOSTING PLAN SELECTOR ==========
   const hostingPlans = document.querySelectorAll('.hosting-packages-grid .package-card');
   hostingPlans.forEach(plan => {
     const selectButton = plan.querySelector('.btn');
@@ -44,14 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (planName && planPrice) {
           sessionStorage.setItem('selectedHostingPlan', planName);
           sessionStorage.setItem('hostingPrice', planPrice);
-          // Visual feedback dengan class
           hostingPlans.forEach(p => p.classList.remove('selected'));
           plan.classList.add('selected');
         }
       });
     }
   });
-  // ========== UPTIME GUARANTEE DISPLAY ==========
   const uptimeDisplay = document.querySelector('[data-uptime], .uptime-badge');
   if (uptimeDisplay) {
     const uptime = 99.9;
@@ -60,12 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
       uptimeDisplay.style.color = '#10B981';
     }
   }
-  // ========== FEATURE CARD INTERACTION ==========
   const featureCards = document.querySelectorAll('.feature-card-item');
   featureCards.forEach((card, index) => {
     card.style.animation = `slideInUp 0.6s ease-out ${index * 0.08}s both`;
   });
-  // ========== AUTO SCROLL SLIDERS (SERUPA HALAMAN PERUSAHAAN) ==========
+
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -80,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
-      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
       if (clientWidth >= scrollWidth - 5) return;
       isAutoScrolling = true;
       if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
@@ -126,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
     sliderElement.addEventListener('mousedown', handleInteraction);
     startAutoScroll();
   }
-  // Inisialisasi slider untuk mobile
   initAutoSnapSlider(document.querySelector('.benefits-grid'));
   initAutoSnapSlider(document.querySelector('.simple-packages'));
   initAutoSnapSlider(document.querySelector('.hosting-packages-grid'));

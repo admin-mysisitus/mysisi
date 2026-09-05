@@ -1,7 +1,4 @@
-/* ========== MAINTENANCE PAGE INTERACTIONS ========== */
-/* Detail halaman maintenance dengan service levels dan monitoring */
 document.addEventListener('DOMContentLoaded', function() {
-  // ========== PROBLEM ITEMS HOVER ANIMATION ==========
   const problemItems = document.querySelectorAll('.problem-item');
   problemItems.forEach(item => {
     const icon = item.querySelector('i');
@@ -14,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-  // ========== SERVICE CATEGORY INTERACTION ==========
   const serviceCategories = document.querySelectorAll('.service-category');
   serviceCategories.forEach(category => {
     const items = category.querySelectorAll('li');
@@ -23,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
       item.style.opacity = '0';
     });
   });
-  // ========== INCLUDED ITEMS HOVER ==========
   const includedItems = document.querySelectorAll('.included-item');
   includedItems.forEach(item => {
     const icon = item.querySelector('i');
@@ -36,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-  // ========== SERVICE LEVEL SELECTOR ==========
   const serviceLevels = document.querySelectorAll('[data-service-level], .package-card');
   serviceLevels.forEach(level => {
     const selectButton = level.querySelector('.btn, [data-select]');
@@ -46,10 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const levelPrice = level.querySelector('.price')?.textContent || 'Custom';
         sessionStorage.setItem('selectedServiceLevel', levelName);
         sessionStorage.setItem('maintenancePrice', levelPrice);
-        // Update visual
         serviceLevels.forEach(l => l.classList.remove('selected'));
         level.classList.add('selected');
-        // Show features breakdown
         showFeaturesBreakdown(levelName);
       });
     }
@@ -67,10 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
       breakdownElement.innerHTML = features.map(f => `<li>✓ ${f}</li>`).join('');
     }
   }
-  // ========== UPTIME MONITOR ==========
   const uptimeMonitor = document.querySelector('[data-uptime-monitor]');
   if (uptimeMonitor) {
-    // Simulated uptime data
     const uptime = 99.95;
     const lastIncident = '15 hari yang lalu';
     uptimeMonitor.innerHTML = `
@@ -80,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
   }
-  // ========== MAINTENANCE SCHEDULE DISPLAY ==========
   const scheduleDisplay = document.querySelector('[data-maintenance-schedule]');
   if (scheduleDisplay) {
     const schedule = {
@@ -95,12 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
     html += '</ul>';
     scheduleDisplay.innerHTML = html;
   }
-  // ========== COMPARISON TABLE ROW ANIMATION ==========
   const comparisonRows = document.querySelectorAll('.comparison-table tbody tr, [data-comparison-row]');
   comparisonRows.forEach((row, index) => {
     row.style.animation = `slideInUp 0.4s ease-out ${index * 0.05}s both`;
   });
-  // ========== COMPARISON TABLE HOVER HIGHLIGHT ==========
   comparisonRows.forEach(row => {
     row.addEventListener('mouseenter', function() {
       this.style.backgroundColor = '#E0F2FE';
@@ -110,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.style.backgroundColor = isEven ? '#F9FAFB' : '#FFFFFF';
     });
   });
-  // ========== ADD-ON SERVICES ==========
   const addonButtons = document.querySelectorAll('[data-addon], .addon-btn');
   addonButtons.forEach(button => {
     button.addEventListener('click', function(e) {
@@ -125,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== CONTACT FOR CUSTOM PLAN ==========
   const customPlanButton = document.querySelector('[data-custom-plan]');
   if (customPlanButton) {
     customPlanButton.addEventListener('click', function() {
@@ -134,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         contactForm.scrollIntoView({
           behavior: 'smooth'
         });
-        // Pre-fill form if possible
         const messageField = contactForm.querySelector('textarea[name="message"], [data-message]');
         if (messageField) {
           messageField.value = 'Saya tertarik dengan custom maintenance plan.';
@@ -142,14 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-  // ========== FAQ ACCORDION INTERACTIONS ==========
-  // FAQ functionality is now handled by faq.js component
-  // ========== CTA BUTTONS INTERACTIONS ==========
   const ctaButtons = document.querySelectorAll('.detail-cta-section .btn');
   ctaButtons.forEach(btn => {
     btn.addEventListener('click', function(e) {
       const btnText = this.textContent;
-      // Add ripple effect (desktop only)
       if (!isTouch()) {
         const ripple = document.createElement('span');
         ripple.style.position = 'absolute';
@@ -165,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== AUTO SCROLL SLIDERS (SERUPA HALAMAN PERUSAHAAN) ==========
+
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -183,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
-      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
       if (clientWidth >= scrollWidth - 5) return;
       isAutoScrolling = true;
       if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
@@ -229,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
     sliderElement.addEventListener('mousedown', handleInteraction);
     startAutoScroll();
   }
-  // Inisialisasi slider untuk mobile
   initAutoSnapSlider(document.querySelector('.problems-grid'));
   initAutoSnapSlider(document.querySelector('.packages-grid'));
 

@@ -12,12 +12,9 @@ let currentTemplates = [];
 let selectedTemplateId = null;
 export async function render() {
   console.error('Admin Settings Module Loaded');
-  // 1. Setup Tab Switching
   setupTabs();
-  // 2. Fetch Data
   await fetchSettings();
   await fetchTemplates();
-  // 3. Setup Event Listeners
   setupEventListeners();
 }
 
@@ -26,14 +23,12 @@ function setupTabs() {
   const tabs = document.querySelectorAll('.settings-tab');
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // Deactivate all
       tabBtns.forEach(b => {
         b.classList.remove('active');
         b.style.background = 'transparent';
         b.style.color = 'var(--admin-text-muted)';
       });
       tabs.forEach(t => t.style.display = 'none');
-      // Activate clicked
       btn.classList.add('active');
       btn.style.background = 'var(--admin-primary)';
       btn.style.color = 'var(--admin-text-main)';
@@ -61,7 +56,6 @@ async function loadLocalTsvSettings() {
   try {
     const res = await fetch('/spreadsheet.tsv?t=' + Date.now());
     const text = await res.text();
-    // Parse CONFIG section
     const configSection = text.split('SHEET: CONFIG')[1]?.split('SHEET:')[0] || '';
     const lines = configSection.split('\n');
     let isData = false;
@@ -115,7 +109,6 @@ async function loadLocalTsvTemplates() {
   try {
     const res = await fetch('/spreadsheet.tsv?t=' + Date.now());
     const text = await res.text();
-    // Parse EMAIL_TEMPLATES section
     const templateSection = text.split('SHEET: EMAIL_TEMPLATES')[1]?.split('SHEET:')[0] || '';
     const lines = templateSection.split('\n');
     let isData = false;
@@ -191,14 +184,12 @@ function updateIframePreview(html) {
   doc.close();
   doc.body.contentEditable = "true";
   doc.body.style.margin = "0";
-  // Sync iframe changes back to textarea
   doc.body.addEventListener('input', () => {
     document.getElementById('template-body').value = doc.body.innerHTML;
   });
 }
 
 function setupEventListeners() {
-  // Sync textarea changes to iframe preview
   const templateBody = document.getElementById('template-body');
   if (templateBody) {
     templateBody.addEventListener('input', (e) => {
@@ -208,11 +199,9 @@ function setupEventListeners() {
       }
     });
   }
-  // Save All Settings
   const btnSaveSettings = document.getElementById('btn-save-settings');
   if (btnSaveSettings) {
     btnSaveSettings.addEventListener('click', async () => {
-      // Gather all inputs starting with config-
       const newSettings = {};
       document.querySelectorAll('[id^="config-"]').forEach(input => {
         const key = input.id.replace('config-', '');
@@ -246,7 +235,6 @@ function setupEventListeners() {
       }
     });
   }
-  // Save Individual Template
   const btnSaveTemplate = document.getElementById('btn-save-template');
   if (btnSaveTemplate) {
     btnSaveTemplate.addEventListener('click', async () => {
@@ -267,7 +255,6 @@ function setupEventListeners() {
           }
         });
         if (response.success) {
-          // Update local cache
           const tIndex = currentTemplates.findIndex(t => t.id === selectedTemplateId);
           if (tIndex > -1) {
             currentTemplates[tIndex].subject = subject;

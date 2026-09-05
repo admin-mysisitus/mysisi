@@ -1,8 +1,3 @@
-/**
- * ============================================================================
- * SyncEngine.js - Firebase Realtime Synchronization
- * ============================================================================
- */
 class SyncEngine {
   constructor(messageStore, messageRenderer, config = {}) {
     this.messageStore = messageStore;
@@ -28,19 +23,16 @@ class SyncEngine {
       get
     } = window.firebaseHelpers;
     const messagesRef = ref(db, `rooms/${roomId}/messages`);
-    // Initial load and listen for new messages
     this.unsubscribeMessages = onChildAdded(messagesRef, (snapshot) => {
       const msg = snapshot.val();
       if (!msg) return;
       this.messageStore.handleIncoming([msg]);
       this._scheduleRender();
-      // Save to session cache
       if (this.sessionCache) {
         const allMessages = this.messageStore.getSortedMessages();
         this.sessionCache.saveSession(this.roomId, new Date().toISOString(), allMessages, this.userType);
       }
     });
-    // Listen for message updates (like delivery status or edits)
     this.unsubscribeChanges = onChildChanged(messagesRef, (snapshot) => {
       const msg = snapshot.val();
       if (msg) {
@@ -48,7 +40,6 @@ class SyncEngine {
         this._scheduleRender();
       }
     });
-    // Listen for typing status
     if (this.onTypingCallback) {
       const typingRef = ref(db, `rooms/${roomId}/typing/${userType === 'user' ? 'admin' : 'user'}`);
       const {
@@ -105,7 +96,6 @@ class SyncEngine {
     };
   }
 }
-// Export for use
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = SyncEngine;
 }

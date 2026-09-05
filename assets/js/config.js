@@ -1,7 +1,6 @@
 import {
   EnvHelper
 } from './modules/unified-utils.js';
-// menu navbar — single source of truth untuk navigasi utama
 export const menuData = [{
   text: "Layanan",
   href: "/layanan/",
@@ -65,7 +64,6 @@ export const menuData = [{
   icon: "fas fa-sign-in-alt",
   isAuth: true
 }];
-// footer kolom layanan utama
 export const mainServicesData = [{
   href: "/layanan/website/",
   text: "Pembuatan Website"
@@ -82,7 +80,6 @@ export const mainServicesData = [{
   href: "/promo/",
   text: "Promo & Penawaran"
 }];
-// footer kolom link cepat — info perusahaan & pendukung
 export const footerQuickLinksData = [{
   href: "/perusahaan/",
   text: "Tentang kami"
@@ -99,7 +96,6 @@ export const footerQuickLinksData = [{
   href: "/bantuan/",
   text: "Bantuan"
 }];
-// footer baris legal — link kebijakan hukum
 export const footerLegalData = [{
   href: "/perusahaan/legal/",
   text: "Syarat & Ketentuan"
@@ -110,9 +106,6 @@ export const footerLegalData = [{
   href: "/perusahaan/legal/",
   text: "Kebijakan Refund"
 }];
-// =========================
-// DATA SOSIAL MEDIA FOOTER
-// =========================
 export const footerSocialData = [{
   href: "https://www.facebook.com/sisitusdotcom",
   ariaLabel: "Facebook",
@@ -139,9 +132,6 @@ export const footerSocialData = [{
   name: "TikTok",
   svg: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#25F4EE" d="M16.6 0h-3.8v15.05a3.06 3.06 0 1 1-2.27-2.96V8.2a6.85 6.85 0 1 0 6.07 6.85V7.67c1.38.99 3.07 1.57 4.94 1.57V5.45A5.03 5.03 0 0 1 16.6.5V0z" transform="translate(-0.7 0.7)"/><path fill="#FE2C55" d="M16.6 0h-3.8v15.05a3.06 3.06 0 1 1-2.27-2.96V8.2a6.85 6.85 0 1 0 6.07 6.85V7.67c1.38.99 3.07 1.57 4.94 1.57V5.45A5.03 5.03 0 0 1 16.6.5V0z" transform="translate(0.7 -0.7)"/><path fill="#FFFFFF" d="M16.6 0h-3.8v15.05a3.06 3.06 0 1 1-2.27-2.96V8.2a6.85 6.85 0 1 0 6.07 6.85V7.67c1.38.99 3.07 1.57 4.94 1.57V5.45A5.03 5.03 0 0 1 16.6.5V0z"/></svg>'
 }];
-// =========================
-// DATA KONTAK FOOTER
-// =========================
 export const footerContactData = [{
   icon: "fas fa-map-marker-alt",
   text: "<a href=\"https://share.google/UJstmjkDDtpHyCMRm\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"footer-kontak-link\" aria-label=\"Buka Google Maps\">PT SINTARA DIGITAL NUSANTARA</a>"
@@ -155,9 +145,6 @@ export const footerContactData = [{
   icon: "fas fa-clock",
   text: "Senin - Sabtu: 08.00 - 20.00 WIB"
 }];
-// =========================
-// DATA TRUST BADGES
-// =========================
 export const footerTrustBadgesData = [{
   src: "/assets/img/trust/logo-komdigi.svg",
   alt: "Terdaftar PSE Komdigi"

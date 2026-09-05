@@ -22,7 +22,6 @@ const CONFIG = {
 };
 let currentIndex = 0;
 let switchTimeout = null;
-// Update tampilan tanggal & waktu
 const updateDateTime = () => {
   const datetimeEl = document.getElementById('datetime');
   if (!datetimeEl) return;
@@ -42,7 +41,6 @@ const updateDateTime = () => {
     <span class="datetime-time"><strong>${formattedTime}</strong></span>
   `;
 };
-// Tampilkan fitur yang sedang aktif
 const renderFeature = () => {
   const infoEl = document.getElementById('info');
   if (!infoEl) return;
@@ -56,14 +54,12 @@ const renderFeature = () => {
       </div>
     </div>
   `;
-  // Atur pergantian otomatis
   clearTimeout(switchTimeout);
   switchTimeout = setTimeout(() => {
     currentIndex = (currentIndex + 1) % CONFIG.FEATURES.length;
     renderFeature();
   }, CONFIG.SWITCH_INTERVAL);
 };
-// Inisialisasi saat halaman dimuat
 document.addEventListener('DOMContentLoaded', () => {
   setInterval(updateDateTime, CONFIG.REFRESH_INTERVAL);
   updateDateTime();

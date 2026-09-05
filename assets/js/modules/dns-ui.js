@@ -133,7 +133,6 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
           .dns-table td:last-child { border-bottom: none; }
           .dns-table td::before { content: attr(data-label); font-weight: 600; color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
           .record-content { flex: 1; text-align: right; white-space: nowrap; overflow-x: auto; overflow-y: hidden; max-width: calc(100vw - 120px); -webkit-overflow-scrolling: touch; }
-          /* Optional: Hide scrollbar for cleaner look if you prefer, but auto is fine */
           .record-content::-webkit-scrollbar { height: 4px; }
           .record-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
           .dns-form-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -147,7 +146,7 @@ export async function openDnsManagement(domainName, onSetupCloudflare = null) {
           <h3 class="dns-title">DNS: <span>${domainName}</span></h3>
           <button id="btn-refresh-dns" class="btn-refresh"><i class="fas fa-sync"></i> Refresh Data</button>
         </div>
-        
+
         <div class="dns-table-wrapper">
           <table class="dns-table">
             <thead>

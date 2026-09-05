@@ -1,15 +1,8 @@
-/**
- * ============================================================================
- * REFACTORED ADMIN CHAT INTERFACE - NEW MODULAR ARCHITECTURE
- * ============================================================================
- */
-// DOM ELEMENTS
 var chatBox = document.getElementById('chatBox');
 var replyInput = document.getElementById('replyInput');
 var sendBtn = document.getElementById('sendBtn');
 var roomsList = document.getElementById('roomsList');
 var currentRoomDisplay = document.getElementById('currentRoom');
-// SESSION & STATE
 var activeRoom = null;
 var isRoomsLoading = false;
 var isSending = false;
@@ -17,24 +10,17 @@ var isLoadingMessages = false;
 var previousRoomsState = JSON.parse(localStorage.getItem('previousRoomsState') || '{}');
 var roomUnreadCounts = JSON.parse(localStorage.getItem('roomUnreadCounts') || '{}'); // Track unread per room
 var adminUnreadCount = parseInt(localStorage.getItem('adminUnreadCount') || '0', 10);
-// Notification audio
 var audio = new Audio('/assets/audio/notification.mp3');
 var autoPilotRooms = {};
-// NEW: Module instances (initialized per room)
 var messageStore = null;
 var messageRenderer = null;
 var syncEngine = null;
 var sendQueue = null;
 var typingTimeout = null;
 var QUICK_REPLIES = [];
-// ============================================================================
-// QUICK REPLIES LOGIC
-// ============================================================================
 var quickReplySelectedIndex = -1;
 var lastQuickReplyFilter = null;
-// ============================================================================
-// MODULE INITIALIZATION
-// ============================================================================
+
 function initializeChatModules() {
   messageRenderer = new MessageRenderer('#chatBox');
   messageRenderer.roomId = activeRoom;
@@ -93,7 +79,7 @@ function updateAdminUnreadBadge() {
     }
   }
 }
-// Typing Indicator handler
+
 function handleTypingIndicator(isTyping) {
   let indicator = document.getElementById('typingIndicator');
   if (isTyping) {
@@ -103,7 +89,6 @@ function handleTypingIndicator(isTyping) {
       indicator.className = 'message system-message typing-indicator';
       indicator.innerHTML = `<span class="typing-text">User is typing</span> <img src="/assets/img/livechat/dots-typing.gif" class="typing-gif" alt="...">`;
       chatBox.appendChild(indicator);
-      // Jangan maksa scroll jika admin sedang di atas
       const scrollableHeight = chatBox.scrollHeight - chatBox.clientHeight;
       const distanceFromBottom = scrollableHeight - chatBox.scrollTop;
       if (distanceFromBottom < 100) {
@@ -116,9 +101,6 @@ function handleTypingIndicator(isTyping) {
     }
   }
 }
-// ============================================================================
-// ROOMS MANAGEMENT
-// ============================================================================
 var unsubscribeRooms = null;
 async function loadRooms() {
   if (unsubscribeRooms) return; // Already listening
@@ -151,7 +133,6 @@ async function loadRooms() {
       }
       if (!room.id || !room.lastSender) return;
       const shortMsg = truncateString(room.lastMessage || "", CONFIG.ROOM_MESSAGE_PREVIEW_LENGTH);
-      // Detect new messages from users
       if (room.lastSender === 'user') {
         if (previousRoomsState[room.id] && previousRoomsState[room.id] !== room.lastMessage) {
           if (room.id !== activeRoom || document.visibilityState !== 'visible') {
@@ -191,7 +172,6 @@ async function loadRooms() {
         </div>
         <small class="room-preview">(${sanitizeMessage(shortMsg)})</small>
       `;
-      // Attach click event for deleting room
       const deleteBtn = div.querySelector('.delete-room-btn');
       if (deleteBtn) {
         deleteBtn.onclick = async (e) => {
@@ -203,7 +183,6 @@ async function loadRooms() {
                 ref
               } = window.firebaseHelpers;
               await remove(ref(window.firebaseDB, `rooms/${room.id}`));
-              // If the deleted room is currently open, close it
               if (activeRoom === room.id) {
                 const emptyState = document.getElementById('emptyStateContainer');
                 const activeChat = document.getElementById('activeChatContainer');
@@ -219,7 +198,6 @@ async function loadRooms() {
           }
         };
       }
-      // Attach click event for opening room
       div.onclick = (e) => {
         if (e.target.classList.contains('delete-room-btn')) return;
         selectRoom(room.id);
@@ -290,15 +268,11 @@ function selectRoom(roomId) {
     }, 10);
     replyInput.focus();
   }
-  // Set Auto-Pilot toggle state for this room
   const apToggle = document.getElementById('aiAutoPilotToggle');
   if (apToggle) {
     apToggle.checked = !!autoPilotRooms[roomId];
   }
 }
-// ============================================================================
-// MESSAGE SENDING
-// ============================================================================
 async function sendReply(attachmentUrl = null) {
   if (!activeRoom) {
     return;
@@ -315,7 +289,6 @@ async function sendReply(attachmentUrl = null) {
   sendBtn.disabled = true;
   sendBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
   try {
-    // Extract agent name from existing messages in the room (LATEST first)
     let agentName = 'Admin';
     if (messageStore) {
       const messages = messageStore.getSortedMessages();
@@ -366,10 +339,6 @@ function showNotif() {
     }, CONFIG.TIMINGS.DELAYS.notification_fadeout);
   }
 }
-// ============================================================================
-// DOM EVENT HANDLERS
-// ============================================================================
-// File Upload Handlers
 var fileInput = document.getElementById('fileInput');
 var attachBtn = document.getElementById('attachBtn');
 if (attachBtn && fileInput) {
@@ -435,7 +404,6 @@ if (attachBtn && fileInput) {
     }
   });
 }
-// AI Copilot Handlers
 var aiSuggestBtn = document.getElementById('aiSuggestBtn');
 var aiAutoPilotToggle = document.getElementById('aiAutoPilotToggle');
 if (aiAutoPilotToggle) {
@@ -463,7 +431,6 @@ if (aiAutoPilotToggle) {
 if (aiSuggestBtn) {
   aiSuggestBtn.addEventListener('click', async () => {
     if (!activeRoom) return;
-    // Prevent double clicking by checking if already drafting
     if (aiSuggestBtn.disabled) return;
     aiSuggestBtn.disabled = true;
     aiSuggestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -482,9 +449,7 @@ if (aiSuggestBtn) {
         alert("Gagal memanggil AI: " + (resData.message || resData.details || "Kesalahan tidak diketahui"));
         messageRenderer?.addSystemMessage('❌ Gagal memanggil AI: ' + (resData.message || ''));
       } else if (resData.draft) {
-        // Masukkan draft ke dalam kotak input text admin
         replyInput.value = resData.draft;
-        // Fokuskan kursor ke input agar admin bisa langsung mengedit
         replyInput.focus();
       }
     } catch (e) {
@@ -499,7 +464,6 @@ if (aiSuggestBtn) {
 }
 var typingTimeout = null;
 var QUICK_REPLIES = [];
-// Fetch quick replies from GAS configuration with caching
 async function loadQuickReplies() {
   try {
     const cached = localStorage.getItem("livechat_quick_replies");
@@ -580,7 +544,6 @@ function initEventHandlers() {
   if (sendBtn) {
     sendBtn.addEventListener('click', () => sendReply(null));
   }
-  // --- NEW: AI Settings Bindings (Using Event Delegation) ---
   document.addEventListener('click', (e) => {
     const aiSettingsBtn = e.target.closest('#aiSettingsBtn');
     const saveAiConfigBtn = e.target.closest('#saveAiConfigBtn');
@@ -594,7 +557,6 @@ function initEventHandlers() {
         return;
       }
       aiConfigModal.style.display = 'flex';
-      // Tambahkan timeout kecil agar transisi CSS berjalan
       setTimeout(() => aiConfigModal.classList.add('active'), 10);
       aiConfigLoading.style.display = 'flex';
       aiConfigForm.style.display = 'none';
@@ -689,14 +651,11 @@ function initEventHandlers() {
   });
   if (replyInput) {
     replyInput.addEventListener('input', function(e) {
-      // Auto-resize textarea (set to 1px first to force shrink calculation)
       this.style.height = '1px';
       this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-      // Simpan draft per room
       if (activeRoom) {
         localStorage.setItem(`livechat_admin_draft_${activeRoom}`, this.value);
       }
-      // Quick Reply Logic
       const val = replyInput.value;
       const popup = document.getElementById('quickReplyPopup');
       if (val.startsWith('/')) {
@@ -709,7 +668,6 @@ function initEventHandlers() {
         lastQuickReplyFilter = null;
       }
       if (!activeRoom || !window.firebaseHelpers) return;
-      // Throttled Typing Indicator Write
       if (!isTypingRefActive) {
         const {
           ref,
@@ -764,15 +722,11 @@ function initEventHandlers() {
       if (e.key === 'Enter') {
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
-          // Di ponsel: Enter = Baris Baru (default textarea)
           return;
         }
-        // Di Desktop:
         if (e.shiftKey) {
-          // Shift+Enter = Baris Baru
           return;
         }
-        // Enter saja = Kirim Pesan
         e.preventDefault();
         if (typingTimeout) clearTimeout(typingTimeout);
         if (window.firebaseHelpers) {
@@ -794,7 +748,6 @@ function initEventHandlers() {
 function initAdmin() {
   initEventHandlers();
   loadRooms();
-  // Online/Offline Toggle Logic
   const toggle = document.getElementById('lcOnlineToggle');
   const label = document.getElementById('lcStatusLabel');
   if (toggle && window.firebaseHelpers && window.firebaseDB) {
@@ -804,15 +757,12 @@ function initAdmin() {
       set
     } = window.firebaseHelpers;
     const statusRef = ref(window.firebaseDB, 'settings/livechat/isOnline');
-    // Listen to DB changes
     onValue(statusRef, (snapshot) => {
       const isOnline = snapshot.val();
-      // If null (not set), default to true
       const currentState = isOnline !== false;
       toggle.checked = currentState;
       if (label) label.textContent = currentState ? 'Online' : 'Offline';
     });
-    // Update DB on toggle change
     toggle.addEventListener('change', (e) => {
       set(statusRef, e.target.checked);
     });
@@ -823,9 +773,6 @@ if (window.firebaseDB) {
 } else {
   window.addEventListener('firebase-ready', initAdmin);
 }
-// ============================================================================
-// A11Y & UX: CLEAR BADGE ON TAB RETURN
-// ============================================================================
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && activeRoom) {
     if (roomUnreadCounts[activeRoom]) {

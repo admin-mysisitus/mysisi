@@ -1,11 +1,7 @@
-/* ========== PERUSAHAAN PAGE INTERACTIONS ========== */
-/* Import common interactions dan tambahkan logic spesifik perusahaan */
 document.addEventListener('DOMContentLoaded', function() {
   'use strict';
-  // ========== NAVIGATE CARDS INTERACTION ==========
   const navigateCards = document.querySelectorAll('.navigate-card');
   navigateCards.forEach(card => {
-    // Hover effect for desktop
     card.addEventListener('mouseenter', function() {
       this.style.transition = 'none';
       const icon = this.querySelector('i');
@@ -22,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
         icon.style.animation = 'none';
       }
     });
-    // Click feedback for mobile
     card.addEventListener('click', function(e) {
       if (window.innerWidth < 768) {
         e.preventDefault();
@@ -34,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== HIGHLIGHT CARDS IMPROVEMENTS ==========
   const highlightCards = document.querySelectorAll('.highlight-card');
   highlightCards.forEach(card => {
     const icon = card.querySelector('i');
@@ -48,19 +42,15 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-  // ========== ICON CARD POPUP AUTO-SCROLL ==========
   const iconCards = document.querySelectorAll('.icon-card');
   iconCards.forEach(card => {
     const handleScroll = () => {
       const popup = card.querySelector('.icon-card-popup');
       if (!popup) return;
-      // Small delay to allow the CSS transition to reveal the popup
       setTimeout(() => {
         const popupRect = popup.getBoundingClientRect();
         const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        // If the bottom of the popup is cut off by the bottom of the viewport
         if (popupRect.bottom > windowHeight) {
-          // Calculate exact scroll needed to show the bottom with 24px margin
           const scrollAmount = popupRect.bottom - windowHeight + 24;
           window.scrollBy({
             top: scrollAmount,
@@ -72,10 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
     card.addEventListener('mouseenter', handleScroll);
     card.addEventListener('focusin', handleScroll);
   });
-  // ========== CTA BUTTONS INTERACTION ==========
-  // Auto-initialized by HeroComponent.initAll() - no manual setup needed
-  // CTA buttons akan mendapatkan hover effects, animations, dan ripple effect secara otomatis
-  // ========== REVEAL ON SCROLL ANIMATION ==========
   const revealElements = document.querySelectorAll('.reveal-up');
   if (revealElements.length > 0) {
     const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -96,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     revealElements.forEach(el => revealObserver.observe(el));
   }
-  // ========== VISION MISSION TABS ==========
   const tabBtns = document.querySelectorAll('.vm-tab-btn');
   const tabContents = document.querySelectorAll('.vm-tab-content');
   if (tabBtns.length > 0) {
@@ -111,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-  // ========== AUTO SCROLL SLIDERS ==========
+
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -121,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const slideInterval = 2500;
     const resumeDelay = 3000;
     let track = sliderElement.firstElementChild;
-    // Adaptasi jika sliderElement tidak memiliki wrapper melainkan langsung berisi item
     if (track && (track.classList.contains('metric-list-item') || track.classList.contains('mission-card'))) {
       track = sliderElement;
     }
@@ -130,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
-      // Jangan jalankan animasi jika kontennya muat (tidak ada scrollbar horizontal), contoh: mode desktop
       if (clientWidth >= scrollWidth - 5) return;
       isAutoScrolling = true;
       if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
@@ -147,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
           behavior: 'smooth'
         });
       }
-      // Reset flag after smooth scroll is expected to complete
       scrollFlagTimeout = setTimeout(() => {
         isAutoScrolling = false;
       }, 800);
@@ -160,13 +142,11 @@ document.addEventListener('DOMContentLoaded', function() {
       if (autoScrollInterval) clearInterval(autoScrollInterval);
     };
     const handleInteraction = (e) => {
-      // Ignore scroll events triggered by our own script's scrollToNext
       if (e && e.type === 'scroll' && isAutoScrolling) return;
       stopAutoScroll();
       if (resumeTimeout) clearTimeout(resumeTimeout);
       resumeTimeout = setTimeout(startAutoScroll, resumeDelay);
     };
-    // Listen to manual interaction events
     sliderElement.addEventListener('scroll', handleInteraction, {
       passive: true
     });
@@ -183,10 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
   initAutoSnapSlider(document.querySelector('.team-slider-container'));
   initAutoSnapSlider(document.querySelector('.compact-metrics-list'));
   initAutoSnapSlider(document.querySelector('.mission-cards-grid'));
-  // ========== TEAM BIO EXPAND ==========
   const teamBios = document.querySelectorAll('.team-bio');
   const teamSliderContainer = document.querySelector('.team-slider-container');
-  // Fungsi penolong untuk menutup semua bio
   const closeAllBios = (exceptBio = null) => {
     teamBios.forEach(bio => {
       if (bio !== exceptBio) bio.classList.remove('expanded');
@@ -201,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!isExpanded) this.classList.add('expanded'); // Buka yang ini jika belum terbuka
     });
   });
-  // Tutup otomatis saat mulai scroll/geser (swipe)
   if (teamSliderContainer) {
     teamSliderContainer.addEventListener('scroll', () => closeAllBios(), {
       passive: true
@@ -210,9 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
       passive: true
     });
   }
-  // Tutup otomatis jika klik di area layar lainnya
   document.addEventListener('click', () => closeAllBios());
-  // ========== EXCLUSIVE ACCORDION (AUTO-CLOSE OTHERS) ==========
   const detailElements = document.querySelectorAll('details');
   detailElements.forEach(detail => {
     detail.addEventListener('toggle', () => {
@@ -228,8 +203,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // --- MERGED FROM TENTANG.JS ---
-  // ========== TIMELINE INTERACTIVE ==========
   const timelineItems = document.querySelectorAll('.timeline-item');
   timelineItems.forEach((item, index) => {
     const content = item.querySelector('.timeline-content');
@@ -241,17 +214,14 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.toggle('expanded');
       }
     });
-    // Keyboard accessibility
     item.addEventListener('keypress', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         this.click();
       }
     });
-    // Add animation
     item.style.animation = `slideInUp 0.6s ease-out ${index * 0.1}s both`;
   });
-  // ========== VALUES EXPANDED INTERACTION ==========
   const valueExpandedCards = document.querySelectorAll('.value-expanded');
   valueExpandedCards.forEach(card => {
     const valueNumber = card.querySelector('.value-number');
@@ -266,13 +236,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== CTA BUTTONS INTERACTION ==========
-  // Auto-initialized by HeroComponent.initAll() - no manual setup needed
-  // CTA buttons akan mendapatkan hover effects, animations, dan ripple effect secara otomatis
-  // ========== TEAM MEMBER CARD INTERACTION ==========
   const teamCards = document.querySelectorAll('.team-card');
   teamCards.forEach(card => {
-    // Hover effect
     if (!isTouch()) {
       card.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-8px)';
@@ -282,8 +247,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-  // ========== PARTNER COMPANY SHOWCASE ==========
-  // Hover effects untuk partner cards sudah ditangani oleh CSS
   const partnerImages = document.querySelectorAll('.partner-image');
   partnerImages.forEach(partner => {
     partner.addEventListener('click', function() {
@@ -293,32 +256,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // ========== COLLABORATION & CTA BUTTONS ==========
   const collaborationBtns = document.querySelectorAll('.collaboration-section .btn');
   collaborationBtns.forEach((btn, index) => {
     btn.addEventListener('click', function(e) {
-      // Only handle partnership button with WhatsApp redirect
       if (index === 0 && (!this.getAttribute('href') || this.getAttribute('href') === '/bantuan/')) {
         e.preventDefault();
         const message = 'Saya tertarik untuk berkolaborasi dengan SISITUS';
         window.open('https://wa.me/6281215289095?text=' + encodeURIComponent(message), '_blank');
       }
-      // Career link navigates normally to /perusahaan/karir/
     });
   });
-  // ========== TIMELINE CONTENT MAX-HEIGHT ==========
-  // Set initial max-height for non-expanded timeline items
   timelineItems.forEach(item => {
     const content = item.querySelector('.timeline-content');
     if (content && !item.classList.contains('expanded')) {
       content.style.maxHeight = content.scrollHeight + 'px';
     }
   });
-  // ========== METRICS COUNT UP ANIMATION ==========
   const metricNumbers = document.querySelectorAll('.metric-number');
   const animateCountUp = (element) => {
     const originalText = element.textContent;
-    // Extract numbers, decimal point, and surrounding text
     const match = originalText.match(/^(.*?)([0-9.]+)(.*?)$/);
     if (!match) return;
     const prefix = match[1];
@@ -348,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const countUpObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
-        // Beri sedikit delay agar terlihat lebih natural
         setTimeout(() => {
           animateCountUp(entry.target);
         }, 200);
@@ -362,41 +317,31 @@ document.addEventListener('DOMContentLoaded', function() {
   metricNumbers.forEach(metric => {
     countUpObserver.observe(metric);
   });
-  // ========== UTILITY FUNCTIONS ==========
+
   function isTouch() {
     return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
   }
-  // ======================
-  // Sponsor Section (Partners)
-  // ======================
   const template = document.getElementById("sponsors-template");
   const row1 = document.getElementById("row1");
   const row2 = document.getElementById("row2");
   if (template && row1 && row2) {
     const trackTemplate = template.content.querySelector(".sponsors-track");
     if (trackTemplate) {
-      // Ambil semua logo dari template
       const allLogos = Array.from(trackTemplate.querySelectorAll('img'));
-      // Bagi dua secara berurutan layaknya rantai
       const halfIndex = Math.ceil(allLogos.length / 2);
       const logos1 = allLogos.slice(0, halfIndex).map(img => img.outerHTML).join('');
       const logos2 = allLogos.slice(halfIndex).map(img => img.outerHTML).join('');
-      // Buat track untuk baris 1
       const track1 = document.createElement('div');
       track1.className = 'sponsors-track scroll-left';
-      // Repeat genap (misal 6) agar translasi -50% menghasilkan loop mulus tanpa jeda
       track1.innerHTML = logos1.repeat(6);
-      // Buat track untuk baris 2
       const track2 = document.createElement('div');
       track2.className = 'sponsors-track scroll-right';
       track2.innerHTML = logos2.repeat(6);
-      // Masukkan ke DOM
       row1.appendChild(track1);
       row2.appendChild(track2);
     }
   }
 });
-// ========== ANIMATION KEYFRAMES (injected via script) ==========
 const perusahaanStyle = document.createElement('style');
 perusahaanStyle.textContent = `
   @keyframes pulse {
@@ -437,10 +382,6 @@ tentangStyle.textContent = `
       transform: scale(1.15) rotate(-5deg);
     }
   }
-
-  /* slideInUp, slideInLeft, dan ripple keyframes sudah di-handle oleh HeroComponent */
-  /* @keyframes slideInUp digunakan untuk CTA buttons animation */
-  /* @keyframes ripple digunakan untuk CTA buttons ripple effect */
 
   .value-expanded .value-number {
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);

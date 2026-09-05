@@ -24,7 +24,6 @@ export async function render() {
       }
     });
   }
-  // Initial load
   await loadStats();
 }
 async function loadStats() {
@@ -65,7 +64,6 @@ async function loadStats() {
               bgStyle = 'rgba(245, 158, 11, 0.2)';
               colorStyle = 'var(--admin-warning)';
             }
-            // Format relative time if possible, else just use timeStr
             let timeText = act.timeStr;
             try {
               const dateObj = new Date(act.timeStr);
@@ -114,7 +112,6 @@ let registrationChart = null;
 function renderChart(chartData) {
   const ctx = document.getElementById('registration-chart');
   if (!ctx) return;
-  // Hancurkan chart lama jika ada, agar tidak double render saat ganti menu
   if (registrationChart) {
     registrationChart.destroy();
   }

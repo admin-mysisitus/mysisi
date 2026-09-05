@@ -1,7 +1,5 @@
-/* ========== PROMO PAGE INTERACTIONS ========== */
 import APIClient from '/assets/js/modules/unified-api.js';
 document.addEventListener('DOMContentLoaded', function() {
-  // ========== SMOOTH SCROLL KE PROMO DETAILS ==========
   const smoothScrollLinks = document.querySelectorAll('a[href="#promo-details"]');
   smoothScrollLinks.forEach(link => {
     link.addEventListener('click', function(e) {
@@ -15,16 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  // Intersection Observer untuk animation reveal sudah ditangani CSS
-  // CTA Button analytics dapat ditambah di tracker analytics terpisah
-  // ========== FEATURED CARD HIGHLIGHT PADA LOAD ==========
   const featuredCard = document.querySelector('.promo-card.featured');
   if (featuredCard) {
-    // Memberikan slight glow effect pada featured card saat page load
     featuredCard.style.transition = 'all 0.3s ease-in-out';
   }
-  // ========== RESPONSIVE PROMO CARD HOVER ==========
-  // Disable hover effect di touch devices
   const isTouch = () => {
     return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
   };
@@ -39,11 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-  // ========== WHY ITEMS ICON ANIMATION (via CSS hover) ==========
-  // Icon animation sekarang di-handle oleh CSS .why-item:hover i
-  // Tidak perlu JavaScript intervention untuk hover animation
-  // ========== COUNTER ANIMATION (OPTIONAL untuk statistik jika ada) ==========
-  // Bisa ditambahkan jika ada section dengan angka-angka
   const animateCounter = (element, target, duration = 2000) => {
     const increment = target / (duration / 16);
     let current = 0;
@@ -58,8 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     updateCounter();
   };
-  // ========== DYNAMIC PROMO CARD STAGGER ANIMATION ==========
-  // Memastikan animation timing yang smooth
   const staggerCards = () => {
     const cards = document.querySelectorAll('.promo-card');
     cards.forEach((card, index) => {
@@ -67,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
   staggerCards();
-  // ========== ACCESSIBILITY: FOCUS MANAGEMENT ==========
   const allButtons = document.querySelectorAll('.btn');
   allButtons.forEach(button => {
     button.addEventListener('focus', function() {
@@ -78,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.style.outline = 'none';
     });
   });
-  // ========== PROMO COUNTDOWN TIMER ==========
   const PROMO_END_DATE = new Date('2026-03-31T23:59:59+07:00').getTime();
   const UPDATE_INTERVAL = 1000; // Update every 1 second
   const countdownContainer = document.getElementById('promo-countdown');
@@ -115,16 +98,13 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateCountdown() {
     if (!countdownContainer) return;
     const time = calculateTimeRemaining();
-    // Update DOM
     daysElement.textContent = String(time.days).padStart(2, '0');
     hoursElement.textContent = String(time.hours).padStart(2, '0');
     minutesElement.textContent = String(time.minutes).padStart(2, '0');
     secondsElement.textContent = String(time.seconds).padStart(2, '0');
-    // Add warning class if less than 24 hours
     if (time.days === 0 && time.hours <= 6) {
       countdownContainer.classList.add('countdown-urgent');
     }
-    // If promo expired, show message
     if (time.isExpired) {
       countdownContainer.innerHTML = `
         <div style="text-align: center; padding: 20px; background: #fef3cd; border-radius: 8px;">
@@ -139,18 +119,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   }
-  // Initialize countdown timer
   if (countdownContainer) {
     updateCountdown();
     window.promoCountdownInterval = setInterval(updateCountdown, UPDATE_INTERVAL);
-    // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
       if (window.promoCountdownInterval) {
         clearInterval(window.promoCountdownInterval);
       }
     });
   }
-  // ========== DYNAMIC ACTIVE COUPONS LOADER ==========
   const couponsList = document.getElementById('active-coupons-list');
   if (couponsList) {
     fetchActiveCoupons();
@@ -225,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
     }
   }
-  // Global clipboard copy helper
   window.copyCouponCode = (btn, code) => {
     navigator.clipboard.writeText(code).then(() => {
       const originalText = btn.textContent;
@@ -239,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Failed to copy text:', err);
     });
   };
-  // ========== AUTO SNAP SLIDER UNTUK MOBILE ==========
+
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -251,7 +227,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let track = sliderElement;
     if (!track || track.children.length === 0) return;
     const scrollToNext = () => {
-      // Hanya aktif jika layar mobile/tablet (dimana scrollWidth > clientWidth)
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
@@ -277,7 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     const startAutoScroll = () => {
       stopAutoScroll();
-      // Jangan mulai interval jika tidak ada scroll (desktop view)
       if (sliderElement.clientWidth < sliderElement.scrollWidth) {
         autoScrollInterval = setInterval(scrollToNext, slideInterval);
       }
@@ -301,21 +275,17 @@ document.addEventListener('DOMContentLoaded', function() {
       passive: true
     });
     sliderElement.addEventListener('mousedown', handleInteraction);
-    // Initial check (delay a bit for layout to settle)
     setTimeout(startAutoScroll, 1000);
-    // Re-check on resize
     window.addEventListener('resize', () => {
       stopAutoScroll();
       setTimeout(startAutoScroll, 500);
     });
   }
-  // Initialize for all mobile grids
   const gridsToSnap = ['.promos-grid', '.value-proposition-grid', '.requirements-grid', '.why-grid'];
   gridsToSnap.forEach(selector => {
     const el = document.querySelector(selector);
     if (el) initAutoSnapSlider(el);
   });
-  // ========== SWIPER CAROUSEL INITIALIZATION ==========
   if (typeof Swiper !== 'undefined') {
     const testimonialSwiper = new Swiper('.testimonial-swiper', {
       effect: 'coverflow',

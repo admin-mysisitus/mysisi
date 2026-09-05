@@ -1,6 +1,3 @@
-/**
- * Admin Dashboard SPA Main Application
- */
 import {
   AdminSidebar
 } from './components/sidebar.js';
@@ -24,7 +21,6 @@ class AdminApp {
     this.init();
   }
   async init() {
-    // STRICT SECURITY: Synchronous Check sebelum me-render UI apapun
     const user = AuthManager.getCurrentUser();
     if (!user) {
       window.location.href = '/auth/';
@@ -37,16 +33,13 @@ class AdminApp {
     }
     if (user.role !== 'admin') {
       document.body.innerHTML = '';
-      // Arahkan ke dasbor pelanggan karena dia masih punya hak akses sebagai customer
       window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/');
       return;
     }
-    // Render sidebar and navbar
     this.sidebar = new AdminSidebar(this);
     this.sidebar.render();
     this.navbar = new AdminNavbar();
     this.navbar.render();
-    // SECURITY: Firebase Admin Probe Check
     try {
       const {
         db
@@ -58,11 +51,8 @@ class AdminApp {
       window.location.href = '/auth/?error=unauthorized';
       return;
     }
-    // Setup routes
     this.setupRoutes();
-    // Listen for hash changes
     window.addEventListener('hashchange', () => this.handleRouteChange());
-    // Initial route
     this.handleRouteChange();
   }
   setupRoutes() {
@@ -136,7 +126,6 @@ class AdminApp {
     this.navigate(baseRoute);
   }
   async navigate(route) {
-    // PROTECT ROUTES
     if (route !== '/login' && !AuthManager.isAdmin()) {
       window.location.href = '/auth/';
       return;
@@ -148,22 +137,17 @@ class AdminApp {
     }
     this.currentRoute = route;
     const routeConfig = this.routes[route];
-    // Update sidebar UI
     if (this.sidebar) this.sidebar.setActive(route);
-    // Update Navbar title
     if (this.navbar) this.navbar.setTitle(routeConfig.title);
     document.title = `${routeConfig.title} - Admin SISITUS`;
     try {
       this.showLoading();
-      // Load JS module
       const module = await routeConfig.loadModule();
-      // Load HTML view
       const response = await fetch(`./views/${routeConfig.page}.html`);
       if (!response.ok) throw new Error(`View not found: ${routeConfig.page}`);
       const html = await response.text();
       const contentArea = document.getElementById('admin-content');
       contentArea.innerHTML = html;
-      // Run module logic
       if (module.render) {
         await module.render();
       }
@@ -190,7 +174,6 @@ class AdminApp {
     if (loader) loader.style.display = 'none';
   }
 }
-// Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
   window.adminApp = new AdminApp();
 });

@@ -208,7 +208,6 @@ function renderTxTable(mockTx, tbody) {
     return;
   }
   mockTx.forEach(tx => {
-    // Map Firebase properties to expected table properties
     const inv = tx.inv || tx.orderId || '-';
     const date = tx.date || tx.createdAt || new Date().toISOString();
     const name = tx.name || '-';

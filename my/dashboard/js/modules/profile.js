@@ -1,7 +1,3 @@
-/**
- * Profile Page Module
- * User account management, profile editing, password change
- */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   showError,
@@ -18,10 +14,8 @@ import {
 } from '/assets/js/modules/unified-auth.js';
 export async function render(currentUser) {
   try {
-    // Load user profile data
     const result = await APIClient.getUserProfile(currentUser.userId);
     let user = result.data || currentUser;
-    // Defensive parsing for corrupt JSON displayName
     if (user.displayName && typeof user.displayName === 'string' && user.displayName.trim().startsWith('{')) {
       try {
         const parsed = JSON.parse(user.displayName);
@@ -35,16 +29,13 @@ export async function render(currentUser) {
         console.log('Failed to parse corrupt user displayName JSON:', e);
       }
     }
-    // Setup form with current data
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
-      // Sinkronkan session lokal dengan data API terbaru (agar Navbar langsung update jika berbeda)
       if (user.displayName !== currentUser.displayName || user.photoURL !== currentUser.photoURL) {
         AuthManager.saveSession(user);
       }
       const inputName = document.getElementById('input-name');
       inputName.value = user.displayName || '';
-      // Live update nama di navbar saat user mengetik (Premium feel)
       inputName.addEventListener('input', (e) => {
         const userNameEl = document.querySelector('.user-profile-trigger .user-name');
         const dropdownNameEl = document.querySelector('.dropdown-header strong');
@@ -102,13 +93,11 @@ export async function render(currentUser) {
         await handleProfileUpdate(currentUser.userId);
       });
     }
-    // Setup password change form
     const formChangePassword = document.getElementById('form-change-password');
     if (formChangePassword) {
       const oldPwdInput = document.getElementById('input-old-password');
       const submitBtn = formChangePassword.querySelector('button[type="submit"]');
       const isSetPassword = user.hasPassword === false;
-      // Jika user belum punya password (misal login via Google baru), hide form Password Lama
       if (isSetPassword && oldPwdInput) {
         const formGroup = oldPwdInput.closest('.form-group');
         if (formGroup) formGroup.style.display = 'none';
@@ -116,7 +105,6 @@ export async function render(currentUser) {
         oldPwdInput.value = '';
         if (submitBtn) submitBtn.textContent = 'Set Password';
       }
-      // Handler untuk fitur Lupa Password Inline
       const forgotPwdBtn = document.getElementById('btn-forgot-password-inline');
       if (forgotPwdBtn) {
         if (isSetPassword) {
@@ -191,7 +179,6 @@ async function handleProfileUpdate(userId) {
     setButtonLoading(btn, true, 'Menyimpan...');
     const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
     if (result.success) {
-      // Update session
       const user = AuthManager.getCurrentUser();
       user.displayName = displayName;
       user.whatsapp = whatsapp;
@@ -199,7 +186,6 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       AuthManager.saveSession(user);
-      // Render ulang navbar agar foto profil (jika berubah) langsung tampil baru
       if (window.app && window.app.navbar) {
         window.app.navbar.user = user;
         window.app.navbar.render();
@@ -247,7 +233,6 @@ async function handlePasswordChange(userId, isSetPassword = false) {
     if (result.success) {
       showSuccess(isSetPassword ? 'Password berhasil diatur' : 'Password berhasil diubah');
       document.getElementById('form-change-password').reset();
-      // Update session local state to mark that password is now set
       const user = AuthManager.getCurrentUser();
       if (user && user.hasPassword === false) {
         user.hasPassword = true;

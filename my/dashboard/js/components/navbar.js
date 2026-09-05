@@ -1,6 +1,3 @@
-/**
- * Dashboard Top Navigation Bar Component
- */
 import {
   AuthManager
 } from '/assets/js/modules/unified-auth.js';
@@ -72,7 +69,6 @@ export class DashboardNavbar {
         </div>
       </div>
     `;
-    // Dropdown toggle logic
     const dropdownTrigger = document.getElementById('user-profile-trigger');
     const dropdownMenu = document.getElementById('user-dropdown-menu');
     if (dropdownTrigger && dropdownMenu) {
@@ -100,7 +96,6 @@ export class DashboardNavbar {
       };
       document.addEventListener('click', this.dropdownOutsideClickHandler);
     }
-    // Mobile sidebar toggle logic
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('sidebar');
     if (sidebarToggle && sidebar) {
@@ -118,7 +113,6 @@ export class DashboardNavbar {
       };
       document.addEventListener('click', this.sidebarOutsideClickHandler);
     }
-    // Logout handler
     const btnLogout = document.getElementById('btn-logout-dropdown');
     if (btnLogout) {
       btnLogout.addEventListener('click', () => {
@@ -128,7 +122,6 @@ export class DashboardNavbar {
         });
       });
     }
-    // Kunjungi Website handler (Reverse Handoff)
     const btnKunjungi = document.getElementById('btn-kunjungi-website');
     if (btnKunjungi) {
       btnKunjungi.addEventListener('click', async (e) => {
@@ -153,7 +146,6 @@ export class DashboardNavbar {
         }
       });
     }
-    // Listen for auth changes
     if (!this.authListenerBound) {
       this.authListenerBound = true;
       document.addEventListener('auth:authChanged', (e) => {
@@ -163,7 +155,6 @@ export class DashboardNavbar {
         }
       });
     }
-    // Update active breadcrumb name on hashchange
     this.updateActiveBreadcrumb();
     if (!this.breadcrumbListenerBound) {
       this.breadcrumbListenerBound = true;

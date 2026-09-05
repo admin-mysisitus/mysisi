@@ -1,8 +1,3 @@
-/**
- * ============================================================================
- * SendQueue.js - Firebase Realtime Database Message Sender
- * ============================================================================
- */
 class SendQueue {
   constructor(messageStore, config = {}) {
     this.messageStore = messageStore;
@@ -28,7 +23,6 @@ class SendQueue {
     };
     this.messageStore.upsertMessage(optimisticMsg);
     if (this.onRender) this.onRender();
-    // Send to Firebase
     this._sendToFirebase(optimisticMsg);
     return optimisticMsg;
   }
@@ -56,7 +50,6 @@ class SendQueue {
         status: "sent",
         time: msg.time
       };
-      // Atomic update for both the message and the room metadata
       const updates = {};
       updates[`rooms/${msg.roomId}/messages/${newMessageRef.key}`] = finalMessage;
       updates[`rooms/${msg.roomId}/lastMessage`] = msg.attachment ? "[Attachment]" : msg.message;
@@ -64,7 +57,6 @@ class SendQueue {
       updates[`rooms/${msg.roomId}/timestamp`] = serverTimestamp();
       updates[`rooms/${msg.roomId}/id`] = msg.roomId; // Ensure ID exists for listing
       await update(ref(db), updates);
-      // Update local store with final status and server-generated ID
       this.messageStore.updateMessage(msg.clientId, {
         status: "sent",
         id: newMessageRef.key
@@ -84,7 +76,6 @@ class SendQueue {
     return `${hours}:${minutes}`;
   }
 }
-// Export for use
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = SendQueue;
 }

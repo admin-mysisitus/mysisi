@@ -1,8 +1,5 @@
-/* ========== TIPS PAGE INTERACTIONS ========== */
-/* Khusus untuk halaman tips dengan filter, bookmark, dan highlight functionality */
 document.addEventListener('DOMContentLoaded', function() {
   const tipsCards = document.querySelectorAll('.tips-card, .artikel-card');
-  // Pagination Elements
   const paginationLinks = document.querySelectorAll('.pagination .pagination-link');
   const prevBtn = paginationLinks.length > 0 ? paginationLinks[0] : null;
   const nextBtn = paginationLinks.length > 1 ? paginationLinks[paginationLinks.length - 1] : null;
@@ -15,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function updateDisplay(scrollToTop = false) {
     if (tipsCards.length === 0) return;
-    // 1. Filter
     const matchingCards = Array.from(tipsCards).filter(card => {
       let categoryMatch = true;
       if (currentCategory !== 'Semua') {
@@ -31,17 +27,14 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       return categoryMatch && searchMatch;
     });
-    // 2. Paginate
     const totalPages = Math.max(1, Math.ceil(matchingCards.length / cardsPerPage));
     if (currentPage > totalPages) currentPage = totalPages;
     if (currentPage < 1) currentPage = 1;
-    // 3. Hide all
     tipsCards.forEach(card => {
       card.style.display = 'none';
       card.classList.add('hidden');
       card.classList.remove('visible');
     });
-    // 4. Show current page
     const startIndex = (currentPage - 1) * cardsPerPage;
     const pageCards = matchingCards.slice(startIndex, startIndex + cardsPerPage);
     pageCards.forEach(card => {
@@ -89,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   }
-  // ========== EVENT LISTENERS ==========
   const categoryButtons = document.querySelectorAll('.category-btn');
   if (categoryButtons.length > 0) {
     categoryButtons.forEach(button => {
@@ -157,11 +149,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-  // Inisialisasi awal tampilan (Halaman 1, 6 card pertama)
   if (document.querySelector('.pagination')) {
     updateDisplay(false);
   }
-  // ========== SEARCH EVENT LISTENER ==========
   if (searchInput) {
     searchInput.addEventListener('input', function(e) {
       currentSearch = e.target.value;

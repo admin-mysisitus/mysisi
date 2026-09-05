@@ -1413,7 +1413,6 @@ button:focus-visible,
   border-radius: 50%;
 }
 
-/* Custom Scrollbar untuk Textarea Admin */
 .lc-reply-input::-webkit-scrollbar {
   width: 6px;
 }

@@ -1,8 +1,3 @@
-/**
- * Payment Page Module
- * Midtrans payment integration, order status tracking
- * Migrated and fixed from assets/js/pages/payment.js
- */
 import APIClient from '/assets/js/modules/unified-api.js?v=2';
 import {
   AuthManager
@@ -29,51 +24,10 @@ let currentOrder = null;
 let currentTransaction = null;
 export async function render(user) {
   try {
-    // CRITICAL: Refresh user data from storage
     if (!user) {
       AuthManager.refreshUserData(); // NEW: Load latest user session
     }
-    // Store current user for use in other functions
     currentUser = user || AuthManager.getCurrentUser(); // NEW: Use refreshed data
-    // Email verification check - Bypassed to allow payment
-    /*
-    if (!currentUser?.emailVerified) {
-      const content = document.getElementById('content');
-      content.innerHTML = `
-        <div style="max-width: 600px; margin: 60px auto; padding: 20px; text-align: center;">
-          <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
-            <h2 style="margin: 0 0 10px 0; color: #92400e;">
-              <i class="fas fa-envelope-open-text"></i> Verifikasi Email Diperlukan
-            </h2>
-            <p style="margin: 0 0 10px 0; color: #78350f;">
-              Email Anda belum terverifikasi. Verifikasi email diperlukan untuk melanjutkan pembayaran.
-            </p>
-            <p style="margin: 0; color: #99410e; font-size: 14px;">
-              Email dikirim ke: <strong>${currentUser?.email}</strong>
-            </p>
-          </div>
-
-          <div style="margin-bottom: 20px;">
-            <p style="color: #666;">Setelah memverifikasi email, refresh halaman ini untuk melanjutkan.</p>
-            <button onclick="location.reload()" class="btn" style="padding: 12px 24px; background: #2563EB; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-              <i class="fas fa-redo"></i> Refresh Halaman
-            </button>
-          </div>
-
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e0e0e0;">
-
-          <div style="color: #999; font-size: 14px;">
-            <p>Link verifikasi tidak muncul?</p>
-            <a href="/auth/verify-email.html" style="color: #2563EB; text-decoration: none; font-weight: bold;">
-              Buka halaman verifikasi email
-            </a>
-          </div>
-        </div>
-      `;
-      return;
-    }
-    */
-    // Get order ID from URL (support both search params and hash params)
     let orderId = new URLSearchParams(window.location.search).get('orderId');
     if (!orderId) {
       const hash = window.location.hash;
@@ -85,9 +39,7 @@ export async function render(user) {
     if (!orderId) {
       throw new Error('Order ID tidak ditemukan');
     }
-    // Load order data
     await loadOrderData(orderId, currentUser);
-    // Setup buttons
     setupPaymentButtons();
   } catch (error) {
     void('Error rendering payment page:', error);
@@ -103,7 +55,6 @@ export async function render(user) {
 }
 async function loadOrderData(orderId, currentUser) {
   try {
-    // Show loading
     const content = document.getElementById('content');
     content.innerHTML = `
       <div class="card">
@@ -113,15 +64,12 @@ async function loadOrderData(orderId, currentUser) {
         </div>
       </div>
     `;
-    // Fetch order data
     const result = await APIClient.getOrderDetail(orderId, currentUser.userId);
     if (!result.success) {
       throw new Error(result.message || 'Gagal memuat pesanan');
     }
     currentOrder = result.data || result.order;
-    // Display order
     displayOrderData(currentOrder);
-    // Generate payment token if not yet paid
     if (currentOrder.paymentStatus !== 'paid') {
       if (currentOrder.snapToken) {
         currentTransaction = {
@@ -144,8 +92,6 @@ async function generateMidtransToken(orderData) {
     if (!currentUser) {
       throw new Error('Data pengguna tidak ditemukan');
     }
-    // Call GAS to generate Midtrans token with all required parameters
-    // NEW: Pass addons as the 8th parameter
     const result = await APIClient.generateMidtransToken(orderData.orderId, currentUser.email, currentUser.phone || '', currentUser.displayName || currentUser.name || 'Customer', orderData.domain, orderData.packageId || orderData.packageName, orderData.total, orderData.addons || [] // NEW: Pass addons array
     );
     if (!result.success || !result.data || !result.data.snapToken) {
@@ -157,10 +103,8 @@ async function generateMidtransToken(orderData) {
       orderId: orderData.orderId,
       amount: orderData.total
     };
-    // Token already saved to RTDB by GAS createOrderWithAuth
   } catch (error) {
     void('Error generating Midtrans token:', error);
-    // Show error but don't crash
     const errorDiv = document.createElement('div');
     errorDiv.className = 'alert alert-warning';
     errorDiv.style.marginTop = '16px';
@@ -200,7 +144,6 @@ function openMidtransPayment() {
     }
     const btn = document.getElementById('btn-payment');
     setButtonLoading(btn, true, 'Membuka pembayaran...');
-    // Open Midtrans Snap
     window.snap.pay(currentTransaction.token, {
       onSuccess: handlePaymentSuccess,
       onPending: handlePaymentPending,
@@ -222,7 +165,6 @@ function handlePaymentLunas(orderId) {
     clearInterval(paymentPollingInterval);
     paymentPollingInterval = null;
   }
-  // Cleanup listener
   getFirebase().then(({
     db
   }) => {
@@ -245,7 +187,6 @@ function handlePaymentLunas(orderId) {
 async function startPaymentPolling() {
   const orderId = currentOrder?.orderId;
   if (!orderId) return;
-  // 1. Listener RTDB untuk respon Instan (Real-time)
   try {
     const {
       db
@@ -263,7 +204,6 @@ async function startPaymentPolling() {
   } catch (e) {
     void('Firebase DB listener error', e);
   }
-  // 2. Polling API sebagai fallback
   if (paymentPollingInterval) clearInterval(paymentPollingInterval);
   let pollCount = 0;
   paymentPollingInterval = setInterval(async () => {
@@ -327,7 +267,6 @@ function handlePaymentClose() {
 function requestPaymentAfterPreview() {
   try {
     if (!currentOrder) return;
-    // Build addon info if present
     let addonInfo = '';
     if (currentOrder.addons && Array.isArray(currentOrder.addons) && currentOrder.addons.length > 0) {
       addonInfo = `\nAddon (${currentOrder.addons.length}):\n`;
@@ -349,7 +288,6 @@ function displayOrderData(orderData) {
   const expirationDate = new Date(new Date(orderData.createdAt).getTime() + 24 * 60 * 60 * 1000);
   const isExpired = new Date() > expirationDate;
   const statusInfo = getStatusInfo(orderData.paymentStatus);
-  // Build addons section if present
   let addonsSection = '';
   if (orderData.addons && Array.isArray(orderData.addons) && orderData.addons.length > 0) {
     const addonsHTML = orderData.addons.map(addon => `
@@ -367,7 +305,6 @@ function displayOrderData(orderData) {
       <div class="summary-divider"></div>
     `;
   }
-  // Backwards compatibility calculation for older orders
   const discount = orderData.discount || 0;
   let subtotal = orderData.subtotal;
   let ppn = orderData.ppn;
@@ -375,7 +312,6 @@ function displayOrderData(orderData) {
     subtotal = Math.round((orderData.total + discount) / 1.11);
     ppn = orderData.total + discount - subtotal;
   }
-  // Build pricing breakdown
   let pricingBreakdown = `
     <div class="summary-divider"></div>
     <div class="summary-row">

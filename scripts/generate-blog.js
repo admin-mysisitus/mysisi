@@ -2,10 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const rootDir = path.resolve(__dirname, '..');
 const blogJsonPath = path.join(rootDir, 'assets', 'data', 'blog.json');
-// Read JSON
 const rawData = fs.readFileSync(blogJsonPath, 'utf8');
 const blogData = JSON.parse(rawData);
-// Sort array by date descending
 const sortedData = blogData.sort((a, b) => new Date(b.date) - new Date(a.date));
 const formatDate = (dateString) => {
   const options = {
@@ -15,7 +13,6 @@ const formatDate = (dateString) => {
   };
   return new Date(dateString).toLocaleDateString('id-ID', options);
 };
-// Generate HTML for blog/index.html (Featured Post Style)
 const createFeaturedCardHTML = (post) => {
   return `          <article class="featured-post">
             <div class="featured-image">
@@ -30,7 +27,6 @@ const createFeaturedCardHTML = (post) => {
             </div>
           </article>`;
 };
-// Generate HTML for blog/artikel/index.html and blog/tips-website/index.html (Artikel Card Style)
 const createArtikelCardHTML = (post) => {
   const readingTime = post.readingTime || "5 min read";
   const tags = post.tags || ["Website", "Digital", "Marketing"];
@@ -69,18 +65,15 @@ function injectIntoFile(filePath, startMarker, endMarker, contentToInject) {
   fs.writeFileSync(fullPath, newContent, 'utf8');
   void(`Successfully injected into ${filePath}`);
 }
-// 1. Process blog/index.html (Recent 3 of each)
 const artikelRecent = sortedData.filter(post => post.category === 'Artikel').slice(0, 3);
 const tipsRecent = sortedData.filter(post => post.category === 'Tips & Trik').slice(0, 3);
 const artikelRecentHTML = artikelRecent.map(createFeaturedCardHTML).join('\n');
 const tipsRecentHTML = tipsRecent.map(createFeaturedCardHTML).join('\n');
 injectIntoFile('blog/index.html', '<!-- BLOG_INJECT_START: artikel_recent -->', '<!-- BLOG_INJECT_END -->', artikelRecentHTML);
 injectIntoFile('blog/index.html', '<!-- BLOG_INJECT_START: tips_recent -->', '<!-- BLOG_INJECT_END -->', tipsRecentHTML);
-// 2. Process blog/artikel/index.html (All Artikel)
 const artikelAll = sortedData.filter(post => post.category === 'Artikel');
 const artikelAllHTML = artikelAll.map(createArtikelCardHTML).join('\n');
 injectIntoFile('blog/artikel/index.html', '<!-- BLOG_INJECT_START: artikel_all -->', '<!-- BLOG_INJECT_END -->', artikelAllHTML);
-// 3. Process blog/tips-website/index.html (All Tips)
 const tipsAll = sortedData.filter(post => post.category === 'Tips & Trik');
 const tipsAllHTML = tipsAll.map(createArtikelCardHTML).join('\n');
 injectIntoFile('blog/tips-website/index.html', '<!-- BLOG_INJECT_START: tips_all -->', '<!-- BLOG_INJECT_END -->', tipsAllHTML);

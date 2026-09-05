@@ -12,10 +12,8 @@ export async function render() {
   try {
     const currentUser = AuthManager.getCurrentUser();
     if (!currentUser) throw new Error('Not logged in');
-    // Load user profile data
     const result = await APIClient.getUserProfile(currentUser.userId);
     let user = result.data || currentUser;
-    // Defensive parsing for corrupt JSON displayName
     if (user.displayName && typeof user.displayName === 'string' && user.displayName.trim().startsWith('{')) {
       try {
         const parsed = JSON.parse(user.displayName);
@@ -29,7 +27,6 @@ export async function render() {
         console.error('Failed to parse corrupt user displayName JSON:', e);
       }
     }
-    // Setup form with current data
     const formEditProfile = document.getElementById('form-edit-profile');
     if (formEditProfile) {
       document.getElementById('input-name').value = user.displayName || '';
@@ -81,14 +78,12 @@ export async function render() {
         await handleProfileUpdate(currentUser.userId);
       });
     }
-    // Setup password change form
     const formChangePassword = document.getElementById('form-change-password');
     if (formChangePassword) {
       formChangePassword.addEventListener('submit', async (e) => {
         e.preventDefault();
         await handlePasswordChange(currentUser.userId);
       });
-      // Setup toggle password visibility
       const toggleBtns = document.querySelectorAll('.toggle-password-btn');
       toggleBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -106,7 +101,6 @@ export async function render() {
           }
         });
       });
-      // Setup password strength indicator
       const newPwdInput = document.getElementById('input-new-password');
       if (newPwdInput) {
         newPwdInput.addEventListener('input', function() {
@@ -129,12 +123,10 @@ async function handleProfileUpdate(userId) {
       Swal.fire('Error', 'Nama minimal 3 karakter', 'error');
       return;
     }
-    // Show loading state (you could implement a spinner button)
     const btn = document.querySelector('#form-edit-profile button[type="submit"]');
     setButtonLoading(btn, true, 'Menyimpan...');
     const result = await APIClient.updateUserProfile(userId, displayName, whatsapp, photoBase64);
     if (result.success) {
-      // Update session
       const user = AuthManager.getCurrentUser();
       user.displayName = displayName;
       user.whatsapp = whatsapp;
@@ -142,7 +134,6 @@ async function handleProfileUpdate(userId) {
         user.photoURL = result.data.photoURL;
       }
       AuthManager.updateUser(user);
-      // Update Navbar immediately via SSOT
       if (window.adminApp && window.adminApp.navbar) {
         window.adminApp.navbar.render();
       }

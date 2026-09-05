@@ -1,6 +1,4 @@
-/* Blog Page Script - Auto Snap Slider untuk Mobile & Filter */
 document.addEventListener('DOMContentLoaded', () => {
-  // Fungsi Inisialisasi Slider Horizontal dengan Auto-Snap (serupa halaman Perusahaan & Domain Hosting)
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -15,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
-      // Jangan jalankan animasi jika kontennya muat (desktop/tanpa horizontal scroll)
       if (clientWidth >= scrollWidth - 5) return;
       isAutoScrolling = true;
       if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
@@ -61,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderElement.addEventListener('mousedown', handleInteraction);
     startAutoScroll();
   }
-  // Inisialisasi slider horizontal untuk mobile pada grid blog
   const artikelGrid = document.getElementById('artikel-grid');
   const tipsGrid = document.getElementById('tips-grid');
   if (artikelGrid) initAutoSnapSlider(artikelGrid);

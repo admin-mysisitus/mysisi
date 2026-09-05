@@ -11,7 +11,6 @@ export class AdminNavbar {
   }
   render() {
     if (!this.container) return;
-    // Get real user data from AuthManager
     const userData = AuthManager.getCurrentUser();
     let displayName = 'Administrator';
     let avatarHtml = renderUserAvatarHtml(userData, 'w150', 'admin-avatar');
@@ -24,26 +23,24 @@ export class AdminNavbar {
           <i class="fas fa-bars"></i>
         </button>
       </div>
-      
+
       <div class="admin-nav-actions">
         <button class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main); padding: 8px 12px;">
           <i class="fas fa-bell"></i>
         </button>
-        
+
         <div class="admin-profile-btn" id="admin-profile-trigger">
           ${avatarHtml}
           <span style="font-weight: 500; font-size: 0.9rem; padding-right: 8px;">${displayName}</span>
         </div>
       </div>
     `;
-    // Profile click to go to profile settings
     const profileBtn = document.getElementById('admin-profile-trigger');
     if (profileBtn) {
       profileBtn.addEventListener('click', () => {
         window.location.hash = '#!/profile';
       });
     }
-    // Setup Sidebar Toggle Logic for Mobile
     const menuToggle = document.getElementById('admin-menu-toggle');
     const sidebar = document.getElementById('admin-sidebar');
     const overlay = document.getElementById('admin-sidebar-overlay');

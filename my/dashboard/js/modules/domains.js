@@ -1,9 +1,3 @@
-/**
- * Domains Page Module
- * Manage registered domains, renewal, DNS settings
- * MVP Status: ✅ COMPLETE - Shows list of registered domains
- * Future Enhancement: Add DNS management, renewal, domain settings
- */
 import APIClient from '/assets/js/modules/unified-api.js';
 import {
   AuthManager
@@ -22,12 +16,10 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 export async function render(currentUser) {
   try {
-    // Load user orders to get registered domains
     const result = await APIClient.getUserOrders(currentUser.userId);
     const orders = result.data?.orders || result.orders || [];
     const paidOrders = orders.filter(o => o.paymentStatus === 'paid');
     const domainMap = {};
-    // Sort by date so registeredDate is the oldest order's date
     paidOrders.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     paidOrders.forEach(o => {
       const dur = parseInt(o.domainDuration) || 1;
@@ -89,7 +81,6 @@ export async function render(currentUser) {
           `).join('')}
         </div>
       `;
-      // Attach modern event listeners instead of using inline onclick with global fallback
       container.querySelectorAll('.btn-dns').forEach(btn => {
         btn.addEventListener('click', () => {
           const domainName = btn.dataset.domain;
@@ -142,7 +133,6 @@ async function handleDomainRenewal(domainName, expiryDate) {
   try {
     showInfo('Memproses', 'Mengambil informasi harga perpanjangan...');
     const tld = domainName.split('.').slice(1).join('.');
-    // Fetch pricing
     const configRes = await APIClient.fetchPricingConfig();
     let renewalPrice = 150000; // Fallback price
     if (configRes.success && configRes.data && configRes.data.domains) {
@@ -152,7 +142,6 @@ async function handleDomainRenewal(domainName, expiryDate) {
       }
     }
     Swal.close(); // Tutup loading dialog
-    // Hitung sisa hari
     const expDate = expiryDate ? new Date(expiryDate) : new Date();
     const daysRemaining = Math.ceil((expDate - new Date()) / (1000 * 60 * 60 * 24));
     let badgeText = daysRemaining > 0 ? `Expiring in ${daysRemaining} days` : `Expired ${Math.abs(daysRemaining)} days ago`;
@@ -182,7 +171,7 @@ async function handleDomainRenewal(domainName, expiryDate) {
               <span style="background: ${badgeColor}; color: ${badgeTextColor}; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">${badgeText}</span>
             </div>
             <p style="margin: 0 0 15px 0; color: #6b7280; font-size: 14px;">Expiry Date: ${formattedDate} ${yearsText}</p>
-            
+
             <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 5px; color: #374151;">Available Renewal Periods</label>
             <select id="renewal-duration" class="swal2-select" style="display: flex; width: 100%; margin: 0; font-size: 15px;">
               ${optionsHtml}

@@ -1,18 +1,3 @@
-/**
- * UNIFIED API CLIENT
- * ===================================
- * Single API layer untuk semua GAS calls
- * - Consistent request/response format
- * - Automatic error handling & recovery
- * - Built-in timeout & retry logic
- * - Session validation
- * - Detailed logging
- * 
- * Usage:
- *   APIClient.call('registerUser', {email, password})
- *   APIClient.call('loginUser', {email, password})
- *   APIClient.call('getUserProfile', {userId})
- */
 import {
   AuthManager
 } from './unified-auth.js';
@@ -27,22 +12,14 @@ import {
 } from './unified-utils.js';
 export class APIClient {
   static DEFAULT_TIMEOUT = GAS_CONFIG.TIMEOUT || 30000; // Use configured timeout
-  /**
-   * Make API call to GAS backend
-   * Simple, direct pattern matching sampel-mekanisme-GAS
-   */
   static async call(action, data = {}, options = {}) {
     let {
       method = 'POST'
     } = options;
-    // DO NOT force GET for GAS, as it requires a doGet function which doesn't exist, causing CORS errors.
     try {
       const response = await this.makeRequest(action, data, method, this.DEFAULT_TIMEOUT);
-      // Response bisa dalam berbagai format, fallback jika tidak sesuai expected
       let result = response;
-      // Jika response adalah object dengan success field
       if (typeof response === 'object' && response !== null) {
-        // Jika ada success field, gunakan sebagai response valid
         if ('success' in response) {
           if (typeof response.success !== 'boolean') {
             void('[API] Warning: success field bukan boolean, treating as:', !!response.success);
@@ -50,7 +27,6 @@ export class APIClient {
           }
           result = response;
         } else if ('data' in response) {
-          // Fallback: jika ada data field tapi tidak ada success, anggap success = true
           void('[API] No success field, default to true (data present)');
           result = {
             success: true,
@@ -59,7 +35,6 @@ export class APIClient {
             timestamp: response.timestamp || Date.now()
           };
         } else {
-          // Response adalah object tapi tidak ada expected field
           void('[API] Unexpected response format, trying to detect success state:', response);
           result = {
             success: true, // Assume success jika response sudah dikirim
@@ -69,11 +44,9 @@ export class APIClient {
           };
         }
       } else {
-        // Response bukan object (string, boolean, etc) - unexpected
         void('[API] Response bukan object:', typeof response);
         throw new Error('Server response format tidak valid');
       }
-      // Final validation
       if (result.success === false && (result.errorCode === 'UNAUTHORIZED' || result.errorCode === 'SESSION_EXPIRED')) {
         void('[API] Auth error - clearing session');
         AuthManager.clearSession();
@@ -85,22 +58,10 @@ export class APIClient {
       throw error; // Let caller handle error
     }
   }
-  /**
-   * Make actual HTTP request
-   * Using FormData for ALL requests - matches sampel-mekanisme-GAS pattern
-   * FormData automatically becomes multipart/form-data - NO CORS preflight needed
-   * Per sampel-mekanisme-GAS: this is the ONLY way to reliably work with GAS
-   * 
-   * DO NOT use:
-   * - Content-Type: application/json (triggers preflight - GAS doesn't like it)
-   * - URLSearchParams (less reliable than FormData)
-   * - Custom headers (can trigger preflight)
-   */
   static async makeRequest(action, data, method, timeout) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     try {
-      // Get Firebase ID Token if user is logged in
       const {
         auth
       } = await getFirebase();
@@ -112,14 +73,11 @@ export class APIClient {
           void('[API] Failed to get ID token', e);
         }
       }
-      // Build URLSearchParams for application/x-www-form-urlencoded format
-      // as required by Google Apps Script rules to avoid CORS preflight errors.
       const postParams = new URLSearchParams();
       postParams.append('action', action);
       if (idToken) {
         postParams.append('idToken', idToken);
       }
-      // Add all data fields
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           if (typeof value === 'object') {
@@ -137,7 +95,6 @@ export class APIClient {
         cache: 'no-store'
       };
       if (method === 'GET') {
-        // For GET, append as query string
         const params = new URLSearchParams({
           action,
           ...(idToken ? {
@@ -147,12 +104,10 @@ export class APIClient {
         });
         url = `${GAS_CONFIG.URL}?${params}`;
       } else if (method === 'POST') {
-        // For POST, use application/x-www-form-urlencoded to prevent CORS preflight issues
         options.body = postParams;
       }
       const response = await fetch(url, options);
       if (!response.ok) {
-        // Try to get error message from response body
         let errorBody = '';
         try {
           const contentType = response.headers.get('content-type');
@@ -167,14 +122,11 @@ export class APIClient {
         }
         throw new Error(`HTTP ${response.status}: ${errorBody || response.statusText}`);
       }
-      // Try parse as JSON
       try {
         const responseText = await response.text();
-        // Try parse JSON
         try {
           return JSON.parse(responseText);
         } catch (parseError) {
-          // Jika bukan valid JSON, return sebagai response object dengan raw text
           void('[API] Response bukan JSON, return as-is:', responseText.substring(0, 100));
           return {
             success: true, // Assume success jika GAS respond
@@ -188,7 +140,6 @@ export class APIClient {
         throw new Error('Gagal membaca response dari server: ' + error.message);
       }
     } catch (error) {
-      // Network error, timeout, atau parse error
       if (error.name === 'AbortError') {
         throw new Error('Request timeout setelah ' + timeout + 'ms');
       }
@@ -197,10 +148,6 @@ export class APIClient {
       clearTimeout(timeoutId);
     }
   }
-  // ========== AUTH ENDPOINTS ==========
-  /**
-   * Register new user
-   */
   static async registerUser(email, password, displayName = '', whatsapp = '') {
     try {
       const {
@@ -230,7 +177,6 @@ export class APIClient {
         createdAt: new Date().toISOString()
       };
       if (db) {
-        // Jangan gunakan .set() agar tidak menghapus profil existing jika ada
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
         const existingData = snapshot.val();
         if (existingData) {
@@ -241,7 +187,6 @@ export class APIClient {
         }
         await db.ref(`users/${user.uid}`).update(profile);
       }
-      // Update native Firebase Auth profile
       await user.updateProfile({
         displayName: profile.displayName
       });
@@ -268,9 +213,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Login user
-   */
   static async loginUser(email, password) {
     try {
       const {
@@ -283,7 +225,6 @@ export class APIClient {
           message: 'Firebase Auth tidak tersedia'
         };
       }
-      // 1. Check Rate Limit dari Backend
       const rateLimitRes = await this.call(GAS_CONFIG.ACTIONS.CHECK_LOGIN_RATE_LIMIT, {
         email
       });
@@ -301,14 +242,12 @@ export class APIClient {
           rateLimit: data
         };
       }
-      // 2. Lakukan Firebase Auth
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
       let profile = null;
       if (db) {
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
         profile = snapshot.val();
-        // Cek suspend permanen dari RTDB Single Source of Truth
         if (profile && profile.status === 'suspended') {
           await auth.signOut();
           return {
@@ -317,7 +256,6 @@ export class APIClient {
           };
         }
       }
-      // 3. Clear failed attempts di backend karena login sukses
       this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, {
         email,
         isSuccess: true
@@ -346,7 +284,6 @@ export class APIClient {
         errorMsg = e.message;
       }
       let rateLimitData = null;
-      // Jika salah password, catat ke backend (GAS)
       if (isPasswordError) {
         try {
           const failRes = await this.call(GAS_CONFIG.ACTIONS.HANDLE_FAILED_LOGIN, {
@@ -378,10 +315,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Verify Google OAuth token (Legacy GIS fallback)
-   * Using POST request because Google tokens are extremely long and can trigger URL limits or CORS failures on GET
-   */
   static async verifyGoogleToken(token) {
     try {
       const {
@@ -407,7 +340,6 @@ export class APIClient {
         createdAt: new Date().toISOString()
       };
       if (db) {
-        // Gunakan update dan periksa existingData untuk menghindari terhapusnya status suspend atau role admin
         const snapshot = await db.ref(`users/${user.uid}`).once('value');
         const existingData = snapshot.val();
         if (existingData) {
@@ -473,11 +405,6 @@ export class APIClient {
       message: 'Verifikasi diproses oleh Firebase.'
     };
   }
-  // ========== USER PROFILE ENDPOINTS ==========
-  /**
-   * Get user profile
-   * Using GET request to avoid CORS preflight issues
-   */
   static async getUserProfile(userId) {
     try {
       const {
@@ -502,9 +429,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Update user profile
-   */
   static async updateUserProfile(userId, displayName, whatsapp, photoBase64) {
     try {
       const {
@@ -545,7 +469,6 @@ export class APIClient {
         updates.photoURL = photoURL;
       }
       await db.ref(`users/${userId}`).update(updates);
-      // Juga update native Firebase Auth profile
       if (auth && auth.currentUser) {
         const profileUpdates = {
           displayName
@@ -567,9 +490,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Change password
-   */
   static async changePassword(userId, oldPassword, newPassword) {
     try {
       const {
@@ -597,10 +517,6 @@ export class APIClient {
       message: 'User tidak terautentikasi'
     };
   }
-  // ========== CART & WISHLIST SYNC ==========
-  /**
-   * Sync Cart to Firebase Realtime Database
-   */
   static async syncUserCart(userId, cartData) {
     try {
       const {
@@ -622,9 +538,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Fetch Cart from Firebase Realtime Database
-   */
   static async fetchUserCart(userId) {
     try {
       const {
@@ -647,9 +560,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Sync Wishlist to Firebase Realtime Database
-   */
   static async syncUserWishlist(userId, wishlistData) {
     try {
       const {
@@ -671,9 +581,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Fetch Wishlist from Firebase Realtime Database
-   */
   static async fetchUserWishlist(userId) {
     try {
       const {
@@ -696,17 +603,9 @@ export class APIClient {
       };
     }
   }
-  // ========== ORDER ENDPOINTS ==========
-  /**
-   * Create order (authenticated)
-   * Accepts userId as part of orderData or will pass-through
-   */
   static createOrder(orderData) {
     return this.createOrderWithAuth(orderData);
   }
-  /**
-   * Create order with separate userId (alternative signature for convenience)
-   */
   static async createOrderWithAuth(userIdOrOrderData, orderDataIfUserIdProvided) {
     let data;
     if (typeof userIdOrOrderData === 'string') {
@@ -717,7 +616,6 @@ export class APIClient {
     } else {
       data = userIdOrOrderData;
     }
-    // Safety net: generate orderId if caller didn't provide one
     if (!data.orderId) {
       const ts = Date.now();
       const rnd = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -725,17 +623,13 @@ export class APIClient {
       void('[API] orderId was missing, auto-generated:', data.orderId);
     }
     try {
-      // 1. Call GAS to Create Order AND Generate Token simultaneously
       const response = await this.call(GAS_CONFIG.ACTIONS.CREATE_ORDER, data, {
         method: 'POST'
       });
       if (response.success && response.data) {
-        // GAS returns orderId and snapToken
         const orderId = response.data.orderId;
         const snapToken = response.data.snapToken || '';
         const snapRedirectUrl = response.data.snapRedirectUrl || '';
-        // GAS handles the RTDB writes for initial order via createOrderWithAuth endpoint.
-        // We simply return the response to the caller.
         return response;
       } else {
         throw new Error(response.message || 'Gagal membuat pesanan');
@@ -748,9 +642,6 @@ export class APIClient {
       };
     }
   }
-  /**
-   * Get user's orders
-   */
   static async getUserOrders(userId) {
     try {
       const {
@@ -760,19 +651,16 @@ export class APIClient {
         success: false,
         message: 'Firebase DB not available'
       };
-      // Primary: baca dari userOrders/{userId} - node yang bisa diakses user sendiri
       const userOrdersSnap = await db.ref(`userOrders/${userId}`).once('value');
       let ordersArray = [];
       if (userOrdersSnap.exists()) {
         const raw = userOrdersSnap.val() || {};
         ordersArray = Object.values(raw);
       } else {
-        // Fallback untuk user lama: query orders langsung (mungkin diblokir rules, tapi coba)
         try {
           const snapshot = await db.ref('orders').orderByChild('userId').equalTo(userId).once('value');
           const data = snapshot.val() || {};
           ordersArray = Object.values(data);
-          // Rebuild userOrders index jika berhasil (otomatis perbaiki user lama)
           if (ordersArray.length > 0) {
             const updates = {};
             ordersArray.forEach(o => {
@@ -823,7 +711,6 @@ export class APIClient {
       };
     } catch (e) {
       void('[API] RTDB getOrderDetail failed:', e);
-      // Fallback ke GAS Backend jika Firebase menolak akses (Cross-Domain Public Site tanpa Firebase Auth)
       if (e.message && e.message.toLowerCase().includes('permission denied')) {
         console.log('[API] Fallback ke GAS Backend untuk getOrderDetail...');
         try {
@@ -913,8 +800,6 @@ export class APIClient {
       }, {
         method: 'POST'
       });
-      // Frontend simply queries GAS and returns response. 
-      // RTDB sync should only be handled by GAS webhook or GAS endpoint, not frontend.
       return response;
     } catch (e) {
       return {
@@ -955,14 +840,10 @@ export class APIClient {
       };
       const domainLower = domain.toLowerCase();
       const domainKey = domainLower.replace(/\./g, '_');
-      // Status pembayaran yang dianggap "sudah berhasil" (domain resmi milik orang)
       const PAID_STATUSES = ['paid', 'settlement', 'capture', 'success', 'active'];
-      // 1. Fast path: check `domains` mirror node (public readable)
-      // Node ini di-update oleh webhook Midtrans ketika pembayaran berhasil
       const domainSnap = await db.ref(`domains/${domainKey}`).once('value');
       if (domainSnap.exists()) {
         const domainData = domainSnap.val();
-        // Hanya block jika sudah AKTIF (bayar berhasil). Status 'ordered' = masih rebutan
         const isTaken = domainData.status === 'active';
         return {
           success: true,
@@ -974,7 +855,6 @@ export class APIClient {
           message: isTaken ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
         };
       }
-      // Tidak ada data â†’ domain tersedia
       return {
         success: true,
         data: {
@@ -1158,7 +1038,6 @@ export class APIClient {
       let revenue = 0;
       let subsCount = 0;
       Object.values(orders).forEach(o => {
-        // Support both old `status` field and new `paymentStatus` field
         const pStatus = (o.paymentStatus || o.status || '').toLowerCase();
         if (pStatus === 'paid' || pStatus === 'settlement' || pStatus === 'capture' || pStatus === 'success' || pStatus === 'active') {
           revenue += (Number(o.total) || 0);
@@ -1249,12 +1128,10 @@ export class APIClient {
       };
       const snap = await db.ref('users').once('value');
       const data = snap.val() || {};
-      // Inject Firebase key (uid) into each user object in case it's missing
       const users = Object.entries(data).map(([key, val]) => ({
         uid: key,
         id: key,
         ...val,
-        // Ensure uid is always present (might be stored inside the object too)
         ...(val.uid ? {} : {
           uid: key
         })
@@ -1607,7 +1484,6 @@ export class APIClient {
       };
     }
   }
-  // --- ADMIN DOMAINS API ---
   static async getAdminDomains(adminId) {
     try {
       const {
@@ -1675,7 +1551,6 @@ export class APIClient {
       };
     }
   }
-  // --- ADMIN ADDONS API ---
   static async getAdminAddons(adminId) {
     try {
       const {
@@ -1810,9 +1685,6 @@ export class APIClient {
       };
     }
   }
-  // ==========================================
-  // DNS MANAGEMENT (GAS BACKEND INTEGRATION)
-  // ==========================================
   static async setupCloudflareZone(domain) {
     if (!AuthManager.isLoggedIn()) return {
       success: false,
@@ -1863,6 +1735,5 @@ export class APIClient {
     });
   }
 }
-// Export for use
 window.APIClient = APIClient;
 export default APIClient;

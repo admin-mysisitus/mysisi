@@ -1,8 +1,5 @@
-/* ========== PORTOFOLIO PAGE - PORTFOLIO GRID & FILTERING ========== */
-/* Halaman portofolio SISITUS dengan grid, filter kategori, dan load more functionality */
 document.addEventListener('DOMContentLoaded', async function() {
   'use strict';
-  // ========== PORTFOLIO DATA ==========
   let portfolioData = [];
   try {
     const response = await fetch('/assets/data/portfolio.json');
@@ -10,20 +7,18 @@ document.addEventListener('DOMContentLoaded', async function() {
   } catch (error) {
     console.log('Failed to load portfolio data:', error);
   }
-  // ========== KONFIGURASI TAMPILAN ==========
   const INITIAL_ITEMS = 8; // Jumlah item yang ditampilkan awalnya
   let currentFilter = 'all';
   let displayedItems = INITIAL_ITEMS;
   const portfolioGrid = document.getElementById('portfolio-grid');
   const btnLoadMore = document.getElementById('btn-load-more');
-  // ========== FUNGSI MEMBUAT PORTFOLIO CARD ==========
+
   function createPortfolioCard(item) {
     const card = document.createElement('article');
     card.className = 'portfolio-card';
     card.dataset.category = item.category;
     card.dataset.id = item.id;
     card.style.animation = 'fadeInUp 0.6s ease-out forwards';
-    // Split features into array for pill tags
     const featureTags = item.features.split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('');
     card.innerHTML = `
       <div class="portfolio-card-image" onclick="window.open('${item.url}', '_blank')">
@@ -46,30 +41,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     `;
     return card;
   }
-  // ========== FUNGSI RENDER ITEMS ==========
+
   function renderItems(filter = 'all', limit = null, shouldScroll = false) {
-    // Kosongkan grid terlebih dahulu
     portfolioGrid.innerHTML = '';
-    // Filter item berdasarkan kategori
     const filteredItems = portfolioData.filter(item => {
       return filter === 'all' || item.category === filter;
     });
-    // Tentukan jumlah item yang akan ditampilkan
     const itemsToShow = limit ? Math.min(limit, filteredItems.length) : filteredItems.length;
-    // Tambahkan card ke grid secara langsung (tanpa row)
     for (let i = 0; i < itemsToShow; i++) {
       portfolioGrid.appendChild(createPortfolioCard(filteredItems[i]));
     }
-    // Sembunyikan tombol jika semua item sudah ditampilkan
     if (filteredItems.length <= itemsToShow) {
       if (btnLoadMore) btnLoadMore.classList.add('hidden');
     } else {
       if (btnLoadMore) btnLoadMore.classList.remove('hidden');
     }
-    // Update status filter dan jumlah item yang ditampilkan
     currentFilter = filter;
     displayedItems = itemsToShow;
-    // Scroll to grid dengan smooth jika dipicu oleh filter
     if (shouldScroll && portfolioGrid) {
       portfolioGrid.scrollIntoView({
         behavior: 'smooth',
@@ -77,23 +65,21 @@ document.addEventListener('DOMContentLoaded', async function() {
       });
     }
   }
-  // ========== FUNGSI FILTER ITEMS ==========
+
   function filterItems(filterValue) {
-    // Reset jumlah item yang ditampilkan
     displayedItems = INITIAL_ITEMS;
     renderItems(filterValue, INITIAL_ITEMS, true);
-    // Update status tombol filter
     const filterBtns = document.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.filter === filterValue);
     });
   }
-  // ========== FUNGSI LOAD MORE ITEMS ==========
+
   function loadMoreItems() {
     displayedItems += INITIAL_ITEMS;
     renderItems(currentFilter, displayedItems);
   }
-  // ========== SETUP FILTER BUTTONS ==========
+
   function setupFilterButtons() {
     const filterBtns = document.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => {
@@ -102,13 +88,13 @@ document.addEventListener('DOMContentLoaded', async function() {
       });
     });
   }
-  // ========== SETUP LOAD MORE BUTTON ==========
+
   function setupLoadMoreButton() {
     if (btnLoadMore) {
       btnLoadMore.addEventListener('click', loadMoreItems);
     }
   }
-  // ========== PORTFOLIO CARD HOVER EFFECTS ==========
+
   function setupCardHoverEffects() {
     portfolioGrid.addEventListener('mouseover', function(e) {
       const card = e.target.closest('.portfolio-card');
@@ -123,16 +109,12 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     });
   }
-  // ========== INISIALISASI ==========
   setupFilterButtons();
   setupLoadMoreButton();
-  // Tampilkan item awal dengan filter "all"
   renderItems('all', INITIAL_ITEMS);
-  // Setup hover effects
   if (portfolioGrid) {
     setupCardHoverEffects();
   }
-  // ========== ACCESSIBILITY ==========
   const filterContainer = document.getElementById('filter-container');
   if (filterContainer) {
     filterContainer.addEventListener('keypress', function(e) {
@@ -144,8 +126,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     });
   }
-  // ========== ANALYTICS TRACKING ==========
-  // Track portfolio item clicks
   portfolioGrid.addEventListener('click', function(e) {
     const viewBtn = e.target.closest('.btn-view');
     if (viewBtn && window.gtag) {
@@ -157,7 +137,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       });
     }
   });
-  // Track filter usage
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       if (window.gtag) {
@@ -167,7 +146,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     });
   });
-  // ========== AUTO SCROLL SLIDERS ==========
+
   function initAutoSnapSlider(sliderElement) {
     if (!sliderElement) return;
     let autoScrollInterval;
@@ -181,7 +160,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       const scrollLeft = sliderElement.scrollLeft;
       const clientWidth = sliderElement.clientWidth;
       const scrollWidth = sliderElement.scrollWidth;
-      // Jangan scroll otomatis di Desktop (saat konten tidak overflow)
       if (clientWidth >= scrollWidth - 5) return;
       isAutoScrolling = true;
       if (scrollFlagTimeout) clearTimeout(scrollFlagTimeout);
