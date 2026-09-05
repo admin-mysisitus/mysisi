@@ -166,10 +166,10 @@ export function isValidPhoneNumber(phone) {
   return regex.test(phone.replace(/[\s\-]/g, ''));
 }
 export function isValidDomain(domain) {
-  domain = domain.replace(/^https?:\/\
-    const regex = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
-    return regex.test(domain);
-  }
+  domain = domain.replace(/^https?:\/\//, '');
+  const regex = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
+  return regex.test(domain);
+}
   export const Base64Utils = {
     encode: (str) => {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
