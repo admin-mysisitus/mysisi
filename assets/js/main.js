@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const pkgId = el.getAttribute('data-package').toLowerCase();
           const pkg = configRes.data.packages[pkgId];
           if (pkg && pkg.active === false) {
-            el.style.display = 'none'; // Hide inactive packages
+            el.style.display = 'none';
           }
         });
       }

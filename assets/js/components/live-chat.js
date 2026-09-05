@@ -78,7 +78,7 @@ window.addEventListener("load", async () => {
   scripts.forEach(src => {
     const script = document.createElement('script');
     script.src = src;
-    script.async = false; // Menjamin script dieksekusi sesuai urutan append
+    script.async = false;
     document.body.appendChild(script);
   });
 });

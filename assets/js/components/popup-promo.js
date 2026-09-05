@@ -3,8 +3,8 @@ class PopupPromo {
   constructor(options = {}) {
     this.storageKey = options.storageKey || 'popup_promo_shown';
     this.storageTimeKey = `${this.storageKey}_time`;
-    this.resetInterval = 3 * 60 * 60 * 1000; // 3 jam dalam milliseconds
-    this.delay = options.delay || 10000; // 10 detik default
+    this.resetInterval = 3 * 60 * 60 * 1000;
+    this.delay = options.delay || 10000;
     this.actionUrl = options.actionUrl || '#';
     this.actionTarget = options.actionTarget || '_self';
     this.onClose = options.onClose || null;
@@ -179,7 +179,7 @@ window.addEventListener('load', async () => {
   if (!document.getElementById('popup-promo-overlay')) {
     const popupPromo = new PopupPromo({
       storageKey: 'sisitus_popup_promo_shown',
-      delay: 10000, // 10 detik - tunggu sebelum muncul
+      delay: 10000,
       actionUrl: '/promo/',
       actionTarget: '_self',
       onShow: () => {},

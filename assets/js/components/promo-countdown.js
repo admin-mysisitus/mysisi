@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   const PROMO_END_DATE = new Date('2026-03-31T23:59:59+07:00').getTime();
-  const UPDATE_INTERVAL = 1000; // Update every 1 second
+  const UPDATE_INTERVAL = 1000;
   const countdownContainer = document.getElementById('promo-countdown');
   const daysElement = document.getElementById('countdown-days');
   const hoursElement = document.getElementById('countdown-hours');

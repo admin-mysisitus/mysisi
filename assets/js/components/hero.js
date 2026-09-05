@@ -3,9 +3,9 @@ class HeroComponent {
     this.options = {
       title: '',
       description: '',
-      cta: null, // {label: string, href: string}
+      cta: null,
       ctaSecondary: null,
-      variant: 'default', // 'default', 'home', 'artikel', 'cta', 'promo-cta', atau CTA section variants
+      variant: 'default',
       ...options
     };
   }

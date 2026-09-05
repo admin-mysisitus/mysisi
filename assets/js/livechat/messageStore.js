@@ -7,8 +7,8 @@ class MessageStore {
     this.isSyncing = false;
     this.messageRenderer = messageRenderer;
     this.subscribers = {
-      messageAdded: [], // Used for notifications in admin.js
-      messageUpdated: [] // Used for status updates in user.js/admin.js
+      messageAdded: [],
+      messageUpdated: []
     };
   }
   subscribe(event, callback) {
@@ -181,7 +181,7 @@ class MessageStore {
     return {
       id: message.id,
       roomId: message.roomId,
-      sender: message.sender, // "user" or "admin"
+      sender: message.sender,
       message: message.message,
       attachment: message.attachment || null,
       clientId: message.clientId || null,
@@ -203,7 +203,7 @@ class MessageStore {
   _insertInOrder(message) {
     const msgId = message.id;
     if (this.messageIdOrder.includes(msgId)) {
-      return; // Already in order, skip
+      return;
     }
     const createdMs = new Date(message.createdAt).getTime();
     let insertIndex = this.messageIdOrder.length;

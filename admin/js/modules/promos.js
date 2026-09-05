@@ -56,7 +56,7 @@ function setupEventListeners() {
             });
           }
           modal.style.display = 'none';
-          await loadPromos(); // reload table
+          await loadPromos();
         } else {
           throw new Error(res.message);
         }
@@ -80,7 +80,7 @@ function setupEventListeners() {
     if (!promo) return;
     document.getElementById('promo-modal-title').textContent = 'Edit Promo';
     document.getElementById('promo-code').value = promo.code;
-    document.getElementById('promo-code').readOnly = true; // prevent changing code
+    document.getElementById('promo-code').readOnly = true;
     document.getElementById('promo-type').value = promo.type;
     document.getElementById('promo-value').value = promo.value;
     document.getElementById('promo-limit').value = promo.limit;
@@ -194,11 +194,11 @@ function renderPromos(promos, tbody) {
     if (p.active) {
       if (isExhausted) {
         statusBg = 'rgba(239, 68, 68, 0.1)';
-        statusColor = 'var(--admin-danger)'; // Red
+        statusColor = 'var(--admin-danger)';
         statusText = 'Habis Kuota';
       } else if (isExpired) {
         statusBg = 'rgba(245, 158, 11, 0.1)';
-        statusColor = '#d97706'; // Amber/Orange
+        statusColor = '#d97706';
         statusText = 'Kadaluwarsa';
       } else {
         statusBg = 'rgba(16, 185, 129, 0.1)';

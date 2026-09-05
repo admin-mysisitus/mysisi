@@ -40,7 +40,7 @@ export async function getFirebase() {
             const preconnect = document.createElement('link');
             preconnect.rel = 'preconnect';
             preconnect.href = 'https://www.gstatic.com';
-            preconnect.crossOrigin = 'anonymous'; // Important for CORS preconnect
+            preconnect.crossOrigin = 'anonymous';
             document.head.appendChild(preconnect);
           }
           await loadScript("https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js");
@@ -91,7 +91,7 @@ export async function getFirebase() {
         };
       } catch (error) {
         console.log('[Firebase Core] Initialization error:', error);
-        firebaseInitPromise = null; // Reset so we can retry
+        firebaseInitPromise = null;
         throw error;
       }
     })();

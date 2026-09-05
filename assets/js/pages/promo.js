@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   const PROMO_END_DATE = new Date('2026-03-31T23:59:59+07:00').getTime();
-  const UPDATE_INTERVAL = 1000; // Update every 1 second
+  const UPDATE_INTERVAL = 1000;
   const countdownContainer = document.getElementById('promo-countdown');
   const daysElement = document.getElementById('countdown-days');
   const hoursElement = document.getElementById('countdown-hours');
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const usage = Number(promo.usage) || 0;
           if (limit > 0) {
             const remaining = Math.max(0, limit - usage);
-            let color = remaining <= 10 ? '#dc2626' : '#d97706'; // Red if low, orange otherwise
+            let color = remaining <= 10 ? '#dc2626' : '#d97706';
             usageDisplay = `<div class="coupon-usage" style="font-size: 12px; color: ${color}; margin-top: 6px; text-align: center; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px;"><i class="fas fa-fire"></i> Sisa kuota: ${remaining} lagi</div>`;
           } else {
             usageDisplay = `<div class="coupon-usage" style="font-size: 12px; color: #10b981; margin-top: 6px; text-align: center; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 4px;"><i class="fas fa-infinity"></i> Kuota tanpa batas</div>`;
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       } else {
         const cardWidth = track.children[0].offsetWidth;
-        const gap = parseFloat(window.getComputedStyle(track).gap) || 24; // fallback gap
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 24;
         sliderElement.scrollBy({
           left: cardWidth + gap,
           behavior: 'smooth'

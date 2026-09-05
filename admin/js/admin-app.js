@@ -44,7 +44,7 @@ class AdminApp {
       const {
         db
       } = await getFirebase();
-      await db.ref('users').once('value'); // This will throw Permission Denied if not admin
+      await db.ref('users').once('value');
     } catch (e) {
       console.error('Admin verification failed!', e);
       AuthManager.clearSession();

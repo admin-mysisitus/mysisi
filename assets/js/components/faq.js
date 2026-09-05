@@ -1,7 +1,7 @@
 class FAQComponent {
   constructor(options = {}) {
     this.container = options.container || document.querySelector('.faq-section');
-    this.singleOpen = options.singleOpen !== false; // Default: hanya 1 FAQ bisa buka
+    this.singleOpen = options.singleOpen !== false;
     this.animationDelay = options.animationDelay || 100;
     if (this.container) {
       this.init();

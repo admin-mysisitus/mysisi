@@ -15,7 +15,7 @@ let conversationId = localStorage.getItem('conversationId');
 let assignedAgent = null;
 let initialSpinnerRemoved = false;
 let lastReadTimestamp = parseInt(localStorage.getItem('lastReadTimestamp') || '0', 10);
-let userUnreadCount = 0; // We'll recalculate this
+let userUnreadCount = 0;
 const notificationAudio = new Audio('/assets/audio/notification.mp3');
 let messageStore = null;
 let messageRenderer = null;
@@ -33,7 +33,7 @@ function initializeChatModules() {
     onTyping: handleTypingIndicator
   });
   sendQueue = new SendQueue(messageStore, {
-    onRender: () => syncEngine._scheduleRender() // UNIFIED RENDER PATH
+    onRender: () => syncEngine._scheduleRender()
   });
   _setupStoreSubscriptions();
   const userType = 'user';
@@ -384,7 +384,7 @@ if (chatBtn) {
 }
 if (modalOverlay) {
   modalOverlay.addEventListener('click', () => {
-    closeModal(); // Tutup saat klik di luar kotak obrolan
+    closeModal();
   });
 }
 const fileInput = document.getElementById('fileInput');
@@ -496,8 +496,8 @@ if (input) {
         const db = window.firebaseDB;
         set(ref(db, `rooms/${conversationId}/typing/user`), false);
         sendMessage(null);
-        input.style.height = '38px'; // Reset height
-        localStorage.removeItem('livechat_user_draft'); // Hapus draft
+        input.style.height = '38px';
+        localStorage.removeItem('livechat_user_draft');
       }
     }
   });
@@ -520,7 +520,7 @@ function initUser() {
   if (conversationId) {
     initializeChatModules();
     syncEngine?.startSync(conversationId, 'user');
-    updateUnreadBadge(); // Display badge if there were unread messages on load
+    updateUnreadBadge();
   }
   if (window.firebaseHelpers && window.firebaseDB) {
     const {

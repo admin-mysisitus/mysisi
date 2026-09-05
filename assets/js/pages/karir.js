@@ -122,7 +122,7 @@ class KarirPageManager {
           const params = new URLSearchParams({
             tipe: 'karir',
             posisi: jobTitle.toLowerCase().replace(/\s+/g, '-'),
-            auto: 'true' // Flag untuk auto-submit (akan menampilkan form dengan auto-prefill)
+            auto: 'true'
           });
           window.location.href = `/kontak/?${params.toString()}`;
         }

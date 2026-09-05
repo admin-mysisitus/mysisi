@@ -140,7 +140,7 @@ function applyFilters() {
       return true;
     });
   }
-  updateStats(currentTx); // Stats usually show based on ALL data, or filtered? Usually ALL data.
+  updateStats(currentTx);
   renderTxTable(filteredTx, tbody);
 }
 

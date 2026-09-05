@@ -19,7 +19,7 @@ export class SharedAuthForm {
       containerId: 'auth-form-container',
       showGoogleSignIn: true,
       showPrivacyNotice: true,
-      inlineMode: false, // true for cart, false for https://my.sisitus.com/auth/
+      inlineMode: false,
       onLoginSuccess: null,
       onRegisterSuccess: null,
       ...options
@@ -777,17 +777,17 @@ export class SharedAuthForm {
     if (isValidPhoneNumber(value)) {
       barEl.className = 'strength-bar strength-strong';
       barEl.style.width = '100%';
-      textEl.style.color = '#10b981'; // Green
+      textEl.style.color = '#10b981';
       textEl.innerHTML = '<i class="fas fa-check-circle"></i> Format WhatsApp valid';
     } else if (cleanValue.length >= 5) {
       barEl.className = 'strength-bar strength-fair';
       barEl.style.width = '50%';
-      textEl.style.color = '#f59e0b'; // Orange
+      textEl.style.color = '#f59e0b';
       textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Format tidak valid. Gunakan format Indonesia (contoh: 0812xxxxxx)';
     } else {
       barEl.className = 'strength-bar strength-weak';
       barEl.style.width = '25%';
-      textEl.style.color = '#ef4444'; // Red
+      textEl.style.color = '#ef4444';
       textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nomor terlalu pendek';
     }
   }

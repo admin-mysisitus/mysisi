@@ -108,7 +108,7 @@ export async function render(currentUser) {
       const forgotPwdBtn = document.getElementById('btn-forgot-password-inline');
       if (forgotPwdBtn) {
         if (isSetPassword) {
-          forgotPwdBtn.style.display = 'none'; // Sembunyikan jika tidak butuh password lama
+          forgotPwdBtn.style.display = 'none';
         } else {
           forgotPwdBtn.addEventListener('click', async (e) => {
             e.preventDefault();
@@ -239,7 +239,7 @@ async function handlePasswordChange(userId, isSetPassword = false) {
         AuthManager.saveSession(user);
         setTimeout(() => {
           window.location.reload();
-        }, 1500); // Reload to reset the UI forms
+        }, 1500);
       }
     } else {
       throw new Error(result.message || 'Gagal mengubah password');

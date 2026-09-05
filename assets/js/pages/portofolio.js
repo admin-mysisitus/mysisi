@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   } catch (error) {
     console.log('Failed to load portfolio data:', error);
   }
-  const INITIAL_ITEMS = 8; // Jumlah item yang ditampilkan awalnya
+  const INITIAL_ITEMS = 8;
   let currentFilter = 'all';
   let displayedItems = INITIAL_ITEMS;
   const portfolioGrid = document.getElementById('portfolio-grid');

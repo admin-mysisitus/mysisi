@@ -55,7 +55,7 @@ class SendQueue {
       updates[`rooms/${msg.roomId}/lastMessage`] = msg.attachment ? "[Attachment]" : msg.message;
       updates[`rooms/${msg.roomId}/lastSender`] = msg.sender;
       updates[`rooms/${msg.roomId}/timestamp`] = serverTimestamp();
-      updates[`rooms/${msg.roomId}/id`] = msg.roomId; // Ensure ID exists for listing
+      updates[`rooms/${msg.roomId}/id`] = msg.roomId;
       await update(ref(db), updates);
       this.messageStore.updateMessage(msg.clientId, {
         status: "sent",

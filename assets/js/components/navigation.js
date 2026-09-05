@@ -334,8 +334,8 @@ let isHideActive = false;
 let scrollWithinThreshold = false;
 const handleAutoHideHeader = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop;
-  const scrollThreshold = 100; // Mulai hide setelah scroll 100px
-  const triggerDistance = 50; // Distance untuk trigger show/hide
+  const scrollThreshold = 100;
+  const triggerDistance = 50;
   if (scrollTop <= scrollThreshold) {
     navElements.header?.classList.remove('nav-hidden');
     isHideActive = false;
@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (payload.cart) {
         CartManager.mergeCart(payload.cart);
-        cartChanged = true; // trigger badge update
+        cartChanged = true;
       }
       if (payload.wishlist) {
         WishlistManager.mergeWishlist(payload.wishlist);

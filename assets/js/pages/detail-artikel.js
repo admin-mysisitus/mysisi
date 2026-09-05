@@ -167,7 +167,7 @@ function calculateReadingTime() {
   if (artikelBody) {
     const text = artikelBody.innerText;
     const wordsCount = text.split(/\s+/).length;
-    const readingTime = Math.ceil(wordsCount / 200); // Assuming 200 words per minute
+    const readingTime = Math.ceil(wordsCount / 200);
     const readingTimeElement = document.querySelector('.reading-time');
     if (readingTimeElement) {
       readingTimeElement.textContent = `${readingTime} menit baca`;

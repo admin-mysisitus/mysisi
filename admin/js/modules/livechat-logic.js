@@ -8,7 +8,7 @@ var isRoomsLoading = false;
 var isSending = false;
 var isLoadingMessages = false;
 var previousRoomsState = JSON.parse(localStorage.getItem('previousRoomsState') || '{}');
-var roomUnreadCounts = JSON.parse(localStorage.getItem('roomUnreadCounts') || '{}'); // Track unread per room
+var roomUnreadCounts = JSON.parse(localStorage.getItem('roomUnreadCounts') || '{}');
 var adminUnreadCount = parseInt(localStorage.getItem('adminUnreadCount') || '0', 10);
 var audio = new Audio('/assets/audio/notification.mp3');
 var autoPilotRooms = {};
@@ -94,7 +94,7 @@ function handleTypingIndicator(isTyping) {
       if (distanceFromBottom < 100) {
         chatBox.scrollTop = chatBox.scrollHeight;
       }
-    } // Penutup if (!indicator)
+    }
   } else {
     if (indicator) {
       indicator.remove();
@@ -103,7 +103,7 @@ function handleTypingIndicator(isTyping) {
 }
 var unsubscribeRooms = null;
 async function loadRooms() {
-  if (unsubscribeRooms) return; // Already listening
+  if (unsubscribeRooms) return;
   if (!window.firebaseHelpers) {
     console.error("Firebase not loaded!");
     roomsList.innerHTML = "<i class=\"empty-state error\">Firebase Error</i>";
@@ -129,7 +129,7 @@ async function loadRooms() {
     let hasNewMessages = false;
     rooms.forEach(room => {
       if (room.id) {
-        autoPilotRooms[room.id] = room.autoPilot !== false; // Default to ON
+        autoPilotRooms[room.id] = room.autoPilot !== false;
       }
       if (!room.id || !room.lastSender) return;
       const shortMsg = truncateString(room.lastMessage || "", CONFIG.ROOM_MESSAGE_PREVIEW_LENGTH);
@@ -175,7 +175,7 @@ async function loadRooms() {
       const deleteBtn = div.querySelector('.delete-room-btn');
       if (deleteBtn) {
         deleteBtn.onclick = async (e) => {
-          e.stopPropagation(); // prevent opening the room
+          e.stopPropagation();
           if (confirm('Yakin ingin menghapus room ini beserta seluruh riwayat chatnya selamanya?')) {
             try {
               const {
@@ -660,7 +660,7 @@ function initEventHandlers() {
       const popup = document.getElementById('quickReplyPopup');
       if (val.startsWith('/')) {
         const filterText = val.substring(1);
-        if (quickReplySelectedIndex === -1) quickReplySelectedIndex = 0; // Default select first
+        if (quickReplySelectedIndex === -1) quickReplySelectedIndex = 0;
         renderQuickReplies(filterText);
       } else {
         if (popup) popup.classList.remove('active');
@@ -739,7 +739,7 @@ function initEventHandlers() {
           isTypingRefActive = false;
         }
         sendReply(null);
-        replyInput.style.height = 'auto'; // Reset height
+        replyInput.style.height = 'auto';
       }
     });
   }

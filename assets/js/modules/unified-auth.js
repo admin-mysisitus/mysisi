@@ -12,8 +12,8 @@ import {
 export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;
-  static SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-  static STORAGE_TYPE = 'localStorage'; // Use localStorage for cross-tab persistence
+  static SESSION_TIMEOUT = 30 * 60 * 1000;
+  static STORAGE_TYPE = 'localStorage';
   static state = {
     user: null,
     isLoggedIn: false,
@@ -183,7 +183,7 @@ export class AuthManager {
       whatsapp: user.whatsapp || '',
       authMethod: user.authMethod || 'email',
       role: user.role || 'customer',
-      status: user.status || 'active', // Pastikan status ikut tersimpan ke session storage
+      status: user.status || 'active',
       verifiedAt: user.verifiedAt || Date.now(),
       hasPassword: user.hasPassword
     };

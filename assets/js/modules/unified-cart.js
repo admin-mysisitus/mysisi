@@ -268,13 +268,13 @@ export class CartManager {
       }
     }
     let subtotalAfterDiscount = subtotal - discount;
-    let ppn = Math.round(subtotalAfterDiscount * 0.11); // PPN 11%
+    let ppn = Math.round(subtotalAfterDiscount * 0.11);
     return {
       ...cart,
       subtotal: Math.round(subtotal),
       discount: Math.round(discount),
       ppn: ppn,
-      total: Math.round(subtotalAfterDiscount + ppn) // Total akhir yang dibayar ke Midtrans
+      total: Math.round(subtotalAfterDiscount + ppn)
     };
   }
   static _generateId() {
@@ -420,7 +420,7 @@ export class CartAnalytics {
       items: cart.domains,
       total: cart.total || 0,
       abandonedAt: Date.now(),
-      userEmail: null // Will be filled in if logged in
+      userEmail: null
     };
     let abandoned_carts = [];
     try {

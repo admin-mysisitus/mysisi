@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         cloneList.removeAttribute('hidden');
         cloneList.style.display = 'block';
         cloneList.style.textAlign = 'left';
-        cloneList.style.fontSize = '0.9rem'; // Mengecilkan ukuran font
+        cloneList.style.fontSize = '0.9rem';
         cloneList.style.padding = '0';
         cloneList.style.margin = '0';
         Array.from(cloneList.children).forEach(li => {

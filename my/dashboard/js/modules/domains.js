@@ -134,14 +134,14 @@ async function handleDomainRenewal(domainName, expiryDate) {
     showInfo('Memproses', 'Mengambil informasi harga perpanjangan...');
     const tld = domainName.split('.').slice(1).join('.');
     const configRes = await APIClient.fetchPricingConfig();
-    let renewalPrice = 150000; // Fallback price
+    let renewalPrice = 150000;
     if (configRes.success && configRes.data && configRes.data.domains) {
       const extData = Object.values(configRes.data.domains).find(d => d.ext === tld || d.ext === `.${tld}`);
       if (extData) {
         renewalPrice = extData.renewal || extData.registration || 150000;
       }
     }
-    Swal.close(); // Tutup loading dialog
+    Swal.close();
     const expDate = expiryDate ? new Date(expiryDate) : new Date();
     const daysRemaining = Math.ceil((expDate - new Date()) / (1000 * 60 * 60 * 24));
     let badgeText = daysRemaining > 0 ? `Expiring in ${daysRemaining} days` : `Expired ${Math.abs(daysRemaining)} days ago`;
@@ -191,7 +191,7 @@ async function handleDomainRenewal(domainName, expiryDate) {
         CartManager.add(domainName, tld, {
           isRenewal: true,
           duration: duration,
-          price: renewalPrice, // Base price per year
+          price: renewalPrice,
           basePrice: renewalPrice,
           renewalPrice: renewalPrice,
           package: 'none',

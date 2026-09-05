@@ -18,7 +18,7 @@ const CONFIG = {
     desc: "Tim Teknis Siap Bantu Kapanpun",
     icon: "fa-headset"
   }],
-  TIMEZONE: 7 // WIB
+  TIMEZONE: 7
 };
 let currentIndex = 0;
 let switchTimeout = null;

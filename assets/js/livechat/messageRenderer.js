@@ -20,7 +20,7 @@ class MessageRenderer {
     this.scrollBtn.title = 'Ke pesan terbaru';
     Object.assign(this.scrollBtn.style, {
       position: 'absolute',
-      bottom: '90px', // Jarak aman di atas area input
+      bottom: '90px',
       right: '20px',
       width: '38px',
       height: '38px',
@@ -53,7 +53,7 @@ class MessageRenderer {
         this.scrollBtn.style.display = 'flex';
       } else {
         this.scrollBtn.style.display = 'none';
-        this.scrollBtn.style.color = '#6b7280'; // Reset warna jika sudah di bawah
+        this.scrollBtn.style.color = '#6b7280';
         this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
       }
     };
@@ -75,7 +75,7 @@ class MessageRenderer {
     }
     const newMessages = deduplicatedMessages.filter(msg => !this.renderedIds.has(msg.id));
     if (newMessages.length === 0) {
-      return; // Nothing new to render
+      return;
     }
     const shouldScroll = this._shouldAutoScroll();
     const isInitialLoad = (this.renderedIds.size === 0);
@@ -105,7 +105,7 @@ class MessageRenderer {
       this.scrollToBottom();
     } else if (this.scrollBtn) {
       this.scrollBtn.style.display = 'flex';
-      this.scrollBtn.style.color = '#ef4444'; // Red color
+      this.scrollBtn.style.color = '#ef4444';
       this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
     }
   }
@@ -167,7 +167,7 @@ class MessageRenderer {
         this.scrollToBottom();
       } else if (this.scrollBtn) {
         this.scrollBtn.style.display = 'flex';
-        this.scrollBtn.style.color = '#ef4444'; // Red color
+        this.scrollBtn.style.color = '#ef4444';
         this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
       }
     }
@@ -216,7 +216,7 @@ class MessageRenderer {
       this.scrollToBottom();
     } else if (this.scrollBtn) {
       this.scrollBtn.style.display = 'flex';
-      this.scrollBtn.style.color = '#ef4444'; // Red color
+      this.scrollBtn.style.color = '#ef4444';
       this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
     }
     return msgEl;
@@ -360,7 +360,7 @@ class MessageRenderer {
               imgContainer.style.background = 'transparent';
               try {
                 sessionStorage.setItem(cacheKey, data.fileData);
-              } catch (e) {} // Ignore quota errors
+              } catch (e) {}
             } else {
               throw new Error("Invalid response");
             }
@@ -445,7 +445,7 @@ class MessageRenderer {
     parsedText = parsedText.replace(notedRegex, (match, key, value) => {
       hasNotes = true;
       notesHtml += `<div class="noted-kak-item"><i class="fas fa-check-circle"></i> <b>${key}:</b> ${value}</div>`;
-      return ''; // Remove the raw tag from the text
+      return '';
     });
     notesHtml += '</div>';
     let finalHtml = parsedText.trim();

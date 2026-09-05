@@ -25,9 +25,9 @@ let currentTransaction = null;
 export async function render(user) {
   try {
     if (!user) {
-      AuthManager.refreshUserData(); // NEW: Load latest user session
+      AuthManager.refreshUserData();
     }
-    currentUser = user || AuthManager.getCurrentUser(); // NEW: Use refreshed data
+    currentUser = user || AuthManager.getCurrentUser();
     let orderId = new URLSearchParams(window.location.search).get('orderId');
     if (!orderId) {
       const hash = window.location.hash;
@@ -92,8 +92,7 @@ async function generateMidtransToken(orderData) {
     if (!currentUser) {
       throw new Error('Data pengguna tidak ditemukan');
     }
-    const result = await APIClient.generateMidtransToken(orderData.orderId, currentUser.email, currentUser.phone || '', currentUser.displayName || currentUser.name || 'Customer', orderData.domain, orderData.packageId || orderData.packageName, orderData.total, orderData.addons || [] // NEW: Pass addons array
-    );
+    const result = await APIClient.generateMidtransToken(orderData.orderId, currentUser.email, currentUser.phone || '', currentUser.displayName || currentUser.name || 'Customer', orderData.domain, orderData.packageId || orderData.packageName, orderData.total, orderData.addons || []);
     if (!result.success || !result.data || !result.data.snapToken) {
       throw new Error(result.message || 'Gagal membuat token pembayaran');
     }
@@ -182,7 +181,7 @@ function handlePaymentLunas(orderId) {
     } catch (e) {
       window.location.href = EnvHelper.getDomainUrl('my', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
     }
-  }, 300); // 300ms so they can read the toast slightly
+  }, 300);
 }
 async function startPaymentPolling() {
   const orderId = currentOrder?.orderId;
@@ -213,7 +212,7 @@ async function startPaymentPolling() {
       if (res && res.data && (res.data.paymentStatus === 'paid' || res.data.status === 'paid' || res.data.orderStatus === 'completed')) {
         handlePaymentLunas(orderId);
       }
-      if (pollCount >= 36) { // Stop after 3 minutes
+      if (pollCount >= 36) {
         clearInterval(paymentPollingInterval);
       }
     } catch (e) {
@@ -232,7 +231,7 @@ function handlePaymentSuccess(result) {
     } catch (e) {
       window.location.href = EnvHelper.getDomainUrl('my', `/invoice/?orderId=${encodeURIComponent(orderId)}`);
     }
-  }, 500); // Instant redirect
+  }, 500);
 }
 
 function handlePaymentPending(result) {

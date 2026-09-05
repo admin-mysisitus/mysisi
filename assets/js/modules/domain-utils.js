@@ -1,7 +1,7 @@
 export const MULTI_PART_EXTENSIONS = ['.co.id', '.my.id', '.sch.id', '.ac.id', '.go.id', '.or.id', '.web.id', '.biz.id', '.net.id', '.ponpes.id', '.desa.id', '.it.com'];
 export function parseDomain(input, pricingData = []) {
   const cleaned = input.toLowerCase().trim();
-  const knownExtensions = [...new Set([...pricingData.map(p => p.ext), ...MULTI_PART_EXTENSIONS])].sort((a, b) => b.length - a.length); // Sort longest first to match .ponpes.id before .id
+  const knownExtensions = [...new Set([...pricingData.map(p => p.ext), ...MULTI_PART_EXTENSIONS])].sort((a, b) => b.length - a.length);
   for (const ext of knownExtensions) {
     if (cleaned.endsWith(ext)) {
       return {

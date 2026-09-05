@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             behavior: 'smooth'
           });
         }
-      }, 300); // Matches the 0.3s CSS transition duration
+      }, 300);
     };
     card.addEventListener('mouseenter', handleScroll);
     card.addEventListener('focusin', handleScroll);
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
           setTimeout(() => {
             entry.target.classList.add('is-visible');
           }, delay);
-          delay += 100; // 100ms stagger
+          delay += 100;
           observer.unobserve(entry.target);
         }
       });
@@ -173,10 +173,10 @@ document.addEventListener('DOMContentLoaded', function() {
   teamBios.forEach(bio => {
     bio.title = "Ketuk untuk memperluas/menyembunyikan teks";
     bio.addEventListener('click', function(e) {
-      e.stopPropagation(); // Mencegah global click handler membatalkan aksi ini
+      e.stopPropagation();
       const isExpanded = this.classList.contains('expanded');
-      closeAllBios(); // Tutup yang lain
-      if (!isExpanded) this.classList.add('expanded'); // Buka yang ini jika belum terbuka
+      closeAllBios();
+      if (!isExpanded) this.classList.add('expanded');
     });
   });
   if (teamSliderContainer) {
@@ -282,23 +282,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const suffix = match[3];
     const isFloat = numberText.includes('.');
     const endValue = parseFloat(numberText);
-    const duration = 2500; // Extend duration to 2.5s for better effect
+    const duration = 2500;
     let startTime = null;
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
       const currentValue = easeProgress * endValue;
       const displayValue = isFloat ? currentValue.toFixed(1) : Math.floor(currentValue);
       element.textContent = `${prefix}${displayValue}${suffix}`;
       if (progress < 1) {
         window.requestAnimationFrame(step);
       } else {
-        element.textContent = originalText; // Ensure exact final text
+        element.textContent = originalText;
       }
     };
     element.setAttribute('data-animated', 'true');
-    element.textContent = `${prefix}0${suffix}`; // Start at 0 visually
+    element.textContent = `${prefix}0${suffix}`;
     window.requestAnimationFrame(step);
   };
   const countUpObserver = new IntersectionObserver((entries, observer) => {

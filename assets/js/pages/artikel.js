@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextBtn = paginationLinks.length > 1 ? paginationLinks[paginationLinks.length - 1] : null;
   const pageInfo = document.querySelector('.pagination-info');
   let currentPage = 1;
-  const cardsPerPage = 6; // 1 baris 3 card per halaman, 2 baris = 6
+  const cardsPerPage = 6;
   let currentCategory = 'Semua';
   let currentSearch = '';
   const searchInput = document.getElementById('searchInput');
@@ -41,11 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const endIndex = startIndex + cardsPerPage;
     const pageCards = matchingCards.slice(startIndex, endIndex);
     pageCards.forEach(card => {
-      card.style.display = ''; // Gunakan default stylesheet (flex/grid)
+      card.style.display = '';
       card.classList.remove('hidden');
       card.classList.add('visible');
       card.style.animation = 'none';
-      void card.offsetWidth; // Trigger reflow
+      void card.offsetWidth;
       card.style.animation = 'slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both';
     });
     if (pageInfo) {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (scrollToTop) {
       const section = document.querySelector('.artikel-list-section') || document.querySelector('.artikel-grid');
       if (section) {
-        const offset = 100; // Kompensasi header fixed
+        const offset = 100;
         const elementPosition = section.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
         window.scrollTo({
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
         currentCategory = category;
-        currentPage = 1; // Reset ke halaman pertama setiap kali filter berubah
+        currentPage = 1;
         updateDisplay(false);
       });
     });

@@ -186,7 +186,7 @@
         const cursorPosition = base.length;
         setTimeout(() => {
           cekDomainInput.setSelectionRange(cursorPosition, cursorPosition);
-          cekDomainInput.dispatchEvent(new Event('input')); // trigger suggestions
+          cekDomainInput.dispatchEvent(new Event('input'));
         }, 10);
       };
       item.addEventListener('click', handleSelect);
@@ -358,7 +358,7 @@
       try {
         isAvailableGlobally = await dnsPromise;
       } catch (dnsError) {
-        domainCheckCache.delete(domain); // Remove failed cache
+        domainCheckCache.delete(domain);
         if (dnsError.name === 'AbortError') throw dnsError;
         console.log('Hybrid DNS check failed:', dnsError);
         isAvailableGlobally = false;
@@ -402,7 +402,7 @@
     } catch (error) {
       const message = error.name === 'AbortError' ? 'Request dibatalkan' : `Gagal mengecek ketersediaan: ${error.message}`;
       return {
-        available: null, // Unknown
+        available: null,
         isOrdered: false,
         error: true,
         method: 'dns-check',

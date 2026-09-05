@@ -11,7 +11,7 @@ import {
   EnvHelper
 } from './unified-utils.js';
 export class APIClient {
-  static DEFAULT_TIMEOUT = GAS_CONFIG.TIMEOUT || 30000; // Use configured timeout
+  static DEFAULT_TIMEOUT = GAS_CONFIG.TIMEOUT || 30000;
   static async call(action, data = {}, options = {}) {
     let {
       method = 'POST'
@@ -23,7 +23,7 @@ export class APIClient {
         if ('success' in response) {
           if (typeof response.success !== 'boolean') {
             void('[API] Warning: success field bukan boolean, treating as:', !!response.success);
-            response.success = !!response.success; // Convert to boolean
+            response.success = !!response.success;
           }
           result = response;
         } else if ('data' in response) {
@@ -37,7 +37,7 @@ export class APIClient {
         } else {
           void('[API] Unexpected response format, trying to detect success state:', response);
           result = {
-            success: true, // Assume success jika response sudah dikirim
+            success: true,
             data: response,
             message: response.message || 'Operation completed',
             timestamp: Date.now()
@@ -55,7 +55,7 @@ export class APIClient {
       return result;
     } catch (error) {
       void(`[API] ${action} failed:`, error.message);
-      throw error; // Let caller handle error
+      throw error;
     }
   }
   static async makeRequest(action, data, method, timeout) {
@@ -129,11 +129,11 @@ export class APIClient {
         } catch (parseError) {
           void('[API] Response bukan JSON, return as-is:', responseText.substring(0, 100));
           return {
-            success: true, // Assume success jika GAS respond
+            success: true,
             data: responseText,
             message: 'Response received from server',
             timestamp: Date.now(),
-            _raw: responseText // Keep raw response
+            _raw: responseText
           };
         }
       } catch (error) {
@@ -143,7 +143,7 @@ export class APIClient {
       if (error.name === 'AbortError') {
         throw new Error('Request timeout setelah ' + timeout + 'ms');
       }
-      throw error; // Re-throw all other errors
+      throw error;
     } finally {
       clearTimeout(timeoutId);
     }
@@ -163,7 +163,7 @@ export class APIClient {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
       const actionCodeSettings = {
-        url: EnvHelper.getDomainUrl('my', '/dashboard/'), // Akan memunculkan tombol 'Continue' ke dashboard
+        url: EnvHelper.getDomainUrl('my', '/dashboard/'),
         handleCodeInApp: true
       };
       await user.sendEmailVerification(actionCodeSettings);
@@ -850,7 +850,7 @@ export class APIClient {
           data: {
             domain,
             available: !isTaken,
-            isOrdered: domainData.status === 'ordered' // sedang dipesan tapi belum bayar
+            isOrdered: domainData.status === 'ordered'
           },
           message: isTaken ? 'Domain sudah dimiliki orang lain' : 'Domain tersedia'
         };

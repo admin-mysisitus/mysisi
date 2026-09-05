@@ -31,9 +31,9 @@ function setupEventListeners() {
       const nameField = document.getElementById('usr-name').value.trim();
       const userData = {
         id: document.getElementById('usr-id').value.trim(),
-        uid: document.getElementById('usr-id').value.trim(), // Pastikan uid dikirim untuk konsolidasi Firebase
+        uid: document.getElementById('usr-id').value.trim(),
         name: nameField,
-        displayName: nameField, // Pastikan displayName juga di-update untuk mencegah nama undefined
+        displayName: nameField,
         email: document.getElementById('usr-email').value.trim(),
         whatsapp: document.getElementById('usr-wa').value.trim(),
         role: document.getElementById('usr-role').value,
@@ -78,7 +78,7 @@ function setupEventListeners() {
     document.getElementById('usr-id').value = user.id || user.uid || '';
     document.getElementById('usr-name').value = user.displayName || user.name || 'Pelanggan';
     document.getElementById('usr-email').value = user.email || '';
-    document.getElementById('usr-wa').value = user.whatsapp || user.wa || ''; // depending on API response
+    document.getElementById('usr-wa').value = user.whatsapp || user.wa || '';
     document.getElementById('usr-role').value = user.role || 'customer';
     const currentStatus = user.status || 'active';
     document.getElementById('usr-active').checked = currentStatus === 'active';

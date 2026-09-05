@@ -57,7 +57,7 @@ function setupEventListeners() {
             });
           }
           modal.style.display = 'none';
-          await loadPackages(); // reload list
+          await loadPackages();
         } else {
           throw new Error(res.message);
         }
@@ -81,7 +81,7 @@ function setupEventListeners() {
     if (!pkg) return;
     document.getElementById('package-modal-title').textContent = 'Edit Paket';
     document.getElementById('pkg-id').value = pkg.id;
-    document.getElementById('pkg-id').readOnly = true; // prevent changing ID
+    document.getElementById('pkg-id').readOnly = true;
     document.getElementById('pkg-name').value = pkg.name;
     document.getElementById('pkg-price').value = pkg.price;
     document.getElementById('pkg-periodValue').value = pkg.periodValue || (pkg.cycle ? parseInt(pkg.cycle) : 1);
@@ -160,8 +160,8 @@ function renderPackages(packages, container) {
   container.innerHTML = '';
   currentPackages = packages;
   packages.forEach((pkg, index) => {
-    const isPopular = index === 1; // Highlight the second package visually
-    const isActive = pkg.active !== false; // default to active if undefined
+    const isPopular = index === 1;
+    const isActive = pkg.active !== false;
     const inactiveStyle = isActive ? '' : 'opacity: 0.6; filter: grayscale(1);';
     const card = document.createElement('div');
     card.style.background = isPopular ? 'linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(0, 0, 0, 0.2))' : 'rgba(0, 0, 0, 0.2)';

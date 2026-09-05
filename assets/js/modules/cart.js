@@ -130,7 +130,7 @@ export async function render(currentUser) {
       cartState.pricing = pricingRes.data;
     }
     if (!currentUser) {
-      AuthManager.refreshUserData(); // NEW: Load latest user session
+      AuthManager.refreshUserData();
     }
     cartState.currentUser = currentUser || AuthManager.getCurrentUser();
     if (cartState.currentUser) {
@@ -866,7 +866,7 @@ async function applyPromoCode() {
     return;
   }
   if (cartState.isValidatingPromo) {
-    return; // Already validating
+    return;
   }
   cartState.isValidatingPromo = true;
   setButtonLoading(promoBtn, true, 'Memvalidasi...');

@@ -135,7 +135,7 @@
         const item = this.closest('.faq-item');
         setTimeout(() => {
           if (item && item.hasAttribute('open')) {
-            const headerOffset = 90; // Offset for sticky header
+            const headerOffset = 90;
             const elementPosition = item.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             window.scrollTo({

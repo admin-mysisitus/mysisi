@@ -128,7 +128,7 @@ function renderChart(chartData) {
         backgroundColor: 'rgba(99, 102, 241, 0.2)',
         borderWidth: 2,
         fill: true,
-        tension: 0.4, // Membuat garis menjadi melengkung (smooth)
+        tension: 0.4,
         pointBackgroundColor: '#6366f1',
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
@@ -140,7 +140,7 @@ function renderChart(chartData) {
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false // Sembunyikan legend karena hanya ada 1 dataset
+          display: false
         },
         tooltip: {
           backgroundColor: 'rgba(15, 17, 26, 0.9)',

@@ -2,7 +2,7 @@ class SessionCache {
   constructor() {
     this.CONFIG = {
       CACHE_KEY: 'livechat_session_state',
-      TTL_MS: 5 * 60 * 1000, // 5 minutes
+      TTL_MS: 5 * 60 * 1000,
       VERSION: 1
     };
   }
