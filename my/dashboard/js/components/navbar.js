@@ -128,14 +128,16 @@ export class DashboardNavbar {
         });
       });
     }
-    
     // Kunjungi Website handler (Reverse Handoff)
     const btnKunjungi = document.getElementById('btn-kunjungi-website');
     if (btnKunjungi) {
       btnKunjungi.addEventListener('click', async (e) => {
         e.preventDefault();
         try {
-          const { CartManager, WishlistManager } = await import('/assets/js/modules/unified-cart.js');
+          const {
+            CartManager,
+            WishlistManager
+          } = await import('/assets/js/modules/unified-cart.js');
           const handoffData = {
             cart: CartManager.getCart(),
             wishlist: WishlistManager.getWishlist(),
@@ -151,7 +153,6 @@ export class DashboardNavbar {
         }
       });
     }
-
     // Listen for auth changes
     if (!this.authListenerBound) {
       this.authListenerBound = true;

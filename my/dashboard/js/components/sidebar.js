@@ -107,7 +107,6 @@ export class DashboardSidebar {
     // Update cart badge on cart changes
     this.updateCartBadge();
     window.addEventListener('cart:updated', () => this.updateCartBadge());
-
     // Update wishlist badge
     this.updateWishlistBadge();
     window.addEventListener('wishlist:updated', () => this.updateWishlistBadge());
@@ -134,7 +133,6 @@ export class DashboardSidebar {
       // CartManager not available, skip silently
     }
   }
-
   /**
    * Update wishlist item count badge
    */

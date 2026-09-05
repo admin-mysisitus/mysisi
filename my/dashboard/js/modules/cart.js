@@ -117,13 +117,10 @@ window.toggleCartAddon = async (domain, addonId, isChecked) => {
   try {
     const addonDef = cartState.pricing.addons[addonId];
     if (!addonDef) return;
-    
     const cart = CartManager.getCart();
     const item = cart.domains.find(d => d.domain.toLowerCase() === domain.toLowerCase());
     if (!item) return;
-
     let itemAddons = item.addons || [];
-    
     if (isChecked) {
       // Add addon to domain
       const existing = itemAddons.find(a => a.id.toLowerCase() === addonId.toLowerCase());
@@ -139,10 +136,10 @@ window.toggleCartAddon = async (domain, addonId, isChecked) => {
       // Remove addon from domain
       itemAddons = itemAddons.filter(a => a.id.toLowerCase() !== addonId.toLowerCase());
     }
-    
     // Save to CartManager
-    CartManager.update(domain, { addons: itemAddons });
-
+    CartManager.update(domain, {
+      addons: itemAddons
+    });
     await withScrollPreservation(async () => {
       if (cartState.currentUser) {
         await render(cartState.currentUser);
@@ -166,7 +163,6 @@ export async function render(currentUser) {
       console.log('[Cart] #cart-container not found');
       return;
     }
-
     // Delegated Action: Parse URL parameters for secure Add to Cart
     // (Digunakan saat user login di Public mencoba menambah keranjang)
     try {
@@ -181,51 +177,45 @@ export async function render(currentUser) {
           // Clean the URL immediately without reloading the page
           const cleanUrl = window.location.pathname + hashSplit[0];
           window.history.replaceState(null, '', cleanUrl);
-
           // Process addition through secure existing CartManager mechanism
           // VALIDASI SOURCE OF TRUTH: Ambil harga otentik dari API, BUKAN dari parameter
           showInfo('Memproses', `Memeriksa ketersediaan ${addDomain}...`);
-
           const [configRes, checkRes] = await Promise.all([
-             APIClient.fetchPricingConfig(),
-             APIClient.checkDomain(addDomain)
+            APIClient.fetchPricingConfig(),
+            APIClient.checkDomain(addDomain)
           ]);
-
           if (checkRes.success && checkRes.data && checkRes.data.available) {
-             let starterPrice = 599000;
-             let domainPrice = 150000;
-             
-             if (configRes.success && configRes.data) {
-                if (configRes.data.packages?.starter) {
-                   starterPrice = configRes.data.packages.starter.price;
+            let starterPrice = 599000;
+            let domainPrice = 150000;
+            if (configRes.success && configRes.data) {
+              if (configRes.data.packages?.starter) {
+                starterPrice = configRes.data.packages.starter.price;
+              }
+              if (configRes.data.domains) {
+                const cleanTld = tld.startsWith('.') ? tld.substring(1) : tld;
+                const extData = Object.values(configRes.data.domains).find(d => d.ext === cleanTld || d.ext === `.${cleanTld}`);
+                if (extData && extData.registration) {
+                  domainPrice = extData.registration;
                 }
-                if (configRes.data.domains) {
-                   const cleanTld = tld.startsWith('.') ? tld.substring(1) : tld;
-                   const extData = Object.values(configRes.data.domains).find(d => d.ext === cleanTld || d.ext === `.${cleanTld}`);
-                   if (extData && extData.registration) {
-                      domainPrice = extData.registration;
-                   }
-                }
-             }
-             
-             CartManager.add(addDomain, tld, {
-                package: 'starter',
-                duration: 1,
-                domainPrice: domainPrice,
-                packagePrice: starterPrice,
-                price: starterPrice, // legacy format
-                renewalPrice: starterPrice,
-                basePrice: starterPrice
-             });
+              }
+            }
+            CartManager.add(addDomain, tld, {
+              package: 'starter',
+              duration: 1,
+              domainPrice: domainPrice,
+              packagePrice: starterPrice,
+              price: starterPrice, // legacy format
+              renewalPrice: starterPrice,
+              basePrice: starterPrice
+            });
           } else {
-             showError('❌ Gagal', `Domain ${addDomain} tidak tersedia atau terjadi kesalahan jaringan.`);
+            showError('❌ Gagal', `Domain ${addDomain} tidak tersedia atau terjadi kesalahan jaringan.`);
           }
         }
       }
     } catch (e) {
       console.log('[Cart] Error parsing URL parameters:', e);
     }
-
     // Fetch pricing configuration
     const pricingRes = await APIClient.fetchPricingConfig();
     if (pricingRes.success && pricingRes.data) {
@@ -301,7 +291,6 @@ export async function render(currentUser) {
     `;
   }
 }
-
 // ============================================================================
 // HELPER FOR SELECTED DOMAIN
 // ============================================================================
@@ -319,23 +308,17 @@ window.selectCartDomain = (domain) => {
 function getSelectedCartSummary() {
   const cartData = CartManager.getCart();
   const items = (cartData && cartData.domains) || [];
-
   if (items.length > 0 && (!cartState.selectedDomain || !items.find(i => i.domain === cartState.selectedDomain))) {
     cartState.selectedDomain = items[0].domain;
   }
-
   const selectedItem = items.find(i => i.domain === cartState.selectedDomain);
-
   let domainSubtotal = 0;
   if (selectedItem) {
     domainSubtotal = (selectedItem.price || 0) * (selectedItem.duration || 1);
   }
-
   const addons = (selectedItem && selectedItem.addons) || [];
   const addonsTotal = addons.reduce((sum, a) => sum + ((a.price || 0) * (a.quantity || 1)), 0);
-
   let subtotal = domainSubtotal + addonsTotal;
-
   let discount = 0;
   if (cartData && cartData.coupon) {
     const type = cartData.coupon.discountType;
@@ -346,14 +329,11 @@ function getSelectedCartSummary() {
       discount = value;
     }
   }
-
   // Also update cartState if promo exists
   cartState.promoDiscount = Math.round(discount);
-
   let subtotalAfterDiscount = subtotal - cartState.promoDiscount;
   let ppn = Math.round(subtotalAfterDiscount * 0.11);
   let finalTotal = Math.round(subtotalAfterDiscount + ppn);
-
   return {
     items,
     selectedItem,
@@ -366,7 +346,6 @@ function getSelectedCartSummary() {
     finalTotal
   };
 }
-
 // ============================================================================
 // GUEST CART PREVIEW
 // ============================================================================
@@ -402,7 +381,6 @@ function renderGuestCheckout() {
     if (document.activeElement && document.activeElement.tagName !== 'BODY') {
       document.activeElement.blur();
     }
-
     const {
       items,
       selectedItem,
@@ -414,11 +392,9 @@ function renderGuestCheckout() {
       ppn,
       finalTotal
     } = getSelectedCartSummary();
-
     const previewContainer = document.getElementById('cart-preview-container');
     if (!previewContainer) return;
     let previewContent = '<div class="preview-empty">Keranjang kosong</div>';
-
     if (items.length > 0) {
       let addonsHtml = '';
       if (addonsTotal > 0) {
@@ -429,7 +405,6 @@ function renderGuestCheckout() {
                 </div>
         `;
       }
-
       let promoHtml = '';
       if (discount > 0) {
         let promoDescHtml = '';
@@ -446,9 +421,7 @@ function renderGuestCheckout() {
                 </div>
         `;
       }
-
       const itemsHtml = items.map(item => renderCartItem(item)).join('');
-
       previewContent = `
             <div class="preview-items" style="border-bottom: 1px solid var(--border-light); margin-bottom: 0.75rem; padding-bottom: 0.25rem;">
               ${itemsHtml}
@@ -482,7 +455,6 @@ function renderGuestCheckout() {
             </div>
       `;
     }
-
     previewContainer.innerHTML = `
       <div class="cart-preview">
         <h3 class="preview-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
@@ -686,7 +658,6 @@ function renderAuthenticatedCart() {
   } = getSelectedCartSummary();
   const promoTotal = discount;
   let itemsHTML = items.map(item => renderCartItem(item)).join('');
-
   // Flatten HTML generation to avoid IDE syntax highlighter bugs with nested templates
   let selectedItemHTML = '';
   if (selectedItem) {
@@ -711,7 +682,6 @@ function renderAuthenticatedCart() {
                 ${packageInfoHTML}
     `;
   }
-
   let addonsHTML = '';
   if (addons.length > 0) {
     const addonsList = addons.map(addon => `
@@ -729,12 +699,9 @@ function renderAuthenticatedCart() {
                 <div class="summary-divider" style="margin: 8px 0; border-top: 1px dashed var(--border-color);"></div>
     `;
   }
-
   let promoHTML = '';
   if (promoTotal > 0) {
-    const promoDescHTML = cartState.promoDescription
-      ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>`
-      : '';
+    const promoDescHTML = cartState.promoDescription ? `<span class="promo-desc-detail" style="font-size: 11px; color: var(--text-secondary); font-style: italic; margin-top: 2px; padding-left: 18px;">(${cartState.promoDescription})</span>` : '';
     promoHTML = `
                 <div class="price-row discount" style="align-items: flex-start; height: auto; padding: 8px 0;">
                   <div style="display: flex; flex-direction: column; text-align: left;">
@@ -745,7 +712,6 @@ function renderAuthenticatedCart() {
                 </div>
     `;
   }
-
   cartState.container.innerHTML = `
     <div class="page-container">
       <div class="cart-page">
@@ -888,7 +854,6 @@ function renderCartItemSelectors(item) {
             </div>
       `;
     }
-
     let detailsHtml = '';
     if (descHtml || featuresList) {
       detailsHtml = `
@@ -898,7 +863,6 @@ function renderCartItemSelectors(item) {
         </div>
       `;
     }
-
     return `
       <label class="cart-item-addon-option ${isSelected ? 'selected' : ''} ${isFree ? 'is-free' : ''}">
         <div class="cart-item-addon-header" style="justify-content: space-between; align-items: center;">
@@ -945,7 +909,6 @@ function renderCartItemSelectors(item) {
 // ============================================================================
 function renderCartItem(item) {
   const renewalInfo = item.renewalPrice && item.renewalPrice !== item.price ? `<div class="cart-item-renewal" style="margin-top: 4px;"><i class="ph-fill ph-arrows-clockwise"></i> Pembaruan: ${formatPrice(item.renewalPrice)}/tahun</div>` : '';
-
   let configSection = '';
   if (!item.isRenewal) {
     configSection = `
@@ -955,7 +918,6 @@ function renderCartItem(item) {
       </div>
     `;
   }
-
   return `
     <div class="cart-item ${item.domain === cartState.selectedDomain ? 'selected-domain-card' : ''}" style="display: block; margin-bottom: 1.5rem; ${item.domain === cartState.selectedDomain ? 'border: 2px solid var(--primary-blue); background: #f0f7ff; border-radius: 8px;' : ''}">
       <div class="cart-item-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: clamp(1rem, 2vw, 1.5rem); padding-bottom: 0.75rem;">
@@ -999,8 +961,6 @@ function loadSavedPromo() {
     console.log('[Cart] Could not load saved promo:', e);
   }
 }
-
-
 async function applyPromoCode() {
   const input = document.getElementById('promo-code-input');
   if (!input) return;
@@ -1038,7 +998,6 @@ async function applyPromoCode() {
       cartState.promoDiscount = discount;
       cartState.promoDescription = result.data.description;
       cartState.promoValidated = true;
-
       // Save to CartManager
       const cartData = CartManager.getCart();
       cartData.coupon = {
@@ -1048,7 +1007,6 @@ async function applyPromoCode() {
         description: result.data.description
       };
       CartManager.saveCart(cartData);
-
       if (promoMsg) {
         promoMsg.textContent = `✓ ${result.message || 'Kode promo berhasil diterapkan'}`;
         promoMsg.style.color = '#27ae60';
@@ -1060,12 +1018,10 @@ async function applyPromoCode() {
       cartState.promoDiscount = 0;
       cartState.promoDescription = null;
       cartState.promoValidated = false;
-
       // Remove from CartManager
       const cartData = CartManager.getCart();
       cartData.coupon = null;
       CartManager.saveCart(cartData);
-
       if (promoMsg) {
         promoMsg.textContent = result.message || 'Kode promo tidak valid';
         promoMsg.style.color = '#dc2626';
@@ -1084,26 +1040,21 @@ async function applyPromoCode() {
     setButtonLoading(promoBtn, false, 'Gunakan');
   }
 }
-
 window.cancelPromoCode = () => {
   cartState.promoCode = null;
   cartState.promoDiscount = 0;
   cartState.promoDescription = null;
   cartState.promoValidated = false;
-
   localStorage.removeItem('saved_promo_code');
   localStorage.removeItem('saved_promo_description');
   localStorage.removeItem('saved_promo_discount_value');
   localStorage.removeItem('saved_promo_discount_type');
-  
   CartManager.removeCoupon();
-
   showInfo('Promo Dibatalkan', 'Kode promo telah dilepas dari keranjang.');
   if (cartState.currentUser) {
     render(cartState.currentUser);
   }
 };
-
 // ============================================================================
 // CHECKOUT FUNCTIONS
 // ============================================================================
@@ -1126,7 +1077,9 @@ async function proceedToCheckout() {
     // }
     cartState.isProcessingCheckout = true;
     // Get first domain for order
-    const { selectedItem } = getSelectedCartSummary();
+    const {
+      selectedItem
+    } = getSelectedCartSummary();
     const firstDomain = selectedItem?.domain || '';
     if (!firstDomain) {
       throw new Error('Domain tidak ditemukan');
@@ -1226,7 +1179,6 @@ async function proceedToCheckout() {
     console.log('[Cart] Order created:', confirmedOrderId);
     // Hanya hapus domain yang di-checkout dari cart
     CartManager.remove(firstDomain);
-
     // ALWAYS CLEAR PROMOS AFTER SUCCESSFUL CHECKOUT (Since promo is consumed for this order)
     cartState.promoCode = null;
     cartState.promoDiscount = 0;
@@ -1237,10 +1189,8 @@ async function proceedToCheckout() {
     localStorage.removeItem('saved_promo_discount_value');
     localStorage.removeItem('saved_promo_discount_type');
     CartManager.removeCoupon();
-    
     // ALWAYS CLEAR ADDONS AFTER SUCCESSFUL CHECKOUT (So they don't stick to the next checkout)
     CartManager.clearAddons();
-
     showSuccess('✓ Order Dibuat', 'Mengarahkan ke pembayaran...');
     // Redirect to payment page (use hash route for SPA)
     setTimeout(() => {
@@ -1286,7 +1236,6 @@ function removeCartItem(domain) {
     render(cartState.currentUser);
   }
 }
-
 // Auto-refresh UI when cart data syncs from backend (e.g., after login)
 window.addEventListener('cart:updated', () => {
   const container = document.getElementById('cart-container');
@@ -1295,5 +1244,4 @@ window.addEventListener('cart:updated', () => {
     render(cartState.currentUser);
   }
 });
-
 export default render;

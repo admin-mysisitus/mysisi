@@ -562,7 +562,6 @@
     cekDomainBtn.disabled = true;
     const originalBtnHTML = cekDomainBtn.innerHTML;
     cekDomainBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari...';
-    
     // Tampilkan Skeleton Loading
     cekDomainResultsList.innerHTML = Array(3).fill(`
       <li class="cek-domain-skeleton-card">
@@ -576,7 +575,6 @@
         </div>
       </li>
     `).join('');
-    
     cekDomainResults.removeAttribute('hidden');
     cekDomainResults.classList.add('show');
     cekDomainResults.scrollIntoView({
@@ -724,7 +722,6 @@
   // Initialize immediately
   renderPricingPreview();
   initiatePlaceholderAnimation();
-  
   if (cekDomainClearBtn) {
     cekDomainClearBtn.addEventListener('click', () => {
       cekDomainInput.value = '';
@@ -733,7 +730,6 @@
       cekDomainInput.focus();
     });
   }
-
   cekDomainInput.addEventListener('input', (e) => {
     let value = e.target.value;
     if (value !== value.toLowerCase()) {
@@ -743,12 +739,10 @@
       e.target.setSelectionRange(start, end);
       value = value.toLowerCase();
     }
-    
     if (cekDomainClearBtn) {
       cekDomainClearBtn.style.display = value ? 'flex' : 'none';
     }
     currentFocus = -1;
-
     if (/[^a-z0-9.-]/i.test(value)) {
       cekDomainError.innerHTML = '<i class="fas fa-warning"></i> Hanya huruf, angka, titik, dan strip yang diperbolehkan';
       cekDomainError.style.display = 'block';
@@ -795,10 +789,7 @@
   });
   let currentFocus = -1;
   cekDomainInput.addEventListener('keydown', (e) => {
-    const items = cekDomainSuggestions && cekDomainSuggestions.style.display !== 'none' 
-      ? cekDomainSuggestions.querySelectorAll('.cek-domain-suggestion-item') 
-      : [];
-    
+    const items = cekDomainSuggestions && cekDomainSuggestions.style.display !== 'none' ? cekDomainSuggestions.querySelectorAll('.cek-domain-suggestion-item') : [];
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       currentFocus++;
@@ -824,7 +815,9 @@
     items.forEach(item => item.classList.remove('keyboard-focus'));
     if (currentFocus > -1) {
       items[currentFocus].classList.add('keyboard-focus');
-      items[currentFocus].scrollIntoView({ block: 'nearest' });
+      items[currentFocus].scrollIntoView({
+        block: 'nearest'
+      });
     }
   }
   // ============================================
@@ -849,7 +842,6 @@
           window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?addDomain=${encodeURIComponent(domain)}&tld=${encodeURIComponent(tld)}`);
           return;
         }
-
         // Add domain to cart for guest users
         CartManager.add(domain, tld, {
           package: 'starter',
@@ -882,7 +874,6 @@
           if (iframe && iframe.contentWindow) {
             // Optimistically update UI
             const isCurrentlyInWishlist = window.SSO_WISHLIST_DOMAINS && window.SSO_WISHLIST_DOMAINS.includes(domain.toLowerCase());
-            
             if (isCurrentlyInWishlist) {
               heartIcon.className = 'far fa-heart';
               btn.style.color = '#999';
@@ -892,7 +883,6 @@
               btn.style.color = '#e74c3c';
               showSuccess('Ditambahkan ke Wishlist', `${domain} disimpan untuk nanti (Customer Portal)`);
             }
-
             iframe.contentWindow.postMessage({
               type: 'SISITUS_DELEGATE_WISHLIST_TOGGLE',
               domain: domain
@@ -938,7 +928,6 @@
   document.addEventListener('wishlist:updated', () => {
     updateWishlistIcons();
   });
-
   window.addEventListener('sso_wishlist:updated', () => {
     updateWishlistIcons();
   });
@@ -948,14 +937,12 @@
     wishlistBtns.forEach(btn => {
       const domain = btn.dataset.domain;
       const heartIcon = btn.querySelector('i');
-      
       let inWishlist = false;
       if (window.SSO_USER && window.SSO_WISHLIST_DOMAINS) {
-         inWishlist = window.SSO_WISHLIST_DOMAINS.includes(domain.toLowerCase());
+        inWishlist = window.SSO_WISHLIST_DOMAINS.includes(domain.toLowerCase());
       } else {
-         inWishlist = WishlistManager.isInWishlist(domain);
+        inWishlist = WishlistManager.isInWishlist(domain);
       }
-
       if (inWishlist) {
         heartIcon.className = 'fas fa-heart';
         btn.style.color = '#e74c3c';

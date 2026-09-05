@@ -13,7 +13,9 @@ import {
 import {
   getFirebase
 } from '/assets/js/modules/firebase-core.js';
-import { EnvHelper } from '/assets/js/modules/unified-utils.js';
+import {
+  EnvHelper
+} from '/assets/js/modules/unified-utils.js';
 class AdminApp {
   constructor() {
     this.currentRoute = null;

@@ -124,7 +124,6 @@ class DashboardApp {
         requiresAuth: true,
         loadModule: () => import('./modules/settings.js?v=' + Date.now())
       },
-
       '/dashboard/cart': {
         page: 'cart',
         title: 'Keranjang Belanja',
@@ -201,7 +200,7 @@ class DashboardApp {
           fetchSuccess = true;
         } catch (fetchErr) {
           retries--;
-          void (`[Router] Gagal memuat template ${routeConfig.page}.html, sisa percobaan: ${retries}`, fetchErr);
+          void(`[Router] Gagal memuat template ${routeConfig.page}.html, sisa percobaan: ${retries}`, fetchErr);
           if (retries === 0) {
             throw new Error(`Gagal memuat antarmuka halaman. Server hosting mungkin sedang sibuk. Silakan muat ulang (refresh) halaman ini.`);
           }
@@ -211,7 +210,6 @@ class DashboardApp {
       }
       // Render content
       const contentArea = document.getElementById('content');
-
       // Cleanup previous module to prevent memory leaks
       if (this.currentModule && typeof this.currentModule.destroy === 'function') {
         try {
@@ -220,12 +218,9 @@ class DashboardApp {
           console.warn('[Router] Error cleaning up previous module:', cleanupErr);
         }
       }
-
       contentArea.innerHTML = html;
-      
       // Store current module reference
       this.currentModule = module;
-
       // Initialize page module
       if (module.render) {
         await module.render(this.currentUser);
@@ -235,7 +230,7 @@ class DashboardApp {
       // Scroll to top
       contentArea.scrollTop = 0;
     } catch (error) {
-      void ('Error loading route:', error);
+      void('Error loading route:', error);
       document.getElementById('content').innerHTML = `
         <div class="error-container">
           <h2>Error</h2>

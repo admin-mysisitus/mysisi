@@ -18,9 +18,14 @@
 import {
   getFirebase
 } from './firebase-core.js';
-import { EnvHelper } from './unified-utils.js';
+import {
+  EnvHelper
+} from './unified-utils.js';
 import APIClient from './unified-api.js';
-import { CartManager, WishlistManager } from './unified-cart.js';
+import {
+  CartManager,
+  WishlistManager
+} from './unified-cart.js';
 export class AuthManager {
   static SESSION_KEY = 'sisitus_user';
   static SESSION_VERSION = 2;
@@ -112,7 +117,6 @@ export class AuthManager {
             // Ensure state updates without causing infinite loop
             if (JSON.stringify(this.state.user) !== JSON.stringify(userObj)) {
               this.saveSession(userObj);
-
               // Sync Cart & Wishlist on login
               const cartRes = await APIClient.fetchUserCart(userObj.userId);
               if (cartRes.success && cartRes.data) {
@@ -123,7 +127,6 @@ export class AuthManager {
                   await APIClient.syncUserCart(userObj.userId, CartManager.getCart());
                 }
               }
-
               const wishRes = await APIClient.fetchUserWishlist(userObj.userId);
               if (wishRes.success && wishRes.data) {
                 WishlistManager.mergeWishlist(wishRes.data);
@@ -141,7 +144,6 @@ export class AuthManager {
               // jadi jangan biarkan Firebase menghapus sesi localStorage (SSO) secara sepihak!
               const hostname = window.location.hostname;
               const isMyDomain = hostname.startsWith('my.') || hostname.includes('localhost');
-              
               if (isMyDomain) {
                 this.clearSession();
               } else {
@@ -155,7 +157,6 @@ export class AuthManager {
       console.log('[AuthManager] Error initializing Firebase Auth:', error);
     }
     this.setupStorageListener();
-
     // Setup sync listeners
     if (!this._syncListenersAdded) {
       this._syncListenersAdded = true;
@@ -266,14 +267,12 @@ export class AuthManager {
     window[this.STORAGE_TYPE].removeItem(this.SESSION_KEY);
     // Jika ada session storage yang dipakai khusus auth di masa depan, hapus item per item
     // contoh: sessionStorage.removeItem('auth_token_tmp');
-
     // Completely invalidate the Firebase Auth session to prevent ghost sessions
     getFirebase().then(({
       auth
     }) => {
       if (auth) auth.signOut();
     }).catch(e => console.log('[AuthManager] Firebase signout error:', e));
-
     if (this.state.isLoggedIn || this.state.user) {
       this.state = {
         user: null,
@@ -366,7 +365,6 @@ export class AuthManager {
       }
     });
   }
-
   /**
    * Event system
    */

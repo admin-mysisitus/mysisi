@@ -1,4 +1,4 @@
-(function () {
+(function() {
   // Cari elemen footer utama
   const footer = document.querySelector("footer[aria-label='Informasi Footer']");
   if (!footer) return;

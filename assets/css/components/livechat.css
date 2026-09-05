@@ -641,15 +641,18 @@
 .livechat-widget .chat-input textarea::-webkit-scrollbar {
   width: 4px;
 }
+
 .livechat-widget .chat-input textarea::-webkit-scrollbar-track {
   background: transparent;
   margin-top: 8px;
   margin-bottom: 8px;
 }
+
 .livechat-widget .chat-input textarea::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
+
 .livechat-widget .chat-input textarea::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.25);
 }
@@ -869,16 +872,20 @@
   margin: 8px 0;
   list-style-position: outside;
 }
+
 .livechat-widget .msg-content ul {
   list-style-type: disc;
 }
+
 .livechat-widget .msg-content ol {
   list-style-type: decimal;
 }
+
 .livechat-widget .msg-content li {
   margin-bottom: 4px;
   display: list-item;
 }
+
 /* Noted Kak UI Styles */
 .livechat-widget .noted-kak-container {
   background: #f8fafc;
@@ -886,7 +893,7 @@
   border-radius: 8px;
   padding: 10px;
   margin-top: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .livechat-widget .noted-kak-header {
@@ -969,6 +976,11 @@
 }
 
 @keyframes livechat-custom-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

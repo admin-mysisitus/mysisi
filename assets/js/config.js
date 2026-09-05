@@ -1,4 +1,6 @@
-import { EnvHelper } from './modules/unified-utils.js';
+import {
+  EnvHelper
+} from './modules/unified-utils.js';
 // menu navbar — single source of truth untuk navigasi utama
 export const menuData = [{
   text: "Layanan",
@@ -63,7 +65,6 @@ export const menuData = [{
   icon: "fas fa-sign-in-alt",
   isAuth: true
 }];
-
 // footer kolom layanan utama
 export const mainServicesData = [{
   href: "/layanan/website/",
@@ -81,7 +82,6 @@ export const mainServicesData = [{
   href: "/promo/",
   text: "Promo & Penawaran"
 }];
-
 // footer kolom link cepat — info perusahaan & pendukung
 export const footerQuickLinksData = [{
   href: "/perusahaan/",
@@ -99,7 +99,6 @@ export const footerQuickLinksData = [{
   href: "/bantuan/",
   text: "Bantuan"
 }];
-
 // footer baris legal — link kebijakan hukum
 export const footerLegalData = [{
   href: "/perusahaan/legal/",

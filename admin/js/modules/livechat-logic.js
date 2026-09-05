@@ -103,7 +103,6 @@ function handleTypingIndicator(isTyping) {
       indicator.className = 'message system-message typing-indicator';
       indicator.innerHTML = `<span class="typing-text">User is typing</span> <img src="/assets/img/livechat/dots-typing.gif" class="typing-gif" alt="...">`;
       chatBox.appendChild(indicator);
-      
       // Jangan maksa scroll jika admin sedang di atas
       const scrollableHeight = chatBox.scrollHeight - chatBox.clientHeight;
       const distanceFromBottom = scrollableHeight - chatBox.scrollTop;
@@ -291,7 +290,6 @@ function selectRoom(roomId) {
     }, 10);
     replyInput.focus();
   }
-  
   // Set Auto-Pilot toggle state for this room
   const apToggle = document.getElementById('aiAutoPilotToggle');
   if (apToggle) {
@@ -437,99 +435,98 @@ if (attachBtn && fileInput) {
     }
   });
 }
-
 // AI Copilot Handlers
 var aiSuggestBtn = document.getElementById('aiSuggestBtn');
 var aiAutoPilotToggle = document.getElementById('aiAutoPilotToggle');
-
 if (aiAutoPilotToggle) {
   aiAutoPilotToggle.addEventListener('change', (e) => {
     if (activeRoom) {
       if (window.firebaseDB && window.firebaseHelpers) {
-        const { ref, update } = window.firebaseHelpers;
+        const {
+          ref,
+          update
+        } = window.firebaseHelpers;
         const roomRef = ref(window.firebaseDB, `rooms/${activeRoom}`);
-        update(roomRef, { autoPilot: e.target.checked }).catch(err => console.error('Gagal update Auto-Pilot', err));
+        update(roomRef, {
+          autoPilot: e.target.checked
+        }).catch(err => console.error('Gagal update Auto-Pilot', err));
       }
       autoPilotRooms[activeRoom] = e.target.checked;
       if (e.target.checked) {
-         messageRenderer?.addSystemMessage('<i class="fas fa-robot"></i> Auto-Pilot diaktifkan untuk obrolan ini.');
+        messageRenderer?.addSystemMessage('<i class="fas fa-robot"></i> Auto-Pilot diaktifkan untuk obrolan ini.');
       } else {
-         messageRenderer?.addSystemMessage('<i class="fas fa-user"></i> Auto-Pilot dimatikan. Anda dalam kendali manual.');
+        messageRenderer?.addSystemMessage('<i class="fas fa-user"></i> Auto-Pilot dimatikan. Anda dalam kendali manual.');
       }
     }
   });
 }
-
 if (aiSuggestBtn) {
   aiSuggestBtn.addEventListener('click', async () => {
     if (!activeRoom) return;
-    
     // Prevent double clicking by checking if already drafting
     if (aiSuggestBtn.disabled) return;
-    
     aiSuggestBtn.disabled = true;
     aiSuggestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     replyInput.placeholder = "AI sedang berpikir...";
-    
     try {
-       const res = await fetch('https://livechat.sisitusdotcom.workers.dev/', {
-           method: "POST",
-           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-           body: `action=draftAIReply&roomId=${activeRoom}&force=true`
-       });
-       
-       const resData = await res.json();
-       if (!res.ok || resData.status === 'error') {
-           console.error("AI Error:", resData);
-           alert("Gagal memanggil AI: " + (resData.message || resData.details || "Kesalahan tidak diketahui"));
-           messageRenderer?.addSystemMessage('❌ Gagal memanggil AI: ' + (resData.message || ''));
-       } else if (resData.draft) {
-           // Masukkan draft ke dalam kotak input text admin
-           replyInput.value = resData.draft;
-           // Fokuskan kursor ke input agar admin bisa langsung mengedit
-           replyInput.focus();
-       }
-    } catch(e) {
-       console.error('AI Suggest error:', e);
-       messageRenderer?.addSystemMessage('❌ Gagal memanggil AI.');
+      const res = await fetch('https://livechat.sisitusdotcom.workers.dev/', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `action=draftAIReply&roomId=${activeRoom}&force=true`
+      });
+      const resData = await res.json();
+      if (!res.ok || resData.status === 'error') {
+        console.error("AI Error:", resData);
+        alert("Gagal memanggil AI: " + (resData.message || resData.details || "Kesalahan tidak diketahui"));
+        messageRenderer?.addSystemMessage('❌ Gagal memanggil AI: ' + (resData.message || ''));
+      } else if (resData.draft) {
+        // Masukkan draft ke dalam kotak input text admin
+        replyInput.value = resData.draft;
+        // Fokuskan kursor ke input agar admin bisa langsung mengedit
+        replyInput.focus();
+      }
+    } catch (e) {
+      console.error('AI Suggest error:', e);
+      messageRenderer?.addSystemMessage('❌ Gagal memanggil AI.');
     } finally {
-       aiSuggestBtn.disabled = false;
-       aiSuggestBtn.innerHTML = '<i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i>';
-       replyInput.placeholder = "Ketik pesan di sini... (tekan Enter untuk mengirim)";
+      aiSuggestBtn.disabled = false;
+      aiSuggestBtn.innerHTML = '<i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i>';
+      replyInput.placeholder = "Ketik pesan di sini... (tekan Enter untuk mengirim)";
     }
   });
 }
-
 var typingTimeout = null;
 var QUICK_REPLIES = [];
 // Fetch quick replies from GAS configuration with caching
 async function loadQuickReplies() {
   try {
-      const cached = localStorage.getItem("livechat_quick_replies");
-      if (cached) {
-          const parsed = JSON.parse(cached);
-          if (parsed.timestamp && (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000)) {
-              QUICK_REPLIES = parsed.data;
-              return;
-          }
+    const cached = localStorage.getItem("livechat_quick_replies");
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (parsed.timestamp && (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000)) {
+        QUICK_REPLIES = parsed.data;
+        return;
       }
-      
-      const res = await fetch(CONFIG.GAS_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: "action=getQuickReplies"
-      });
-      const result = await res.json();
-      
-      if (result.status === "success" && Array.isArray(result.data)) {
-          QUICK_REPLIES = result.data;
-          localStorage.setItem("livechat_quick_replies", JSON.stringify({
-              timestamp: Date.now(),
-              data: QUICK_REPLIES
-          }));
-      }
+    }
+    const res = await fetch(CONFIG.GAS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "action=getQuickReplies"
+    });
+    const result = await res.json();
+    if (result.status === "success" && Array.isArray(result.data)) {
+      QUICK_REPLIES = result.data;
+      localStorage.setItem("livechat_quick_replies", JSON.stringify({
+        timestamp: Date.now(),
+        data: QUICK_REPLIES
+      }));
+    }
   } catch (err) {
-      console.error("Gagal memuat template Quick Reply dari server:", err);
+    console.error("Gagal memuat template Quick Reply dari server:", err);
   }
 }
 loadQuickReplies();
@@ -583,13 +580,11 @@ function initEventHandlers() {
   if (sendBtn) {
     sendBtn.addEventListener('click', () => sendReply(null));
   }
-
   // --- NEW: AI Settings Bindings (Using Event Delegation) ---
   document.addEventListener('click', (e) => {
     const aiSettingsBtn = e.target.closest('#aiSettingsBtn');
     const saveAiConfigBtn = e.target.closest('#saveAiConfigBtn');
     const archiveChatBtn = e.target.closest('#archiveChatBtn');
-
     if (aiSettingsBtn) {
       const aiConfigModal = document.getElementById('aiConfigModal');
       const aiConfigLoading = document.getElementById('aiConfigLoading');
@@ -598,38 +593,33 @@ function initEventHandlers() {
         alert('DEBUG: aiConfigModal tidak ditemukan di DOM. Coba Refresh (Ctrl+F5).');
         return;
       }
-
       aiConfigModal.style.display = 'flex';
       // Tambahkan timeout kecil agar transisi CSS berjalan
       setTimeout(() => aiConfigModal.classList.add('active'), 10);
       aiConfigLoading.style.display = 'flex';
       aiConfigForm.style.display = 'none';
-
       fetch(CONFIG.GAS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         body: 'action=getAiConfig'
-      })
-      .then(r => r.json())
-      .then(res => {
+      }).then(r => r.json()).then(res => {
         if (res.status === 'success') {
           const cfgTargetEmail = document.getElementById('cfgTargetEmail');
           const cfgAiModel = document.getElementById('cfgAiModel');
           const cfgPrompt = document.getElementById('cfgPrompt');
-
-          if(cfgTargetEmail) cfgTargetEmail.value = res.data.config['Target Email'] || '';
-          if(cfgAiModel) cfgAiModel.value = res.data.config['AI Model'] || '';
-          if(cfgPrompt) cfgPrompt.value = res.data.prompt || '';
+          if (cfgTargetEmail) cfgTargetEmail.value = res.data.config['Target Email'] || '';
+          if (cfgAiModel) cfgAiModel.value = res.data.config['AI Model'] || '';
+          if (cfgPrompt) cfgPrompt.value = res.data.prompt || '';
         }
         aiConfigLoading.style.display = 'none';
         aiConfigForm.style.display = 'flex';
-      })
-      .catch(err => {
+      }).catch(err => {
         console.error(err);
         aiConfigLoading.innerHTML = '<p style="color:red">Gagal memuat pengaturan.</p>';
       });
     }
-
     if (saveAiConfigBtn) {
       const aiConfigModal = document.getElementById('aiConfigModal');
       const payload = {
@@ -639,18 +629,16 @@ function initEventHandlers() {
         },
         prompt: document.getElementById('cfgPrompt') ? document.getElementById('cfgPrompt').value : ''
       };
-
       const origText = saveAiConfigBtn.innerHTML;
       saveAiConfigBtn.disabled = true;
       saveAiConfigBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-
       fetch(CONFIG.GAS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         body: `action=saveAiConfig&payload=${encodeURIComponent(JSON.stringify(payload))}`
-      })
-      .then(r => r.json())
-      .then(res => {
+      }).then(r => r.json()).then(res => {
         saveAiConfigBtn.disabled = false;
         saveAiConfigBtn.innerHTML = '<i class="fas fa-check"></i> Tersimpan!';
         setTimeout(() => {
@@ -660,30 +648,26 @@ function initEventHandlers() {
             setTimeout(() => aiConfigModal.style.display = 'none', 300);
           }
         }, 1500);
-      })
-      .catch(err => {
+      }).catch(err => {
         console.error(err);
         saveAiConfigBtn.disabled = false;
         saveAiConfigBtn.innerHTML = origText;
         alert('Gagal menyimpan. Periksa koneksi internet.');
       });
     }
-
     if (archiveChatBtn) {
       if (!activeRoom) return;
       if (!confirm("Arsipkan dan selesaikan obrolan ini secara permanen? Data akan dipindahkan ke Sheets.")) return;
-      
       const origText = archiveChatBtn.innerHTML;
       archiveChatBtn.disabled = true;
       archiveChatBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengarsipkan...';
-
       fetch(CONFIG.GAS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         body: `action=archiveChat&roomId=${activeRoom}`
-      })
-      .then(r => r.json())
-      .then(res => {
+      }).then(r => r.json()).then(res => {
         archiveChatBtn.disabled = false;
         archiveChatBtn.innerHTML = origText;
         if (res.status === 'success') {
@@ -695,8 +679,7 @@ function initEventHandlers() {
         } else {
           alert('Gagal mengarsipkan: ' + res.message);
         }
-      })
-      .catch(err => {
+      }).catch(err => {
         console.error(err);
         archiveChatBtn.disabled = false;
         archiveChatBtn.innerHTML = origText;
@@ -709,12 +692,10 @@ function initEventHandlers() {
       // Auto-resize textarea (set to 1px first to force shrink calculation)
       this.style.height = '1px';
       this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-
       // Simpan draft per room
       if (activeRoom) {
         localStorage.setItem(`livechat_admin_draft_${activeRoom}`, this.value);
       }
-
       // Quick Reply Logic
       const val = replyInput.value;
       const popup = document.getElementById('quickReplyPopup');
@@ -786,16 +767,13 @@ function initEventHandlers() {
           // Di ponsel: Enter = Baris Baru (default textarea)
           return;
         }
-
         // Di Desktop:
         if (e.shiftKey) {
           // Shift+Enter = Baris Baru
           return;
         }
-
         // Enter saja = Kirim Pesan
         e.preventDefault();
-        
         if (typingTimeout) clearTimeout(typingTimeout);
         if (window.firebaseHelpers) {
           const {

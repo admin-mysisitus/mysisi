@@ -75,13 +75,11 @@ export class CartManager {
   static remove(domain) {
     const cart = this.getCart();
     cart.domains = cart.domains.filter(d => d.domain.toLowerCase() !== domain.toLowerCase());
-
     // DRY Principle: If cart becomes empty, clear all modifiers automatically
     if (cart.domains.length === 0) {
       cart.coupon = null;
       cart.addons = [];
     }
-
     this.saveCart(cart);
     return cart;
   }
@@ -120,7 +118,7 @@ export class CartManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      void ('[Cart] Parse error:', err);
+      void('[Cart] Parse error:', err);
       return {
         domains: [],
         addons: [],
@@ -142,10 +140,9 @@ export class CartManager {
         detail: calculated
       }));
     } catch (err) {
-      void ('[Cart] Save error:', err);
+      void('[Cart] Save error:', err);
     }
   }
-
   /**
    * Merge remote cart data with local cart
    */
@@ -153,17 +150,14 @@ export class CartManager {
     if (!remoteCart) return;
     const localCart = this.getCart();
     let updated = false;
-
     // Helper to safely iterate arrays or Firebase objects
     const iterate = (items, callback) => {
       if (!items) return;
       if (Array.isArray(items)) items.forEach(callback);
       else if (typeof items === 'object') Object.values(items).forEach(callback);
     };
-
     // Tolerate if remoteCart is directly an array OR an object with .domains
     const remoteDomains = Array.isArray(remoteCart) ? remoteCart : (remoteCart.domains || []);
-
     // Merge domains
     iterate(remoteDomains, remoteItem => {
       if (remoteItem && remoteItem.domain && !localCart.domains.some(localItem => localItem.domain === remoteItem.domain)) {
@@ -171,7 +165,6 @@ export class CartManager {
         updated = true;
       }
     });
-
     // Merge addons
     iterate(remoteCart.addons, remoteAddon => {
       if (remoteAddon && remoteAddon.id && !localCart.addons.some(localAddon => localAddon.id === remoteAddon.id)) {
@@ -179,17 +172,14 @@ export class CartManager {
         updated = true;
       }
     });
-
     if (remoteCart.coupon && !localCart.coupon) {
       localCart.coupon = remoteCart.coupon;
       updated = true;
     }
-
     if (updated || localCart.domains.length === 0) {
       this.saveCart(localCart);
     }
   }
-
   /**
    * Clear cart
    */
@@ -243,7 +233,7 @@ export class CartManager {
         cart
       };
     } catch (error) {
-      void ('[Cart] Error validating coupon:', error);
+      void('[Cart] Error validating coupon:', error);
       return {
         success: false,
         message: error.message
@@ -259,7 +249,6 @@ export class CartManager {
     this.saveCart(cart);
     return cart;
   }
-
   /**
    * Add addons to cart
 
@@ -342,7 +331,6 @@ export class CartManager {
         // Simpan harga terhitung kembali ke price properti agar sinkron (legacy support)
         domain.price = itemPrice;
         subtotal += itemPrice * (domain.duration || 1);
-
         // Calculate per-domain addon prices
         if (domain.addons && Array.isArray(domain.addons)) {
           domain.addons.forEach(addon => {
@@ -431,10 +419,12 @@ export class WishlistManager {
    * Clear all items from wishlist
    */
   static clear() {
-    this.saveWishlist({ domains: [], updatedAt: Date.now() });
+    this.saveWishlist({
+      domains: [],
+      updatedAt: Date.now()
+    });
     window.dispatchEvent(new CustomEvent('wishlist:cleared'));
   }
-
   /**
    * Move wishlist item to cart
    */
@@ -481,7 +471,7 @@ export class WishlistManager {
       }
       return JSON.parse(stored);
     } catch (err) {
-      void ('[Wishlist] Parse error:', err);
+      void('[Wishlist] Parse error:', err);
       return {
         domains: []
       };
@@ -497,10 +487,9 @@ export class WishlistManager {
         detail: wishlist
       }));
     } catch (err) {
-      void ('[Wishlist] Save error:', err);
+      void('[Wishlist] Save error:', err);
     }
   }
-
   /**
    * Merge remote wishlist with local wishlist
    */
@@ -508,29 +497,24 @@ export class WishlistManager {
     if (!remoteWishlist) return;
     const localWishlist = this.getWishlist();
     let updated = false;
-
     // Helper to safely iterate arrays or Firebase objects
     const iterate = (items, callback) => {
       if (!items) return;
       if (Array.isArray(items)) items.forEach(callback);
       else if (typeof items === 'object') Object.values(items).forEach(callback);
     };
-
     // Tolerate if remoteWishlist is directly an array OR an object with .domains
     const remoteDomains = Array.isArray(remoteWishlist) ? remoteWishlist : (remoteWishlist.domains || []);
-
     iterate(remoteDomains, remoteItem => {
       if (remoteItem && remoteItem.domain && !localWishlist.domains.some(localItem => localItem.domain === remoteItem.domain)) {
         localWishlist.domains.push(remoteItem);
         updated = true;
       }
     });
-
     if (updated || localWishlist.domains.length === 0) {
       this.saveWishlist(localWishlist);
     }
   }
-
   /**
    * Check if domain is in wishlist
    */
@@ -584,7 +568,7 @@ export class CartAnalytics {
     let abandoned_carts = [];
     try {
       abandoned_carts = JSON.parse(localStorage.getItem('abandoned_carts')) || [];
-    } catch (err) { }
+    } catch (err) {}
     abandoned_carts.push(abandoned);
     localStorage.setItem('abandoned_carts', JSON.stringify(abandoned_carts));
   }

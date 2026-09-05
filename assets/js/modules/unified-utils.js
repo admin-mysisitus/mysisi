@@ -514,7 +514,7 @@ export function getStorage(key, defaultValue = null) {
     }
     return data.value;
   } catch (error) {
-    void (`[Storage] Error reading ${key}:`, error);
+    void(`[Storage] Error reading ${key}:`, error);
     return defaultValue;
   }
 }
@@ -529,7 +529,7 @@ export function setStorage(key, value, expirationMinutes = null) {
     };
     localStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
-    void (`[Storage] Error writing ${key}:`, error);
+    void(`[Storage] Error writing ${key}:`, error);
   }
 }
 /**
@@ -562,7 +562,7 @@ export function getErrorMessage(error) {
  */
 export function handleAPIError(error, showNotification = true) {
   const message = getErrorMessage(error);
-  void ('[API Error]:', error);
+  void('[API Error]:', error);
   if (showNotification) {
     showError('Terjadi Kesalahan', message);
   }
@@ -690,11 +690,9 @@ export const EnvHelper = {
   isLocal: () => {
     return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   },
-  
   getDomainUrl: (subdomain, path = '') => {
     const isLocal = EnvHelper.isLocal();
     const cleanPath = path.startsWith('/') ? path : '/' + path;
-    
     if (isLocal) {
       if (subdomain === 'my') {
         return window.location.origin + '/my' + (cleanPath === '/' ? '' : cleanPath);
@@ -712,11 +710,9 @@ export const EnvHelper = {
         return 'https://sisitus.com' + cleanPath;
       }
     }
-    
     return cleanPath;
   }
 };
-
 // ========== EXPORT ALL ==========
 export const Utilities = {
   // Notifications

@@ -222,7 +222,6 @@ function openModal() {
   }
   chatModal.style.display = 'flex';
   modalOverlay.style.display = 'block';
-  
   // Kembalikan posisi scroll setelah modal terbuka (karena tidak bisa di-set saat display: none)
   if (messages) {
     const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
@@ -304,7 +303,6 @@ function openModal() {
                     }
                   }
                 }
-
                 if (treatAsFirstTime) {
                   autoSendAdminMessage(`Halo Sisi's! Selamat ${getGreetingTime()}. Terima kasih telah menghubungi kami.`);
                   setTimeout(() => autoSendAdminMessage(`Perkenalkan, saya ${currentAgent.name} (Customer Support). Ada yang bisa saya bantu hari ini?`), 1500);
@@ -400,17 +398,17 @@ async function sendMessage(attachmentUrl = null) {
     // Delayed to ensure Firebase write has been committed
     setTimeout(() => {
       fetch('https://livechat.sisitusdotcom.workers.dev/', {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: `action=generateAIReply&roomId=${conversationId}`
-      })
-      .then(async res => {
-          if (!res.ok) {
-              const err = await res.text();
-              console.error("Auto-Pilot API Error:", res.status, err);
-          }
-      })
-      .catch(e => console.error("Auto-Pilot trigger network failed:", e));
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `action=generateAIReply&roomId=${conversationId}`
+      }).then(async res => {
+        if (!res.ok) {
+          const err = await res.text();
+          console.error("Auto-Pilot API Error:", res.status, err);
+        }
+      }).catch(e => console.error("Auto-Pilot trigger network failed:", e));
     }, 1500);
   } catch (error) {
     console.log('Error sending message:', error);
@@ -518,10 +516,8 @@ if (input) {
     // Auto-resize textarea
     this.style.height = '';
     this.style.height = Math.min(this.scrollHeight + 2, 100) + 'px';
-
     // Simpan draft agar tidak hilang
     localStorage.setItem('livechat_user_draft', this.value);
-
     resetInactiveTimer();
     if (!conversationId) return;
     const {
@@ -539,19 +535,16 @@ if (input) {
   input.addEventListener('keydown', (e) => {
     resetInactiveTimer();
     const isMobile = window.innerWidth <= 768;
-
     if (e.key === 'Enter') {
       if (isMobile) {
         // Di ponsel: Enter = Baris Baru (default textarea)
         return;
       }
-
       // Di Desktop:
       if (e.shiftKey) {
         // Shift+Enter = Baris Baru
         return;
       }
-
       // Enter saja = Kirim Pesan
       e.preventDefault();
       if (!isWaiting && input.value.trim().length > 0) {

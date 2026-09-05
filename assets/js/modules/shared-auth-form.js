@@ -23,7 +23,10 @@ import {
   initPasswordToggle,
   EnvHelper
 } from '/assets/js/modules/unified-utils.js';
-import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
+import {
+  CartManager,
+  WishlistManager
+} from '/assets/js/modules/unified-cart.js';
 export class SharedAuthForm {
   constructor(options = {}) {
     this.options = {
@@ -602,11 +605,15 @@ export class SharedAuthForm {
       // Call register API
       let result;
       if (EnvHelper.getDomainType() === 'public') {
-        result = await this.delegateAuth('register', { email, password, displayName, whatsapp });
+        result = await this.delegateAuth('register', {
+          email,
+          password,
+          displayName,
+          whatsapp
+        });
       } else {
         result = await APIClient.registerUser(email, password, displayName, whatsapp);
       }
-      
       if (!result.success) {
         throw new Error(result.message || 'Registrasi gagal');
       }
@@ -666,11 +673,13 @@ export class SharedAuthForm {
       // Call login API
       let result;
       if (EnvHelper.getDomainType() === 'public') {
-        result = await this.delegateAuth('login', { email, password });
+        result = await this.delegateAuth('login', {
+          email,
+          password
+        });
       } else {
         result = await APIClient.loginUser(email, password);
       }
-      
       if (!result.success) {
         if (result.rateLimit && result.rateLimit.remainingSec > 0) {
           this.startCountdown(form.querySelector('button[type="submit"]'), result.rateLimit.remainingSec);
@@ -874,7 +883,6 @@ export class SharedAuthForm {
       textEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Nomor terlalu pendek';
     }
   }
-
   /**
    * Mendelegasikan autentikasi secara aman menggunakan Popup (Cross-Domain anti Storage Partitioning)
    */
@@ -882,28 +890,22 @@ export class SharedAuthForm {
     return new Promise((resolve) => {
       // Buka popup ke sso-popup.html
       const popupUrl = EnvHelper.getDomainUrl('my', '/auth/sso-popup.html');
-      
       // Hitung posisi tengah layar untuk popup
       const width = 450;
       const height = 550;
       const left = (window.screen.width / 2) - (width / 2);
       const top = (window.screen.height / 2) - (height / 2);
-      
-      const popup = window.open(
-        popupUrl, 
-        'SSO_Auth', 
-        `width=${width},height=${height},top=${top},left=${left},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
-      );
-
+      const popup = window.open(popupUrl, 'SSO_Auth', `width=${width},height=${height},top=${top},left=${left},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`);
       if (!popup) {
-        resolve({ success: false, message: 'Popup diblokir oleh browser. Izinkan popup untuk melanjutkan.' });
+        resolve({
+          success: false,
+          message: 'Popup diblokir oleh browser. Izinkan popup untuk melanjutkan.'
+        });
         return;
       }
-
       const handler = (event) => {
         const allowedOrigins = ['https://my.sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
         if (!allowedOrigins.includes(event.origin)) return;
-        
         // Popup sudah siap menerima data
         if (event.data && event.data.type === 'SISITUS_POPUP_READY') {
           popup.postMessage({
@@ -916,35 +918,44 @@ export class SharedAuthForm {
             }
           }, '*');
         }
-        
         // Popup selesai memproses dan mengembalikan hasil
         if (event.data && event.data.type === 'SISITUS_DELEGATE_SUCCESS' && event.data.action === action) {
           window.removeEventListener('message', handler);
           if (event.data.success) {
-            resolve({ success: true, data: event.data.userData });
+            resolve({
+              success: true,
+              data: event.data.userData
+            });
           } else {
-            resolve({ success: false, message: event.data.message || 'Delegasi login gagal', rateLimit: event.data.rateLimit });
+            resolve({
+              success: false,
+              message: event.data.message || 'Delegasi login gagal',
+              rateLimit: event.data.rateLimit
+            });
           }
         }
       };
-      
       window.addEventListener('message', handler);
-
       // Cek secara berkala apakah pengguna menutup popup secara manual
       const checkClosed = setInterval(() => {
         if (popup.closed) {
           clearInterval(checkClosed);
           window.removeEventListener('message', handler);
-          resolve({ success: false, message: 'Otentikasi dibatalkan' });
+          resolve({
+            success: false,
+            message: 'Otentikasi dibatalkan'
+          });
         }
       }, 500);
-
       // Timeout absolut (30 detik untuk berjaga-jaga jika proses Firebase lambat)
       setTimeout(() => {
         clearInterval(checkClosed);
         window.removeEventListener('message', handler);
         if (!popup.closed) popup.close();
-        resolve({ success: false, message: 'Request timeout' });
+        resolve({
+          success: false,
+          message: 'Request timeout'
+        });
       }, 30000);
     });
   }

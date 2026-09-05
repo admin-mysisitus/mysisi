@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <title>SSO Provider - SISITUS</title>
 </head>
+
 <body>
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
     import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
     import APIClient from '/assets/js/modules/unified-api.js';
-
+    
     // Origin whitelist strict
     const allowedOrigins = ['https://sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
     const trustedClients = new Map(); // Menyimpan source -> origin untuk broadcast
-
+    
     const getCartCount = () => {
       try {
         const cart = CartManager.getCart();
@@ -21,7 +23,7 @@
       } catch(e) {}
       return 0;
     };
-
+    
     const getWishlistDomains = () => {
       try {
         const wishlist = WishlistManager.getWishlist();
@@ -29,10 +31,10 @@
       } catch(e) {}
       return [];
     };
-
+    
     const broadcastState = () => {
       const user = AuthManager.getCurrentUser();
-
+    
       // Filter payload agar hanya mengirim data visual minimal (tanpa token, credential, uid)
       const payload = {
         type: 'SISITUS_SSO_STATE',
@@ -47,7 +49,7 @@
         cartCount: user ? getCartCount() : undefined,
         wishlistDomains: user ? getWishlistDomains() : undefined
       };
-
+    
       // Kirim hanya ke client yang sudah terverifikasi lewat handshake
       trustedClients.forEach((origin, source) => {
         try {
@@ -55,16 +57,16 @@
         } catch(e) {}
       });
     };
-
+    
     // Dengarkan request dari parent window (Handshake Protocol)
     window.addEventListener('message', (event) => {
       if (!allowedOrigins.includes(event.origin)) return;
-
+    
       if (event.data && event.data.type === 'SISITUS_SSO_REQUEST') {
         trustedClients.set(event.source, event.origin);
         broadcastState(); // Kirim state saat ini juga
       }
-
+    
       // Handoff Protocol: Terima guest cart dan balas dengan ACK jika sukses
       if (event.data && event.data.type === 'SISITUS_GUEST_HANDOFF') {
         if (!AuthManager.isLoggedIn()) {
@@ -78,7 +80,7 @@
               WishlistManager.saveWishlist(event.data.wishlist);
               saved = true;
             }
-
+    
             // Hanya kirim ACK jika penyimpanan berhasil dan memang Guest
             if (saved && event.source) {
               event.source.postMessage({ type: 'SISITUS_GUEST_HANDOFF_ACK' }, event.origin);
@@ -88,7 +90,7 @@
           }
         }
       }
-
+    
       // Handoff Protocol: Delegated Wishlist Action
       if (event.data && event.data.type === 'SISITUS_DELEGATE_WISHLIST_TOGGLE') {
         if (event.data.domain) {
@@ -101,25 +103,26 @@
         }
       }
     });
-
+    
     // Dengarkan perubahan state autentikasi internal (dari Firebase via AuthManager)
     document.addEventListener('auth:authChanged', () => {
       broadcastState();
     });
-
+    
     window.addEventListener('wishlist:updated', () => {
       broadcastState();
     });
-
+    
     // Dengarkan perubahan storage murni (sinkronisasi cart lintas tab dashboard)
     window.addEventListener('storage', (e) => {
       if (e.key === 'cart' || e.key === 'wishlist') {
         broadcastState();
       }
     });
-
+    
     // Inisialisasi AuthManager
     AuthManager.init();
   </script>
 </body>
+
 </html>

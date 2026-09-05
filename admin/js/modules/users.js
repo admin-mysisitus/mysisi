@@ -7,7 +7,7 @@ import {
 } from '/assets/js/modules/unified-utils.js';
 let currentUsers = [];
 export async function render() {
-  void ('Admin Users Module Loaded');
+  void('Admin Users Module Loaded');
   setupEventListeners();
   await loadUsers();
 }
@@ -57,7 +57,7 @@ function setupEventListeners() {
           throw new Error(res.message);
         }
       } catch (error) {
-        void (error);
+        void(error);
         if (typeof Swal !== 'undefined') {
           Swal.fire({
             icon: 'error',
@@ -162,7 +162,7 @@ async function loadUsers() {
       throw new Error(response.message || 'Gagal memuat user');
     }
   } catch (error) {
-    void ('Failed to load users:', error);
+    void('Failed to load users:', error);
     tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--admin-danger);">Error: ${error.message}</td></tr>`;
   }
 }

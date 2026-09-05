@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <title>SSO Hub</title>
@@ -8,17 +9,17 @@
     body { display: none; }
   </style>
 </head>
+
 <body>
   <!-- Firebase Core -->
   <script type="module" src="/assets/js/modules/firebase-core.js"></script>
   <!-- Unified Cart -->
   <script type="module" src="/assets/js/modules/unified-cart.js"></script>
-  
   <script type="module">
     import { getFirebase } from '/assets/js/modules/firebase-core.js';
     import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
-
+    
     let allowedOrigins = [
       'https://sisitus.com',
       'https://www.sisitus.com',
@@ -26,7 +27,7 @@
       'http://127.0.0.1:5500',
       window.location.origin
     ];
-
+    
     async function init() {
       try {
         const { auth } = await getFirebase();
@@ -36,16 +37,16 @@
           if (!allowedOrigins.some(origin => event.origin.startsWith(origin))) {
             return;
           }
-
+    
           const { type, payload } = event.data;
-
+    
           if (type === 'SSO_REQUEST_SYNC') {
             // Check session via AuthManager instead of raw firebase to ensure metadata consistency
             const currentUser = AuthManager.getCurrentUser();
             
             const cartData = CartManager.getCart();
             const wishlistData = WishlistManager.getWishlist();
-
+    
             event.source.postMessage({
               type: 'SSO_SYNC_RESPONSE',
               payload: {
@@ -73,8 +74,9 @@
         console.error('[SSO Hub] Init error:', err);
       }
     }
-
+    
     init();
   </script>
 </body>
+
 </html>

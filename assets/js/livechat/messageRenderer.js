@@ -22,24 +22,20 @@ class MessageRenderer {
     this.elementCache = new Map();
     // Track rendered message IDs
     this.renderedIds = new Set();
-    
     // Hapus tombol lama jika komponen diinisialisasi ulang (mencegah duplikasi)
     const oldBtn = this.container.parentElement.querySelector('.lc-scroll-bottom-btn');
     if (oldBtn) {
       oldBtn.remove();
     }
-    
     // Hapus event listener lama di kontainer jika ada
     if (this.container._lcScrollHandler) {
       this.container.removeEventListener('scroll', this.container._lcScrollHandler);
     }
-    
     // Inisiasi Tombol Scroll to Bottom
     this.scrollBtn = document.createElement('button');
     this.scrollBtn.className = 'lc-scroll-bottom-btn';
     this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
     this.scrollBtn.title = 'Ke pesan terbaru';
-    
     // Gunakan inline styling agar praktis dan tidak bergantung CSS eksternal
     Object.assign(this.scrollBtn.style, {
       position: 'absolute',
@@ -60,28 +56,22 @@ class MessageRenderer {
       transition: 'all 0.2s ease',
       outline: 'none'
     });
-
     if (window.getComputedStyle(this.container.parentElement).position === 'static') {
       this.container.parentElement.style.position = 'relative';
     }
-    
     this.container.parentElement.appendChild(this.scrollBtn);
-
     // Event listener ketika tombol ditekan
     this.scrollBtn.addEventListener('click', () => {
       this.scrollToBottom(true);
     });
-
     // Event listener scroll pada kontainer chat
     this.container._lcScrollHandler = () => {
       // Simpan posisi scroll ke localStorage agar tidak hilang saat pindah halaman
       localStorage.setItem('livechat_scroll_pos', this.container.scrollTop);
-
       // Tombol hanya muncul jika ada scroll (scrollable) DAN tidak sedang di area bawah (300px)
       const scrollableHeight = this.container.scrollHeight - this.container.clientHeight;
       const isScrollable = scrollableHeight > 0;
       const distanceFromBottom = scrollableHeight - this.container.scrollTop;
-      
       if (isScrollable && distanceFromBottom > 250) {
         this.scrollBtn.style.display = 'flex';
       } else {
@@ -90,7 +80,6 @@ class MessageRenderer {
         this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
       }
     };
-    
     this.container.addEventListener('scroll', this.container._lcScrollHandler);
   }
   // ========================================
@@ -117,7 +106,7 @@ class MessageRenderer {
       if (!seenIds.has(msg.id)) {
         seenIds.add(msg.id);
         deduplicatedMessages.push(msg);
-      } else { }
+      } else {}
     }
     // Only render messages not yet in DOM (incremental approach)
     const newMessages = deduplicatedMessages.filter(msg => !this.renderedIds.has(msg.id));
@@ -127,7 +116,6 @@ class MessageRenderer {
     // Check if we should auto-scroll (FIX #6)
     const shouldScroll = this._shouldAutoScroll();
     const isInitialLoad = (this.renderedIds.size === 0);
-
     // Build fragment with only new messages
     const fragment = document.createDocumentFragment();
     newMessages.forEach(message => {
@@ -143,7 +131,6 @@ class MessageRenderer {
       this.container.appendChild(fragment);
       this._applyGrouping();
     }
-
     // Conditional scroll (FIX #7: Only if needed)
     if (isInitialLoad) {
       const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
@@ -301,13 +288,11 @@ class MessageRenderer {
     }
     // Check scroll position BEFORE adding message
     const shouldScroll = this._shouldAutoScroll();
-    
     // Append and cache
     this.container.appendChild(msgEl);
     this.elementCache.set(messageId, msgEl);
     this.renderedIds.add(messageId);
     this._applyGrouping();
-    
     // Conditional auto-scroll
     if (shouldScroll) {
       this.scrollToBottom();
@@ -317,7 +302,6 @@ class MessageRenderer {
       this.scrollBtn.style.color = '#ef4444'; // Red color
       this.scrollBtn.innerHTML = '<i class="fas fa-chevron-down"></i><span style="position:absolute;top:4px;right:6px;width:8px;height:8px;background-color:#ef4444;border-radius:50%;border:2px solid #fff;"></span>';
     }
-    
     return msgEl;
   }
   /**
@@ -489,7 +473,7 @@ class MessageRenderer {
               imgContainer.style.background = 'transparent';
               try {
                 sessionStorage.setItem(cacheKey, data.fileData);
-              } catch (e) { } // Ignore quota errors
+              } catch (e) {} // Ignore quota errors
             } else {
               throw new Error("Invalid response");
             }
@@ -566,24 +550,19 @@ class MessageRenderer {
     div.textContent = text;
     return div.innerHTML;
   }
-
   /**
    * Parse [Key: Value] into Noted UI
    */
   _parseNotedTags(text) {
     if (!text || typeof text !== 'string') return text;
-
     let parsedText = text;
     let waHtml = '';
-
     // Tangkap perintah WhatsApp
     if (parsedText.includes('[ACTION: WHATSAPP]')) {
       parsedText = parsedText.replace(/\[ACTION:\s*WHATSAPP\]/gi, '').trim();
       waHtml = `<div class="wa-action-container"><a href="https://wa.me/62882010067695" target="_blank" class="btn-whatsapp-payment"><i class="fab fa-whatsapp"></i> Konfirmasi Pesanan</a></div>`;
     }
-
     const notedRegex = /\[([^\]]+?):\s*([^\]]+?)\]/g;
-
     // Check if there are any matches for Noted Kak
     if (!notedRegex.test(parsedText)) {
       let tempHtml = parsedText.trim();
@@ -592,21 +571,16 @@ class MessageRenderer {
       }
       return tempHtml.replace(/^(<br\s*\/?>)+/gi, '').trim();
     }
-
     // Reset regex index
     notedRegex.lastIndex = 0;
-
     let hasNotes = false;
     let notesHtml = '<div class="noted-kak-container"><div class="noted-kak-header"><i class="fas fa-clipboard-check"></i> Pesanan Dicatat</div>';
-
     parsedText = parsedText.replace(notedRegex, (match, key, value) => {
       hasNotes = true;
       notesHtml += `<div class="noted-kak-item"><i class="fas fa-check-circle"></i> <b>${key}:</b> ${value}</div>`;
       return ''; // Remove the raw tag from the text
     });
-
     notesHtml += '</div>';
-
     let finalHtml = parsedText.trim();
     if (hasNotes) {
       finalHtml += (finalHtml ? '<br><br>' : '') + notesHtml;
@@ -614,7 +588,6 @@ class MessageRenderer {
     if (waHtml) {
       finalHtml += (finalHtml ? '<br><br>' : '') + waHtml;
     }
-
     // Bersihkan sisa <br> di awal jika ada
     return finalHtml.replace(/^(<br\s*\/?>)+/gi, '').trim();
   }

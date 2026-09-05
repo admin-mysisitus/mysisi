@@ -228,11 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-
-
   // --- MERGED FROM TENTANG.JS ---
-
-  
   // ========== TIMELINE INTERACTIVE ==========
   const timelineItems = document.querySelectorAll('.timeline-item');
   timelineItems.forEach((item, index) => {
@@ -399,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function() {
       row2.appendChild(track2);
     }
   }
-
 });
 // ========== ANIMATION KEYFRAMES (injected via script) ==========
 const perusahaanStyle = document.createElement('style');

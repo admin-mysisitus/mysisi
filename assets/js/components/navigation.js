@@ -14,15 +14,19 @@ import {
   EnvHelper,
   Base64Utils
 } from '../modules/unified-utils.js';
-import { AuthManager } from '../modules/unified-auth.js';
-import { CartManager, WishlistManager } from '../modules/unified-cart.js';
+import {
+  AuthManager
+} from '../modules/unified-auth.js';
+import {
+  CartManager,
+  WishlistManager
+} from '../modules/unified-cart.js';
 const navElements = {
   btn: document.getElementById('nav-mobile-btn'),
   menu: document.getElementById('nav-mobile'),
   header: document.querySelector('header'),
   desktopNav: document.querySelector('.nav-desktop')
 };
-
 // Helper: Create profile menu item
 function createProfileMenuItem(user) {
   const li = document.createElement('li');
@@ -238,9 +242,7 @@ const setActiveLinks = () => {
     if (!rawHref || rawHref === '#') return;
     const linkPath = rawHref.replace(/\/$/, '') || '/';
     // cocokkan persis, atau currentPath berada di bawah path link ini
-    const isActive = linkPath === '/'
-      ? currentPath === '/'
-      : (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
+    const isActive = linkPath === '/' ? currentPath === '/' : (currentPath === linkPath || currentPath.startsWith(linkPath + '/'));
     if (isActive) {
       link.classList.add('active');
       if (currentPath === linkPath && link.offsetParent !== null) link.setAttribute('aria-current', 'page');
@@ -524,7 +526,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const payload = JSON.parse(Base64Utils.decode(hash.replace('#handoff=', '')));
       if (payload.cart) CartManager.mergeCart(payload.cart);
       if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
-      
       // Update User Session for visual UI sync
       if (payload.user !== undefined) {
         if (payload.user) {
@@ -533,14 +534,12 @@ document.addEventListener('DOMContentLoaded', () => {
           AuthManager.clearSession();
         }
       }
-
       // Clean URL
       window.history.replaceState(null, '', window.location.pathname + window.location.search);
     } catch (err) {
       console.log('[Navigation] Invalid handoff token:', err);
     }
   }
-
   // ==========================================
   // SSO HUB IFRAME SYNC (Background Sync)
   // ==========================================
@@ -548,50 +547,46 @@ document.addEventListener('DOMContentLoaded', () => {
   iframe.src = EnvHelper.getDomainUrl('my', '/auth/sso-hub.html');
   iframe.style.display = 'none';
   document.body.appendChild(iframe);
-
   window.addEventListener('message', (event) => {
     // Pastikan dari my.sisitus.com atau environment aktif
     if (!event.origin.includes('sisitus.com') && !event.origin.includes('localhost') && !event.origin.includes('127.0.0.1')) {
       return;
     }
-
     if (event.data && event.data.type === 'SSO_HUB_READY') {
       // Hub siap, kirim permintaan data (cart & user)
-      iframe.contentWindow.postMessage({ type: 'SSO_REQUEST_SYNC' }, '*');
+      iframe.contentWindow.postMessage({
+        type: 'SSO_REQUEST_SYNC'
+      }, '*');
     }
-    
     if (event.data && event.data.type === 'SSO_SYNC_RESPONSE') {
       const payload = event.data.payload;
-      
       let cartChanged = false;
       let wishlistChanged = false;
-      
       // Update UI if we got user data and we weren't aware of it locally
       const localUser = AuthManager.getCurrentUser();
       // Perbaikan: Jangan hapus sesi lokal jika payload.user null karena iframe storage sering terpartisi (3rd party cookie block)
       if (payload.user && (!localUser || localUser.uid !== payload.user.uid)) {
-         AuthManager.saveSession(payload.user);
-         cartChanged = true;
-         // Trigger auth event for navigation
-         document.dispatchEvent(new CustomEvent('auth:authChanged', { detail: payload.user }));
+        AuthManager.saveSession(payload.user);
+        cartChanged = true;
+        // Trigger auth event for navigation
+        document.dispatchEvent(new CustomEvent('auth:authChanged', {
+          detail: payload.user
+        }));
       }
-
       if (payload.cart) {
-         CartManager.mergeCart(payload.cart);
-         cartChanged = true; // trigger badge update
+        CartManager.mergeCart(payload.cart);
+        cartChanged = true; // trigger badge update
       }
       if (payload.wishlist) {
-         WishlistManager.mergeWishlist(payload.wishlist);
-         wishlistChanged = true;
+        WishlistManager.mergeWishlist(payload.wishlist);
+        wishlistChanged = true;
       }
-      
       if (cartChanged || wishlistChanged) {
-         updateFloatingCart();
+        updateFloatingCart();
       }
     }
   });
   // ==========================================
-
   // Always initialize floating cart
   updateFloatingCart();
   // Listen to cart updates
@@ -635,29 +630,22 @@ document.addEventListener('DOMContentLoaded', () => {
   generateFooterContact();
   generateFooterTrustBadges();
   generateFooterLegal();
-
   // Listen to auth state changes to dynamically update the navigation
   document.addEventListener('auth:authChanged', () => {
     refreshNavigation();
   });
-
   // Interceptor: Cegat navigasi ke Customer Portal untuk Handoff Guest Cart (Single Door Auth)
   document.addEventListener('click', async (e) => {
     const link = e.target.closest('a');
     if (!link) return;
-
     let href = link.getAttribute('href');
     if (!href) return;
-
     // Hanya cegat transisi ke auth atau dashboard Customer
     if (href.includes('/auth/') || href.includes('my.sisitus.com/auth') || href.includes('my.sisitus.com/dashboard')) {
       // Jika sudah login, biarkan langsung lewat
       if (window.SSO_USER) return;
-
       e.preventDefault();
-
       const cartData = CartManager.getCart();
-      
       let wishlistData = null;
       try {
         if (typeof WishlistManager !== 'undefined') {
@@ -668,24 +656,22 @@ document.addEventListener('DOMContentLoaded', () => {
           if (raw) wishlistData = JSON.parse(raw);
         }
       } catch (err) {}
-
       // Jika tidak ada data yang perlu di-handoff, langsung navigasi
       if (!cartData && !wishlistData) {
         window.location.href = link.href;
         return;
       }
-
       // Encode payload ke Base64
       try {
-        const handoffPayload = { cart: cartData, wishlist: wishlistData };
+        const handoffPayload = {
+          cart: cartData,
+          wishlist: wishlistData
+        };
         const handoffBase64 = btoa(JSON.stringify(handoffPayload));
-        
         // Ensure proper redirect structure
         const urlObj = new URL(link.href, window.location.origin);
-        
         // Append hash ke URL
         urlObj.hash = `handoff=${handoffBase64}`;
-        
         window.location.href = urlObj.toString();
       } catch (err) {
         console.log('Error creating handoff hash:', err);

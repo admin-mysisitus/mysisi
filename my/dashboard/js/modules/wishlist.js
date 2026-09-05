@@ -223,7 +223,6 @@ export async function render() {
     `;
   }
 }
-
 // Auto-refresh UI when wishlist data syncs from backend (e.g., after login)
 window.addEventListener('wishlist:updated', () => {
   const container = document.getElementById('wishlist-container');

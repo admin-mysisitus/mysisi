@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <title>Memproses Otentikasi...</title>
@@ -29,29 +30,29 @@
     }
   </style>
 </head>
+
 <body>
   <div class="spinner"></div>
   <p id="status-text">Memproses login aman...</p>
-
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
     import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
     import APIClient from '/assets/js/modules/unified-api.js';
-
+    
     // Beri tahu opener bahwa popup siap menerima kredensial
     if (window.opener) {
       window.opener.postMessage({ type: 'SISITUS_POPUP_READY' }, '*');
     }
-
+    
     // Dengarkan perintah otentikasi dari opener
     window.addEventListener('message', (event) => {
       const allowedOrigins = ['https://sisitus.com', 'http://localhost:5500', 'http://127.0.0.1:5500'];
       if (!allowedOrigins.includes(event.origin)) return;
-
+    
       if (event.data && event.data.type === 'SISITUS_DELEGATE_AUTH') {
         const { action, payload, handoff } = event.data;
         const opener = window.opener;
-
+    
         (async () => {
           try {
             // TERIMA GUEST HANDOFF (sebelum login, agar langsung ke-sync setelah login sukses)
@@ -59,7 +60,7 @@
               if (handoff.cart) CartManager.mergeCart(handoff.cart);
               if (handoff.wishlist) WishlistManager.mergeWishlist(handoff.wishlist);
             }
-
+    
             let result;
             if (action === 'login') {
               result = await APIClient.loginUser(payload.email, payload.password);
@@ -68,7 +69,7 @@
             } else {
               throw new Error('Tindakan tidak valid');
             }
-
+    
             if (result.success && result.data) {
               // Sesi sukses dibuat di my.sisitus.com (Top-Level karena popup)
               AuthManager.saveSession(result.data);
@@ -88,7 +89,7 @@
                   setTimeout(() => { unsubscribe(); resolve(); }, 3000);
                 });
               }
-
+    
               if (opener) {
                 opener.postMessage({
                   type: 'SISITUS_DELEGATE_SUCCESS',
@@ -119,7 +120,7 @@
         })();
       }
     });
-
+    
     // Inisialisasi Firebase & API Client
     AuthManager.init();
     
@@ -129,4 +130,5 @@
     }, 15000);
   </script>
 </body>
+
 </html>

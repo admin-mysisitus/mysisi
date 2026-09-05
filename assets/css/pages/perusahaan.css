@@ -1296,7 +1296,6 @@ details[open] .accordion-icon {
   border-radius: var(--radius-besar);
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  
   /* Compact layout: Number beside Title */
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1674,7 +1673,9 @@ details[open] .accordion-icon {
     padding: 0.5rem 1rem !important;
     font-size: 0.844rem !important;
   }
-}.eyebrow-text {
+}
+
+.eyebrow-text {
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 700;
