@@ -68,7 +68,7 @@ function _setupStoreSubscriptions() {
       const oldCount = userUnreadCount;
       recalculateUnread();
       if (userUnreadCount > oldCount) {
-        notificationAudio.play().catch(() => {});
+        notificationAudio.play().catch(() => { });
       }
     }
   });
@@ -125,7 +125,7 @@ function setAgent() {
     if (session && session.user && session.user.userId) {
       userId = session.user.userId;
     }
-  } catch (e) {}
+  } catch (e) { }
   if (userId) {
     conversationId = 'room-' + userId;
     localStorage.setItem('conversationId', conversationId);
@@ -146,7 +146,7 @@ function setAgent() {
   if (headerName) headerName.innerText = currentAgent.name;
   if (headerAvatar) {
     headerAvatar.src = currentAgent.avatar;
-    headerAvatar.onerror = function() {
+    headerAvatar.onerror = function () {
       this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="36" height="36"%3E%3Crect fill="%235B7C99" width="36" height="36"/%3E%3C/svg%3E';
     };
   }
@@ -263,10 +263,10 @@ function openModal() {
                   }
                 }
                 if (treatAsFirstTime) {
-                  autoSendAdminMessage(`Halo Sisi's! Selamat ${getGreetingTime()}. Terima kasih telah menghubungi kami.`);
+                  autoSendAdminMessage(`Halo kak!, Selamat ${getGreetingTime()}. Terima kasih telah menghubungi kami.`);
                   setTimeout(() => autoSendAdminMessage(`Perkenalkan, saya ${currentAgent.name} (Customer Support). Ada yang bisa saya bantu hari ini?`), 1500);
                 } else {
-                  autoSendAdminMessage(`Halo kembali! Ada yang bisa saya bantu lagi?`);
+                  autoSendAdminMessage(`Halo kak!, dengan saya ${currentAgent.name}. Ada yang bisa saya bantu hari ini?`);
                 }
               }
               input.disabled = false;
@@ -407,7 +407,7 @@ if (attachBtn && fileInput) {
     try {
       await new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = async function(event) {
+        reader.onload = async function (event) {
           try {
             const base64Data = event.target.result;
             const formData = new FormData();
@@ -458,7 +458,7 @@ if (sendBtn) {
   });
 }
 if (input) {
-  input.addEventListener('input', function(e) {
+  input.addEventListener('input', function (e) {
     this.style.height = '';
     this.style.height = Math.min(this.scrollHeight + 2, 100) + 'px';
     localStorage.setItem('livechat_user_draft', this.value);

@@ -71,7 +71,7 @@ class MessageRenderer {
       if (!seenIds.has(msg.id)) {
         seenIds.add(msg.id);
         deduplicatedMessages.push(msg);
-      } else {}
+      } else { }
     }
     const newMessages = deduplicatedMessages.filter(msg => !this.renderedIds.has(msg.id));
     if (newMessages.length === 0) {
@@ -181,7 +181,7 @@ class MessageRenderer {
   _scrollToBottom() {
     try {
       this.container.scrollTop = this.container.scrollHeight;
-    } catch (e) {}
+    } catch (e) { }
   }
   addMessage(message, currentUser = {
     type: "user"
@@ -360,7 +360,7 @@ class MessageRenderer {
               imgContainer.style.background = 'transparent';
               try {
                 sessionStorage.setItem(cacheKey, data.fileData);
-              } catch (e) {}
+              } catch (e) { }
             } else {
               throw new Error("Invalid response");
             }
