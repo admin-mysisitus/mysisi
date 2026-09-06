@@ -6,7 +6,7 @@ import './components/date-time.js';
 import './components/hero.js';
 import './components/section-animation.js';
 import './components/popup-promo.js';
-import './components/live-chat.js';
+import './components/floating-promo.js';
 import './wm.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const packageElements = document.querySelectorAll('[data-package]');

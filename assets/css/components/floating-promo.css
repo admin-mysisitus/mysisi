@@ -1,0 +1,379 @@
+/* Base styles - Realistic Product Tag */
+.floating-promo-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 990;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  /* Removed red glowing shadow, replaced with a realistic dark shadow */
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15)) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.floating-promo-container.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.promo-widget-card {
+  padding: 12px 16px 12px 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-decoration: none;
+  font-family: inherit;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: max-content;
+  position: relative;
+  z-index: 2;
+  transform: rotate(-1.5deg);
+  /* Natural tilt for a hand-placed look */
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.05));
+}
+
+/* The Pointed Tag Background - Organic Hand-Cut Shape & Texture */
+.promo-widget-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Ribbed fabric/paper texture + red gradient */
+  background:
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 255, 255, 0.035) 2px, rgba(255, 255, 255, 0.035) 4px),
+    linear-gradient(135deg, #EF4444 0%, #EA580C 100%);
+  clip-path: polygon(22px 2%, 99% 0%, 100% 98%, 21px 100%, 0 53%);
+  /* Slightly asymmetrical sharp tip */
+  border-radius: 8px 12px 10px 6px;
+  /* Imperfect, hand-drawn right corners */
+  z-index: -2;
+}
+
+/* Perfect alignment hardware (Eyelet + String) */
+.promo-widget-hardware {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  z-index: 5;
+}
+
+.promo-widget-eyelet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 2px solid #E5E7EB;
+  box-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.promo-widget-string {
+  position: absolute;
+  left: -26px;
+  top: -38px;
+  width: 40px;
+  height: 60px;
+  transform: scale(0.85);
+  transform-origin: 32px 44px;
+  z-index: -1;
+  pointer-events: none;
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+.promo-widget-card:hover {
+  transform: translateY(-4px) rotate(0.5deg);
+  /* Playful hover bounce without scale to prevent text blur */
+}
+
+.promo-widget-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border: 1px solid #FEE2E2;
+  border-radius: 40% 60% 70% 50% / 50% 50% 60% 40%;
+  /* Hand-drawn organic circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EF4444;
+  font-size: 9px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.promo-widget-close:hover {
+  background: #FEE2E2;
+  transform: rotate(90deg) scale(1.1);
+  border-radius: 50% 40% 50% 60% / 60% 50% 40% 50%;
+  /* Shift shape on hover */
+}
+
+/* Icon and Sound Waves - Popping Out */
+.promo-widget-icon {
+  position: absolute;
+  top: -20px;
+  left: 26px;
+  /* Digeser ke kiri agar tidak menabrak tombol close */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  z-index: 10;
+  transform: rotate(-15deg);
+  /* Tilted left for sticker look */
+}
+
+.icon-megaphone {
+  color: #F59E0B;
+  /* Brighter Amber Gold for a punchy promo feel */
+  position: relative;
+  z-index: 2;
+  animation: megaphoneShoutOrganic 3.5s cubic-bezier(0.36, 0, 0.66, 1) infinite;
+  /* Removed white outline, keeping only subtle drop shadow for depth */
+  text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes megaphoneShoutOrganic {
+
+  0%,
+  14%,
+  100% {
+    transform: rotate(-15deg) scale(1);
+  }
+
+  2% {
+    transform: rotate(-25deg) scale(1.1);
+  }
+
+  4% {
+    transform: rotate(-5deg) scale(1.1);
+  }
+
+  6% {
+    transform: rotate(-20deg) scale(1.05);
+  }
+
+  8% {
+    transform: rotate(-10deg) scale(1.05);
+  }
+
+  10% {
+    transform: rotate(-17deg) scale(1.02);
+  }
+
+  12% {
+    transform: rotate(-13deg) scale(1.02);
+  }
+}
+
+
+
+/* Content */
+.promo-widget-content {
+  display: contents;
+}
+
+.promo-widget-badges {
+  position: absolute;
+  left: 38px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-5deg);
+  /* Mengikuti arah tembakan corong */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: -1px;
+}
+
+.badge-label {
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  line-height: 0.9;
+  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.15);
+}
+
+.badge-label.promo {
+  color: #F59E0B;
+  /* Matches megaphone */
+  animation: badgeTextWiggle 3.5s cubic-bezier(0.36, 0, 0.66, 1) infinite;
+}
+
+.badge-label.terbaru {
+  color: #DC2626;
+  /* Brighter Crimson Red for better visibility */
+  animation: badgeTextWiggle 3.5s cubic-bezier(0.36, 0, 0.66, 1) infinite 0.1s;
+}
+
+@keyframes badgeTextWiggle {
+
+  0%,
+  14%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  2% {
+    transform: translateY(-2px) rotate(-4deg) scale(1.02);
+  }
+
+  4% {
+    transform: translateY(-2px) rotate(4deg) scale(1.02);
+  }
+
+  6% {
+    transform: translateY(-1px) rotate(-3deg) scale(1.01);
+  }
+
+  8% {
+    transform: translateY(-1px) rotate(3deg) scale(1.01);
+  }
+
+  10% {
+    transform: translateY(0) rotate(-2deg) scale(1.01);
+  }
+
+  12% {
+    transform: translateY(0) rotate(2deg) scale(1.01);
+  }
+}
+
+.promo-widget-value {
+  font-size: 16px;
+  font-weight: 900;
+  /* Extra bold agar menonjol */
+  color: #FEF08A;
+  /* Kuning terang (emas) agar sangat kontras dengan background merah */
+  letter-spacing: 0.5px;
+  text-shadow: 1px 2px 3px rgba(150, 0, 0, 0.6), 0px 0px 8px rgba(254, 240, 138, 0.4);
+  /* Kombinasi bayangan gelap dan pendar tipis */
+  line-height: 1.1;
+  margin-top: -2px;
+  transform: rotate(-2deg);
+  /* Rotasi asimetris lebih dinamis */
+}
+
+.promo-widget-desc {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.1;
+  transform: rotate(1deg);
+  /* Rotasi asimetris natural berlawanan */
+  margin-left: 2px;
+  /* Sedikit meleset dari teks atasnya */
+}
+
+/* Mobile Adjustments - Ultra Compact */
+@media (max-width: 639px) {
+  .floating-promo-container {
+    bottom: 12px;
+    left: 10px;
+  }
+
+  .promo-widget-card {
+    padding: 10px 10px 10px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    max-width: 155px;
+  }
+
+  .promo-widget-card::before {
+    clip-path: polygon(18px 2%, 99% 0%, 100% 98%, 17px 100%, 0 53%);
+    /* Organic sharp tip for mobile */
+    border-radius: 6px 10px 8px 4px;
+  }
+
+  .promo-widget-hardware {
+    left: 4px;
+    width: 10px;
+    height: 10px;
+  }
+
+  .promo-widget-eyelet {
+    border-width: 1.5px;
+  }
+
+  .promo-widget-string {
+    left: -27px;
+    top: -39px;
+    transform: scale(0.65);
+    transform-origin: 32px 44px;
+  }
+
+  .promo-widget-close {
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .promo-widget-icon {
+    top: -16px;
+    left: 18px;
+    /* Digeser ke kiri */
+    font-size: 22px;
+  }
+
+  .promo-widget-badges {
+    left: 26px;
+    /* Dirapatkan sangat dekat ke megaphone mobile agar selaras dengan desktop */
+    gap: -1px;
+  }
+
+  .badge-label {
+    font-size: 10px;
+    /* Diperbesar karena tidak ada blok latar belakang */
+  }
+
+  .promo-widget-value {
+    font-size: 14px;
+    /* Dibesarkan agar sangat mencolok di mobile */
+    margin-top: -1px;
+  }
+
+  .promo-widget-desc {
+    font-size: 8.5px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* Gelombang Teks Promo (Dengan jeda panjang agar tidak mengganggu) */
+.promo-widget-value span,
+.promo-widget-desc span {
+  animation: promoTextWaveAnim 10s infinite;
+  animation-delay: calc(var(--char-index) * 0.05s);
+}
+
+@keyframes promoTextWaveAnim {
+  0%,
+  3%,
+  100% {
+    transform: translateY(0);
+  }
+  1.5% {
+    transform: translateY(-4px);
+  }
+}
