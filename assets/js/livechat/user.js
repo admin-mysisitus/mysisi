@@ -2,6 +2,19 @@ const chatBtn = document.getElementById('chatBtn');
 const chatModal = document.getElementById('chatModal');
 const modalOverlay = document.getElementById('modalOverlay');
 const messages = document.getElementById('messages');
+
+// Memastikan Typing Indicator SELALU berada di urutan paling bawah
+if (messages) {
+  const typingObserver = new MutationObserver(() => {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator && indicator.nextElementSibling) {
+      messages.appendChild(indicator);
+      messages.scrollTop = messages.scrollHeight;
+    }
+  });
+  typingObserver.observe(messages, { childList: true });
+}
+
 const input = document.getElementById('input');
 const sendBtn = document.getElementById('sendBtn');
 const headerName = document.getElementById('headerName');

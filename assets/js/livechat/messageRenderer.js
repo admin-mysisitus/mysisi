@@ -91,6 +91,10 @@ class MessageRenderer {
     if (fragment.children.length > 0) {
       this.container.appendChild(fragment);
       this._applyGrouping();
+      const typingIndicator = document.getElementById('typingIndicator');
+      if (typingIndicator && this.container.contains(typingIndicator)) {
+        this.container.appendChild(typingIndicator);
+      }
     }
     if (isInitialLoad) {
       const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
@@ -129,6 +133,10 @@ class MessageRenderer {
     this.container.appendChild(msgEl);
     this.elementCache.set(message.id, msgEl);
     this.renderedIds.add(message.id);
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator && this.container.contains(typingIndicator)) {
+      this.container.appendChild(typingIndicator);
+    }
     return msgEl;
   }
   addMessages(messages, currentUser = {
@@ -161,6 +169,10 @@ class MessageRenderer {
     if (fragment.children.length > 0) {
       this.container.appendChild(fragment);
       this._applyGrouping();
+      const typingIndicator = document.getElementById('typingIndicator');
+      if (typingIndicator && this.container.contains(typingIndicator)) {
+        this.container.appendChild(typingIndicator);
+      }
     }
     if (addedCount > 0) {
       if (shouldScroll) {
@@ -212,6 +224,10 @@ class MessageRenderer {
     this.elementCache.set(messageId, msgEl);
     this.renderedIds.add(messageId);
     this._applyGrouping();
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator && this.container.contains(typingIndicator)) {
+      this.container.appendChild(typingIndicator);
+    }
     if (shouldScroll) {
       this.scrollToBottom();
     } else if (this.scrollBtn) {
