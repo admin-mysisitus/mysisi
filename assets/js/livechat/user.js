@@ -21,8 +21,9 @@ const headerName = document.getElementById('headerName');
 const headerAvatar = document.getElementById('headerAvatar');
 const chatHeader = document.getElementById('chatHeader');
 let inactiveTimer;
-let inactivityWarningTimer;
-let currentAgent = {};
+let inactivityWarningTimer = null;
+let currentAgent = null;
+let hasUserRespondedInSession = false;
 let isConversationEnded = false;
 let conversationId = localStorage.getItem('conversationId');
 let assignedAgent = null;
@@ -169,7 +170,7 @@ function resetInactiveTimer() {
   clearTimeout(inactiveTimer);
   clearTimeout(inactivityWarningTimer);
   inactivityWarningTimer = setTimeout(() => {
-    if (!isConversationEnded) {
+    if (!isConversationEnded && hasUserRespondedInSession) {
       autoSendAdminMessage(`Halo, masih dengan saya ${currentAgent.name}. Apakah masih ada yang ingin ditanyakan atau dibantu sebelum sesi obrolan ini saya akhiri?`);
     }
   }, CONFIG.TIMINGS.SESSION.inactivity_warning);
@@ -179,13 +180,16 @@ function resetInactiveTimer() {
 }
 
 function endConversation() {
-  autoSendAdminMessage('Karena tidak ada aktivitas, sesi percakapan ini akan saya tutup ya.');
-  setTimeout(() => {
-    autoSendAdminMessage('Senang berinteraksi dengan Anda! Semoga hari Anda menyenangkan dan jangan ragu untuk menghubungi kami kembali.');
-  }, 1500);
+  if (hasUserRespondedInSession) {
+    autoSendAdminMessage('Karena tidak ada aktivitas, sesi percakapan ini akan saya tutup ya.');
+    setTimeout(() => {
+      autoSendAdminMessage('Senang berinteraksi dengan Anda! Semoga hari Anda menyenangkan dan jangan ragu untuk menghubungi kami kembali.');
+    }, 1500);
+  }
   input.disabled = true;
   sendBtn.disabled = true;
   isConversationEnded = true;
+  hasUserRespondedInSession = false;
   syncEngine?.stopSync();
   setTimeout(() => {
     closeModal();
@@ -335,6 +339,10 @@ async function sendMessage(attachmentUrl = null) {
   if (!validateMessage(text) && !attachmentUrl) {
     return;
   }
+  
+  // Tandai bahwa user sudah pernah merespon
+  hasUserRespondedInSession = true;
+
   if (isWaiting) {
     messageRenderer?.addSystemMessage('⚠️ Tunggu sebentar, pesan sedang diproses...');
     return;
