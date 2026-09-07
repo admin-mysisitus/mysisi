@@ -157,6 +157,27 @@ class MessageStore {
     }
     return changed;
   }
+  removeMessage(messageId) {
+    if (this.messagesById.has(messageId)) {
+      this.messagesById.delete(messageId);
+      const index = this.messageIdOrder.indexOf(messageId);
+      if (index > -1) {
+        this.messageIdOrder.splice(index, 1);
+      }
+      for (const [clientId, msg] of this.messagesByClientId.entries()) {
+        if (msg.id === messageId) {
+          this.messagesByClientId.delete(clientId);
+          break;
+        }
+      }
+      if (this.messageRenderer && typeof this.messageRenderer.removeMessage === 'function') {
+        this.messageRenderer.removeMessage(messageId);
+      }
+      this._emit("messageRemoved", messageId);
+      return true;
+    }
+    return false;
+  }
   getAllMessages() {
     return this.messageIdOrder.map(id => this.messagesById.get(id)).filter(m => m);
   }

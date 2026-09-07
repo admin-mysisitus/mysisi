@@ -71,6 +71,10 @@ export async function getFirebase() {
               ref.on('child_changed', callback);
               return () => ref.off('child_changed', callback);
             },
+            onChildRemoved: (ref, callback) => {
+              ref.on('child_removed', callback);
+              return () => ref.off('child_removed', callback);
+            },
             push: (ref) => ref.push(),
             set: (ref, value) => ref.set(value),
             serverTimestamp: () => window.firebase.database.ServerValue.TIMESTAMP,

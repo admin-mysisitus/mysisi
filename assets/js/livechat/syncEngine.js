@@ -26,6 +26,7 @@ class SyncEngine {
     this.unsubscribeMessages = onChildAdded(messagesRef, (snapshot) => {
       const msg = snapshot.val();
       if (!msg) return;
+      msg.id = snapshot.key;
       this.messageStore.handleIncoming([msg]);
       this._scheduleRender();
       if (this.sessionCache) {
@@ -36,10 +37,20 @@ class SyncEngine {
     this.unsubscribeChanges = onChildChanged(messagesRef, (snapshot) => {
       const msg = snapshot.val();
       if (msg) {
+        msg.id = snapshot.key;
         this.messageStore.handleIncoming([msg]);
         this._scheduleRender();
       }
     });
+    const { onChildRemoved } = window.firebaseHelpers;
+    if (onChildRemoved) {
+      this.unsubscribeRemovals = onChildRemoved(messagesRef, (snapshot) => {
+        const msgKey = snapshot.key;
+        if (msgKey) {
+          this.messageStore.removeMessage(msgKey);
+        }
+      });
+    }
     if (this.onTypingCallback) {
       const typingRef = ref(db, `rooms/${roomId}/typing/${userType === 'user' ? 'admin' : 'user'}`);
       const {
@@ -59,6 +70,10 @@ class SyncEngine {
       this.unsubscribeChanges();
       this.unsubscribeChanges = null;
     }
+    if (this.unsubscribeRemovals) {
+      this.unsubscribeRemovals();
+      this.unsubscribeRemovals = null;
+    }
     if (this.unsubscribeTyping) {
       this.unsubscribeTyping();
       this.unsubscribeTyping = null;
@@ -66,15 +81,17 @@ class SyncEngine {
   }
   async syncNow() {
     if (!this.roomId) return;
-    const db = window.firebaseDB;
     const {
       ref,
       get
     } = window.firebaseHelpers;
-    const snapshot = await get(ref(db, `rooms/${this.roomId}/messages`));
+    const snapshot = await get(ref(window.firebaseDB, `rooms/${this.roomId}/messages`));
     if (snapshot.exists()) {
       const messagesObj = snapshot.val();
-      const msgs = Object.values(messagesObj);
+      const msgs = Object.entries(messagesObj).map(([key, msg]) => {
+        msg.id = key;
+        return msg;
+      });
       this.messageStore.handleIncoming(msgs);
       this._scheduleRender();
     }

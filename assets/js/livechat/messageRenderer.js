@@ -270,6 +270,27 @@ class MessageRenderer {
     this.elementCache.clear();
     this.renderedIds.clear();
   }
+  removeMessage(id) {
+    if (this.elementCache.has(id)) {
+      const el = this.elementCache.get(id);
+      if (el) {
+        el.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out, height 0.3s ease-out';
+        el.style.opacity = '0';
+        el.style.transform = 'scaleY(0)';
+        el.style.height = '0px';
+        el.style.margin = '0px';
+        el.style.padding = '0px';
+        el.style.overflow = 'hidden';
+        
+        setTimeout(() => {
+          if (el.parentElement) el.remove();
+        }, 300);
+      }
+      this.elementCache.delete(id);
+      this.renderedIds.delete(id);
+      setTimeout(() => this._applyGrouping(), 310);
+    }
+  }
   _applyGrouping() {
     if (!this.container) return;
     const messages = Array.from(this.container.children).filter(el => el.classList.contains('message') && !el.classList.contains('system-message') && !el.classList.contains('typing-indicator'));
@@ -296,6 +317,53 @@ class MessageRenderer {
     msg.setAttribute('data-sender-key', this._sanitize(senderKey));
     const msgContent = document.createElement('div');
     msgContent.classList.add('msg-content');
+    if (currentUser && currentUser.type === 'admin') {
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'admin-msg-delete-btn';
+      deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+      deleteBtn.title = 'Hapus pesan ini';
+      deleteBtn.style.position = 'absolute';
+      deleteBtn.style.top = '50%';
+      deleteBtn.style.transform = 'translateY(-50%)';
+      deleteBtn.style.background = 'white';
+      deleteBtn.style.border = '1px solid #fee2e2';
+      deleteBtn.style.color = '#ef4444';
+      deleteBtn.style.cursor = 'pointer';
+      deleteBtn.style.opacity = '0';
+      deleteBtn.style.transition = 'all 0.2s ease';
+      deleteBtn.style.fontSize = '12px';
+      deleteBtn.style.padding = '6px';
+      deleteBtn.style.borderRadius = '50%';
+      deleteBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+      deleteBtn.style.zIndex = '10';
+      
+      if (message.sender === 'admin') {
+        deleteBtn.style.left = '-36px';
+      } else {
+        deleteBtn.style.right = '-36px';
+      }
+
+      msg.style.position = 'relative';
+      msg.addEventListener('mouseenter', () => { deleteBtn.style.opacity = '1'; });
+      msg.addEventListener('mouseleave', () => { deleteBtn.style.opacity = '0'; });
+      
+      deleteBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (confirm('Yakin ingin menghapus pesan ini dari database?')) {
+          try {
+            const { ref, remove } = window.firebaseHelpers;
+            const db = window.firebaseDB;
+            if (ref && remove && db && message.roomId) {
+              await remove(ref(db, `rooms/${message.roomId}/messages/${message.id}`));
+            }
+          } catch (err) {
+            console.error("Gagal menghapus pesan:", err);
+            alert("Gagal menghapus pesan. Silakan coba lagi.");
+          }
+        }
+      });
+      msg.appendChild(deleteBtn);
+    }
     let nameTag = null;
     if (message.sender === 'admin') {
       nameTag = document.createElement('div');

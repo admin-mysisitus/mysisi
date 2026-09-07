@@ -170,7 +170,7 @@ function resetInactiveTimer() {
   clearTimeout(inactiveTimer);
   clearTimeout(inactivityWarningTimer);
   inactivityWarningTimer = setTimeout(() => {
-    if (!isConversationEnded && hasUserRespondedInSession) {
+    if (!isConversationEnded) {
       autoSendAdminMessage(`Halo, masih dengan saya ${currentAgent.name}. Apakah masih ada yang ingin ditanyakan atau dibantu sebelum sesi obrolan ini saya akhiri?`);
     }
   }, CONFIG.TIMINGS.SESSION.inactivity_warning);
@@ -180,12 +180,10 @@ function resetInactiveTimer() {
 }
 
 function endConversation() {
-  if (hasUserRespondedInSession) {
-    autoSendAdminMessage('Karena tidak ada aktivitas, sesi percakapan ini akan saya tutup ya.');
-    setTimeout(() => {
-      autoSendAdminMessage('Senang berinteraksi dengan Anda! Semoga hari Anda menyenangkan dan jangan ragu untuk menghubungi kami kembali.');
-    }, 1500);
-  }
+  autoSendAdminMessage('Karena tidak ada aktivitas, sesi percakapan ini akan saya tutup ya.');
+  setTimeout(() => {
+    autoSendAdminMessage('Senang berinteraksi dengan Anda! Semoga hari Anda menyenangkan dan jangan ragu untuk menghubungi kami kembali.');
+  }, 1500);
   input.disabled = true;
   sendBtn.disabled = true;
   isConversationEnded = true;
@@ -194,6 +192,40 @@ function endConversation() {
   setTimeout(() => {
     closeModal();
   }, CONFIG.TIMINGS.DELAYS.modal_close);
+}
+
+function cleanupOrphanedAutoMessages() {
+  if (!window.firebaseHelpers || !window.firebaseDB || !conversationId) return;
+  const { ref, remove } = window.firebaseHelpers;
+  const db = window.firebaseDB;
+  
+  if (typeof messageStore === 'undefined' || !messageStore) return;
+  const msgs = messageStore.getSortedMessages();
+  if (msgs.length === 0) return;
+  
+  let toDelete = [];
+  for (let i = msgs.length - 1; i >= 0; i--) {
+    const m = msgs[i];
+    if (m.sender === 'user') {
+      break;
+    }
+    const msgText = m.message || m.text || m.content || "";
+    const isAuto = msgText.includes("Karena tidak ada aktivitas") ||
+                   msgText.includes("Senang berinteraksi dengan Anda") ||
+                   msgText.includes("Apakah masih ada yang ingin ditanyakan") ||
+                   msgText.includes("Halo kak!, dengan saya") ||
+                   msgText.includes("Halo kak!, Selamat") ||
+                   msgText.includes("Perkenalkan, saya");
+    if (isAuto) {
+      toDelete.push(m.id);
+    } else {
+      break; 
+    }
+  }
+  
+  toDelete.forEach(msgId => {
+    remove(ref(db, `rooms/${conversationId}/messages/${msgId}`)).catch(e => console.error(e));
+  });
 }
 
 function openModal() {
@@ -281,6 +313,7 @@ function openModal() {
                     }
                   }
                 }
+                cleanupOrphanedAutoMessages();
                 if (treatAsFirstTime) {
                   autoSendAdminMessage(`Halo kak!, Selamat ${getGreetingTime()}. Terima kasih telah menghubungi kami.`);
                   setTimeout(() => autoSendAdminMessage(`Perkenalkan, saya ${currentAgent.name} (Customer Support). Ada yang bisa saya bantu hari ini?`), 1500);
