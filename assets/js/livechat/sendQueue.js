@@ -19,6 +19,7 @@ class SendQueue {
       createdAt: now,
       status: "sending",
       agent: messageData.agent || "",
+      replyTo: messageData.replyTo || null,
       time: this._formatTime(new Date())
     };
     this.messageStore.upsertMessage(optimisticMsg);
@@ -48,6 +49,7 @@ class SendQueue {
         timestamp: serverTimestamp(),
         agent: msg.agent,
         status: "sent",
+        replyTo: msg.replyTo || null,
         time: msg.time
       };
       const updates = {};

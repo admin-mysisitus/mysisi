@@ -209,6 +209,7 @@ class MessageStore {
       createdAt: message.createdAt || new Date().toISOString(),
       status: message.status || "sent",
       agent: message.agent || "",
+      replyTo: message.replyTo || null,
       time: message.time || this._formatTime(new Date(message.createdAt || Date.now()))
     };
   }
@@ -218,7 +219,8 @@ class MessageStore {
       ...server,
       id: server.id || optimistic.id,
       createdAt: server.createdAt || optimistic.createdAt,
-      status: server.status || optimistic.status
+      status: server.status || optimistic.status,
+      replyTo: server.replyTo || optimistic.replyTo || null
     };
   }
   _insertInOrder(message) {

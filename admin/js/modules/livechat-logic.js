@@ -20,9 +20,20 @@ var typingTimeout = null;
 var QUICK_REPLIES = [];
 var quickReplySelectedIndex = -1;
 var lastQuickReplyFilter = null;
+let activeReplyTo = null;
 
 function initializeChatModules() {
-  messageRenderer = new MessageRenderer('#chatBox');
+  messageRenderer = new MessageRenderer('#chatBox', {
+    onReplyTriggered: (message) => {
+      activeReplyTo = {
+        id: message.id,
+        sender: message.sender,
+        agent: message.agent,
+        text: message.message
+      };
+      showReplyPreview(activeReplyTo);
+    }
+  });
   messageRenderer.roomId = activeRoom;
   messageStore = new MessageStore(messageRenderer);
   syncEngine = new SyncEngine(messageStore, messageRenderer, {
@@ -299,12 +310,18 @@ async function sendReply(attachmentUrl = null) {
         }
       }
     }
+    const currentReplyTo = activeReplyTo ? { ...activeReplyTo } : null;
+    activeReplyTo = null;
+    const previewBox = document.getElementById('admin-reply-context-preview');
+    if (previewBox) previewBox.style.display = 'none';
+
     const optimisticMsg = sendQueue?.enqueue({
       roomId: activeRoom,
       text: txt,
       attachment: attachmentUrl,
       sender: 'admin',
-      agent: agentName
+      agent: agentName,
+      replyTo: currentReplyTo
     });
     if (!optimisticMsg) {
       throw new Error('Failed to enqueue message');
@@ -462,8 +479,6 @@ if (aiSuggestBtn) {
     }
   });
 }
-var typingTimeout = null;
-var QUICK_REPLIES = [];
 async function loadQuickReplies() {
   try {
     const cached = localStorage.getItem("livechat_quick_replies");
@@ -494,8 +509,6 @@ async function loadQuickReplies() {
   }
 }
 loadQuickReplies();
-var quickReplySelectedIndex = -1;
-var lastQuickReplyFilter = null;
 
 function renderQuickReplies(filterText = "") {
   const popup = document.getElementById('quickReplyPopup');
@@ -538,8 +551,56 @@ function renderQuickReplies(filterText = "") {
     });
   }
 }
-var isTypingRefActive = false;
 
+function showReplyPreview(replyData) {
+  let previewBox = document.getElementById('admin-reply-context-preview');
+  if (!previewBox) {
+    const inputContainer = replyInput.parentElement;
+    if (!inputContainer) return;
+    previewBox = document.createElement('div');
+    previewBox.id = 'admin-reply-context-preview';
+    previewBox.style.padding = '6px 10px';
+    previewBox.style.background = 'var(--admin-bg-hover)';
+    previewBox.style.borderLeft = '3px solid var(--admin-primary)';
+    previewBox.style.borderTop = '1px solid var(--admin-border)';
+    previewBox.style.display = 'flex';
+    previewBox.style.alignItems = 'center';
+    previewBox.style.justifyContent = 'space-between';
+    
+    const contentBox = document.createElement('div');
+    contentBox.id = 'admin-reply-context-content';
+    contentBox.style.flex = '1';
+    contentBox.style.overflow = 'hidden';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.style.background = 'transparent';
+    closeBtn.style.border = 'none';
+    closeBtn.style.color = 'var(--admin-text-muted)';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.padding = '2px 4px';
+    
+    closeBtn.addEventListener('click', () => {
+      activeReplyTo = null;
+      previewBox.style.display = 'none';
+    });
+    
+    previewBox.appendChild(contentBox);
+    previewBox.appendChild(closeBtn);
+    inputContainer.parentNode.insertBefore(previewBox, inputContainer);
+  }
+  
+  const contentBox = document.getElementById('admin-reply-context-content');
+  const senderName = replyData.sender === 'admin' ? (replyData.agent || 'Admin') : 'Pelanggan';
+  contentBox.innerHTML = `
+    <div style="font-weight:600; font-size:11px; color:var(--admin-primary); margin-bottom:2px;">Membalas ${senderName}</div>
+    <div style="font-size:11px; color:var(--admin-text); max-height:2.6em; line-height:1.3; overflow:hidden; white-space:normal;">${replyData.text}</div>
+  `;
+  previewBox.style.display = 'flex';
+  if (replyInput) replyInput.focus();
+}
+
+var isTypingRefActive = false;
 function initEventHandlers() {
   if (sendBtn) {
     sendBtn.addEventListener('click', () => sendReply(null));

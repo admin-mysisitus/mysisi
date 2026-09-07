@@ -641,6 +641,7 @@
   flex: 1;
   padding: 12px;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
@@ -684,6 +685,7 @@
   display: flex;
   flex-direction: column;
   max-width: 85%;
+  position: relative;
 }
 
 .livechat-widget .message .msg-content {
@@ -1128,4 +1130,138 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Reply Quote Box */
+.msg-reply-box {
+  background: rgba(0,0,0,0.05);
+  border-left: 3px solid var(--lc-primary);
+  padding: 4px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.msg-reply-box:hover {
+  background: rgba(0,0,0,0.1);
+}
+.msg-reply-sender {
+  font-weight: 600;
+  color: var(--lc-primary);
+  margin-bottom: 1px;
+}
+.msg-reply-text {
+  color: var(--lc-text);
+  opacity: 0.9;
+  max-height: 2.6em;
+  overflow: hidden;
+  line-height: 1.3;
+  white-space: normal;
+}
+.message.user .msg-reply-sender {
+  color: rgba(255, 255, 255, 0.9);
+}
+.message.user .msg-reply-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+.message.user .msg-reply-box {
+  background: rgba(255, 255, 255, 0.15);
+  border-left-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Swipe to reply animations */
+.message {
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+}
+.message.swiping {
+  transition: none; /* Disable transition during drag */
+}
+
+/* Reply Icon Indicator (Swipe Mobile) */
+.reply-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  z-index: 5;
+}
+.message.user .reply-indicator {
+  right: -46px;
+}
+.message.agent .reply-indicator {
+  left: -46px;
+}
+
+/* Desktop Hover Reply Button */
+.desktop-reply-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  z-index: 10;
+}
+.message.user .desktop-reply-btn {
+  left: -36px;
+}
+.message.agent .desktop-reply-btn {
+  right: -36px;
+}
+@media (hover: hover) {
+  .msg-wrapper:hover .desktop-reply-btn {
+    opacity: 1;
+  }
+  .desktop-reply-btn:hover {
+    background: #f8fafc;
+    color: var(--lc-primary);
+  }
+}
+@media (hover: none) {
+  .desktop-reply-btn {
+    display: none;
+  }
+}
+
+/* Bump effect */
+.highlight-flash::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: -100vw;
+  right: -100vw;
+  background: rgba(99,102,241, 0.35); /* Thicker color */
+  animation: flash-overlay 2.5s ease-out forwards; /* 2.5 seconds */
+  z-index: -1;
+  pointer-events: none;
+}
+@keyframes flash-overlay {
+  0%, 15% { opacity: 1; }
+  100% { opacity: 0; }
 }

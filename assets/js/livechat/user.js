@@ -37,9 +37,21 @@ let syncEngine = null;
 let sendQueue = null;
 let isWaiting = false;
 
+let activeReplyTo = null;
+
 function initializeChatModules() {
   if (messageStore) return;
-  messageRenderer = new MessageRenderer('#messages');
+  messageRenderer = new MessageRenderer('#messages', {
+    onReplyTriggered: (message) => {
+      activeReplyTo = {
+        id: message.id,
+        sender: message.sender,
+        agent: message.agent,
+        text: message.message
+      };
+      showReplyPreview(activeReplyTo);
+    }
+  });
   messageRenderer.roomId = conversationId;
   messageStore = new MessageStore(messageRenderer);
   syncEngine = new SyncEngine(messageStore, messageRenderer, {
@@ -371,6 +383,56 @@ function autoSendAdminMessage(text) {
     sender: 'admin'
   });
 }
+
+function showReplyPreview(replyData) {
+  let previewBox = document.getElementById('reply-context-preview');
+  if (!previewBox) {
+    const inputContainer = document.querySelector('.chat-input');
+    if (!inputContainer) return;
+    previewBox = document.createElement('div');
+    previewBox.id = 'reply-context-preview';
+    previewBox.style.padding = '6px 10px';
+    previewBox.style.background = 'rgba(0,0,0,0.03)';
+    previewBox.style.borderLeft = '3px solid var(--lc-primary)';
+    previewBox.style.borderTop = '1px solid rgba(0,0,0,0.05)';
+    previewBox.style.display = 'flex';
+    previewBox.style.alignItems = 'center';
+    previewBox.style.justifyContent = 'space-between';
+    
+    const contentBox = document.createElement('div');
+    contentBox.id = 'reply-context-content';
+    contentBox.style.flex = '1';
+    contentBox.style.overflow = 'hidden';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.style.background = 'transparent';
+    closeBtn.style.border = 'none';
+    closeBtn.style.color = '#94a3b8';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.padding = '2px 4px';
+    
+    closeBtn.addEventListener('click', () => {
+      activeReplyTo = null;
+      previewBox.style.display = 'none';
+    });
+    
+    previewBox.appendChild(contentBox);
+    previewBox.appendChild(closeBtn);
+    inputContainer.parentNode.insertBefore(previewBox, inputContainer);
+  }
+  
+  const contentBox = document.getElementById('reply-context-content');
+  const senderName = replyData.sender === 'admin' ? (replyData.agent || 'Admin') : 'Anda';
+  contentBox.innerHTML = `
+    <div style="font-weight:600; font-size:11px; color:var(--lc-primary); margin-bottom:2px;">Membalas ${senderName}</div>
+    <div style="font-size:11px; color:#64748b; max-height:2.6em; line-height:1.3; overflow:hidden; white-space:normal;">${replyData.text}</div>
+  `;
+  previewBox.style.display = 'flex';
+  const inputEl = document.getElementById('input');
+  if (inputEl) inputEl.focus();
+}
+
 async function sendMessage(attachmentUrl = null) {
   const text = input.value.trim();
   if (!validateMessage(text) && !attachmentUrl) {
@@ -394,13 +456,23 @@ async function sendMessage(attachmentUrl = null) {
   sendBtn.disabled = true;
   isWaiting = true;
   resetInactiveTimer();
+  
+  // Ambil reply context jika ada
+  const currentReplyTo = activeReplyTo ? { ...activeReplyTo } : null;
+  
+  // Bersihkan UI preview
+  activeReplyTo = null;
+  const previewBox = document.getElementById('reply-context-preview');
+  if (previewBox) previewBox.style.display = 'none';
+
   try {
     const optimisticMsg = sendQueue?.enqueue({
       roomId: conversationId,
       text,
       attachment: attachmentUrl,
       sender: 'user',
-      agent: currentAgent.name
+      agent: currentAgent.name,
+      replyTo: currentReplyTo
     });
     if (!optimisticMsg) {
       throw new Error('Failed to enqueue message');
