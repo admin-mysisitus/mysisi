@@ -26,7 +26,7 @@ function setupEventListeners() {
       e.preventDefault();
       const submitBtn = document.getElementById('btn-save-user');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
       const nameField = document.getElementById('usr-name').value.trim();
       const userData = {
@@ -140,7 +140,7 @@ async function loadUsers() {
   tbody.innerHTML = `
     <tr>
       <td colspan="5" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
-        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
+        <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
         Memuat data user...
       </td>
     </tr>
@@ -214,10 +214,10 @@ function renderTable(users, tbody) {
       <td style="padding: 16px; text-align: right;">
         <div style="display: flex; gap: 8px; justify-content: flex-end;">
           <button class="admin-btn" onclick="window.editUser('${uid}')" style="background: rgba(59, 130, 246, 0.1); color: var(--admin-info); padding: 8px; border-radius: 6px;" title="Edit">
-            <i class="fas fa-edit"></i>
+            <i class="ph ph-pencil-simple"></i>
           </button>
           <button class="admin-btn" onclick="window.deleteUser('${uid}')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Suspend">
-            <i class="fas fa-ban"></i>
+            <i class="ph ph-prohibit"></i>
           </button>
         </div>
       </td>

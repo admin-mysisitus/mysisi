@@ -7,10 +7,10 @@ export async function render() {
   const refreshBtn = document.getElementById('refresh-stats');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', async () => {
-      refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
+      refreshBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Memuat...';
       refreshBtn.disabled = true;
       await loadStats();
-      refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+      refreshBtn.innerHTML = '<i class="ph ph-arrows-clockwise"></i> Refresh Data';
       refreshBtn.disabled = false;
       if (typeof Swal !== 'undefined') {
         Swal.fire({
@@ -52,15 +52,15 @@ async function loadStats() {
             let bgStyle = '';
             let colorStyle = '';
             if (act.type === 'transaction') {
-              iconStr = '<i class="fas fa-check"></i>';
+              iconStr = '<i class="ph ph-check"></i>';
               bgStyle = 'rgba(16, 185, 129, 0.2)';
               colorStyle = 'var(--admin-success)';
             } else if (act.type === 'user') {
-              iconStr = '<i class="fas fa-user-plus"></i>';
+              iconStr = '<i class="ph ph-user-plus"></i>';
               bgStyle = 'rgba(59, 130, 246, 0.2)';
               colorStyle = 'var(--admin-info)';
             } else {
-              iconStr = '<i class="fas fa-ticket-alt"></i>';
+              iconStr = '<i class="ph ph-ticket"></i>';
               bgStyle = 'rgba(245, 158, 11, 0.2)';
               colorStyle = 'var(--admin-warning)';
             }

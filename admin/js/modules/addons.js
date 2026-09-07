@@ -35,7 +35,7 @@ function setupEventListeners() {
       e.preventDefault();
       const submitBtn = document.getElementById('btn-save-addon');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
       const addonData = {
         id: document.getElementById('addon-id').value.trim(),
@@ -123,7 +123,7 @@ async function loadAddons() {
   if (!container) return;
   container.innerHTML = `
     <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-text-muted);">
-      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
+      <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
       Memuat data addon...
     </div>
   `;
@@ -172,7 +172,7 @@ function renderAddons(addons, container) {
     const displayPrice = addon.price > 0 ? `Rp ${formatNumber(addon.price)}` : 'Gratis';
     let badges = '';
     if (addon.recommended) {
-      badges += `<span style="background: rgba(99, 102, 241, 0.2); color: var(--admin-primary); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;"><i class="fas fa-star" style="margin-right:4px;"></i> Recommended</span>`;
+      badges += `<span style="background: rgba(99, 102, 241, 0.2); color: var(--admin-primary); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;"><i class="ph ph-star" style="margin-right:4px;"></i> Recommended</span>`;
     }
     card.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
@@ -195,10 +195,10 @@ function renderAddons(addons, container) {
 
       <div style="display: flex; gap: 10px;">
         <button onclick="editAddon('${addon.id}')" class="admin-btn" style="flex: 1; padding: 10px; background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); border: 1px solid rgba(99, 102, 241, 0.2);">
-          <i class="fas fa-edit"></i> Edit
+          <i class="ph ph-pencil-simple"></i> Edit
         </button>
         <button onclick="deleteAddon('${addon.id}')" class="admin-btn" style="padding: 10px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);">
-          <i class="fas fa-trash"></i>
+          <i class="ph ph-trash"></i>
         </button>
       </div>
     `;

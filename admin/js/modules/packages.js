@@ -32,7 +32,7 @@ function setupEventListeners() {
       e.preventDefault();
       const submitBtn = document.getElementById('btn-save-package');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
       const packageData = {
         id: document.getElementById('pkg-id').value.trim(),
@@ -129,7 +129,7 @@ async function loadPackages() {
   if (!container) return;
   container.innerHTML = `
     <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-text-muted);">
-      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
+      <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
       Memuat data paket...
     </div>
   `;
@@ -182,7 +182,7 @@ function renderPackages(packages, container) {
     }
     let featuresHtml = featuresArr.filter(f => f && f.trim().length > 0).map(f => `
       <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-        <i class="fas fa-check-circle" style="color: var(--admin-primary);"></i>
+        <i class="ph ph-check-circle" style="color: var(--admin-primary);"></i>
         <span style="color: var(--admin-text-muted);">${f.trim()}</span>
       </li>
     `).join('');
@@ -208,7 +208,7 @@ function renderPackages(packages, container) {
           Edit Paket
         </button>
         <button class="admin-btn" onclick="window.deletePackage('${pkgId}')" style="width: 44px; background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); border: none; border-radius: 8px;" title="Nonaktifkan">
-          <i class="fas fa-trash"></i>
+          <i class="ph ph-trash"></i>
         </button>
       </div>
     `;

@@ -14,56 +14,56 @@ export class AdminSidebar {
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 10px;">Main Menu</div>
 
         <a href="#!/" class="admin-nav-item" data-route="/">
-          <i class="fas fa-chart-pie"></i> Overview
+          <i class="ph ph-chart-pie"></i> Overview
         </a>
         <a href="#!/users" class="admin-nav-item" data-route="/users">
-          <i class="fas fa-users"></i> Users
+          <i class="ph ph-users"></i> Users
         </a>
         <a href="#!/transactions" class="admin-nav-item" data-route="/transactions">
-          <i class="fas fa-file-invoice-dollar"></i> Transaksi
+          <i class="ph ph-receipt"></i> Transaksi
         </a>
 
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Manajemen Produk</div>
 
         <a href="#!/packages" class="admin-nav-item" data-route="/packages">
-          <i class="fas fa-box-open"></i> Paket Website
+          <i class="ph ph-package"></i> Paket Website
         </a>
         <a href="#!/domains" class="admin-nav-item" data-route="/domains">
-          <i class="fas fa-globe"></i> Harga Domain
+          <i class="ph ph-globe"></i> Harga Domain
         </a>
         <a href="#!/addons" class="admin-nav-item" data-route="/addons">
-          <i class="fas fa-puzzle-piece"></i> Layanan Ekstra
+          <i class="ph ph-puzzle-piece"></i> Layanan Ekstra
         </a>
         <a href="#!/dns" class="admin-nav-item" data-route="/dns">
-          <i class="fas fa-network-wired"></i> DNS Records
+          <i class="ph ph-tree-structure"></i> DNS Records
         </a>
         <a href="#!/promos" class="admin-nav-item" data-route="/promos">
-          <i class="fas fa-ticket"></i> Promo Codes
+          <i class="ph ph-ticket"></i> Promo Codes
         </a>
 
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Sistem</div>
 
         <a href="#!/livechat" class="admin-nav-item" data-route="/livechat">
-          <i class="fas fa-comments"></i> Live Chat
+          <i class="ph ph-chats"></i> Live Chat
         </a>
         <a href="#!/support" class="admin-nav-item" data-route="/support">
-          <i class="fas fa-headset"></i> Support Tickets
+          <i class="ph ph-headset"></i> Support Tickets
         </a>
         <a href="#!/settings" class="admin-nav-item" data-route="/settings">
-          <i class="fas fa-sliders"></i> Pengaturan
+          <i class="ph ph-sliders"></i> Pengaturan
         </a>
 
         <a href="#!/profile" class="admin-nav-item" data-route="/profile">
-          <i class="fas fa-user-circle"></i> Profil Admin
+          <i class="ph ph-user-circle"></i> Profil Admin
         </a>
 
         <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px; border-top: 1px solid var(--admin-border); padding-top: 20px;">Lainnya</div>
 
         <a href="https://sisitus.com/" class="admin-nav-item" style="color: var(--admin-text-muted);">
-          <i class="fas fa-arrow-left"></i> Halaman Utama
+          <i class="ph ph-arrow-left"></i> Halaman Utama
         </a>
         <button id="sidebar-logout-btn" class="admin-nav-item" style="color: var(--admin-danger); background: transparent; border: none; text-align: left; width: 100%; cursor: pointer;">
-          <i class="fas fa-sign-out-alt"></i> Keluar
+          <i class="ph ph-sign-out"></i> Keluar
         </button>
       </nav>
     `;

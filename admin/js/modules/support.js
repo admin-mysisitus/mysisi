@@ -32,7 +32,7 @@ function setupEventListeners() {
       e.preventDefault();
       const submitBtn = document.getElementById('btn-save-ticket');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
       const tckData = {
         id: document.getElementById('tck-id').value.trim(),
@@ -148,7 +148,7 @@ function renderTickets(tickets, listContainer) {
   tickets.forEach((t, index) => {
     let isActive = index === 0;
     let statusColor = (t.status === 'Open' || t.status === 'open') ? 'var(--admin-warning)' : ((t.status === 'Closed' || t.status === 'closed') ? 'var(--admin-text-muted)' : 'var(--admin-success)');
-    let priorityBadge = (t.priority === 'High' || t.priority === 'high') ? '<i class="fas fa-fire" style="color: var(--admin-danger);"></i>' : '';
+    let priorityBadge = (t.priority === 'High' || t.priority === 'high') ? '<i class="ph ph-fire" style="color: var(--admin-danger);"></i>' : '';
     const div = document.createElement('div');
     div.style.padding = '16px';
     div.style.borderBottom = '1px solid var(--admin-border)';
@@ -170,15 +170,15 @@ function renderTickets(tickets, listContainer) {
         <span style="font-size: 0.8rem; color: var(--admin-text-muted); min-width: 70px; text-align: right;">${new Date(t.time).toLocaleDateString()}</span>
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 0.85rem; color: var(--admin-text-muted);"><i class="fas fa-user" style="margin-right: 4px;"></i> ${t.user}</span>
+        <span style="font-size: 0.85rem; color: var(--admin-text-muted);"><i class="ph ph-user" style="margin-right: 4px;"></i> ${t.user}</span>
         <span style="font-size: 0.8rem; font-weight: 600; color: ${statusColor}; text-transform: capitalize;">${t.status}</span>
       </div>
       <div style="margin-top: 12px; display: flex; gap: 8px;">
          <button class="admin-btn" onclick="window.editTicket('${t.id}', event)" style="background: rgba(59, 130, 246, 0.1); color: var(--admin-info); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;" title="Edit">
-            <i class="fas fa-edit"></i> Edit
+            <i class="ph ph-pencil-simple"></i> Edit
           </button>
           <button class="admin-btn" onclick="window.deleteTicket('${t.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;" title="Tutup">
-            <i class="fas fa-times"></i> Tutup
+            <i class="ph ph-x"></i> Tutup
           </button>
       </div>
     `;

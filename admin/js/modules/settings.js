@@ -209,7 +209,7 @@ function setupEventListeners() {
       });
       const originalText = btnSaveSettings.innerHTML;
       btnSaveSettings.disabled = true;
-      btnSaveSettings.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      btnSaveSettings.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       try {
         const currentUser = AuthManager.getCurrentUser();
         const response = await APIClient.call(GAS_CONFIG.ACTIONS.SAVE_SETTINGS, {
@@ -243,7 +243,7 @@ function setupEventListeners() {
       const bodyHtml = document.getElementById('template-body').value;
       const originalText = btnSaveTemplate.innerHTML;
       btnSaveTemplate.disabled = true;
-      btnSaveTemplate.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      btnSaveTemplate.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       try {
         const currentUser = AuthManager.getCurrentUser();
         const response = await APIClient.call(GAS_CONFIG.ACTIONS.SAVE_EMAIL_TEMPLATE, {

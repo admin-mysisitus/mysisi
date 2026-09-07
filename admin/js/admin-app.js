@@ -156,7 +156,7 @@ class AdminApp {
       console.error('Routing Error:', error);
       document.getElementById('admin-content').innerHTML = `
         <div style="padding: 2rem; color: #ef4444; text-align: center;">
-          <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+          <i class="ph ph-warning" style="font-size: 3rem; margin-bottom: 1rem;"></i>
           <h2>Error Loading Module</h2>
           <p>${error.message}</p>
         </div>

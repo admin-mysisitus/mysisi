@@ -20,13 +20,13 @@ export class AdminNavbar {
     this.container.innerHTML = `
       <div class="admin-navbar-left">
         <button id="admin-menu-toggle" class="admin-menu-toggle">
-          <i class="fas fa-bars"></i>
+          <i class="ph ph-list"></i>
         </button>
       </div>
 
       <div class="admin-nav-actions">
         <button class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main); padding: 8px 12px;">
-          <i class="fas fa-bell"></i>
+          <i class="ph ph-bell"></i>
         </button>
 
         <div class="admin-profile-btn" id="admin-profile-trigger">

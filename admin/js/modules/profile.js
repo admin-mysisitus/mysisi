@@ -92,12 +92,12 @@ export async function render() {
           const icon = this.querySelector('i');
           if (input.type === 'password') {
             input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
+            icon.classList.remove('ph-eye');
+            icon.classList.add('ph-eye-slash');
           } else {
             input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
+            icon.classList.remove('ph-eye-slash');
+            icon.classList.add('ph-eye');
           }
         });
       });

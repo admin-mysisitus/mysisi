@@ -17,11 +17,11 @@ function setupEventListeners() {
   const btnClose = document.getElementById('btn-close-dns');
   const modal = document.getElementById('dns-modal');
   if (btnAdd) {
-    btnAdd.innerHTML = '<i class="fas fa-sync"></i> Refresh Data';
+    btnAdd.innerHTML = '<i class="ph ph-arrows-clockwise"></i> Refresh Data';
     btnAdd.addEventListener('click', async () => {
-      btnAdd.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat...';
+      btnAdd.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Memuat...';
       await loadDNS();
-      btnAdd.innerHTML = '<i class="fas fa-sync"></i> Refresh Data';
+      btnAdd.innerHTML = '<i class="ph ph-arrows-clockwise"></i> Refresh Data';
     });
   }
   window.setupCloudflare = async (domain) => {
@@ -66,7 +66,7 @@ async function loadDNS() {
   tbody.innerHTML = `
     <tr>
       <td colspan="4" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
-        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
+        <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
         Mencari data domain dari pesanan...
       </td>
     </tr>
@@ -109,23 +109,23 @@ function renderDNS(domainsList, tbody) {
     tr.style.borderBottom = '1px solid var(--admin-border)';
     tr.innerHTML = `
       <td style="padding: 16px; font-weight: 600; color: var(--admin-text-main);">
-        <i class="fas fa-globe" style="color: var(--admin-primary); margin-right: 8px;"></i> ${d.domain}
+        <i class="ph ph-globe" style="color: var(--admin-primary); margin-right: 8px;"></i> ${d.domain}
       </td>
       <td style="padding: 16px; color: var(--admin-text-muted);">
         ${d.user}
       </td>
       <td style="padding: 16px;">
         <span style="background: rgba(59, 130, 246, 0.1); color: var(--admin-info); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
-          <i class="fas fa-cloud"></i> Otomatis
+          <i class="ph ph-cloud"></i> Otomatis
         </span>
       </td>
       <td style="padding: 16px; text-align: right;">
         <div style="display: flex; gap: 8px; justify-content: flex-end;">
           <button class="admin-btn" onclick="window.setupCloudflare('${d.domain}')" style="background: rgba(16, 185, 129, 0.1); color: var(--admin-success); padding: 8px 12px; border-radius: 6px;" title="Setup Cloudflare">
-            <i class="fas fa-bolt"></i> Setup CF
+            <i class="ph ph-lightning"></i> Setup CF
           </button>
           <button class="admin-btn" onclick="window.manageDNS('${d.domain}')" style="background: rgba(59, 130, 246, 0.1); color: var(--admin-info); padding: 8px 12px; border-radius: 6px;" title="Kelola Record">
-            <i class="fas fa-list"></i> Records
+            <i class="ph ph-list"></i> Records
           </button>
         </div>
       </td>

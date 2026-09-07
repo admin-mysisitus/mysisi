@@ -20,7 +20,7 @@ var typingTimeout = null;
 var QUICK_REPLIES = [];
 var quickReplySelectedIndex = -1;
 var lastQuickReplyFilter = null;
-let activeReplyTo = null;
+var activeReplyTo = null;
 
 function initializeChatModules() {
   messageRenderer = new MessageRenderer('#chatBox', {
@@ -126,7 +126,7 @@ async function loadRooms() {
     onValue
   } = window.firebaseHelpers;
   const roomsRef = ref(db, 'rooms');
-  roomsList.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memuat...';
+  roomsList.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i> Memuat...';
   roomsList.classList.add('rooms-loading');
   unsubscribeRooms = onValue(roomsRef, (snapshot) => {
     roomsList.innerHTML = '';
@@ -179,7 +179,7 @@ async function loadRooms() {
             <span class="room-item-title">${sanitizeMessage(roomDisplay)}</span>
             ${unreadBadgeHtml}
           </div>
-          <i class="fas fa-trash delete-room-btn" title="Hapus Room"></i>
+          <i class="ph ph-trash delete-room-btn" title="Hapus Room"></i>
         </div>
         <small class="room-preview">(${sanitizeMessage(shortMsg)})</small>
       `;
@@ -298,7 +298,7 @@ async function sendReply(attachmentUrl = null) {
   isSending = true;
   const originalBtnHTML = sendBtn.innerHTML;
   sendBtn.disabled = true;
-  sendBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
+  sendBtn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Mengirim...`;
   try {
     let agentName = 'Admin';
     if (messageStore) {
@@ -371,7 +371,7 @@ if (attachBtn && fileInput) {
       messageRenderer?.addSystemMessage('❌ File terlalu besar (Maks 5MB)');
       return;
     }
-    const spinnerMsg = messageRenderer?.addSystemMessage('<i class="fas fa-spinner fa-spin"></i> Mengunggah file...');
+    const spinnerMsg = messageRenderer?.addSystemMessage('<i class="ph ph-spinner ph-spin"></i> Mengunggah file...');
     attachBtn.disabled = true;
     replyInput.disabled = true;
     sendBtn.disabled = true;
@@ -438,9 +438,9 @@ if (aiAutoPilotToggle) {
       }
       autoPilotRooms[activeRoom] = e.target.checked;
       if (e.target.checked) {
-        messageRenderer?.addSystemMessage('<i class="fas fa-robot"></i> Auto-Pilot diaktifkan untuk obrolan ini.');
+        messageRenderer?.addSystemMessage('<i class="ph ph-robot"></i> Auto-Pilot diaktifkan untuk obrolan ini.');
       } else {
-        messageRenderer?.addSystemMessage('<i class="fas fa-user"></i> Auto-Pilot dimatikan. Anda dalam kendali manual.');
+        messageRenderer?.addSystemMessage('<i class="ph ph-user"></i> Auto-Pilot dimatikan. Anda dalam kendali manual.');
       }
     }
   });
@@ -450,7 +450,7 @@ if (aiSuggestBtn) {
     if (!activeRoom) return;
     if (aiSuggestBtn.disabled) return;
     aiSuggestBtn.disabled = true;
-    aiSuggestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    aiSuggestBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i>';
     replyInput.placeholder = "AI sedang berpikir...";
     try {
       const res = await fetch('https://livechat.sisitusdotcom.workers.dev/', {
@@ -474,7 +474,7 @@ if (aiSuggestBtn) {
       messageRenderer?.addSystemMessage('❌ Gagal memanggil AI.');
     } finally {
       aiSuggestBtn.disabled = false;
-      aiSuggestBtn.innerHTML = '<i class="fas fa-magic" style="font-size: 1.1rem; color: #8b5cf6;"></i>';
+      aiSuggestBtn.innerHTML = '<i class="ph ph-magic-wand" style="font-size: 1.1rem; color: #8b5cf6;"></i>';
       replyInput.placeholder = "Ketik pesan di sini... (tekan Enter untuk mengirim)";
     }
   });
@@ -573,7 +573,7 @@ function showReplyPreview(replyData) {
     contentBox.style.overflow = 'hidden';
     
     const closeBtn = document.createElement('button');
-    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.innerHTML = '<i class="ph ph-x"></i>';
     closeBtn.style.background = 'transparent';
     closeBtn.style.border = 'none';
     closeBtn.style.color = 'var(--admin-text-muted)';
@@ -654,7 +654,7 @@ function initEventHandlers() {
       };
       const origText = saveAiConfigBtn.innerHTML;
       saveAiConfigBtn.disabled = true;
-      saveAiConfigBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      saveAiConfigBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       fetch(CONFIG.GAS_URL, {
         method: 'POST',
         headers: {
@@ -663,7 +663,7 @@ function initEventHandlers() {
         body: `action=saveAiConfig&payload=${encodeURIComponent(JSON.stringify(payload))}`
       }).then(r => r.json()).then(res => {
         saveAiConfigBtn.disabled = false;
-        saveAiConfigBtn.innerHTML = '<i class="fas fa-check"></i> Tersimpan!';
+        saveAiConfigBtn.innerHTML = '<i class="ph ph-check"></i> Tersimpan!';
         setTimeout(() => {
           saveAiConfigBtn.innerHTML = origText;
           if (aiConfigModal) {
@@ -683,7 +683,7 @@ function initEventHandlers() {
       if (!confirm("Arsipkan dan selesaikan obrolan ini secara permanen? Data akan dipindahkan ke Sheets.")) return;
       const origText = archiveChatBtn.innerHTML;
       archiveChatBtn.disabled = true;
-      archiveChatBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengarsipkan...';
+      archiveChatBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Mengarsipkan...';
       fetch(CONFIG.GAS_URL, {
         method: 'POST',
         headers: {

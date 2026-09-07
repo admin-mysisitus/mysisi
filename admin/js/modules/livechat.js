@@ -32,7 +32,6 @@ export async function render() {
     await loadScript("/assets/js/livechat/sendQueue.js");
     await loadScript("/assets/js/livechat/utils.js");
   }
-  await loadScript("./js/modules/livechat-logic.js");
   const existingAdminScript = document.getElementById('livechat-admin-logic');
   if (existingAdminScript) {
     existingAdminScript.remove();

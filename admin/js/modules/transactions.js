@@ -32,7 +32,7 @@ function setupEventListeners() {
       e.preventDefault();
       const submitBtn = document.getElementById('btn-save-tx');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
       const txData = {
         inv: document.getElementById('tx-inv').value.trim(),
@@ -176,7 +176,7 @@ async function loadTransactions() {
   tbody.innerHTML = `
     <tr>
       <td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
-        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
+        <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
         Memuat data transaksi...
       </td>
     </tr>
@@ -253,10 +253,10 @@ function renderTxTable(mockTx, tbody) {
       <td style="padding: 16px; text-align: right;">
         <div style="display: flex; gap: 8px; justify-content: flex-end;">
           <button class="admin-btn" onclick="window.editTx('${inv}')" style="background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); padding: 8px; border-radius: 6px;" title="Edit">
-            <i class="fas fa-edit"></i>
+            <i class="ph ph-pencil-simple"></i>
           </button>
           <button class="admin-btn" onclick="window.deleteTx('${inv}')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Batalkan">
-            <i class="fas fa-ban"></i>
+            <i class="ph ph-prohibit"></i>
           </button>
         </div>
       </td>

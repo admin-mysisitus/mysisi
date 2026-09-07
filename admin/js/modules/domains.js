@@ -37,7 +37,7 @@ function setupEventListeners() {
       e.preventDefault();
       const submitBtn = document.getElementById('btn-save-domain');
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
       submitBtn.disabled = true;
       const ext = document.getElementById('domain-ext').value.trim();
       let oldPrice = document.getElementById('domain-oldprice').value;
@@ -139,7 +139,7 @@ async function loadDomains() {
   if (!container) return;
   container.innerHTML = `
     <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-text-muted);">
-      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
+      <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
       Memuat data domain...
     </div>
   `;
@@ -227,10 +227,10 @@ function renderDomains(domains, container) {
 
       <div style="display: flex; gap: 10px;">
         <button onclick="editDomain('${extKey}')" class="admin-btn" style="flex: 1; padding: 10px; background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); border: 1px solid rgba(99, 102, 241, 0.2);">
-          <i class="fas fa-edit"></i> Edit
+          <i class="ph ph-pencil-simple"></i> Edit
         </button>
         <button onclick="deleteDomain('${extKey}')" class="admin-btn" style="padding: 10px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);">
-          <i class="fas fa-trash"></i>
+          <i class="ph ph-trash"></i>
         </button>
       </div>
     `;

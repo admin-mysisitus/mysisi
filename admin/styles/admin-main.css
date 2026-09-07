@@ -2,9 +2,9 @@
   --admin-bg-dark: #f8fafc;
   --admin-surface: #ffffff;
   --admin-surface-hover: #f1f5f9;
-  --admin-border: rgba(15, 23, 42, 0.08);
-  --admin-primary: #2563eb;
-  --admin-primary-glow: rgba(37, 99, 235, 0.2);
+  --admin-border: rgba(15, 23, 42, 0.04);
+  --admin-primary: #4f46e5;
+  --admin-primary-glow: rgba(79, 70, 229, 0.15);
   --admin-secondary: #06b6d4;
   --admin-text-main: #0f172a;
   --admin-text-muted: #64748b;
@@ -106,9 +106,10 @@ body.admin-body {
 }
 
 .admin-nav-item.active {
-  background: rgba(37, 99, 235, 0.08);
+  background: transparent;
   color: var(--admin-primary);
   border-left: 3px solid var(--admin-primary);
+  font-weight: 600;
 }
 
 .admin-wrapper {
@@ -270,9 +271,9 @@ body.admin-body {
 .admin-card {
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .admin-stat-card {
@@ -920,4 +921,55 @@ body.admin-body {
 img.admin-avatar {
   object-fit: cover;
   border: 2px solid var(--admin-primary);
+}
+
+/* Premium Table Styles */
+.admin-main-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-family: var(--font-admin-body);
+}
+
+.admin-main-content th,
+.admin-main-content td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-main-content th {
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+  background: transparent;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.admin-main-content td {
+  font-size: 0.9rem;
+  color: var(--admin-text-main);
+  background: transparent;
+}
+
+.admin-main-content tbody tr:hover td {
+  background: var(--admin-surface-hover);
+}
+
+/* Phosphor Icons Base Style overrides for elegance */
+.ph, .ph-fill, .ph-bold, .ph-light {
+  font-size: 1.15rem; /* ~20px for a refined look */
+  vertical-align: middle;
+}
+
+.ph-spin {
+  animation: ph-spin 2s linear infinite;
+}
+
+@keyframes ph-spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
