@@ -202,6 +202,8 @@ function openModal() {
   }
   chatModal.style.display = 'flex';
   modalOverlay.style.display = 'block';
+  const widget = document.querySelector('.livechat-widget');
+  if (widget) widget.classList.add('modal-open');
   if (messages) {
     const savedScrollPos = localStorage.getItem('livechat_scroll_pos');
     if (savedScrollPos !== null) {
@@ -312,6 +314,8 @@ function closeModal() {
   if (!chatModal) return;
   chatModal.style.display = 'none';
   modalOverlay.style.display = 'none';
+  const widget = document.querySelector('.livechat-widget');
+  if (widget) widget.classList.remove('modal-open');
   clearTimeout(inactiveTimer);
   clearTimeout(inactivityWarningTimer);
 }

@@ -5,7 +5,33 @@ window.addEventListener("load", async () => {
   const chatHTML = `
   <div class="livechat-widget" style="opacity: 0; visibility: hidden;">
     <button class="chat-button" id="chatBtn" aria-label="Buka Live Chat">
-      <i class="fas fa-comments" aria-hidden="true"></i> Live Chat
+      <div class="chat-avatar-wrapper">
+        <img src="/assets/img/livechat/ic-livechat.webp" alt="Customer Service" class="chat-avatar-img">
+      </div>
+      
+      <div class="chat-btn-content">
+        <div class="chat-btn-icon-box">
+          <div class="chat-double-bubble">
+            <svg class="chat-bubble-back" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 1H5c-2.21 0-4 1.79-4 4v16l4-4h14c2.21 0 4-1.79 4-4V5c0-2.21-1.79-4-4-4z"/>
+            </svg>
+            <svg class="chat-bubble-front" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 1H5c-2.21 0-4 1.79-4 4v16l4-4h14c2.21 0 4-1.79 4-4V5c0-2.21-1.79-4-4-4z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="chat-btn-text-box">
+          <span class="chat-online-dot"></span>
+          <span class="chat-title-text">LiveChat</span>
+        </div>
+      </div>
+
+      <div class="chat-btn-subtitle">
+        <div class="subtitle-slider">
+          <span>Kami Online</span>
+          <span>Chat sekarang</span>
+        </div>
+      </div>
       <span id="unreadBadge" class="badge" style="display: none;" aria-label="Pesan belum dibaca">0</span>
     </button>
 
