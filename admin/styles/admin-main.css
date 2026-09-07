@@ -1,17 +1,17 @@
 :root {
-  --admin-bg-dark: #0f172a;
-  --admin-surface: #1e293b;
-  --admin-surface-hover: #334155;
-  --admin-border: rgba(255, 255, 255, 0.06);
-  --admin-primary: #818cf8;
-  --admin-primary-glow: rgba(129, 140, 248, 0.2);
-  --admin-secondary: #38bdf8;
-  --admin-text-main: #f1f5f9;
-  --admin-text-muted: #94a3b8;
-  --admin-success: #34d399;
-  --admin-warning: #fbbf24;
-  --admin-danger: #f87171;
-  --admin-info: #60a5fa;
+  --admin-bg-dark: #f8fafc;
+  --admin-surface: #ffffff;
+  --admin-surface-hover: #f1f5f9;
+  --admin-border: rgba(15, 23, 42, 0.08);
+  --admin-primary: #2563eb;
+  --admin-primary-glow: rgba(37, 99, 235, 0.2);
+  --admin-secondary: #06b6d4;
+  --admin-text-main: #0f172a;
+  --admin-text-muted: #64748b;
+  --admin-success: #10b981;
+  --admin-warning: #f59e0b;
+  --admin-danger: #ef4444;
+  --admin-info: #3b82f6;
   --font-admin-heading: 'Outfit', sans-serif;
   --font-admin-body: 'Inter', sans-serif;
 }
@@ -106,7 +106,7 @@ body.admin-body {
 }
 
 .admin-nav-item.active {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(37, 99, 235, 0.08);
   color: var(--admin-primary);
   border-left: 3px solid var(--admin-primary);
 }
@@ -272,7 +272,7 @@ body.admin-body {
   border: 1px solid var(--admin-border);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
 }
 
 .admin-stat-card {
@@ -668,7 +668,7 @@ body.admin-body {
   min-height: 44px;
   border-radius: 6px;
   border: 1px solid var(--admin-border);
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(15, 23, 42, 0.04);
   color: var(--admin-text-main);
   font-family: var(--font-admin-body);
   font-size: 0.9rem;
@@ -716,7 +716,7 @@ body.admin-body {
   min-height: 44px;
   border-radius: 8px;
   border: 1px solid var(--admin-border);
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(15, 23, 42, 0.04);
   color: var(--admin-text-main);
   font-family: var(--font-admin-body);
   font-size: 0.9rem;
@@ -755,17 +755,17 @@ body.admin-body {
 }
 
 .admin-table-container::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(15, 23, 42, 0.05);
   border-radius: 4px;
 }
 
 .admin-table-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(15, 23, 42, 0.15);
   border-radius: 4px;
 }
 
 .admin-table-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(15, 23, 42, 0.25);
 }
 
 .admin-table {
