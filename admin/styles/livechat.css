@@ -10,7 +10,7 @@
 }
 
 #livechat-spa-container .room-item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: var(--admin-surface-hover) !important;
 }
 
 #livechat-spa-container .room-item.active {
@@ -28,10 +28,10 @@
 }
 
 #livechat-spa-container .message.user .msg-content {
-  background: rgba(255, 255, 255, 0.1) !important;
+  background: var(--admin-surface) !important;
   color: var(--admin-text-main) !important;
   border-radius: 12px 12px 12px 2px !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--admin-border) !important;
 }
 
 #livechat-spa-container .message.admin .msg-content {
@@ -698,7 +698,7 @@ button:focus-visible,
 }
 
 .admin-body .admin-dashboard .sidebar>div:first-child {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(15, 23, 42, 0.02);
   border-bottom: 1px solid var(--admin-border);
 }
 
@@ -744,7 +744,7 @@ button:focus-visible,
 }
 
 .admin-body .message.user .msg-content {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(15, 23, 42, 0.04);
   color: var(--admin-text-main);
   border: 1px solid var(--admin-border);
 }
@@ -773,7 +773,7 @@ button:focus-visible,
 }
 
 .admin-body #replyInput {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(15, 23, 42, 0.04);
   border: 1px solid var(--admin-border);
   color: var(--admin-text-main);
 }

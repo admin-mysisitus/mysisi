@@ -76,8 +76,8 @@
   </div>
 </div>
 <div id="attachmentModal" class="modal-backdrop" onclick="if(event.target === this) closeAttachmentModal()">
-  <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto; background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;">
-    <button class="modal-close" style="color: #94a3b8; background: rgba(255,255,255,0.1);" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>
+  <div class="modal-content" style="width: fit-content; max-width: 90vw; min-width: 300px; margin: 0 auto; background-color: var(--admin-surface); color: var(--admin-text-main); border: 1px solid var(--admin-border);">
+    <button class="modal-close" style="color: var(--admin-text-muted); background: rgba(15,23,42,0.05);" onclick="closeAttachmentModal()" aria-label="Tutup Lampiran"><i class="fas fa-times" aria-hidden="true"></i></button>
     <div class="attachment-modal-header">
       <h3 id="attachmentModalTitle"><i class="fas fa-file-alt" aria-hidden="true"></i> Lampiran</h3>
     </div>
@@ -96,8 +96,8 @@
   </div>
 </div>
 <div id="aiConfigModal" class="modal-backdrop" style="display: none;" onclick="if(event.target === this) { document.getElementById('aiConfigModal').classList.remove('active'); setTimeout(() => document.getElementById('aiConfigModal').style.display='none', 300); }">
-  <div class="modal-content" style="width: 100%; max-width: 800px; max-height: 90vh; margin: 0 auto; padding: 32px; background-color: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 16px;">
-    <button class="modal-close" style="color: #94a3b8; background: rgba(255,255,255,0.1); top: 24px; right: 24px;" onclick="document.getElementById('aiConfigModal').classList.remove('active'); setTimeout(() => document.getElementById('aiConfigModal').style.display='none', 300);" aria-label="Tutup Pengaturan"><i class="fas fa-times" aria-hidden="true"></i></button>
+  <div class="modal-content" style="width: 100%; max-width: 800px; max-height: 90vh; margin: 0 auto; padding: 32px; background-color: var(--admin-surface); color: var(--admin-text-main); border: 1px solid var(--admin-border); border-radius: 16px;">
+    <button class="modal-close" style="color: var(--admin-text-muted); background: rgba(15,23,42,0.05); top: 24px; right: 24px;" onclick="document.getElementById('aiConfigModal').classList.remove('active'); setTimeout(() => document.getElementById('aiConfigModal').style.display='none', 300);" aria-label="Tutup Pengaturan"><i class="fas fa-times" aria-hidden="true"></i></button>
     <div class="attachment-modal-header" style="margin-bottom: 20px;">
       <h3><i class="fas fa-robot" aria-hidden="true"></i> Pengaturan AI Dasbor</h3>
       <p style="font-size: 0.85rem; color: #6b7280; margin-top: 4px;">Perubahan di sini akan langsung tersimpan ke Google Sheets Anda.</p>
