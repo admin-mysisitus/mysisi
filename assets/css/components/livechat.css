@@ -457,11 +457,17 @@
 }
 
 /* Hide mascot and subtitle when modal is open */
+.livechat-widget.modal-open .chat-button {
+  pointer-events: none;
+}
+.livechat-widget.modal-open .chat-btn-content,
+.livechat-widget.modal-open .badge {
+  pointer-events: auto;
+}
 .livechat-widget.modal-open .chat-avatar-wrapper,
 .livechat-widget.modal-open .chat-btn-subtitle {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
   transition: all 0.2s ease-out;
 }
 
