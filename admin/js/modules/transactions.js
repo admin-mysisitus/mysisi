@@ -75,7 +75,7 @@ function setupEventListeners() {
     });
   }
   window.editTx = (inv) => {
-    const tx = currentTx.find(t => t.inv === inv);
+    const tx = currentTx.find(t => t.inv === inv || t.orderId === inv);
     if (!tx) return;
     document.getElementById('tx-modal-title').textContent = 'Edit Invoice';
     document.getElementById('tx-inv').value = tx.inv;
