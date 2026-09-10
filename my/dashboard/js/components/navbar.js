@@ -26,7 +26,7 @@ export class DashboardNavbar {
 
         <div class="navbar-brand">
           <a href="#!/dashboard/" class="navbar-logo">
-            <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS" class="logo-img">
+            <img src="/assets/img/logo/logo.svg" alt="SISITUS" class="logo-img">
             <span class="logo-text">Client Area</span>
           </a>
         </div>

@@ -84,3 +84,10 @@ p {
 .section {
   padding: clamp(2rem, 4vw, 3.5rem) 0;
 }
+
+/* Global style untuk main logo agar memiliki background bulat */
+img[src*="/logo.svg"] {
+  background-color: #162033;
+  border-radius: 50%;
+  object-fit: contain;
+}

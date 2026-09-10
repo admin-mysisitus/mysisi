@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1969c8">
+    <title>SISITUS — Website Siap Jadi</title>
+    <meta name="description"
+        content="SISITUS membantu bisnis tampil profesional di internet dengan website siap jadi, domain, hosting, dan layanan digital.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #1969c8;
+            --bg-main-darker: #155cb4;
+            --btn-primary: #3375e3;
+            --btn-primary-darker: #2564d0;
+            --primary-light: #e0edff;
+            --text-dark: #0f172a;
+            --border-color: #b8d0f5;
+            --bg-card: #ffffff;
+            --color-white: #ffffff;
+            --success: #25D366;
+            --success-light: #f0fdf4;
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Nunito", sans-serif;
+            background: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.12), transparent 45%),
+                linear-gradient(180deg, var(--bg-main) 0%, var(--bg-main-darker) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(100%, 520px);
+            margin: 0 auto;
+            padding: 14px 14px 28px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .top-button {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--bg-main);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+
+        .top-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            border-color: var(--color-white);
+        }
+
+        .top-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-wrap {
+            position: relative;
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 12px;
+        }
+
+        .logo-wrap {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--color-white);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-verified {
+            position: absolute;
+            right: -4px;
+            bottom: -4px;
+            width: 24px;
+            height: 24px;
+            color: #1497FF;
+            background: var(--color-white);
+            border-radius: 50%;
+            padding: 3px;
+            box-shadow: 0 0 0 2px #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-verified svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .logo-text-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .logo-text-wrapper::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 115%;
+            height: 170%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.35) 45%, transparent 70%);
+            filter: blur(18px);
+        }
+
+        .logo-text-img {
+            height: 34px;
+            width: auto;
+        }
+
+        .tagline {
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--color-white);
+        }
+
+        .bio {
+            max-width: 420px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .main-actions {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .main-button {
+            min-height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+        }
+
+        .main-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .main-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, var(--btn-primary) 0%, var(--btn-primary-darker) 100%);
+            color: var(--color-white);
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+        }
+
+        .primary:hover {
+            background: linear-gradient(135deg, #2564d0 0%, #1f57b8 100%);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .secondary {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: var(--bg-main);
+        }
+
+        .secondary:hover {
+            border-color: var(--color-white);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            background: var(--color-white);
+        }
+
+        .section {
+            margin-bottom: 22px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--color-white);
+        }
+
+        .section-link {
+            color: var(--color-white);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .promo-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .promo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+
+        .promo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            border-color: var(--btn-primary);
+        }
+
+        .promo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            color: var(--bg-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .promo-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .promo-content {
+            flex: 1;
+        }
+
+        .promo-label {
+            color: var(--bg-main);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 2px;
+        }
+
+        .promo-title {
+            font-size: 13px;
+            line-height: 1.4;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .promo-arrow {
+            width: 16px;
+            color: #94a3b8;
+            transition: color 0.22s ease;
+        }
+
+        .promo-card:hover .promo-arrow {
+            color: var(--btn-primary);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            border-color: var(--btn-primary);
+            background: var(--color-white);
+        }
+
+        .service-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            color: var(--bg-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-icon svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .service-card h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.3;
+        }
+
+        .link-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .link-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            min-height: 44px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            border-color: var(--btn-primary);
+            background: var(--color-white);
+        }
+
+        .link-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-main);
+        }
+
+        .link-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .link-text {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .link-arrow {
+            width: 16px;
+            color: #94a3b8;
+            transition: color 0.22s ease;
+        }
+
+        .link-card:hover .link-arrow {
+            color: var(--btn-primary);
+        }
+
+        .whatsapp-card {
+            background: var(--success-light);
+            border: 1px solid #bbf7d0;
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .whatsapp-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.15);
+        }
+
+        .whatsapp-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--success);
+            color: var(--color-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .whatsapp-text {
+            flex: 1;
+        }
+
+        .whatsapp-text strong {
+            display: block;
+            color: #166534;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .whatsapp-text span {
+            color: #4d7c5b;
+            font-size: 12px;
+        }
+
+        .contact-info {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .contact-info strong {
+            color: var(--color-white);
+        }
+
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 14px 0 18px;
+        }
+
+        .social {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-main);
+            transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+        }
+
+        .social:hover {
+            color: var(--color-white);
+            background: var(--btn-primary);
+            transform: translateY(-2px);
+            border-color: var(--color-white);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .social svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 4px;
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            color: var(--color-white);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .footer-company {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 10px;
+            transition: color 0.22s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-white);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 9px;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 18px;
+            transform: translate(-50%, 20px);
+            background: #0f172a;
+            color: var(--color-white);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .logo-text-img {
+                height: 30px;
+            }
+
+            .service-card {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <header class="topbar">
+            <a href="https://sisitus.com" class="top-button" aria-label="Website SISITUS">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 11.5 12 4l9 7.5" />
+                    <path d="M5.5 10.5V20h13v-9.5" />
+                    <path d="M9.5 20v-5.5h5V20" />
+                </svg>
+            </a>
+            <button class="top-button" onclick="sharePage()" aria-label="Bagikan halaman">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="2.5" />
+                    <circle cx="6" cy="12" r="2.5" />
+                    <circle cx="18" cy="19" r="2.5" />
+                    <path d="m8.2 10.8 7.5-4.3" />
+                    <path d="m8.2 13.2 7.5 4.3" />
+                </svg>
+            </button>
+        </header>
+
+        <section class="profile">
+            <div class="profile-wrap">
+                <div class="logo-wrap"><img src="assets/img/logo.svg" alt="SISITUS"></div>
+                <span class="profile-verified" title="Terverifikasi">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="currentColor"
+                            d="M12 1.8l2.1 1.7 2.7-.2 1 2.55 2.45 1.2-.5 2.65 1.55 2.3-1.55 2.3.5 2.65-2.45 1.2-1 2.55-2.7-.2L12 22.2l-2.1-1.7-2.7.2-1-2.55-2.45-1.2.5-2.65-1.55-2.3 1.55-2.3-.5-2.65 2.45-1.2 1-2.55 2.7.2L12 1.8Z" />
+                        <path d="M8.3 12.1l2.25 2.25 5.15-5.2" fill="none" stroke="#fff" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </span>
+            </div>
+            <h1 class="logo-text-wrapper"><img src="assets/img/logo-with-text.svg" alt="SISITUS" class="logo-text-img">
+            </h1>
+            <p class="tagline">Website Siap Jadi untuk Bisnis Anda.</p>
+            <p class="bio">Bantu bisnis tampil lebih profesional di internet melalui website, domain, dan layanan
+                digital yang praktis.</p>
+        </section>
+
+        <section class="main-actions">
+            <a href="https://sisitus.com" target="_blank" rel="noopener" class="main-button primary"><svg
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 11.5 12 4l9 7.5" />
+                    <path d="M5.5 10.5V20h13v-9.5" />
+                    <path d="M9.5 20v-5.5h5V20" />
+                </svg>Lihat Website & Paket SISITUS</a>
+            <a href="#portofolio" class="main-button secondary"><svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="3" />
+                    <path d="M3 9h18" />
+                    <path d="M9 21V9" />
+                </svg>Lihat portofolio Website</a>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <h2 class="section-title">Promo & Penawaran</h2><a href="https://sisitus.com/promo" target="_blank"
+                    rel="noopener" class="section-link">Lihat semua</a>
+            </div>
+            <div class="promo-list">
+                <a href="https://sisitus.com/promo" target="_blank" rel="noopener" class="promo-card">
+                    <div class="promo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="M7 9h10M7 13h6" />
+                        </svg></div>
+                    <div class="promo-content">
+                        <div class="promo-label">Promo</div>
+                        <div class="promo-title">Website Siap Jadi — Lihat paket & harga terbaru</div>
+                    </div><svg class="promo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+                <a href="https://sisitus.com/layanan/domain" target="_blank" rel="noopener" class="promo-card">
+                    <div class="promo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M3 12h18" />
+                            <path d="M12 3c2.2 2.5 3.3 5.5 3.3 9S14.2 18.5 12 21" />
+                            <path d="M12 3c-2.2 2.5-3.3 5.5-3.3 9s1.1 6.5 3.3 9" />
+                        </svg></div>
+                    <div class="promo-content">
+                        <div class="promo-label">Domain</div>
+                        <div class="promo-title">Cari nama domain untuk bisnis Anda</div>
+                    </div><svg class="promo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+                <a href="https://sisitus.com/promo" target="_blank" rel="noopener" class="promo-card">
+                    <div class="promo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7" />
+                            <path d="M2 7h20v5H2z" />
+                            <path d="M12 7v14" />
+                            <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7Z" />
+                            <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7Z" />
+                        </svg></div>
+                    <div class="promo-content">
+                        <div class="promo-label">Penawaran</div>
+                        <div class="promo-title">Cek promo terbaru SISITUS</div>
+                    </div><svg class="promo-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <h2 class="section-title">Layanan SISITUS</h2>
+            </div>
+            <div class="service-grid">
+                <a href="https://sisitus.com/layanan/website" class="service-card">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="16" rx="2" />
+                            <path d="M3 9h18" />
+                            <path d="M7 6.5h.01M10 6.5h.01" />
+                        </svg></div>
+                    <h3>Website</h3>
+                </a>
+                <a href="https://sisitus.com/layanan/domain" class="service-card">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M3 12h18" />
+                            <path d="M12 3c2 2.5 3 5.5 3 9s-1 6.5-3 9" />
+                            <path d="M12 3c-2 2.5-3 5.5-3 9s1 6.5 3 9" />
+                        </svg></div>
+                    <h3>Domain</h3>
+                </a>
+                <a href="https://sisitus.com/layanan/hosting" class="service-card">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="4" y="3" width="16" height="7" rx="2" />
+                            <rect x="4" y="14" width="16" height="7" rx="2" />
+                            <path d="M8 6.5h.01M8 17.5h.01" />
+                            <path d="M12 6.5h5M12 17.5h5" />
+                        </svg></div>
+                    <h3>Hosting</h3>
+                </a>
+                <a href="https://sisitus.com/layanan/maintenance" class="service-card">
+                    <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.8-2.8 1.9-2.3Z" />
+                        </svg></div>
+                    <h3>Maintenance</h3>
+                </a>
+            </div>
+        </section>
+
+        <section class="section" id="portofolio">
+            <div class="section-heading">
+                <h2 class="section-title">Lihat Hasil Kami</h2><a href="https://sisitus.com/portofolio" target="_blank"
+                    rel="noopener" class="section-link">Semua portofolio</a>
+            </div>
+            <div class="link-list"><a href="https://sisitus.com/portofolio" target="_blank" rel="noopener"
+                    class="link-card">
+                    <div class="link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="3" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <path d="m21 15-5-5L5 21" />
+                        </svg></div><span class="link-text">Portofolio Website SISITUS</span><svg class="link-arrow"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a></div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <h2 class="section-title">Jelajahi SISITUS</h2>
+            </div>
+            <div class="link-list">
+                <a href="https://sisitus.com" target="_blank" rel="noopener" class="link-card">
+                    <div class="link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 11.5 12 4l9 7.5" />
+                            <path d="M5.5 10.5V20h13v-9.5" />
+                        </svg></div><span class="link-text">Website Resmi SISITUS</span><svg class="link-arrow"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+                <a href="https://sisitus.com/blog" target="_blank" rel="noopener" class="link-card">
+                    <div class="link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z" />
+                            <path d="M8 8h8M8 12h8M8 16h5" />
+                        </svg></div><span class="link-text">Blog & Tips Digital</span><svg class="link-arrow"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+                <a href="https://sisitus.com/bantuan" target="_blank" rel="noopener" class="link-card">
+                    <div class="link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M9.7 9a2.4 2.4 0 1 1 4.2 1.6c-.9.8-1.9 1.2-1.9 2.4v1" />
+                            <rect x="11.75" y="16.6" width="0.5" height="0.5" />
+                        </svg></div><span class="link-text">Bantuan & Panduan</span><svg class="link-arrow"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <a href="https://wa.me/6281215289095" target="_blank" rel="noopener" class="whatsapp-card">
+                <div class="whatsapp-icon"><svg viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M12 2.05a9.95 9.95 0 0 0-8.57 15.1L2 22l4.98-1.3A9.95 9.95 0 1 0 12 2.05Zm0 17.9a7.9 7.9 0 0 1-4.03-1.1l-.29-.17-2.96.77.79-2.88-.19-.3A7.9 7.9 0 1 1 12 19.95Zm4.35-5.91c-.24-.12-1.4-.69-1.62-.77-.22-.08-.38-.12-.54.12-.16.24-.61.77-.75.93-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.17-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.1-.48.1-.1.24-.27.35-.41.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.47-.39-.41-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.83.81-.83 1.98s.85 2.3.97 2.46c.12.16 1.67 2.55 4.05 3.58.57.25 1.01.4 1.36.5.57.18 1.09.15 1.5.09.46-.07 1.4-.57 1.6-1.12.2-.55.2-1.02.14-1.12-.06-.1-.22-.16-.46-.28Z" />
+                    </svg></div>
+                <div class="whatsapp-text"><strong>Konsultasi via WhatsApp</strong><span>Tanya kebutuhan website
+                        Anda</span></div><svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="m9 18 6-6-6-6" />
+                </svg>
+            </a>
+        </section>
+
+        <section class="section">
+            <div class="contact-info"><strong>PT Sintara Digital Nusantara</strong><br>hello@sisitus.com<br>Senin–Sabtu
+                • 08.00–20.00 WIB<br>Indonesia • Melayani seluruh wilayah</div>
+        </section>
+
+        <div class="socials">
+            <a href="#" class="social" aria-label="Instagram" onclick="return false;"><svg viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1" />
+                </svg></a>
+            <a href="#" class="social" aria-label="TikTok" onclick="return false;"><svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.8">
+                    <path d="M14 4v10.2a4.2 4.2 0 1 1-3.2-4.07" />
+                    <path d="M14 4c.5 2.7 2.2 4.4 5 4.7" />
+                </svg></a>
+            <a href="#" class="social" aria-label="YouTube" onclick="return false;"><svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="6" width="18" height="12" rx="4" />
+                    <path d="m10 9 5 3-5 3V9Z" />
+                </svg></a>
+            <a href="#" class="social" aria-label="Facebook" onclick="return false;"><svg viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path
+                        d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.87.24-1.46 1.5-1.46h1.7V4a22 22 0 0 0-2.48-.13c-2.45 0-4.12 1.5-4.12 4.25V10H8v3h2.1v8h3.4Z" />
+                </svg></a>
+        </div>
+
+        <footer>
+            <div class="footer-logo">SISITUS</div>
+            <div class="footer-company">PT Sintara Digital Nusantara</div>
+            <div class="footer-links">
+                <a href="https://sisitus.com/syarat-ketentuan">Syarat & Ketentuan</a>
+                <a href="https://sisitus.com/kebijakan-privasi">Kebijakan Privasi</a>
+                <a href="https://sisitus.com/kebijakan-refund">Kebijakan Refund</a>
+            </div>
+            <div class="copyright">© 2026 SISITUS. All rights reserved.</div>
+        </footer>
+    </main>
+
+    <div class="toast" id="toast">Tautan berhasil disalin</div>
+    <script>
+        function sharePage() {
+            const shareData = {
+                title: "SISITUS — Website Siap Jadi",
+                text: "SISITUS — Website Siap Jadi untuk Bisnis Anda.",
+                url: window.location.href
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(() => { });
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href);
+                showToast();
+            } else {
+                prompt("Salin tautan berikut:", window.location.href);
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2200);
+        }
+    </script>
+</body>
+
+</html>

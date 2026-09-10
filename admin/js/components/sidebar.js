@@ -7,7 +7,7 @@ export class AdminSidebar {
     if (!this.container) return;
     this.container.innerHTML = `
       <div class="admin-sidebar-header">
-        <img src="/assets/img/logo/logo512x512.webp" alt="SISITUS Logo" style="width: 28px; height: 28px; object-fit: contain;">
+        <img src="/assets/img/logo/logo.svg" alt="SISITUS Logo" style="width: 28px; height: 28px; object-fit: contain;">
         <span class="admin-logo-text">SISITUS Admin</span>
       </div>
       <nav class="admin-nav-menu">
