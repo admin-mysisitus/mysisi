@@ -1,0 +1,390 @@
+/* Halaman Layanan CSS */
+
+/* Rekening Donasi Card */
+.donation-card {
+    background: white;
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.bank-detail-box {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    border: 2px dashed var(--alwahyu-primary);
+    margin-top: 20px;
+}
+
+.bank-name {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.bank-number {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    font-weight: 800;
+    color: var(--alwahyu-dark);
+    letter-spacing: clamp(1px, 1vw, 4px);
+    margin-bottom: 8px;
+    word-break: break-word;
+}
+
+.bank-holder {
+    font-weight: 600;
+    color: var(--alwahyu-text);
+}
+
+.donation-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--alwahyu-text);
+}
+
+.donation-thanks {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: var(--alwahyu-primary);
+    font-weight: 700;
+}
+
+/* WhatsApp Button Custom Styles */
+.wa-btn {
+    background: #25d366;
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.wa-btn:hover {
+    background: #20ba5a;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Forms & inputs inside Layanan pages (e.g. Pengaduan) */
+.form-card {
+    background: white;
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.form-card h2 {
+    margin-bottom: 24px;
+}
+
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    text-align: left;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--alwahyu-dark);
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--alwahyu-border);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    background: white;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    border-color: var(--alwahyu-primary);
+    box-shadow: 0 0 0 4px rgba(62, 125, 55, 0.1);
+}
+
+/* Registration details page */
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-list li {
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--alwahyu-border);
+    padding-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+.info-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Donasi Badges & Cards */
+.donation-card-item {
+    background: white;
+    border: 1px solid var(--alwahyu-border);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.badge-category {
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.badge-green { background: rgba(62,125,55,0.1); color: var(--alwahyu-primary); }
+.badge-blue { background: rgba(37,150,190,0.1); color: #2596be; }
+.badge-yellow { background: rgba(253,240,0,0.15); color: #c9aa00; }
+
+.info-block {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+}
+.info-block-green { border-left: 3px solid var(--alwahyu-primary); }
+.info-block-blue { border-left: 3px solid #2596be; }
+.info-block-yellow { border-left: 3px solid #c9aa00; }
+
+/* Status Check Forms */
+.status-form-container {
+    background: white;
+    border: 1px solid var(--alwahyu-border);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+.status-form-icon-text {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .donation-card, .form-card { padding: 16px; }
+    .bank-detail-box { padding: 16px; }
+}
+
+/* Pendaftaran Santri Page Redesign Elements */
+
+/* Timeline/Alur Pendaftaran */
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 40px auto 60px auto;
+    padding: 0 10px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 32px;
+    width: 4px;
+    background: var(--alwahyu-border);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    padding-left: 70px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: 12px;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: 3px solid var(--alwahyu-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--alwahyu-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    z-index: 1;
+}
+
+.timeline-content {
+    background: white;
+    padding: 24px 30px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+    border: 1px solid var(--alwahyu-border);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateX(5px);
+    border-color: var(--alwahyu-primary);
+}
+
+.timeline-content h3 {
+    font-size: 1.15rem;
+    color: var(--alwahyu-dark);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.timeline-content p {
+    color: var(--alwahyu-text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Two-column Form Row Grid */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    color: var(--alwahyu-dark);
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--alwahyu-border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-section-title i {
+    color: var(--alwahyu-primary);
+}
+
+/* JS Injected Components */
+.js-success-container { text-align: center; padding: 20px 0; }
+.js-success-icon-wrapper { width: 80px; height: 80px; background: rgba(62, 125, 55, 0.1); color: var(--alwahyu-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 24px; }
+.js-success-title { margin-bottom: 12px; font-size: 1.6rem; text-align: center; }
+.js-success-desc { color: var(--alwahyu-text); line-height: 1.6; margin-bottom: 24px; }
+.js-account-info-box { background: #f8fafc; border: 1px solid var(--alwahyu-border); border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 30px; }
+.js-account-info-title { font-weight: 700; color: var(--alwahyu-dark); margin-bottom: 10px; font-size: 0.95rem; }
+.js-account-info-text { margin-bottom: 6px; font-size: 0.9rem; color: var(--alwahyu-text); }
+.js-account-info-text.mb-12 { margin-bottom: 12px; }
+.js-account-info-note { font-size: 0.8rem; color: #64748b; line-height: 1.4; border-top: 1px solid var(--alwahyu-border); padding-top: 10px; }
+.js-btn-primary-padded { display: inline-block; padding: 12px 30px; }
+.js-loading-container { text-align:center; padding: 20px; }
+.js-loading-icon { font-size: 2rem; color: var(--alwahyu-primary); }
+.js-loading-text { margin-top:10px; color:var(--alwahyu-text); }
+.js-status-card { background: #f8fafc; border: 1px solid var(--alwahyu-border); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+.js-status-header { display:flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--alwahyu-border); padding-bottom: 12px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.js-status-name { font-size: 1.1rem; color: var(--alwahyu-dark); font-weight:700; margin:0; }
+.js-status-nisn { font-size: 0.85rem; color: var(--alwahyu-text); }
+.js-status-badge { background: rgba(62,125,55,0.1); color: var(--alwahyu-primary); padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight:700; }
+.js-timeline-wrapper { display: flex; justify-content: space-between; position: relative; margin: 40px 0 20px 0; padding: 0 10px; overflow-x: auto; gap: 20px; }
+.js-timeline-line-bg { position: absolute; top: 15px; left: 0; right: 0; height: 4px; background: #e2e8f0; z-index: 1; }
+.js-timeline-line-active { position: absolute; top: 15px; left: 0; height: 4px; background: var(--alwahyu-primary); z-index: 1; transition: width 0.5s ease; }
+.js-status-step { text-align: center; z-index: 2; flex: 1; min-width: 70px; }
+.js-step-dot { width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; transition: all 0.3s ease; }
+.js-step-label { font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+.js-status-msg { margin-top: 24px; padding: 15px; border-radius: 8px; background: rgba(62,125,55,0.05); color: var(--alwahyu-primary); font-size: 0.95rem; font-weight: 500; border-left: 4px solid var(--alwahyu-primary); text-align: center; }
+.js-error-container { text-align: center; padding: 20px; border: 1px dashed #ef4444; background: rgba(239,68,68,0.02); border-radius: 12px; }
+.js-error-icon { font-size: 2.2rem; color: #ef4444; margin-bottom: 12px; }
+.js-error-title { font-weight: 700; color: #ef4444; margin-bottom: 6px; margin-top: 0; }
+.js-error-desc { color: var(--alwahyu-text); font-size: 0.9rem; margin: 0; }
+
+/* Administrasi Tab Components */
+.tabs-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--alwahyu-border);
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+}
+.admin-tab-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--alwahyu-text);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 8px;
+    border-bottom: 3px solid transparent;
+}
+.admin-tab-btn.active, .admin-tab-btn:hover {
+    color: var(--alwahyu-primary);
+    border-bottom-color: var(--alwahyu-primary);
+}
+.admin-tab-title {
+    font-size: 1.4rem;
+    color: var(--alwahyu-dark);
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.admin-tab-desc {
+    color: var(--alwahyu-text);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+.admin-tab-subtitle {
+    font-weight: 700;
+    color: var(--alwahyu-dark);
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+.admin-tab-subtitle-bordered {
+    font-weight: 700;
+    color: var(--alwahyu-dark);
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--alwahyu-border);
+    padding-bottom: 10px;
+}
+.admin-tab-list {
+    padding-left: 20px;
+    color: var(--alwahyu-text);
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+.jam-layanan-box {
+    background: white;
+    border: 1px solid var(--alwahyu-border);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    margin-top: 45px;
+}

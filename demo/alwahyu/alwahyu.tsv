@@ -1,0 +1,33 @@
+#table:users
+id	name	email	password	role
+1	Admin Alwahyu	admin@alwahyu.com	admin123	admin
+
+#table:santri
+id	user_id	nis	kelas	kamar	nama_ayah	nama_ibu	wa_wali	status_aktif
+
+#table:pengurus
+id	user_id	nip	nama	jabatan	mapel
+
+#table:pembayaran
+id	santri_id	jenis	nominal	status	bukti_transfer	tanggal
+
+#table:hafalan
+id	santri_id	surat	ayat_awal	ayat_akhir	nilai	catatan	tanggal
+
+#table:nilai
+id	santri_id	mapel	nilai	semester
+
+#table:absensi
+id	santri_id	tanggal	status
+
+#table:perizinan
+id	santri_id	jenis	keterangan	status	tanggal_pengajuan	tanggal_kembali
+
+#table:pengumuman
+id	judul	isi	tanggal	pembuat
+
+#table:pengaduan
+id	nama	kontak	jenis	isi	tanggal
+
+#table:administrasi
+id	layanan_type	field_0	field_1	field_2	field_3	tanggal

@@ -5,6 +5,7 @@ Disallow: /auth/
 Disallow: /cart/
 Disallow: /dashboard/
 Disallow: /invoice/
+Disallow: /demo/
 Disallow: /spreadsheet.tsv
 Allow: /assets/img/team/lukman.webp
 Disallow: /assets/img/team/adhim.webp

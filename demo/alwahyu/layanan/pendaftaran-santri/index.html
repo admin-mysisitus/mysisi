@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/favicon/favicon_io (2)/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon/favicon_io (2)/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/img/favicon/favicon_io (2)/favicon-16x16.png">
+    <link rel="manifest" href="../../assets/img/favicon/favicon_io (2)/site.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penerimaan Santri Baru - PPTQ AL WAHYU</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/global/variables.css">
+<link rel="stylesheet" href="../../assets/css/global/reset.css">
+<link rel="stylesheet" href="../../assets/css/global/layout.css">
+<link rel="stylesheet" href="../../assets/css/global/components.css">
+<link rel="stylesheet" href="../../assets/css/global/animations.css">
+<link rel="stylesheet" href="../../assets/css/pages/layanan.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+<header class="header">
+
+<nav class="navbar">
+
+<a href="https://maps.app.goo.gl/uLiReoaKe8HRWjCx5?g_st=ac" target="_blank" class="logo">
+    <img src="../../assets/img/logo/tinny-logo.png" alt="Logo PPTQ AL WAHYU" class="logo-img">
+
+    <div class="logo-text">
+        <strong>PPTQ AL WAHYU</strong>
+        <span>Ponpes Tahfidz Al-Qur’an</span>
+    </div>
+</a>
+
+<ul class="nav-menu">
+
+<li><a href="../../index.html"><i class="ph ph-house"></i> Beranda</a></li>
+
+<li><a href="../../profile/index.html"><i class="ph ph-identification-badge"></i> Profil</a></li>
+
+<li class="dropdown">
+    <a href="#"><i class="ph ph-buildings"></i> Lembaga</a>
+
+    <div class="dropdown-menu">
+        <a href="../../lembaga/formal/index.html"><i class="ph ph-backpack"></i> Pendidikan Formal</a>
+        <a href="../../lembaga/madin/index.html"><i class="ph ph-mosque"></i> Madrasah Diniyah</a>
+        <a href="../../lembaga/tahfidz/index.html"><i class="ph ph-book-open-text"></i> Tahfidz</a>
+        <a href="../../lembaga/yayasan/index.html"><i class="ph ph-bank"></i> Yayasan</a>
+    </div>
+</li>
+
+<li class="dropdown">
+    <a href="#"><i class="ph ph-info"></i> Informasi</a>
+
+    <div class="dropdown-menu">
+        <a href="../../informasi/berita/index.html"><i class="ph ph-newspaper"></i> Berita</a>
+        <a href="../../informasi/agenda/index.html"><i class="ph ph-calendar"></i> Agenda</a>
+        <a href="../../informasi/artikel/index.html"><i class="ph ph-file-text"></i> Artikel</a>
+    </div>
+</li>
+
+<li class="dropdown">
+    <a href="#"><i class="ph ph-handshake"></i> Layanan</a>
+
+    <div class="dropdown-menu">
+        <a href="../../layanan/pendaftaran-santri/index.html"><i class="ph ph-user-plus"></i> Pendaftaran Santri</a>
+        <a href="../../layanan/administrasi/index.html"><i class="ph ph-folder-open"></i> Administrasi</a>
+        <a href="../../layanan/pengaduan/index.html"><i class="ph ph-warning-circle"></i> Pengaduan</a>
+        <a href="../../layanan/donasi/index.html"><i class="ph ph-gift"></i> Donasi</a>
+    </div>
+</li>
+
+<li>
+    <a href="../../e-ponpes/index.html"><i class="ph ph-laptop"></i> E-Ponpes</a>
+</li>
+
+</ul>
+
+<a href="#form-daftar-santri" class="btn-daftar">
+Daftar Santri
+</a>
+
+<button class="menu-btn" id="menuBtn">
+
+<span class="dot d1"></span>
+<span class="dot d2"></span>
+<span class="dot d3"></span>
+<span class="dot d4"></span>
+
+</button>
+
+</nav>
+
+</header>
+
+<!-- MOBILE PANEL -->
+
+<div class="mobile-panel" id="mobilePanel">
+
+<a href="../../index.html" class="mobile-link"><i class="ph ph-house"></i> Beranda</a>
+
+<a href="../../profile/index.html" class="mobile-link"><i class="ph ph-identification-badge"></i> Profil</a>
+
+<div class="mobile-item">
+
+<button class="mobile-dropdown-btn"><i class="ph ph-buildings"></i> Lembaga
+    <span class="dropdown-icon">▼</span>
+</button>
+
+<div class="mobile-submenu">
+    <a href="../../lembaga/formal/index.html"><i class="ph ph-backpack"></i> Pendidikan Formal</a>
+    <a href="../../lembaga/madin/index.html"><i class="ph ph-mosque"></i> Madrasah Diniyah</a>
+    <a href="../../lembaga/tahfidz/index.html"><i class="ph ph-book-open-text"></i> Tahfidz</a>
+    <a href="../../lembaga/yayasan/index.html"><i class="ph ph-bank"></i> Yayasan</a>
+</div>
+
+</div>
+
+<div class="mobile-item">
+
+<button class="mobile-dropdown-btn"><i class="ph ph-info"></i> Informasi
+    <span class="dropdown-icon">▼</span>
+</button>
+
+<div class="mobile-submenu">
+    <a href="../../informasi/berita/index.html"><i class="ph ph-newspaper"></i> Berita</a>
+    <a href="../../informasi/agenda/index.html"><i class="ph ph-calendar"></i> Agenda</a>
+    <a href="../../informasi/artikel/index.html"><i class="ph ph-file-text"></i> Artikel</a>
+</div>
+
+</div>
+
+<div class="mobile-item">
+
+<button class="mobile-dropdown-btn"><i class="ph ph-handshake"></i> Layanan
+    <span class="dropdown-icon">▼</span>
+</button>
+
+<div class="mobile-submenu">
+    <a href="../../layanan/pendaftaran-santri/index.html"><i class="ph ph-user-plus"></i> Pendaftaran Santri</a>
+    <a href="../../layanan/administrasi/index.html"><i class="ph ph-folder-open"></i> Administrasi</a>
+    <a href="../../layanan/pengaduan/index.html"><i class="ph ph-warning-circle"></i> Pengaduan</a>
+    <a href="../../layanan/donasi/index.html"><i class="ph ph-gift"></i> Donasi</a>
+</div>
+
+</div>
+
+<a href="../../e-ponpes/index.html" class="mobile-link"><i class="ph ph-laptop"></i> E-Ponpes</a>
+
+<a href="#form-daftar-santri" class="mobile-daftar">
+Daftar Santri
+</a>
+
+</div>
+
+
+
+<main class="page-content">
+<section class='page-header fade-in-up'><div class='container text-center'><h1 class='section-title'>Pendaftaran Santri Baru</h1><p class='section-desc'>Bergabunglah bersama kami menjadi generasi Qur'ani.</p></div></section>
+<section class="section-padding fade-in-up delay-100 pt-30">
+    <div class="container">
+        
+        <!-- Cek Status Pendaftaran Section -->
+        <div class="status-form-container slide-in-up">
+            <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                <i class="ph-fill ph-magnifying-glass" style="color: var(--alwahyu-primary);"></i> Cek Status Pendaftaran
+            </h2>
+            <p style="color: var(--alwahyu-text); margin-bottom: 20px; font-size: 0.95rem;">Masukkan email pendaftaran atau nomor NISN calon santri untuk memantau perkembangan proses verifikasi dan seleksi.</p>
+            
+            <form id="form-cek-status" style="display: flex; gap: 12px; max-width: 600px; margin-bottom: 16px; flex-wrap: wrap;">
+                <input type="text" id="input-cek-status" placeholder="Contoh: email@wali.com atau NISN" style="flex: 1; min-width: 250px; padding: 8px 12px; border: 1px solid var(--alwahyu-border); border-radius: 8px; font-size: 0.95rem;" required>
+                <button type="submit" class="btn-primary" style="margin: 0; width: auto; padding: 8px 16px; white-space: nowrap;"><i class="ph-fill ph-magnifying-glass"></i> Cek Status</button>
+            </form>
+
+            <!-- Results Container -->
+            <div id="status-result-container" style="display: none; border-top: 1px solid var(--alwahyu-border); padding-top: 16px; margin-top: 16px;">
+                <!-- Result status will be dynamically rendered here -->
+            </div>
+        </div>
+        
+        <!-- Timeline Section -->
+        <div class="mb-60">
+            <h2 class="section-title text-center">Alur Pendaftaran</h2>
+            <p class="section-desc text-center">Ikuti langkah-langkah berikut untuk melakukan pendaftaran santri baru di PPTQ Al Wahyu.</p>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">1</div>
+                    <div class="timeline-content">
+                        <h3>Mengisi Formulir Online</h3>
+                        <p>Mengisi formulir pendaftaran santri baru lengkap di bagian bawah halaman ini secara akurat.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">2</div>
+                    <div class="timeline-content">
+                        <h3>Mengikuti Tes Seleksi</h3>
+                        <p>Santri mengikuti tes kemampuan baca tulis Al-Qur'an, tajwid, makhroj, serta wawancara dengan penguji.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">3</div>
+                    <div class="timeline-content">
+                        <h3>Pengumuman Kelulusan</h3>
+                        <p>Hasil kelulusan akan diumumkan melalui Portal E-Ponpes menggunakan akun yang Anda daftarkan di sini.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">4</div>
+                    <div class="timeline-content">
+                        <h3>Daftar Ulang & Administrasi</h3>
+                        <p>Setelah dinyatakan lulus, lakukan pembayaran biaya masuk pondok dan unggah bukti transfer melalui Portal E-Ponpes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info & Form Split Section -->
+        <div class="layanan-split-grid">
+            
+            <!-- Left: Info Card -->
+            <div class="form-card" style="height: 100%;">
+                <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 20px; border-bottom: 2px solid var(--alwahyu-border); padding-bottom: 12px;">
+                    <i class="ph-fill ph-info" style="color: var(--alwahyu-primary); margin-right: 8px;"></i> Informasi Pendaftaran
+                </h2>
+                <ul class="info-list">
+                    <li>
+                        <strong>Jadwal Pendaftaran:</strong><br>
+                        <span style="font-size: 0.95rem; color: var(--alwahyu-text); line-height: 1.6; display: block; margin-top: 4px;">
+                            • <strong>Gelombang 1:</strong> 1 Januari - 15 Maret 2026<br>
+                            • <strong>Gelombang 2:</strong> 16 Maret - 31 Mei 2026<br>
+                            • <strong>Tes Masuk:</strong> Gel. 1 (22 Maret 2026) | Gel. 2 (7 Juni 2026)<br>
+                            • <strong>Pengumuman:</strong> Gel. 1 (25 Maret 2026) | Gel. 2 (10 Juni 2026)
+                        </span>
+                    </li>
+                    <li>
+                        <strong>Syarat & Dokumen:</strong><br>
+                        <span style="font-size: 0.95rem; color: var(--alwahyu-text); line-height: 1.6; display: block; margin-top: 4px;">
+                            • Lulus SD/MI (SMP) atau SMP/MTs (SMA)<br>
+                            • Lancar membaca Al-Qur'an (tajwid dasar)<br>
+                            • Wajib tinggal di asrama (mukim)<br>
+                            • Berkas: Fotokopi Akta Lahir, KK, Ijazah/SKL, Pas Foto 3x4 (4 lembar), & Surat Sehat Dokter.
+                        </span>
+                    </li>
+                    <li>
+                        <strong>Rincian Biaya Masuk:</strong><br>
+                        <span style="font-size: 0.95rem; color: var(--alwahyu-text); line-height: 1.6; display: block; margin-top: 4px;">
+                            • Uang Pendaftaran: Rp 200.000<br>
+                            • Uang Pangkal/Pembangunan: Rp 3.000.000<br>
+                            • Uang Seragam (5 Setel): Rp 1.000.000<br>
+                            • Kitab & Sarana Penunjang Kamar: Rp 1.300.000<br>
+                            • <strong>Total Awal: Rp 5.300.000</strong><br>
+                            • SPP Bulanan (Makan 3x, Laundry, Asrama): Rp 1.200.000
+                        </span>
+                    </li>
+                    <li>
+                        <strong>Kuota Penerimaan:</strong><br>
+                        <span style="font-size: 0.95rem; color: var(--alwahyu-text); line-height: 1.6; display: block; margin-top: 4px;">
+                            • <strong>SMP Al Wahyu:</strong> 60 Santri (30 Putra, 30 Putri)<br>
+                            • <strong>SMA Al Wahyu:</strong> 40 Santri (20 Putra, 20 Putri)<br>
+                            • <strong>Total Kuota:</strong> 100 Santri Baru
+                        </span>
+                    </li>
+                    <li>
+                        <strong>Sistem Pemukiman:</strong><br>
+                        <span style="font-size: 0.95rem; color: var(--alwahyu-text); line-height: 1.6; display: block; margin-top: 4px;">
+                            Wajib Mukim (Seluruh santri wajib menetap di Asrama Pesantren untuk menjaga kedisiplinan dan keberlanjutan program tahfidz).
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right: Form Card -->
+            <div class="form-card">
+                <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: 20px; border-bottom: 2px solid var(--alwahyu-border); padding-bottom: 12px;">
+                    <i class="ph-fill ph-signature" style="color: var(--alwahyu-primary); margin-right: 8px;"></i> Formulir Pendaftaran
+                </h2>
+                
+                <form id="form-daftar-santri" class="custom-form">
+                    <!-- Section: Data Calon Santri -->
+                    <div class="form-section-title">
+                        <i class="ph-fill ph-graduation-cap"></i> Data Calon Santri
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="nama-santri">Nama Lengkap Santri</label>
+                        <input type="text" id="nama-santri" placeholder="Masukkan nama lengkap calon santri" required>
+                    </div>
+                    
+                    <div class="form-grid-2">
+                        <div class="form-row">
+                            <label for="nis-santri">NIS / NISN</label>
+                            <input type="text" id="nis-santri" placeholder="Nomor Induk Siswa" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="jenjang-santri">Pilihan Jenjang</label>
+                            <select id="jenjang-santri" required>
+                                <option value="" disabled selected>Pilih Jenjang</option>
+                                <option value="SMP Kelas 7">SMP (Kelas 7)</option>
+                                <option value="SMA Kelas 10">SMA (Kelas 10)</option>
+                                <option value="Tahfidz Intensif">Program Tahfidz Intensif</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="jk-santri">Jenis Kelamin</label>
+                        <select id="jk-santri" required>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <!-- Section: Data Orang Tua / Wali -->
+                    <div class="form-section-title">
+                        <i class="ph-fill ph-users"></i> Data Orang Tua / Wali
+                    </div>
+                    
+                    <div class="form-grid-2">
+                        <div class="form-row">
+                            <label for="nama-ayah">Nama Ayah</label>
+                            <input type="text" id="nama-ayah" placeholder="Nama ayah kandung" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="nama-ibu">Nama Ibu</label>
+                            <input type="text" id="nama-ibu" placeholder="Nama ibu kandung" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="wa-wali">No. HP / WhatsApp Wali</label>
+                        <input type="tel" id="wa-wali" placeholder="Contoh: 081234567890" required>
+                    </div>
+
+                    <!-- Section: Akun Login E-Ponpes -->
+                    <div class="form-section-title">
+                        <i class="ph-fill ph-key"></i> Kredensial Akses E-Ponpes
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="email-login">Email Pendaftaran</label>
+                        <input type="email" id="email-login" placeholder="Email aktif wali / santri" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="pass-login">Password Baru</label>
+                        <input type="password" id="pass-login" placeholder="Minimal 6 karakter" required minlength="6">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary btn-submit" id="btnSubmitDaftar">
+                        <i class="ph-fill ph-user-plus"></i> Kirim Pendaftaran
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+</main>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div class="footer-col">
+            <div class="footer-logo">
+                <img src="../../assets/img/logo/tinny-logo.png" alt="Logo PPTQ AL WAHYU" class="footer-logo-img">
+                <div class="footer-logo-text">
+                    <strong class="footer-logo-title">PPTQ AL WAHYU</strong>
+                    <span class="footer-logo-subtitle">Ponpes Tahfidz Al-Qur’an</span>
+                </div>
+            </div>
+            <p>Pusat Pendidikan Islam dan Tahfidz Al-Qur'an yang mencetak generasi beradab, mandiri, dan visioner.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Kontak Kami</h3>
+            <p><i class="ph-fill ph-phone"></i> +62 812 3020 0098</p>
+            <p><i class="ph ph-clock"></i> Senin - Jumat, 08.00 - 16.00 WIB</p>
+        </div>
+        <div class="footer-col">
+            <h3>Sosial Media</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/ponpestahfidzalwahyu?igsh=MWFzdzlpNDU1OXN2cg==" target="_blank"><i class="ph ph-instagram-logo"></i> Instagram</a>
+                <a href="https://www.facebook.com/share/1DFZfmiqeV/" target="_blank"><i class="ph ph-facebook-logo"></i> Facebook</a>
+                <a href="https://youtube.com/@alwahyuchannel?si=UnHLhtk589R4jCXM" target="_blank"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 PPTQ AL WAHYU. Semua Hak Dilindungi.</p>
+    </div>
+</footer>
+
+<!-- TOAST ALERT -->
+<div class="ep-toast" id="epToast">
+    <span class="ep-toast-icon"><i class="ph-fill ph-check-circle"></i></span>
+    <span id="epToastMsg">Pesan Berhasil</span>
+</div>
+
+<script src="../../assets/js/global/navigation.js"></script>
+<script src="../../assets/js/global/main.js"></script>
+<script src="../../assets/js/global/config.js"></script>
+<script src="../../assets/js/global/eponpes-shared.js"></script>
+<script src="../../assets/js/pages/pendaftaran-santri.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--alwahyu-text);
+    background-color: var(--alwahyu-bg);
+    line-height: 1.6;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.section-padding {
+    padding: 60px 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-4 {
+    margin-top: 24px;
+}
+
+.bg-light {
+    background-color: #f8fafc;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    color: var(--alwahyu-dark);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.section-desc {
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+    color: var(--alwahyu-text);
+    font-size: 1.1rem;
+}
+
+.btn-primary, .btn-outline {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--alwahyu-primary), var(--alwahyu-primary-2));
+    color: white;
+    box-shadow: 0 4px 15px rgba(62, 125, 55, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(62, 125, 55, 0.4);
+}
+
+.btn-outline {
+    border: 2px solid var(--alwahyu-primary);
+    color: var(--alwahyu-primary);
+    background: transparent;
+}
+
+.btn-outline:hover {
+    background: var(--alwahyu-primary);
+    color: white;
+}
+
+/* Page Header (Global banner for subpages) */
+.page-header {
+    padding: 100px 0 40px 0;
+    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('../../assets/img/banner/hero-1.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+.page-header-logo {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.page-header-logo img {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.page-header .section-title {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.page-header .section-desc {
+    color: #cbd5e1;
+}
+
+/* Mobile Adjustments for Compact Layout */
+@media (max-width: 768px) {
+    .section-padding {
+        padding: 30px 0;
+    }
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+    .section-desc {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+    }
+    .page-header {
+        padding: 80px 0 30px 0;
+    }
+    .mt-4 {
+        margin-top: 16px;
+    }
+    .container {
+        padding: 0 16px;
+    }
+}
+
+/* 
+ * Utility Classes 
+ */
+.p-20 { padding: 20px; }
+.p-16 { padding: 16px; }
+.pt-30 { padding-top: 30px; }
+.pt-20 { padding-top: 20px; }
+.pb-20 { padding-bottom: 20px; }
+.mb-60 { margin-bottom: 60px; }
+.mb-50 { margin-bottom: 50px; }
+.mb-30 { margin-bottom: 30px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-15 { margin-bottom: 15px; }
+.mt-24 { margin-top: 24px; }
+.mt-10 { margin-top: 10px; }
+.gap-12 { gap: 12px; }
+.cursor-default { cursor: default; }
+.d-inline-block { display: inline-block; }
+.d-flex-wrap { display: flex; flex-wrap: wrap; }
+.flex-center-content { display: flex; justify-content: center; }
+.align-items-center { align-items: center; }
+.w-full { width: 100%; }

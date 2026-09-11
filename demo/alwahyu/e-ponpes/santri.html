@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/favicon/favicon_io (2)/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon/favicon_io (2)/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/img/favicon/favicon_io (2)/favicon-16x16.png">
+    <link rel="manifest" href="../assets/img/favicon/favicon_io (2)/site.webmanifest">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Santri - E-Ponpes PPTQ AL WAHYU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/global/variables.css">
+    <link rel="stylesheet" href="../assets/css/global/reset.css">
+    <link rel="stylesheet" href="../assets/css/global/layout.css">
+    <link rel="stylesheet" href="../assets/css/global/components.css">
+    <link rel="stylesheet" href="../assets/css/global/animations.css">
+    <link rel="stylesheet" href="../assets/css/pages/eponpes.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+<header class="header">
+    <nav class="navbar">
+        <a href="https://maps.app.goo.gl/uLiReoaKe8HRWjCx5?g_st=ac" target="_blank" class="logo">
+            <img src="../assets/img/logo/tinny-logo.png" alt="Logo PPTQ AL WAHYU" class="logo-img">
+            <div class="logo-text">
+                <strong>PPTQ AL WAHYU</strong>
+                <span>Ponpes Tahfidz Al-Qur’an</span>
+            </div>
+        </a>
+        <ul class="nav-menu">
+            <li><a href="../index.html"><i class="ph ph-house"></i> Beranda</a></li>
+            <li><a href="../profile/index.html"><i class="ph ph-identification-badge"></i> Profil</a></li>
+            <li class="dropdown">
+                <a href="#"><i class="ph ph-buildings"></i> Lembaga</a>
+                <div class="dropdown-menu">
+                    <a href="../lembaga/formal/index.html"><i class="ph ph-backpack"></i> Pendidikan Formal</a>
+                    <a href="../lembaga/madin/index.html"><i class="ph ph-mosque"></i> Madrasah Diniyah</a>
+                    <a href="../lembaga/tahfidz/index.html"><i class="ph ph-book-open-text"></i> Tahfidz</a>
+                    <a href="../lembaga/yayasan/index.html"><i class="ph ph-bank"></i> Yayasan</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#"><i class="ph ph-info"></i> Informasi</a>
+                <div class="dropdown-menu">
+                    <a href="../informasi/berita/index.html"><i class="ph ph-newspaper"></i> Berita</a>
+                    <a href="../informasi/agenda/index.html"><i class="ph ph-calendar"></i> Agenda</a>
+                    <a href="../informasi/artikel/index.html"><i class="ph ph-file-text"></i> Artikel</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#"><i class="ph ph-handshake"></i> Layanan</a>
+                <div class="dropdown-menu">
+                    <a href="../layanan/pendaftaran-santri/index.html"><i class="ph ph-user-plus"></i> Pendaftaran Santri</a>
+                    <a href="../layanan/administrasi/index.html"><i class="ph ph-folder-open"></i> Administrasi</a>
+                    <a href="../layanan/pengaduan/index.html"><i class="ph ph-warning-circle"></i> Pengaduan</a>
+                    <a href="../layanan/donasi/index.html"><i class="ph ph-gift"></i> Donasi</a>
+                </div>
+            </li>
+            <li><a href="index.html"><i class="ph ph-laptop"></i> E-Ponpes</a></li>
+        </ul>
+        <a href="../layanan/pendaftaran-santri/index.html" class="btn-daftar">Daftar Santri</a>
+        <button class="menu-btn" id="menuBtn">
+            <span class="dot d1"></span>
+            <span class="dot d2"></span>
+            <span class="dot d3"></span>
+            <span class="dot d4"></span>
+        </button>
+    </nav>
+</header>
+
+<!-- MOBILE PANEL -->
+<div class="mobile-panel" id="mobilePanel">
+    <a href="../index.html" class="mobile-link"><i class="ph ph-house"></i> Beranda</a>
+    <a href="../profile/index.html" class="mobile-link"><i class="ph ph-identification-badge"></i> Profil</a>
+    <div class="mobile-item">
+        <button class="mobile-dropdown-btn"><i class="ph ph-buildings"></i> Lembaga
+    <span class="dropdown-icon">▼</span></button>
+        <div class="mobile-submenu">
+            <a href="../lembaga/formal/index.html"><i class="ph ph-backpack"></i> Pendidikan Formal</a>
+            <a href="../lembaga/madin/index.html"><i class="ph ph-mosque"></i> Madrasah Diniyah</a>
+            <a href="../lembaga/tahfidz/index.html"><i class="ph ph-book-open-text"></i> Tahfidz</a>
+            <a href="../lembaga/yayasan/index.html"><i class="ph ph-bank"></i> Yayasan</a>
+        </div>
+    </div>
+    <div class="mobile-item">
+        <button class="mobile-dropdown-btn"><i class="ph ph-info"></i> Informasi
+    <span class="dropdown-icon">▼</span></button>
+        <div class="mobile-submenu">
+            <a href="../informasi/berita/index.html"><i class="ph ph-newspaper"></i> Berita</a>
+            <a href="../informasi/agenda/index.html"><i class="ph ph-calendar"></i> Agenda</a>
+            <a href="../informasi/artikel/index.html"><i class="ph ph-file-text"></i> Artikel</a>
+        </div>
+    </div>
+    <div class="mobile-item">
+        <button class="mobile-dropdown-btn"><i class="ph ph-handshake"></i> Layanan
+    <span class="dropdown-icon">▼</span></button>
+        <div class="mobile-submenu">
+            <a href="../layanan/pendaftaran-santri/index.html"><i class="ph ph-user-plus"></i> Pendaftaran Santri</a>
+            <a href="../layanan/administrasi/index.html"><i class="ph ph-folder-open"></i> Administrasi</a>
+            <a href="../layanan/pengaduan/index.html"><i class="ph ph-warning-circle"></i> Pengaduan</a>
+            <a href="../layanan/donasi/index.html"><i class="ph ph-gift"></i> Donasi</a>
+        </div>
+    </div>
+    <a href="index.html" class="mobile-link"><i class="ph ph-laptop"></i> E-Ponpes</a>
+    <a href="../layanan/pendaftaran-santri/index.html" class="mobile-daftar">Daftar Santri</a>
+</div>
+
+<main class="page-content">
+    <section class='page-header fade-in-up'>
+        <div class='container text-center'>
+            <h1 class='section-title'>Portal Santri / Wali</h1>
+            <p class='section-desc'>Portal Digital Terpadu Santri dan Wali Santri PPTQ AL WAHYU.</p>
+        </div>
+    </section>
+    
+    <section class="section-padding fade-in-up delay-100" style="padding-top:20px;">
+        <div class="container">
+            <div class="ep-dashboard" style="display: grid;">
+                <!-- SIDEBAR -->
+                <div class="ep-sidebar">
+                    <div class="ep-profile-box">
+                        <div class="ep-avatar" id="userAvatar">AW</div>
+                        <h4 id="userName">Loading...</h4>
+                        <span id="userRole">Santri</span>
+                    </div>
+                    
+                    <ul class="ep-menu" id="epMenu">
+                        <li class="ep-menu-item"><button class="ep-menu-btn active" data-tab="dashboard"><i class="ph-fill ph-gauge"></i> Dashboard</button></li>
+                        <li class="ep-menu-item"><button class="ep-menu-btn" data-tab="setoran"><i class="ph-fill ph-microphone"></i> Setor Hafalan</button></li>
+                        <li class="ep-menu-item"><button class="ep-menu-btn" data-tab="nilai"><i class="ph-fill ph-graduation-cap"></i> Rapor Akademik</button></li>
+                        <li class="ep-menu-item"><button class="ep-menu-btn" data-tab="keuangan"><i class="ph-fill ph-receipt"></i> Tagihan SPP</button></li>
+                        <li class="ep-menu-item"><button class="ep-menu-btn" data-tab="perizinan"><i class="ph-fill ph-calendar-plus"></i> Izin Pulang/Keluar</button></li>
+                        <li class="ep-menu-item"><button class="ep-menu-btn" data-tab="pengumuman"><i class="ph-fill ph-megaphone"></i> Papan Pengumuman</button></li>
+                    </ul>
+                    
+                    <button class="ep-menu-btn ep-logout-btn" id="logoutBtn">
+                        <i class="ph-fill ph-sign-out"></i> Keluar
+                    </button>
+                </div>
+                
+                <!-- MAIN CONTENT AREA -->
+                <div class="ep-main-content">
+                    <div class="ep-content-header">
+                        <h2 id="contentTitle">Dashboard</h2>
+                        <div id="contentHeaderActions"></div>
+                    </div>
+                    
+                    <div id="tabPanelsContainer">
+                        <!-- PANEL: DASHBOARD -->
+                        <div id="panel-santri-dashboard" class="ep-tab-panel active">
+                            <div class="ep-stats-grid">
+                                <div class="ep-stat-card">
+                                    <div class="ep-stat-icon"><i class="ph-fill ph-book-open-text"></i></div>
+                                    <div class="ep-stat-info">
+                                        <span class="ep-stat-label">Hafalan Quran</span>
+                                        <span class="ep-stat-value" id="stat-santri-juz">0 Juz</span>
+                                    </div>
+                                </div>
+                                <div class="ep-stat-card">
+                                    <div class="ep-stat-icon warning"><i class="ph-fill ph-receipt"></i></div>
+                                    <div class="ep-stat-info">
+                                        <span class="ep-stat-label">Tunggakan SPP</span>
+                                        <span class="ep-stat-value" id="stat-santri-spp">Rp 0</span>
+                                    </div>
+                                </div>
+                                <div class="ep-stat-card">
+                                    <div class="ep-stat-icon success"><i class="ph-fill ph-calendar-check"></i></div>
+                                    <div class="ep-stat-info">
+                                        <span class="ep-stat-label">Kehadiran (Hadir)</span>
+                                        <span class="ep-stat-value" id="stat-santri-absen">0 Hari</span>
+                                    </div>
+                                </div>
+                                <div class="ep-stat-card">
+                                    <div class="ep-stat-icon danger"><i class="ph-fill ph-warning-circle"></i></div>
+                                    <div class="ep-stat-info">
+                                        <span class="ep-stat-label">Izin Aktif</span>
+                                        <span class="ep-stat-value" id="stat-santri-izin">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-chart-line-up"></i> Progres Target Hafalan 30 Juz</h3>
+                                <div class="ep-progress-container">
+                                    <div class="ep-progress-bar-bg">
+                                        <div class="ep-progress-bar" id="santri-progress-bar" style="width: 0%;"></div>
+                                    </div>
+                                    <div class="ep-progress-text">
+                                        <span>Capaian: <strong id="progress-juz-text">0 Juz</strong></span>
+                                        <span>Target: 30 Juz (Mutqin)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ep-grid-2">
+                                <div class="ep-card">
+                                    <h3><i class="ph-fill ph-clock"></i> Jadwal Harian</h3>
+                                    <div class="ep-table-wrapper">
+                                        <table class="ep-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Waktu</th>
+                                                    <th>Kegiatan</th>
+                                                    <th>Keterangan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>04:00 - 05:30</td><td>Tahfidz Shubuh</td><td>Setoran Baru & Muroja'ah</td></tr>
+                                                <tr><td>07:30 - 12:00</td><td>Sekolah Formal</td><td>SMP / SMA</td></tr>
+                                                <tr><td>15:30 - 17:00</td><td>Madrasah Diniyah</td><td>Kajian Kitab Klasik</td></tr>
+                                                <tr><td>19:30 - 21:00</td><td>Muroja'ah Mandiri</td><td>Halaqah Asrama</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="ep-card">
+                                    <h3><i class="ph-fill ph-megaphone"></i> Pengumuman Terbaru</h3>
+                                    <div id="santri-dashboard-pengumuman-list" style="display:flex; flex-direction:column; gap:12px;">
+                                        <!-- Dynamic -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL: SETORAN -->
+                        <div id="panel-santri-setoran" class="ep-tab-panel">
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-paper-plane-tilt"></i> Setor Hafalan Mandiri / Online</h3>
+                                <form id="form-santri-setor" class="login-form" style="margin-top:0;">
+                                    <div class="ep-form-row">
+                                        <div class="form-group">
+                                            <label for="setor-surat">Surah / Kitab</label>
+                                            <input type="text" id="setor-surat" placeholder="Contoh: Al-Mulk" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setor-ayat-awal">Ayat Awal</label>
+                                            <input type="number" id="setor-ayat-awal" placeholder="1" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setor-ayat-akhir">Ayat Akhir</label>
+                                            <input type="number" id="setor-ayat-akhir" placeholder="15" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn-primary" style="margin-top:0; width:auto;"><i class="ph-fill ph-paper-plane-tilt"></i> Ajukan Setoran</button>
+                                </form>
+                            </div>
+                            
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-clock-counter-clockwise"></i> Riwayat Hafalan & Penilaian</h3>
+                                <div class="ep-table-wrapper">
+                                    <table class="ep-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Surat</th>
+                                                <th>Ayat</th>
+                                                <th>Nilai</th>
+                                                <th>Catatan Ustadz</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-santri-hafalan-body">
+                                            <!-- Dynamic -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL: NILAI -->
+                        <div id="panel-santri-nilai" class="ep-tab-panel">
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-graduation-cap"></i> Rapor Akademik Santri</h3>
+                                <div class="ep-table-wrapper">
+                                    <table class="ep-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Mata Pelajaran</th>
+                                                <th>Nilai</th>
+                                                <th>Semester</th>
+                                                <th>Predikat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-santri-nilai-body">
+                                            <!-- Dynamic -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL: KEUANGAN -->
+                        <div id="panel-santri-keuangan" class="ep-tab-panel">
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-receipt"></i> Riwayat SPP & Tagihan</h3>
+                                <div class="ep-table-wrapper">
+                                    <table class="ep-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jenis Pembayaran</th>
+                                                <th>Nominal</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-santri-keuangan-body">
+                                            <!-- Dynamic -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL: PERIZINAN -->
+                        <div id="panel-santri-perizinan" class="ep-tab-panel">
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-calendar-plus"></i> Form Pengajuan Izin Keluar / Pulang</h3>
+                                <form id="form-santri-izin" class="login-form" style="margin-top:0;">
+                                    <div class="ep-form-row">
+                                        <div class="form-group">
+                                            <label for="izin-jenis">Jenis Izin</label>
+                                            <select id="izin-jenis" required>
+                                                <option value="Izin Pulang (Sakit)">Izin Pulang (Sakit)</option>
+                                                <option value="Izin Pulang (Acara Keluarga)">Izin Pulang (Acara Keluarga)</option>
+                                                <option value="Izin Keluar Pondok (Keperluan Singkat)">Izin Keluar Pondok (Keperluan Singkat)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="izin-kembali">Tanggal Rencana Kembali</label>
+                                            <input type="date" id="izin-kembali" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom:15px;">
+                                        <label for="izin-keterangan">Keterangan / Alasan</label>
+                                        <textarea id="izin-keterangan" placeholder="Berikan rincian alasan pengajuan izin..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-primary" style="margin-top:0; width:auto;"><i class="ph-fill ph-paper-plane-tilt"></i> Kirim Permohonan</button>
+                                </form>
+                            </div>
+                            
+                            <div class="ep-card">
+                                <h3><i class="ph-fill ph-clock-counter-clockwise"></i> Riwayat Perizinan</h3>
+                                <div class="ep-table-wrapper">
+                                    <table class="ep-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal Pengajuan</th>
+                                                <th>Jenis Izin</th>
+                                                <th>Keterangan</th>
+                                                <th>Tgl Kembali</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-santri-izin-body">
+                                            <!-- Dynamic -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL: PENGUMUMAN -->
+                        <div id="panel-santri-pengumuman" class="ep-tab-panel">
+                            <div id="santri-pengumuman-wall" style="display:flex; flex-direction:column; gap:20px;">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- MODAL BUKTI PEMBAYARAN -->
+<div class="ep-modal-overlay" id="paymentModal">
+    <div class="ep-modal">
+        <div class="ep-modal-header">
+            <h3><i class="ph-fill ph-cloud-arrow-up"></i> Upload Bukti Pembayaran</h3>
+            <button class="ep-modal-close" id="closePaymentModal">&times;</button>
+        </div>
+        <form id="form-upload-bukti">
+            <input type="hidden" id="modal-invoice-id">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Nominal Tagihan</label>
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--alwahyu-dark);" id="modal-invoice-nominal">Rp 1.200.000</div>
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="payment-proof-file">File Bukti Transfer (Simulasi)</label>
+                <select id="payment-proof-file" required>
+                    <option value="bukti_spp_juni_bsi.jpg">bukti_spp_juni_bsi.jpg</option>
+                    <option value="transfer_mandiri_juni.png">transfer_mandiri_juni.png</option>
+                    <option value="struk_atm_bsi.png">struk_atm_bsi.png</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top:0; width:100%;"><i class="ph-fill ph-paper-plane-tilt"></i> Kirim Bukti Transfer</button>
+        </form>
+    </div>
+</div>
+
+<!-- TOAST ALERT -->
+<div class="ep-toast" id="epToast">
+    <span class="ep-toast-icon"><i class="ph-fill ph-check-circle"></i></span>
+    <span id="epToastMsg">Pesan Berhasil</span>
+</div>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div class="footer-col">
+            <div class="footer-logo">
+                <img src="../assets/img/logo/tinny-logo.png" alt="Logo PPTQ AL WAHYU" class="footer-logo-img">
+                <div class="footer-logo-text">
+                    <strong class="footer-logo-title">PPTQ AL WAHYU</strong>
+                    <span class="footer-logo-subtitle">Ponpes Tahfidz Al-Qur’an</span>
+                </div>
+            </div>
+            <p>Pusat Pendidikan Islam dan Tahfidz Al-Qur'an yang mencetak generasi beradab, mandiri, dan visioner.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Kontak Kami</h3>
+            <p><i class="ph-fill ph-phone"></i> +62 812 3020 0098</p>
+            <p><i class="ph ph-clock"></i> Senin - Jumat, 08.00 - 16.00 WIB</p>
+        </div>
+        <div class="footer-col">
+            <h3>Sosial Media</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/ponpestahfidzalwahyu?igsh=MWFzdzlpNDU1OXN2cg==" target="_blank"><i class="ph ph-instagram-logo"></i> Instagram</a>
+                <a href="https://www.facebook.com/share/1DFZfmiqeV/" target="_blank"><i class="ph ph-facebook-logo"></i> Facebook</a>
+                <a href="https://youtube.com/@alwahyuchannel?si=UnHLhtk589R4jCXM" target="_blank"><i class="ph ph-youtube-logo"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 PPTQ AL WAHYU. Semua Hak Dilindungi.</p>
+    </div>
+</footer>
+
+<script src="../assets/js/global/navigation.js"></script>
+<script src="../assets/js/global/main.js"></script>
+<script src="../assets/js/global/config.js"></script>
+<script src="../assets/js/global/eponpes-shared.js"></script>
+<script src="../assets/js/pages/eponpes-santri.js"></script>
+</body>
+</html>
