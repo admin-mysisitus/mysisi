@@ -1,0 +1,21 @@
+@import "base/reset.css";
+@import "base/variables.css";
+@import "base/typography.css";
+
+@import "components/nav.css";
+@import "components/button.css";
+@import "components/card.css";
+@import "components/hero.css";
+@import "components/sidebar.css";
+@import "components/breadcrumb.css";
+
+@import "components/footer.css";
+@import "components/modal.css";
+@import "components/custom-font.css";
+
+@import "utilities/helpers.css";
+@import "utilities/layout.css";
+@import "utilities/animations.css";
+
+@import "pages/home.css";
+@import "pages/data-pegawai.css";

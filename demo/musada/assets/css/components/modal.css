@@ -1,0 +1,229 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / .5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px)
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible
+}
+
+.modal-content {
+  background-color: var(--color-surface);
+  width: 95%;
+  max-width: 800px;
+  max-height: 90vh;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px) scale(.98);
+  transition: transform 0.4s ease, opacity 0.4s;
+  box-shadow: 0 30px 60px rgb(0 0 0 / .2);
+  overflow: hidden
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0) scale(1)
+}
+
+.modal-content::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar {
+  width: 6px
+}
+
+.modal-content::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track {
+  background: #fff0
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb {
+  background: #dcdcdc;
+  border-radius: 10px
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #bebebe
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #fff0;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--color-neutral-medium);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease
+}
+
+.modal-close:hover {
+  background-color: #f5f5f5;
+  color: #111;
+  transform: rotate(90deg)
+}
+
+.modal-header {
+  background: var(--color-surface);
+  padding: 30px 40px 10px;
+  text-align: left;
+  position: relative;
+  border-bottom: 2px solid var(--color-primary-blue)
+}
+
+.modal-header h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: var(--color-neutral-medium);
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase
+}
+
+.modal-body {
+  padding: 40px;
+  overflow-y: auto;
+  background-color: var(--color-surface)
+}
+
+.profile-welcome-full {
+  text-align: left
+}
+
+.modal-profile-img {
+  width: 240px;
+  height: 300px;
+  border-radius: 12px;
+  object-fit: cover;
+  float: left;
+  margin: 0 30px 20px 0;
+  box-shadow: 0 10px 25px rgb(0 0 0 / .12);
+  border: 1px solid var(--color-border)
+}
+
+.profile-welcome-full h4 {
+  color: var(--color-primary-blue);
+  font-family: 'Georgia', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 5px;
+  line-height: 1.2
+}
+
+.profile-welcome-full h4::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: var(--color-yellow);
+  margin: 15px 0 25px 0;
+  border-radius: 2px
+}
+
+.profile-welcome-full p {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  color: var(--color-neutral-dark);
+  line-height: 1.8;
+  margin-bottom: 20px;
+  text-align: justify
+}
+
+.profile-welcome-full p:first-of-type::first-letter {
+  float: left;
+  font-size: 4.2rem;
+  line-height: .8;
+  padding-top: 4px;
+  padding-right: 8px;
+  padding-left: 3px;
+  color: var(--color-primary-blue);
+  font-family: 'Georgia', serif;
+  font-weight: 700
+}
+
+.profile-welcome-full::after {
+  content: "";
+  display: table;
+  clear: both
+}
+
+.profile-welcome-full .welcome-motto {
+  margin-bottom: 0;
+  margin-top: 40px;
+  font-weight: 700;
+  color: #111;
+  font-style: italic;
+  font-size: 1.25rem;
+  text-align: center;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 0;
+  border-top: 2px solid var(--color-yellow);
+  border-bottom: 2px solid var(--color-yellow);
+  clear: both
+}
+
+@media (max-width:768px) {
+  .modal-content {
+    width: 95%
+  }
+
+  .modal-header {
+    padding: 20px 25px 10px
+  }
+
+  .modal-header h3 {
+    font-size: 1rem
+  }
+
+  .modal-body {
+    padding: 25px
+  }
+
+  .modal-profile-img {
+    float: none;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    margin: 0 0 25px 0
+  }
+
+  .profile-welcome-full h4 {
+    font-size: 1.5rem
+  }
+
+  .profile-welcome-full p {
+    font-size: 1rem;
+    text-align: left
+  }
+
+  .profile-welcome-full p:first-of-type::first-letter {
+    font-size: 3.5rem
+  }
+}

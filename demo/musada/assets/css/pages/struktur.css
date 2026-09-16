@@ -1,0 +1,233 @@
+.chart-wrapper {
+  font-family: Arial, Helvetica, sans-serif;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 5px;
+}
+
+    .outer-border {
+      display: inline-block;
+      border: 4px solid #1e5a38;
+      padding: 3px;
+      background-color: #c89b3c;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+    }
+
+    .inner-border {
+      border: 3px solid #1e5a38;
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 966px;
+      height: 695px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .header-title {
+      text-align: center;
+      padding-top: 4px;
+    }
+
+    .header-title h1 {
+      font-size: 21px;
+      font-weight: 900;
+      color: #050505;
+      letter-spacing: 0.5px;
+    }
+
+    .header-title h2 {
+      font-size: 16px;
+      font-weight: bold;
+      color: #050505;
+      margin-top: 2px;
+    }
+
+    .legend {
+      position: absolute;
+      top: 235px;
+      left: 10px;
+      font-size: 10px;
+      font-weight: bold;
+      z-index: 5;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .legend-line {
+      width: 36px;
+      margin-right: 8px;
+    }
+
+    .legend-solid {
+      border-top: 1.6px solid #111;
+    }
+
+    .legend-dashed {
+      border-top: 1.6px dashed #111;
+    }
+
+    .tree-lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .tree-lines line,
+    .tree-lines polyline,
+    .tree-lines path {
+      stroke: #111111;
+      stroke-width: 1.5;
+      fill: none;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+    }
+
+    .dashed {
+      stroke-dasharray: 4, 3;
+    }
+
+    .node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1.4px solid #111;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+      z-index: 2;
+      font-size: 9.5px;
+      font-weight: bold;
+      color: #000;
+      line-height: 1.15;
+    }
+
+    .c-green {
+      background-color: #8ce461;
+      border-radius: 6px;
+    }
+
+    .c-cyan {
+      background-color: #4cd8db;
+      border-radius: 6px;
+    }
+
+    .c-cream {
+      background-color: #eed6cb;
+      border-radius: 6px;
+    }
+
+    .c-purple {
+      background-color: #d1c1fe;
+      border-radius: 6px;
+    }
+
+    .c-yellow {
+      background-color: #fae13c;
+      border-radius: 8px;
+    }
+
+    .c-blue {
+      background-color: #38678f;
+      color: #fff;
+      border-radius: 6px;
+    }
+
+    .has-avatar {
+      padding-left: 18px;
+    }
+
+    .avatar-wrapper {
+      position: absolute;
+      left: -19px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #78d255;
+      border: 1.5px solid #fff;
+      box-shadow: 0 0 0 1px #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .name-title {
+      font-size: 9px;
+      font-weight: 900;
+      text-decoration: underline;
+      display: block;
+    }
+
+    .role-title {
+      font-size: 8px;
+      font-weight: normal;
+      display: block;
+      margin-top: 1px;
+    }
+
+/* Dark Mode Overrides */
+html.dark-mode .outer-border {
+  border-color: var(--color-primary-blue);
+}
+
+html.dark-mode .inner-border {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary-blue);
+}
+
+html.dark-mode .chart-container {
+  background: var(--color-surface);
+}
+
+html.dark-mode .header-title h1,
+html.dark-mode .header-title h2,
+html.dark-mode .legend {
+  color: var(--color-text-on-primary);
+}
+
+html.dark-mode .legend-solid {
+  border-top-color: var(--color-neutral-medium);
+}
+
+html.dark-mode .legend-dashed {
+  border-top-color: var(--color-neutral-medium);
+}
+
+html.dark-mode .tree-lines line,
+html.dark-mode .tree-lines polyline,
+html.dark-mode .tree-lines path {
+  stroke: var(--color-neutral-medium);
+}
+
+html.dark-mode .node {
+  border-color: var(--color-neutral-medium);
+  box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+html.dark-mode .avatar-wrapper {
+  box-shadow: 0 0 0 1px var(--color-neutral-medium);
+}

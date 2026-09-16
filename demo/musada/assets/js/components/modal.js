@@ -1,0 +1,3 @@
+function openWelcomeModal(e) { if (e) e.preventDefault(); const modal = document.getElementById('welcomeModal'); if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden' } }
+function closeWelcomeModal() { const modal = document.getElementById('welcomeModal'); if (modal) { modal.classList.remove('active'); document.body.style.overflow = '' } }
+document.addEventListener('DOMContentLoaded', () => { const modals = document.querySelectorAll('.modal-overlay'); modals.forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) { closeWelcomeModal() } }) }); document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeWelcomeModal() } }) })

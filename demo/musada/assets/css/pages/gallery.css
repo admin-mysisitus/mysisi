@@ -1,0 +1,305 @@
+
+/* --- Gallery Grid Layout --- */
+.gallery-page-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* --- Common Card Styles --- */
+.gallery-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-sedang);
+  overflow: hidden;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.gallery-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.gallery-card-img-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 66.66%; /* 3:2 Aspect Ratio */
+  overflow: hidden;
+  background: #f5f5f5;
+}
+.gallery-card-img-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gallery-card:hover .gallery-card-img-wrapper img {
+  transform: scale(1.05);
+}
+
+.gallery-card-content {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.gallery-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: nowrap;
+}
+.gallery-badge {
+  background-color: var(--color-primary-blue);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.gallery-date {
+  font-size: 0.75rem;
+  color: var(--color-neutral-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gallery-title {
+  font-size: 1rem;
+  color: var(--color-text-main);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* --- Video Specific Styles --- */
+.video-card-img-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+.gallery-card:hover .video-card-img-wrapper::before {
+  background: rgba(0,0,0,0.4);
+}
+.youtube-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 40px;
+  background-color: #ff0000;
+  border-radius: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.gallery-card:hover .youtube-play-btn {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.youtube-play-btn::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 0 8px 12px;
+  border-color: transparent transparent transparent #ffffff;
+  margin-left: 4px;
+}
+.video-card-content {
+  padding: 1rem;
+}
+.video-date {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-neutral-medium);
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Pagination --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #fff;
+  border: 1px solid #ddd;
+  color: var(--color-text-main);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.pagination-btn:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+.pagination-btn.active {
+  background: #2563eb; /* Blue color from screenshot */
+  color: #fff;
+  border-color: #2563eb;
+}
+
+/* --- Gallery Detail Page --- */
+.gallery-detail-layout {
+  display: flex;
+  flex-direction: column;
+}
+.detail-main-photo {
+  width: 100%;
+  border-radius: var(--radius-sedang);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.detail-main-photo img {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: cover;
+  display: block;
+}
+.detail-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+.detail-date {
+  font-size: 0.85rem;
+  color: var(--color-neutral-medium);
+}
+.detail-share {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.share-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+.share-icon:hover {
+  opacity: 0.8;
+}
+.share-fb { background-color: #3b5998; }
+.share-tw { background-color: #55acee; }
+.share-wa { background-color: #25d366; }
+
+.thumbnail-slider {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.thumbnail-item {
+  flex: 0 0 calc(25% - 0.75rem);
+  scroll-snap-align: start;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+.thumbnail-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.3s ease;
+}
+.thumbnail-item:hover::after {
+  background: rgba(0,0,0,0.1);
+}
+.thumbnail-item img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+.detail-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-text-main);
+  padding: 1rem;
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-sedang);
+  border-left: 4px solid var(--color-primary-blue);
+}
+
+@media (max-width: 991px) {
+  .gallery-page-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .gallery-page-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .gallery-card-content, .video-card-content {
+    padding: 0.75rem;
+  }
+  .gallery-title {
+    font-size: 0.9rem;
+  }
+  .gallery-badge {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.65rem;
+  }
+  .gallery-date, .video-date {
+    font-size: 0.7rem;
+  }
+  .thumbnail-item {
+    flex: 0 0 calc(50% - 0.5rem);
+  }
+  .detail-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

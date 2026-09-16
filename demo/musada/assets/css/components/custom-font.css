@@ -1,0 +1,38 @@
+.logo.wm-sc {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  word-spacing: 0;
+  letter-spacing: -.25px;
+  font-variant-ligatures: none;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: .65rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #ffffff !important;
+  background-color: #162033;
+  padding: .2rem .4rem;
+  border-radius: 3px;
+  opacity: .32;
+  transition: opacity 0.3s ease;
+  height: auto !important;
+  text-decoration: none
+}
+
+.logo.wm-sc::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--favicon-url) no-repeat center / contain;
+  opacity: .85
+}
+
+.logo.wm-sc span {
+  color: #2563EB;
+  transform: none !important
+}
+
+.logo.wm-sc:hover {
+  opacity: 1
+}
