@@ -7,8 +7,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var baseUrl = './';
   if (musadaIndex !== -1) {
-    var depthFromRoot = Math.max(siteSegments.length - musadaIndex - 1, 0);
-    baseUrl = Array(depthFromRoot + 1).join('../');
+    var relativeSegments = siteSegments.slice(musadaIndex + 1);
+    var nestedFolderDepth = 0;
+
+    relativeSegments.forEach(function (segment) {
+      if (!segment || segment.indexOf('.') !== -1) return;
+      nestedFolderDepth += 1;
+    });
+
+    if (nestedFolderDepth > 0) {
+      baseUrl = Array(nestedFolderDepth + 1).join('../');
+    }
   }
   if (!baseUrl) {
     baseUrl = './';
