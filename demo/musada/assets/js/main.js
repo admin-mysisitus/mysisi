@@ -173,3 +173,58 @@ function initInfografisSliders() {
   });
 }
 window.initInfografisSliders = initInfografisSliders;
+
+function toRelativeUrl(targetPath, currentPathname) {
+  var normalizedCurrent = currentPathname.split('?')[0].split('#')[0] || '/';
+  var currentDir = normalizedCurrent.endsWith('/') ? normalizedCurrent : normalizedCurrent.substring(0, normalizedCurrent.lastIndexOf('/') + 1);
+  var currentSegments = currentDir.split('/').filter(Boolean);
+  var targetSegments = targetPath.split('/').filter(Boolean);
+  var commonLength = 0;
+
+  while (commonLength < currentSegments.length && commonLength < targetSegments.length && currentSegments[commonLength] === targetSegments[commonLength]) {
+    commonLength++;
+  }
+
+  var upLevels = Math.max(0, currentSegments.length - commonLength);
+  var downSegments = targetSegments.slice(commonLength);
+  var relativePath = Array(upLevels + 1).join('../') + downSegments.join('/');
+
+  return relativePath || './';
+}
+
+function normalizeDemoRootPaths() {
+  if (!document || !document.querySelectorAll) return;
+
+  var selectors = [
+    'a[href^="/"]',
+    'link[href^="/"]',
+    'script[src^="/"]',
+    'img[src^="/"]',
+    'source[src^="/"]',
+    'video[poster^="/"]',
+    'input[src^="/"]',
+    '[src^="/"]',
+    '[href^="/"]'
+  ];
+
+  selectors.forEach(function (selector) {
+    document.querySelectorAll(selector).forEach(function (element) {
+      var attrName = null;
+      if (selector.indexOf('href') !== -1) attrName = 'href';
+      if (selector.indexOf('src') !== -1 || selector.indexOf('poster') !== -1) attrName = selector.indexOf('poster') !== -1 ? 'poster' : 'src';
+      if (!attrName) return;
+
+      var value = element.getAttribute(attrName);
+      if (!value || value.indexOf('/') !== 0) return;
+
+      var relativeValue = toRelativeUrl(value, window.location.pathname);
+      if (relativeValue && relativeValue !== value) {
+        element.setAttribute(attrName, relativeValue);
+      }
+    });
+  });
+}
+
+window.normalizeDemoRootPaths = normalizeDemoRootPaths;
+document.addEventListener('DOMContentLoaded', normalizeDemoRootPaths);
+window.addEventListener('load', normalizeDemoRootPaths);

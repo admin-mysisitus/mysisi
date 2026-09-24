@@ -1,23 +1,23 @@
-@import "base/reset.css";
-@import "base/variables.css";
-@import "base/typography.css";
+@import "/assets/css/base/reset.css";
+@import "/assets/css/base/variables.css";
+@import "/assets/css/base/typography.css";
 
-@import "components/nav.css";
-@import "components/button.css";
-@import "components/card.css";
-@import "components/hero.css";
-@import "components/sidebar.css";
-@import "components/breadcrumb.css";
+@import "/assets/css/components/nav.css";
+@import "/assets/css/components/button.css";
+@import "/assets/css/components/card.css";
+@import "/assets/css/components/hero.css";
+@import "/assets/css/components/sidebar.css";
+@import "/assets/css/components/breadcrumb.css";
 
-@import "components/footer.css";
-@import "components/modal.css";
-@import "components/custom-font.css";
+@import "/assets/css/components/footer.css";
+@import "/assets/css/components/modal.css";
+@import "/assets/css/components/custom-font.css";
 
-@import "utilities/helpers.css";
-@import "utilities/layout.css";
-@import "utilities/animations.css";
+@import "/assets/css/utilities/helpers.css";
+@import "/assets/css/utilities/layout.css";
+@import "/assets/css/utilities/animations.css";
 
-@import "pages/home.css";
-@import "pages/data-pegawai.css";
-@import "pages/ekskul.css";
+@import "/assets/css/pages/home.css";
+@import "/assets/css/pages/data-pegawai.css";
+@import "/assets/css/pages/ekskul.css";
 
