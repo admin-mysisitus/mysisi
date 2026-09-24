@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPMB 2027 | SD Muhammadiyah 1 Sedati</title>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/pages/spmb.css" />
+  <link rel="icon" href="assets/img/favicon/favicon.ico" type="image/x-icon">
+  <meta name="theme-color" content="#003B9C" />
+  <meta name="description" content="SPMB 2027 SD Muhammadiyah 1 Sedati: jalur prestasi, proses pendaftaran, jadwal, dan contoh formulir pendaftaran." />
+  <meta property="og:title" content="SPMB 2027 | SD Muhammadiyah 1 Sedati" />
+  <meta property="og:description" content="SPMB 2027 SD Muhammadiyah 1 Sedati: cara pendaftaran, jadwal, syarat, dan preview formulir." />
+  <meta property="og:url" content="https://musada.sch.id/spmb.html" />
+  <link rel="canonical" href="https://musada.sch.id/spmb.html" />
+</head>
+
+<body>
+  <div id="app-header"></div>
+  <main class="wrapper mb-3">
+    <div id="app-hero"></div>
+    <div class="breadcrumb-wrapper">
+      <div class="breadcrumb">
+        <a href="index.html"><i class="ph-bold ph-house"></i> Beranda</a>
+        <span>/</span>
+        <span class="current-page">SPMB 2027</span>
+      </div>
+    </div>
+
+    <section class="mt-4 mb-4">
+      <div class="main-sidebar-grid">
+        <article class="article-content article-card spmb-style">
+          <h2 class="section-title"><strong>SPMB</strong><span>2027</span></h2>
+          <div class="section-divider"></div>
+
+          <div class="spmb-intro">
+            <p>Jalur Prestasi SD Muhammadiyah 1 Sedati — membuka peluang bagi calon peserta didik yang memiliki prestasi akademik, non-akademik, dan karakter unggul.</p>
+          </div>
+
+          <div class="spmb-highlight-box">
+            <div>
+              <span class="label">Biaya Pendaftaran</span>
+              <strong>Rp 300.000</strong>
+            </div>
+            <div>
+              <span class="label">Trial Class</span>
+              <strong>16 Januari 2027</strong>
+            </div>
+          </div>
+
+          <div class="spmb-info-block">
+            <h3>Cara Pendaftaran</h3>
+            <ul class="step-list">
+              <li>
+                <span class="step-number">1</span>
+                <div>
+                  <strong>Daftar Akun</strong><br>
+                  Calon peserta didik mengisi data dasar pada formulir pendaftaran online.
+                </div>
+              </li>
+              <li>
+                <span class="step-number">2</span>
+                <div>
+                  <strong>Unggah Bukti Transfer</strong><br>
+                  Upload bukti transfer biaya pendaftaran sebesar Rp 300.000 sesuai persyaratan.
+                </div>
+              </li>
+              <li>
+                <span class="step-number">3</span>
+                <div>
+                  <strong>Seleksi Jalur Prestasi</strong><br>
+                  Tim sekolah menilai prestasi akademik, karakter, dan kegiatan ekstrakurikuler.
+                </div>
+              </li>
+              <li>
+                <span class="step-number">4</span>
+                <div>
+                  <strong>Pengumuman dan Daftar Ulang</strong><br>
+                  Calon diterima akan mendapatkan jadwal daftar ulang sesuai ketentuan sekolah.
+                </div>
+              </li>
+            </ul>
+
+            <div class="status-box">
+              <span>Registrasi dibuka mulai bulan Juni 2027</span>
+              <i class="ph-fill ph-check-circle"></i>
+            </div>
+          </div>
+
+          <form class="spmb-form" id="spmbForm" novalidate>
+            <div class="spmb-form-section">
+              <h3>Pilih Periode</h3>
+              <div class="radio-grid">
+                <label class="choice-item">
+                  <input type="radio" name="periode" value="Tahun Ajaran 2026/2027" required>
+                  <span>Tahun Ajaran 2026/2027</span>
+                </label>
+                <label class="choice-item">
+                  <input type="radio" name="periode" value="Tahun Ajaran 2027/2028" required>
+                  <span>Tahun Ajaran 2027/2028</span>
+                </label>
+                <label class="choice-item">
+                  <input type="radio" name="periode" value="Tahun Ajaran 2028/2029" required>
+                  <span>Tahun Ajaran 2028/2029</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="spmb-form-section">
+              <h3>Data Calon Siswa</h3>
+              <div class="form-grid">
+                <label>
+                  <span>Nama Lengkap Calon Siswa</span>
+                  <input type="text" name="nama_siswa" placeholder="Masukan Nama Lengkap Calon Siswa" required>
+                </label>
+                <label>
+                  <span>Tempat Lahir</span>
+                  <input type="text" name="tempat_lahir" placeholder="Masukan Tempat Lahir" required>
+                </label>
+                <label>
+                  <span>Tanggal Lahir</span>
+                  <input type="date" name="tanggal_lahir" required>
+                </label>
+                <label>
+                  <span>Jenis Kelamin</span>
+                  <select name="jenis_kelamin" required>
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                  </select>
+                </label>
+                <label>
+                  <span>NIK</span>
+                  <input type="text" name="nik" placeholder="Masukkan Nik 16 angka" inputmode="numeric" maxlength="16" pattern="\d{16}" required>
+                </label>
+                <label>
+                  <span>Sekolah Asal</span>
+                  <input type="text" name="sekolah_asal" placeholder="Masukkan Sekolah Asal" required>
+                </label>
+                <label>
+                  <span>NISN (Opsional)</span>
+                  <input type="text" name="nisn" placeholder="Masukkan NISN" inputmode="numeric" maxlength="10">
+                </label>
+              </div>
+            </div>
+
+            <div class="spmb-form-section">
+              <h3>Data Orang Tua / Wali</h3>
+              <div class="form-grid">
+                <label>
+                  <span>Nama Ibu Kandung</span>
+                  <input type="text" name="nama_ibu" placeholder="Masukan Nama Ibu Kandung" required>
+                </label>
+                <label>
+                  <span>Nomor WhatsApp Orang Tua / Wali</span>
+                  <input type="tel" name="wa_orangtua" placeholder="08xxxxxxxxxx" required>
+                </label>
+                <label class="full-width">
+                  <span>Email Orang Tua / Wali (Opsional)</span>
+                  <input type="email" name="email_orangtua" placeholder="contoh: ibu@gmail.com">
+                </label>
+              </div>
+            </div>
+
+            <div class="spmb-form-section">
+              <h3>Upload Bukti Transfer</h3>
+              <div class="upload-grid">
+                <label class="upload-item">
+                  <span>Upload Bukti Transfer Biaya Pendaftaran Rp 300.000</span>
+                  <input type="file" name="bukti_transfer" accept="image/*,.pdf" required>
+                </label>
+              </div>
+            </div>
+
+            <div class="spmb-form-section">
+              <h3>Informasi Tambahan</h3>
+              <div class="question-block">
+                <label class="question-label">Apakah calon siswa memiliki saudara di sekolah ini?</label>
+                <div class="inline-options">
+                  <label class="choice-inline"><input type="radio" name="saudara" value="ya" required> Ya</label>
+                  <label class="choice-inline"><input type="radio" name="saudara" value="tidak" required> Tidak</label>
+                </div>
+              </div>
+
+              <div class="question-block">
+                <label class="question-label" for="penyakit">Apakah calon siswa memiliki riwayat penyakit / kebutuhan khusus?</label>
+                <select id="penyakit" name="penyakit" required>
+                  <option value="">Pilih</option>
+                  <option value="Tidak">Tidak</option>
+                  <option value="Tidak ingin memberitahu">Tidak ingin memberitahu</option>
+                  <option value="ABK">ABK</option>
+                  <option value="Diabetes">Diabetes</option>
+                  <option value="Asma">Asma</option>
+                  <option value="TBC">TBC</option>
+                  <option value="Epilepsi">Epilepsi</option>
+                  <option value="Autis">Autis</option>
+                  <option value="Lainnya">Lainnya (mengisi)</option>
+                </select>
+                <input type="text" id="penyakit_lainnya" name="penyakit_lainnya" class="secondary-input" placeholder="Isi jika memilih Lainnya" style="display:none;">
+              </div>
+            </div>
+
+            <div class="spmb-form-section">
+              <div class="cta-row form-submit-row">
+                <button type="submit" class="btn-view-more-inline spmb-button spmb-button--primary">Kirim Data Pendaftaran</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="spmb-info-block status-check-box">
+            <h3>Cek Status Pendaftaran</h3>
+            <p>Masukkan email pendaftaran atau nomor NISN calon siswa untuk memantau perkembangan proses verifikasi dan seleksi.</p>
+            <div class="status-check-form">
+              <input type="text" id="statusCheckInput" placeholder="Contoh: budi@gmail.com atau NISN">
+              <button type="button" class="btn-view-more-inline spmb-button spmb-button--secondary" id="cekStatusBtn">Cek Status</button>
+            </div>
+          </div>
+
+          <div class="spmb-info-block">
+            <h3>Jadwal dan Persyaratan</h3>
+            <table class="info-table">
+              <thead>
+                <tr>
+                  <th>Komponen</th>
+                  <th>Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jadwal Pendaftaran</td>
+                  <td>1 Juni – 31 Juli 2027</td>
+                </tr>
+                <tr>
+                  <td>Seleksi</td>
+                  <td>1 – 7 Agustus 2027</td>
+                </tr>
+                <tr>
+                  <td>Pengumuman</td>
+                  <td>10 Agustus 2027</td>
+                </tr>
+                <tr>
+                  <td>Daftar Ulang</td>
+                  <td>12 – 15 Agustus 2027</td>
+                </tr>
+                <tr>
+                  <td>Persyaratan</td>
+                  <td>Foto, KK, akte, ijazah, serta dokumen prestasi</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spmb-info-block">
+            <h3>Fasilitas Sekolah</h3>
+            <div class="gallery-slider auto-slide-gallery" id="spmb-facility-slider">
+              <article class="gallery-item-home">
+                <img src="assets/img/fasilitas/lab-musada.webp" alt="Laboratorium Musada" loading="lazy">
+                <div class="gallery-item-meta">
+                  <span class="gallery-badge">LABORATORIUM</span>
+                  <span class="gallery-date">Sains & Praktikum</span>
+                </div>
+              </article>
+              <article class="gallery-item-home">
+                <img src="assets/img/fasilitas/ruang-kelas-ac.webp" alt="Ruang Kelas Ber-AC" loading="lazy">
+                <div class="gallery-item-meta">
+                  <span class="gallery-badge">RUANG KELAS</span>
+                  <span class="gallery-date">Nyaman & Modern</span>
+                </div>
+              </article>
+              <article class="gallery-item-home">
+                <img src="assets/img/fasilitas/perpustakaan.webp" alt="Perpustakaan" loading="lazy">
+                <div class="gallery-item-meta">
+                  <span class="gallery-badge">PERPUSTAKAAN</span>
+                  <span class="gallery-date">Literasi & Minat Baca</span>
+                </div>
+              </article>
+              <article class="gallery-item-home">
+                <img src="assets/img/fasilitas/masjid.webp" alt="Masjid" loading="lazy">
+                <div class="gallery-item-meta">
+                  <span class="gallery-badge">MASJID</span>
+                  <span class="gallery-date">Ibadah & Karakter</span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="spmb-info-block">
+            <h3>Kenapa Pilih SD Muhammadiyah 1 Sedati?</h3>
+            <p>SD Muhammadiyah 1 Sedati merupakan sekolah yang mengedepankan pendidikan berbasis <strong>Islamic Modern School</strong> dengan penguatan iman, ilmu, akhlak, karakter, serta kemampuan teknologi dan global awareness.</p>
+            <ul class="bullet-list">
+              <li>Pembelajaran berlandaskan Al-Qur’an dan pembentukan karakter.</li>
+              <li>Program unggulan tahfidz, IPA, dan pengembangan kreativitas siswa.</li>
+              <li>Lingkungan aman, religius, dan inspiratif untuk tumbuh serta berkembang.</li>
+            </ul>
+          </div>
+        </article>
+
+        <div id="app-sidebar"></div>
+      </div>
+    </section>
+  </main>
+  <div id="app-footer"></div>
+  <script src="assets/js/base/layout.js"></script>
+  <script src="assets/js/components/navigation.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    const spmbForm = document.getElementById('spmbForm');
+    const penyakitSelect = document.getElementById('penyakit');
+    const penyakitLainnya = document.getElementById('penyakit_lainnya');
+    const statusCheckBtn = document.getElementById('cekStatusBtn');
+    const statusCheckInput = document.getElementById('statusCheckInput');
+
+    if (penyakitSelect) {
+      penyakitSelect.addEventListener('change', function () {
+        if (this.value === 'Lainnya') {
+          penyakitLainnya.style.display = 'block';
+          penyakitLainnya.setAttribute('required', 'required');
+        } else {
+          penyakitLainnya.style.display = 'none';
+          penyakitLainnya.removeAttribute('required');
+          penyakitLainnya.value = '';
+        }
+      });
+    }
+
+    if (spmbForm) {
+      spmbForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const nisn = spmbForm.querySelector('[name="nisn"]');
+        const emailOrangtua = spmbForm.querySelector('[name="email_orangtua"]');
+        const nik = spmbForm.querySelector('[name="nik"]');
+
+        if (nisn && emailOrangtua) {
+          const nisnValue = (nisn.value || '').trim();
+          const emailValue = (emailOrangtua.value || '').trim();
+
+          if (!nisnValue && !emailValue) {
+            alert('Harap isi minimal salah satu: NISN atau Email Orang Tua / Wali.');
+            emailOrangtua.focus();
+            return;
+          }
+        }
+
+        if (nik && nik.value.trim().length !== 16) {
+          alert('NIK harus berisi 16 angka.');
+          nik.focus();
+          return;
+        }
+
+        if (!spmbForm.reportValidity()) {
+          return;
+        }
+
+        alert('Data pendaftaran berhasil dikirim. Silakan tunggu konfirmasi dari pihak sekolah.');
+        spmbForm.reset();
+        if (penyakitLainnya) {
+          penyakitLainnya.style.display = 'none';
+        }
+      });
+    }
+
+    if (statusCheckBtn && statusCheckInput) {
+      statusCheckBtn.addEventListener('click', function () {
+        const value = statusCheckInput.value.trim();
+        if (!value) {
+          alert('Masukkan email pendaftaran atau NISN untuk mengecek status.');
+          statusCheckInput.focus();
+          return;
+        }
+
+        alert('Status pendaftaran sedang diproses. Silakan cek kembali secara berkala untuk update terbaru.');
+      });
+    }
+  </script>
+</body>
+</html>

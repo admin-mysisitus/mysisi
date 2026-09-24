@@ -66,6 +66,66 @@
   font-size: 1.1rem;
 }
 
+.magazine-style h3 {
+  color: var(--color-primary-blue);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px dashed rgba(0, 59, 156, 0.2);
+  display: inline-block;
+  font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.magazine-style .info-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.magazine-style .info-badge {
+  background: linear-gradient(135deg, rgba(0,59,156,0.08), rgba(230,180,0,0.12));
+  border: 1px solid rgba(0,59,156,0.12);
+  border-radius: var(--radius-sedang);
+  padding: 0.9rem 1rem;
+  color: var(--color-neutral-dark);
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.magazine-style .info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border-radius: var(--radius-sedang);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 59, 156, 0.12);
+}
+
+.magazine-style .info-table td {
+  padding: 0.85rem 1rem;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0, 59, 156, 0.08);
+  background: rgba(255,255,255,0.7);
+}
+
+.magazine-style .info-table tr:last-child td {
+  border-bottom: none;
+}
+
+.magazine-style .info-table tr:nth-child(even) td {
+  background: rgba(0,59,156,0.03);
+}
+
+.magazine-style .info-table td:first-child {
+  width: 38%;
+  font-weight: 800;
+  color: var(--color-primary-blue);
+  background: rgba(0,59,156,0.04);
+}
+
 /* Leader List Styling */
 .ordered-list.leader-list {
   background: transparent;

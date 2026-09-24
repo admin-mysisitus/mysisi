@@ -1,0 +1,2421 @@
+{
+  "users": {
+    "WRp7X9dV34VfjMPaUpR0F4s6aCD2": {
+      "email": "admin@musada.sch.id",
+      "name": "Super Admin",
+      "role": "admin"
+    },
+    "DUMMY_UID_KEPSEK": {
+      "email": "kepsek@musada.sch.id",
+      "name": "Bpk. Kepala Sekolah",
+      "role": "kepsek"
+    },
+    "DUMMY_UID_GURU_1A": {
+      "email": "guru1a@musada.sch.id",
+      "name": "Wali Kelas 1A",
+      "role": "guru",
+      "classId": "class1A"
+    },
+    "DUMMY_UID_ORTU_stu1": {
+      "email": "ortu_stu1@musada.sch.id",
+      "name": "Orang Tua Dinda",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu2": {
+      "email": "ortu_stu2@musada.sch.id",
+      "name": "Orang Tua Siti",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_1B": {
+      "email": "guru1b@musada.sch.id",
+      "name": "Wali Kelas 1B",
+      "role": "guru",
+      "classId": "class1B"
+    },
+    "DUMMY_UID_ORTU_stu6": {
+      "email": "ortu_stu6@musada.sch.id",
+      "name": "Orang Tua Aisyah",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu7": {
+      "email": "ortu_stu7@musada.sch.id",
+      "name": "Orang Tua Iqbal",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_2A": {
+      "email": "guru2a@musada.sch.id",
+      "name": "Wali Kelas 2A",
+      "role": "guru",
+      "classId": "class2A"
+    },
+    "DUMMY_UID_ORTU_stu12": {
+      "email": "ortu_stu12@musada.sch.id",
+      "name": "Orang Tua Iqbal",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu13": {
+      "email": "ortu_stu13@musada.sch.id",
+      "name": "Orang Tua Rizky",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_2B": {
+      "email": "guru2b@musada.sch.id",
+      "name": "Wali Kelas 2B",
+      "role": "guru",
+      "classId": "class2B"
+    },
+    "DUMMY_UID_ORTU_stu19": {
+      "email": "ortu_stu19@musada.sch.id",
+      "name": "Orang Tua Kevin",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu20": {
+      "email": "ortu_stu20@musada.sch.id",
+      "name": "Orang Tua Putri",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_3A": {
+      "email": "guru3a@musada.sch.id",
+      "name": "Wali Kelas 3A",
+      "role": "guru",
+      "classId": "class3A"
+    },
+    "DUMMY_UID_ORTU_stu27": {
+      "email": "ortu_stu27@musada.sch.id",
+      "name": "Orang Tua Hafiz",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu28": {
+      "email": "ortu_stu28@musada.sch.id",
+      "name": "Orang Tua Aisyah",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_4A": {
+      "email": "guru4a@musada.sch.id",
+      "name": "Wali Kelas 4A",
+      "role": "guru",
+      "classId": "class4A"
+    },
+    "DUMMY_UID_ORTU_stu35": {
+      "email": "ortu_stu35@musada.sch.id",
+      "name": "Orang Tua Zahra",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu36": {
+      "email": "ortu_stu36@musada.sch.id",
+      "name": "Orang Tua Fathur",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_5A": {
+      "email": "guru5a@musada.sch.id",
+      "name": "Wali Kelas 5A",
+      "role": "guru",
+      "classId": "class5A"
+    },
+    "DUMMY_UID_ORTU_stu41": {
+      "email": "ortu_stu41@musada.sch.id",
+      "name": "Orang Tua Aisyah",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu42": {
+      "email": "ortu_stu42@musada.sch.id",
+      "name": "Orang Tua Aditya",
+      "role": "ortu"
+    },
+    "DUMMY_UID_GURU_6A": {
+      "email": "guru6a@musada.sch.id",
+      "name": "Wali Kelas 6A",
+      "role": "guru",
+      "classId": "class6A"
+    },
+    "DUMMY_UID_ORTU_stu48": {
+      "email": "ortu_stu48@musada.sch.id",
+      "name": "Orang Tua Aisyah",
+      "role": "ortu"
+    },
+    "DUMMY_UID_ORTU_stu49": {
+      "email": "ortu_stu49@musada.sch.id",
+      "name": "Orang Tua Rizky",
+      "role": "ortu"
+    }
+  },
+  "settings": {
+    "currentAcademicYear": "2026/2027",
+    "currentSemester": "1"
+  },
+  "characters": {
+    "char1": {
+      "name": "Kedisiplinan",
+      "desc": "Datang tepat waktu dan mematuhi aturan kelas",
+      "active": true,
+      "order": 1
+    },
+    "char2": {
+      "name": "Tanggung Jawab",
+      "desc": "Mengerjakan dan mengumpulkan tugas dengan tuntas",
+      "active": true,
+      "order": 2
+    },
+    "char3": {
+      "name": "Sopan Santun",
+      "desc": "Berbicara sopan dengan guru dan teman",
+      "active": true,
+      "order": 3
+    },
+    "char4": {
+      "name": "Ibadah",
+      "desc": "Mengikuti sholat dzuhur berjamaah dengan tertib",
+      "active": true,
+      "order": 4
+    },
+    "char5": {
+      "name": "Kemandirian",
+      "desc": "Menyiapkan perlengkapan belajar sendiri",
+      "active": true,
+      "order": 5
+    }
+  },
+  "classes": {
+    "class1A": {
+      "name": "Kelas 1A"
+    },
+    "class1B": {
+      "name": "Kelas 1B"
+    },
+    "class2A": {
+      "name": "Kelas 2A"
+    },
+    "class2B": {
+      "name": "Kelas 2B"
+    },
+    "class3A": {
+      "name": "Kelas 3A"
+    },
+    "class4A": {
+      "name": "Kelas 4A"
+    },
+    "class5A": {
+      "name": "Kelas 5A"
+    },
+    "class6A": {
+      "name": "Kelas 6A"
+    }
+  },
+  "students": {
+    "stu1": {
+      "name": "Dinda Hidayat",
+      "nisn": "1002",
+      "classId": "class1A",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu1"
+    },
+    "stu2": {
+      "name": "Siti Nugroho",
+      "nisn": "1003",
+      "classId": "class1A",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu2"
+    },
+    "stu3": {
+      "name": "Ahmad Hidayat",
+      "nisn": "1004",
+      "classId": "class1A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu4": {
+      "name": "Rani Ramadhan",
+      "nisn": "1005",
+      "classId": "class1A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu5": {
+      "name": "Fathur Pratama",
+      "nisn": "1006",
+      "classId": "class1A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu6": {
+      "name": "Aisyah Ramadhan",
+      "nisn": "1007",
+      "classId": "class1B",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu6"
+    },
+    "stu7": {
+      "name": "Iqbal Rohman",
+      "nisn": "1008",
+      "classId": "class1B",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu7"
+    },
+    "stu8": {
+      "name": "Nisa Arya",
+      "nisn": "1009",
+      "classId": "class1B",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu9": {
+      "name": "Bima Rohman",
+      "nisn": "1010",
+      "classId": "class1B",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu10": {
+      "name": "Aditya Wijaya",
+      "nisn": "1011",
+      "classId": "class1B",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu11": {
+      "name": "Nisa Hidayat",
+      "nisn": "1012",
+      "classId": "class1B",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu12": {
+      "name": "Iqbal Arya",
+      "nisn": "1013",
+      "classId": "class2A",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu12"
+    },
+    "stu13": {
+      "name": "Rizky Wijaya",
+      "nisn": "1014",
+      "classId": "class2A",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu13"
+    },
+    "stu14": {
+      "name": "Aditya Rohman",
+      "nisn": "1015",
+      "classId": "class2A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu15": {
+      "name": "Siti Saputra",
+      "nisn": "1016",
+      "classId": "class2A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu16": {
+      "name": "Putri Pratama",
+      "nisn": "1017",
+      "classId": "class2A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu17": {
+      "name": "Rizky Pratama",
+      "nisn": "1018",
+      "classId": "class2A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu18": {
+      "name": "Bima Nugroho",
+      "nisn": "1019",
+      "classId": "class2A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu19": {
+      "name": "Kevin Hidayat",
+      "nisn": "1020",
+      "classId": "class2B",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu19"
+    },
+    "stu20": {
+      "name": "Putri Pratama",
+      "nisn": "1021",
+      "classId": "class2B",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu20"
+    },
+    "stu21": {
+      "name": "Zahra Arya",
+      "nisn": "1022",
+      "classId": "class2B",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu22": {
+      "name": "Bima Rohman",
+      "nisn": "1023",
+      "classId": "class2B",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu23": {
+      "name": "Iqbal Saputra",
+      "nisn": "1024",
+      "classId": "class2B",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu24": {
+      "name": "Salsa Saputra",
+      "nisn": "1025",
+      "classId": "class2B",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu25": {
+      "name": "Budi Santoso",
+      "nisn": "1026",
+      "classId": "class2B",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu26": {
+      "name": "Siti Rohman",
+      "nisn": "1027",
+      "classId": "class2B",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu27": {
+      "name": "Hafiz Ramadhan",
+      "nisn": "1028",
+      "classId": "class3A",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu27"
+    },
+    "stu28": {
+      "name": "Aisyah Rohman",
+      "nisn": "1029",
+      "classId": "class3A",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu28"
+    },
+    "stu29": {
+      "name": "Siti Hidayat",
+      "nisn": "1030",
+      "classId": "class3A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu30": {
+      "name": "Tiara Ramadhan",
+      "nisn": "1031",
+      "classId": "class3A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu31": {
+      "name": "Nisa Ramadhan",
+      "nisn": "1032",
+      "classId": "class3A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu32": {
+      "name": "Gilang Arya",
+      "nisn": "1033",
+      "classId": "class3A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu33": {
+      "name": "Hafiz Saputra",
+      "nisn": "1034",
+      "classId": "class3A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu34": {
+      "name": "Bima Pratama",
+      "nisn": "1035",
+      "classId": "class3A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu35": {
+      "name": "Zahra Ramadhan",
+      "nisn": "1036",
+      "classId": "class4A",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu35"
+    },
+    "stu36": {
+      "name": "Fathur Santoso",
+      "nisn": "1037",
+      "classId": "class4A",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu36"
+    },
+    "stu37": {
+      "name": "Kevin Hidayat",
+      "nisn": "1038",
+      "classId": "class4A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu38": {
+      "name": "Nisa Arya",
+      "nisn": "1039",
+      "classId": "class4A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu39": {
+      "name": "Hafiz Arya",
+      "nisn": "1040",
+      "classId": "class4A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu40": {
+      "name": "Aisyah Nugroho",
+      "nisn": "1041",
+      "classId": "class4A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu41": {
+      "name": "Aisyah Kusuma",
+      "nisn": "1042",
+      "classId": "class5A",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu41"
+    },
+    "stu42": {
+      "name": "Aditya Santoso",
+      "nisn": "1043",
+      "classId": "class5A",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu42"
+    },
+    "stu43": {
+      "name": "Kevin Santoso",
+      "nisn": "1044",
+      "classId": "class5A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu44": {
+      "name": "Kevin Ramadhan",
+      "nisn": "1045",
+      "classId": "class5A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu45": {
+      "name": "Putri Arya",
+      "nisn": "1046",
+      "classId": "class5A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu46": {
+      "name": "Budi Nugroho",
+      "nisn": "1047",
+      "classId": "class5A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu47": {
+      "name": "Gilang Pratama",
+      "nisn": "1048",
+      "classId": "class5A",
+      "gender": "L",
+      "parentId": null
+    },
+    "stu48": {
+      "name": "Aisyah Arya",
+      "nisn": "1049",
+      "classId": "class6A",
+      "gender": "P",
+      "parentId": "DUMMY_UID_ORTU_stu48"
+    },
+    "stu49": {
+      "name": "Rizky Saputra",
+      "nisn": "1050",
+      "classId": "class6A",
+      "gender": "L",
+      "parentId": "DUMMY_UID_ORTU_stu49"
+    },
+    "stu50": {
+      "name": "Syifa Wijaya",
+      "nisn": "1051",
+      "classId": "class6A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu51": {
+      "name": "Nisa Ramadhan",
+      "nisn": "1052",
+      "classId": "class6A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu52": {
+      "name": "Salsa Wijaya",
+      "nisn": "1053",
+      "classId": "class6A",
+      "gender": "P",
+      "parentId": null
+    },
+    "stu53": {
+      "name": "Rani Hidayat",
+      "nisn": "1054",
+      "classId": "class6A",
+      "gender": "P",
+      "parentId": null
+    }
+  },
+  "assessments": {
+    "2026-2027_1": {
+      "stu1": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788708592619
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1789096457805
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1788570156595
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788282226200
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788508049525
+        }
+      },
+      "stu2": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788643826587
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788264021805
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788735382053
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788306761257
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788706773930
+        }
+      },
+      "stu3": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788475905491
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788878748566
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1789096825519
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788476395255
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788896961929
+        }
+      },
+      "stu4": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788279354652
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788395869512
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788310726297
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788939571051
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788803159930
+        }
+      },
+      "stu5": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788916572937
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788559319800
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788330490070
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788854197945
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788365206317
+        }
+      },
+      "stu6": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788985166206
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788849960020
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788703035221
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788627515126
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788753638832
+        }
+      },
+      "stu7": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788964172022
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788739523851
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788653134433
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788665771791
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788796232961
+        }
+      },
+      "stu8": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788761277513
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788279333409
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788511664664
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788781713899
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788493837967
+        }
+      },
+      "stu9": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788460577264
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788331877436
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788811028556
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1789082033259
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788967398187
+        }
+      },
+      "stu10": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788778063072
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788919207698
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788713022964
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788677414495
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788326133439
+        }
+      },
+      "stu11": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788281756113
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788877494479
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788416855953
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788712893137
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788762024887
+        }
+      },
+      "stu12": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1789002616449
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788542457824
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788304983145
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788472995470
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1789033465419
+        }
+      },
+      "stu13": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788695416122
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788801758314
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788853932627
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788569438650
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788444393736
+        }
+      },
+      "stu14": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788817836678
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788844194398
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788660386001
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788425695764
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788833168418
+        }
+      },
+      "stu15": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788940490296
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788747015884
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788369524737
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1789019263176
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788430589670
+        }
+      },
+      "stu16": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1789054862703
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788684724373
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1789083494402
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788650206738
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788309970837
+        }
+      },
+      "stu17": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788459683577
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788434921216
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788720668877
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788570592088
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788918531821
+        }
+      },
+      "stu18": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1789106786130
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788413167333
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788695537285
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788964047195
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788725884864
+        }
+      },
+      "stu19": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788517818532
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788397460408
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788727944843
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1789051514932
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788432545575
+        }
+      },
+      "stu20": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788739078536
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788430715439
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1788320982048
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1789007884171
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1789020242235
+        }
+      },
+      "stu21": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788778992947
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788561529424
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788259896894
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788662663873
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788766613789
+        }
+      },
+      "stu22": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788871513235
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788263161839
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1788824300295
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1789038435109
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788533370146
+        }
+      },
+      "stu23": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788785183185
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788996968644
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788868318415
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788321947349
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788531183353
+        }
+      },
+      "stu24": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788255645092
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788669390926
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788708761177
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788411162611
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788641574815
+        }
+      },
+      "stu25": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788399150176
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788519169953
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788711084913
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788528125266
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788802816157
+        }
+      },
+      "stu26": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788728990050
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788491660099
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788590268227
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788984729796
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788974140836
+        }
+      },
+      "stu27": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788652602473
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788482640731
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1788454992644
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788883366436
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788768785709
+        }
+      },
+      "stu28": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788553509199
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1789023881377
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788655886623
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788490930206
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1789000134505
+        }
+      },
+      "stu29": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788383957251
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788928280947
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788463007232
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788402191745
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788636313895
+        }
+      },
+      "stu30": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788542607457
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788810790122
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788346328971
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1789108596995
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788358639298
+        }
+      },
+      "stu31": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1789030051481
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788792533220
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788578348952
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788701412892
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1789043988260
+        }
+      },
+      "stu32": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788859071424
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788343384621
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788352625950
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788826115466
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788810574220
+        }
+      },
+      "stu33": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788544353561
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788551507700
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788331804493
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788343290975
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788313938249
+        }
+      },
+      "stu34": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788274393075
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788522434233
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788864235574
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788259198152
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788553135623
+        }
+      },
+      "stu35": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788849071278
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1789026883184
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788916613352
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788491392360
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788353246526
+        }
+      },
+      "stu36": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788509016551
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788728155301
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1788565917090
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1789033657710
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788615947690
+        }
+      },
+      "stu37": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788614164576
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1789017201007
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1789044368851
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1789019525314
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788747756253
+        }
+      },
+      "stu38": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788845527330
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788782962411
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788303939010
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788923378187
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788656919751
+        }
+      },
+      "stu39": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788432275474
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1789033154093
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788988710230
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788435967837
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788672566895
+        }
+      },
+      "stu40": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788320688653
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788909024789
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788873553569
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788366908189
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788986560684
+        }
+      },
+      "stu41": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788520550614
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788944059028
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788478059462
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788664737460
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788784925010
+        }
+      },
+      "stu42": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788626579101
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788795010857
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788487781681
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788533539183
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1789054264800
+        }
+      },
+      "stu43": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788940940377
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788372744473
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1789063390202
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788955173479
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788711408033
+        }
+      },
+      "stu44": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788274446336
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788560895947
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788883113529
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788301716407
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788285604266
+        }
+      },
+      "stu45": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788614947744
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788257832580
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788296814626
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788748077118
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788255766163
+        }
+      },
+      "stu46": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788886567306
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788256544464
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1789021090819
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788493799325
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788875164327
+        }
+      },
+      "stu47": {
+        "char1": {
+          "score": 2,
+          "updatedAt": 1788540208390
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788654595914
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788961333220
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788869271890
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788846073997
+        }
+      },
+      "stu48": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788317265865
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788863288663
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788263434134
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1789051936839
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788806996600
+        }
+      },
+      "stu49": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788781136747
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788848184218
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1788399964593
+        },
+        "char4": {
+          "score": 4,
+          "updatedAt": 1788474071029
+        },
+        "char5": {
+          "score": 2,
+          "updatedAt": 1788718403264
+        }
+      },
+      "stu50": {
+        "char1": {
+          "score": 3,
+          "updatedAt": 1788847444407
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788682134321
+        },
+        "char3": {
+          "score": 3,
+          "updatedAt": 1788954123116
+        },
+        "char4": {
+          "score": 2,
+          "updatedAt": 1788619582061
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788843231053
+        }
+      },
+      "stu51": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788515889693
+        },
+        "char2": {
+          "score": 3,
+          "updatedAt": 1788466866136
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1788426482376
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788933879849
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788389518264
+        }
+      },
+      "stu52": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1788262687289
+        },
+        "char2": {
+          "score": 4,
+          "updatedAt": 1788632461075
+        },
+        "char3": {
+          "score": 2,
+          "updatedAt": 1789092312879
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1789029989715
+        },
+        "char5": {
+          "score": 3,
+          "updatedAt": 1788389072291
+        }
+      },
+      "stu53": {
+        "char1": {
+          "score": 4,
+          "updatedAt": 1789085851121
+        },
+        "char2": {
+          "score": 2,
+          "updatedAt": 1788373333007
+        },
+        "char3": {
+          "score": 4,
+          "updatedAt": 1789011960235
+        },
+        "char4": {
+          "score": 3,
+          "updatedAt": 1788479823656
+        },
+        "char5": {
+          "score": 4,
+          "updatedAt": 1788458221441
+        }
+      }
+    }
+  },
+  "observations": {
+    "obs1": {
+      "studentId": "stu1",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Dinda masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1788345670334,
+      "date": "22/8/2026"
+    },
+    "obs2": {
+      "studentId": "stu1",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Dinda menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1788315250182,
+      "date": "16/8/2026"
+    },
+    "obs3": {
+      "studentId": "stu2",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Siti menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1786611285154,
+      "date": "19/8/2026"
+    },
+    "obs4": {
+      "studentId": "stu3",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Ahmad menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787540786633,
+      "date": "3/9/2026"
+    },
+    "obs5": {
+      "studentId": "stu4",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Rani masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1788396529941,
+      "date": "17/8/2026"
+    },
+    "obs6": {
+      "studentId": "stu4",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Rani masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1789059687037,
+      "date": "15/8/2026"
+    },
+    "obs7": {
+      "studentId": "stu5",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Fathur menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1787003471626,
+      "date": "2/9/2026"
+    },
+    "obs8": {
+      "studentId": "stu5",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Fathur menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1788135231629,
+      "date": "8/9/2026"
+    },
+    "obs9": {
+      "studentId": "stu6",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Aisyah menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787344808831,
+      "date": "30/8/2026"
+    },
+    "obs10": {
+      "studentId": "stu6",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Aisyah menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1786520175196,
+      "date": "30/8/2026"
+    },
+    "obs11": {
+      "studentId": "stu7",
+      "characterId": "char1",
+      "type": "needs_improvement",
+      "note": "Iqbal masih perlu bimbingan dan dorongan lebih lanjut untuk Kedisiplinan.",
+      "timestamp": 1787482516719,
+      "date": "22/8/2026"
+    },
+    "obs12": {
+      "studentId": "stu8",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Nisa menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1788626323657,
+      "date": "7/9/2026"
+    },
+    "obs13": {
+      "studentId": "stu8",
+      "characterId": "char5",
+      "type": "needs_improvement",
+      "note": "Nisa masih perlu bimbingan dan dorongan lebih lanjut untuk Kemandirian.",
+      "timestamp": 1788662493853,
+      "date": "3/9/2026"
+    },
+    "obs14": {
+      "studentId": "stu9",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Bima menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1788342988325,
+      "date": "16/8/2026"
+    },
+    "obs15": {
+      "studentId": "stu10",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Aditya menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1788861453652,
+      "date": "29/8/2026"
+    },
+    "obs16": {
+      "studentId": "stu10",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Aditya menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1787246798156,
+      "date": "30/8/2026"
+    },
+    "obs17": {
+      "studentId": "stu11",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Nisa menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1786986157072,
+      "date": "20/8/2026"
+    },
+    "obs18": {
+      "studentId": "stu11",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Nisa menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1787882886332,
+      "date": "21/8/2026"
+    },
+    "obs19": {
+      "studentId": "stu12",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Iqbal masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1788193189239,
+      "date": "11/9/2026"
+    },
+    "obs20": {
+      "studentId": "stu13",
+      "characterId": "char4",
+      "type": "needs_improvement",
+      "note": "Rizky masih perlu bimbingan dan dorongan lebih lanjut untuk Ibadah.",
+      "timestamp": 1787954948272,
+      "date": "18/8/2026"
+    },
+    "obs21": {
+      "studentId": "stu14",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Aditya menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1787400031245,
+      "date": "28/8/2026"
+    },
+    "obs22": {
+      "studentId": "stu15",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Siti menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787785481910,
+      "date": "21/8/2026"
+    },
+    "obs23": {
+      "studentId": "stu15",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Siti menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1788504916990,
+      "date": "19/8/2026"
+    },
+    "obs24": {
+      "studentId": "stu16",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Putri menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787990164690,
+      "date": "23/8/2026"
+    },
+    "obs25": {
+      "studentId": "stu16",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Putri menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1786867182594,
+      "date": "31/8/2026"
+    },
+    "obs26": {
+      "studentId": "stu17",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Rizky menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1786945981050,
+      "date": "10/9/2026"
+    },
+    "obs27": {
+      "studentId": "stu17",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Rizky menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1787172921627,
+      "date": "15/8/2026"
+    },
+    "obs28": {
+      "studentId": "stu18",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Bima menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787206664733,
+      "date": "28/8/2026"
+    },
+    "obs29": {
+      "studentId": "stu18",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Bima menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1787905051780,
+      "date": "19/8/2026"
+    },
+    "obs30": {
+      "studentId": "stu19",
+      "characterId": "char1",
+      "type": "needs_improvement",
+      "note": "Kevin masih perlu bimbingan dan dorongan lebih lanjut untuk Kedisiplinan.",
+      "timestamp": 1786694478160,
+      "date": "30/8/2026"
+    },
+    "obs31": {
+      "studentId": "stu19",
+      "characterId": "char5",
+      "type": "needs_improvement",
+      "note": "Kevin masih perlu bimbingan dan dorongan lebih lanjut untuk Kemandirian.",
+      "timestamp": 1789055559661,
+      "date": "24/8/2026"
+    },
+    "obs32": {
+      "studentId": "stu20",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Putri menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1788452893821,
+      "date": "22/8/2026"
+    },
+    "obs33": {
+      "studentId": "stu21",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Zahra menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1788032723386,
+      "date": "31/8/2026"
+    },
+    "obs34": {
+      "studentId": "stu22",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Bima menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787868407265,
+      "date": "10/9/2026"
+    },
+    "obs35": {
+      "studentId": "stu22",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Bima menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787006563908,
+      "date": "3/9/2026"
+    },
+    "obs36": {
+      "studentId": "stu23",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Iqbal masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1787594660060,
+      "date": "28/8/2026"
+    },
+    "obs37": {
+      "studentId": "stu23",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Iqbal masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1788089341122,
+      "date": "2/9/2026"
+    },
+    "obs38": {
+      "studentId": "stu24",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Salsa menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1788844969788,
+      "date": "21/8/2026"
+    },
+    "obs39": {
+      "studentId": "stu24",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Salsa menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787200652182,
+      "date": "29/8/2026"
+    },
+    "obs40": {
+      "studentId": "stu25",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Budi menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1788448894381,
+      "date": "25/8/2026"
+    },
+    "obs41": {
+      "studentId": "stu25",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Budi menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1787711038029,
+      "date": "1/9/2026"
+    },
+    "obs42": {
+      "studentId": "stu26",
+      "characterId": "char1",
+      "type": "needs_improvement",
+      "note": "Siti masih perlu bimbingan dan dorongan lebih lanjut untuk Kedisiplinan.",
+      "timestamp": 1786605165445,
+      "date": "13/8/2026"
+    },
+    "obs43": {
+      "studentId": "stu27",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Hafiz menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787113497725,
+      "date": "15/8/2026"
+    },
+    "obs44": {
+      "studentId": "stu28",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Aisyah menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1787395635177,
+      "date": "17/8/2026"
+    },
+    "obs45": {
+      "studentId": "stu29",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Siti menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1786924084861,
+      "date": "26/8/2026"
+    },
+    "obs46": {
+      "studentId": "stu29",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Siti masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1787711528139,
+      "date": "20/8/2026"
+    },
+    "obs47": {
+      "studentId": "stu30",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Tiara masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1787012610905,
+      "date": "24/8/2026"
+    },
+    "obs48": {
+      "studentId": "stu31",
+      "characterId": "char4",
+      "type": "needs_improvement",
+      "note": "Nisa masih perlu bimbingan dan dorongan lebih lanjut untuk Ibadah.",
+      "timestamp": 1786994866834,
+      "date": "27/8/2026"
+    },
+    "obs49": {
+      "studentId": "stu31",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Nisa menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1787971865989,
+      "date": "19/8/2026"
+    },
+    "obs50": {
+      "studentId": "stu32",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Gilang masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1788276620238,
+      "date": "22/8/2026"
+    },
+    "obs51": {
+      "studentId": "stu32",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Gilang menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787386834913,
+      "date": "7/9/2026"
+    },
+    "obs52": {
+      "studentId": "stu33",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Hafiz masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1786754723978,
+      "date": "30/8/2026"
+    },
+    "obs53": {
+      "studentId": "stu34",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Bima masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1787988341743,
+      "date": "31/8/2026"
+    },
+    "obs54": {
+      "studentId": "stu34",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Bima menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1788210126378,
+      "date": "5/9/2026"
+    },
+    "obs55": {
+      "studentId": "stu35",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Zahra menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787302675243,
+      "date": "10/9/2026"
+    },
+    "obs56": {
+      "studentId": "stu35",
+      "characterId": "char5",
+      "type": "needs_improvement",
+      "note": "Zahra masih perlu bimbingan dan dorongan lebih lanjut untuk Kemandirian.",
+      "timestamp": 1786795466686,
+      "date": "26/8/2026"
+    },
+    "obs57": {
+      "studentId": "stu36",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Fathur menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1787201610439,
+      "date": "19/8/2026"
+    },
+    "obs58": {
+      "studentId": "stu36",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Fathur menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1786748444374,
+      "date": "23/8/2026"
+    },
+    "obs59": {
+      "studentId": "stu37",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Kevin menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1787176087457,
+      "date": "14/8/2026"
+    },
+    "obs60": {
+      "studentId": "stu38",
+      "characterId": "char1",
+      "type": "needs_improvement",
+      "note": "Nisa masih perlu bimbingan dan dorongan lebih lanjut untuk Kedisiplinan.",
+      "timestamp": 1787330688062,
+      "date": "27/8/2026"
+    },
+    "obs61": {
+      "studentId": "stu38",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Nisa menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1786576855427,
+      "date": "2/9/2026"
+    },
+    "obs62": {
+      "studentId": "stu39",
+      "characterId": "char1",
+      "type": "needs_improvement",
+      "note": "Hafiz masih perlu bimbingan dan dorongan lebih lanjut untuk Kedisiplinan.",
+      "timestamp": 1787722717292,
+      "date": "29/8/2026"
+    },
+    "obs63": {
+      "studentId": "stu40",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Aisyah menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1786623620321,
+      "date": "31/8/2026"
+    },
+    "obs64": {
+      "studentId": "stu40",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Aisyah menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1786653075238,
+      "date": "18/8/2026"
+    },
+    "obs65": {
+      "studentId": "stu41",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Aisyah masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1788089929429,
+      "date": "17/8/2026"
+    },
+    "obs66": {
+      "studentId": "stu41",
+      "characterId": "char5",
+      "type": "needs_improvement",
+      "note": "Aisyah masih perlu bimbingan dan dorongan lebih lanjut untuk Kemandirian.",
+      "timestamp": 1788472810778,
+      "date": "23/8/2026"
+    },
+    "obs67": {
+      "studentId": "stu42",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Aditya menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1787346841193,
+      "date": "16/8/2026"
+    },
+    "obs68": {
+      "studentId": "stu42",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Aditya masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1788131917554,
+      "date": "19/8/2026"
+    },
+    "obs69": {
+      "studentId": "stu43",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Kevin menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1788233661517,
+      "date": "10/9/2026"
+    },
+    "obs70": {
+      "studentId": "stu44",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Kevin menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1788703365767,
+      "date": "21/8/2026"
+    },
+    "obs71": {
+      "studentId": "stu45",
+      "characterId": "char4",
+      "type": "positive",
+      "note": "Putri menunjukkan perkembangan yang sangat baik dalam hal Ibadah.",
+      "timestamp": 1789089278434,
+      "date": "21/8/2026"
+    },
+    "obs72": {
+      "studentId": "stu46",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Budi menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1786756276309,
+      "date": "27/8/2026"
+    },
+    "obs73": {
+      "studentId": "stu47",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Gilang menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1788493365120,
+      "date": "17/8/2026"
+    },
+    "obs74": {
+      "studentId": "stu47",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Gilang masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1787320083517,
+      "date": "2/9/2026"
+    },
+    "obs75": {
+      "studentId": "stu48",
+      "characterId": "char3",
+      "type": "needs_improvement",
+      "note": "Aisyah masih perlu bimbingan dan dorongan lebih lanjut untuk Sopan Santun.",
+      "timestamp": 1787811061958,
+      "date": "23/8/2026"
+    },
+    "obs76": {
+      "studentId": "stu48",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Aisyah menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787563025254,
+      "date": "31/8/2026"
+    },
+    "obs77": {
+      "studentId": "stu49",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Rizky menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787500176644,
+      "date": "3/9/2026"
+    },
+    "obs78": {
+      "studentId": "stu50",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Syifa menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1787846174937,
+      "date": "3/9/2026"
+    },
+    "obs79": {
+      "studentId": "stu50",
+      "characterId": "char1",
+      "type": "positive",
+      "note": "Syifa menunjukkan perkembangan yang sangat baik dalam hal Kedisiplinan.",
+      "timestamp": 1786576159959,
+      "date": "25/8/2026"
+    },
+    "obs80": {
+      "studentId": "stu51",
+      "characterId": "char3",
+      "type": "positive",
+      "note": "Nisa menunjukkan perkembangan yang sangat baik dalam hal Sopan Santun.",
+      "timestamp": 1787342980654,
+      "date": "14/8/2026"
+    },
+    "obs81": {
+      "studentId": "stu51",
+      "characterId": "char5",
+      "type": "needs_improvement",
+      "note": "Nisa masih perlu bimbingan dan dorongan lebih lanjut untuk Kemandirian.",
+      "timestamp": 1787932446421,
+      "date": "13/8/2026"
+    },
+    "obs82": {
+      "studentId": "stu52",
+      "characterId": "char2",
+      "type": "positive",
+      "note": "Salsa menunjukkan perkembangan yang sangat baik dalam hal Tanggung Jawab.",
+      "timestamp": 1788839214385,
+      "date": "30/8/2026"
+    },
+    "obs83": {
+      "studentId": "stu53",
+      "characterId": "char5",
+      "type": "positive",
+      "note": "Rani menunjukkan perkembangan yang sangat baik dalam hal Kemandirian.",
+      "timestamp": 1787612407070,
+      "date": "7/9/2026"
+    },
+    "obs84": {
+      "studentId": "stu53",
+      "characterId": "char2",
+      "type": "needs_improvement",
+      "note": "Rani masih perlu bimbingan dan dorongan lebih lanjut untuk Tanggung Jawab.",
+      "timestamp": 1787588104988,
+      "date": "6/9/2026"
+    }
+  }
+}

@@ -84,52 +84,92 @@ function initSponsorsMarquee() {
 window.initSponsorsMarquee = initSponsorsMarquee;
 
 function initGallerySlider() {
-  var slider = document.getElementById('gallery-slider');
-  if (!slider) return;
-  
-  var scrollInterval;
-  var pauseTimeout;
-  
-  function scrollStep() {
-    var firstItem = slider.querySelector('.gallery-item-home');
-    if (!firstItem) return;
-    
-    // Calculate precise width including gap
-    var itemStyle = window.getComputedStyle(firstItem);
-    var itemWidth = firstItem.offsetWidth + parseFloat(itemStyle.marginRight || 0);
-    // Add gap explicitly since it's gap-based flexbox
-    var gap = parseFloat(window.getComputedStyle(slider).gap || 0);
-    var scrollAmount = itemWidth + gap;
+  var sliders = document.querySelectorAll('.auto-slide-gallery, #gallery-slider');
+  if (!sliders.length) return;
 
-    // Check if we're near the end
-    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
-      slider.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  sliders.forEach(function(slider) {
+    if (slider.dataset.autoSliderInitialized === 'true') return;
+    slider.dataset.autoSliderInitialized = 'true';
+
+    var scrollInterval;
+    var pauseTimeout;
+
+    function getScrollAmount() {
+      var firstItem = slider.querySelector('.gallery-item-home');
+      if (!firstItem) return 0;
+
+      var itemStyle = window.getComputedStyle(firstItem);
+      var itemWidth = firstItem.offsetWidth + parseFloat(itemStyle.marginRight || 0);
+      var gap = parseFloat(window.getComputedStyle(slider).gap || 0);
+      return itemWidth + gap;
     }
-  }
 
-  function startAutoScroll() {
-    scrollInterval = setInterval(scrollStep, 2000);
-  }
+    function scrollStep() {
+      var maxScroll = slider.scrollWidth - slider.clientWidth - 10;
+      if (maxScroll <= 0 || slider.scrollLeft >= maxScroll) {
+        slider.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
+      }
 
-  function pauseAutoScroll() {
-    clearInterval(scrollInterval);
-    clearTimeout(pauseTimeout);
-  }
+      slider.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    }
 
-  function resumeAutoScroll() {
-    pauseAutoScroll();
-    pauseTimeout = setTimeout(function() {
-      startAutoScroll();
-    }, 3500);
-  }
+    function startAutoScroll() {
+      clearInterval(scrollInterval);
+      scrollInterval = setInterval(scrollStep, 2200);
+    }
 
-  slider.addEventListener('mouseenter', pauseAutoScroll);
-  slider.addEventListener('mouseleave', resumeAutoScroll);
-  slider.addEventListener('touchstart', pauseAutoScroll, { passive: true });
-  slider.addEventListener('touchend', resumeAutoScroll, { passive: true });
+    function pauseAutoScroll() {
+      clearInterval(scrollInterval);
+      clearTimeout(pauseTimeout);
+    }
 
-  startAutoScroll();
+    function resumeAutoScroll() {
+      pauseAutoScroll();
+      pauseTimeout = setTimeout(startAutoScroll, 1800);
+    }
+
+    slider.addEventListener('mouseenter', pauseAutoScroll);
+    slider.addEventListener('mouseleave', resumeAutoScroll);
+    slider.addEventListener('touchstart', pauseAutoScroll, { passive: true });
+    slider.addEventListener('touchend', resumeAutoScroll, { passive: true });
+
+    startAutoScroll();
+  });
 }
 window.initGallerySlider = initGallerySlider;
+
+function initInfografisSliders() {
+  var sliders = document.querySelectorAll('.infografis-slider');
+  if (!sliders.length) return;
+
+  sliders.forEach(function(slider) {
+    var slides = slider.querySelectorAll('.infografis-slide');
+    if (slides.length < 2) return;
+
+    var currentIndex = 0;
+    var intervalMs = Number(slider.dataset.interval) || 2600;
+
+    function showSlide(index) {
+      slides.forEach(function(slide, slideIndex) {
+        slide.classList.toggle('active', slideIndex === index);
+      });
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      showSlide(currentIndex);
+    }
+
+    var intervalId = setInterval(nextSlide, intervalMs);
+
+    slider.addEventListener('mouseenter', function() {
+      clearInterval(intervalId);
+    });
+
+    slider.addEventListener('mouseleave', function() {
+      intervalId = setInterval(nextSlide, intervalMs);
+    });
+  });
+}
+window.initInfografisSliders = initInfografisSliders;

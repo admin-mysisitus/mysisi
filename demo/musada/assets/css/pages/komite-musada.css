@@ -1,0 +1,121 @@
+.committee-visual {
+  margin: 1.5rem 0 2rem;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(13, 66, 157, 0.12);
+  background: linear-gradient(135deg, #eef5ff 0%, #ffffff 100%);
+  box-shadow: 0 12px 30px rgba(6, 40, 96, 0.08);
+}
+
+.committee-visual img {
+  display: block;
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+}
+
+.committee-caption {
+  padding: 1rem 1.25rem 1.25rem;
+  background: #fff;
+}
+
+.committee-caption p {
+  margin: 0;
+  color: var(--color-neutral-medium);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.committee-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.committee-mini-card {
+  background: #f5f9ff;
+  border: 1px solid #dfeaff;
+  border-radius: 12px;
+  padding: 0.75rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.committee-mini-card img {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.7rem;
+}
+
+.committee-mini-card span {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary-blue);
+  margin-bottom: 0.35rem;
+}
+
+.committee-mini-card strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--color-neutral-dark);
+  margin-bottom: 0.2rem;
+}
+
+.profile-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.profile-summary-card {
+  background: #f8fbff;
+  border: 1px solid rgba(13, 66, 157, 0.12);
+  border-radius: 14px;
+  padding: 1rem 1rem 0.9rem;
+  box-shadow: 0 8px 20px rgba(9, 41, 91, 0.04);
+}
+
+.profile-card-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary-blue);
+  margin-bottom: 0.5rem;
+}
+
+.profile-summary-card strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--color-text-main);
+  margin-bottom: 0.45rem;
+}
+
+.profile-summary-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-neutral-medium);
+}
+
+@media (max-width: 768px) {
+  .profile-list-grid {
+    grid-template-columns: 1fr;
+  }
+  .committee-visual img {
+    height: 250px;
+  }
+
+  .committee-mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,512 @@
+[
+  {
+    "nama": "Dhani Harsyahyadi, S.H.I.",
+    "jabatan": "Kepala Sekolah",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/dhani-harsyahyadi-s-h-i.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Nur Fadhilah, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 1 Abu",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/nur-fadhilah-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Hasnia Ulfa, S.Pd.",
+    "jabatan": "Guru Kelas 1 Umar",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/hasnia-ulfa-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Dhiya Ayu Rahmania, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 1 Aisyah",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/dhiya-ayu-rahmania-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Lina Nur Jannah, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 2 Usman",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/lina-nur-jannah-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Divia Arianti, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 2 Salman",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/divia-arianti-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Ari Uswatun Khasanah, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 2 Khadijah",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/ari-uswatun-khasanah-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Siti Nadhiroh, S.Pd.",
+    "jabatan": "Guru Kelas 3 Ali",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/siti-nadhiroh-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Maslukatul Faujiah, S.Pd.",
+    "jabatan": "Guru Kelas 3 Bilal",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/maslukatul-faujiah-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Wahyu Mufida Isnaini, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 3 Zainab",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/wahyu-mufida-isnaini-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Deayu Icha Ristya, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 4 Abdurrahman",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/deayu-icha-ristya-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Roichatul Jannah, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 4 Khalid",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/roichatul-jannah-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Khalimah Sakdiyah, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 4 Hafshah",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/khalimah-sakdiyah-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Angga Dwi Kurniawan Kusuma, M.Pd., Gr.",
+    "jabatan": "Guru Kelas 5 Zaid",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/angga-dwi-kurniawan-kusuma-m-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Ainaini Ratna Noeri, M.Pd.",
+    "jabatan": "Guru Kelas 5 Maryam",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/ainaini-ratna-noeri-m-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Roudlotul Millah, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 6 Mu’adz",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/roudlotul-millah-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Eka Dessy Pratiwi, S.Pd., Gr.",
+    "jabatan": "Guru Kelas 6 Fatimah",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/eka-dessy-pratiwi-s-pd-gr.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Furqon, S.H.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/furqon-s-h.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "M. Niam Agustian, S.Pd.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/m-niam-agustian-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Ahmad Tsalis N, S.Tr.T.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/ahmad-tsalis-n-s-tr-t.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "M. Khohar, M.Pd.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/m-khohar-m-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Nurul Laily Mufida, S.Pd.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/nurul-laily-mufida-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Vindy Aprilia, S.Pd.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/vindy-aprilia-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Aprilia An’Umillah, S.Pd.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/aprilia-an-umillah-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Naila Adiba, S.Pd.",
+    "jabatan": "Guru ISMUBARISTIK",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/naila-adiba-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Moh Muzzaki, S.Pd.",
+    "jabatan": "Guru PJOK",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/moh-muzzaki-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Haris Kuswandi",
+    "jabatan": "Guru Tapak Suci",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/haris-kuswandi.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Intan Ayu Primitarini, S.Sos",
+    "jabatan": "Bendahara",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/intan-ayu-primitarini-s-sos.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Asmaul Husna, S.Pd",
+    "jabatan": "Bendahara",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/asmaul-husna-s-pd.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Andi Sugiyanto, S.E",
+    "jabatan": "Tata Usaha",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/andi-sugiyanto-s-e.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "M. Wildan Mustofa",
+    "jabatan": "Perpustakaan",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/m-wildan-mustofa.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Brilianinda, A.Md",
+    "jabatan": "Koperasi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/brilianinda-a-md.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Drs. Abdullah Said",
+    "jabatan": "Pengemudi",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/drs-abdullah-said.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Iswanto",
+    "jabatan": "Satpam",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/iswanto.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Imam Dahlan",
+    "jabatan": "Taman",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/imam-dahlan.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Parni",
+    "jabatan": "Kebersihan",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/parni.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "M. Hafid",
+    "jabatan": "Kebersihan",
+    "ttl": "-",
+    "jenis_kelamin": "Laki-laki",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/m-hafid.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Nur Abidhatul Lailiyah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/nur-abidhatul-lailiyah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Maryam",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/maryam.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Zaidatur Rohmah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/zaidatur-rohmah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Bibi Mutliatil Jannah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/bibi-mutliatil-jannah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Ismaul Kusnah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/ismaul-kusnah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Nanik",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/nanik.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Fitraning Daniyah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/fitraning-daniyah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Aisyah Hani Sulaiman",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/aisyah-hani-sulaiman.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Silvana Izza Rahma",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/silvana-izza-rahma.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Layyinatus Saniyyah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/layyinatus-saniyyah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Urwatun Nazihah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/urwatun-nazihah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Fuaidah Rochmah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/fuaidah-rochmah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Dewi Nur Maslihah",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/dewi-nur-maslihah.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  },
+  {
+    "nama": "Yulianingsih",
+    "jabatan": "Guru BTQ Ummi",
+    "ttl": "-",
+    "jenis_kelamin": "Perempuan",
+    "pangkat_golongan": "-",
+    "foto": "/assets/img/pegawai/yulianingsih.webp",
+    "tupoksi_url": "#",
+    "detail_url": "#"
+  }
+]

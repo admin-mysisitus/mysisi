@@ -163,10 +163,26 @@
   transition: background-color 0.2s
 }
 
+.main-nav>ul>li>a.nav-login-button {
+  margin-left: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--strip-yellow);
+  color: var(--color-header-bg);
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgb(0 0 0 / .18);
+}
+
 .main-nav>ul>li:hover>a,
 .main-nav>ul>li>a.active {
   background-color: rgb(255 255 255 / .15);
   color: var(--strip-yellow)
+}
+
+.main-nav>ul>li>a.nav-login-button:hover,
+.main-nav>ul>li>a.nav-login-button.active {
+  background: #f1c84d;
+  color: var(--color-header-bg);
 }
 
 .nav-search {

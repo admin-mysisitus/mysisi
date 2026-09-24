@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>e-Rapor SD Muhammadiyah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+
+<body>
+  <div id="app-loading" class="fullscreen-overlay">
+    <div class="loader"></div>
+  </div>
+  <main id="login-view" class="view hidden">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="brand-header">
+          <div class="brand-logo"><i class="ph-fill ph-student"></i></div>
+          <h1>e-Rapor<br>SD Muhammadiyah 1 Sedati</h1>
+          <p>Sistem Observasi & Penilaian Karakter</p>
+        </div>
+        <form id="login-form">
+          <div class="form-group"><label for="email">Email</label><input type="email" id="email"
+              placeholder="contoh: guru@sekolah.id" required></div>
+          <div class="form-group"><label for="password">Password</label>
+            <div class="password-wrapper"><input type="password" id="password" placeholder="Masukkan password"
+                required><button type="button" class="btn-toggle-password" id="toggle-password"
+                title="Lihat/Sembunyikan password"><i class="ph ph-eye" id="toggle-password-icon"></i></button></div>
+          </div>
+          <p id="login-error" class="error-text hidden"></p><button type="submit" class="btn btn-primary btn-block"
+            id="btn-login"><span class="btn-text">Masuk</span><i class="ph ph-arrow-right"></i></button>
+        </form>
+      </div>
+      <div class="login-footer">
+        <p>Developed By:<br><i>IT Support SD Muhammadiyah 1 Sedati</i></p>
+      </div>
+    </div>
+  </main>
+  <div id="app-shell" class="hidden">
+    <header class="mobile-header">
+      <div class="brand-logo-small"><i class="ph-fill ph-student"></i><span>e-Rapor</span></div><button class="btn-icon"
+        id="btn-menu-toggle"><i class="ph ph-list"></i></button>
+    </header>
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-small"><i class="ph-fill ph-student"></i><span>e-Rapor</span></div><button
+          class="btn-icon mobile-only" id="btn-menu-close"><i class="ph ph-x"></i></button>
+      </div>
+      <div class="user-profile-widget">
+        <div class="avatar"><i class="ph ph-user"></i></div>
+        <div class="user-info">
+          <p class="user-name" id="current-user-name">Memuat...</p>
+          <p class="user-role" id="current-user-role">Role</p>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer"><button class="btn-nav danger" id="btn-logout"><i
+            class="ph ph-sign-out"></i><span>Keluar</span></button></div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    <main class="main-content">
+      <header class="page-header">
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-subtitle" class="text-muted">Selamat datang di sistem penilaian karakter.</p>
+      </header>
+      <div id="views-container" class="views-container"></div>
+    </main>
+  </div>
+  <script src="assets/js/app-config.js?v=2"></script>
+  <script src="assets/js/firebase-config.js?v=2"></script>
+  <script src="assets/js/drive-utils.js?v=2"></script>
+  <script src="assets/js/db.js?v=2"></script>
+  <script src="assets/js/auth.js?v=2"></script>
+  <script src="assets/js/router.js?v=2"></script>
+  <script src="assets/js/pages/admin.js?v=2"></script>
+  <script src="assets/js/pages/guru.js?v=2"></script>
+  <script src="assets/js/pages/ortu.js?v=2"></script>
+  <script src="assets/js/pages/kepsek.js?v=2"></script>
+  <script src="assets/js/app.js?v=2"></script>
+</body>
+
+</html>
