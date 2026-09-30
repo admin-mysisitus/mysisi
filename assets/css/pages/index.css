@@ -1489,7 +1489,7 @@
 
 .ig-grid-item {
   position: relative;
-  aspect-ratio: 1/1;
+  aspect-ratio: 4/5.35;
   background: #efefef;
   overflow: hidden;
 }
