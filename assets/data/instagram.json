@@ -1,21 +1,21 @@
 {
   "username": "sisitus.official",
-  "nama_lengkap": "SINTARA TECH",
+  "nama_lengkap": "SINTARA Tech.",
   "pengikut": "3,2 rb pengikut",
   "kiriman": "6 postingan",
   "ada_story": true,
   "foto_profil": "assets/img/logo/logo.svg",
   "kiriman_grid": [
     {
-      "url": "assets/img/blog/tips/conversion-rate-optimization.webp",
+      "url": "assets/img/ig/post6.webp",
       "tipe": "is-carousel"
     },
     {
-      "url": "assets/img/blog/tips/email-marketing.webp",
+      "url": "assets/img/ig/post5.webp",
       "tipe": ""
     },
     {
-      "url": "assets/img/blog/tips/mobile-first-design.webp",
+      "url": "assets/img/ig/post4.webp",
       "tipe": "is-video"
     },
     {
