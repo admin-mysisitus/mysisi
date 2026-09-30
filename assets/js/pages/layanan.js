@@ -62,7 +62,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const text = this.textContent.toLowerCase();
       if (text.includes('whatsapp')) {
         e.preventDefault();
-        window.open('https://wa.me/62882010067695?text=Halo, saya tertarik dengan layanan SISITUS', '_blank');
+        const hour = new Date().getHours();
+        let greeting = 'malam';
+        if (hour >= 4 && hour < 11) greeting = 'pagi';
+        else if (hour >= 11 && hour < 15) greeting = 'siang';
+        else if (hour >= 15 && hour < 18) greeting = 'sore';
+        const msg = `Halo Sisitus! Selamat ${greeting}, saya ingin info penawaran produk.`;
+        window.open('https://wa.me/62882010067695?text=' + encodeURIComponent(msg), '_blank');
       } else if (text.includes('email')) {
         e.preventDefault();
         window.location.href = 'mailto:hello@sisitus.com?subject=Inquiry%20Layanan%20SISITUS';

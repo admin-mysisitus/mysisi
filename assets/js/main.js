@@ -27,4 +27,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       void('Could not verify package active status:', err);
     }
   }
+
+  // Add Dynamic WhatsApp Greeting
+  document.body.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href*="wa.me/62882010067695"]');
+    if (a) {
+      const hour = new Date().getHours();
+      let greeting = 'malam';
+      if (hour >= 4 && hour < 11) greeting = 'pagi';
+      else if (hour >= 11 && hour < 15) greeting = 'siang';
+      else if (hour >= 15 && hour < 18) greeting = 'sore';
+      
+      const url = new URL(a.href);
+      let currentText = url.searchParams.get('text') || '';
+      
+      // Clean up previous dynamic greetings if link was already clicked
+      currentText = currentText.replace(/^Halo\s+Sisitus!\s+Selamat\s+(pagi|siang|sore|malam),\s*/ig, '');
+      currentText = currentText.replace(/^Halo\s+SISITUS(,\s*)?/ig, '');
+      currentText = currentText.replace(/^Halo\s+SISITUS\s+SISITUS(,\s*)?/ig, '');
+      
+      if (!currentText || currentText.trim().toLowerCase() === 'saya ingin info penawaran produk') {
+        currentText = 'saya ingin info penawaran produk.';
+      } else {
+        currentText = currentText.charAt(0).toLowerCase() + currentText.slice(1);
+      }
+      
+      url.searchParams.set('text', `Halo Sisitus! Selamat ${greeting}, ${currentText}`);
+      a.href = url.toString();
+    }
+  });
 });

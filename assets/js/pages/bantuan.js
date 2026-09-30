@@ -121,7 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
       }
       try {
-        const whatsappMessage = encodeURIComponent(`Halo SISITUS!\n\n` + `Nama: ${fullname}\n` + `Email: ${email}\n` + `Telepon: ${phone}\n` + `Subjek: ${subject}\n\n` + `Pesan:\n${message}`);
+        const hour = new Date().getHours();
+        let greeting = 'malam';
+        if (hour >= 4 && hour < 11) greeting = 'pagi';
+        else if (hour >= 11 && hour < 15) greeting = 'siang';
+        else if (hour >= 15 && hour < 18) greeting = 'sore';
+        const whatsappMessage = encodeURIComponent(`Halo Sisitus! Selamat ${greeting},\n\n` + `Nama: ${fullname}\n` + `Email: ${email}\n` + `Telepon: ${phone}\n` + `Subjek: ${subject}\n\n` + `Pesan:\n${message}`);
         const whatsappURL = `https://wa.me/62882010067695?text=${whatsappMessage}`;
         window.open(whatsappURL, '_blank');
         contactForm.reset();

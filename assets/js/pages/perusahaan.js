@@ -261,7 +261,12 @@ document.addEventListener('DOMContentLoaded', function() {
     btn.addEventListener('click', function(e) {
       if (index === 0 && (!this.getAttribute('href') || this.getAttribute('href') === '/bantuan/')) {
         e.preventDefault();
-        const message = 'Saya tertarik untuk berkolaborasi dengan SISITUS';
+        const hour = new Date().getHours();
+        let greeting = 'malam';
+        if (hour >= 4 && hour < 11) greeting = 'pagi';
+        else if (hour >= 11 && hour < 15) greeting = 'siang';
+        else if (hour >= 15 && hour < 18) greeting = 'sore';
+        const message = `Halo Sisitus! Selamat ${greeting}, saya tertarik untuk berkolaborasi dengan SISITUS`;
         window.open('https://wa.me/62882010067695?text=' + encodeURIComponent(message), '_blank');
       }
     });
