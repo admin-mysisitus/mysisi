@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       try {
         const whatsappMessage = encodeURIComponent(`Halo SISITUS!\n\n` + `Nama: ${fullname}\n` + `Email: ${email}\n` + `Telepon: ${phone}\n` + `Subjek: ${subject}\n\n` + `Pesan:\n${message}`);
-        const whatsappURL = `https://wa.me/6281215289095?text=${whatsappMessage}`;
+        const whatsappURL = `https://wa.me/62882010067695?text=${whatsappMessage}`;
         window.open(whatsappURL, '_blank');
         contactForm.reset();
         const successMsg = karirType === 'karir' ? 'Terima kasih! Lamaran Anda akan dikirim via WhatsApp.' : 'Terima kasih! Pesan Anda akan dikirim via WhatsApp.';

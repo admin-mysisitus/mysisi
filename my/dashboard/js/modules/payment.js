@@ -18,7 +18,7 @@ import {
   EnvHelper,
   Base64Utils
 } from '/assets/js/modules/unified-utils.js';
-const ADMIN_WHATSAPP = '6281215289095';
+const ADMIN_WHATSAPP = '62882010067695';
 let currentUser = null;
 let currentOrder = null;
 let currentTransaction = null;

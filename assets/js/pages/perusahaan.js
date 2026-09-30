@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (index === 0 && (!this.getAttribute('href') || this.getAttribute('href') === '/bantuan/')) {
         e.preventDefault();
         const message = 'Saya tertarik untuk berkolaborasi dengan SISITUS';
-        window.open('https://wa.me/6281215289095?text=' + encodeURIComponent(message), '_blank');
+        window.open('https://wa.me/62882010067695?text=' + encodeURIComponent(message), '_blank');
       }
     });
   });
