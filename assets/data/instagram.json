@@ -1,14 +1,14 @@
 {
-  "username": "sisitusdotcom",
+  "username": "sisitus.official",
   "nama_lengkap": "SINTARA TECH",
-  "pengikut": "2,8 rb pengikut",
-  "kiriman": "30 kiriman",
+  "pengikut": "3,2 rb pengikut",
+  "kiriman": "6 postingan",
   "ada_story": true,
   "foto_profil": "assets/img/logo/logo.svg",
   "kiriman_grid": [
     {
       "url": "assets/img/blog/tips/conversion-rate-optimization.webp",
-      "tipe": ""
+      "tipe": "is-carousel"
     },
     {
       "url": "assets/img/blog/tips/email-marketing.webp",
@@ -19,16 +19,16 @@
       "tipe": "is-video"
     },
     {
-      "url": "assets/img/blog/tips/seo-on-page.webp",
+      "url": "assets/img/ig/post3.webp",
       "tipe": ""
     },
     {
-      "url": "assets/img/blog/tips/strategi-content-marketing.webp",
-      "tipe": "is-carousel"
+      "url": "assets/img/ig/post2.webp",
+      "tipe": ""
     },
     {
-      "url": "assets/img/blog/tips/trend-desain-website-2025.webp",
-      "tipe": "is-video"
+      "url": "assets/img/ig/post1.webp",
+      "tipe": ""
     }
   ]
 }
