@@ -10,7 +10,7 @@
   const copyrightPara = document.createElement("p");
   const currentYear = new Date().getFullYear();
   copyrightPara.innerHTML = `&copy; <span>${currentYear}</span> — sisitus.com<br>
-                             All Rights Reserved | Operated by: <a href="https://www.instagram.com/sisitusdotcom" class="copyright-link" aria-label="Instagram SINTARA TECH">SINTARA Tech.</a><br>
+                             All Rights Reserved | Operated by: <a href="https://www.instagram.com/sisitus.official" class="copyright-link" aria-label="Instagram SINTARA TECH">SINTARA Tech.</a><br>
                              Powered by`;
   const wm = document.createElement("a");
   wm.href = "https://sisitus.com";

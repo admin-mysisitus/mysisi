@@ -112,7 +112,7 @@ export const footerSocialData = [{
   name: "Facebook",
   svg: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#1877F2" d="M24 12.073C24 5.446 18.627.073 12 .073S0 5.446 0 12.073c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>'
 }, {
-  href: "https://www.instagram.com/sisitusdotcom",
+  href: "https://www.instagram.com/sisitus.official",
   ariaLabel: "Instagram",
   name: "Instagram",
   svg: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="instagram-gradient" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#FDF497"/><stop offset="5%" stop-color="#FDF497"/><stop offset="45%" stop-color="#FD5949"/><stop offset="60%" stop-color="#D6249F"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><path fill="url(#instagram-gradient)" d="M7.8 0h8.4C20.5 0 24 3.5 24 7.8v8.4c0 4.3-3.5 7.8-7.8 7.8H7.8C3.5 24 0 20.5 0 16.2V7.8C0 3.5 3.5 0 7.8 0zm-.2 2.2C4.5 2.2 2.2 4.5 2.2 7.6v8.8c0 3.1 2.3 5.4 5.4 5.4h8.8c3.1 0 5.4-2.3 5.4-5.4V7.6c0-3.1-2.3-5.4-5.4-5.4H7.6z"/><path fill="url(#instagram-gradient)" d="M12 5.4A6.6 6.6 0 1 0 12 18.6 6.6 6.6 0 0 0 12 5.4zm0 10.9A4.3 4.3 0 1 1 12 7.7a4.3 4.3 0 0 1 0 8.6z"/><circle cx="18.3" cy="5.7" r="1.5" fill="url(#instagram-gradient)"/></svg>'
