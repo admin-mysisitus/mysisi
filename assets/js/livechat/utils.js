@@ -24,7 +24,7 @@ function truncateString(str, maxLength = 15) {
 
 function isValidRoomId(roomId) {
   if (!roomId || typeof roomId !== 'string') return false;
-  return roomId.length > 5;
+  return roomId.length > 1;
 }
 
 function isOnline() {
