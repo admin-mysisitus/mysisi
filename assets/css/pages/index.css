@@ -304,7 +304,7 @@
   background: var(--bg-white);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-large);
-  padding: 1.5rem;
+  padding: 1.25rem;
   text-align: left;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -317,7 +317,7 @@
 
 @media (min-width: 768px) {
   .service-card {
-    padding: 2.5rem 2rem;
+    padding: 2rem 1.5rem;
   }
 }
 
@@ -341,13 +341,13 @@
 
 .badge-featured {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.75rem;
+  right: 0.75rem;
   background: var(--brand-base);
   color: white;
-  padding: 0.35rem 0.85rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 99px;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -355,8 +355,10 @@
 
 @media (min-width: 768px) {
   .badge-featured {
-    top: 1.5rem;
-    right: 1.5rem;
+    top: 1.25rem;
+    right: 1.25rem;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -448,22 +450,22 @@
 }
 
 .package-price {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .price-amount {
   display: block;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--brand-dark);
   line-height: 1;
   letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 @media (min-width: 768px) {
   .price-amount {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
@@ -473,18 +475,30 @@
 
 .price-period {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
+  margin-top: 0.75rem;
+  margin-bottom: 0;
 }
 
 .service-card--featured .price-period {
   color: #94a3b8;
 }
 
+.package-divider {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 1.5rem 0;
+}
+
+.service-card--featured .package-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .package-features {
   list-style: none;
   padding: 0;
-  margin: 0 0 2rem 0;
+  margin: 0;
   flex-grow: 1;
 }
 
@@ -503,18 +517,18 @@
 }
 
 .package-features i {
-  color: var(--primary-blue);
-  font-size: 1.1rem;
-  margin-top: 0.15rem;
+  color: #10b981;
+  font-size: 1rem;
+  margin-top: 0.25rem;
   flex-shrink: 0;
 }
 
 .service-card--featured .package-features i {
-  color: var(--accent-cyan);
+  color: #10b981;
 }
 
 .card-action {
-  margin-top: auto;
+  margin-bottom: 0.5rem;
 }
 
 .w-100 {
