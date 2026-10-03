@@ -8,7 +8,8 @@
     "features": "Profil Sekolah, PPDB Online, Berita Sekolah",
     "url": "https://musada.sch.id",
     "image": "/assets/img/portfolio/sdmusada.webp",
-    "imageAlt": "Tampilan Website SD Muhammadiyah 1"
+    "imageAlt": "Tampilan Website SD Muhammadiyah 1",
+    "package": "Starter"
   },
   {
     "id": 48,
@@ -19,7 +20,8 @@
     "features": "Profil Yayasan, Program Pendidikan, Galeri Kegiatan",
     "url": "https://pptqalwahyu.id",
     "image": "/assets/img/portfolio/pptqalwahyu.webp",
-    "imageAlt": "Tampilan Website Yayasan Al-Wahyu Cahaya Islam"
+    "imageAlt": "Tampilan Website Yayasan Al-Wahyu Cahaya Islam",
+    "package": "Grower"
   },
   {
     "id": 47,
@@ -30,7 +32,8 @@
     "features": "Prefab House, Furniture, Project Gallery, Construction",
     "url": "https://www.bali-prefab.com/",
     "image": "/assets/img/portfolio/baliprefab.webp",
-    "imageAlt": "Tampilan Website Bali Prefab"
+    "imageAlt": "Tampilan Website Bali Prefab",
+    "package": "Pioneer"
   },
   {
     "id": 46,
@@ -41,7 +44,8 @@
     "features": "Paket Wisata, Tour Borneo, International Tour, Informasi Perjalanan",
     "url": "https://baramatour.co.id/",
     "image": "/assets/img/portfolio/baramatour.webp",
-    "imageAlt": "Tampilan Website Barama Tour"
+    "imageAlt": "Tampilan Website Barama Tour",
+    "package": "Monster"
   },
   {
     "id": 45,
@@ -52,7 +56,8 @@
     "features": "Ocean Freight, Air Freight, Trucking, Warehousing",
     "url": "https://www.andalan-pacific.com/",
     "image": "/assets/img/portfolio/andalanpacific.webp",
-    "imageAlt": "Tampilan Website Andalan Pacific Samudra"
+    "imageAlt": "Tampilan Website Andalan Pacific Samudra",
+    "package": "Starter"
   },
   {
     "id": 44,
@@ -63,7 +68,8 @@
     "features": "Produk Sanitary, Kitchen, Galeri, Informasi Produk",
     "url": "https://halmar.id/",
     "image": "/assets/img/portfolio/halmar.webp",
-    "imageAlt": "Tampilan Website Halmar Sanitary"
+    "imageAlt": "Tampilan Website Halmar Sanitary",
+    "package": "Grower"
   },
   {
     "id": 43,
@@ -74,7 +80,8 @@
     "features": "Program Pendidikan, Sertifikasi, Galeri, Pendaftaran",
     "url": "https://shs.sch.id/",
     "image": "/assets/img/portfolio/shs.webp",
-    "imageAlt": "Tampilan Website Surabaya Hotel School"
+    "imageAlt": "Tampilan Website Surabaya Hotel School",
+    "package": "Pioneer"
   },
   {
     "id": 42,
@@ -85,7 +92,8 @@
     "features": "PPDB Digital, Registrasi, Informasi Madrasah, Portal Siswa",
     "url": "https://ppdb.dev.man1gresik.sch.id/",
     "image": "/assets/img/portfolio/man1gresik.webp",
-    "imageAlt": "Tampilan Website PPDB MAN 1 Gresik"
+    "imageAlt": "Tampilan Website PPDB MAN 1 Gresik",
+    "package": "Monster"
   },
   {
     "id": 41,
@@ -96,7 +104,8 @@
     "features": "PPDB Online, Program Sekolah, Fasilitas, Informasi Akademik",
     "url": "https://ppdb.smasemengresik.sch.id/",
     "image": "/assets/img/portfolio/smasemengresik.webp",
-    "imageAlt": "Tampilan Website PPDB SMA Semen Gresik"
+    "imageAlt": "Tampilan Website PPDB SMA Semen Gresik",
+    "package": "Starter"
   },
   {
     "id": 40,
@@ -107,7 +116,8 @@
     "features": "PPDB Online, Program Unggulan, E-Learning, Berita",
     "url": "https://smpsepuluhnopember.sch.id/",
     "image": "/assets/img/portfolio/smpsepuluhnopember.webp",
-    "imageAlt": "Tampilan Website SMP Sepuluh Nopember Sidoarjo"
+    "imageAlt": "Tampilan Website SMP Sepuluh Nopember Sidoarjo",
+    "package": "Grower"
   },
   {
     "id": 39,
@@ -118,7 +128,8 @@
     "features": "Berita Madrasah, PPDB, Informasi Akademik, Kegiatan Siswa",
     "url": "https://www.mtsn1sidoarjo.sch.id/",
     "image": "/assets/img/portfolio/mtsn1sidoarjo.webp",
-    "imageAlt": "Tampilan Website MTsN 1 Sidoarjo"
+    "imageAlt": "Tampilan Website MTsN 1 Sidoarjo",
+    "package": "Pioneer"
   },
   {
     "id": 38,
@@ -129,7 +140,8 @@
     "features": "Website UMKM, Web Design, Mobile Responsive, Business Website",
     "url": "https://www.kitangoding.my.id/",
     "image": "/assets/img/portfolio/kitangoding.webp",
-    "imageAlt": "Tampilan Website Kitangoding"
+    "imageAlt": "Tampilan Website Kitangoding",
+    "package": "Monster"
   },
   {
     "id": 37,
@@ -140,7 +152,8 @@
     "features": "Platform SaaS, AI, CDN, Database, Modul Bisnis",
     "url": "https://app.luvion.my.id/",
     "image": "/assets/img/portfolio/luvion.webp",
-    "imageAlt": "Tampilan Website Luvion"
+    "imageAlt": "Tampilan Website Luvion",
+    "package": "Starter"
   },
   {
     "id": 36,
@@ -151,7 +164,8 @@
     "features": "Web Development, SEO, Data Analytics, WhatsApp Automation",
     "url": "https://innovize.my.id/",
     "image": "/assets/img/portfolio/innovize.webp",
-    "imageAlt": "Tampilan Website Innovize Digital"
+    "imageAlt": "Tampilan Website Innovize Digital",
+    "package": "Grower"
   },
   {
     "id": 35,
@@ -162,7 +176,8 @@
     "features": "Software Bisnis, POS, Hotel Management, Retail, Custom System",
     "url": "https://ideakomputindo.my.id/",
     "image": "/assets/img/portfolio/ideakomputindo.webp",
-    "imageAlt": "Tampilan Website Idea Karya Komputindo"
+    "imageAlt": "Tampilan Website Idea Karya Komputindo",
+    "package": "Pioneer"
   },
   {
     "id": 34,
@@ -173,7 +188,8 @@
     "features": "Port Services, Cargo Handling, Logistics, Warehouse",
     "url": "https://www.gjtama.co.id/",
     "image": "/assets/img/portfolio/gjtama.webp",
-    "imageAlt": "Tampilan Website Gresik Jasatama"
+    "imageAlt": "Tampilan Website Gresik Jasatama",
+    "package": "Monster"
   },
   {
     "id": 33,
@@ -184,7 +200,8 @@
     "features": "Interior Design, Furniture Production, Installation, Project Service",
     "url": "https://kusumaindoabadi.co.id/",
     "image": "/assets/img/portfolio/kusumaindoabadi.webp",
-    "imageAlt": "Tampilan Website Kusuma Indah Abadi"
+    "imageAlt": "Tampilan Website Kusuma Indah Abadi",
+    "package": "Starter"
   },
   {
     "id": 32,
@@ -195,7 +212,8 @@
     "features": "Company Profile, PP Woven Bags, FIBC, Production Line",
     "url": "https://forindo.co.id/",
     "image": "/assets/img/portfolio/forindo.webp",
-    "imageAlt": "Tampilan Website PT Forindoprima Perkasa"
+    "imageAlt": "Tampilan Website PT Forindoprima Perkasa",
+    "package": "Grower"
   },
   {
     "id": 31,
@@ -206,7 +224,8 @@
     "features": "Company Profile, Produk Makanan, Private Label, Informasi Kontak",
     "url": "https://www.familyfoodindonesia.co.id/",
     "image": "/assets/img/portfolio/familyfoodindonesia.webp",
-    "imageAlt": "Tampilan Website PT Family Food Indonesia"
+    "imageAlt": "Tampilan Website PT Family Food Indonesia",
+    "package": "Pioneer"
   },
   {
     "id": 30,
@@ -217,7 +236,8 @@
     "features": "Katalog Skincare, Body Care, Parfum, Pemesanan Online",
     "url": "https://www.beautytalk.co.id/",
     "image": "/assets/img/portfolio/beautytalk.webp",
-    "imageAlt": "Tampilan Website Beauty Talk"
+    "imageAlt": "Tampilan Website Beauty Talk",
+    "package": "Monster"
   },
   {
     "id": 29,
@@ -228,7 +248,8 @@
     "features": "Produk Seafood, Frozen Food, Cold Storage, Distribusi",
     "url": "https://suwisa.co.id/",
     "image": "/assets/img/portfolio/suwisa.webp",
-    "imageAlt": "Tampilan Website PT Sunar Wijaya Sakti"
+    "imageAlt": "Tampilan Website PT Sunar Wijaya Sakti",
+    "package": "Starter"
   },
   {
     "id": 28,
@@ -239,7 +260,8 @@
     "features": "Profil Perusahaan, Produk Charcoal, Galeri, Informasi Ekspor",
     "url": "https://trisuryasempana.co.id/",
     "image": "/assets/img/portfolio/trisuryasempana.webp",
-    "imageAlt": "Tampilan Website PT Trisurya Sempana"
+    "imageAlt": "Tampilan Website PT Trisurya Sempana",
+    "package": "Grower"
   },
   {
     "id": 27,
@@ -250,7 +272,8 @@
     "features": "Company Profile, Produk Kayu, Flooring, Door, Veneer",
     "url": "https://www.tohitindo.co.id/",
     "image": "/assets/img/portfolio/tohitindo.webp",
-    "imageAlt": "Tampilan Website PT Tohitindo Multicraft Industries"
+    "imageAlt": "Tampilan Website PT Tohitindo Multicraft Industries",
+    "package": "Pioneer"
   },
   {
     "id": 26,
@@ -261,7 +284,8 @@
     "features": "Company Profile, Produk Bolt & Nut, Aplikasi Produk, Kontak",
     "url": "https://jamet.co.id/",
     "image": "/assets/img/portfolio/jamet.webp",
-    "imageAlt": "Tampilan Website PT Jawa Metalindo Prima Industri"
+    "imageAlt": "Tampilan Website PT Jawa Metalindo Prima Industri",
+    "package": "Monster"
   },
   {
     "id": 25,
@@ -272,7 +296,8 @@
     "features": "Profil Perusahaan, Produk Kimia, Katalog, Informasi Kontak",
     "url": "https://pawitra.co.id/",
     "image": "/assets/img/portfolio/pawitra.webp",
-    "imageAlt": "Tampilan Website PT Pawitra Kimia Kencana"
+    "imageAlt": "Tampilan Website PT Pawitra Kimia Kencana",
+    "package": "Starter"
   },
   {
     "id": 18,
@@ -283,7 +308,8 @@
     "features": "Artikel Berita, Eksplorasi Sosial & Agama, Sistem Langganan",
     "url": "https://dawinsight.my.id/",
     "image": "/assets/img/portfolio/dawinsight.webp",
-    "imageAlt": "Tampilan Website Dwi Sunyi - Dawinsight"
+    "imageAlt": "Tampilan Website Dwi Sunyi - Dawinsight",
+    "package": "Grower"
   },
   {
     "id": 23,
@@ -294,7 +320,8 @@
     "features": "Sekolah Inspiratif, Berita Pendidikan, Galeri Kegiatan",
     "url": "https://smpmaarifpdn.sch.id/",
     "image": "/assets/img/portfolio/smpmaarifpdn.webp",
-    "imageAlt": "Tampilan Website SMP Maarif NU (SPARIFDA)"
+    "imageAlt": "Tampilan Website SMP Maarif NU (SPARIFDA)",
+    "package": "Pioneer"
   },
   {
     "id": 13,
@@ -305,7 +332,8 @@
     "features": "Konsultasi Legal, Layanan Izin Usaha, Testimoni Klien",
     "url": "https://legalnet.id/",
     "image": "/assets/img/portfolio/legalnet.webp",
-    "imageAlt": "Tampilan Website Legalnet"
+    "imageAlt": "Tampilan Website Legalnet",
+    "package": "Monster"
   },
   {
     "id": 5,
@@ -316,7 +344,8 @@
     "features": "Pariwisata, Layanan Masyarakat, Data Statistik",
     "url": "https://www.gunungkidul.go.id",
     "image": "/assets/img/portfolio/gunungkidul.webp",
-    "imageAlt": "Pemerintah Kabupaten Gunungkidul Website"
+    "imageAlt": "Pemerintah Kabupaten Gunungkidul Website",
+    "package": "Starter"
   },
   {
     "id": 22,
@@ -327,7 +356,8 @@
     "features": "Informasi PSB, Jenjang Pendidikan, Kalender Akademik",
     "url": "https://www.alfurqongresik.com/",
     "image": "/assets/img/portfolio/alfurqongresik.webp",
-    "imageAlt": "Tampilan Website Ma'had Al-Furqon Al-Islami Gresik"
+    "imageAlt": "Tampilan Website Ma'had Al-Furqon Al-Islami Gresik",
+    "package": "Grower"
   },
   {
     "id": 1,
@@ -338,7 +368,8 @@
     "features": "Paket Wisata, Sewa Kendaraan, Layanan Driver",
     "url": "https://jakalelana.id",
     "image": "/assets/img/portfolio/jakalelana.webp",
-    "imageAlt": "Jakalelana Tour & Travel Website"
+    "imageAlt": "Jakalelana Tour & Travel Website",
+    "package": "Pioneer"
   },
   {
     "id": 7,
@@ -349,7 +380,8 @@
     "features": "Katalog Produk, Detail Brand Global, Inquiry Sistem",
     "url": "https://noelindonesia.com/",
     "image": "/assets/img/portfolio/noelindonesia.webp",
-    "imageAlt": "Tampilan Website PT Noel Indonesia Effata"
+    "imageAlt": "Tampilan Website PT Noel Indonesia Effata",
+    "package": "Monster"
   },
   {
     "id": 3,
@@ -360,7 +392,8 @@
     "features": "Produk Digital, Konsultasi, Artikel Edukasi",
     "url": "https://ratakan.com/",
     "image": "/assets/img/portfolio/handokotantra.webp",
-    "imageAlt": "Handoko Tantra Website"
+    "imageAlt": "Handoko Tantra Website",
+    "package": "Starter"
   },
   {
     "id": 2,
@@ -371,7 +404,8 @@
     "features": "Form Pesanan, Pilihan Pembayaran, Tracking",
     "url": "https://mynasgor.pages.dev",
     "image": "/assets/img/portfolio/nasgorrakyat.webp",
-    "imageAlt": "Nasi Goreng Rasa Merakyat Website"
+    "imageAlt": "Nasi Goreng Rasa Merakyat Website",
+    "package": "Grower"
   },
   {
     "id": 14,
@@ -382,7 +416,8 @@
     "features": "Profil Pengacara, Praktik Hukum Bisnis, Layanan Konsultasi",
     "url": "https://kantorhukumhendrik.com/",
     "image": "/assets/img/portfolio/kantorhukumhendrik.webp",
-    "imageAlt": "Tampilan Website Hendrik Harsono Njoto Law Office"
+    "imageAlt": "Tampilan Website Hendrik Harsono Njoto Law Office",
+    "package": "Pioneer"
   },
   {
     "id": 4,
@@ -393,7 +428,8 @@
     "features": "Galeri Foto, Buku Digital, Kalkulator Harga",
     "url": "https://fajarkristiono.com",
     "image": "/assets/img/portfolio/fajarkristiono.webp",
-    "imageAlt": "Fajar Kristiono Website"
+    "imageAlt": "Fajar Kristiono Website",
+    "package": "Monster"
   },
   {
     "id": 10,
@@ -404,7 +440,8 @@
     "features": "Layanan Agensi, Klien Portofolio, Form Kontak",
     "url": "https://idekreativa.com/",
     "image": "/assets/img/portfolio/idekreativa.webp",
-    "imageAlt": "Tampilan Website Idekreativa"
+    "imageAlt": "Tampilan Website Idekreativa",
+    "package": "Starter"
   },
   {
     "id": 17,
@@ -415,7 +452,8 @@
     "features": "Jadwal Dokter Anak & Psikolog, Baby Spa, Asuransi Mitra",
     "url": "https://growsgigglesclinic.com/",
     "image": "/assets/img/portfolio/growsgigglesclinic.webp",
-    "imageAlt": "Tampilan Website Grow & Giggles Healthy Clinic"
+    "imageAlt": "Tampilan Website Grow & Giggles Healthy Clinic",
+    "package": "Grower"
   },
   {
     "id": 21,
@@ -426,7 +464,8 @@
     "features": "PPDB Online, Berita Artikel, Profil Alumni",
     "url": "https://alibrohimi.my.id/",
     "image": "/assets/img/portfolio/alibrohimi.webp",
-    "imageAlt": "Tampilan Website PP Ushulul Hikmah Al Ibrohimi"
+    "imageAlt": "Tampilan Website PP Ushulul Hikmah Al Ibrohimi",
+    "package": "Pioneer"
   },
   {
     "id": 6,
@@ -437,7 +476,8 @@
     "features": "Profil Perusahaan, Layanan Industri Terpadu, Portofolio Proyek",
     "url": "https://bintangsinergi.co.id/",
     "image": "/assets/img/portfolio/bintangsinergi.webp",
-    "imageAlt": "Tampilan Website PT Cakrawala Bintang Sinergi"
+    "imageAlt": "Tampilan Website PT Cakrawala Bintang Sinergi",
+    "package": "Monster"
   },
   {
     "id": 12,
@@ -448,7 +488,8 @@
     "features": "Galeri Desain Interior, Custom Furniture, Project Showcase",
     "url": "https://krisan.co.id/",
     "image": "/assets/img/portfolio/krisan.webp",
-    "imageAlt": "Tampilan Website PT Krisan Ciptakreasi Unggul"
+    "imageAlt": "Tampilan Website PT Krisan Ciptakreasi Unggul",
+    "package": "Starter"
   },
   {
     "id": 24,
@@ -459,7 +500,8 @@
     "features": "Profil Jurusan (DPIB, DKV, TKJ), E-Learning, Agenda Sekolah",
     "url": "https://smkn1kemlagi.sch.id/",
     "image": "/assets/img/portfolio/smkn1kemlagi.webp",
-    "imageAlt": "Tampilan Website SMK Negeri 1 Kemlagi"
+    "imageAlt": "Tampilan Website SMK Negeri 1 Kemlagi",
+    "package": "Grower"
   },
   {
     "id": 8,
@@ -470,7 +512,8 @@
     "features": "Sistem Informasi Desa, Transparansi Peraturan, Partisipasi Publik",
     "url": "https://sadarhukum.com/",
     "image": "/assets/img/portfolio/sadarhukum.webp",
-    "imageAlt": "Tampilan Website Desa Lalowosula (SADAR HUKUM)"
+    "imageAlt": "Tampilan Website Desa Lalowosula (SADAR HUKUM)",
+    "package": "Pioneer"
   },
   {
     "id": 20,
@@ -481,7 +524,8 @@
     "features": "Penerimaan Santri Baru (PSB), Berita Kegiatan, Portal Pendaftaran",
     "url": "https://psb.mta.ponpes.id/",
     "image": "/assets/img/portfolio/psb.webp",
-    "imageAlt": "Tampilan Website Pondok Pesantren MTA"
+    "imageAlt": "Tampilan Website Pondok Pesantren MTA",
+    "package": "Monster"
   },
   {
     "id": 11,
@@ -492,7 +536,8 @@
     "features": "Katalog Bumbu, Resep Masakan, Integrasi E-Commerce",
     "url": "https://sibumbu.co.id/",
     "image": "/assets/img/portfolio/sibumbu.webp",
-    "imageAlt": "Tampilan Website SiBumbu"
+    "imageAlt": "Tampilan Website SiBumbu",
+    "package": "Starter"
   },
   {
     "id": 9,
@@ -503,7 +548,8 @@
     "features": "Pemesanan Layanan Caregiver, Program Lansia, Artikel Kesehatan",
     "url": "https://ikarehome.com/",
     "image": "/assets/img/portfolio/ikarehome.webp",
-    "imageAlt": "Tampilan Website iKare Home Care"
+    "imageAlt": "Tampilan Website iKare Home Care",
+    "package": "Grower"
   },
   {
     "id": 16,
@@ -514,7 +560,8 @@
     "features": "Legacy & Estate Planning, Probate Litigation, Business Law",
     "url": "https://www.dahlialawgroup.com/",
     "image": "/assets/img/portfolio/dahlialawgroup.webp",
-    "imageAlt": "Tampilan Website Dahlia Law Group"
+    "imageAlt": "Tampilan Website Dahlia Law Group",
+    "package": "Pioneer"
   },
   {
     "id": 19,
@@ -525,7 +572,8 @@
     "features": "Profil Yayasan, Pendidikan Berasrama, Info Pendaftaran Santri",
     "url": "https://www.yayasanmardhotillah.com/",
     "image": "/assets/img/portfolio/yayasanmardhotillah.webp",
-    "imageAlt": "Tampilan Website Pondok Pesantren Mardhotillah Sidoarjo"
+    "imageAlt": "Tampilan Website Pondok Pesantren Mardhotillah Sidoarjo",
+    "package": "Monster"
   },
   {
     "id": 15,
@@ -536,6 +584,7 @@
     "features": "Profil Firma, Konsultasi Gratis, Area Praktik",
     "url": "https://sihaloho.co/",
     "image": "/assets/img/portfolio/sihaloho.webp",
-    "imageAlt": "Tampilan Website Sihaloho Lawyers"
+    "imageAlt": "Tampilan Website Sihaloho Lawyers",
+    "package": "Starter"
   }
 ]

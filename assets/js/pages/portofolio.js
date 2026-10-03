@@ -20,9 +20,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     card.dataset.id = item.id;
     card.style.animation = 'fadeInUp 0.6s ease-out forwards';
     const featureTags = item.features.split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('');
+    const packageBadge = item.package ? `<span class="package-badge package-${item.package.toLowerCase()}">${item.package}</span>` : '';
     card.innerHTML = `
-      <div class="portfolio-card-image" onclick="window.open('${item.url}', '_blank')">
+      <div class="portfolio-card-image" style="position: relative;" onclick="window.open('${item.url}', '_blank')">
         <img src="${item.image}" alt="${item.imageAlt}" loading="lazy">
+        ${packageBadge}
         <div class="portfolio-image-overlay">
           <a href="${item.url}" target="_blank" class="btn btn-view-hover" aria-label="Kunjungi Website ${item.name}">Kunjungi Website</a>
         </div>

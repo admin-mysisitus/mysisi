@@ -167,6 +167,28 @@
   flex-shrink: 0;
 }
 
+/* Package Badge */
+.package-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  color: white;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.package-starter { background: linear-gradient(135deg, #10b981, #059669); }
+.package-grower { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.package-pioneer { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.package-monster { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+
 @media (max-width: 768px) {
 
   .hero.hero-home,

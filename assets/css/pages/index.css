@@ -628,12 +628,49 @@
 .services-cta-footer {
   text-align: center;
   margin-top: clamp(2rem, 4vw, 3rem);
-  padding-top: clamp(2rem, 4vw, 2.5rem);
-  border-top: 1px solid var(--border-light);
+  padding-top: 0;
+  border-top: none;
 }
 
-.services-cta-footer .link-arrow {
-  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+.btn-compare-plans {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background-color: var(--bg-white);
+  color: var(--brand-dark);
+  font-size: 1rem;
+  font-weight: 700;
+  border: 1px solid var(--border-medium);
+  border-radius: 99px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.btn-compare-plans:hover {
+  background-color: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+}
+
+.btn-compare-plans i {
+  transition: transform 0.3s ease;
+}
+
+.btn-compare-plans:hover i {
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .btn-compare-plans {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
 }
 
 .testimonial-section {
