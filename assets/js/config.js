@@ -97,13 +97,13 @@ export const footerQuickLinksData = [{
   text: "Bantuan"
 }];
 export const footerLegalData = [{
-  href: "/perusahaan/legal/",
+  href: "/perusahaan/legal/syarat-ketentuan/",
   text: "Syarat & Ketentuan"
 }, {
-  href: "/perusahaan/legal/",
+  href: "/perusahaan/legal/kebijakan-privasi/",
   text: "Kebijakan Privasi"
 }, {
-  href: "/perusahaan/legal/",
+  href: "/perusahaan/legal/kebijakan-refund/",
   text: "Kebijakan Refund"
 }];
 export const footerSocialData = [{

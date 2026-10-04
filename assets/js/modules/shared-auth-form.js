@@ -233,8 +233,8 @@ export class SharedAuthForm {
           <div class="auth-privacy" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; font-size: 12px; color: #666;">
             <p style="margin: 0;">
               Dengan membuat akun, Anda setuju dengan 
-              <a href="/perusahaan/legal/" target="_blank" style="color: #2563EB; text-decoration: none;">Ketentuan Layanan</a> dan 
-              <a href="/perusahaan/legal/" target="_blank" style="color: #2563EB; text-decoration: none;">Kebijakan Privasi</a> kami.
+              <a href="/perusahaan/legal/syarat-ketentuan/" target="_blank" style="color: #2563EB; text-decoration: none;">Ketentuan Layanan</a> dan 
+              <a href="/perusahaan/legal/kebijakan-privasi/" target="_blank" style="color: #2563EB; text-decoration: none;">Kebijakan Privasi</a> kami.
             </p>
           </div>
         ` : ''}
