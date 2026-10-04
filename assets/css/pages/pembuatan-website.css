@@ -221,6 +221,7 @@
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .dp-current-price strong {
@@ -228,12 +229,14 @@
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .dp-current-price span {
   font-size: 0.9rem;
   color: var(--gray-medium);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .dp-note {
@@ -373,10 +376,16 @@
     gap: 1.5rem;
   }
   .dp-title-row h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+  .dp-old-price {
+    font-size: 0.85rem;
+  }
+  .dp-current-price {
+    font-size: 1rem;
   }
   .dp-current-price strong {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   .dp-btn {
     width: 100%;
