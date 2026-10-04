@@ -7,6 +7,7 @@ import './components/hero.js';
 import './components/section-animation.js';
 import './components/popup-promo.js';
 import './components/floating-promo.js';
+import './components/bottom-cta.js';
 import './wm.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const packageElements = document.querySelectorAll('[data-package]');

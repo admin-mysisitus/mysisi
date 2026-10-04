@@ -1443,56 +1443,20 @@
   grid-column: 1 / -1;
 }
 
-.bottom-cta-section {
-  padding: 1rem 0 1.5rem 0;
-}
 
-.team-cta {
-  text-align: left;
-  padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
-  background: var(--brand-base);
-  border-radius: 16px;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-}
 
-.team-cta-content {
-  flex: 1;
-}
 
-.team-cta h3,
-.team-cta h2 {
-  font-size: var(--judul-kecil);
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  color: white;
-}
 
-.team-cta p {
-  font-size: var(--teks-kecil);
-  opacity: 0.95;
-  margin: 0;
-  line-height: 1.5;
-  color: white;
-}
 
-.team-cta .btn {
-  margin: 0;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
+
+
+
+
+
+
 
 @media (max-width: 768px) {
-  .team-cta {
-    flex-direction: column;
-    text-align: center;
-    padding: 1.5rem;
-    gap: 1.5rem;
-  }
+  
 
   .features-grid-3col,
   .packages-carousel,

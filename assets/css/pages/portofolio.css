@@ -123,49 +123,17 @@
   line-height: var(--line-height-relaxed);
 }
 
-.bottom-cta-section {
-  padding: 1rem 0 1.5rem 0;
-}
 
-.team-cta {
-  text-align: left;
-  padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
-  background: var(--brand-base);
-  border-radius: 16px;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
-}
 
-.team-cta-content {
-  flex: 1;
-}
 
-.team-cta h3,
-.team-cta h2 {
-  font-size: var(--judul-kecil);
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  color: white !important;
-}
 
-.team-cta p {
-  font-size: var(--teks-kecil);
-  opacity: 0.95;
-  margin: 0;
-  line-height: 1.5;
-  color: white !important;
-}
 
-.team-cta .btn {
-  margin: 0;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
+
+
+
+
+
+
 
 /* Package Badge */
 .package-badge {
@@ -323,60 +291,17 @@
     margin: 0 !important;
   }
 
-  .bottom-cta-section {
-    padding: 1rem 0 1.5rem 0 !important;
-  }
+  
 
-  .team-cta {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%) !important;
-    color: white !important;
-    border-radius: 16px !important;
-    flex-direction: column !important;
-    text-align: center !important;
-    padding: 1.25rem 1rem !important;
-    gap: 1.25rem !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
-    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2) !important;
-  }
+  
 
-  .team-cta-content {
-    width: 100% !important;
-  }
+  
 
-  .team-cta h3,
-  .team-cta h2 {
-    font-size: 1.1rem !important;
-    line-height: 1.3 !important;
-    margin-bottom: 0.5rem !important;
-    color: white !important;
-  }
+  
 
-  .team-cta p {
-    font-size: 0.844rem !important;
-    line-height: 1.45 !important;
-    color: white !important;
-  }
+  
 
-  .team-cta .cta-buttons {
-    width: 100% !important;
-    flex-direction: column !important;
-    gap: 0.75rem !important;
-    display: flex !important;
-  }
+  
 
-  .team-cta .btn,
-  .team-cta .cta-buttons .btn {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0.75rem 1rem !important;
-    font-size: 0.938rem !important;
-    white-space: normal !important;
-    text-align: center !important;
-    justify-content: center !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    display: inline-flex !important;
-  }
+  
 }
