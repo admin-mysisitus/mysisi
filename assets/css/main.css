@@ -22,3 +22,99 @@
 @import url('components/popup-promo.css?v=1.0.0');
 @import url('components/faq.css?v=1.0.0');
 @import url('components/custom-icons.css?v=1.0.0');
+/* Global CTA Section */
+.bottom-cta-section {
+  padding: 1.5rem 0 2rem 0;
+}
+
+.team-cta {
+  text-align: left;
+  padding: clamp(1.5rem, 3vw, 2rem) 2.5rem;
+  background: var(--brand-base);
+  border-radius: 16px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.team-cta-content {
+  flex: 1;
+}
+
+.team-cta h3,
+.team-cta h2 {
+  font-size: var(--judul-kecil);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: white;
+  line-height: 1.3;
+}
+
+.team-cta p {
+  font-size: var(--teks-kecil);
+  opacity: 0.95;
+  margin: 0;
+  line-height: 1.5;
+  color: white;
+}
+
+.team-cta .cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 260px;
+  max-width: 320px;
+  flex-shrink: 0;
+}
+
+.team-cta .btn {
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.3;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+}
+
+@media (max-width: 768px) {
+  .team-cta {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+}
+
+/* Best Practice: Enforce consistent button styles inside the blue CTA card */
+.team-cta .btn-primary {
+  background-color: var(--bg-white, #ffffff) !important;
+  color: var(--brand-base, #2563EB) !important;
+  border: 1px solid var(--bg-white, #ffffff) !important;
+  border-radius: 100px !important;
+}
+
+.team-cta .btn-primary:hover {
+  background-color: #f1f5f9 !important;
+  color: var(--brand-dark, #1d4ed8) !important;
+}
+
+.team-cta .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: var(--bg-white, #ffffff) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 100px !important;
+}
+
+.team-cta .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  color: var(--bg-white, #ffffff) !important;
+}
