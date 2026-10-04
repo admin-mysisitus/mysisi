@@ -564,28 +564,15 @@
 }
 
 .detail-cta-section .contact-info,
-.promo-cta-final-section .contact-info {
-  font-size: var(--teks-kecil);
-  opacity: 0.95;
-  position: relative;
-  z-index: 1;
-  margin-top: 1.5rem;
-  line-height: 1.8;
-}
+
 
 .detail-cta-section .contact-info a,
-.promo-cta-final-section .contact-info a {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 600;
-  transition: var(--transisi);
-}
 
-.detail-cta-section .contact-info a:hover,
-.promo-cta-final-section .contact-info a:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-}
+
+.detail-cta-section .contact-info a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
 
 .kontak-cta-section h2 {
   font-size: var(--judul-sedang);
@@ -725,9 +712,7 @@
   }
 
   .detail-cta-section .contact-info,
-  .promo-cta-final-section .contact-info {
-    font-size: var(--teks-kecil);
-  }
+  
 }
 
 .cta-final-section {
