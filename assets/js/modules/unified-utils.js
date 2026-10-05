@@ -523,6 +523,13 @@ export function isValidDomain(domain) {
     isLocal: () => {
       return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     },
+    getDomainType: () => {
+      const host = window.location.hostname;
+      if (host.includes('my.sisitus.com')) return 'my';
+      if (host.includes('backstage.sisitus.com')) return 'backstage';
+      if (host.includes('sisitus.com')) return 'public';
+      return 'public';
+    },
     getDomainUrl: (subdomain, path = '') => {
       const isLocal = EnvHelper.isLocal();
       const cleanPath = path.startsWith('/') ? path : '/' + path;
