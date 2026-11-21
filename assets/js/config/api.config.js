@@ -22,7 +22,6 @@ export const GAS_CONFIG = {
 export const MIDTRANS_CONFIG = {
   ENVIRONMENT: 'sandbox',
   CLIENT_KEY: 'Mid-client-5Pt2HLTUbjJd24VZ',
-  SERVER_KEY: '',
   SNAP_URL: {
     sandbox: 'https://app.sandbox.midtrans.com/snap/snap.js',
     production: 'https://app.midtrans.com/snap/snap.js'
