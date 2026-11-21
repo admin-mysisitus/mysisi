@@ -1,91 +1,94 @@
 <div class="admin-page-header">
-  <div>
-    <h1 class="admin-page-title">Kode Promo</h1>
-    <p class="admin-page-desc">Kelola diskon dan promosi marketing untuk pelanggan.</p>
-  </div>
-  <div>
-    <button class="admin-btn" id="btn-add-promo">
-      <i class="ph ph-plus"></i> Buat Promo Baru </button>
-  </div>
+<div>
+<h1 class="admin-page-title">Kode Promo</h1>
+<p class="admin-page-desc">Kelola diskon dan promosi marketing untuk pelanggan.</p>
+</div>
+<div class="admin-actions">
+<button class="admin-btn" id="btn-add-promo">
+<i class="ph ph-plus"></i> Buat Promo Baru
+</button>
+</div>
 </div>
 <div class="admin-card">
-  <div class="admin-toolbar">
-    <div class="admin-search-box">
-      <i class="ph ph-magnifying-glass"></i>
-      <input type="text" id="search-promos" class="admin-input-control" placeholder="Cari kode promo...">
-    </div>
-    <div class="admin-filter-group">
-      <select id="filter-promo-status" class="admin-input-control">
-        <option value="all">Semua Status</option>
-        <option value="active">Aktif</option>
-        <option value="expired">Expired/Nonaktif</option>
-      </select>
-    </div>
-  </div>
-  <div class="admin-table-container">
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Kode</th>
-          <th>Tipe & Nilai</th>
-          <th>Penggunaan</th>
-          <th>Validitas</th>
-          <th>Status</th>
-          <th style="text-align: right;">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="promos-table-body">
-      </tbody>
-    </table>
-  </div>
+<div class="admin-toolbar">
+<div class="admin-search-box">
+<i class="ph ph-magnifying-glass"></i>
+<input type="text" id="search-promos" class="admin-input-control" placeholder="Cari kode promo...">
+</div>
+<div class="admin-filter-group">
+<select id="filter-promo-status" class="admin-filter-select">
+<option value="all">Semua Status</option>
+<option value="active">Aktif</option>
+<option value="expired">Expired/Nonaktif</option>
+</select>
+</div>
+</div>
+<div class="admin-table-container">
+<table class="admin-table">
+<thead>
+<tr>
+<th>Kode</th>
+<th>Tipe & Nilai</th>
+<th class="nowrap">Penggunaan</th>
+<th class="nowrap">Validitas</th>
+<th class="nowrap">Status</th>
+<th class="text-right nowrap">Aksi</th>
+</tr>
+</thead>
+<tbody id="promos-table-body">
+</tbody>
+</table>
+</div>
 </div>
 <div id="promo-modal" class="admin-modal">
-  <div class="admin-card admin-modal-content">
-    <h3 id="promo-modal-title" class="admin-section-title">Buat Promo Baru</h3>
-    <form id="promo-form">
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Kode Promo</label>
-        <input type="text" id="promo-code" required class="admin-input-control">
-      </div>
-      <div class="admin-form-grid-2">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Tipe Diskon</label>
-          <select id="promo-type" class="admin-input-control">
-            <option value="percentage">Persentase (%)</option>
-            <option value="fixed">Nominal (Rp)</option>
-          </select>
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Nilai Diskon</label>
-          <input type="number" id="promo-value" required min="1" class="admin-input-control">
-        </div>
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Batas Penggunaan (Isi -1 untuk tak terbatas)</label>
-        <input type="number" id="promo-limit" value="-1" required class="admin-input-control">
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Deskripsi</label>
-        <input type="text" id="promo-desc" class="admin-input-control">
-      </div>
-      <div class="admin-form-grid-2" style="margin-bottom: 24px;">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Mulai Berlaku</label>
-          <input type="datetime-local" id="promo-start" required class="admin-input-control" style="color-scheme: dark;">
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Berakhir Pada</label>
-          <input type="datetime-local" id="promo-end" required class="admin-input-control" style="color-scheme: dark;">
-        </div>
-      </div>
-      <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="promo-active" checked style="width: 18px; height: 18px;">
-        <label for="promo-active" style="font-size: 0.9rem;">Promo Aktif</label>
-      </div>
-      <div class="admin-actions" style="justify-content: flex-end;">
-        <button type="button" id="btn-close-promo" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
-        <button type="submit" id="btn-save-promo" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
-      </div>
-    </form>
-  </div>
+<div class="admin-modal-content">
+<h3 id="promo-modal-title" class="admin-page-title">Buat Promo Baru</h3>
+<form id="promo-form">
+<div class="admin-form-group">
+<label class="admin-form-label">Kode Promo</label>
+<input type="text" id="promo-code" required class="admin-input-control">
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label class="admin-form-label">Tipe Diskon</label>
+<select id="promo-type" class="admin-input-control">
+<option value="percentage">Persentase (%)</option>
+<option value="fixed">Nominal (Rp)</option>
+</select>
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Nilai Diskon</label>
+<input type="number" id="promo-value" required min="1" class="admin-input-control">
+</div>
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Batas Penggunaan (-1 untuk tanpa batas)</label>
+<input type="number" id="promo-limit" value="-1" required class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Deskripsi</label>
+<input type="text" id="promo-desc" class="admin-input-control">
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label class="admin-form-label">Mulai Berlaku</label>
+<input type="datetime-local" id="promo-start" required class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Berakhir Pada</label>
+<input type="datetime-local" id="promo-end" required class="admin-input-control">
+</div>
+</div>
+<div class="admin-form-group">
+<label class="checkbox-label">
+<input type="checkbox" id="promo-active" checked>
+<span>Promo Aktif</span>
+</label>
+</div>
+<div class="admin-actions flex-end">
+<button type="button" id="btn-close-promo" class="admin-btn btn-secondary">Batal</button>
+<button type="submit" id="btn-save-promo" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
+</div>
+</form>
+</div>
 </div>

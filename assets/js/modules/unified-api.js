@@ -1419,6 +1419,9 @@ success: false,
 message: res.message || 'Failed to get packages'
 };
 }
+static async getAllPackages(adminId) {
+return this.getAdminPackages(adminId);
+}
 static async getAdminPackages(adminId) {
 try {
 const {

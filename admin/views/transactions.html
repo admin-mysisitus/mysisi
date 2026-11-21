@@ -1,100 +1,123 @@
 <div class="admin-page-header">
-  <div>
-    <h1 class="admin-page-title">Transaksi & Tagihan</h1>
-    <p class="admin-page-desc">Pantau semua pembayaran masuk dari pelanggan.</p>
-  </div>
-  <div class="admin-actions">
-    <button class="admin-btn" style="background: var(--admin-surface-hover); color: var(--admin-text-main);">
-      <i class="ph ph-export"></i> Export CSV </button>
-    <button class="admin-btn" id="btn-add-tx">
-      <i class="ph ph-receipt"></i> Buat Invoice Manual </button>
-  </div>
+<div>
+<h1 class="admin-page-title">Transaksi & Tagihan</h1>
+<p class="admin-page-desc">Pantau semua pembayaran masuk dari pelanggan.</p>
 </div>
-<div class="admin-layout-grid-3" style="margin-bottom: 24px;">
-  <div class="admin-card admin-stat-card">
-    <p style="color: var(--admin-text-muted); margin: 0 0 4px 0; font-size: 0.9rem;">Total Pendapatan</p>
-    <h3 id="stat-revenue" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-text-main);">Rp -</h3>
-  </div>
-  <div class="admin-card admin-stat-card">
-    <p style="color: var(--admin-text-muted); margin: 0 0 4px 0; font-size: 0.9rem;">Menunggu Pembayaran</p>
-    <h3 id="stat-pending" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-warning);">Rp -</h3>
-  </div>
-  <div class="admin-card admin-stat-card">
-    <p style="color: var(--admin-text-muted); margin: 0 0 4px 0; font-size: 0.9rem;">Transaksi Sukses (Bulan ini)</p>
-    <h3 id="stat-success" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--admin-success);">-</h3>
-  </div>
+<div class="admin-actions">
+<button class="admin-btn btn-secondary" id="btn-export-tx">
+<i class="ph ph-export"></i> Export CSV
+</button>
+<button class="admin-btn" id="btn-add-tx">
+<i class="ph ph-receipt"></i> Buat Invoice Manual
+</button>
+</div>
+</div>
+<div class="stats-grid stats-grid--3">
+<div class="stat-card stat-card--primary">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-revenue">Rp -</div>
+<div class="stat-card__label">Total Pendapatan</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-currency-circle-dollar"></i>
+</div>
+</div>
+</div>
+<div class="stat-card stat-card--warning">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-pending">Rp -</div>
+<div class="stat-card__label">Menunggu Pembayaran</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-clock"></i>
+</div>
+</div>
+</div>
+<div class="stat-card stat-card--success">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-success">-</div>
+<div class="stat-card__label">Transaksi Sukses (Bulan ini)</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-check-circle"></i>
+</div>
+</div>
+</div>
 </div>
 <div class="admin-card">
-  <div class="admin-toolbar">
-    <div class="admin-search-box">
-      <i class="ph ph-magnifying-glass"></i>
-      <input type="text" id="search-tx" class="admin-input-control" placeholder="Cari No Invoice / Email...">
-    </div>
-    <div class="admin-filter-group">
-      <select id="filter-status" class="admin-input-control">
-        <option value="all">Semua Status</option>
-        <option value="paid">Lunas (Paid)</option>
-        <option value="unpaid">Menunggu (Unpaid)</option>
-        <option value="failed">Gagal (Failed)</option>
-      </select>
-    </div>
-  </div>
-  <div class="admin-table-container">
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Invoice</th>
-          <th>Pelanggan</th>
-          <th>Item</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th style="text-align: right;">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="tx-table-body">
-      </tbody>
-    </table>
-  </div>
+<div class="admin-toolbar">
+<div class="admin-search-box">
+<i class="ph ph-magnifying-glass"></i>
+<input type="text" id="search-tx" class="admin-input-control" placeholder="Cari No Invoice / Email...">
 </div>
-<div id="tx-modal" class="admin-overlay" style="display: none;">
-  <div class="admin-card admin-modal-content" style="width: 100%; max-width: 500px; padding: 24px;">
-    <h3 id="tx-modal-title" class="admin-section-title">Buat Invoice Manual</h3>
-    <form id="tx-form">
-      <input type="hidden" id="tx-inv">
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Nama Pelanggan</label>
-        <input type="text" id="tx-name" required class="admin-input-control">
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Email Pelanggan</label>
-        <input type="email" id="tx-email" required class="admin-input-control">
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Nama Item / Paket</label>
-        <input type="text" id="tx-item" required class="admin-input-control">
-      </div>
-      <div class="admin-form-grid-2">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Domain (Opsional)</label>
-          <input type="text" id="tx-domain" class="admin-input-control">
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Total Tagihan (Rp)</label>
-          <input type="number" id="tx-total" required min="0" class="admin-input-control">
-        </div>
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Status Pembayaran</label>
-        <select id="tx-status" class="admin-input-control">
-          <option value="unpaid">Menunggu (Unpaid)</option>
-          <option value="paid">Lunas (Paid)</option>
-          <option value="failed">Gagal / Dibatalkan (Failed)</option>
-        </select>
-      </div>
-      <div class="admin-actions" style="justify-content: flex-end;">
-        <button type="button" id="btn-close-tx" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
-        <button type="submit" id="btn-save-tx" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
-      </div>
-    </form>
-  </div>
+<div class="admin-filter-group">
+<select id="filter-status" class="admin-filter-select">
+<option value="all">Semua Status</option>
+<option value="paid">Lunas (Paid)</option>
+<option value="unpaid">Menunggu (Unpaid)</option>
+<option value="failed">Gagal (Failed)</option>
+</select>
+</div>
+</div>
+<div class="admin-table-container">
+<table class="admin-table">
+<thead>
+<tr>
+<th>Invoice</th>
+<th>Pelanggan</th>
+<th>Item</th>
+<th>Total</th>
+<th>Status</th>
+<th class="text-right">Aksi</th>
+</tr>
+</thead>
+<tbody id="tx-table-body">
+</tbody>
+</table>
+</div>
+</div>
+<div id="tx-modal" class="admin-modal">
+<div class="admin-modal-content">
+<h3 id="tx-modal-title" class="admin-page-title">Buat Invoice Manual</h3>
+<form id="tx-form">
+<input type="hidden" id="tx-inv">
+<div class="admin-form-group">
+<label class="admin-form-label">Nama Pelanggan</label>
+<input type="text" id="tx-name" required class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Email Pelanggan</label>
+<input type="email" id="tx-email" required class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Nama Item / Paket</label>
+<input type="text" id="tx-item" required class="admin-input-control">
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label class="admin-form-label">Domain (Opsional)</label>
+<input type="text" id="tx-domain" class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Total Tagihan (Rp)</label>
+<input type="number" id="tx-total" required min="0" class="admin-input-control">
+</div>
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Status Pembayaran</label>
+<select id="tx-status" class="admin-input-control">
+<option value="unpaid">Menunggu (Unpaid)</option>
+<option value="paid">Lunas (Paid)</option>
+<option value="failed">Gagal / Dibatalkan (Failed)</option>
+</select>
+</div>
+<div class="admin-actions flex-end">
+<button type="button" id="btn-close-tx" class="admin-btn btn-secondary">Batal</button>
+<button type="submit" id="btn-save-tx" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
+</div>
+</form>
+</div>
 </div>

@@ -1,111 +1,105 @@
 <div class="admin-page-header">
-  <div>
-    <h1 class="admin-page-title">Pengaturan Sistem</h1>
-    <p class="admin-page-desc">Konfigurasi global platform SISITUS dan template email.</p>
-  </div>
-  <div>
-    <button id="btn-save-settings" class="admin-btn admin-btn-primary">
-      <i class="ph ph-floppy-disk"></i> Simpan Perubahan </button>
-  </div>
+<div>
+<h1 class="admin-page-title">Pengaturan Sistem</h1>
+<p class="admin-page-desc">Konfigurasi global platform SISITUS dan template email.</p>
+</div>
+<div class="admin-actions">
+<button id="btn-save-settings" class="admin-btn">
+<i class="ph ph-floppy-disk"></i> Simpan Perubahan
+</button>
+</div>
 </div>
 <div class="admin-settings-grid">
-  <div style="display: flex; flex-direction: column; gap: 8px;">
-    <button class="admin-btn tab-btn active" data-target="tab-email" style="background: var(--admin-primary); justify-content: flex-start; text-align: left;">
-      <i class="ph ph-envelope" style="width: 24px;"></i> Email & SMTP </button>
-    <button class="admin-btn tab-btn" data-target="tab-payment" style="background: transparent; color: var(--admin-text-muted); justify-content: flex-start; text-align: left; border: 1px solid transparent;">
-      <i class="ph ph-credit-card" style="width: 24px;"></i> Payment Gateway </button>
-  </div>
-  <div class="admin-card">
-    <div id="tab-email" class="settings-tab">
-      <h3 style="margin: 0 0 24px 0; font-family: var(--font-admin-heading); border-bottom: 1px solid var(--admin-border); padding-bottom: 16px;">Pengaturan Email & SMTP</h3>
-      <div class="admin-form-group">
-        <h4 style="margin-bottom: 16px;">Alamat Email Sistem</h4>
-        <div>
-          <label class="admin-form-label">Email Admin Induk (Pengirim/Penerima Notifikasi)</label>
-          <input type="email" id="config-ADMIN_EMAIL" class="admin-input-control" style="max-width: 400px;">
-        </div>
-      </div>
-      <div class="admin-form-group">
-        <h4 style="margin-bottom: 16px;">Pengaturan SMTP (Opsional)</h4>
-        <div class="admin-form-grid-2" style="max-width: 600px;">
-          <div>
-            <label class="admin-form-label">SMTP Host</label>
-            <input type="text" id="config-SMTP_HOST" class="admin-input-control" placeholder="smtp.gmail.com">
-          </div>
-          <div>
-            <label class="admin-form-label">SMTP Port</label>
-            <input type="text" id="config-SMTP_PORT" class="admin-input-control" placeholder="587">
-          </div>
-          <div>
-            <label class="admin-form-label">SMTP Username</label>
-            <input type="text" id="config-SMTP_USER" class="admin-input-control" placeholder="user@domain.com">
-          </div>
-          <div>
-            <label class="admin-form-label">SMTP Password</label>
-            <input type="password" id="config-SMTP_PASS" class="admin-input-control" placeholder="***">
-          </div>
-        </div>
-      </div>
-      <div style="border-top: 1px solid var(--admin-border); padding-top: 24px;">
-        <h4 style="margin-bottom: 16px;">Template Email (HTML)</h4>
-        <div class="admin-form-group">
-          <label class="admin-form-label">Pilih Template</label>
-          <select id="select-email-template" class="admin-input-control" style="max-width: 400px;">
-            <option value="">-- Pilih Template --</option>
-          </select>
-        </div>
-        <div id="email-template-editor" style="display: none;">
-          <div class="admin-form-group">
-            <label class="admin-form-label">Subject Email</label>
-            <input type="text" id="template-subject" class="admin-input-control">
-          </div>
-          <div class="admin-form-group">
-            <label class="admin-form-label">Body HTML & Live Preview</label>
-            <div class="admin-form-grid-2">
-              <div>
-                <div style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 4px;">Kode HTML Mentah</div>
-                <textarea id="template-body" class="admin-input-control" rows="16" style="font-family: monospace; resize: vertical;"></textarea>
-              </div>
-              <div style="display: flex; flex-direction: column;">
-                <div style="font-size: 0.85rem; color: var(--admin-info); margin-bottom: 4px;">Visual Preview (Bisa langsung ketik & edit teks di sini)</div>
-                <iframe id="template-preview" style="flex-grow: 1; width: 100%; min-height: 340px; border: 1px solid var(--admin-border); border-radius: 8px; background: white;"></iframe>
-              </div>
-            </div>
-          </div>
-          <div style="margin-bottom: 16px; background: rgba(15,23,42,0.02); padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border);">
-            <strong style="color: var(--admin-text-muted); font-size: 0.9rem;">Variabel Tersedia:</strong>
-            <div id="template-variables" style="font-family: monospace; color: var(--admin-info); margin-top: 4px;"></div>
-          </div>
-          <button id="btn-save-template" class="admin-btn admin-btn-sm" style="background: var(--admin-info);">
-            <i class="ph ph-floppy-disk"></i> Simpan Template Saja </button>
-        </div>
-      </div>
-    </div>
-    <div id="tab-payment" class="settings-tab" style="display: none;">
-      <h3 style="margin: 0 0 24px 0; font-family: var(--font-admin-heading); border-bottom: 1px solid var(--admin-border); padding-bottom: 16px;">Midtrans Payment Gateway</h3>
-      <div style="display: flex; flex-direction: column; gap: 24px; max-width: 600px;">
-        <div style="background: rgba(255, 152, 0, 0.1); border: 1px solid var(--admin-warning); padding: 16px; border-radius: 8px; color: var(--admin-warning);">
-          <i class="ph ph-warning" style="margin-right: 8px;"></i> Pastikan URL Webhook di Midtrans Dashboard diarahkan ke Web App URL SISITUS.
-        </div>
-        <div class="admin-form-group">
-          <label class="admin-form-label">Merchant ID</label>
-          <input type="text" id="config-MIDTRANS_MERCHANT_ID" class="admin-input-control" placeholder="G...">
-        </div>
-        <div class="admin-form-group">
-          <label class="admin-form-label">Server Key (Rahasia)</label>
-          <input type="password" id="config-MIDTRANS_SERVER_KEY" class="admin-input-control" placeholder="SB-Mid-server-...">
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="settings-nav">
+<button class="tab-btn active" data-target="tab-email">
+<i class="ph ph-envelope"></i> Email & SMTP
+</button>
+<button class="tab-btn" data-target="tab-payment">
+<i class="ph ph-credit-card"></i> Payment Gateway
+</button>
 </div>
-<style>
-  /* CSS khusus Settings agar toggle checkbox berfungsi visualnya (checked state diatur via js/inline) */
-    input[type="checkbox"]:checked + span {
-      background-color: var(--admin-primary) !important;
-    }
-    input[type="checkbox"]:checked + span > span {
-      transform: translateX(24px);
-      background-color: white !important;
-    }
-</style>
+<div class="admin-card">
+<div id="tab-email" class="settings-tab">
+<h3 class="admin-section-title">Pengaturan Email & SMTP</h3>
+<div class="admin-form-group">
+<h4 class="text-sm font-bold mb-xs">Alamat Email Sistem</h4>
+<div class="max-w-md">
+<label class="admin-form-label">Email Admin Induk (Pengirim/Penerima Notifikasi)</label>
+<input type="email" id="config-ADMIN_EMAIL" class="admin-input-control">
+</div>
+</div>
+<div class="admin-form-group">
+<h4 class="text-sm font-bold mb-xs">Pengaturan SMTP (Opsional)</h4>
+<div class="admin-form-grid-2 max-w-lg">
+<div>
+<label class="admin-form-label">SMTP Host</label>
+<input type="text" id="config-SMTP_HOST" class="admin-input-control" placeholder="smtp.gmail.com">
+</div>
+<div>
+<label class="admin-form-label">SMTP Port</label>
+<input type="text" id="config-SMTP_PORT" class="admin-input-control" placeholder="587">
+</div>
+<div>
+<label class="admin-form-label">SMTP Username</label>
+<input type="text" id="config-SMTP_USER" class="admin-input-control" placeholder="user@domain.com">
+</div>
+<div>
+<label class="admin-form-label">SMTP Password</label>
+<input type="password" id="config-SMTP_PASS" class="admin-input-control" placeholder="***">
+</div>
+</div>
+</div>
+<div class="border-top pt-md">
+<h4 class="text-sm font-bold mb-xs">Template Email (HTML)</h4>
+<div class="admin-form-group max-w-md">
+<label class="admin-form-label">Pilih Template</label>
+<select id="select-email-template" class="admin-filter-select w-full">
+<option value="">-- Pilih Template --</option>
+</select>
+</div>
+<div id="email-template-editor" class="is-hidden">
+<div class="admin-form-group">
+<label class="admin-form-label">Subject Email</label>
+<input type="text" id="template-subject" class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Body HTML & Live Preview</label>
+<div class="admin-form-grid-2">
+<div>
+<div class="text-xs text-muted mb-xs">Kode HTML Mentah</div>
+<textarea id="template-body" class="admin-input-control font-mono" rows="12"></textarea>
+</div>
+<div>
+<div class="text-xs text-primary mb-xs">Visual Preview</div>
+<iframe id="template-preview" class="template-preview-iframe"></iframe>
+</div>
+</div>
+</div>
+<div class="admin-form-group bg-light p-sm rounded border">
+<strong class="text-muted text-xs">Variabel Tersedia:</strong>
+<div id="template-variables" class="font-mono text-primary text-xs mt-xs"></div>
+</div>
+<button id="btn-save-template" class="admin-btn btn-secondary">
+<i class="ph ph-floppy-disk"></i> Simpan Template
+</button>
+</div>
+</div>
+</div>
+<div id="tab-payment" class="settings-tab is-hidden">
+<h3 class="admin-section-title">Midtrans Payment Gateway</h3>
+<div class="admin-form-group max-w-lg">
+<div class="alert-warning-box mb-sm">
+<i class="ph ph-warning mr-xs"></i> Pastikan URL Webhook di Midtrans Dashboard diarahkan ke Web App URL SISITUS.
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Merchant ID</label>
+<input type="text" id="config-MIDTRANS_MERCHANT_ID" class="admin-input-control" placeholder="G...">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Server Key (Rahasia)</label>
+<input type="password" id="config-MIDTRANS_SERVER_KEY" class="admin-input-control" placeholder="SB-Mid-server-...">
+</div>
+</div>
+</div>
+</div>
+</div>

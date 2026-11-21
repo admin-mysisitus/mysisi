@@ -1,87 +1,71 @@
 <div class="admin-page-header">
-  <div>
-    <h1 class="admin-page-title">Support Tickets</h1>
-    <p class="admin-page-desc">Tanggapi pertanyaan dan keluhan teknis dari pengguna.</p>
-  </div>
-  <div class="admin-actions">
-    <button class="admin-btn" id="btn-add-ticket">
-      <i class="ph ph-plus"></i> Buat Tiket Manual </button>
-  </div>
+<div>
+<h1 class="admin-page-title">Support Tickets</h1>
+<p class="admin-page-desc">Tanggapi pertanyaan dan keluhan teknis dari pengguna.</p>
+</div>
+<div class="admin-actions">
+<button class="admin-btn" id="btn-add-ticket">
+<i class="ph ph-plus"></i> Buat Tiket Manual
+</button>
+</div>
 </div>
 <div class="admin-support-grid">
-  <div class="admin-card" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
-    <div style="padding: 16px; border-bottom: 1px solid var(--admin-border);">
-      <div style="position: relative; width: 100%;">
-        <i class="ph ph-magnifying-glass" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--admin-text-muted);"></i>
-        <input type="text" placeholder="Cari tiket..." style="width: 100%; padding: 10px 16px 10px 48px; border-radius: 8px; border: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); color: var(--admin-text-main);">
-      </div>
-    </div>
-    <div style="flex: 1; overflow-y: auto;" id="ticket-list">
-    </div>
-  </div>
-  <div class="admin-card" style="padding: 0; display: flex; flex-direction: column; overflow: hidden; position: relative;">
-    <div style="padding: 20px; border-bottom: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center; background: rgba(15,23,42,0.02);">
-      <div>
-        <h3 style="margin: 0 0 4px 0; font-family: var(--font-admin-heading);" id="active-ticket-subject">Pilih Tiket</h3>
-        <p style="margin: 0; font-size: 0.85rem; color: var(--admin-text-muted);" id="active-ticket-info">Klik salah satu tiket di samping untuk melihat detail.</p>
-      </div>
-      <div id="active-ticket-actions" style="display: none;">
-        <button class="admin-btn" style="background: rgba(16, 185, 129, 0.1); color: var(--admin-success); padding: 8px 16px; border-radius: 8px;">
-          <i class="ph ph-check"></i> Tandai Selesai </button>
-      </div>
-    </div>
-    <div style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px;" id="ticket-conversation">
-      <div style="text-align: center; color: var(--admin-text-muted); margin-top: 40px;">
-        <i class="ph ph-chats" style="font-size: 3rem; opacity: 0.2; margin-bottom: 16px; display: block;"></i> Pilih tiket untuk mulai merespons
-      </div>
-    </div>
-    <div style="padding: 20px; border-top: 1px solid var(--admin-border); background: rgba(0,0,0,0.2); display: none;" id="ticket-reply-box">
-      <textarea placeholder="Tulis balasan Anda..." style="width: 100%; height: 80px; padding: 12px; border-radius: 8px; border: 1px solid var(--admin-border); background: var(--admin-surface); color: var(--admin-text-main); font-family: var(--font-admin-body); resize: none; margin-bottom: 12px;"></textarea>
-      <div style="display: flex; justify-content: space-between;">
-        <button class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-muted);">
-          <i class="ph ph-paperclip"></i> Lampiran </button>
-        <button class="admin-btn">
-          <i class="ph ph-paper-plane-right"></i> Kirim Balasan </button>
-      </div>
-    </div>
-  </div>
+<div class="admin-card p-0 flex flex-col overflow-hidden">
+<div class="support-search-wrap">
+<div class="admin-search-box">
+<i class="ph ph-magnifying-glass"></i>
+<input type="text" id="search-ticket" placeholder="Cari tiket...">
+</div>
+</div>
+<div class="support-list-wrap" id="ticket-list">
+</div>
+</div>
+<div class="admin-card p-0 flex flex-col overflow-hidden">
+<div class="support-panel-header">
+<h3 class="support-panel-title">Detail Percakapan</h3>
+<span class="status-pill status-pill--info" id="ticket-detail-status">Pilih Tiket</span>
+</div>
+<div class="support-empty-state" id="ticket-detail-body">
+<i class="ph ph-chats-circle support-empty-icon"></i>
+<p class="support-empty-text">Pilih tiket di sebelah kiri untuk melihat pesan dan memberikan tanggapan.</p>
+</div>
+</div>
 </div>
 <div id="ticket-modal" class="admin-modal">
-  <div class="admin-card admin-modal-content">
-    <h3 id="ticket-modal-title" class="admin-section-title">Buat Tiket Baru</h3>
-    <form id="ticket-form">
-      <input type="hidden" id="tck-id">
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Subjek Tiket</label>
-        <input type="text" id="tck-subject" required class="admin-input-control">
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Email Pelanggan</label>
-        <input type="email" id="tck-user" required class="admin-input-control">
-      </div>
-      <div class="admin-form-grid-2" style="margin-bottom: 24px;">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Prioritas</label>
-          <select id="tck-priority" class="admin-input-control">
-            <option value="low">Rendah (Low)</option>
-            <option value="medium" selected>Sedang (Medium)</option>
-            <option value="high">Tinggi (High)</option>
-          </select>
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Status</label>
-          <select id="tck-status" class="admin-input-control">
-            <option value="open">Open</option>
-            <option value="in_progress">In Progress</option>
-            <option value="resolved">Resolved</option>
-            <option value="closed">Closed</option>
-          </select>
-        </div>
-      </div>
-      <div class="admin-actions" style="justify-content: flex-end;">
-        <button type="button" id="btn-close-ticket" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
-        <button type="submit" id="btn-save-ticket" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
-      </div>
-    </form>
-  </div>
+<div class="admin-modal-content">
+<h3 id="ticket-modal-title" class="admin-page-title">Buat Tiket Baru</h3>
+<form id="ticket-form">
+<input type="hidden" id="tck-id">
+<div class="admin-form-group">
+<label class="admin-form-label">Subjek Tiket</label>
+<input type="text" id="tck-subject" required class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Nama Pengguna / Email</label>
+<input type="text" id="tck-user" required class="admin-input-control">
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label class="admin-form-label">Prioritas</label>
+<select id="tck-priority" class="admin-filter-select w-full">
+<option value="low">Rendah (Low)</option>
+<option value="medium" selected>Sedang (Medium)</option>
+<option value="high">Tinggi (High)</option>
+</select>
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Status</label>
+<select id="tck-status" class="admin-filter-select w-full">
+<option value="open" selected>Open</option>
+<option value="pending">Pending</option>
+<option value="closed">Closed</option>
+</select>
+</div>
+</div>
+<div class="admin-actions flex-end">
+<button type="button" id="btn-close-ticket" class="admin-btn btn-secondary">Batal</button>
+<button type="submit" id="btn-save-ticket" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
+</div>
+</form>
+</div>
 </div>

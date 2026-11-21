@@ -1,110 +1,108 @@
 export class AdminSidebar {
-  constructor(app) {
-    this.app = app;
-    this.container = document.getElementById('admin-sidebar');
-  }
-  render() {
-    if (!this.container) return;
-    this.container.innerHTML = `
-      <div class="admin-sidebar-header">
-        <img src="/assets/img/logo/logo.svg" alt="SISITUS Logo" style="width: 28px; height: 28px; object-fit: contain;">
-        <span class="admin-logo-text">SISITUS Admin</span>
-      </div>
-      <nav class="admin-nav-menu">
-        <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 10px;">Main Menu</div>
-
-        <a href="#!/" class="admin-nav-item" data-route="/">
-          <i class="ph ph-chart-pie"></i> Overview
-        </a>
-        <a href="#!/users" class="admin-nav-item" data-route="/users">
-          <i class="ph ph-users"></i> Users
-        </a>
-        <a href="#!/transactions" class="admin-nav-item" data-route="/transactions">
-          <i class="ph ph-receipt"></i> Transaksi
-        </a>
-
-        <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Manajemen Produk</div>
-
-        <a href="#!/packages" class="admin-nav-item" data-route="/packages">
-          <i class="ph ph-package"></i> Paket Website
-        </a>
-        <a href="#!/proposals" class="admin-nav-item" data-route="/proposals">
-          <i class="ph ph-file-text"></i> Proposal Builder
-        </a>
-        <a href="#!/domains" class="admin-nav-item" data-route="/domains">
-          <i class="ph ph-globe"></i> Harga Domain
-        </a>
-        <a href="#!/addons" class="admin-nav-item" data-route="/addons">
-          <i class="ph ph-puzzle-piece"></i> Layanan Ekstra
-        </a>
-        <a href="#!/dns" class="admin-nav-item" data-route="/dns">
-          <i class="ph ph-tree-structure"></i> DNS Records
-        </a>
-        <a href="#!/promos" class="admin-nav-item" data-route="/promos">
-          <i class="ph ph-ticket"></i> Promo Codes
-        </a>
-
-        <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px;">Sistem</div>
-
-        <a href="#!/livechat" class="admin-nav-item" data-route="/livechat">
-          <i class="ph ph-chats"></i> Live Chat
-        </a>
-        <a href="#!/support" class="admin-nav-item" data-route="/support">
-          <i class="ph ph-headset"></i> Support Tickets
-        </a>
-        <a href="#!/settings" class="admin-nav-item" data-route="/settings">
-          <i class="ph ph-sliders"></i> Pengaturan
-        </a>
-
-        <a href="#!/profile" class="admin-nav-item" data-route="/profile">
-          <i class="ph ph-user-circle"></i> Profil Admin
-        </a>
-
-        <div style="color: var(--admin-text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 16px; margin-top: 15px; border-top: 1px solid var(--admin-border); padding-top: 20px;">Lainnya</div>
-
-        <a href="https://sisitus.com/" class="admin-nav-item" style="color: var(--admin-text-muted);">
-          <i class="ph ph-arrow-left"></i> Halaman Utama
-        </a>
-        <button id="sidebar-logout-btn" class="admin-nav-item" style="color: var(--admin-danger); background: transparent; border: none; text-align: left; width: 100%; cursor: pointer;">
-          <i class="ph ph-sign-out"></i> Keluar
-        </button>
-      </nav>
-    `;
-    const logoutBtn = this.container.querySelector('#sidebar-logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        if (confirm('Apakah Anda yakin ingin keluar dari Admin Panel?')) {
-          const {
-            AuthManager
-          } = await import('/assets/js/modules/unified-auth.js');
-          const {
-            EnvHelper
-          } = await import('/assets/js/modules/unified-utils.js');
-          AuthManager.clearSession();
-          window.location.href = EnvHelper.getDomainUrl('my', '/auth/');
-        }
-      });
-    }
-    const navLinks = this.container.querySelectorAll('.admin-nav-item');
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-          const sidebar = document.getElementById('admin-sidebar');
-          const overlay = document.getElementById('admin-sidebar-overlay');
-          if (sidebar) sidebar.classList.remove('open');
-          if (overlay) overlay.classList.remove('show');
-        }
-      });
-    });
-  }
-  setActive(route) {
-    const items = this.container.querySelectorAll('.admin-nav-item');
-    items.forEach(item => {
-      if (item.getAttribute('data-route') === route) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
-  }
+constructor(app) {
+this.app = app;
+this.container = document.getElementById('admin-sidebar');
+this.currentRoute = '/';
 }
+render() {
+if (!this.container) return;
+this.container.innerHTML = `
+<div class="sidebar-brand-container">
+<a href="#!/" class="sidebar-logo">
+<img src="/assets/img/logo/logo.svg" alt="SISITUS" class="sidebar-logo-img">
+<span class="sidebar-logo-text">SISITUS</span>
+</a>
+</div>
+<div class="sidebar-menu-header">MENU UTAMA</div>
+<nav class="sidebar-menu">
+<a href="#!/" class="menu-item active" data-route="/" title="Overview">
+<span class="menu-icon"><i class="ph-fill ph-squares-four"></i></span>
+<span class="menu-label">Overview</span>
+</a>
+<a href="#!/users" class="menu-item" data-route="/users" title="Users">
+<span class="menu-icon"><i class="ph-fill ph-users"></i></span>
+<span class="menu-label">Users</span>
+</a>
+<a href="#!/transactions" class="menu-item" data-route="/transactions" title="Transaksi">
+<span class="menu-icon"><i class="ph-fill ph-receipt"></i></span>
+<span class="menu-label">Transaksi</span>
+</a>
+</nav>
+<div class="sidebar-menu-header">MANAJEMEN PRODUK</div>
+<nav class="sidebar-menu">
+<a href="#!/packages" class="menu-item" data-route="/packages" title="Paket Website">
+<span class="menu-icon"><i class="ph-fill ph-package"></i></span>
+<span class="menu-label">Paket Website</span>
+</a>
+<a href="#!/proposals" class="menu-item" data-route="/proposals" title="Proposal Builder">
+<span class="menu-icon"><i class="ph-fill ph-file-text"></i></span>
+<span class="menu-label">Proposal Builder</span>
+</a>
+<a href="#!/domains" class="menu-item" data-route="/domains" title="Harga Domain">
+<span class="menu-icon"><i class="ph-fill ph-globe"></i></span>
+<span class="menu-label">Harga Domain</span>
+</a>
+<a href="#!/addons" class="menu-item" data-route="/addons" title="Layanan Ekstra">
+<span class="menu-icon"><i class="ph-fill ph-puzzle-piece"></i></span>
+<span class="menu-label">Layanan Ekstra</span>
+</a>
+<a href="#!/dns" class="menu-item" data-route="/dns" title="DNS Records">
+<span class="menu-icon"><i class="ph-fill ph-tree-structure"></i></span>
+<span class="menu-label">DNS Records</span>
+</a>
+<a href="#!/promos" class="menu-item" data-route="/promos" title="Kode Promo">
+<span class="menu-icon"><i class="ph-fill ph-ticket"></i></span>
+<span class="menu-label">Kode Promo</span>
+</a>
+</nav>
+<div class="sidebar-menu-header">SISTEM</div>
+<nav class="sidebar-menu">
+<a href="#!/livechat" class="menu-item" data-route="/livechat" title="Live Chat">
+<span class="menu-icon"><i class="ph-fill ph-chat-teardrop-dots"></i></span>
+<span class="menu-label">Live Chat</span>
+</a>
+<a href="#!/support" class="menu-item" data-route="/support" title="Support Tickets">
+<span class="menu-icon"><i class="ph-fill ph-headset"></i></span>
+<span class="menu-label">Support Tickets</span>
+</a>
+<a href="#!/settings" class="menu-item" data-route="/settings" title="Pengaturan">
+<span class="menu-icon"><i class="ph-fill ph-sliders"></i></span>
+<span class="menu-label">Pengaturan</span>
+</a>
+<a href="#!/profile" class="menu-item" data-route="/profile" title="Profil Admin">
+<span class="menu-icon"><i class="ph-fill ph-user-circle-gear"></i></span>
+<span class="menu-label">Profil Admin</span>
+</a>
+</nav>
+<div class="sidebar-footer">
+<div class="sidebar-info">
+<small class="sidebar-info__title">SISITUS Admin Dashboard</small>
+<small class="sidebar-info__meta">Akses cepat &bull; aman &bull; terintegrasi</small>
+</div>
+</div>
+`;
+const navLinks = this.container.querySelectorAll('.menu-item');
+navLinks.forEach(link => {
+link.addEventListener('click', () => {
+if (window.innerWidth <= 768) {
+const sidebar = document.getElementById('admin-sidebar');
+const overlay = document.getElementById('admin-sidebar-overlay');
+if (sidebar) sidebar.classList.remove('open');
+if (overlay) overlay.classList.remove('show');
+}
+});
+});
+}
+setActive(route) {
+this.currentRoute = route;
+const items = this.container.querySelectorAll('.menu-item');
+items.forEach(item => {
+if (item.getAttribute('data-route') === route) {
+item.classList.add('active');
+} else {
+item.classList.remove('active');
+}
+});
+}
+}
+export default AdminSidebar;

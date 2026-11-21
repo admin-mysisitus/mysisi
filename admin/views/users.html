@@ -1,84 +1,84 @@
 <div class="admin-page-header">
-  <div>
-    <h1 class="admin-page-title">Manajemen Users</h1>
-    <p class="admin-page-desc">Kelola profil akun pelanggan dan status hak akses.</p>
-  </div>
+<div>
+<h1 class="admin-page-title">Manajemen Users</h1>
+<p class="admin-page-desc">Kelola profil akun pelanggan dan status hak akses.</p>
+</div>
 </div>
 <div class="admin-card">
-  <div class="admin-toolbar">
-    <div class="admin-search-box">
-      <i class="ph ph-magnifying-glass"></i>
-      <input type="text" id="search-users" placeholder="Cari nama atau email...">
-    </div>
-    <div class="admin-filter-group">
-      <select id="filter-user-status" class="admin-filter-select">
-        <option value="all">Semua Status</option>
-        <option value="active">Aktif</option>
-        <option value="suspended">Suspended</option>
-      </select>
-      <button class="admin-btn" style="background: var(--admin-surface-hover); color: var(--admin-text-main);">
-        <i class="ph ph-funnel"></i> Filter </button>
-    </div>
-  </div>
-  <div class="admin-table-container">
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>User Info</th>
-          <th>Role</th>
-          <th>Status</th>
-          <th>Bergabung</th>
-          <th style="text-align: right;">Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="users-table-body">
-      </tbody>
-    </table>
-  </div>
-  <div style="padding: 16px; text-align: center;">
-    <p id="users-count" class="admin-pagination-text" style="color: var(--admin-text-muted);">Menampilkan 0 user</p>
-  </div>
+<div class="admin-toolbar">
+<div class="admin-search-box">
+<i class="ph ph-magnifying-glass"></i>
+<input type="text" id="search-users" placeholder="Cari nama atau email...">
+</div>
+<div class="admin-filter-group">
+<select id="filter-user-status" class="admin-filter-select">
+<option value="all">Semua Status</option>
+<option value="active">Aktif</option>
+<option value="suspended">Suspended</option>
+</select>
+</div>
+</div>
+<div class="admin-table-container">
+<table class="admin-table">
+<thead>
+<tr>
+<th>User Info</th>
+<th class="nowrap">Role</th>
+<th class="nowrap">Status</th>
+<th class="nowrap">Bergabung</th>
+<th class="text-right nowrap">Aksi</th>
+</tr>
+</thead>
+<tbody id="users-table-body">
+</tbody>
+</table>
+</div>
+<div class="admin-pagination">
+<p id="users-count" class="admin-pagination-text">Menampilkan 0 user</p>
+</div>
 </div>
 <div id="user-modal" class="admin-modal">
-  <div class="admin-card admin-modal-content">
-    <h3 id="user-modal-title" style="margin: 0 0 20px 0;">Edit Profil User</h3>
-    <form id="user-form">
-      <input type="hidden" id="usr-id">
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Nama Lengkap</label>
-        <input type="text" id="usr-name" required class="admin-input-control">
-      </div>
-      <div class="admin-form-group">
-        <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Email</label>
-        <input type="email" id="usr-email" required class="admin-input-control">
-      </div>
-      <div class="admin-form-grid-2">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">WhatsApp</label>
-          <input type="text" id="usr-wa" class="admin-input-control">
-        </div>
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--admin-text-muted);">Role</label>
-          <select id="usr-role" class="admin-input-control" style="background: var(--admin-surface);">
-            <option value="customer">Customer</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-      </div>
-      <div style="display: flex; gap: 20px; margin-bottom: 24px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <input type="checkbox" id="usr-active" checked style="width: 18px; height: 18px;">
-          <label for="usr-active" style="font-size: 0.9rem;">Akun Aktif</label>
-        </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <input type="checkbox" id="usr-verified" checked style="width: 18px; height: 18px;">
-          <label for="usr-verified" style="font-size: 0.9rem;">Email Verified</label>
-        </div>
-      </div>
-      <div class="admin-actions" style="justify-content: flex-end;">
-        <button type="button" id="btn-close-user" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">Batal</button>
-        <button type="submit" id="btn-save-user" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
-      </div>
-    </form>
-  </div>
+<div class="admin-modal-content">
+<h3 id="user-modal-title" class="admin-page-title">Edit Profil User</h3>
+<form id="user-form">
+<input type="hidden" id="usr-id">
+<div class="admin-form-group">
+<label class="admin-form-label">Nama Lengkap</label>
+<input type="text" id="usr-name" required class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Email</label>
+<input type="email" id="usr-email" required class="admin-input-control">
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label class="admin-form-label">WhatsApp</label>
+<input type="text" id="usr-wa" class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label class="admin-form-label">Role</label>
+<select id="usr-role" class="admin-input-control">
+<option value="customer">Customer</option>
+<option value="admin">Admin</option>
+</select>
+</div>
+</div>
+<div class="admin-form-group">
+<div class="admin-actions">
+<label class="checkbox-label">
+<input type="checkbox" id="usr-active" checked>
+<span>Akun Aktif</span>
+</label>
+<label class="checkbox-label">
+<input type="checkbox" id="usr-verified" checked>
+<span>Email Verified</span>
+</label>
+</div>
+</div>
+<div class="admin-actions flex-end">
+<button type="button" id="btn-close-user" class="admin-btn btn-secondary">Batal</button>
+<button type="submit" id="btn-save-user" class="admin-btn"><i class="ph ph-floppy-disk"></i> Simpan</button>
+</div>
+</form>
+</div>
 </div>

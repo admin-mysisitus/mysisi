@@ -1,82 +1,95 @@
-<div class="admin-page-header">
-  <div>
-    <h1 class="admin-page-title">Dashboard Overview</h1>
-    <p class="admin-page-desc">Ringkasan performa sistem SISITUS hari ini.</p>
-  </div>
-  <div>
-    <button class="admin-btn" id="refresh-stats">
-      <i class="ph ph-arrows-clockwise"></i> Refresh Data </button>
-  </div>
+<div class="dashboard-hero">
+<div class="dashboard-hero__content">
+<div class="dashboard-hero__eyebrow">ADMIN CONTROL PANEL &bull; SISITUS</div>
+<h1>Halo, <span id="admin-welcome-name">Administrator</span>! 👋</h1>
+<p>Selamat datang di Admin Control Panel SISITUS. Pantau performa bisnis, transaksi, langganan aktif, dan tiket bantuan teknis secara realtime.</p>
 </div>
-<div class="admin-metrics-grid-compact">
-  <div class="admin-metric-card admin-metric-card--hero">
-    <div class="admin-metric-card__body">
-      <div>
-        <div class="admin-metric-card__value" id="stat-revenue">-</div>
-        <div class="admin-metric-card__label">Pendapatan (MRR)</div>
-      </div>
-      <div class="admin-metric-card__icon">
-        <i class="ph ph-currency-circle-dollar"></i>
-      </div>
-    </div>
-    <div class="admin-metric-card__trend admin-metric-card__trend--up">
-      <i class="ph ph-arrow-up"></i> 8.5% bln lalu
-    </div>
-  </div>
-  <div class="admin-metric-card admin-metric-card--info">
-    <div class="admin-metric-card__body">
-      <div>
-        <div class="admin-metric-card__value" id="stat-users">-</div>
-        <div class="admin-metric-card__label">Total Pengguna</div>
-      </div>
-      <div class="admin-metric-card__icon">
-        <i class="ph ph-users"></i>
-      </div>
-    </div>
-    <div class="admin-metric-card__trend admin-metric-card__trend--up">
-      <i class="ph ph-arrow-up"></i> 12% bln lalu
-    </div>
-  </div>
-  <div class="admin-metric-card admin-metric-card--primary">
-    <div class="admin-metric-card__body">
-      <div>
-        <div class="admin-metric-card__value" id="stat-subs">-</div>
-        <div class="admin-metric-card__label">Langganan Aktif</div>
-      </div>
-      <div class="admin-metric-card__icon">
-        <i class="ph ph-package"></i>
-      </div>
-    </div>
-    <div class="admin-metric-card__trend admin-metric-card__trend--neutral"> Sesuai target </div>
-  </div>
-  <div class="admin-metric-card admin-metric-card--warning">
-    <div class="admin-metric-card__body">
-      <div>
-        <div class="admin-metric-card__value" id="stat-tickets">-</div>
-        <div class="admin-metric-card__label">Tiket Support</div>
-      </div>
-      <div class="admin-metric-card__icon">
-        <i class="ph ph-headset"></i>
-      </div>
-    </div>
-    <div class="admin-metric-card__trend admin-metric-card__trend--down">
-      <i class="ph ph-warning-circle"></i> 5 butuh balasan
-    </div>
-  </div>
+<button class="btn btn-hero" id="refresh-stats">
+<i class="ph ph-arrows-clockwise"></i> Refresh Data
+</button>
 </div>
-<div class="admin-layout-grid-2">
-  <div class="admin-card">
-    <h3 style="margin: 0 0 20px 0; font-family: var(--font-admin-heading);">Grafik Pendaftaran Baru</h3>
-    <div style="height: 300px; position: relative; width: 100%;">
-      <canvas id="registration-chart"></canvas>
-    </div>
-  </div>
-  <div class="admin-card">
-    <h3 style="margin: 0 0 20px 0; font-family: var(--font-admin-heading);">Aktivitas Terbaru</h3>
-    <div style="display: flex; flex-direction: column; gap: 16px;" id="recent-activities">
-      <div style="display: flex; justify-content: center; padding: 20px 0;">
-        <i class="ph ph-spinner ph-spin" style="color: var(--admin-text-muted);"></i>
-      </div>
-    </div>
-  </div>
+<div class="stats-grid">
+<div class="stat-card stat-card--primary">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-revenue">-</div>
+<div class="stat-card__label">Pendapatan (MRR)</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-currency-circle-dollar"></i>
+</div>
+</div>
+<a href="#!/transactions" class="stat-card__footer stat-card__footer--primary">
+Kelola Transaksi <i class="ph ph-arrow-right"></i>
+</a>
+</div>
+<div class="stat-card stat-card--success">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-users">-</div>
+<div class="stat-card__label">Total Pengguna</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-users"></i>
+</div>
+</div>
+<a href="#!/users" class="stat-card__footer stat-card__footer--success">
+Kelola Pengguna <i class="ph ph-arrow-right"></i>
+</a>
+</div>
+<div class="stat-card stat-card--warning">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-subs">-</div>
+<div class="stat-card__label">Langganan Aktif</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-package"></i>
+</div>
+</div>
+<a href="#!/packages" class="stat-card__footer stat-card__footer--warning">
+Kelola Paket <i class="ph ph-arrow-right"></i>
+</a>
+</div>
+<div class="stat-card stat-card--info">
+<div class="stat-card__body">
+<div>
+<div class="stat-card__value" id="stat-tickets">-</div>
+<div class="stat-card__label">Tiket Support</div>
+</div>
+<div class="stat-card__icon">
+<i class="ph ph-headset"></i>
+</div>
+</div>
+<a href="#!/support" class="stat-card__footer stat-card__footer--info">
+Buka Tiket Support <i class="ph ph-arrow-right"></i>
+</a>
+</div>
+</div>
+<div class="dashboard-grid-sections">
+<div class="panel panel--domain">
+<div class="panel__header">
+<div>
+<span class="panel__eyebrow">STATISTIK PERTUMBUHAN</span>
+<h3>Grafik Pendaftaran Baru</h3>
+</div>
+<span class="panel__chip">Mingguan</span>
+</div>
+<div class="chart-container">
+<canvas id="registration-chart"></canvas>
+</div>
+</div>
+<div class="panel">
+<div class="panel__header">
+<div>
+<span class="panel__eyebrow">LOG SISTEM REALTIME</span>
+<h3>Aktivitas Terbaru</h3>
+</div>
+</div>
+<div class="recent-activities-list" id="recent-activities">
+<div class="activity-loading">
+<i class="ph ph-spinner ph-spin"></i>
+</div>
+</div>
+</div>
 </div>

@@ -282,7 +282,6 @@ class MessageRenderer {
         el.style.margin = '0px';
         el.style.padding = '0px';
         el.style.overflow = 'hidden';
-        
         setTimeout(() => {
           if (el.parentElement) el.remove();
         }, 300);
@@ -318,53 +317,6 @@ class MessageRenderer {
     msg.setAttribute('data-sender-key', this._sanitize(senderKey));
     const msgContent = document.createElement('div');
     msgContent.classList.add('msg-content');
-    if (currentUser && currentUser.type === 'admin') {
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'admin-msg-delete-btn';
-      deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-      deleteBtn.title = 'Hapus pesan ini';
-      deleteBtn.style.position = 'absolute';
-      deleteBtn.style.top = '50%';
-      deleteBtn.style.transform = 'translateY(-50%)';
-      deleteBtn.style.background = 'white';
-      deleteBtn.style.border = '1px solid #fee2e2';
-      deleteBtn.style.color = '#ef4444';
-      deleteBtn.style.cursor = 'pointer';
-      deleteBtn.style.opacity = '0';
-      deleteBtn.style.transition = 'all 0.2s ease';
-      deleteBtn.style.fontSize = '12px';
-      deleteBtn.style.padding = '6px';
-      deleteBtn.style.borderRadius = '50%';
-      deleteBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-      deleteBtn.style.zIndex = '10';
-      
-      if (message.sender === 'admin') {
-        deleteBtn.style.left = '-36px';
-      } else {
-        deleteBtn.style.right = '-36px';
-      }
-
-      msg.style.position = 'relative';
-      msg.addEventListener('mouseenter', () => { deleteBtn.style.opacity = '1'; });
-      msg.addEventListener('mouseleave', () => { deleteBtn.style.opacity = '0'; });
-      
-      deleteBtn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        if (confirm('Yakin ingin menghapus pesan ini dari database?')) {
-          try {
-            const { ref, remove } = window.firebaseHelpers;
-            const db = window.firebaseDB;
-            if (ref && remove && db && message.roomId) {
-              await remove(ref(db, `rooms/${message.roomId}/messages/${message.id}`));
-            }
-          } catch (err) {
-            console.error("Gagal menghapus pesan:", err);
-            alert("Gagal menghapus pesan. Silakan coba lagi.");
-          }
-        }
-      });
-      msg.appendChild(deleteBtn);
-    }
     let nameTag = null;
     if (message.sender === 'admin') {
       nameTag = document.createElement('div');
@@ -372,8 +324,6 @@ class MessageRenderer {
       const agentDisplay = message.agent && message.agent.trim() ? message.agent : 'Admin';
       nameTag.textContent = this._sanitize(agentDisplay);
     }
-    
-    // Render Reply Context
     if (message.replyTo) {
       const replyBox = document.createElement('div');
       replyBox.className = 'msg-reply-box';
@@ -382,7 +332,6 @@ class MessageRenderer {
         <div class="msg-reply-sender">${this._sanitize(senderName)}</div>
         <div class="msg-reply-text">${this._sanitize(message.replyTo.text)}</div>
       `;
-      // Click to scroll to original message
       replyBox.addEventListener('click', () => {
         const originalMsg = this.container.querySelector(`[data-message-id="${this._sanitize(message.replyTo.id)}"]`);
         if (originalMsg) {
@@ -393,7 +342,6 @@ class MessageRenderer {
       });
       msgContent.appendChild(replyBox);
     }
-
     if (message.message && message.message.trim().length > 0) {
       const textNode = document.createElement('div');
       textNode.classList.add('msg-text');
@@ -491,24 +439,56 @@ class MessageRenderer {
     timeTag.textContent = message.time || this._getCurrentTime();
     msgWrapper.appendChild(timeTag);
     msg.appendChild(msgWrapper);
-
-    // Swipe to reply logic
+    const actionsGroup = document.createElement('div');
+    actionsGroup.className = 'msg-actions-group';
+    if (this.onReplyTriggered) {
+      const replyBtn = document.createElement('button');
+      replyBtn.className = 'msg-action-btn desktop-reply-btn';
+      replyBtn.innerHTML = '<i class="fas fa-reply"></i>';
+      replyBtn.title = 'Balas Pesan';
+      replyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.onReplyTriggered(message);
+      });
+      actionsGroup.appendChild(replyBtn);
+    }
+    if (currentUser && currentUser.type === 'admin') {
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'msg-action-btn admin-msg-delete-btn';
+      deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+      deleteBtn.title = 'Hapus pesan ini';
+      deleteBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (confirm('Yakin ingin menghapus pesan ini dari database?')) {
+          try {
+            const { ref, remove } = window.firebaseHelpers;
+            const db = window.firebaseDB;
+            if (ref && remove && db && message.roomId) {
+              await remove(ref(db, `rooms/${message.roomId}/messages/${message.id}`));
+            }
+          } catch (err) {
+            console.error("Gagal menghapus pesan:", err);
+            alert("Gagal menghapus pesan. Silakan coba lagi.");
+          }
+        }
+      });
+      actionsGroup.appendChild(deleteBtn);
+    }
+    if (actionsGroup.hasChildNodes()) {
+      msgWrapper.appendChild(actionsGroup);
+    }
     if (this.onReplyTriggered) {
       let startX = 0;
       let currentX = 0;
       let isDragging = false;
       let replyIcon = null;
-      
       const threshold = 60; // drag distance to trigger reply
       const isAgent = message.sender === 'admin';
       const isAlignedRight = (currentUser && currentUser.type === 'admin') ? isAgent : !isAgent;
-      
       const handleStart = (clientX) => {
         startX = clientX;
         isDragging = true;
         msg.classList.add('swiping');
-        
-        // Create reply icon on demand
         if (!replyIcon) {
           replyIcon = document.createElement('div');
           replyIcon.className = 'reply-indicator';
@@ -516,72 +496,48 @@ class MessageRenderer {
           msg.appendChild(replyIcon);
         }
       };
-      
       const handleMove = (clientX) => {
         if (!isDragging) return;
         currentX = clientX - startX;
-        
         let validDrag = false;
         if (isAlignedRight && currentX < 0) {
-          // pull to left
           currentX = Math.max(currentX, -threshold - 20); // damping
           validDrag = true;
         } else if (!isAlignedRight && currentX > 0) {
-          // pull to right
           currentX = Math.min(currentX, threshold + 20);
           validDrag = true;
         }
-        
         if (validDrag) {
           msg.style.transform = `translateX(${currentX}px)`;
           if (replyIcon) {
             const progress = Math.min(Math.abs(currentX) / threshold, 1);
             replyIcon.style.opacity = progress.toString();
-            // simple scale animation based on drag
             replyIcon.style.transform = `translateY(-50%) scale(${0.5 + (0.5 * progress)})`;
           }
         }
       };
-      
       const handleEnd = () => {
         if (!isDragging) return;
         isDragging = false;
         msg.classList.remove('swiping');
         msg.style.transform = '';
-        
         if (Math.abs(currentX) >= threshold) {
-          // Trigger reply
           this.onReplyTriggered(message);
           if (window.navigator && window.navigator.vibrate) {
             window.navigator.vibrate(50);
           }
         }
-        
         if (replyIcon) {
           replyIcon.style.opacity = '0';
           replyIcon.style.transform = 'translateY(-50%) scale(0.5)';
         }
         currentX = 0;
       };
-
       msg.addEventListener('touchstart', (e) => handleStart(e.touches[0].clientX), { passive: true });
       msg.addEventListener('touchmove', (e) => handleMove(e.touches[0].clientX), { passive: true });
       msg.addEventListener('touchend', handleEnd);
       msg.addEventListener('touchcancel', handleEnd);
-
-      // Hover reply button for desktop
-      const desktopBtn = document.createElement('button');
-      desktopBtn.className = 'desktop-reply-btn';
-      desktopBtn.innerHTML = '<i class="fas fa-reply"></i>';
-      desktopBtn.title = 'Balas Pesan';
-      
-      desktopBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.onReplyTriggered(message);
-      });
-      msgWrapper.appendChild(desktopBtn);
     }
-
     return msg;
   }
   _updateMessageElement(msgEl, message, currentUser) {

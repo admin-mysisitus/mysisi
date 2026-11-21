@@ -8,6 +8,41 @@ setupEventListeners();
 await loadProposals();
 }
 function setupEventListeners() {
+const tbody = document.getElementById('proposals-table-body');
+if (tbody) {
+tbody.addEventListener('click', (e) => {
+const btnInv = e.target.closest('[data-action="view-invoice"]');
+if (btnInv) {
+window.openInvoiceOnline(btnInv.dataset.id);
+return;
+}
+const btnProp = e.target.closest('[data-action="view-proposal"]');
+if (btnProp) {
+window.openProposalOnline(btnProp.dataset.id);
+return;
+}
+const btnCopy = e.target.closest('[data-action="copy-invoice"]');
+if (btnCopy) {
+window.copyInvoiceLink(btnCopy.dataset.id);
+return;
+}
+const btnEdit = e.target.closest('[data-action="edit-proposal"]');
+if (btnEdit) {
+window.editProposal(btnEdit.dataset.id);
+return;
+}
+const btnDup = e.target.closest('[data-action="duplicate-proposal"]');
+if (btnDup) {
+window.duplicateProposal(btnDup.dataset.id);
+return;
+}
+const btnDel = e.target.closest('[data-action="delete-proposal"]');
+if (btnDel) {
+window.deleteProposal(btnDel.dataset.id, btnDel.dataset.name);
+return;
+}
+});
+}
 const btnAdd = document.getElementById('btn-add-proposal');
 const btnClose = document.getElementById('btn-close-proposal');
 const btnCloseTop = document.getElementById('btn-close-proposal-top');
@@ -294,14 +329,10 @@ Swal.fire({
 icon: 'success',
 title: 'Penawaran & Faktur Tersimpan!',
 html: `
-<p style="margin-bottom: 12px;">Dokumen untuk <strong>${data.clientName}</strong> berhasil disimpan.</p>
-<div style="display: flex; flex-direction: column; gap: 8px;">
-<button class="swal2-confirm swal2-styled" onclick="window.open('/invoice/?id=${encodeURIComponent(id)}', '_blank'); Swal.close();" style="background:#2563eb; margin: 0;">
-📄 Buka Faktur & Invoice Online
-</button>
-<button class="swal2-confirm swal2-styled" onclick="window.open('/proposal/?id=${encodeURIComponent(id)}', '_blank'); Swal.close();" style="background:#0f172a; margin: 0;">
-📑 Buka Proposal Lengkap
-</button>
+<p class="mb-sm">Dokumen untuk <strong>${data.clientName}</strong> berhasil disimpan.</p>
+<div class="swal-actions">
+<a href="/invoice/?id=${encodeURIComponent(id)}" target="_blank" class="admin-btn mb-xs"><i class="ph ph-receipt"></i> Buka Faktur Online</a>
+<a href="/proposal/?id=${encodeURIComponent(id)}" target="_blank" class="admin-btn btn-secondary"><i class="ph ph-file-text"></i> Buka Proposal Lengkap</a>
 </div>
 `,
 showConfirmButton: false,
@@ -334,10 +365,7 @@ const tbody = document.getElementById('proposals-table-body');
 if (tbody) {
 tbody.innerHTML = `
 <tr>
-<td colspan="5" style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
-<i class="ph ph-spinner ph-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
-Memuat daftar faktur & proposal...
-</td>
+<td colspan="5" class="table-state-cell"><i class="ph ph-spinner ph-spin"></i><span>Memuat daftar faktur & proposal...</span></td>
 </tr>
 `;
 }
@@ -363,7 +391,7 @@ console.error('Error loading proposals:', error);
 if (tbody) {
 tbody.innerHTML = `
 <tr>
-<td colspan="5" style="text-align: center; padding: 2rem; color: var(--admin-danger);">
+<td colspan="5" class="table-state-cell table-state-cell--error">
 Gagal memuat dokumen: ${error.message}
 </td>
 </tr>
@@ -408,9 +436,7 @@ return matchesSearch && matchesCat && matchesStatus;
 if (filtered.length === 0) {
 tbody.innerHTML = `
 <tr>
-<td colspan="5" style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
-Tidak ada faktur / proposal yang sesuai filter.
-</td>
+<td colspan="5" class="table-state-cell">Tidak ada faktur / proposal yang sesuai filter.</td>
 </tr>
 `;
 return;
@@ -418,36 +444,32 @@ return;
 tbody.innerHTML = filtered.map(p => {
 let catIcon = 'ph-buildings';
 let catLabel = 'Sekolah / Edukasi';
-let catColor = '#2563eb';
+let catClass = 'proposal-cat-pill--sekolah';
 if (p.category === 'perusahaan') {
 catIcon = 'ph-briefcase';
 catLabel = 'Perusahaan';
-catColor = '#0284c7';
+catClass = 'proposal-cat-pill--perusahaan';
 } else if (p.category === 'personal') {
 catIcon = 'ph-user';
 catLabel = 'Personal Brand';
-catColor = '#7c3aed';
+catClass = 'proposal-cat-pill--personal';
 } else if (p.category === 'umkm') {
 catIcon = 'ph-storefront';
 catLabel = 'UMKM / Toko';
-catColor = '#059669';
+catClass = 'proposal-cat-pill--umkm';
 }
 let statusLabel = 'Belum Bayar';
-let statusBg = 'rgba(217, 119, 6, 0.1)';
-let statusColor = '#d97706';
+let statusBadgeClass = 'status-cell-badge--unpaid';
 const st = (p.status || '').toUpperCase();
 if (st === 'LUNAS' || st === 'DEAL' || st === 'FP') {
 statusLabel = 'Lunas Penuh (Deal)';
-statusBg = 'rgba(16, 185, 129, 0.1)';
-statusColor = '#10b981';
+statusBadgeClass = 'status-cell-badge--paid';
 } else if (st === 'DP') {
 statusLabel = 'DP Diterima (50%)';
-statusBg = 'rgba(37, 99, 235, 0.1)';
-statusColor = '#2563eb';
+statusBadgeClass = 'status-cell-badge--dp';
 } else if (st === 'DRAFT') {
 statusLabel = 'Draft';
-statusBg = 'rgba(100, 116, 139, 0.1)';
-statusColor = '#64748b';
+statusBadgeClass = 'status-cell-badge--expired';
 }
 const createdDate = p.createdAt ? InvoiceService.formatDate(p.createdAt) : '-';
 const totalAmount = Number(p.totalAmount) || Number(p.pkg2Price) || 0;
@@ -455,61 +477,63 @@ const dpAmount = Number(p.dpAmount) || Math.round(totalAmount * 0.5);
 return `
 <tr>
 <td>
-<div style="font-weight: 700; color: var(--admin-text-main); font-size: 0.95rem;">${escapeHtml(p.clientName)}</div>
-<div style="font-size: 0.8rem; color: var(--admin-text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+<div class="client-cell">
+<div class="client-title">${escapeHtml(p.clientName)}</div>
+<div class="client-sub">
 <span><i class="ph ph-user"></i> ${escapeHtml(p.picName || 'PIC')}</span>
-${p.picPhone ? `• <span><i class="ph ph-whatsapp-logo" style="color: #22c55e;"></i> ${escapeHtml(p.picPhone)}</span>` : ''}
+${p.picPhone ? `• <span class="text-success"><i class="ph ph-whatsapp-logo"></i> ${escapeHtml(p.picPhone)}</span>` : ''}
 </div>
-<div style="font-size: 0.75rem; color: #94a3b8; font-family: monospace; margin-top: 2px;">
-No: ${p.invoiceNumber || p.id}
+<div class="client-code">No: ${p.invoiceNumber || p.id}</div>
 </div>
 </td>
 <td>
-<div style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 700; color: ${catColor}; background: ${catColor}15; padding: 2px 7px; border-radius: 4px; margin-bottom: 4px;">
+<div>
+<div class="proposal-cat-pill ${catClass}">
 <i class="ph ${catIcon}"></i> ${catLabel}
 </div>
-<div style="font-weight: 600; font-size: 0.88rem; color: var(--admin-text-main);">${escapeHtml(p.title)}</div>
+<div class="proposal-title">${escapeHtml(p.title)}</div>
 ${p.demoUrl ? `
-<div style="margin-top: 4px;">
-<a href="${escapeHtml(p.demoUrl)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; color: #2563eb; text-decoration: none; font-weight: 600;">
+<a href="${escapeHtml(p.demoUrl)}" target="_blank" rel="noopener noreferrer" class="proposal-demo-link">
 <i class="ph ph-globe"></i> <span>Live Demo: ${escapeHtml(p.demoUrl)}</span>
 </a>
-</div>
 ` : ''}
+</div>
 </td>
 <td>
-<div style="font-size: 0.95rem; font-weight: 800; color: var(--admin-primary);">
+<div class="pkg-cell-price">
 ${InvoiceService.formatRupiah(totalAmount)}
 </div>
-<div style="font-size: 0.76rem; color: var(--admin-text-muted);">
+<div class="pkg-cell-sub">
 Min. DP: ${InvoiceService.formatRupiah(dpAmount)}
 </div>
 </td>
 <td>
-<div style="display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: ${statusBg}; color: ${statusColor}; margin-bottom: 4px;">
+<div class="status-cell-badge ${statusBadgeClass}">
 ${statusLabel}
 </div>
-<div style="font-size: 0.75rem; color: var(--admin-text-muted);">Dibuat: ${createdDate}</div>
+<div class="status-cell-date">Dibuat: ${createdDate}</div>
 </td>
-<td style="text-align: right; white-space: nowrap;">
-<button class="admin-btn-action" title="Lihat Faktur & Invoice Online" onclick="window.openInvoiceOnline('${p.id}')" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; border: none; padding: 6px 8px; border-radius: 5px; cursor: pointer; margin-right: 4px;">
+<td class="text-right nowrap">
+<div class="btn-group btn-group--right">
+<button type="button" class="admin-btn-action" title="Lihat Faktur & Invoice Online" data-action="view-invoice" data-id="${p.id}">
 <i class="ph ph-file-text"></i>
 </button>
-<button class="admin-btn-action" title="Lihat Proposal Lengkap" onclick="window.openProposalOnline('${p.id}')" style="background: rgba(15, 23, 42, 0.08); color: #0f172a; border: none; padding: 6px 8px; border-radius: 5px; cursor: pointer; margin-right: 4px;">
+<button type="button" class="admin-btn-action" title="Lihat Proposal Lengkap" data-action="view-proposal" data-id="${p.id}">
 <i class="ph ph-article"></i>
 </button>
-<button class="admin-btn-action" title="Salin Link Faktur" onclick="window.copyInvoiceLink('${p.id}')" style="background: rgba(6, 182, 212, 0.1); color: #06b6d4; border: none; padding: 6px 8px; border-radius: 5px; cursor: pointer; margin-right: 4px;">
+<button type="button" class="admin-btn-action" title="Salin Link Faktur" data-action="copy-invoice" data-id="${p.id}">
 <i class="ph ph-link"></i>
 </button>
-<button class="admin-btn-action" title="Edit Penawaran" onclick="window.editProposal('${p.id}')" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: none; padding: 6px 8px; border-radius: 5px; cursor: pointer; margin-right: 4px;">
+<button type="button" class="admin-btn-action" title="Edit Penawaran" data-action="edit-proposal" data-id="${p.id}">
 <i class="ph ph-pencil"></i>
 </button>
-<button class="admin-btn-action" title="Duplikat Dokumen" onclick="window.duplicateProposal('${p.id}')" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed; border: none; padding: 6px 8px; border-radius: 5px; cursor: pointer; margin-right: 4px;">
+<button type="button" class="admin-btn-action" title="Duplikat Dokumen" data-action="duplicate-proposal" data-id="${p.id}">
 <i class="ph ph-copy"></i>
 </button>
-<button class="admin-btn-action" title="Hapus Dokumen" onclick="window.deleteProposal('${p.id}', '${escapeQuotes(p.clientName)}')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; padding: 6px 8px; border-radius: 5px; cursor: pointer;">
+<button type="button" class="admin-btn-action admin-btn-action--danger" title="Hapus Dokumen" data-action="delete-proposal" data-id="${p.id}" data-name="${escapeQuotes(p.clientName)}">
 <i class="ph ph-trash"></i>
 </button>
+</div>
 </td>
 </tr>
 `;

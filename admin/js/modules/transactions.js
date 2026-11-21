@@ -10,6 +10,31 @@ setupEventListeners();
 await loadTransactions();
 }
 function setupEventListeners() {
+const tbody = document.getElementById('tx-table-body');
+if (tbody) {
+tbody.addEventListener('click', (e) => {
+const btnOpen = e.target.closest('[data-action="open-tx"]');
+if (btnOpen) {
+openTxInvoice(btnOpen.dataset.inv);
+return;
+}
+const btnCopy = e.target.closest('[data-action="copy-tx"]');
+if (btnCopy) {
+copyTxInvoiceLink(btnCopy.dataset.inv);
+return;
+}
+const btnEdit = e.target.closest('[data-action="edit-tx"]');
+if (btnEdit) {
+editTx(btnEdit.dataset.inv);
+return;
+}
+const btnDel = e.target.closest('[data-action="delete-tx"]');
+if (btnDel) {
+deleteTx(btnDel.dataset.inv);
+return;
+}
+});
+}
 window.openTxInvoice = (inv) => {
 const tx = currentTx.find(t => (t.inv || t.orderId) === inv);
 if (tx) InvoiceService.syncOrderToPublicInvoice(tx);
@@ -195,20 +220,13 @@ if (statSuccess) statSuccess.textContent = successCount;
 async function loadTransactions() {
 const tbody = document.getElementById('tx-table-body');
 if (!tbody) return;
-tbody.innerHTML = `
-<tr>
-<td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
-<i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
-Memuat data transaksi...
-</td>
-</tr>
-`;
+tbody.innerHTML = '<tr><td colspan="6" class="table-state-cell"><i class="ph ph-spinner ph-spin"></i><span>Memuat data transaksi...</span></td></tr>';
 try {
 const adminId = AuthManager.getUserId();
 const response = await APIClient.getAllTransactions(adminId);
 if (response.success && response.data) {
 if (response.data.length === 0) {
-tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Belum ada transaksi.</td></tr>';
+tbody.innerHTML = '<tr><td colspan="6" class="table-state-cell">Belum ada transaksi.</td></tr>';
 updateStats([]);
 } else {
 currentTx = response.data;
@@ -220,13 +238,13 @@ throw new Error(response.message || 'Gagal memuat transaksi');
 }
 } catch (error) {
 console.error('Failed to load transactions:', error);
-tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--admin-danger);">Error: ${error.message}</td></tr>`;
+tbody.innerHTML = `<tr class="table-state-cell--error"><td colspan="6" class="table-state-cell table-state-cell--error">Error: ${error.message}</td></tr>`;
 }
 }
 function renderTxTable(mockTx, tbody) {
 tbody.innerHTML = '';
 if (mockTx.length === 0) {
-tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Tidak ada transaksi yang sesuai.</td></tr>';
+tbody.innerHTML = '<tr><td colspan="6" class="table-state-cell">Tidak ada transaksi yang sesuai.</td></tr>';
 return;
 }
 mockTx.forEach(tx => {
@@ -237,53 +255,52 @@ const email = tx.email || '-';
 const item = tx.item || tx.domain || tx.packageId || '-';
 const total = tx.total || 0;
 const status = (tx.status || tx.paymentStatus || 'unpaid').toLowerCase();
-let statusBg, statusColor;
-if (status === 'paid' || status === 'settlement' || status === 'capture') {
-statusBg = 'rgba(16, 185, 129, 0.1)';
-statusColor = 'var(--admin-success)';
-} else if (status === 'pending' || status === 'unpaid') {
-statusBg = 'rgba(245, 158, 11, 0.1)';
-statusColor = 'var(--admin-warning)';
-} else {
-statusBg = 'rgba(239, 68, 68, 0.1)';
-statusColor = 'var(--admin-danger)';
+let statusClass = 'status-pill--danger';
+let statusText = status.toUpperCase();
+if (status === 'paid' || status === 'settlement' || status === 'capture' || status === 'selesai' || status === 'success') {
+statusClass = 'status-pill--success';
+statusText = 'PAID';
+} else if (status === 'pending' || status === 'unpaid' || status === 'tertunda') {
+statusClass = 'status-pill--warning';
+statusText = 'UNPAID';
 }
-const rowOpacity = (status === 'failed' || status === 'expire' || status === 'cancel' || status === 'deny') ? '0.6' : '1';
+const isFailed = (status === 'failed' || status === 'expire' || status === 'cancel' || status === 'deny');
 const tr = document.createElement('tr');
-tr.style.borderBottom = '1px solid var(--admin-border)';
-tr.style.opacity = rowOpacity;
+if (isFailed) tr.className = 'tr--failed';
 tr.innerHTML = `
-<td style="padding: 16px;">
-<p style="margin: 0; font-weight: 600; color: var(--admin-primary);">${inv}</p>
-<p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+<td class="nowrap">
+<p class="table-user-name text-primary">${inv}</p>
+<p class="table-user-sub">${new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
 </td>
-<td style="padding: 16px;">
-<p style="margin: 0; font-weight: 500;">${name}</p>
-<p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--admin-text-muted);">${email}</p>
+<td>
+<div class="table-user-info">
+<p class="table-user-name">${name}</p>
+<p class="table-user-sub">${email}</p>
+</div>
 </td>
-<td style="padding: 16px; color: var(--admin-text-muted);">
+<td class="text-muted text-sm">
 ${item}
 </td>
-<td style="padding: 16px; font-weight: 600;">
+<td class="nowrap font-bold text-sm">
 Rp ${parseInt(total || 0).toLocaleString('id-ID')}
 </td>
-<td style="padding: 16px;">
-<span style="background: ${statusBg}; color: ${statusColor}; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">
-${status === 'settlement' || status === 'capture' ? 'PAID' : status}
+<td class="nowrap">
+<span class="status-pill ${statusClass}">
+${statusText}
 </span>
 </td>
-<td style="padding: 16px; text-align: right;">
-<div style="display: flex; gap: 6px; justify-content: flex-end;">
-<button class="admin-btn" onclick="window.openTxInvoice('${inv}')" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; padding: 8px; border-radius: 6px;" title="Buka Faktur Online">
+<td class="text-right nowrap">
+<div class="table-actions">
+<button type="button" class="btn-action btn-action--edit" data-action="open-tx" data-inv="${inv}" title="Buka Faktur Online">
 <i class="ph ph-receipt"></i>
 </button>
-<button class="admin-btn" onclick="window.copyTxInvoiceLink('${inv}')" style="background: rgba(6, 182, 212, 0.1); color: #06b6d4; padding: 8px; border-radius: 6px;" title="Salin Link Faktur">
+<button type="button" class="btn-action btn-action--view" data-action="copy-tx" data-inv="${inv}" title="Salin Link Faktur">
 <i class="ph ph-link"></i>
 </button>
-<button class="admin-btn" onclick="window.editTx('${inv}')" style="background: rgba(99, 102, 241, 0.1); color: var(--admin-primary); padding: 8px; border-radius: 6px;" title="Edit">
+<button type="button" class="btn-action btn-action--edit" data-action="edit-tx" data-inv="${inv}" title="Edit">
 <i class="ph ph-pencil-simple"></i>
 </button>
-<button class="admin-btn" onclick="window.deleteTx('${inv}')" style="background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); padding: 8px; border-radius: 6px;" title="Batalkan">
+<button type="button" class="btn-action btn-action--delete" data-action="delete-tx" data-inv="${inv}" title="Batalkan">
 <i class="ph ph-prohibit"></i>
 </button>
 </div>

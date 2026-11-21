@@ -1,217 +1,212 @@
 import APIClient from '/assets/js/modules/unified-api.js';
-import {
-  AuthManager
-} from '/assets/js/modules/unified-auth.js';
+import { AuthManager } from '/assets/js/modules/unified-auth.js';
 let currentPackages = [];
 export async function render() {
-  console.error('Admin Packages Module Loaded');
-  setupEventListeners();
-  await loadPackages();
+setupEventListeners();
+await loadPackages();
 }
-
 function setupEventListeners() {
-  const btnAdd = document.getElementById('btn-add-package');
-  const btnClose = document.getElementById('btn-close-package');
-  const modal = document.getElementById('package-modal');
-  const form = document.getElementById('package-form');
-  if (btnAdd) {
-    btnAdd.addEventListener('click', () => {
-      form.reset();
-      document.getElementById('pkg-id').readOnly = false;
-      document.getElementById('package-modal-title').textContent = 'Buat Paket Baru';
-      modal.style.display = 'flex';
-    });
-  }
-  if (btnClose) {
-    btnClose.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-  }
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const submitBtn = document.getElementById('btn-save-package');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
-      submitBtn.disabled = true;
-      const packageData = {
-        id: document.getElementById('pkg-id').value.trim(),
-        name: document.getElementById('pkg-name').value.trim(),
-        price: parseInt(document.getElementById('pkg-price').value),
-        periodValue: parseInt(document.getElementById('pkg-periodValue').value),
-        period: document.getElementById('pkg-periodValue').value + ' Tahun',
-        description: document.getElementById('pkg-description').value.trim(),
-        features: document.getElementById('pkg-features').value.trim().split('\n').filter(f => f.trim() !== ''),
-        active: document.getElementById('pkg-active').checked,
-        order: parseInt(document.getElementById('pkg-order').value) || 99
-      };
-      try {
-        const adminId = AuthManager.getUserId();
-        const res = await APIClient.saveAdminPackage(adminId, packageData);
-        if (res.success) {
-          if (typeof Swal !== 'undefined') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Berhasil',
-              text: 'Paket berhasil disimpan!'
-            });
-          }
-          modal.style.display = 'none';
-          await loadPackages();
-        } else {
-          throw new Error(res.message);
-        }
-      } catch (error) {
-        console.error(error);
-        if (typeof Swal !== 'undefined') {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal',
-            text: error.message
-          });
-        }
-      } finally {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-      }
-    });
-  }
-  window.editPackage = (id) => {
-    const pkg = currentPackages.find(p => p.id === id);
-    if (!pkg) return;
-    document.getElementById('package-modal-title').textContent = 'Edit Paket';
-    document.getElementById('pkg-id').value = pkg.id;
-    document.getElementById('pkg-id').readOnly = true;
-    document.getElementById('pkg-name').value = pkg.name;
-    document.getElementById('pkg-price').value = pkg.price;
-    document.getElementById('pkg-periodValue').value = pkg.periodValue || (pkg.cycle ? parseInt(pkg.cycle) : 1);
-    document.getElementById('pkg-description').value = pkg.description || pkg.desc || '';
-    document.getElementById('pkg-order').value = typeof pkg.order === 'number' ? pkg.order : 99;
-    let featuresText = '';
-    if (Array.isArray(pkg.features)) {
-      featuresText = pkg.features.join('\n');
-    } else if (typeof pkg.features === 'string') {
-      featuresText = pkg.features;
-    }
-    document.getElementById('pkg-features').value = featuresText;
-    document.getElementById('pkg-active').checked = pkg.active;
-    document.getElementById('package-modal').style.display = 'flex';
-  };
-  window.deletePackage = async (id) => {
-    if (typeof Swal !== 'undefined') {
-      const result = await Swal.fire({
-        title: 'Nonaktifkan Paket?',
-        text: `Paket dengan ID ${id} akan dinonaktifkan.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        cancelButtonColor: '#4b5563',
-        confirmButtonText: 'Ya, Nonaktifkan'
-      });
-      if (result.isConfirmed) {
-        try {
-          const res = await APIClient.deleteAdminPackage(AuthManager.getUserId(), id);
-          if (res.success) {
-            Swal.fire('Berhasil!', 'Paket telah dinonaktifkan.', 'success');
-            await loadPackages();
-          } else {
-            throw new Error(res.message);
-          }
-        } catch (err) {
-          Swal.fire('Error', err.message, 'error');
-        }
-      }
-    }
-  };
+const btnAdd = document.getElementById('btn-add-package');
+const btnClose = document.getElementById('btn-close-package');
+const modal = document.getElementById('package-modal');
+const form = document.getElementById('package-form');
+const container = document.getElementById('packages-grid');
+if (btnAdd) {
+btnAdd.addEventListener('click', () => {
+form.reset();
+document.getElementById('pkg-id').disabled = false;
+document.getElementById('pkg-id').value = '';
+document.getElementById('pkg-periodValue').value = '1';
+document.getElementById('pkg-order').value = '99';
+document.getElementById('pkg-active').checked = true;
+document.getElementById('package-modal-title').textContent = 'Buat Paket Baru';
+modal.classList.add('show');
+});
 }
+if (btnClose) {
+btnClose.addEventListener('click', () => {
+modal.classList.remove('show');
+});
+}
+if (container) {
+container.addEventListener('click', async (e) => {
+const editBtn = e.target.closest('[data-action="edit-pkg"]');
+if (editBtn) {
+const id = editBtn.dataset.id;
+openEditPackage(id);
+return;
+}
+const deleteBtn = e.target.closest('[data-action="delete-pkg"]');
+if (deleteBtn) {
+const id = deleteBtn.dataset.id;
+await confirmDeletePackage(id);
+return;
+}
+});
+}
+if (form) {
+form.addEventListener('submit', async (e) => {
+e.preventDefault();
+const submitBtn = document.getElementById('btn-save-package');
+const originalText = submitBtn.innerHTML;
+submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
+submitBtn.disabled = true;
+const featuresText = document.getElementById('pkg-features').value;
+const featuresArray = featuresText.split('\n').map(f => f.trim()).filter(f => f.length > 0);
+const packageData = {
+id: document.getElementById('pkg-id').value.trim(),
+name: document.getElementById('pkg-name').value.trim(),
+price: parseInt(document.getElementById('pkg-price').value),
+periodValue: parseInt(document.getElementById('pkg-periodValue').value) || 1,
+order: parseInt(document.getElementById('pkg-order').value) || 0,
+description: document.getElementById('pkg-description').value.trim(),
+features: featuresArray,
+active: document.getElementById('pkg-active').checked
+};
+try {
+const adminId = AuthManager.getUserId();
+const res = await APIClient.saveAdminPackage(adminId, packageData);
+if (res.success) {
+if (typeof Swal !== 'undefined') {
+Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Paket berhasil disimpan!' });
+}
+modal.classList.remove('show');
+await loadPackages();
+} else {
+throw new Error(res.message);
+}
+} catch (error) {
+if (typeof Swal !== 'undefined') {
+Swal.fire({ icon: 'error', title: 'Gagal', text: error.message });
+}
+} finally {
+submitBtn.innerHTML = originalText;
+submitBtn.disabled = false;
+}
+});
+}
+}
+function openEditPackage(id) {
+const pkg = currentPackages.find(p => p.id === id);
+if (!pkg) return;
+document.getElementById('package-modal-title').textContent = 'Edit Paket';
+document.getElementById('pkg-id').value = pkg.id;
+document.getElementById('pkg-id').disabled = true;
+document.getElementById('pkg-name').value = pkg.name;
+document.getElementById('pkg-price').value = pkg.price;
+document.getElementById('pkg-periodValue').value = pkg.periodValue || pkg.cycle || 1;
+document.getElementById('pkg-order').value = pkg.order !== undefined ? pkg.order : 0;
+document.getElementById('pkg-description').value = pkg.description || '';
+let featuresText = '';
+if (Array.isArray(pkg.features)) {
+featuresText = pkg.features.join('\n');
+} else if (typeof pkg.features === 'string') {
+featuresText = pkg.features;
+}
+document.getElementById('pkg-features').value = featuresText;
+document.getElementById('pkg-active').checked = pkg.active !== false;
+document.getElementById('package-modal').classList.add('show');
+}
+async function confirmDeletePackage(id) {
+if (typeof Swal !== 'undefined') {
+const result = await Swal.fire({
+title: 'Hapus Paket?',
+text: `Paket dengan ID ${id} akan dihapus secara permanen.`,
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#ef4444',
+cancelButtonColor: '#4b5563',
+confirmButtonText: 'Ya, Hapus'
+});
+if (result.isConfirmed) {
+try {
+const res = await APIClient.deleteAdminPackage(AuthManager.getUserId(), id);
+if (res.success) {
+Swal.fire('Berhasil!', 'Paket telah dihapus.', 'success');
+await loadPackages();
+} else {
+throw new Error(res.message);
+}
+} catch (err) {
+Swal.fire('Error', err.message, 'error');
+}
+}
+}
+}
+window.editPackage = openEditPackage;
+window.deletePackage = confirmDeletePackage;
 async function loadPackages() {
-  const container = document.getElementById('packages-grid');
-  if (!container) return;
-  container.innerHTML = `
-    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-text-muted);">
-      <i class="ph ph-spinner ph-spin" style="font-size: 2rem; margin-bottom: 16px; display: block;"></i>
-      Memuat data paket...
-    </div>
-  `;
-  try {
-    const adminId = AuthManager.getUserId();
-    const response = await APIClient.getAdminPackages(adminId);
-    if (response.success) {
-      const packages = (response.data || []).sort((a, b) => {
-        const orderA = typeof a.order === 'number' ? a.order : 999;
-        const orderB = typeof b.order === 'number' ? b.order : 999;
-        return orderA - orderB;
-      });
-      if (packages.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px;">Belum ada paket.</div>';
-      } else {
-        renderPackages(packages, container);
-      }
-    } else {
-      throw new Error(response.message);
-    }
-  } catch (error) {
-    console.error('Failed to load packages:', error);
-    container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--admin-danger);">${error.message}</div>`;
-  }
+const container = document.getElementById('packages-grid');
+if (!container) return;
+container.innerHTML = '<div class="grid-col-full grid-state-message"><i class="ph ph-spinner ph-spin"></i><span>Memuat data paket...</span></div>';
+try {
+const adminId = AuthManager.getUserId();
+const response = await APIClient.getAdminPackages(adminId);
+if (response.success && response.data) {
+const packages = response.data;
+if (packages.length === 0) {
+container.innerHTML = '<div class="grid-col-full grid-state-message">Belum ada paket.</div>';
+} else {
+renderPackages(packages, container);
 }
-
+} else {
+throw new Error(response.message);
+}
+} catch (error) {
+container.innerHTML = `<div class="grid-col-full grid-state-message table-state-cell--error">${error.message}</div>`;
+}
+}
 function renderPackages(packages, container) {
-  container.innerHTML = '';
-  currentPackages = packages;
-  packages.forEach((pkg, index) => {
-    const isPopular = index === 1;
-    const isActive = pkg.active !== false;
-    const inactiveStyle = isActive ? '' : 'opacity: 0.6; filter: grayscale(1);';
-    const card = document.createElement('div');
-    card.style.background = isPopular ? 'linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(0, 0, 0, 0.2))' : 'rgba(0, 0, 0, 0.2)';
-    card.style.border = isPopular ? '1px solid var(--admin-primary)' : '1px solid var(--admin-border)';
-    card.style.borderRadius = '16px';
-    card.style.padding = '24px';
-    card.style.position = 'relative';
-    card.style.display = 'flex';
-    card.style.flexDirection = 'column';
-    card.style.cssText += inactiveStyle;
-    let popularBadge = isPopular ? `<div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--admin-primary); color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">Paling Populer</div>` : '';
-    let inactiveBadge = !isActive ? `<div style="position: absolute; top: 10px; right: 10px; background: var(--admin-danger); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">NONAKTIF</div>` : '';
-    let featuresArr = [];
-    if (Array.isArray(pkg.features)) {
-      featuresArr = pkg.features;
-    } else if (typeof pkg.features === 'string' && pkg.features.trim()) {
-      featuresArr = pkg.features.split('\\n');
-    }
-    let featuresHtml = featuresArr.filter(f => f && f.trim().length > 0).map(f => `
-      <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-        <i class="ph ph-check-circle" style="color: var(--admin-primary);"></i>
-        <span style="color: var(--admin-text-muted);">${f.trim()}</span>
-      </li>
-    `).join('');
-    const displayPrice = pkg.price != null ? Number(pkg.price).toLocaleString('id-ID') : '0';
-    const displayCycle = pkg.periodValue || pkg.cycle || '1';
-    const pkgId = pkg.id || '';
-    const pkgName = pkg.name || 'Paket Tanpa Nama';
-    card.innerHTML = `
-      ${popularBadge}
-      ${inactiveBadge}
-      <h3 style="margin: 0 0 8px 0; color: var(--admin-text-main); font-size: 1.25rem;">${pkgName}</h3>
-      <div style="margin-bottom: 24px;">
-        <span style="font-size: 2rem; font-weight: 700; color: var(--admin-text-main);">Rp ${displayPrice}</span>
-        <span style="color: var(--admin-text-muted);">/${displayCycle} Tahun</span>
-      </div>
-
-      <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; flex-grow: 1;">
-        ${featuresHtml || '<li style="color: var(--admin-text-muted); font-style: italic;">-</li>'}
-      </ul>
-
-      <div style="display: flex; gap: 12px; margin-top: auto;">
-        <button class="admin-btn" onclick="window.editPackage('${pkgId}')" style="flex: 1; background: var(--admin-primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600;">
-          Edit Paket
-        </button>
-        <button class="admin-btn" onclick="window.deletePackage('${pkgId}')" style="width: 44px; background: rgba(239, 68, 68, 0.1); color: var(--admin-danger); border: none; border-radius: 8px;" title="Nonaktifkan">
-          <i class="ph ph-trash"></i>
-        </button>
-      </div>
-    `;
-    container.appendChild(card);
-  });
+container.innerHTML = '';
+currentPackages = packages;
+packages.forEach((pkg, index) => {
+const isPopular = index === 1;
+const isActive = pkg.active !== false;
+const card = document.createElement('div');
+let cardClasses = ['product-card'];
+if (isPopular) cardClasses.push('product-card--featured');
+if (!isActive) cardClasses.push('product-card--inactive');
+card.className = cardClasses.join(' ');
+let popularBadge = isPopular ? '<div class="popular-badge">Paling Populer</div>' : '';
+let inactiveBadge = !isActive ? '<div class="inactive-badge">NONAKTIF</div>' : '';
+let featuresArr = [];
+if (Array.isArray(pkg.features)) {
+featuresArr = pkg.features;
+} else if (typeof pkg.features === 'string' && pkg.features.trim()) {
+featuresArr = pkg.features.split('\n');
+}
+let featuresHtml = featuresArr.filter(f => f && f.trim().length > 0).map(f => `
+<li class="pkg-feature-item">
+<i class="ph ph-check-circle pkg-check-icon"></i>
+<span>${f.trim()}</span>
+</li>
+`).join('');
+const displayPrice = pkg.price != null ? Number(pkg.price).toLocaleString('id-ID') : '0';
+const displayCycle = pkg.periodValue || pkg.cycle || '1';
+const pkgId = pkg.id || '';
+const pkgName = pkg.name || 'Paket Tanpa Nama';
+card.innerHTML = `
+${popularBadge}
+${inactiveBadge}
+<div class="pkg-header">
+<h3 class="pkg-title">${pkgName}</h3>
+</div>
+<div class="pkg-price-wrap">
+<span class="pkg-price">Rp ${displayPrice}</span>
+<span class="pkg-cycle">/${displayCycle} Tahun</span>
+</div>
+<ul class="pkg-features-list">
+${featuresHtml || '<li class="pkg-feature-empty">-</li>'}
+</ul>
+<div class="pkg-actions">
+<button type="button" class="admin-btn pkg-btn-edit" data-action="edit-pkg" data-id="${pkgId}">
+<i class="ph ph-pencil-simple"></i> Edit Paket
+</button>
+<button type="button" class="btn-action btn-action--delete pkg-btn-delete" data-action="delete-pkg" data-id="${pkgId}" title="Hapus">
+<i class="ph ph-trash"></i>
+</button>
+</div>
+`;
+container.appendChild(card);
+});
 }
