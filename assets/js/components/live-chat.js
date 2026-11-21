@@ -8,7 +8,6 @@ window.addEventListener("load", async () => {
       <div class="chat-avatar-wrapper">
         <img src="/assets/img/livechat/ic-livechat.webp" alt="Customer Service" class="chat-avatar-img">
       </div>
-      
       <div class="chat-btn-content">
         <div class="chat-btn-icon-box">
           <div class="chat-double-bubble">
@@ -25,7 +24,6 @@ window.addEventListener("load", async () => {
           <span class="chat-title-text">LiveChat</span>
         </div>
       </div>
-
       <div class="chat-btn-subtitle">
         <div class="subtitle-slider">
           <span>Kami Online</span>
@@ -34,9 +32,7 @@ window.addEventListener("load", async () => {
       </div>
       <span id="unreadBadge" class="badge" style="display: none;" aria-label="Pesan belum dibaca">0</span>
     </button>
-
     <div class="modal-overlay" id="modalOverlay"></div>
-
     <div class="chat-modal" id="chatModal">
       <div class="chat-header" id="chatHeader">
         <div class="chat-header-info">
@@ -87,7 +83,7 @@ window.addEventListener("load", async () => {
   </div>
   `;
   document.body.insertAdjacentHTML('beforeend', chatHTML);
-  const styles = ["/assets/css/components/livechat.css"];
+  const styles = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css", "/assets/css/components/livechat.css"];
   styles.forEach(href => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -100,7 +96,7 @@ window.addEventListener("load", async () => {
     console.log('[LiveChat] Gagal memuat Firebase:', error);
     return;
   }
-  const scripts = ["https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js", "/assets/js/livechat/config.js", "/assets/js/livechat/sessionCache.js", "/assets/js/livechat/messageStore.js", "/assets/js/livechat/messageRenderer.js", "/assets/js/livechat/syncEngine.js", "/assets/js/livechat/sendQueue.js", "/assets/js/livechat/utils.js", "/assets/js/livechat/user.js?v=11"];
+  const scripts = ["https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js", "/assets/js/livechat/config.js", "/assets/js/livechat/sessionCache.js", "/assets/js/livechat/messageStore.js", "/assets/js/livechat/messageRenderer.js", "/assets/js/livechat/syncEngine.js", "/assets/js/livechat/sendQueue.js", "/assets/js/livechat/utils.js", "/assets/js/livechat/user.js"];
   scripts.forEach(src => {
     const script = document.createElement('script');
     script.src = src;

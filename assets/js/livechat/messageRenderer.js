@@ -309,8 +309,10 @@ class MessageRenderer {
     if (!message || !message.id) {
       return null;
     }
+    const isAgent = message.sender === 'admin';
+    const isAlignedRight = (currentUser && currentUser.type === 'admin') ? isAgent : !isAgent;
     const msg = document.createElement('div');
-    msg.classList.add('message', message.sender === 'admin' ? 'agent' : 'user');
+    msg.classList.add('message', isAgent ? 'agent' : 'user', isAlignedRight ? 'msg-outgoing' : 'msg-incoming');
     msg.setAttribute('data-message-id', this._sanitize(message.id));
     msg.setAttribute('data-created-at', message.createdAt);
     const senderKey = message.sender === 'admin' ? ('admin-' + (message.agent ? message.agent.trim() : 'Admin')) : 'user';
@@ -482,9 +484,7 @@ class MessageRenderer {
       let currentX = 0;
       let isDragging = false;
       let replyIcon = null;
-      const threshold = 60; // drag distance to trigger reply
-      const isAgent = message.sender === 'admin';
-      const isAlignedRight = (currentUser && currentUser.type === 'admin') ? isAgent : !isAgent;
+      const threshold = 60;
       const handleStart = (clientX) => {
         startX = clientX;
         isDragging = true;
