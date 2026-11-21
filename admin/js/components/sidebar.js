@@ -28,6 +28,9 @@ export class AdminSidebar {
         <a href="#!/packages" class="admin-nav-item" data-route="/packages">
           <i class="ph ph-package"></i> Paket Website
         </a>
+        <a href="#!/proposals" class="admin-nav-item" data-route="/proposals">
+          <i class="ph ph-file-text"></i> Proposal Builder
+        </a>
         <a href="#!/domains" class="admin-nav-item" data-route="/domains">
           <i class="ph ph-globe"></i> Harga Domain
         </a>

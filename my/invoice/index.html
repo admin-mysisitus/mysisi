@@ -1,99 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice - SISITUS</title>
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico?v=1.0.0">
-  <link rel="manifest" href="/assets/favicon/site.webmanifest?v=1.0.0">
-  <link rel="stylesheet" href="/assets/css/main.css?v=1.0.0">
-  <link media="print" onload="this.media='all'" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <noscript>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  </noscript>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: #f5f5f5;
-    }
-    
-    .page-container {
-      min-height: 100vh;
-      padding: 20px;
-    }
-    
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-    
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-    
-    .btn {
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
-    }
-    
-    .btn:hover {
-      opacity: 0.9;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice - SISITUS</title>
+<meta name="robots" content="noindex, nofollow">
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get('orderId') || params.get('orderid') || params.get('id');
+if (id) {
+window.location.replace('/invoice/?id=' + encodeURIComponent(id));
+} else {
+window.location.replace('/invoice/');
+}
+</script>
 </head>
-
 <body>
-  <div class="page-container">
-    <div id="invoice-container">
-      <div style="text-align: center; padding: 60px 20px;">
-        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #2563EB; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-        <p style="margin-top: 20px; color: #666;">Memuat invoice...</p>
-      </div>
-    </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module">
-    import {
-      AuthManager
-    } from '/assets/js/modules/unified-auth.js';
-    import {
-      Base64Utils
-    } from '/assets/js/modules/unified-utils.js';
-    import {
-      render
-    } from '/assets/js/modules/invoice.js';
-        // Initialize
-    AuthManager.init();
-    // Render logic with wait for auth sync
-    let renderFired = false;
-    const doRender = (user) => {
-      if (renderFired) return;
-      renderFired = true;
-      render(user);
-    };
-    
-    const currentUser = AuthManager.getCurrentUser();
-    if (currentUser) {
-      doRender(currentUser);
-    } else {
-      // Listen for Firebase auth sync
-      AuthManager.on('authChanged', (user) => {
-        if (user) doRender(user);
-      });
-      
-      // Prompt login jika setelah 2 detik tidak terdeteksi sesi
-      setTimeout(() => {
-        if (!renderFired) {
-          window.location.href = '/auth/';
-        }
-      }, 2000);
-    }
-  </script>
 </body>
-
 </html>

@@ -1,0 +1,239 @@
+<div class="admin-page-header">
+<div>
+<h1 class="admin-page-title">Proposal Builder</h1>
+<p class="admin-page-desc">Kelola, sesuaikan, dan bagikan proposal website digital online untuk sekolah, perusahaan, personal branding, maupun UMKM.</p>
+</div>
+<div style="display: flex; gap: 8px;">
+<a href="/proposal/?type=sekolah" target="_blank" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">
+<i class="ph ph-eye"></i> Pratinjau Publik
+</a>
+<button class="admin-btn" id="btn-add-proposal">
+<i class="ph ph-plus"></i> Buat Proposal Baru
+</button>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+<div class="admin-card" style="padding: 16px;">
+<div style="color: var(--admin-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Proposal</div>
+<div id="stat-total-proposals" style="font-size: 1.8rem; font-weight: 700; color: var(--admin-text-main);">0</div>
+</div>
+<div class="admin-card" style="padding: 16px;">
+<div style="color: var(--admin-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Proposal Aktif / Terkirim</div>
+<div id="stat-active-proposals" style="font-size: 1.8rem; font-weight: 700; color: var(--admin-primary);">0</div>
+</div>
+<div class="admin-card" style="padding: 16px;">
+<div style="color: var(--admin-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Disetujui / Deal</div>
+<div id="stat-deal-proposals" style="font-size: 1.8rem; font-weight: 700; color: var(--admin-success);">0</div>
+</div>
+<div class="admin-card" style="padding: 16px;">
+<div style="color: var(--admin-text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Potensi Pipeline</div>
+<div id="stat-potential-value" style="font-size: 1.6rem; font-weight: 700; color: var(--admin-secondary);">Rp 0</div>
+</div>
+</div>
+<div class="admin-card">
+<div class="admin-toolbar" style="flex-wrap: wrap; gap: 12px;">
+<div class="admin-search-box" style="flex: 1; min-width: 240px;">
+<i class="ph ph-magnifying-glass"></i>
+<input type="text" id="search-proposals" class="admin-input-control" placeholder="Cari klien, sekolah, perusahaan, atau judul proposal...">
+</div>
+<div class="admin-filter-group" style="display: flex; gap: 8px;">
+<select id="filter-proposal-category" class="admin-input-control">
+<option value="all">Semua Kategori</option>
+<option value="sekolah">Sekolah / Pendidikan</option>
+<option value="perusahaan">Perusahaan / Corporate</option>
+<option value="personal">Personal Branding</option>
+<option value="umkm">UMKM / Bisnis</option>
+<option value="custom">Kustom Lainnya</option>
+</select>
+<select id="filter-proposal-status" class="admin-input-control">
+<option value="all">Semua Status</option>
+<option value="aktif">Aktif / Terkirim</option>
+<option value="draft">Draft</option>
+<option value="deal">Disetujui (Deal)</option>
+<option value="expired">Expired</option>
+</select>
+</div>
+</div>
+<div class="admin-table-container">
+<table class="admin-table">
+<thead>
+<tr>
+<th>Klien / Lembaga Target</th>
+<th>Kategori & Judul Proposal</th>
+<th>Paket Ditawarkan</th>
+<th>Tanggal & Status</th>
+<th style="text-align: right;">Aksi</th>
+</tr>
+</thead>
+<tbody id="proposals-table-body">
+<tr>
+<td colspan="5" style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
+<i class="ph ph-spinner ph-spin" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+Memuat daftar proposal...
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="proposal-modal" class="admin-modal">
+<div class="admin-card admin-modal-content" style="max-width: 760px; max-height: 90vh; overflow-y: auto;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 12px;">
+<div>
+<h3 id="proposal-modal-title" class="admin-section-title" style="margin-bottom: 2px;">Buat Proposal Baru</h3>
+<p style="font-size: 0.85rem; color: var(--admin-text-muted);">Pilih template preset atau sesuaikan data secara fleksibel.</p>
+</div>
+<button type="button" id="btn-close-proposal-top" style="background: none; border: none; font-size: 1.4rem; color: var(--admin-text-muted); cursor: pointer;">
+<i class="ph ph-x"></i>
+</button>
+</div>
+<div style="margin-bottom: 20px;">
+<label style="display: block; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; color: var(--admin-text-main);">
+⚡ Isi Cepat dengan Preset Template:
+</label>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
+<button type="button" class="preset-btn" data-preset="sekolah" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface-hover); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 6px;">
+<span>🏫</span> Sekolah / Edukasi
+</button>
+<button type="button" class="preset-btn" data-preset="perusahaan" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface-hover); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 6px;">
+<span>🏢</span> Perusahaan / Corp
+</button>
+<button type="button" class="preset-btn" data-preset="personal" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface-hover); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 6px;">
+<span>👤</span> Personal Brand
+</button>
+<button type="button" class="preset-btn" data-preset="umkm" style="padding: 8px 10px; border-radius: 6px; border: 1px solid var(--admin-border); background: var(--admin-surface-hover); font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 6px;">
+<span>🛍️</span> UMKM / Toko Online
+</button>
+</div>
+</div>
+<form id="proposal-form">
+<input type="hidden" id="proposal-id">
+<div style="background: var(--admin-surface-hover); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+<div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; color: var(--admin-primary); display: flex; align-items: center; gap: 6px;">
+<i class="ph ph-user"></i> 1. Informasi Target Klien
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Nama Lembaga / Klien Target *</label>
+<input type="text" id="prop-client-name" required placeholder="Contoh: SMA Negeri 1 Sedati / PT Maju Sentosa" class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Kategori Penawaran *</label>
+<select id="prop-category" class="admin-input-control" required>
+<option value="sekolah">Sekolah / Lembaga Pendidikan</option>
+<option value="perusahaan">Perusahaan / Company Profile</option>
+<option value="personal">Personal Branding / Profesional</option>
+<option value="umkm">UMKM / Toko Online</option>
+<option value="custom">Kustom</option>
+</select>
+</div>
+</div>
+<div class="admin-form-grid-2">
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Nama PIC / Penerima Proposal</label>
+<input type="text" id="prop-pic-name" placeholder="Contoh: Bapak Drs. H. Ahmad Fauzi / Ibu Rina" class="admin-input-control">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">No. WhatsApp PIC (untuk tombol chat langsung)</label>
+<input type="text" id="prop-pic-phone" placeholder="Contoh: 081234567890" class="admin-input-control">
+</div>
+</div>
+</div>
+<div style="background: var(--admin-surface-hover); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+<div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; color: var(--admin-primary); display: flex; align-items: center; gap: 6px;">
+<i class="ph ph-file-text"></i> 2. Judul & Rincian Proposal
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Judul Utama Proposal / Faktur *</label>
+<input type="text" id="prop-title" required class="admin-input-control" placeholder="Contoh: Proposal Pengembangan Website Sekolah">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Subjudul / Tagline Penawaran</label>
+<input type="text" id="prop-subtitle" class="admin-input-control" placeholder="Contoh: Portal Sekolah Terpadu, Informasi Akademik & SPMB Online">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 700; color: var(--admin-primary);">
+🌐 Link Live Demo Website (Website yang Telah Dibuatkan Klien) *
+</label>
+<input type="url" id="prop-demo-url" class="admin-input-control" placeholder="Contoh: https://sdmusada.sch.id atau https://demo.sisitus.com/sekolah/" style="border-color: var(--admin-primary);">
+<small style="display: block; margin-top: 4px; font-size: 0.75rem; color: var(--admin-text-muted);">
+Calon klien dapat langsung menguji coba website ini melalui tombol interaktif di halaman faktur & proposal online.
+</small>
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 700; color: var(--admin-success);">
+✓ Fitur-Fitur yang Sudah Tersedia / Siap Pakai (Tulis 1 baris per fitur) *
+</label>
+<textarea id="prop-features" rows="4" class="admin-input-control" placeholder="Contoh:&#10;Portal Berita & Kegiatan Sekolah (Sudah Aktif)&#10;Modul SPMB / PPDB Online 24 Jam&#10;Desain Responsif 100% Mobile Smartphone&#10;Domain Resmi & Server Cloud NVMe Cepat&#10;Tombol WhatsApp Humas & Staf Tata Usaha&#10;Sertifikat Keamanan SSL 256-Bit"></textarea>
+<small style="display: block; margin-top: 4px; font-size: 0.75rem; color: var(--admin-text-muted);">
+Akan tampil sebagai checklist verifikasi fitur hijau di invoice & proposal klien.
+</small>
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Catatan Khusus / Promo / Penawaran Spesial</label>
+<textarea id="prop-notes" rows="2" class="admin-input-control" placeholder="Contoh: Termasuk gratis domain & cloud hosting 3 tahun + pelatihan operator staf TU 1x"></textarea>
+</div>
+</div>
+<div style="background: var(--admin-surface-hover); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+<div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; color: var(--admin-primary); display: flex; align-items: center; gap: 6px;">
+<i class="ph ph-receipt"></i> 3. Harga Penawaran & Rincian Faktur Invoice
+</div>
+<div class="admin-form-grid-2" style="margin-bottom: 12px;">
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 4px; font-size: 0.82rem; font-weight: 700; color: var(--admin-primary);">Total Nilai Tagihan (Rp) *</label>
+<input type="number" id="prop-total-amount" value="1299000" class="admin-input-control" style="font-size: 1rem; font-weight: 700; border-color: var(--admin-primary);">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 4px; font-size: 0.82rem; font-weight: 700; color: var(--admin-text-main);">Minimal Uang Muka / DP 50% (Rp) *</label>
+<input type="number" id="prop-dp-amount" value="649500" class="admin-input-control" style="font-size: 1rem; font-weight: 700;">
+</div>
+</div>
+<div style="border-top: 1px dashed var(--admin-border); padding-top: 10px;">
+<div style="font-size: 0.8rem; font-weight: 600; color: var(--admin-text-muted); margin-bottom: 8px;">Pilihan Opsi Paket Alternatif (Opsional):</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 4px; font-size: 0.78rem; color: var(--admin-text-muted);">Paket 1 (Starter)</label>
+<input type="text" id="prop-pkg1-name" value="Paket Starter" class="admin-input-control" style="margin-bottom: 4px;">
+<input type="number" id="prop-pkg1-price" value="599000" class="admin-input-control" placeholder="Harga (Rp)">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 4px; font-size: 0.78rem; color: var(--admin-primary); font-weight: 700;">Paket 2 (Rekomendasi)</label>
+<input type="text" id="prop-pkg2-name" value="Paket Grower" class="admin-input-control" style="margin-bottom: 4px; border-color: var(--admin-primary);">
+<input type="number" id="prop-pkg2-price" value="1299000" class="admin-input-control" placeholder="Harga (Rp)">
+</div>
+<div class="admin-form-group">
+<label style="display: block; margin-bottom: 4px; font-size: 0.78rem; color: var(--admin-text-muted);">Paket 3 (Pioneer)</label>
+<input type="text" id="prop-pkg3-name" value="Paket Pioneer" class="admin-input-control" style="margin-bottom: 4px;">
+<input type="number" id="prop-pkg3-price" value="2399000" class="admin-input-control" placeholder="Harga (Rp)">
+</div>
+</div>
+</div>
+</div>
+<div class="admin-form-grid-2" style="margin-bottom: 24px;">
+<div>
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Status Proposal</label>
+<select id="prop-status" class="admin-input-control">
+<option value="BELUM BAYAR">Menunggu Pembayaran (Belum Bayar)</option>
+<option value="DP">DP Terbayar (Uang Muka Diterima)</option>
+<option value="LUNAS">Lunas Penuh (Deal & Selesai)</option>
+<option value="aktif">Aktif / Terkirim</option>
+<option value="draft">Draft (Belum Disebar)</option>
+<option value="expired">Expired / Selesai</option>
+</select>
+</div>
+<div>
+<label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--admin-text-muted);">Masa Berlaku Hingga</label>
+<input type="date" id="prop-valid-until" class="admin-input-control">
+</div>
+</div>
+<div class="admin-actions" style="justify-content: flex-end; gap: 8px;">
+<button type="button" id="btn-close-proposal" class="admin-btn" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-main);">
+Batal
+</button>
+<button type="submit" id="btn-save-proposal" class="admin-btn">
+<i class="ph ph-floppy-disk"></i> Simpan Penawaran & Faktur
+</button>
+</div>
+</form>
+</div>
+</div>

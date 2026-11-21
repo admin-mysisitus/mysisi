@@ -77,6 +77,11 @@ class AdminApp {
         title: 'Paket Website',
         loadModule: () => import('./modules/packages.js')
       },
+      '/proposals': {
+        page: 'proposals',
+        title: 'Proposal Builder',
+        loadModule: () => import('./modules/proposals.js')
+      },
       '/domains': {
         page: 'domains',
         title: 'Harga Domain',

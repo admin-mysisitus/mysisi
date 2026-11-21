@@ -1,0 +1,27 @@
+{
+  "name": "mysisi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cf-worker-livechat-backup.js",
+  "scripts": {
+    "status": "node backend-tools/firebase-sync.js status",
+    "pull": "node backend-tools/firebase-sync.js pull",
+    "sync": "node backend-tools/firebase-sync.js sync",
+    "push": "node backend-tools/firebase-sync.js push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/admin-mysisitus/mysisi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/admin-mysisitus/mysisi/issues"
+  },
+  "homepage": "https://github.com/admin-mysisitus/mysisi#readme",
+  "dependencies": {
+    "firebase": "^13.4.0"
+  }
+}
