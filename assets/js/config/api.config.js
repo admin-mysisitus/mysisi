@@ -1,5 +1,5 @@
 export const GAS_CONFIG = {
-  URL: 'https://script.google.com/macros/s/AKfycbxhlES3h0EyQgTFYL7u62FS2W67EYW_XlW5gWRFidAgK5OAOvdSy_qSSesWc-nr62VT/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbydqCvHyaa1UOzo6-l-A-4sU-LntcZa7_XZ8gxxoMhdnmtu1SLilKT9ivtZQ0jExL9b/exec',
   TIMEOUT: 60000,
   ACTIONS: {
     CHECK_LOGIN_RATE_LIMIT: 'checkloginratelimit',

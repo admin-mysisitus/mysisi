@@ -269,38 +269,38 @@ const tr = document.createElement('tr');
 if (isFailed) tr.className = 'tr--failed';
 tr.innerHTML = `
 <td class="nowrap">
-<p class="table-user-name text-primary">${inv}</p>
+<p class="table-user-name text-primary">${escapeHtml(inv)}</p>
 <p class="table-user-sub">${new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
 </td>
 <td>
 <div class="table-user-info">
-<p class="table-user-name">${name}</p>
-<p class="table-user-sub">${email}</p>
+<p class="table-user-name">${escapeHtml(name)}</p>
+<p class="table-user-sub">${escapeHtml(email)}</p>
 </div>
 </td>
 <td class="text-muted text-sm">
-${item}
+${escapeHtml(item)}
 </td>
 <td class="nowrap font-bold text-sm">
 Rp ${parseInt(total || 0).toLocaleString('id-ID')}
 </td>
 <td class="nowrap">
 <span class="status-pill ${statusClass}">
-${statusText}
+${escapeHtml(statusText)}
 </span>
 </td>
 <td class="text-right nowrap">
 <div class="table-actions">
-<button type="button" class="btn-action btn-action--edit" data-action="open-tx" data-inv="${inv}" title="Buka Faktur Online">
+<button type="button" class="btn-action btn-action--edit" data-action="open-tx" data-inv="${escapeHtml(inv)}" title="Buka Faktur Online">
 <i class="ph ph-receipt"></i>
 </button>
-<button type="button" class="btn-action btn-action--view" data-action="copy-tx" data-inv="${inv}" title="Salin Link Faktur">
+<button type="button" class="btn-action btn-action--view" data-action="copy-tx" data-inv="${escapeHtml(inv)}" title="Salin Link Faktur">
 <i class="ph ph-link"></i>
 </button>
-<button type="button" class="btn-action btn-action--edit" data-action="edit-tx" data-inv="${inv}" title="Edit">
+<button type="button" class="btn-action btn-action--edit" data-action="edit-tx" data-inv="${escapeHtml(inv)}" title="Edit">
 <i class="ph ph-pencil-simple"></i>
 </button>
-<button type="button" class="btn-action btn-action--delete" data-action="delete-tx" data-inv="${inv}" title="Batalkan">
+<button type="button" class="btn-action btn-action--delete" data-action="delete-tx" data-inv="${escapeHtml(inv)}" title="Batalkan">
 <i class="ph ph-prohibit"></i>
 </button>
 </div>
@@ -308,4 +308,8 @@ ${statusText}
 `;
 tbody.appendChild(tr);
 });
+}
+function escapeHtml(str) {
+if (!str) return '';
+return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }

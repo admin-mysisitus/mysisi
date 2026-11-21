@@ -189,17 +189,17 @@ tr.innerHTML = `
 <div class="table-user-cell">
 ${renderUserAvatarHtml(user, 'w100', 'admin-avatar')}
 <div class="table-user-info">
-<p class="table-user-name">${name}</p>
-<p class="table-user-sub">${email}</p>
+<p class="table-user-name">${escapeHtml(name)}</p>
+<p class="table-user-sub">${escapeHtml(email)}</p>
 </div>
 </div>
 </td>
 <td class="nowrap">
-<span class="user-role-badge user-role-badge--${role}">${role}</span>
+<span class="user-role-badge user-role-badge--${escapeHtml(role)}">${escapeHtml(role)}</span>
 </td>
 <td class="nowrap">
 <span class="status-pill ${statusClass}">
-${status}
+${escapeHtml(status)}
 </span>
 </td>
 <td class="nowrap text-muted text-sm">
@@ -207,10 +207,10 @@ ${new Date(joinedDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'sho
 </td>
 <td class="text-right nowrap">
 <div class="table-actions">
-<button type="button" class="btn-action btn-action--edit" data-action="edit-user" data-uid="${uid}" title="Edit">
+<button type="button" class="btn-action btn-action--edit" data-action="edit-user" data-uid="${escapeHtml(uid)}" title="Edit">
 <i class="ph ph-pencil-simple"></i>
 </button>
-<button type="button" class="btn-action btn-action--delete" data-action="delete-user" data-uid="${uid}" title="Suspend">
+<button type="button" class="btn-action btn-action--delete" data-action="delete-user" data-uid="${escapeHtml(uid)}" title="Suspend">
 <i class="ph ph-prohibit"></i>
 </button>
 </div>
@@ -218,4 +218,8 @@ ${new Date(joinedDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'sho
 `;
 tbody.appendChild(tr);
 });
+}
+function escapeHtml(str) {
+if (!str) return '';
+return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
