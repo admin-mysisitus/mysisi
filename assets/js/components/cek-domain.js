@@ -784,7 +784,7 @@
             wishlist: wishlistData
           };
           const handoffBase64 = btoa(JSON.stringify(handoffPayload));
-          CartManager.clearCart();
+          CartManager.clear();
           window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?handoff=${encodeURIComponent(handoffBase64)}`);
           return;
         }

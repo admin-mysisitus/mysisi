@@ -140,6 +140,9 @@ export class CartManager {
     localStorage.removeItem('cart');
     window.dispatchEvent(new CustomEvent('cart:cleared'));
   }
+  static clearCart() {
+    this.clear();
+  }
   static isEmpty() {
     return this.getCart().domains.length === 0;
   }
@@ -315,6 +318,9 @@ export class WishlistManager {
       updatedAt: Date.now()
     });
     window.dispatchEvent(new CustomEvent('wishlist:cleared'));
+  }
+  static clearWishlist() {
+    this.clear();
   }
   static async moveToCart(domain) {
     const wishlist = this.getWishlist();

@@ -612,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
           wishlist: hasWishlist ? wishlistData : null
         };
         const handoffBase64 = btoa(JSON.stringify(handoffPayload));
-        CartManager.clearCart();
+        CartManager.clear();
         const urlObj = new URL(link.href, window.location.origin);
         if (urlObj.hash.startsWith('#!')) {
           const sep = urlObj.hash.includes('?') ? '&' : '?';

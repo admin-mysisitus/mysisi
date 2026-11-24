@@ -60,7 +60,7 @@
             wishlist: hasWishlist ? wishlistData : null
           };
           const handoffBase64 = btoa(JSON.stringify(handoffPayload));
-          CartManager.clearCart();
+          CartManager.clear();
           window.location.replace(EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?handoff=${encodeURIComponent(handoffBase64)}`));
         } else {
           window.location.replace(EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart'));
