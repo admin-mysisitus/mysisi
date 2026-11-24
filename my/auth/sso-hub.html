@@ -58,10 +58,27 @@
           if (type === 'SSO_UPDATE_DATA') {
             if (payload.cart) CartManager.mergeCart(payload.cart);
             if (payload.wishlist) WishlistManager.mergeWishlist(payload.wishlist);
-    
             event.source.postMessage({
               type: 'SSO_UPDATE_SUCCESS'
             }, event.origin);
+          }
+          if (type === 'SISITUS_DELEGATE_WISHLIST_TOGGLE') {
+            const domain = (payload && payload.domain) || event.data.domain;
+            if (domain) {
+              if (WishlistManager.isInWishlist(domain)) {
+                WishlistManager.remove(domain);
+              } else {
+                WishlistManager.add(domain, 'Domain impian', 'medium', { delegated: true });
+              }
+              event.source.postMessage({
+                type: 'SSO_SYNC_RESPONSE',
+                payload: {
+                  user: AuthManager.getCurrentUser(),
+                  cart: CartManager.getCart(),
+                  wishlist: WishlistManager.getWishlist()
+                }
+              }, event.origin);
+            }
           }
         });
     

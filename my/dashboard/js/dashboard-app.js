@@ -27,7 +27,38 @@ class DashboardApp {
     this.sidebar = null;
     this.init();
   }
+  async processHandoff() {
+    let rawPayload = null;
+    const hash = window.location.hash || '';
+    const search = window.location.search || '';
+    if (hash.includes('handoff=')) {
+      const match = hash.match(/handoff=([^&#]+)/);
+      if (match && match[1]) rawPayload = match[1];
+    } else if (search.includes('handoff=')) {
+      const match = search.match(/handoff=([^&#]+)/);
+      if (match && match[1]) rawPayload = match[1];
+    }
+    if (rawPayload) {
+      try {
+        const { CartManager, WishlistManager } = await import('/assets/js/modules/unified-cart.js');
+        const jsonStr = atob(decodeURIComponent(rawPayload));
+        const payload = JSON.parse(jsonStr);
+        if (payload.cart) {
+          CartManager.mergeCart(payload.cart);
+        }
+        if (payload.wishlist) {
+          WishlistManager.mergeWishlist(payload.wishlist);
+        }
+        let cleanHash = hash.replace(/[?&]handoff=[^&#]+/, '').replace(/#handoff=[^&#]+/, '');
+        if (cleanHash === '#!' || cleanHash === '') cleanHash = '#!/dashboard/cart';
+        window.history.replaceState(null, '', window.location.pathname + cleanHash);
+      } catch (err) {
+        void(err);
+      }
+    }
+  }
   async init() {
+    await this.processHandoff();
     this.navbar = new DashboardNavbar();
     this.navbar.render();
     this.sidebar = new DashboardSidebar(this);
@@ -97,41 +128,42 @@ class DashboardApp {
         page: 'domains',
         title: 'Domain Saya',
         requiresAuth: true,
-        loadModule: () => import('./modules/domains.js?v=' + Date.now())
+        loadModule: () => import('./modules/domains.js')
       },
       '/dashboard/pesanan': {
         page: 'orders',
         title: 'Pesanan',
         requiresAuth: true,
-        loadModule: () => import('./modules/orders.js?v=' + Date.now())
+        loadModule: () => import('./modules/orders.js')
       },
       '/dashboard/pengaturan': {
         page: 'settings',
         title: 'Pengaturan Akun',
         requiresAuth: true,
-        loadModule: () => import('./modules/settings.js?v=' + Date.now())
+        loadModule: () => import('./modules/settings.js')
       },
       '/dashboard/cart': {
         page: 'cart',
         title: 'Keranjang Belanja',
         requiresAuth: true,
-        loadModule: () => import('./modules/cart.js?v=' + Date.now())
+        loadModule: () => import('./modules/cart.js')
       },
       '/dashboard/keranjang': {
         page: 'cart',
         title: 'Keranjang Saya',
         requiresAuth: true,
-        loadModule: () => import('./modules/cart.js?v=' + Date.now())
+        loadModule: () => import('./modules/cart.js')
       },
       '/dashboard/keranjang-saya': {
         page: 'cart',
         title: 'Keranjang Saya',
         requiresAuth: true,
-        loadModule: () => import('./modules/cart.js?v=' + Date.now())
+        loadModule: () => import('./modules/cart.js')
       }
     };
   }
-  handleRouteChange() {
+  async handleRouteChange() {
+    await this.processHandoff();
     const hash = window.location.hash;
     const routePart = hash.replace('#!', '').split('?')[0] || '/dashboard/';
     const baseRoute = routePart.startsWith('/dashboard/') ? routePart : `/dashboard/${routePart}`;

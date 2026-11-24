@@ -170,8 +170,23 @@ export async function render(currentUser) {
       clearInterval(cartState.verificationPollInterval);
       cartState.verificationPollInterval = null;
     }
-    if (window.SSO_USER) {
-      window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart');
+    const ssoOrLocalUser = window.SSO_USER || AuthManager.getCurrentUser();
+    if (ssoOrLocalUser) {
+      const currentCart = CartManager.getCart();
+      const currentWishlist = typeof WishlistManager !== 'undefined' ? WishlistManager.getWishlist() : null;
+      const hasCart = currentCart && currentCart.domains && currentCart.domains.length > 0;
+      const hasWishlist = currentWishlist && currentWishlist.domains && currentWishlist.domains.length > 0;
+      if (hasCart || hasWishlist) {
+        const handoffPayload = {
+          cart: hasCart ? currentCart : null,
+          wishlist: hasWishlist ? currentWishlist : null
+        };
+        const handoffBase64 = btoa(JSON.stringify(handoffPayload));
+        CartManager.clearCart();
+        window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?handoff=${encodeURIComponent(handoffBase64)}`);
+      } else {
+        window.location.href = EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart');
+      }
       return;
     }
     if (!cartState.currentUser) {

@@ -40,22 +40,32 @@
   </header>
   <div id="cart-container" class="page-container" style="padding: 0 16px; padding-top: 40px; overflow-x: hidden;"></div>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module" src="/assets/js/components/navigation.js?v=1.0.1"></script>
+  <script type="module" src="/assets/js/components/navigation.js"></script>
   <script type="module">
     import { AuthManager } from '/assets/js/modules/unified-auth.js';
     import { EnvHelper } from '/assets/js/modules/unified-utils.js';
-    import { render } from '/assets/js/modules/cart.js?v=20260823_1550';
-    
+    import { render } from '/assets/js/modules/cart.js';
+    import { CartManager, WishlistManager } from '/assets/js/modules/unified-cart.js';
     document.addEventListener('DOMContentLoaded', () => {
-      // Force load session synchronously just in case
       AuthManager.loadSession();
       const currentUser = AuthManager.getCurrentUser();
-      
       if (currentUser) {
-        // Authenticated users should use the dashboard cart
-        window.location.replace(EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/keranjang'));
+        const cartData = CartManager.getCart();
+        const wishlistData = WishlistManager.getWishlist();
+        const hasCart = cartData && cartData.domains && cartData.domains.length > 0;
+        const hasWishlist = wishlistData && wishlistData.domains && wishlistData.domains.length > 0;
+        if (hasCart || hasWishlist) {
+          const handoffPayload = {
+            cart: hasCart ? cartData : null,
+            wishlist: hasWishlist ? wishlistData : null
+          };
+          const handoffBase64 = btoa(JSON.stringify(handoffPayload));
+          CartManager.clearCart();
+          window.location.replace(EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?handoff=${encodeURIComponent(handoffBase64)}`));
+        } else {
+          window.location.replace(EnvHelper.getDomainUrl('my', '/dashboard/#!/dashboard/cart'));
+        }
       } else {
-        // Call render function with null for guest checkout
         render(null);
       }
     });

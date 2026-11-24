@@ -498,6 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   const iframe = document.createElement('iframe');
+  iframe.id = 'sisitus-sso-iframe';
   iframe.src = EnvHelper.getDomainUrl('my', '/auth/sso-hub.html');
   iframe.style.display = 'none';
   document.body.appendChild(iframe);
@@ -515,6 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let cartChanged = false;
       let wishlistChanged = false;
       const localUser = AuthManager.getCurrentUser();
+      window.SSO_USER = payload.user || null;
       if (payload.user && (!localUser || localUser.uid !== payload.user.uid)) {
         AuthManager.saveSession(payload.user);
         cartChanged = true;
@@ -529,9 +531,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (payload.wishlist) {
         WishlistManager.mergeWishlist(payload.wishlist);
         wishlistChanged = true;
+        if (payload.wishlist.domains) {
+          window.SSO_WISHLIST_DOMAINS = payload.wishlist.domains.map(d => (d.domain || d).toLowerCase());
+          window.dispatchEvent(new CustomEvent('sso_wishlist:updated'));
+        }
       }
       if (cartChanged || wishlistChanged) {
         updateFloatingCart();
+        refreshNavigation();
       }
     }
   });
@@ -583,8 +590,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let href = link.getAttribute('href');
     if (!href) return;
     if (href.includes('/auth/') || href.includes('my.sisitus.com/auth') || href.includes('my.sisitus.com/dashboard')) {
-      if (window.SSO_USER) return;
-      e.preventDefault();
       const cartData = CartManager.getCart();
       let wishlistData = null;
       try {
@@ -595,21 +600,28 @@ document.addEventListener('DOMContentLoaded', () => {
           if (raw) wishlistData = JSON.parse(raw);
         }
       } catch (err) {}
-      if (!cartData && !wishlistData) {
-        window.location.href = link.href;
+      const hasCart = cartData && cartData.domains && cartData.domains.length > 0;
+      const hasWishlist = wishlistData && wishlistData.domains && wishlistData.domains.length > 0;
+      if (!hasCart && !hasWishlist) {
         return;
       }
+      e.preventDefault();
       try {
         const handoffPayload = {
-          cart: cartData,
-          wishlist: wishlistData
+          cart: hasCart ? cartData : null,
+          wishlist: hasWishlist ? wishlistData : null
         };
         const handoffBase64 = btoa(JSON.stringify(handoffPayload));
+        CartManager.clearCart();
         const urlObj = new URL(link.href, window.location.origin);
-        urlObj.hash = `handoff=${handoffBase64}`;
+        if (urlObj.hash.startsWith('#!')) {
+          const sep = urlObj.hash.includes('?') ? '&' : '?';
+          urlObj.hash = `${urlObj.hash}${sep}handoff=${encodeURIComponent(handoffBase64)}`;
+        } else {
+          urlObj.hash = `handoff=${encodeURIComponent(handoffBase64)}`;
+        }
         window.location.href = urlObj.toString();
       } catch (err) {
-        console.log('Error creating handoff hash:', err);
         window.location.href = link.href;
       }
     }

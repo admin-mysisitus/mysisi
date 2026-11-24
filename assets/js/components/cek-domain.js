@@ -767,10 +767,6 @@
         if (configRes.success && configRes.data && configRes.data.packages && configRes.data.packages.starter) {
           starterPrice = configRes.data.packages.starter.price;
         }
-        if (window.SSO_USER) {
-          window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?addDomain=${encodeURIComponent(domain)}&tld=${encodeURIComponent(tld)}`);
-          return;
-        }
         CartManager.add(domain, tld, {
           package: 'starter',
           duration: 1,
@@ -780,6 +776,18 @@
           renewalPrice: starterPrice,
           basePrice: starterPrice
         });
+        if (window.SSO_USER) {
+          const cartData = CartManager.getCart();
+          const wishlistData = typeof WishlistManager !== 'undefined' ? WishlistManager.getWishlist() : null;
+          const handoffPayload = {
+            cart: cartData,
+            wishlist: wishlistData
+          };
+          const handoffBase64 = btoa(JSON.stringify(handoffPayload));
+          CartManager.clearCart();
+          window.location.href = EnvHelper.getDomainUrl('my', `/dashboard/#!/dashboard/cart?handoff=${encodeURIComponent(handoffBase64)}`);
+          return;
+        }
         window.location.href = '/cart/';
       } catch (error) {
         showError('❌ Gagal', error.message);
