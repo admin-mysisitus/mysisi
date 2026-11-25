@@ -2946,6 +2946,10 @@ textarea.form-control {
   }
 }
 
+.clickable-row,
+.clickable-card {
+  cursor: pointer;
+}
 .invoice-mobile-card {
   background: var(--dashboard-surface);
   border: 1px solid var(--dashboard-border-soft);

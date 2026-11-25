@@ -21,7 +21,6 @@ export async function render(currentUser) {
     } else {
       container.innerHTML = `
         <div class="invoices-container">
-          <!-- Desktop Table -->
           <div class="invoices-desktop-view">
             <div class="table-shell">
               <table class="table table--invoices">
@@ -36,7 +35,7 @@ export async function render(currentUser) {
                 </thead>
                 <tbody>
                   ${invoices.map(inv => `
-                    <tr class="clickable-row" onclick="window.location.href='${EnvHelper.getDomainUrl('my', '/invoice/?orderId=' + inv.orderId)}'" style="cursor: pointer;">
+                    <tr class="clickable-row" data-invoice-url="${EnvHelper.getDomainUrl('my', '/invoice/?id=' + encodeURIComponent(inv.orderId))}">
                       <td>
                         <span class="inv-date-primary">${formatDateTime(inv.createdAt).replace(' pukul ', ', ')}</span>
                       </td>
@@ -50,11 +49,9 @@ export async function render(currentUser) {
               </table>
             </div>
           </div>
-
-          <!-- Mobile Card List -->
           <div class="invoices-mobile-view">
             ${invoices.map(inv => `
-              <div class="invoice-mobile-card clickable-card" onclick="window.location.href='${EnvHelper.getDomainUrl('my', '/invoice/?orderId=' + inv.orderId)}'" style="cursor: pointer;">
+              <div class="invoice-mobile-card clickable-card" data-invoice-url="${EnvHelper.getDomainUrl('my', '/invoice/?id=' + encodeURIComponent(inv.orderId))}">
                 <div class="inv-card-header">
                   <div class="inv-card-id">${inv.orderId}</div>
                   <div class="inv-card-status badge-success">Lunas</div>
@@ -78,6 +75,11 @@ export async function render(currentUser) {
           </div>
         </div>
       `;
+      container.querySelectorAll('[data-invoice-url]').forEach(el => {
+        el.addEventListener('click', () => {
+          window.location.href = el.dataset.invoiceUrl;
+        });
+      });
     }
   } catch (error) {
     console.log('Error rendering invoices:', error);
