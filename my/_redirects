@@ -5,7 +5,7 @@
 /wishlist  /dashboard/#!/dashboard/wishlist  302
 /wishlist/  /dashboard/#!/dashboard/wishlist  302
 /wishlist/*  /dashboard/#!/dashboard/wishlist  302
-/index.html  https://sisitus.com/:splat  302
+/index.html  https://sisitus.com/  302
 /promo  https://sisitus.com/promo/  302
 /promo/  https://sisitus.com/promo/  302
 /promo/*  https://sisitus.com/promo/:splat  302
