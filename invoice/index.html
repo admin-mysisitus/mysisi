@@ -1,146 +1,174 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title">Invoice - sisitus.com</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="/assets/css/pages/invoice.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title id="page-title">Invoice - sisitus.com</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/assets/css/pages/invoice.css">
 </head>
 <body>
-<div class="page-container">
-<div class="invoice-wrapper" id="invoiceContainer">
-<div class="invoice-page">
-<div class="inv-watermark-stamp" id="watermarkStamp">PAID</div>
-<div class="inv-header">
-<div class="inv-logo-wrap">
-<img src="/assets/img/logo/logo-with-text-light.svg" alt="sisitus.com" class="inv-logo-img">
-<div class="inv-logo-subtitle">PT. SINTARA DIGITAL NUSANTARA</div>
-</div>
-<div class="inv-title-section">
-<h1 class="inv-title">INVOICE</h1>
-<div class="inv-meta"><span>Date</span><strong id="inv-header-date">22 September 2026</strong></div>
-<div class="inv-meta"><span>Due</span><strong id="inv-header-due">23 September 2026</strong></div>
-<div class="inv-meta"><span>No.</span><strong id="inv-header-number">INV-2026-11-21-INV-1</strong></div>
-</div>
-</div>
-<div class="inv-details-grid">
-<div class="inv-grid-col">
-<div class="inv-label">FROM</div>
-<div class="inv-address">
-<strong>sisitus.com</strong><br>
-Jl. Manyar II, Punggul, Gedangan<br>
-Sidoarjo, Jawa Timur 61254<br>
-Indonesia<br><br>
-<span class="muted-text">NPWP: 950355107564000</span>
-</div>
-</div>
-<div class="inv-grid-col">
-<div class="inv-label">BILLED TO</div>
-<div class="inv-address">
-<strong id="inv-billed-name">PT Sintara Digital Nusantara</strong><br>
-<span class="muted-text" id="inv-billed-email">sisitus.com@gmail.com</span><br>
-<span class="muted-text" id="inv-billed-phone"></span>
-</div>
-</div>
-<div class="inv-grid-col">
-<div class="inv-label">PAYMENT STATUS</div>
-<div class="badge-container">
-<span class="inv-badge-paid" id="inv-status-badge">PAID / LUNAS</span>
-</div>
-<div class="inv-label">METHOD & REFERENCE</div>
-<div class="inv-address">
-<strong id="inv-method-text">Gopay</strong><br>
-<span class="muted-text" id="inv-ref-text">Ref: f8e488ad-7277-4605-9eee-eeb877d23fdf</span><br>
-<span class="muted-text" id="inv-order-text">Order: INV-1790067823837-0JN3VG</span>
-</div>
-</div>
-</div>
-<table class="inv-table">
-<thead>
-<tr>
-<th class="col-desc">DESCRIPTION</th>
-<th class="col-qty">QTY</th>
-<th class="col-unit-price">UNIT PRICE</th>
-<th class="col-total">TOTAL</th>
-</tr>
-</thead>
-<tbody id="invoiceTableBody"></tbody>
-</table>
-<div class="inv-summary-container">
-<div class="inv-qr-section">
-<img id="inv-qr-image" src="" alt="QR Code">
-<div class="inv-qr-text">Scan untuk verifikasi<br>atau melihat invoice online</div>
-</div>
-<div class="inv-summary">
-<div class="inv-summary-row">
-<span class="inv-summary-label">Subtotal</span>
-<span class="inv-summary-value" id="inv-subtotal">Rp 164.625</span>
-</div>
-<div class="inv-summary-row" id="row-ppn">
-<span class="inv-summary-label">PPN (11%)</span>
-<span class="inv-summary-value" id="inv-ppn">Rp 18.109</span>
-</div>
-<div class="inv-summary-row row-dp-summary" id="row-dp-summary">
-<span class="inv-summary-label">Uang Muka / Minimal DP (50%)</span>
-<span class="inv-summary-value" id="inv-dp-val">Rp 0</span>
-</div>
-<div class="inv-summary-total" id="inv-total-due-wrap">
-<span>Total Due</span>
-<span id="inv-total-due">0</span>
-</div>
-</div>
-</div>
-<div class="inv-signature">
-<div class="inv-sig-text">Billing Admin,</div>
-<strong class="inv-sig-name">sisitus.com</strong>
-</div>
-</div>
-<div class="invoice-page print-page-break">
-<div class="inv-terms-section">
-<div class="inv-terms-block">
-<div class="inv-terms-title"><i class="fas fa-info-circle"></i> IMPORTANT NOTES</div>
-<div class="inv-terms-content">
-<ul>
-<li>Invoice ini merupakan tagihan resmi <strong>sisitus.com</strong>. Pembayaran dianggap sah setelah dana diterima dan terverifikasi.</li>
-<li>Jika terdapat kesalahan data (nama, layanan, nominal, dll), klien WAJIB mengajukan perubahan invoice melalui:<br><a href="https://sisitus.com/bantuan/" class="terms-link">https://sisitus.com/bantuan/</a></li>
-<li>Dalam proses perubahan invoice, mohon <strong>TIDAK melakukan pembayaran</strong> sebelum menerima invoice terbaru. Segala kesalahan pembayaran menjadi tanggung jawab klien.</li>
-<li>Layanan akan diproses secara otomatis segera setelah pembayaran dikonfirmasi oleh sistem atau tim sisitus.</li>
-</ul>
-</div>
-</div>
-<div class="inv-terms-block">
-<div class="inv-terms-title"><i class="fas fa-file-contract"></i> TERMS & CONDITIONS</div>
-<div class="inv-terms-content">
-<ol>
-<li>Pembayaran bersifat <em>non-refundable</em>, kecuali terjadi kesalahan teknis dari pihak sisitus.</li>
-<li>Pengerjaan layanan/produk dimulai setelah status invoice berubah menjadi LUNAS.</li>
-<li>Revisi pengerjaan akan mengikuti ketentuan paket atau kontrak awal yang disepakati.</li>
-<li>Keterlambatan penyediaan data dari pihak klien (konten, feedback, approval) dapat memengaruhi keseluruhan <em>timeline</em> proyek.</li>
-<li>SISITUS berkomitmen penuh membantu penyelesaian kendala teknis (termasuk layanan pihak ketiga) sesuai dengan batas kendali dan akses yang kami miliki.</li>
-<li>Dengan melakukan pembayaran, klien dianggap telah membaca, memahami, dan menyetujui seluruh ketentuan layanan yang berlaku.</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="invoice-actions no-print">
-<button type="button" id="btn-print-pdf" class="inv-btn inv-btn-dark"><i class="fas fa-print"></i> Download / Print PDF</button>
-<button type="button" id="btn-pay-online" class="inv-btn inv-btn-primary"><i class="fas fa-credit-card"></i> Bayar Online (Midtrans)</button>
-<a id="btn-open-demo-site" href="#" target="_blank" rel="noopener noreferrer" class="inv-btn inv-btn-emerald"><i class="fas fa-globe"></i> Buka Demo Website</a>
-<button type="button" id="btn-share-link" class="inv-btn inv-btn-outline"><i class="fas fa-share-alt"></i> Salin Link</button>
-<button type="button" id="btn-wa-confirm" class="inv-btn inv-btn-outline"><i class="fab fa-whatsapp wa-icon"></i> Chat WhatsApp</button>
-</div>
-</div>
-</div>
-<script type="module" src="/assets/js/modules/public-invoice.js"></script>
+    <div class="page-container">
+        <div class="invoice-scroll-wrapper">
+            <div class="invoice-wrapper" id="invoiceContainer">
+            <div class="invoice-page">
+                <div class="inv-watermark-stamp" id="watermarkStamp">PAID</div>
+                <div class="inv-header">
+                    <div class="inv-logo-wrap">
+                        <img src="/assets/img/logo/logo-with-text-light.svg" alt="sisitus.com" class="inv-logo-img">
+                        <div class="inv-logo-subtitle">PT. SINTARA DIGITAL NUSANTARA</div>
+                    </div>
+                    <div class="inv-title-section">
+                        <h1 class="inv-title">INVOICE</h1>
+                        <div class="inv-meta"><span>Date</span><strong id="inv-header-date">22 September 2026</strong>
+                        </div>
+                        <div class="inv-meta"><span>Due</span><strong id="inv-header-due">23 September 2026</strong>
+                        </div>
+                        <div class="inv-meta"><span>No.</span><strong
+                                id="inv-header-number">INV-2026-11-21-INV-1</strong></div>
+                    </div>
+                </div>
+                <div class="inv-details-grid">
+                    <div class="inv-grid-col">
+                        <div class="inv-label">FROM</div>
+                        <div class="inv-address">
+                            <strong>sisitus.com</strong><br>
+                            Jl. Manyar II, Punggul, Gedangan<br>
+                            Sidoarjo, Jawa Timur 61254<br>
+                            Indonesia<br><br>
+                            <span class="muted-text">NPWP: 950355107564000</span>
+                        </div>
+                    </div>
+                    <div class="inv-grid-col">
+                        <div class="inv-label">BILLED TO</div>
+                        <div class="inv-address">
+                            <strong id="inv-billed-name">PT Sintara Digital Nusantara</strong><br>
+                            <span class="muted-text" id="inv-billed-email">sisitus.com@gmail.com</span><br>
+                            <span class="muted-text" id="inv-billed-phone"></span>
+                        </div>
+                    </div>
+                    <div class="inv-grid-col">
+                        <div class="inv-label">PAYMENT STATUS</div>
+                        <div class="badge-container">
+                            <span class="inv-badge-paid" id="inv-status-badge">PAID / LUNAS</span>
+                        </div>
+                        <div class="inv-label">METHOD & REFERENCE</div>
+                        <div class="inv-address">
+                            <strong id="inv-method-text">Gopay</strong><br>
+                            <span class="muted-text" id="inv-ref-text">Ref:
+                                f8e488ad-7277-4605-9eee-eeb877d23fdf</span><br>
+                            <span class="muted-text" id="inv-order-text">Order: INV-1790067823837-0JN3VG</span>
+                        </div>
+                    </div>
+                </div>
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th class="col-desc">DESCRIPTION</th>
+                            <th class="col-qty">QTY</th>
+                            <th class="col-unit-price">UNIT PRICE</th>
+                            <th class="col-total">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceTableBody"></tbody>
+                </table>
+                <div class="inv-footer-group">
+                    <div class="inv-summary-container">
+                        <div class="inv-qr-section">
+                            <img id="inv-qr-image" src="" alt="QR Code">
+                            <div class="inv-qr-text">Scan untuk verifikasi<br>atau melihat invoice online</div>
+                        </div>
+                        <div class="inv-summary">
+                            <div class="inv-summary-row">
+                                <span class="inv-summary-label">Subtotal</span>
+                                <span class="inv-summary-value" id="inv-subtotal">Rp 164.625</span>
+                            </div>
+                            <div class="inv-summary-row" id="row-ppn">
+                                <span class="inv-summary-label">PPN (11%)</span>
+                                <span class="inv-summary-value" id="inv-ppn">Rp 18.109</span>
+                            </div>
+                            <div class="inv-summary-row row-dp-summary" id="row-dp-summary">
+                                <span class="inv-summary-label">Uang Muka / Minimal DP (50%)</span>
+                                <span class="inv-summary-value" id="inv-dp-val">Rp 0</span>
+                            </div>
+                            <div class="inv-summary-row" id="row-grand-total">
+                                <span class="inv-summary-label">Total Tagihan</span>
+                                <span class="inv-summary-value" id="inv-grand-total">Rp 0</span>
+                            </div>
+                            <div class="inv-summary-total" id="inv-total-due-wrap">
+                                <span id="inv-total-due-label">Total Due</span>
+                                <span id="inv-total-due">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inv-signature">
+                        <div class="inv-sig-text">Billing Admin,</div>
+                        <strong class="inv-sig-name">sisitus.com</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice-page print-page-break">
+                <div class="inv-terms-section">
+                    <div class="inv-terms-block">
+                        <div class="inv-terms-title"><i class="fas fa-info-circle"></i> IMPORTANT NOTES</div>
+                        <div class="inv-terms-content">
+                            <ul>
+                                <li>Invoice ini merupakan tagihan resmi <strong>sisitus.com</strong>. Pembayaran
+                                    dianggap sah setelah dana diterima dan terverifikasi.</li>
+                                <li>Jika terdapat kesalahan data (nama, layanan, nominal, dll), klien WAJIB mengajukan
+                                    perubahan invoice melalui:<br><a href="https://sisitus.com/bantuan/"
+                                        class="terms-link">https://sisitus.com/bantuan/</a></li>
+                                <li>Dalam proses perubahan invoice, mohon <strong>TIDAK melakukan pembayaran</strong>
+                                    sebelum menerima invoice terbaru. Segala kesalahan pembayaran menjadi tanggung jawab
+                                    klien.</li>
+                                <li>Layanan akan diproses secara otomatis segera setelah pembayaran dikonfirmasi oleh
+                                    sistem atau tim sisitus.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="inv-terms-block">
+                        <div class="inv-terms-title"><i class="fas fa-file-contract"></i> TERMS & CONDITIONS</div>
+                        <div class="inv-terms-content">
+                            <ol>
+                                <li>Pembayaran bersifat <em>non-refundable</em>, kecuali terjadi kesalahan teknis dari
+                                    pihak sisitus.</li>
+                                <li>Pengerjaan layanan/produk dimulai setelah status invoice berubah menjadi LUNAS.</li>
+                                <li>Revisi pengerjaan akan mengikuti ketentuan paket atau kontrak awal yang disepakati.
+                                </li>
+                                <li>Keterlambatan penyediaan data dari pihak klien (konten, feedback, approval) dapat
+                                    memengaruhi keseluruhan <em>timeline</em> proyek.</li>
+                                <li>SISITUS berkomitmen penuh membantu penyelesaian kendala teknis (termasuk layanan
+                                    pihak ketiga) sesuai dengan batas kendali dan akses yang kami miliki.</li>
+                                <li>Dengan melakukan pembayaran, klien dianggap telah membaca, memahami, dan menyetujui
+                                    seluruh ketentuan layanan yang berlaku.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="invoice-actions no-print">
+            <button type="button" id="btn-print-pdf" class="inv-btn inv-btn-dark"><i class="fas fa-print"></i>
+                Download / Print PDF</button>
+            <button type="button" id="btn-pay-online" class="inv-btn inv-btn-primary"><i
+                    class="fas fa-credit-card"></i> Bayar Online (Midtrans)</button>
+            <a id="btn-open-demo-site" href="#" target="_blank" rel="noopener noreferrer"
+                class="inv-btn inv-btn-emerald"><i class="fas fa-globe"></i> Buka Demo Website</a>
+            <button type="button" id="btn-share-link" class="inv-btn inv-btn-outline"><i
+                    class="fas fa-share-alt"></i> Salin Link</button>
+            <button type="button" id="btn-wa-confirm" class="inv-btn inv-btn-outline"><i
+                    class="fab fa-whatsapp wa-icon"></i> Chat WhatsApp</button>
+        </div>
+    </div>
+    <script type="module" src="/assets/js/modules/public-invoice.js"></script>
 </body>
 </html>
