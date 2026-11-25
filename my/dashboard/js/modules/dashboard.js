@@ -135,7 +135,6 @@ export async function render(currentUser) {
     `;
   }
 }
-
 function updateStatisticsDisplay(stats) {
   const widgets = {
     'stat-total-orders': stats.totalOrders || 0,
@@ -152,7 +151,6 @@ function updateStatisticsDisplay(stats) {
     }
   });
 }
-
 function setupEventListeners() {
   const btnCheckout = document.getElementById('btn-quick-checkout');
   if (btnCheckout) {
@@ -180,12 +178,38 @@ function setupEventListeners() {
   }
   const domainForm = document.getElementById('dashboard-domain-form');
   if (domainForm) {
-    domainForm.addEventListener('submit', (event) => {
+    domainForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const query = document.getElementById('dashboard-domain-input').value.trim();
       if (query) {
-        window.location.href = '../index.html?section=cek-domain&q=' + encodeURIComponent(query);
+        try {
+          const {
+            CartManager,
+            WishlistManager
+          } = await import('/assets/js/modules/unified-cart.js');
+          const {
+            AuthManager
+          } = await import('/assets/js/modules/unified-auth.js');
+          const {
+            Base64Utils
+          } = await import('/assets/js/modules/unified-utils.js');
+          const handoffData = {
+            cart: CartManager.getCart(),
+            wishlist: WishlistManager.getWishlist(),
+            user: AuthManager.getCurrentUser(),
+            intent: 'reverse-sync',
+            timestamp: Date.now()
+          };
+          const encoded = Base64Utils.encode(JSON.stringify(handoffData));
+          window.location.href = EnvHelper.getDomainUrl('public', '/?section=cek-domain&q=' + encodeURIComponent(query)) + '#handoff=' + encoded;
+        } catch (err) {
+          window.location.href = EnvHelper.getDomainUrl('public', '/?section=cek-domain&q=' + encodeURIComponent(query));
+        }
       }
     });
+  }
+  const promoCta = document.getElementById('dashboard-promo-link');
+  if (promoCta) {
+    promoCta.href = EnvHelper.getDomainUrl('public', '/promo/');
   }
 }
