@@ -1628,6 +1628,8 @@ textarea.form-control {
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .search-pill .ext {
@@ -2638,11 +2640,16 @@ textarea.form-control {
   transition: all 0.2s ease;
   width: 100%;
   box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
 }
-
 .search-pill:hover {
   border-color: var(--primary-blue);
   background: var(--dashboard-surface-soft);
+  transform: translateY(-2px);
+}
+.search-pill:active {
+  transform: scale(0.98);
 }
 
 .search-pill .ext {

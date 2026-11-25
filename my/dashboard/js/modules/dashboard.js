@@ -4,6 +4,9 @@ import {
   formatNumber,
   EnvHelper
 } from '/assets/js/modules/unified-utils.js';
+import {
+  parseDomain
+} from '/assets/js/modules/domain-utils.js';
 export async function render(currentUser) {
   if (currentUser && currentUser.role === 'admin') {
     window.location.replace(EnvHelper.getDomainUrl('backstage', '/'));
@@ -83,7 +86,7 @@ export async function render(currentUser) {
           pricingContainer.innerHTML = pricingData.map(domain => {
             const hasDiscount = domain.oldPrice && domain.oldPrice > domain.registration;
             return `
-              <div class="search-pill">
+              <div class="search-pill" role="button" tabindex="0" data-ext="${domain.ext}">
                 <span class="ext" style="color: ${domain.color || '#ea4335'};">${domain.ext}</span>
                 <div class="pricing-info">
                   ${hasDiscount ? `<span class="original-price">${formatNumber(domain.oldPrice)}</span>` : ''}
@@ -92,6 +95,27 @@ export async function render(currentUser) {
               </div>
             `;
           }).join('');
+          const domainInput = document.getElementById('dashboard-domain-input');
+          pricingContainer.querySelectorAll('.search-pill').forEach(pill => {
+            const handlePillClick = () => {
+              if (!domainInput) return;
+              const ext = pill.dataset.ext;
+              const currentInput = domainInput.value;
+              const parsed = parseDomain(currentInput, pricingData);
+              const base = parsed.base || '';
+              domainInput.value = base + ext;
+              domainInput.focus();
+              const cursorPosition = base.length;
+              setTimeout(() => {
+                domainInput.setSelectionRange(cursorPosition, cursorPosition);
+                domainInput.dispatchEvent(new Event('input'));
+              }, 10);
+            };
+            pill.addEventListener('click', handlePillClick);
+            pill.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') handlePillClick();
+            });
+          });
         }
       }
     } catch (pricingError) {
