@@ -7,7 +7,6 @@ openDnsManagement
 } from '/assets/js/modules/dns-ui.js';
 let registeredDomains = [];
 export async function render() {
-console.error('Admin DNS Module Loaded');
 setupEventListeners();
 await loadDNS();
 }
@@ -17,19 +16,39 @@ if (tbody) {
 tbody.addEventListener('click', (e) => {
 const btnCf = e.target.closest('[data-action="setup-cf"]');
 if (btnCf) {
-window.setupCloudflare(btnCf.dataset.domain);
+const domain = btnCf.dataset.domain;
+if (domain && typeof window.setupCloudflare === 'function') {
+window.setupCloudflare(domain);
+}
 return;
 }
 const btnDns = e.target.closest('[data-action="manage-dns"]');
 if (btnDns) {
-window.manageDns(btnDns.dataset.domain);
+const domain = btnDns.dataset.domain;
+if (domain) {
+if (typeof window.manageDns === 'function') {
+window.manageDns(domain);
+} else {
+openDnsManagement(domain, window.setupCloudflare);
+}
+}
 return;
 }
 });
 }
+const searchInput = document.getElementById('search-dns');
+if (searchInput && tbody) {
+searchInput.addEventListener('input', (e) => {
+const q = e.target.value.toLowerCase().trim();
+if (!registeredDomains) return;
+const filtered = registeredDomains.filter(d =>
+(d.domain && d.domain.toLowerCase().includes(q)) ||
+(d.user && d.user.toLowerCase().includes(q))
+);
+renderDNS(filtered, tbody);
+});
+}
 const btnAdd = document.getElementById('btn-add-dns');
-const btnClose = document.getElementById('btn-close-dns');
-const modal = document.getElementById('dns-modal');
 if (btnAdd) {
 btnAdd.innerHTML = '<i class="ph ph-arrows-clockwise"></i> Refresh Data';
 btnAdd.addEventListener('click', async () => {
@@ -70,9 +89,10 @@ throw new Error(res.message);
 Swal.fire('Gagal', err.message, 'error');
 }
 };
-window.manageDNS = async (domainName) => {
+window.manageDns = async (domainName) => {
 openDnsManagement(domainName, window.setupCloudflare);
 };
+window.manageDNS = window.manageDns;
 }
 async function loadDNS() {
 const tbody = document.getElementById('dns-table-body');

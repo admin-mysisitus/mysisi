@@ -46,7 +46,7 @@ picName: 'Ibu Manager Marketing & Operasional',
 picPhone: '0882010067695',
 title: 'Proposal & Penawaran Pembuatan Website Profil Perusahaan',
 subtitle: 'Digital Corporate Identity, Portofolio Layanan & Kredibilitas Bisnis Korporat',
-demoUrl: 'https://bintangsinergimandiri.co.id',
+demoUrl: '/demo/perusahaan/',
 demoScreenshot: '/assets/img/portfolio/bintangsinergi.webp',
 features: [
 'Profil Korporat, Visi-Misi & Struktur Manajemen (Sudah Aktif)',
@@ -140,6 +140,12 @@ adminNotes: 'Bebas biaya komisi penjualan selamanya. Seluruh transaksi langsung 
 signerName: 'Muhammad Lukman Hakim, S.H.',
 signerPosition: 'Manajer Operasional SISITUS'
 }
+},
+generateProposalId() {
+const d = new Date();
+const yymm = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}`;
+const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+return `PROP-${yymm}-${rand}`;
 },
 generateId() {
 const d = new Date();
@@ -399,6 +405,224 @@ success: false,
 message: 'Faktur / Proposal dengan ID tersebut tidak ditemukan'
 };
 },
+async saveProposal(proposalData) {
+try {
+const id = proposalData.id || this.generateProposalId();
+proposalData.id = id;
+proposalData.updatedAt = new Date().toISOString();
+if (!proposalData.createdAt) {
+proposalData.createdAt = proposalData.updatedAt;
+}
+if (!proposalData.status) {
+proposalData.status = 'aktif';
+}
+try {
+const cached = localStorage.getItem('sisitus_proposals');
+let list = cached ? JSON.parse(cached) : [];
+const idx = list.findIndex(p => p.id === id);
+if (idx >= 0) {
+list[idx] = proposalData;
+} else {
+list.unshift(proposalData);
+}
+localStorage.setItem('sisitus_proposals', JSON.stringify(list));
+} catch (locErr) {}
+try {
+const { db } = await getFirebase();
+if (db) {
+await db.ref(`proposals/${id}`).set(proposalData);
+}
+} catch (fbErr) {}
+return {
+success: true,
+message: 'Proposal berhasil disimpan',
+data: proposalData
+};
+} catch (e) {
+return {
+success: false,
+message: 'Gagal menyimpan proposal: ' + e.message
+};
+}
+},
+async getProposal(id) {
+if (!id) return { success: false, message: 'ID proposal tidak ditemukan' };
+if (id === 'PROP-SEKOLAH-DEMO') {
+return { success: true, data: { ...this.PRESETS.sekolah, id } };
+}
+if (id === 'PROP-CORP-DEMO') {
+return { success: true, data: { ...this.PRESETS.perusahaan, id } };
+}
+if (id === 'PROP-PERSONAL-DEMO') {
+return { success: true, data: { ...this.PRESETS.personal, id } };
+}
+try {
+const cached = localStorage.getItem('sisitus_proposals');
+if (cached) {
+const list = JSON.parse(cached);
+const item = list.find(p => p.id === id);
+if (item) return { success: true, data: item };
+}
+} catch (e) {}
+try {
+const { db } = await getFirebase();
+if (db) {
+const snap = await db.ref(`proposals/${id}`).once('value');
+if (snap.exists()) {
+return { success: true, data: { ...snap.val(), id } };
+}
+}
+} catch (fbErr) {}
+try {
+const restProp = await fetch(`https://sisitus-project-default-rtdb.firebaseio.com/proposals/${encodeURIComponent(id)}.json`);
+if (restProp.ok) {
+const d = await restProp.json();
+if (d && typeof d === 'object') return { success: true, data: { ...d, id } };
+}
+} catch (restErr) {}
+return { success: false, message: 'Proposal tidak ditemukan' };
+},
+async submitProposalSPK(proposalId, spkData) {
+try {
+const propRes = await this.getProposal(proposalId);
+let proposal = propRes.success ? propRes.data : null;
+if (!proposal) {
+proposal = {
+id: proposalId,
+clientName: spkData.clientName || 'Klien Terhormat',
+title: 'Pengembangan Website',
+category: 'perusahaan',
+demoUrl: '/demo/perusahaan/'
+};
+}
+const selectedPrice = Number(spkData.selectedPkgPrice) || 1599000;
+const dpAmount = Math.round(selectedPrice * 0.5);
+const invId = proposal.invoiceId || this.generateId();
+const invoiceNumber = this.generateInvoiceNumber(invId);
+const invData = {
+id: invId,
+proposalId: proposalId,
+invoiceNumber: invoiceNumber,
+clientName: proposal.clientName,
+picName: spkData.picName || proposal.picName || '',
+phone: spkData.phone || proposal.picPhone || '',
+email: spkData.email || proposal.clientEmail || '',
+userId: spkData.userId || proposal.userId || '',
+title: `Pengembangan Website ${proposal.category === 'perusahaan' ? 'Perusahaan' : (proposal.category === 'sekolah' ? 'Sekolah' : 'Profil')} - ${spkData.selectedPkgName}`,
+subtitle: `Nomor Ref Penawaran: ${proposalId} | Paket: ${spkData.selectedPkgName}`,
+category: proposal.category || 'perusahaan',
+demoUrl: proposal.demoUrl || '/demo/perusahaan/',
+totalAmount: selectedPrice,
+subtotal: Math.round(selectedPrice / 1.11),
+ppn: selectedPrice - Math.round(selectedPrice / 1.11),
+dpAmount: dpAmount,
+paidAmount: 0,
+remainingAmount: selectedPrice,
+status: 'UNPAID',
+paymentMethod: 'Midtrans / Transfer Bank',
+createdAt: new Date().toISOString(),
+validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+items: [
+{
+name: `Paket ${spkData.selectedPkgName}`,
+desc: `Paket Pengerjaan Website Sesuai Kesepakatan SPK (Ref: ${proposalId})<br>Masa Aktif: 1 Tahun Penuh`,
+qty: 1,
+price: selectedPrice,
+subtotal: selectedPrice
+},
+{
+name: 'Alokasi Domain & Server Cloud NVMe Performa Tinggi (1 Tahun)',
+desc: 'Server Cloud NVMe, Domain Resmi & Setup DNS Terintegrasi<br>Masa Aktif: 1 Tahun Penuh',
+qty: 1,
+price: 0,
+subtotal: 0
+},
+{
+name: 'Sertifikat Keamanan SSL 256-Bit & Maintenance Pemeliharaan',
+desc: 'Enkripsi Data SSL 256-Bit, Proteksi DDoS & Garansi Pemeliharaan<br>Masa Aktif: 1 Tahun Penuh',
+qty: 1,
+price: 0,
+subtotal: 0
+}
+]
+};
+await this.saveInvoice(invData);
+const updatedProposal = {
+...proposal,
+status: 'deal',
+invoiceId: invId,
+selectedPackage: spkData.selectedPkgName,
+selectedPrice: selectedPrice,
+dealAt: new Date().toISOString(),
+spk: {
+picName: spkData.picName || '',
+role: spkData.role || '',
+phone: spkData.phone || '',
+email: spkData.email || '',
+selectedPkgName: spkData.selectedPkgName || '',
+selectedPkgPrice: selectedPrice,
+notes: spkData.notes || '',
+submittedAt: new Date().toISOString()
+}
+};
+await this.saveProposal(updatedProposal);
+return {
+success: true,
+message: 'Surat Perjanjian Kerja (SPK) berhasil disetujui.',
+invoiceId: invId,
+proposal: updatedProposal,
+invoice: invData
+};
+} catch (e) {
+return {
+success: false,
+message: 'Gagal memproses SPK: ' + e.message
+};
+}
+},
+async getUserInvoices(userId, email) {
+let list = [];
+try {
+const cached = localStorage.getItem('sisitus_invoices');
+if (cached) {
+list = JSON.parse(cached);
+}
+} catch (e) {}
+try {
+const { db } = await getFirebase();
+if (db) {
+if (userId) {
+const snap = await db.ref('invoices').orderByChild('userId').equalTo(userId).once('value');
+if (snap.exists()) {
+const val = snap.val();
+Object.keys(val).forEach(k => {
+const item = { ...val[k], id: k };
+const idx = list.findIndex(l => l.id === k);
+if (idx >= 0) list[idx] = item;
+else list.push(item);
+});
+}
+}
+if (email) {
+const snap2 = await db.ref('invoices').orderByChild('email').equalTo(email).once('value');
+if (snap2.exists()) {
+const val2 = snap2.val();
+Object.keys(val2).forEach(k => {
+const item = { ...val2[k], id: k };
+const idx = list.findIndex(l => l.id === k);
+if (idx >= 0) list[idx] = item;
+else list.push(item);
+});
+}
+}
+}
+} catch (e) {}
+return list.filter(inv => {
+const matchUser = userId && inv.userId === userId;
+const matchEmail = email && inv.email && inv.email.toLowerCase() === email.toLowerCase();
+return matchUser || matchEmail;
+});
+},
 async saveInvoice(invoiceData) {
 try {
 const id = invoiceData.id || this.generateId();
@@ -499,10 +723,22 @@ success: true,
 message: 'Faktur / Proposal berhasil dihapus'
 };
 },
-async payWithMidtrans(invoiceData, type = 'FULL') {
+async payWithMidtrans(invoiceData, type = 'DP') {
+const isPelunasan = type === 'PELUNASAN';
 const isDP = type === 'DP';
-const amount = isDP ? (invoiceData.dpAmount || Math.round(invoiceData.totalAmount * 0.5)) : invoiceData.totalAmount;
-const orderId = `${invoiceData.invoiceNumber || invoiceData.id}-${isDP ? 'DP' : 'FP'}-${Date.now().toString().slice(-4)}`;
+let amount = invoiceData.totalAmount;
+let itemTitle = invoiceData.title;
+let orderTypeTag = 'FP';
+if (isDP) {
+amount = invoiceData.dpAmount || Math.round(invoiceData.totalAmount * 0.5);
+itemTitle = `DP (50%) - ${invoiceData.title}`;
+orderTypeTag = 'DP';
+} else if (isPelunasan) {
+amount = invoiceData.remainingAmount || (invoiceData.totalAmount - (invoiceData.paidAmount || invoiceData.dpAmount));
+itemTitle = `Pelunasan (Sisa 50%) - ${invoiceData.title}`;
+orderTypeTag = 'PELUNASAN';
+}
+const orderId = `${invoiceData.invoiceNumber || invoiceData.id}-${orderTypeTag}-${Date.now().toString().slice(-4)}`;
 const tokenRes = await APIClient.generateMidtransToken({
 orderId: orderId,
 grossAmount: amount,
@@ -516,7 +752,7 @@ itemDetails: [
 id: invoiceData.id,
 price: amount,
 quantity: 1,
-name: `${isDP ? 'DP (50%) - ' : ''}${invoiceData.title}`.substring(0, 50)
+name: itemTitle.substring(0, 50)
 }
 ]
 });
@@ -530,15 +766,22 @@ await this.loadSnapScript();
 return new Promise((resolve, reject) => {
 window.snap.pay(snapToken, {
 onSuccess: async (result) => {
-invoiceData.status = isDP ? 'DP' : 'LUNAS';
-invoiceData.paidAmount = (invoiceData.paidAmount || 0) + amount;
+if (isDP) {
+invoiceData.status = 'DP';
+invoiceData.paidAmount = amount;
+invoiceData.remainingAmount = Math.max(0, (invoiceData.totalAmount || 0) - amount);
+} else {
+invoiceData.status = 'LUNAS';
+invoiceData.paidAmount = invoiceData.totalAmount;
+invoiceData.remainingAmount = 0;
+}
 invoiceData.paymentMethod = result.payment_type || 'midtrans';
 invoiceData.transactionId = result.transaction_id || '';
 await this.saveInvoice(invoiceData);
 resolve(result);
 },
 onPending: async (result) => {
-invoiceData.status = 'PENDING';
+invoiceData.status = isDP ? 'PENDING_DP' : 'PENDING';
 await this.saveInvoice(invoiceData);
 resolve(result);
 },

@@ -178,8 +178,15 @@ function renderInvoiceDOM(inv) {
     if (elGrandTotal) elGrandTotal.textContent = formatRupiah(total);
     const elLabel = document.getElementById('inv-total-due-label');
     if (elRowDp && elDpVal) {
-        if (!isPaid && dp < total && inv.demoUrl) {
+        if (isDP) {
             elRowDp.style.display = 'flex';
+            const lbl = elRowDp.querySelector('.inv-summary-label');
+            if (lbl) lbl.textContent = 'Sudah Dibayar (DP 50%)';
+            elDpVal.textContent = formatRupiah(dp);
+        } else if (!isPaid && dp < total && inv.demoUrl) {
+            elRowDp.style.display = 'flex';
+            const lbl = elRowDp.querySelector('.inv-summary-label');
+            if (lbl) lbl.textContent = 'Opsi DP (50%)';
             elDpVal.textContent = formatRupiah(dp);
         } else {
             elRowDp.style.display = 'none';
@@ -190,8 +197,13 @@ function renderInvoiceDOM(inv) {
             if (elLabel) elLabel.textContent = 'Sisa Tagihan';
             elTotalDue.textContent = 'Rp 0 (Lunas)';
             elTotalDue.className = 'inv-summary-total due-paid';
+        } else if (isDP) {
+            const remaining = inv.remainingAmount !== undefined ? Number(inv.remainingAmount) : Math.max(0, total - dp);
+            if (elLabel) elLabel.textContent = 'Sisa Pelunasan (50%)';
+            elTotalDue.textContent = formatRupiah(remaining);
+            elTotalDue.className = 'inv-summary-total';
         } else {
-            if (elLabel) elLabel.textContent = 'Total Due';
+            if (elLabel) elLabel.textContent = 'Total Tagihan';
             elTotalDue.textContent = formatRupiah(total);
             elTotalDue.className = 'inv-summary-total';
         }
@@ -209,9 +221,9 @@ function renderInvoiceDOM(inv) {
             btnDemo.style.display = 'none';
         }
     }
-    setupActions(inv, isPaid);
+    setupActions(inv, isPaid, isDP);
 }
-function setupActions(inv, isPaid) {
+function setupActions(inv, isPaid, isDP) {
     const btnPrint = document.getElementById('btn-print-pdf');
     if (btnPrint) {
         btnPrint.addEventListener('click', () => {
@@ -223,11 +235,15 @@ function setupActions(inv, isPaid) {
         if (isPaid) {
             btnPay.style.display = 'none';
         } else {
+            btnPay.style.display = 'inline-flex';
+            const payType = isDP ? 'PELUNASAN' : 'DP';
+            const btnLabel = isDP ? '<i class="fas fa-credit-card"></i> Bayar Pelunasan (Midtrans)' : '<i class="fas fa-credit-card"></i> Bayar DP 50% (Midtrans)';
+            btnPay.innerHTML = btnLabel;
             btnPay.addEventListener('click', async () => {
                 try {
                     btnPay.disabled = true;
                     btnPay.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghubungkan Midtrans...';
-                    await InvoiceService.payWithMidtrans(inv, 'DP');
+                    await InvoiceService.payWithMidtrans(inv, payType);
                     window.location.reload();
                 } catch (e) {
                     if (typeof Swal !== 'undefined') {
@@ -244,7 +260,7 @@ function setupActions(inv, isPaid) {
                     }
                 } finally {
                     btnPay.disabled = false;
-                    btnPay.innerHTML = '<i class="fas fa-credit-card"></i> Bayar Online (Midtrans)';
+                    btnPay.innerHTML = btnLabel;
                 }
             });
         }

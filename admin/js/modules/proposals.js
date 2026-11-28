@@ -199,7 +199,9 @@ const modal = document.getElementById('proposal-modal');
 if (!form || !modal) return;
 form.reset();
 document.getElementById('proposal-id').value = '';
-document.getElementById('proposal-modal-title').textContent = 'Buat Faktur & Proposal Baru';
+document.getElementById('proposal-modal-title').textContent = 'Buat Proposal Penawaran Baru';
+const elEmail = document.getElementById('prop-client-email'); if (elEmail) elEmail.value = '';
+const elUser = document.getElementById('prop-user-id'); if (elUser) elUser.value = '';
 const d = new Date();
 d.setDate(d.getDate() + 30);
 document.getElementById('prop-valid-until').value = d.toISOString().split('T')[0];
@@ -215,6 +217,8 @@ document.getElementById('prop-client-name').value = proposal.clientName || '';
 document.getElementById('prop-category').value = proposal.category || 'sekolah';
 document.getElementById('prop-pic-name').value = proposal.picName || '';
 document.getElementById('prop-pic-phone').value = proposal.picPhone || '';
+const elEmailEdit = document.getElementById('prop-client-email'); if (elEmailEdit) elEmailEdit.value = proposal.clientEmail || proposal.email || '';
+const elUserEdit = document.getElementById('prop-user-id'); if (elUserEdit) elUserEdit.value = proposal.userId || '';
 document.getElementById('prop-title').value = proposal.title || '';
 document.getElementById('prop-subtitle').value = proposal.subtitle || '';
 document.getElementById('prop-notes').value = proposal.notes || '';
@@ -282,7 +286,7 @@ const saveBtn = document.getElementById('btn-save-proposal');
 const origText = saveBtn.innerHTML;
 saveBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Menyimpan...';
 saveBtn.disabled = true;
-const id = document.getElementById('proposal-id').value.trim() || InvoiceService.generateId();
+const id = document.getElementById('proposal-id').value.trim() || InvoiceService.generateProposalId();
 const totalAmount = parseInt(document.getElementById('prop-total-amount').value) || 0;
 const dpAmount = parseInt(document.getElementById('prop-dp-amount').value) || Math.round(totalAmount * 0.5);
 const rawFeatures = document.getElementById('prop-features').value;
@@ -290,10 +294,14 @@ const featuresList = rawFeatures
 .split('\n')
 .map(s => s.trim())
 .filter(Boolean);
+const clientEmail = (document.getElementById('prop-client-email')?.value || '').trim();
+const userId = (document.getElementById('prop-user-id')?.value || '').trim();
 const data = {
 id,
 invoiceNumber: InvoiceService.generateInvoiceNumber(id),
 clientName: document.getElementById('prop-client-name').value.trim(),
+clientEmail,
+userId,
 category: document.getElementById('prop-category').value,
 picName: document.getElementById('prop-pic-name').value.trim(),
 picPhone: document.getElementById('prop-pic-phone').value.trim(),
@@ -321,7 +329,10 @@ data.items = [
 { name: 'Sertifikat Keamanan SSL 256-Bit & Maintenance Pemeliharaan', qty: 1, unit: 'Lisensi', price: 0, subtotal: 0 }
 ];
 try {
-const res = await InvoiceService.saveInvoice(data);
+const res = await InvoiceService.saveProposal(data);
+if (data.status === 'deal' || data.invoiceId) {
+await InvoiceService.saveInvoice(data);
+}
 if (res.success) {
 document.getElementById('proposal-modal').style.display = 'none';
 if (typeof Swal !== 'undefined') {
@@ -370,8 +381,24 @@ tbody.innerHTML = `
 `;
 }
 try {
-const res = await InvoiceService.getAllInvoices();
-let proposals = res.data || [];
+let proposals = [];
+try {
+const cachedP = localStorage.getItem('sisitus_proposals');
+if (cachedP) proposals = JSON.parse(cachedP);
+} catch (e) {}
+try {
+const resInv = await InvoiceService.getAllInvoices();
+const invList = resInv.data || [];
+invList.forEach(inv => {
+const pId = inv.proposalId || inv.id;
+const idx = proposals.findIndex(p => p.id === pId);
+if (idx >= 0) {
+proposals[idx] = { ...proposals[idx], ...inv, id: pId, invoiceId: inv.id };
+} else {
+proposals.push({ ...inv, id: pId, invoiceId: inv.id });
+}
+});
+} catch (e) {}
 if (proposals.length === 0) {
 const presets = [
 { ...InvoiceService.PRESETS.sekolah, id: 'PROP-SEKOLAH-DEMO', invoiceNumber: 'INV-SIS-202611-001' },
@@ -379,7 +406,7 @@ const presets = [
 { ...InvoiceService.PRESETS.personal, id: 'PROP-PERSONAL-DEMO', invoiceNumber: 'INV-SIS-202611-003', status: 'deal' }
 ];
 for (const p of presets) {
-await InvoiceService.saveInvoice(p);
+await InvoiceService.saveProposal(p);
 }
 proposals = presets;
 }
